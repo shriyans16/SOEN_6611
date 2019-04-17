@@ -1,0 +1,369 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ThresholdingOutputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.output</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ThresholdingOutputStream (org.apache.commons.io.output)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThresholdingOutputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (8/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.2%
+  </span>
+  <span class="absValue">
+    (30/ 44)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ThresholdingOutputStream$__CLR4_1_2jtjtjuliqry5</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    69.2%
+  </span>
+  <span class="absValue">
+    (9/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.9%
+  </span>
+  <span class="absValue">
+    (31/ 45)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.output;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.IOException;
+<i>20</i>&nbsp;import java.io.OutputStream;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * An output stream which triggers an event when a specified number of bytes of
+<i>25</i>&nbsp; * data have been written to it. The event can be used, for example, to throw
+<i>26</i>&nbsp; * an exception if a maximum has been reached, or to switch the underlying
+<i>27</i>&nbsp; * stream type when the threshold is exceeded.
+<i>28</i>&nbsp; * &lt;p&gt;
+<i>29</i>&nbsp; * This class overrides all &lt;code&gt;OutputStream&lt;/code&gt; methods. However, these
+<i>30</i>&nbsp; * overrides ultimately call the corresponding methods in the underlying output
+<i>31</i>&nbsp; * stream implementation.
+<i>32</i>&nbsp; * &lt;p&gt;
+<i>33</i>&nbsp; * NOTE: This implementation may trigger the event &lt;em&gt;before&lt;/em&gt; the threshold
+<i>34</i>&nbsp; * is actually reached, since it triggers when a pending write operation would
+<i>35</i>&nbsp; * cause the threshold to be exceeded.
+<i>36</i>&nbsp; *
+<i>37</i>&nbsp; * @version $Id$
+<i>38</i>&nbsp; */
+<i>39</i>&nbsp;public abstract class ThresholdingOutputStream
+<i>40</i>&nbsp;    extends OutputStream
+<b class="fc"><i>41</i>&nbsp;{</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    // ----------------------------------------------------------- Data members
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * The threshold at which the event will be triggered.
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    private final int threshold;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * The number of bytes written to the output stream.
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    private long written;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Whether or not the configured threshold has been exceeded.
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    private boolean thresholdExceeded;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    // ----------------------------------------------------------- Constructors
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Constructs an instance of this class which will trigger an event at the
+<i>69</i>&nbsp;     * specified threshold.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param threshold The number of bytes at which to trigger an event.
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public ThresholdingOutputStream(int threshold)
+<b class="fc"><i>74</i>&nbsp;    {</b>
+<b class="fc"><i>75</i>&nbsp;        this.threshold = threshold;</b>
+<b class="fc"><i>76</i>&nbsp;    }</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    // --------------------------------------------------- OutputStream methods
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Writes the specified byte to this output stream.
+<i>84</i>&nbsp;     *
+<i>85</i>&nbsp;     * @param b The byte to be written.
+<i>86</i>&nbsp;     *
+<i>87</i>&nbsp;     * @exception IOException if an error occurs.
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    @Override
+<i>90</i>&nbsp;    public void write(int b) throws IOException
+<b class="nc"><i>91</i>&nbsp;    {</b>
+<b class="nc"><i>92</i>&nbsp;        checkThreshold(1);</b>
+<b class="nc"><i>93</i>&nbsp;        getStream().write(b);</b>
+<b class="nc"><i>94</i>&nbsp;        written++;</b>
+<b class="nc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * Writes &lt;code&gt;b.length&lt;/code&gt; bytes from the specified byte array to this
+<i>100</i>&nbsp;     * output stream.
+<i>101</i>&nbsp;     *
+<i>102</i>&nbsp;     * @param b The array of bytes to be written.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @exception IOException if an error occurs.
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    @Override
+<i>107</i>&nbsp;    public void write(byte b[]) throws IOException
+<b class="fc"><i>108</i>&nbsp;    {</b>
+<b class="fc"><i>109</i>&nbsp;        checkThreshold(b.length);</b>
+<b class="fc"><i>110</i>&nbsp;        getStream().write(b);</b>
+<b class="fc"><i>111</i>&nbsp;        written += b.length;</b>
+<b class="fc"><i>112</i>&nbsp;    }</b>
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * Writes &lt;code&gt;len&lt;/code&gt; bytes from the specified byte array starting at
+<i>117</i>&nbsp;     * offset &lt;code&gt;off&lt;/code&gt; to this output stream.
+<i>118</i>&nbsp;     *
+<i>119</i>&nbsp;     * @param b   The byte array from which the data will be written.
+<i>120</i>&nbsp;     * @param off The start offset in the byte array.
+<i>121</i>&nbsp;     * @param len The number of bytes to write.
+<i>122</i>&nbsp;     *
+<i>123</i>&nbsp;     * @exception IOException if an error occurs.
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    @Override
+<i>126</i>&nbsp;    public void write(byte b[], int off, int len) throws IOException
+<b class="fc"><i>127</i>&nbsp;    {</b>
+<b class="fc"><i>128</i>&nbsp;        checkThreshold(len);</b>
+<b class="fc"><i>129</i>&nbsp;        getStream().write(b, off, len);</b>
+<b class="fc"><i>130</i>&nbsp;        written += len;</b>
+<b class="fc"><i>131</i>&nbsp;    }</b>
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Flushes this output stream and forces any buffered output bytes to be
+<i>136</i>&nbsp;     * written out.
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @exception IOException if an error occurs.
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    @Override
+<i>141</i>&nbsp;    public void flush() throws IOException
+<b class="fc"><i>142</i>&nbsp;    {</b>
+<b class="fc"><i>143</i>&nbsp;        getStream().flush();</b>
+<b class="fc"><i>144</i>&nbsp;    }</b>
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Closes this output stream and releases any system resources associated
+<i>149</i>&nbsp;     * with this stream.
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @exception IOException if an error occurs.
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    @Override
+<i>154</i>&nbsp;    public void close() throws IOException
+<b class="fc"><i>155</i>&nbsp;    {</b>
+<b class="fc"><i>156</i>&nbsp;        try</b>
+<i>157</i>&nbsp;        {
+<b class="fc"><i>158</i>&nbsp;            flush();</b>
+<i>159</i>&nbsp;        }
+<b class="nc"><i>160</i>&nbsp;        catch (IOException ignored)</b>
+<i>161</i>&nbsp;        {
+<i>162</i>&nbsp;            // ignore
+<b class="fc"><i>163</i>&nbsp;        }</b>
+<b class="fc"><i>164</i>&nbsp;        getStream().close();</b>
+<b class="fc"><i>165</i>&nbsp;    }</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    // --------------------------------------------------------- Public methods
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /**
+<i>172</i>&nbsp;     * Returns the threshold, in bytes, at which an event will be triggered.
+<i>173</i>&nbsp;     *
+<i>174</i>&nbsp;     * @return The threshold point, in bytes.
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public int getThreshold()
+<b class="nc"><i>177</i>&nbsp;    {</b>
+<b class="nc"><i>178</i>&nbsp;        return threshold;</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * Returns the number of bytes that have been written to this output stream.
+<i>184</i>&nbsp;     *
+<i>185</i>&nbsp;     * @return The number of bytes written.
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    public long getByteCount()
+<b class="nc"><i>188</i>&nbsp;    {</b>
+<b class="nc"><i>189</i>&nbsp;        return written;</b>
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    /**
+<i>194</i>&nbsp;     * Determines whether or not the configured threshold has been exceeded for
+<i>195</i>&nbsp;     * this output stream.
+<i>196</i>&nbsp;     *
+<i>197</i>&nbsp;     * @return {@code true} if the threshold has been reached;
+<i>198</i>&nbsp;     *         {@code false} otherwise.
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public boolean isThresholdExceeded()
+<b class="fc"><i>201</i>&nbsp;    {</b>
+<b class="fc"><i>202</i>&nbsp;        return written &gt; threshold;</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    // ------------------------------------------------------ Protected methods
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * Checks to see if writing the specified number of bytes would cause the
+<i>211</i>&nbsp;     * configured threshold to be exceeded. If so, triggers an event to allow
+<i>212</i>&nbsp;     * a concrete implementation to take action on this.
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @param count The number of bytes about to be written to the underlying
+<i>215</i>&nbsp;     *              output stream.
+<i>216</i>&nbsp;     *
+<i>217</i>&nbsp;     * @exception IOException if an error occurs.
+<i>218</i>&nbsp;     */
+<i>219</i>&nbsp;    protected void checkThreshold(int count) throws IOException
+<b class="fc"><i>220</i>&nbsp;    {</b>
+<b class="fc"><i>221</i>&nbsp;        if (!thresholdExceeded &amp;&amp; written + count &gt; threshold)</b>
+<i>222</i>&nbsp;        {
+<b class="fc"><i>223</i>&nbsp;            thresholdExceeded = true;</b>
+<b class="fc"><i>224</i>&nbsp;            thresholdReached();</b>
+<i>225</i>&nbsp;        }
+<b class="fc"><i>226</i>&nbsp;    }</b>
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     * Resets the byteCount to zero.  You can call this from 
+<i>230</i>&nbsp;     * {@link #thresholdReached()} if you want the event to be triggered again. 
+<i>231</i>&nbsp;     */
+<i>232</i>&nbsp;    protected void resetByteCount() 
+<b class="nc"><i>233</i>&nbsp;    {</b>
+<b class="nc"><i>234</i>&nbsp;        this.thresholdExceeded = false;</b>
+<b class="nc"><i>235</i>&nbsp;        this.written = 0;</b>
+<b class="nc"><i>236</i>&nbsp;    }</b>
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    // ------------------------------------------------------- Abstract methods
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Returns the underlying output stream, to which the corresponding
+<i>243</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; methods in this class will ultimately delegate.
+<i>244</i>&nbsp;     *
+<i>245</i>&nbsp;     * @return The underlying output stream.
+<i>246</i>&nbsp;     *
+<i>247</i>&nbsp;     * @exception IOException if an error occurs.
+<i>248</i>&nbsp;     */
+<i>249</i>&nbsp;    protected abstract OutputStream getStream() throws IOException;
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    /**
+<i>253</i>&nbsp;     * Indicates that the configured threshold has been reached, and that a
+<i>254</i>&nbsp;     * subclass should take whatever action necessary on this event. This may
+<i>255</i>&nbsp;     * include changing the underlying output stream.
+<i>256</i>&nbsp;     *
+<i>257</i>&nbsp;     * @exception IOException if an error occurs.
+<i>258</i>&nbsp;     */
+<i>259</i>&nbsp;    protected abstract void thresholdReached() throws IOException;
+<i>260</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

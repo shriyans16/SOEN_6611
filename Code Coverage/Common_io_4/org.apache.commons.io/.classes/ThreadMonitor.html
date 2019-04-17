@@ -1,0 +1,223 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ThreadMonitor</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ThreadMonitor (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThreadMonitor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/ 26)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ThreadMonitor$__CLR4_1_228i28ijuliqsw5</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/ 27)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;/**
+<i>20</i>&nbsp; * Monitors a thread, interrupting it of it reaches the specified timout.
+<i>21</i>&nbsp; * &lt;p&gt;
+<i>22</i>&nbsp; * This works by sleeping until the specified timout amount and then
+<i>23</i>&nbsp; * interrupting the thread being monitored. If the thread being monitored
+<i>24</i>&nbsp; * completes its work before being interrupted, it should &lt;code&gt;interrupt()&lt;code&gt;
+<i>25</i>&nbsp; * the &lt;i&gt;monitor&lt;/i&gt; thread.
+<i>26</i>&nbsp; * &lt;p&gt;
+<i>27</i>&nbsp; * 
+<i>28</i>&nbsp; * &lt;pre&gt;
+<i>29</i>&nbsp; *       long timeoutInMillis = 1000;
+<i>30</i>&nbsp; *       try {
+<i>31</i>&nbsp; *           Thread monitor = ThreadMonitor.start(timeoutInMillis);
+<i>32</i>&nbsp; *           // do some work here
+<i>33</i>&nbsp; *           ThreadMonitor.stop(monitor);
+<i>34</i>&nbsp; *       } catch (InterruptedException e) {
+<i>35</i>&nbsp; *           // timed amount was reached
+<i>36</i>&nbsp; *       }
+<i>37</i>&nbsp; * &lt;/pre&gt;
+<i>38</i>&nbsp; *
+<i>39</i>&nbsp; * @version  $Id$
+<i>40</i>&nbsp; */
+<b class="fc"><i>41</i>&nbsp;class ThreadMonitor implements Runnable {</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    private final Thread thread;
+<i>44</i>&nbsp;    private final long timeout;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Start monitoring the current thread.
+<i>48</i>&nbsp;     *
+<i>49</i>&nbsp;     * @param timeout The timout amount in milliseconds
+<i>50</i>&nbsp;     * or no timeout if the value is zero or less
+<i>51</i>&nbsp;     * @return The monitor thread or {@code null}
+<i>52</i>&nbsp;     * if the timout amount is not greater than zero
+<i>53</i>&nbsp;     */
+<b class="fc"><i>54</i>&nbsp;    public static Thread start(long timeout) {</b>
+<b class="fc"><i>55</i>&nbsp;        return start(Thread.currentThread(), timeout);</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Start monitoring the specified thread.
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     * @param thread The thread The thread to monitor
+<i>62</i>&nbsp;     * @param timeout The timout amount in milliseconds
+<i>63</i>&nbsp;     * or no timeout if the value is zero or less
+<i>64</i>&nbsp;     * @return The monitor thread or {@code null}
+<i>65</i>&nbsp;     * if the timout amount is not greater than zero
+<i>66</i>&nbsp;     */
+<b class="fc"><i>67</i>&nbsp;    public static Thread start(Thread thread, long timeout) {</b>
+<b class="fc"><i>68</i>&nbsp;        Thread monitor = null;</b>
+<b class="fc"><i>69</i>&nbsp;        if (timeout &gt; 0) {</b>
+<b class="fc"><i>70</i>&nbsp;            ThreadMonitor timout = new ThreadMonitor(thread, timeout);</b>
+<b class="fc"><i>71</i>&nbsp;            monitor = new Thread(timout, ThreadMonitor.class.getSimpleName());</b>
+<b class="fc"><i>72</i>&nbsp;            monitor.setDaemon(true);</b>
+<b class="fc"><i>73</i>&nbsp;            monitor.start();</b>
+<i>74</i>&nbsp;        }
+<b class="fc"><i>75</i>&nbsp;        return monitor;</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * Stop monitoring the specified thread.
+<i>80</i>&nbsp;     *
+<i>81</i>&nbsp;     * @param thread The monitor thread, may be {@code null}
+<i>82</i>&nbsp;     */
+<b class="fc"><i>83</i>&nbsp;    public static void stop(Thread thread) {</b>
+<b class="fc"><i>84</i>&nbsp;        if (thread != null) {</b>
+<b class="fc"><i>85</i>&nbsp;            thread.interrupt();</b>
+<i>86</i>&nbsp;        }
+<b class="fc"><i>87</i>&nbsp;    }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Construct and new monitor.
+<i>91</i>&nbsp;     *
+<i>92</i>&nbsp;     * @param thread The thread to monitor
+<i>93</i>&nbsp;     * @param timeout The timout amount in milliseconds
+<i>94</i>&nbsp;     */
+<b class="fc"><i>95</i>&nbsp;    private ThreadMonitor(Thread thread, long timeout) {</b>
+<b class="fc"><i>96</i>&nbsp;        this.thread = thread;</b>
+<b class="fc"><i>97</i>&nbsp;        this.timeout = timeout;</b>
+<b class="fc"><i>98</i>&nbsp;    }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Sleep until the specified timout amount and then
+<i>102</i>&nbsp;     * interrupt the thread being monitored.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @see Runnable#run()
+<i>105</i>&nbsp;     */
+<b class="fc"><i>106</i>&nbsp;    public void run() {</b>
+<b class="fc"><i>107</i>&nbsp;        try {</b>
+<b class="fc"><i>108</i>&nbsp;            Thread.sleep(timeout);</b>
+<b class="fc"><i>109</i>&nbsp;            thread.interrupt();</b>
+<b class="fc"><i>110</i>&nbsp;        } catch (InterruptedException e) {</b>
+<i>111</i>&nbsp;            // timeout not reached
+<b class="fc"><i>112</i>&nbsp;        }</b>
+<b class="fc"><i>113</i>&nbsp;    }</b>
+<i>114</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

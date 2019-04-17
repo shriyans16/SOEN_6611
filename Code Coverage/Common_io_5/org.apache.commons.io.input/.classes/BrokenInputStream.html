@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BrokenInputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.input</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BrokenInputStream (org.apache.commons.io.input)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BrokenInputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (14/ 16)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BrokenInputStream$__CLR4_1_22eq2eqjukjedm7</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.2%
+  </span>
+  <span class="absValue">
+    (15/ 17)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.input;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.IOException;
+<i>20</i>&nbsp;import java.io.InputStream;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Broken input stream. This stream always throws an {@link IOException} from
+<i>24</i>&nbsp; * all the {@link InputStream} methods where the exception is declared.
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * This class is mostly useful for testing error handling in code that uses an
+<i>27</i>&nbsp; * input stream.
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * @since 2.0
+<i>30</i>&nbsp; */
+<b class="fc"><i>31</i>&nbsp;public class BrokenInputStream extends InputStream {</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * The exception that is thrown by all methods of this class.
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    private final IOException exception;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Creates a new stream that always throws the given exception.
+<i>40</i>&nbsp;     *
+<i>41</i>&nbsp;     * @param exception the exception to be thrown
+<i>42</i>&nbsp;     */
+<b class="fc"><i>43</i>&nbsp;    public BrokenInputStream(final IOException exception) {</b>
+<b class="fc"><i>44</i>&nbsp;        this.exception = exception;</b>
+<b class="fc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * Creates a new stream that always throws an {@link IOException}
+<i>49</i>&nbsp;     */
+<i>50</i>&nbsp;    public BrokenInputStream() {
+<b class="nc"><i>51</i>&nbsp;        this(new IOException(&quot;Broken input stream&quot;));</b>
+<b class="nc"><i>52</i>&nbsp;    }</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * Throws the configured exception.
+<i>56</i>&nbsp;     *
+<i>57</i>&nbsp;     * @return nothing
+<i>58</i>&nbsp;     * @throws IOException always thrown
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    @Override
+<b class="fc"><i>61</i>&nbsp;    public int read() throws IOException {</b>
+<b class="fc"><i>62</i>&nbsp;        throw exception;</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Throws the configured exception.
+<i>67</i>&nbsp;     *
+<i>68</i>&nbsp;     * @return nothing
+<i>69</i>&nbsp;     * @throws IOException always thrown
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    @Override
+<b class="fc"><i>72</i>&nbsp;    public int available() throws IOException {</b>
+<b class="fc"><i>73</i>&nbsp;        throw exception;</b>
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Throws the configured exception.
+<i>78</i>&nbsp;     *
+<i>79</i>&nbsp;     * @param n ignored
+<i>80</i>&nbsp;     * @return nothing
+<i>81</i>&nbsp;     * @throws IOException always thrown
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    @Override
+<b class="fc"><i>84</i>&nbsp;    public long skip(final long n) throws IOException {</b>
+<b class="fc"><i>85</i>&nbsp;        throw exception;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Throws the configured exception.
+<i>90</i>&nbsp;     *
+<i>91</i>&nbsp;     * @throws IOException always thrown
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    @Override
+<b class="fc"><i>94</i>&nbsp;    public synchronized void reset() throws IOException {</b>
+<b class="fc"><i>95</i>&nbsp;        throw exception;</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * Throws the configured exception.
+<i>100</i>&nbsp;     *
+<i>101</i>&nbsp;     * @throws IOException always thrown
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    @Override
+<b class="fc"><i>104</i>&nbsp;    public void close() throws IOException {</b>
+<b class="fc"><i>105</i>&nbsp;        throw exception;</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

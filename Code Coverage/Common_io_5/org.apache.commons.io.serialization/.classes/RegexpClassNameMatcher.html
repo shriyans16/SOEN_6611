@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: RegexpClassNameMatcher</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.serialization</a> ]
+</div>
+
+<h1>Coverage Summary for Class: RegexpClassNameMatcher (org.apache.commons.io.serialization)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RegexpClassNameMatcher</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RegexpClassNameMatcher$__CLR4_1_23m13m1jukjee1n</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/ 11)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one
+<i>3</i>&nbsp; * or more contributor license agreements.  See the NOTICE file
+<i>4</i>&nbsp; * distributed with this work for additional information
+<i>5</i>&nbsp; * regarding copyright ownership.  The ASF licenses this file
+<i>6</i>&nbsp; * to you under the Apache License, Version 2.0 (the
+<i>7</i>&nbsp; * &quot;License&quot;); you may not use this file except in compliance
+<i>8</i>&nbsp; * with the License.  You may obtain a copy of the License at
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; *   http://www.apache.org/licenses/LICENSE-2.0
+<i>11</i>&nbsp; *
+<i>12</i>&nbsp; * Unless required by applicable law or agreed to in writing,
+<i>13</i>&nbsp; * software distributed under the License is distributed on an
+<i>14</i>&nbsp; * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+<i>15</i>&nbsp; * KIND, either express or implied.  See the License for the
+<i>16</i>&nbsp; * specific language governing permissions and limitations
+<i>17</i>&nbsp; * under the License.
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;package org.apache.commons.io.serialization;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.util.regex.Pattern;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * A {@link ClassNameMatcher} that uses regular expressions.
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * This object is immutable and thread-safe.
+<i>27</i>&nbsp; * &lt;/p&gt;
+<i>28</i>&nbsp; */
+<b class="fc"><i>29</i>&nbsp;final class RegexpClassNameMatcher implements ClassNameMatcher {</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    private final Pattern pattern; // Class is thread-safe
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Constructs an object based on the specified regular expression.
+<i>35</i>&nbsp;     * 
+<i>36</i>&nbsp;     * @param regex a regular expression for evaluating acceptable class names
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public RegexpClassNameMatcher(String regex) {
+<b class="fc"><i>39</i>&nbsp;        this(Pattern.compile(regex));</b>
+<b class="fc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Constructs an object based on the specified pattern.
+<i>44</i>&nbsp;     * 
+<i>45</i>&nbsp;     * @param pattern a pattern for evaluating acceptable class names
+<i>46</i>&nbsp;     * @throws IllegalArgumentException if &lt;code&gt;pattern&lt;/code&gt; is null
+<i>47</i>&nbsp;     */
+<b class="fc"><i>48</i>&nbsp;    public RegexpClassNameMatcher(Pattern pattern) {</b>
+<b class="fc"><i>49</i>&nbsp;        if (pattern == null) {</b>
+<b class="fc"><i>50</i>&nbsp;            throw new IllegalArgumentException(&quot;Null pattern&quot;);</b>
+<i>51</i>&nbsp;        }
+<b class="fc"><i>52</i>&nbsp;        this.pattern = pattern;</b>
+<b class="fc"><i>53</i>&nbsp;    }</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    @Override
+<b class="fc"><i>56</i>&nbsp;    public boolean matches(String className) {</b>
+<b class="fc"><i>57</i>&nbsp;        return pattern.matcher(className).matches();</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ConditionalFileFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.filefilter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ConditionalFileFilter (org.apache.commons.io.filefilter)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ConditionalFileFilter</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.filefilter;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.util.List;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;/**
+<i>22</i>&nbsp; * Defines operations for conditional file filters.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * @since 1.1
+<i>25</i>&nbsp; * @version $Id$
+<i>26</i>&nbsp; */
+<i>27</i>&nbsp;public interface ConditionalFileFilter {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Adds the specified file filter to the list of file filters at the end of
+<i>31</i>&nbsp;     * the list.
+<i>32</i>&nbsp;     *
+<i>33</i>&nbsp;     * @param ioFileFilter the filter to be added
+<i>34</i>&nbsp;     * @since 1.1
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    void addFileFilter(IOFileFilter ioFileFilter);
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Returns this conditional file filter&#39;s list of file filters.
+<i>40</i>&nbsp;     *
+<i>41</i>&nbsp;     * @return the file filter list
+<i>42</i>&nbsp;     * @since 1.1
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    List&lt;IOFileFilter&gt; getFileFilters();
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Removes the specified file filter.
+<i>48</i>&nbsp;     *
+<i>49</i>&nbsp;     * @param ioFileFilter filter to be removed
+<i>50</i>&nbsp;     * @return {@code true} if the filter was found in the list,
+<i>51</i>&nbsp;     * {@code false} otherwise
+<i>52</i>&nbsp;     * @since 1.1
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    boolean removeFileFilter(IOFileFilter ioFileFilter);
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Sets the list of file filters, replacing any previously configured
+<i>58</i>&nbsp;     * file filters on this filter.
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @param fileFilters the list of filters
+<i>61</i>&nbsp;     * @since 1.1
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    void setFileFilters(List&lt;IOFileFilter&gt; fileFilters);
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

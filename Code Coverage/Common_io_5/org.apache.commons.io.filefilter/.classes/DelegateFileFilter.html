@@ -1,0 +1,218 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DelegateFileFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.filefilter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DelegateFileFilter (org.apache.commons.io.filefilter)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DelegateFileFilter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/ 24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DelegateFileFilter$__CLR4_1_21sm1smjukjemg6</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96%
+  </span>
+  <span class="absValue">
+    (24/ 25)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.filefilter;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.FileFilter;
+<i>21</i>&nbsp;import java.io.FilenameFilter;
+<i>22</i>&nbsp;import java.io.Serializable;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * This class turns a Java FileFilter or FilenameFilter into an IO FileFilter.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * @since 1.0
+<i>28</i>&nbsp; * @version $Id$
+<i>29</i>&nbsp; *
+<i>30</i>&nbsp; * @see FileFilterUtils#asFileFilter(FileFilter)
+<i>31</i>&nbsp; * @see FileFilterUtils#asFileFilter(FilenameFilter)
+<i>32</i>&nbsp; */
+<b class="fc"><i>33</i>&nbsp;public class DelegateFileFilter extends AbstractFileFilter implements Serializable {</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private static final long serialVersionUID = -8723373124984771318L;
+<i>36</i>&nbsp;    /** The Filename filter */
+<i>37</i>&nbsp;    private final FilenameFilter filenameFilter;
+<i>38</i>&nbsp;    /** The File filter */
+<i>39</i>&nbsp;    private final FileFilter fileFilter;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Constructs a delegate file filter around an existing FilenameFilter.
+<i>43</i>&nbsp;     *
+<i>44</i>&nbsp;     * @param filter  the filter to decorate
+<i>45</i>&nbsp;     */
+<b class="fc"><i>46</i>&nbsp;    public DelegateFileFilter(final FilenameFilter filter) {</b>
+<b class="fc"><i>47</i>&nbsp;        if (filter == null) {</b>
+<b class="fc"><i>48</i>&nbsp;            throw new IllegalArgumentException(&quot;The FilenameFilter must not be null&quot;);</b>
+<i>49</i>&nbsp;        }
+<b class="fc"><i>50</i>&nbsp;        this.filenameFilter = filter;</b>
+<b class="fc"><i>51</i>&nbsp;        this.fileFilter = null;</b>
+<b class="fc"><i>52</i>&nbsp;    }</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * Constructs a delegate file filter around an existing FileFilter.
+<i>56</i>&nbsp;     *
+<i>57</i>&nbsp;     * @param filter  the filter to decorate
+<i>58</i>&nbsp;     */
+<b class="fc"><i>59</i>&nbsp;    public DelegateFileFilter(final FileFilter filter) {</b>
+<b class="fc"><i>60</i>&nbsp;        if (filter == null) {</b>
+<b class="fc"><i>61</i>&nbsp;            throw new IllegalArgumentException(&quot;The FileFilter must not be null&quot;);</b>
+<i>62</i>&nbsp;        }
+<b class="fc"><i>63</i>&nbsp;        this.fileFilter = filter;</b>
+<b class="fc"><i>64</i>&nbsp;        this.filenameFilter = null;</b>
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Checks the filter.
+<i>69</i>&nbsp;     *
+<i>70</i>&nbsp;     * @param file  the file to check
+<i>71</i>&nbsp;     * @return true if the filter matches
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    @Override
+<b class="fc"><i>74</i>&nbsp;    public boolean accept(final File file) {</b>
+<b class="fc"><i>75</i>&nbsp;        if (fileFilter != null) {</b>
+<b class="fc"><i>76</i>&nbsp;            return fileFilter.accept(file);</b>
+<i>77</i>&nbsp;        } else {
+<b class="fc"><i>78</i>&nbsp;            return super.accept(file);</b>
+<i>79</i>&nbsp;        }
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Checks the filter.
+<i>84</i>&nbsp;     *
+<i>85</i>&nbsp;     * @param dir  the directory
+<i>86</i>&nbsp;     * @param name  the filename in the directory
+<i>87</i>&nbsp;     * @return true if the filter matches
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    @Override
+<b class="fc"><i>90</i>&nbsp;    public boolean accept(final File dir, final String name) {</b>
+<b class="fc"><i>91</i>&nbsp;        if (filenameFilter != null) {</b>
+<b class="fc"><i>92</i>&nbsp;            return filenameFilter.accept(dir, name);</b>
+<i>93</i>&nbsp;        } else {
+<b class="nc"><i>94</i>&nbsp;            return super.accept(dir, name);</b>
+<i>95</i>&nbsp;        }
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * Provide a String representaion of this file filter.
+<i>100</i>&nbsp;     *
+<i>101</i>&nbsp;     * @return a String representaion
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    @Override
+<b class="fc"><i>104</i>&nbsp;    public String toString() {</b>
+<b class="fc"><i>105</i>&nbsp;        final String delegate = fileFilter != null ? fileFilter.toString() : filenameFilter.toString();</b>
+<b class="fc"><i>106</i>&nbsp;        return super.toString() + &quot;(&quot; + delegate + &quot;)&quot;;</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

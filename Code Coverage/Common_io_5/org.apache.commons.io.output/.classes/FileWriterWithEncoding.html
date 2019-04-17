@@ -1,0 +1,444 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FileWriterWithEncoding</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.output</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FileWriterWithEncoding (org.apache.commons.io.output)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FileWriterWithEncoding</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (18/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (66/ 78)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">FileWriterWithEncoding$__CLR4_1_24zb4zbjukjeei0</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    86.4%
+  </span>
+  <span class="absValue">
+    (19/ 22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.8%
+  </span>
+  <span class="absValue">
+    (67/ 79)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.output;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.FileOutputStream;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.io.OutputStream;
+<i>23</i>&nbsp;import java.io.OutputStreamWriter;
+<i>24</i>&nbsp;import java.io.Writer;
+<i>25</i>&nbsp;import java.nio.charset.Charset;
+<i>26</i>&nbsp;import java.nio.charset.CharsetEncoder;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;import org.apache.commons.io.FileUtils;
+<i>29</i>&nbsp;import org.apache.commons.io.IOUtils;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * Writer of files that allows the encoding to be set.
+<i>33</i>&nbsp; * &lt;p&gt;
+<i>34</i>&nbsp; * This class provides a simple alternative to &lt;code&gt;FileWriter&lt;/code&gt;
+<i>35</i>&nbsp; * that allows an encoding to be set. Unfortunately, it cannot subclass
+<i>36</i>&nbsp; * &lt;code&gt;FileWriter&lt;/code&gt;.
+<i>37</i>&nbsp; * &lt;p&gt;
+<i>38</i>&nbsp; * By default, the file will be overwritten, but this may be changed to append.
+<i>39</i>&nbsp; * &lt;p&gt;
+<i>40</i>&nbsp; * The encoding must be specified using either the name of the {@link Charset},
+<i>41</i>&nbsp; * the {@link Charset}, or a {@link CharsetEncoder}. If the default encoding
+<i>42</i>&nbsp; * is required then use the {@link java.io.FileWriter} directly, rather than
+<i>43</i>&nbsp; * this implementation.
+<i>44</i>&nbsp; * &lt;p&gt;
+<i>45</i>&nbsp; * 
+<i>46</i>&nbsp; *
+<i>47</i>&nbsp; * @since 1.4
+<i>48</i>&nbsp; * @version $Id$
+<i>49</i>&nbsp; */
+<b class="fc"><i>50</i>&nbsp;public class FileWriterWithEncoding extends Writer {</b>
+<i>51</i>&nbsp;    // Cannot extend ProxyWriter, as requires writer to be
+<i>52</i>&nbsp;    // known when super() is called
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /** The writer to decorate. */
+<i>55</i>&nbsp;    private final Writer out;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @param filename  the name of the file to write to, not null
+<i>61</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>62</i>&nbsp;     * @throws NullPointerException if the file name or encoding is null
+<i>63</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    public FileWriterWithEncoding(final String filename, final String encoding) throws IOException {
+<b class="fc"><i>66</i>&nbsp;        this(new File(filename), encoding, false);</b>
+<b class="fc"><i>67</i>&nbsp;    }</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>71</i>&nbsp;     *
+<i>72</i>&nbsp;     * @param filename  the name of the file to write to, not null
+<i>73</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>74</i>&nbsp;     * @param append  true if content should be appended, false to overwrite
+<i>75</i>&nbsp;     * @throws NullPointerException if the file name or encoding is null
+<i>76</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>77</i>&nbsp;     */
+<i>78</i>&nbsp;    public FileWriterWithEncoding(final String filename, final String encoding, final boolean append)
+<i>79</i>&nbsp;            throws IOException {
+<b class="nc"><i>80</i>&nbsp;        this(new File(filename), encoding, append);</b>
+<b class="nc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>85</i>&nbsp;     *
+<i>86</i>&nbsp;     * @param filename  the name of the file to write to, not null
+<i>87</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>88</i>&nbsp;     * @throws NullPointerException if the file name or encoding is null
+<i>89</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>90</i>&nbsp;     */
+<i>91</i>&nbsp;    public FileWriterWithEncoding(final String filename, final Charset encoding) throws IOException {
+<b class="fc"><i>92</i>&nbsp;        this(new File(filename), encoding, false);</b>
+<b class="fc"><i>93</i>&nbsp;    }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>97</i>&nbsp;     *
+<i>98</i>&nbsp;     * @param filename  the name of the file to write to, not null
+<i>99</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>100</i>&nbsp;     * @param append  true if content should be appended, false to overwrite
+<i>101</i>&nbsp;     * @throws NullPointerException if the file name or encoding is null
+<i>102</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    public FileWriterWithEncoding(final String filename, final Charset encoding, final boolean append)
+<i>105</i>&nbsp;            throws IOException {
+<b class="nc"><i>106</i>&nbsp;        this(new File(filename), encoding, append);</b>
+<b class="nc"><i>107</i>&nbsp;    }</b>
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    /**
+<i>110</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>111</i>&nbsp;     *
+<i>112</i>&nbsp;     * @param filename  the name of the file to write to, not null
+<i>113</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>114</i>&nbsp;     * @throws NullPointerException if the file name or encoding is null
+<i>115</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding) throws IOException {
+<b class="fc"><i>118</i>&nbsp;        this(new File(filename), encoding, false);</b>
+<b class="fc"><i>119</i>&nbsp;    }</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @param filename  the name of the file to write to, not null
+<i>125</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>126</i>&nbsp;     * @param append  true if content should be appended, false to overwrite
+<i>127</i>&nbsp;     * @throws NullPointerException if the file name or encoding is null
+<i>128</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    public FileWriterWithEncoding(final String filename, final CharsetEncoder encoding, final boolean append)
+<i>131</i>&nbsp;            throws IOException {
+<b class="nc"><i>132</i>&nbsp;        this(new File(filename), encoding, append);</b>
+<b class="nc"><i>133</i>&nbsp;    }</b>
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @param file  the file to write to, not null
+<i>139</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>140</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>141</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    public FileWriterWithEncoding(final File file, final String encoding) throws IOException {
+<b class="fc"><i>144</i>&nbsp;        this(file, encoding, false);</b>
+<b class="fc"><i>145</i>&nbsp;    }</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @param file  the file to write to, not null
+<i>151</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>152</i>&nbsp;     * @param append  true if content should be appended, false to overwrite
+<i>153</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>154</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>155</i>&nbsp;     */
+<i>156</i>&nbsp;    public FileWriterWithEncoding(final File file, final String encoding, final boolean append) throws IOException {
+<b class="fc"><i>157</i>&nbsp;        super();</b>
+<b class="fc"><i>158</i>&nbsp;        this.out = initWriter(file, encoding, append);</b>
+<b class="fc"><i>159</i>&nbsp;    }</b>
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    /**
+<i>162</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>163</i>&nbsp;     *
+<i>164</i>&nbsp;     * @param file  the file to write to, not null
+<i>165</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>166</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>167</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public FileWriterWithEncoding(final File file, final Charset encoding) throws IOException {
+<b class="fc"><i>170</i>&nbsp;        this(file, encoding, false);</b>
+<b class="fc"><i>171</i>&nbsp;    }</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /**
+<i>174</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>175</i>&nbsp;     *
+<i>176</i>&nbsp;     * @param file  the file to write to, not null
+<i>177</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>178</i>&nbsp;     * @param append  true if content should be appended, false to overwrite
+<i>179</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>180</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public FileWriterWithEncoding(final File file, final Charset encoding, final boolean append) throws IOException {
+<b class="fc"><i>183</i>&nbsp;        super();</b>
+<b class="fc"><i>184</i>&nbsp;        this.out = initWriter(file, encoding, append);</b>
+<b class="fc"><i>185</i>&nbsp;    }</b>
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    /**
+<i>188</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>189</i>&nbsp;     *
+<i>190</i>&nbsp;     * @param file  the file to write to, not null
+<i>191</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>192</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>193</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>194</i>&nbsp;     */
+<i>195</i>&nbsp;    public FileWriterWithEncoding(final File file, final CharsetEncoder encoding) throws IOException {
+<b class="fc"><i>196</i>&nbsp;        this(file, encoding, false);</b>
+<b class="fc"><i>197</i>&nbsp;    }</b>
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Constructs a FileWriterWithEncoding with a file encoding.
+<i>201</i>&nbsp;     *
+<i>202</i>&nbsp;     * @param file  the file to write to, not null
+<i>203</i>&nbsp;     * @param encoding  the encoding to use, not null
+<i>204</i>&nbsp;     * @param append  true if content should be appended, false to overwrite
+<i>205</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>206</i>&nbsp;     * @throws IOException in case of an I/O error
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    public FileWriterWithEncoding(final File file, final CharsetEncoder encoding, final boolean append)
+<i>209</i>&nbsp;            throws IOException {
+<b class="fc"><i>210</i>&nbsp;        super();</b>
+<b class="fc"><i>211</i>&nbsp;        this.out = initWriter(file, encoding, append);</b>
+<b class="fc"><i>212</i>&nbsp;    }</b>
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    //-----------------------------------------------------------------------
+<i>215</i>&nbsp;    /**
+<i>216</i>&nbsp;     * Initialise the wrapped file writer.
+<i>217</i>&nbsp;     * Ensure that a cleanup occurs if the writer creation fails.
+<i>218</i>&nbsp;     *
+<i>219</i>&nbsp;     * @param file  the file to be accessed
+<i>220</i>&nbsp;     * @param encoding  the encoding to use - may be Charset, CharsetEncoder or String
+<i>221</i>&nbsp;     * @param append  true to append
+<i>222</i>&nbsp;     * @return the initialised writer
+<i>223</i>&nbsp;     * @throws NullPointerException if the file or encoding is null
+<i>224</i>&nbsp;     * @throws IOException if an error occurs
+<i>225</i>&nbsp;     */
+<b class="fc"><i>226</i>&nbsp;     private static Writer initWriter(final File file, final Object encoding, final boolean append) throws IOException {</b>
+<b class="fc"><i>227</i>&nbsp;        if (file == null) {</b>
+<b class="fc"><i>228</i>&nbsp;            throw new NullPointerException(&quot;File is missing&quot;);</b>
+<i>229</i>&nbsp;        }
+<b class="fc"><i>230</i>&nbsp;        if (encoding == null) {</b>
+<b class="fc"><i>231</i>&nbsp;            throw new NullPointerException(&quot;Encoding is missing&quot;);</b>
+<i>232</i>&nbsp;        }
+<b class="fc"><i>233</i>&nbsp;        final boolean fileExistedAlready = file.exists();</b>
+<b class="fc"><i>234</i>&nbsp;        OutputStream stream = null;</b>
+<b class="fc"><i>235</i>&nbsp;        Writer writer = null;</b>
+<b class="fc"><i>236</i>&nbsp;        try {</b>
+<b class="fc"><i>237</i>&nbsp;            stream = new FileOutputStream(file, append);</b>
+<b class="fc"><i>238</i>&nbsp;            if (encoding instanceof Charset) {</b>
+<b class="fc"><i>239</i>&nbsp;                writer = new OutputStreamWriter(stream, (Charset)encoding);</b>
+<b class="fc"><i>240</i>&nbsp;            } else if (encoding instanceof CharsetEncoder) {</b>
+<b class="fc"><i>241</i>&nbsp;                writer = new OutputStreamWriter(stream, (CharsetEncoder)encoding);</b>
+<i>242</i>&nbsp;            } else {
+<b class="fc"><i>243</i>&nbsp;                writer = new OutputStreamWriter(stream, (String)encoding);</b>
+<i>244</i>&nbsp;            }
+<b class="fc"><i>245</i>&nbsp;        } catch (final IOException ex) {</b>
+<b class="fc"><i>246</i>&nbsp;            IOUtils.closeQuietly(writer);</b>
+<b class="fc"><i>247</i>&nbsp;            IOUtils.closeQuietly(stream);</b>
+<b class="fc"><i>248</i>&nbsp;            if (fileExistedAlready == false) {</b>
+<b class="fc"><i>249</i>&nbsp;                FileUtils.deleteQuietly(file);</b>
+<i>250</i>&nbsp;            }
+<b class="fc"><i>251</i>&nbsp;            throw ex;</b>
+<b class="nc"><i>252</i>&nbsp;        } catch (final RuntimeException ex) {</b>
+<b class="nc"><i>253</i>&nbsp;            IOUtils.closeQuietly(writer);</b>
+<b class="nc"><i>254</i>&nbsp;            IOUtils.closeQuietly(stream);</b>
+<b class="nc"><i>255</i>&nbsp;            if (fileExistedAlready == false) {</b>
+<b class="nc"><i>256</i>&nbsp;                FileUtils.deleteQuietly(file);</b>
+<i>257</i>&nbsp;            }
+<b class="nc"><i>258</i>&nbsp;            throw ex;</b>
+<b class="fc"><i>259</i>&nbsp;        }</b>
+<b class="fc"><i>260</i>&nbsp;        return writer;</b>
+<i>261</i>&nbsp;    }
+<i>262</i>&nbsp;
+<i>263</i>&nbsp;    //-----------------------------------------------------------------------
+<i>264</i>&nbsp;    /**
+<i>265</i>&nbsp;     * Write a character.
+<i>266</i>&nbsp;     * @param idx the character to write
+<i>267</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>268</i>&nbsp;     */
+<i>269</i>&nbsp;     @Override
+<b class="fc"><i>270</i>&nbsp;    public void write(final int idx) throws IOException {</b>
+<b class="fc"><i>271</i>&nbsp;        out.write(idx);</b>
+<b class="fc"><i>272</i>&nbsp;    }</b>
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;    /**
+<i>275</i>&nbsp;     * Write the characters from an array.
+<i>276</i>&nbsp;     * @param chr the characters to write
+<i>277</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>278</i>&nbsp;     */
+<i>279</i>&nbsp;     @Override
+<b class="fc"><i>280</i>&nbsp;    public void write(final char[] chr) throws IOException {</b>
+<b class="fc"><i>281</i>&nbsp;        out.write(chr);</b>
+<b class="fc"><i>282</i>&nbsp;    }</b>
+<i>283</i>&nbsp;
+<i>284</i>&nbsp;    /**
+<i>285</i>&nbsp;     * Write the specified characters from an array.
+<i>286</i>&nbsp;     * @param chr the characters to write
+<i>287</i>&nbsp;     * @param st The start offset
+<i>288</i>&nbsp;     * @param end The number of characters to write
+<i>289</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>290</i>&nbsp;     */
+<i>291</i>&nbsp;     @Override
+<b class="fc"><i>292</i>&nbsp;    public void write(final char[] chr, final int st, final int end) throws IOException {</b>
+<b class="fc"><i>293</i>&nbsp;        out.write(chr, st, end);</b>
+<b class="fc"><i>294</i>&nbsp;    }</b>
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;    /**
+<i>297</i>&nbsp;     * Write the characters from a string.
+<i>298</i>&nbsp;     * @param str the string to write
+<i>299</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>300</i>&nbsp;     */
+<i>301</i>&nbsp;     @Override
+<b class="fc"><i>302</i>&nbsp;    public void write(final String str) throws IOException {</b>
+<b class="fc"><i>303</i>&nbsp;        out.write(str);</b>
+<b class="fc"><i>304</i>&nbsp;    }</b>
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;    /**
+<i>307</i>&nbsp;     * Write the specified characters from a string.
+<i>308</i>&nbsp;     * @param str the string to write
+<i>309</i>&nbsp;     * @param st The start offset
+<i>310</i>&nbsp;     * @param end The number of characters to write
+<i>311</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>312</i>&nbsp;     */
+<i>313</i>&nbsp;     @Override
+<b class="fc"><i>314</i>&nbsp;    public void write(final String str, final int st, final int end) throws IOException {</b>
+<b class="fc"><i>315</i>&nbsp;        out.write(str, st, end);</b>
+<b class="fc"><i>316</i>&nbsp;    }</b>
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;    /**
+<i>319</i>&nbsp;     * Flush the stream.
+<i>320</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>321</i>&nbsp;     */
+<i>322</i>&nbsp;     @Override
+<b class="fc"><i>323</i>&nbsp;    public void flush() throws IOException {</b>
+<b class="fc"><i>324</i>&nbsp;        out.flush();</b>
+<b class="fc"><i>325</i>&nbsp;    }</b>
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    /**
+<i>328</i>&nbsp;     * Close the stream.
+<i>329</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>330</i>&nbsp;     */
+<i>331</i>&nbsp;     @Override
+<b class="fc"><i>332</i>&nbsp;    public void close() throws IOException {</b>
+<b class="fc"><i>333</i>&nbsp;        out.close();</b>
+<b class="fc"><i>334</i>&nbsp;    }</b>
+<i>335</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

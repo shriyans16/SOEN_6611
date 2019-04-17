@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NullWriter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.output</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NullWriter (org.apache.commons.io.output)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NullWriter</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (10/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (20/ 24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">NullWriter$__CLR4_1_22f42f4jukjedmh</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84%
+  </span>
+  <span class="absValue">
+    (21/ 25)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.output;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.Writer;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;/**
+<i>22</i>&nbsp; * This {@link Writer} writes all data to the famous &lt;b&gt;/dev/null&lt;/b&gt;.
+<i>23</i>&nbsp; * &lt;p&gt;
+<i>24</i>&nbsp; * This &lt;code&gt;Writer&lt;/code&gt; has no destination (file/socket etc.) and all
+<i>25</i>&nbsp; * characters written to it are ignored and lost.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * @version $Id$
+<i>28</i>&nbsp; */
+<b class="fc"><i>29</i>&nbsp;public class NullWriter extends Writer {</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * A singleton.
+<i>33</i>&nbsp;     */
+<b class="fc"><i>34</i>&nbsp;    public static final NullWriter NULL_WRITER = new NullWriter();</b>
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Constructs a new NullWriter.
+<i>38</i>&nbsp;     */
+<b class="fc"><i>39</i>&nbsp;    public NullWriter() {</b>
+<b class="fc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>44</i>&nbsp;     * @param c The character to write
+<i>45</i>&nbsp;     * @return this writer
+<i>46</i>&nbsp;     * @since 2.0
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    @Override
+<b class="nc"><i>49</i>&nbsp;    public Writer append(final char c) {</b>
+<i>50</i>&nbsp;        //to /dev/null
+<b class="nc"><i>51</i>&nbsp;        return this;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>56</i>&nbsp;     * @param csq The character sequence to write
+<i>57</i>&nbsp;     * @param start The index of the first character to write
+<i>58</i>&nbsp;     * @param end  The index of the first character to write (exclusive)
+<i>59</i>&nbsp;     * @return this writer
+<i>60</i>&nbsp;     * @since 2.0
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    @Override
+<b class="nc"><i>63</i>&nbsp;    public Writer append(final CharSequence csq, final int start, final int end) {</b>
+<i>64</i>&nbsp;        //to /dev/null
+<b class="nc"><i>65</i>&nbsp;        return this;</b>
+<i>66</i>&nbsp;    }
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>70</i>&nbsp;     * @param csq The character sequence to write
+<i>71</i>&nbsp;     * @return this writer
+<i>72</i>&nbsp;     * @since 2.0
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    @Override
+<b class="fc"><i>75</i>&nbsp;    public Writer append(final CharSequence csq) {</b>
+<i>76</i>&nbsp;        //to /dev/null
+<b class="fc"><i>77</i>&nbsp;        return this;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>82</i>&nbsp;     * @param idx The character to write
+<i>83</i>&nbsp;     */
+<i>84</i>&nbsp;    @Override
+<b class="fc"><i>85</i>&nbsp;    public void write(final int idx) {</b>
+<i>86</i>&nbsp;        //to /dev/null
+<b class="fc"><i>87</i>&nbsp;    }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>91</i>&nbsp;     * @param chr The characters to write
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    @Override
+<b class="fc"><i>94</i>&nbsp;    public void write(final char[] chr) {</b>
+<i>95</i>&nbsp;        //to /dev/null
+<b class="fc"><i>96</i>&nbsp;    }</b>
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>100</i>&nbsp;     * @param chr The characters to write
+<i>101</i>&nbsp;     * @param st The start offset
+<i>102</i>&nbsp;     * @param end The number of characters to write
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    @Override
+<b class="fc"><i>105</i>&nbsp;    public void write(final char[] chr, final int st, final int end) {</b>
+<i>106</i>&nbsp;        //to /dev/null
+<b class="fc"><i>107</i>&nbsp;    }</b>
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    /**
+<i>110</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>111</i>&nbsp;     * @param str The string to write
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    @Override
+<b class="fc"><i>114</i>&nbsp;    public void write(final String str) {</b>
+<i>115</i>&nbsp;        //to /dev/null
+<b class="fc"><i>116</i>&nbsp;    }</b>
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    /**
+<i>119</i>&nbsp;     * Does nothing - output to &lt;code&gt;/dev/null&lt;/code&gt;.
+<i>120</i>&nbsp;     * @param str The string to write
+<i>121</i>&nbsp;     * @param st The start offset
+<i>122</i>&nbsp;     * @param end The number of characters to write
+<i>123</i>&nbsp;     */
+<i>124</i>&nbsp;    @Override
+<b class="fc"><i>125</i>&nbsp;    public void write(final String str, final int st, final int end) {</b>
+<i>126</i>&nbsp;        //to /dev/null
+<b class="fc"><i>127</i>&nbsp;    }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /** @see java.io.Writer#flush() */
+<i>130</i>&nbsp;    @Override
+<b class="fc"><i>131</i>&nbsp;    public void flush() {</b>
+<i>132</i>&nbsp;        //to /dev/null
+<b class="fc"><i>133</i>&nbsp;    }</b>
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /** @see java.io.Writer#close() */
+<i>136</i>&nbsp;    @Override
+<b class="fc"><i>137</i>&nbsp;    public void close() {</b>
+<i>138</i>&nbsp;        //to /dev/null
+<b class="fc"><i>139</i>&nbsp;    }</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HexDump</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HexDump (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HexDump</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.3%
+  </span>
+  <span class="absValue">
+    (41/ 43)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">HexDump$__CLR4_1_259l59ljukjeek9</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.5%
+  </span>
+  <span class="absValue">
+    (42/ 44)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.IOException;
+<i>20</i>&nbsp;import java.io.OutputStream;
+<i>21</i>&nbsp;import java.nio.charset.Charset;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Dumps data in hexadecimal format.
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * Provides a single function to take an array of bytes and display it
+<i>27</i>&nbsp; * in hexadecimal form.
+<i>28</i>&nbsp; * &lt;p&gt;
+<i>29</i>&nbsp; * Origin of code: POI.
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * @version $Id$
+<i>32</i>&nbsp; */
+<b class="fc"><i>33</i>&nbsp;public class HexDump {</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Instances should NOT be constructed in standard programming.
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public HexDump() {
+<b class="nc"><i>39</i>&nbsp;        super();</b>
+<b class="nc"><i>40</i>&nbsp;    }</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Dump an array of bytes to an OutputStream. The output is formatted
+<i>44</i>&nbsp;     * for human inspection, with a hexadecimal offset followed by the
+<i>45</i>&nbsp;     * hexadecimal values of the next 16 bytes of data and the printable ASCII
+<i>46</i>&nbsp;     * characters (if any) that those bytes represent printed per each line
+<i>47</i>&nbsp;     * of output.
+<i>48</i>&nbsp;     * &lt;p&gt;
+<i>49</i>&nbsp;     * The offset argument specifies the start offset of the data array
+<i>50</i>&nbsp;     * within a larger entity like a file or an incoming stream. For example,
+<i>51</i>&nbsp;     * if the data array contains the third kibibyte of a file, then the
+<i>52</i>&nbsp;     * offset argument should be set to 2048. The offset value printed
+<i>53</i>&nbsp;     * at the beginning of each line indicates where in that larger entity
+<i>54</i>&nbsp;     * the first byte on that line is located.
+<i>55</i>&nbsp;     * &lt;p&gt;
+<i>56</i>&nbsp;     * All bytes between the given index (inclusive) and the end of the
+<i>57</i>&nbsp;     * data array are dumped.
+<i>58</i>&nbsp;     *
+<i>59</i>&nbsp;     * @param data  the byte array to be dumped
+<i>60</i>&nbsp;     * @param offset  offset of the byte array within a larger entity
+<i>61</i>&nbsp;     * @param stream  the OutputStream to which the data is to be
+<i>62</i>&nbsp;     *               written
+<i>63</i>&nbsp;     * @param index initial index into the byte array
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     * @throws IOException is thrown if anything goes wrong writing
+<i>66</i>&nbsp;     *         the data to stream
+<i>67</i>&nbsp;     * @throws ArrayIndexOutOfBoundsException if the index is
+<i>68</i>&nbsp;     *         outside the data array&#39;s bounds
+<i>69</i>&nbsp;     * @throws IllegalArgumentException if the output stream is null
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    public static void dump(final byte[] data, final long offset,
+<i>73</i>&nbsp;                            final OutputStream stream, final int index)
+<i>74</i>&nbsp;            throws IOException, ArrayIndexOutOfBoundsException,
+<b class="fc"><i>75</i>&nbsp;            IllegalArgumentException {</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        if (index &lt; 0 || index &gt;= data.length) {</b>
+<b class="fc"><i>78</i>&nbsp;            throw new ArrayIndexOutOfBoundsException(</b>
+<i>79</i>&nbsp;                    &quot;illegal index: &quot; + index + &quot; into array of length &quot;
+<i>80</i>&nbsp;                    + data.length);
+<i>81</i>&nbsp;        }
+<b class="fc"><i>82</i>&nbsp;        if (stream == null) {</b>
+<b class="fc"><i>83</i>&nbsp;            throw new IllegalArgumentException(&quot;cannot write to nullstream&quot;);</b>
+<i>84</i>&nbsp;        }
+<b class="fc"><i>85</i>&nbsp;        long display_offset = offset + index;</b>
+<b class="fc"><i>86</i>&nbsp;        final StringBuilder buffer = new StringBuilder(74);</b>
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;        for (int j = index; j &lt; data.length; j += 16) {</b>
+<b class="fc"><i>89</i>&nbsp;            int chars_read = data.length - j;</b>
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;            if (chars_read &gt; 16) {</b>
+<b class="fc"><i>92</i>&nbsp;                chars_read = 16;</b>
+<i>93</i>&nbsp;            }
+<b class="fc"><i>94</i>&nbsp;            dump(buffer, display_offset).append(&#39; &#39;);</b>
+<b class="fc"><i>95</i>&nbsp;            for (int k = 0; k &lt; 16; k++) {</b>
+<b class="fc"><i>96</i>&nbsp;                if (k &lt; chars_read) {</b>
+<b class="fc"><i>97</i>&nbsp;                    dump(buffer, data[k + j]);</b>
+<i>98</i>&nbsp;                } else {
+<b class="fc"><i>99</i>&nbsp;                    buffer.append(&quot;  &quot;);</b>
+<i>100</i>&nbsp;                }
+<b class="fc"><i>101</i>&nbsp;                buffer.append(&#39; &#39;);</b>
+<i>102</i>&nbsp;            }
+<b class="fc"><i>103</i>&nbsp;            for (int k = 0; k &lt; chars_read; k++) {</b>
+<b class="fc"><i>104</i>&nbsp;                if (data[k + j] &gt;= &#39; &#39; &amp;&amp; data[k + j] &lt; 127) {</b>
+<b class="fc"><i>105</i>&nbsp;                    buffer.append((char) data[k + j]);</b>
+<i>106</i>&nbsp;                } else {
+<b class="fc"><i>107</i>&nbsp;                    buffer.append(&#39;.&#39;);</b>
+<i>108</i>&nbsp;                }
+<i>109</i>&nbsp;            }
+<b class="fc"><i>110</i>&nbsp;            buffer.append(EOL);</b>
+<i>111</i>&nbsp;            // make explicit the dependency on the default encoding
+<b class="fc"><i>112</i>&nbsp;            stream.write(buffer.toString().getBytes(Charset.defaultCharset()));</b>
+<b class="fc"><i>113</i>&nbsp;            stream.flush();</b>
+<b class="fc"><i>114</i>&nbsp;            buffer.setLength(0);</b>
+<b class="fc"><i>115</i>&nbsp;            display_offset += chars_read;</b>
+<i>116</i>&nbsp;        }
+<b class="fc"><i>117</i>&nbsp;    }</b>
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /**
+<i>120</i>&nbsp;     * The line-separator (initializes to &quot;line.separator&quot; system property.
+<i>121</i>&nbsp;     */
+<b class="fc"><i>122</i>&nbsp;    public static final String EOL =</b>
+<b class="fc"><i>123</i>&nbsp;            System.getProperty(&quot;line.separator&quot;);</b>
+<b class="fc"><i>124</i>&nbsp;    private static final char[] _hexcodes =</b>
+<i>125</i>&nbsp;            {
+<i>126</i>&nbsp;                &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;,
+<i>127</i>&nbsp;                &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;
+<i>128</i>&nbsp;            };
+<b class="fc"><i>129</i>&nbsp;    private static final int[] _shifts =</b>
+<i>130</i>&nbsp;            {
+<i>131</i>&nbsp;                28, 24, 20, 16, 12, 8, 4, 0
+<i>132</i>&nbsp;            };
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Dump a long value into a StringBuilder.
+<i>136</i>&nbsp;     *
+<i>137</i>&nbsp;     * @param _lbuffer the StringBuilder to dump the value in
+<i>138</i>&nbsp;     * @param value  the long value to be dumped
+<i>139</i>&nbsp;     * @return StringBuilder containing the dumped value.
+<i>140</i>&nbsp;     */
+<b class="fc"><i>141</i>&nbsp;    private static StringBuilder dump(final StringBuilder _lbuffer, final long value) {</b>
+<b class="fc"><i>142</i>&nbsp;        for (int j = 0; j &lt; 8; j++) {</b>
+<b class="fc"><i>143</i>&nbsp;            _lbuffer</b>
+<b class="fc"><i>144</i>&nbsp;                    .append(_hexcodes[(int) (value &gt;&gt; _shifts[j]) &amp; 15]);</b>
+<i>145</i>&nbsp;        }
+<b class="fc"><i>146</i>&nbsp;        return _lbuffer;</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * Dump a byte value into a StringBuilder.
+<i>151</i>&nbsp;     *
+<i>152</i>&nbsp;     * @param _cbuffer the StringBuilder to dump the value in
+<i>153</i>&nbsp;     * @param value  the byte value to be dumped
+<i>154</i>&nbsp;     * @return StringBuilder containing the dumped value.
+<i>155</i>&nbsp;     */
+<b class="fc"><i>156</i>&nbsp;    private static StringBuilder dump(final StringBuilder _cbuffer, final byte value) {</b>
+<b class="fc"><i>157</i>&nbsp;        for (int j = 0; j &lt; 2; j++) {</b>
+<b class="fc"><i>158</i>&nbsp;            _cbuffer.append(_hexcodes[value &gt;&gt; _shifts[j + 6] &amp; 15]);</b>
+<i>159</i>&nbsp;        }
+<b class="fc"><i>160</i>&nbsp;        return _cbuffer;</b>
+<i>161</i>&nbsp;    }
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

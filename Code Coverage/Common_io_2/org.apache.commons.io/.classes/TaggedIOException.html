@@ -1,0 +1,228 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TaggedIOException</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TaggedIOException (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TaggedIOException</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.7%
+  </span>
+  <span class="absValue">
+    (13/ 15)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TaggedIOException$__CLR4_1_22nw2nwjulisjaj</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.7%
+  </span>
+  <span class="absValue">
+    (13/ 15)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.IOException;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * An {@link IOException} decorator that adds a serializable tag to the
+<i>24</i>&nbsp; * wrapped exception. Both the tag and the original exception can be used
+<i>25</i>&nbsp; * to determine further processing when this exception is caught.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * @since 2.0
+<i>28</i>&nbsp; */
+<b class="fc"><i>29</i>&nbsp;public class TaggedIOException extends IOExceptionWithCause {</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Generated serial version UID.
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    private static final long serialVersionUID = -6994123481142850163L;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Checks whether the given throwable is tagged with the given tag.
+<i>38</i>&nbsp;     * &lt;p&gt;
+<i>39</i>&nbsp;     * This check can only succeed if the throwable is a
+<i>40</i>&nbsp;     * {@link TaggedIOException} and the tag is {@link Serializable}, but
+<i>41</i>&nbsp;     * the argument types are intentionally more generic to make it easier
+<i>42</i>&nbsp;     * to use this method without type casts.
+<i>43</i>&nbsp;     * &lt;p&gt;
+<i>44</i>&nbsp;     * A typical use for this method is in a &lt;code&gt;catch&lt;/code&gt; block to
+<i>45</i>&nbsp;     * determine how a caught exception should be handled:
+<i>46</i>&nbsp;     * &lt;pre&gt;
+<i>47</i>&nbsp;     * Serializable tag = ...;
+<i>48</i>&nbsp;     * try {
+<i>49</i>&nbsp;     *     ...;
+<i>50</i>&nbsp;     * } catch (Throwable t) {
+<i>51</i>&nbsp;     *     if (TaggedIOExcepton.isTaggedWith(t, tag)) {
+<i>52</i>&nbsp;     *         // special processing for tagged exception
+<i>53</i>&nbsp;     *     } else {
+<i>54</i>&nbsp;     *         // handling of other kinds of exceptions
+<i>55</i>&nbsp;     *     }
+<i>56</i>&nbsp;     * }
+<i>57</i>&nbsp;     * &lt;/pre&gt;
+<i>58</i>&nbsp;     *
+<i>59</i>&nbsp;     * @param throwable The Throwable object to check
+<i>60</i>&nbsp;     * @param tag tag object
+<i>61</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if the throwable has the specified tag,
+<i>62</i>&nbsp;     * otherwise &lt;code&gt;false&lt;/code&gt;
+<i>63</i>&nbsp;     */
+<b class="fc"><i>64</i>&nbsp;    public static boolean isTaggedWith(Throwable throwable, Object tag) {</b>
+<b class="fc"><i>65</i>&nbsp;        return tag != null</b>
+<i>66</i>&nbsp;            &amp;&amp; throwable instanceof TaggedIOException
+<b class="fc"><i>67</i>&nbsp;            &amp;&amp; tag.equals(((TaggedIOException) throwable).tag);</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * Throws the original {@link IOException} if the given throwable is
+<i>72</i>&nbsp;     * a {@link TaggedIOException} decorator the given tag. Does nothing
+<i>73</i>&nbsp;     * if the given throwable is of a different type or if it is tagged
+<i>74</i>&nbsp;     * with some other tag.
+<i>75</i>&nbsp;     * &lt;p&gt;
+<i>76</i>&nbsp;     * This method is typically used in a &lt;code&gt;catch&lt;/code&gt; block to
+<i>77</i>&nbsp;     * selectively rethrow tagged exceptions.
+<i>78</i>&nbsp;     * &lt;pre&gt;
+<i>79</i>&nbsp;     * Serializable tag = ...;
+<i>80</i>&nbsp;     * try {
+<i>81</i>&nbsp;     *     ...;
+<i>82</i>&nbsp;     * } catch (Throwable t) {
+<i>83</i>&nbsp;     *     TaggedIOExcepton.throwCauseIfTagged(t, tag);
+<i>84</i>&nbsp;     *     // handle other kinds of exceptions
+<i>85</i>&nbsp;     * }
+<i>86</i>&nbsp;     * &lt;/pre&gt;
+<i>87</i>&nbsp;     *
+<i>88</i>&nbsp;     * @param throwable an exception
+<i>89</i>&nbsp;     * @param tag tag object
+<i>90</i>&nbsp;     * @throws IOException original exception from the tagged decorator, if any
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public static void throwCauseIfTaggedWith(Throwable throwable, Object tag)
+<b class="fc"><i>93</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>94</i>&nbsp;        if (isTaggedWith(throwable, tag)) {</b>
+<b class="fc"><i>95</i>&nbsp;            throw ((TaggedIOException) throwable).getCause();</b>
+<i>96</i>&nbsp;        }
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * The tag of this exception.
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    private final Serializable tag;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Creates a tagged wrapper for the given exception.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param original the exception to be tagged
+<i>108</i>&nbsp;     * @param tag tag of this exception
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public TaggedIOException(IOException original, Serializable tag) {
+<b class="fc"><i>111</i>&nbsp;        super(original.getMessage(), original);</b>
+<b class="fc"><i>112</i>&nbsp;        this.tag = tag;</b>
+<b class="fc"><i>113</i>&nbsp;    }</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * Returns the serializable tag object.
+<i>117</i>&nbsp;     *
+<i>118</i>&nbsp;     * @return tag object
+<i>119</i>&nbsp;     */
+<b class="nc"><i>120</i>&nbsp;    public Serializable getTag() {</b>
+<b class="nc"><i>121</i>&nbsp;        return tag;</b>
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * Returns the wrapped exception. The only difference to the overridden
+<i>126</i>&nbsp;     * {@link Throwable#getCause()} method is the narrower return type.
+<i>127</i>&nbsp;     *
+<i>128</i>&nbsp;     * @return wrapped exception
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    @Override
+<b class="fc"><i>131</i>&nbsp;    public IOException getCause() {</b>
+<b class="fc"><i>132</i>&nbsp;        return (IOException) super.getCause();</b>
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

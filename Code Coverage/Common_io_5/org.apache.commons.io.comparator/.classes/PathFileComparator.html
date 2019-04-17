@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PathFileComparator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.comparator</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PathFileComparator (org.apache.commons.io.comparator)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PathFileComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/ 17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PathFileComparator$__CLR4_1_2178178jukjemlr</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.comparator;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.util.Comparator;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.io.IOCase;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Compare the &lt;b&gt;path&lt;/b&gt; of two files for order (see {@link File#getPath()}).
+<i>27</i>&nbsp; * &lt;p&gt;
+<i>28</i>&nbsp; * This comparator can be used to sort lists or arrays of files
+<i>29</i>&nbsp; * by their path either in a case-sensitive, case-insensitive or
+<i>30</i>&nbsp; * system dependent case sensitive way. A number of singleton instances
+<i>31</i>&nbsp; * are provided for the various case sensitivity options (using {@link IOCase})
+<i>32</i>&nbsp; * and the reverse of those options.
+<i>33</i>&nbsp; * &lt;p&gt;
+<i>34</i>&nbsp; * Example of a &lt;i&gt;case-sensitive&lt;/i&gt; file path sort using the
+<i>35</i>&nbsp; * {@link #PATH_COMPARATOR} singleton instance:
+<i>36</i>&nbsp; * &lt;pre&gt;
+<i>37</i>&nbsp; *       List&amp;lt;File&amp;gt; list = ...
+<i>38</i>&nbsp; *       ((AbstractFileComparator) PathFileComparator.PATH_COMPARATOR).sort(list);
+<i>39</i>&nbsp; * &lt;/pre&gt;
+<i>40</i>&nbsp; * &lt;p&gt;
+<i>41</i>&nbsp; * Example of a &lt;i&gt;reverse case-insensitive&lt;/i&gt; file path sort using the
+<i>42</i>&nbsp; * {@link #PATH_INSENSITIVE_REVERSE} singleton instance:
+<i>43</i>&nbsp; * &lt;pre&gt;
+<i>44</i>&nbsp; *       File[] array = ...
+<i>45</i>&nbsp; *       ((AbstractFileComparator) PathFileComparator.PATH_INSENSITIVE_REVERSE).sort(array);
+<i>46</i>&nbsp; * &lt;/pre&gt;
+<i>47</i>&nbsp; * &lt;p&gt;
+<i>48</i>&nbsp; *
+<i>49</i>&nbsp; * @version $Id$
+<i>50</i>&nbsp; * @since 1.4
+<i>51</i>&nbsp; */
+<b class="fc"><i>52</i>&nbsp;public class PathFileComparator extends AbstractFileComparator implements Serializable {</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    private static final long serialVersionUID = 6527501707585768673L;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
+<b class="fc"><i>57</i>&nbsp;    public static final Comparator&lt;File&gt; PATH_COMPARATOR = new PathFileComparator();</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /** Reverse case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
+<b class="fc"><i>60</i>&nbsp;    public static final Comparator&lt;File&gt; PATH_REVERSE = new ReverseComparator(PATH_COMPARATOR);</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /** Case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
+<b class="fc"><i>63</i>&nbsp;    public static final Comparator&lt;File&gt; PATH_INSENSITIVE_COMPARATOR = new PathFileComparator(IOCase.INSENSITIVE);</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /** Reverse case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
+<b class="fc"><i>66</i>&nbsp;    public static final Comparator&lt;File&gt; PATH_INSENSITIVE_REVERSE = new ReverseComparator(PATH_INSENSITIVE_COMPARATOR);</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /** System sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
+<b class="fc"><i>69</i>&nbsp;    public static final Comparator&lt;File&gt; PATH_SYSTEM_COMPARATOR = new PathFileComparator(IOCase.SYSTEM);</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
+<b class="fc"><i>72</i>&nbsp;    public static final Comparator&lt;File&gt; PATH_SYSTEM_REVERSE = new ReverseComparator(PATH_SYSTEM_COMPARATOR);</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /** Whether the comparison is case sensitive. */
+<i>75</i>&nbsp;    private final IOCase caseSensitivity;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * Construct a case sensitive file path comparator instance.
+<i>79</i>&nbsp;     */
+<b class="fc"><i>80</i>&nbsp;    public PathFileComparator() {</b>
+<b class="fc"><i>81</i>&nbsp;        this.caseSensitivity = IOCase.SENSITIVE;</b>
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * Construct a file path comparator instance with the specified case-sensitivity.
+<i>86</i>&nbsp;     *
+<i>87</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>88</i>&nbsp;     */
+<b class="fc"><i>89</i>&nbsp;    public PathFileComparator(final IOCase caseSensitivity) {</b>
+<b class="fc"><i>90</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;</b>
+<b class="fc"><i>91</i>&nbsp;    }</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Compare the paths of two files the specified case sensitivity.
+<i>95</i>&nbsp;     * 
+<i>96</i>&nbsp;     * @param file1 The first file to compare
+<i>97</i>&nbsp;     * @param file2 The second file to compare
+<i>98</i>&nbsp;     * @return a negative value if the first file&#39;s path
+<i>99</i>&nbsp;     * is less than the second, zero if the paths are the
+<i>100</i>&nbsp;     * same and a positive value if the first files path
+<i>101</i>&nbsp;     * is greater than the second file.
+<i>102</i>&nbsp;     * 
+<i>103</i>&nbsp;     */
+<b class="fc"><i>104</i>&nbsp;    public int compare(final File file1, final File file2) {</b>
+<b class="fc"><i>105</i>&nbsp;        return caseSensitivity.checkCompareTo(file1.getPath(), file2.getPath());</b>
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * String representation of this file comparator.
+<i>110</i>&nbsp;     *
+<i>111</i>&nbsp;     * @return String representation of this file comparator
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    @Override
+<b class="fc"><i>114</i>&nbsp;    public String toString() {</b>
+<b class="fc"><i>115</i>&nbsp;        return super.toString() + &quot;[caseSensitivity=&quot; + caseSensitivity + &quot;]&quot;;</b>
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

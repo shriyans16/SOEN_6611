@@ -1,0 +1,406 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ReaderInputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.input</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ReaderInputStream (org.apache.commons.io.input)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ReaderInputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.4%
+  </span>
+  <span class="absValue">
+    (64/ 70)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ReaderInputStream$__CLR4_1_21qk1qkjukht4rf</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (12/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.5%
+  </span>
+  <span class="absValue">
+    (65/ 71)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.input;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import static org.apache.commons.io.IOUtils.EOF;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.io.InputStream;
+<i>23</i>&nbsp;import java.io.Reader;
+<i>24</i>&nbsp;import java.nio.ByteBuffer;
+<i>25</i>&nbsp;import java.nio.CharBuffer;
+<i>26</i>&nbsp;import java.nio.charset.Charset;
+<i>27</i>&nbsp;import java.nio.charset.CharsetEncoder;
+<i>28</i>&nbsp;import java.nio.charset.CoderResult;
+<i>29</i>&nbsp;import java.nio.charset.CodingErrorAction;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * {@link InputStream} implementation that reads a character stream from a {@link Reader}
+<i>33</i>&nbsp; * and transforms it to a byte stream using a specified charset encoding. The stream
+<i>34</i>&nbsp; * is transformed using a {@link CharsetEncoder} object, guaranteeing that all charset
+<i>35</i>&nbsp; * encodings supported by the JRE are handled correctly. In particular for charsets such as
+<i>36</i>&nbsp; * UTF-16, the implementation ensures that one and only one byte order marker
+<i>37</i>&nbsp; * is produced.
+<i>38</i>&nbsp; * &lt;p&gt;
+<i>39</i>&nbsp; * Since in general it is not possible to predict the number of characters to be read from the
+<i>40</i>&nbsp; * {@link Reader} to satisfy a read request on the {@link ReaderInputStream}, all reads from
+<i>41</i>&nbsp; * the {@link Reader} are buffered. There is therefore no well defined correlation
+<i>42</i>&nbsp; * between the current position of the {@link Reader} and that of the {@link ReaderInputStream}.
+<i>43</i>&nbsp; * This also implies that in general there is no need to wrap the underlying {@link Reader}
+<i>44</i>&nbsp; * in a {@link java.io.BufferedReader}.
+<i>45</i>&nbsp; * &lt;p&gt;
+<i>46</i>&nbsp; * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader};
+<i>47</i>&nbsp; * in the following example, reading from {@code in2} would return the same byte
+<i>48</i>&nbsp; * sequence as reading from {@code in} (provided that the initial byte sequence is legal
+<i>49</i>&nbsp; * with respect to the charset encoding):
+<i>50</i>&nbsp; * &lt;pre&gt;
+<i>51</i>&nbsp; * InputStream in = ...
+<i>52</i>&nbsp; * Charset cs = ...
+<i>53</i>&nbsp; * InputStreamReader reader = new InputStreamReader(in, cs);
+<i>54</i>&nbsp; * ReaderInputStream in2 = new ReaderInputStream(reader, cs);&lt;/pre&gt;
+<i>55</i>&nbsp; * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter},
+<i>56</i>&nbsp; * except that the control flow is reversed: both classes transform a character stream
+<i>57</i>&nbsp; * into a byte stream, but {@link java.io.OutputStreamWriter} pushes data to the underlying stream,
+<i>58</i>&nbsp; * while {@link ReaderInputStream} pulls it from the underlying stream.
+<i>59</i>&nbsp; * &lt;p&gt;
+<i>60</i>&nbsp; * Note that while there are use cases where there is no alternative to using
+<i>61</i>&nbsp; * this class, very often the need to use this class is an indication of a flaw
+<i>62</i>&nbsp; * in the design of the code. This class is typically used in situations where an existing
+<i>63</i>&nbsp; * API only accepts an {@link InputStream}, but where the most natural way to produce the data
+<i>64</i>&nbsp; * is as a character stream, i.e. by providing a {@link Reader} instance. An example of a situation
+<i>65</i>&nbsp; * where this problem may appear is when implementing the {@code javax.activation.DataSource}
+<i>66</i>&nbsp; * interface from the Java Activation Framework.
+<i>67</i>&nbsp; * &lt;p&gt;
+<i>68</i>&nbsp; * Given the fact that the {@link Reader} class doesn&#39;t provide any way to predict whether the next
+<i>69</i>&nbsp; * read operation will block or not, it is not possible to provide a meaningful
+<i>70</i>&nbsp; * implementation of the {@link InputStream#available()} method. A call to this method
+<i>71</i>&nbsp; * will always return 0. Also, this class doesn&#39;t support {@link InputStream#mark(int)}.
+<i>72</i>&nbsp; * &lt;p&gt;
+<i>73</i>&nbsp; * Instances of {@link ReaderInputStream} are not thread safe.
+<i>74</i>&nbsp; *
+<i>75</i>&nbsp; * @see org.apache.commons.io.output.WriterOutputStream
+<i>76</i>&nbsp; *
+<i>77</i>&nbsp; * @since 2.0
+<i>78</i>&nbsp; */
+<b class="fc"><i>79</i>&nbsp;public class ReaderInputStream extends InputStream {</b>
+<i>80</i>&nbsp;    private static final int DEFAULT_BUFFER_SIZE = 1024;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    private final Reader reader;
+<i>83</i>&nbsp;    private final CharsetEncoder encoder;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * CharBuffer used as input for the decoder. It should be reasonably
+<i>87</i>&nbsp;     * large as we read data from the underlying Reader into this buffer.
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    private final CharBuffer encoderIn;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * ByteBuffer used as output for the decoder. This buffer can be small
+<i>93</i>&nbsp;     * as it is only used to transfer data from the decoder to the
+<i>94</i>&nbsp;     * buffer provided by the caller.
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    private final ByteBuffer encoderOut;
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    private CoderResult lastCoderResult;
+<i>99</i>&nbsp;    private boolean endOfInput;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Construct a new {@link ReaderInputStream}.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @param reader the target {@link Reader}
+<i>105</i>&nbsp;     * @param encoder the charset encoder
+<i>106</i>&nbsp;     * @since 2.1
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    public ReaderInputStream(final Reader reader, final CharsetEncoder encoder) {
+<b class="nc"><i>109</i>&nbsp;        this(reader, encoder, DEFAULT_BUFFER_SIZE);</b>
+<b class="nc"><i>110</i>&nbsp;    }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * Construct a new {@link ReaderInputStream}.
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @param reader the target {@link Reader}
+<i>116</i>&nbsp;     * @param encoder the charset encoder
+<i>117</i>&nbsp;     * @param bufferSize the size of the input buffer in number of characters
+<i>118</i>&nbsp;     * @since 2.1
+<i>119</i>&nbsp;     */
+<b class="fc"><i>120</i>&nbsp;    public ReaderInputStream(final Reader reader, final CharsetEncoder encoder, final int bufferSize) {</b>
+<b class="fc"><i>121</i>&nbsp;        this.reader = reader;</b>
+<b class="fc"><i>122</i>&nbsp;        this.encoder = encoder;</b>
+<b class="fc"><i>123</i>&nbsp;        this.encoderIn = CharBuffer.allocate(bufferSize);</b>
+<b class="fc"><i>124</i>&nbsp;        this.encoderIn.flip();</b>
+<b class="fc"><i>125</i>&nbsp;        this.encoderOut = ByteBuffer.allocate(128);</b>
+<b class="fc"><i>126</i>&nbsp;        this.encoderOut.flip();</b>
+<b class="fc"><i>127</i>&nbsp;    }</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     * Construct a new {@link ReaderInputStream}.
+<i>131</i>&nbsp;     *
+<i>132</i>&nbsp;     * @param reader the target {@link Reader}
+<i>133</i>&nbsp;     * @param charset the charset encoding
+<i>134</i>&nbsp;     * @param bufferSize the size of the input buffer in number of characters
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    public ReaderInputStream(final Reader reader, final Charset charset, final int bufferSize) {
+<b class="fc"><i>137</i>&nbsp;        this(reader,</b>
+<b class="fc"><i>138</i>&nbsp;             charset.newEncoder()</b>
+<b class="fc"><i>139</i>&nbsp;                    .onMalformedInput(CodingErrorAction.REPLACE)</b>
+<b class="fc"><i>140</i>&nbsp;                    .onUnmappableCharacter(CodingErrorAction.REPLACE),</b>
+<b class="fc"><i>141</i>&nbsp;             bufferSize);</b>
+<b class="fc"><i>142</i>&nbsp;    }</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * Construct a new {@link ReaderInputStream} with a default input buffer size of
+<i>146</i>&nbsp;     * 1024 characters.
+<i>147</i>&nbsp;     *
+<i>148</i>&nbsp;     * @param reader the target {@link Reader}
+<i>149</i>&nbsp;     * @param charset the charset encoding
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public ReaderInputStream(final Reader reader, final Charset charset) {
+<b class="fc"><i>152</i>&nbsp;        this(reader, charset, DEFAULT_BUFFER_SIZE);</b>
+<b class="fc"><i>153</i>&nbsp;    }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Construct a new {@link ReaderInputStream}.
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @param reader the target {@link Reader}
+<i>159</i>&nbsp;     * @param charsetName the name of the charset encoding
+<i>160</i>&nbsp;     * @param bufferSize the size of the input buffer in number of characters
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public ReaderInputStream(final Reader reader, final String charsetName, final int bufferSize) {
+<b class="fc"><i>163</i>&nbsp;        this(reader, Charset.forName(charsetName), bufferSize);</b>
+<b class="fc"><i>164</i>&nbsp;    }</b>
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    /**
+<i>167</i>&nbsp;     * Construct a new {@link ReaderInputStream} with a default input buffer size of
+<i>168</i>&nbsp;     * 1024 characters.
+<i>169</i>&nbsp;     *
+<i>170</i>&nbsp;     * @param reader the target {@link Reader}
+<i>171</i>&nbsp;     * @param charsetName the name of the charset encoding
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    public ReaderInputStream(final Reader reader, final String charsetName) {
+<b class="fc"><i>174</i>&nbsp;        this(reader, charsetName, DEFAULT_BUFFER_SIZE);</b>
+<b class="fc"><i>175</i>&nbsp;    }</b>
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Construct a new {@link ReaderInputStream} that uses the default character encoding
+<i>179</i>&nbsp;     * with a default input buffer size of 1024 characters.
+<i>180</i>&nbsp;     *
+<i>181</i>&nbsp;     * @param reader the target {@link Reader}
+<i>182</i>&nbsp;     * @deprecated 2.5 use {@link #ReaderInputStream(Reader, Charset)} instead
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    @Deprecated
+<i>185</i>&nbsp;    public ReaderInputStream(final Reader reader) {
+<b class="fc"><i>186</i>&nbsp;        this(reader, Charset.defaultCharset());</b>
+<b class="fc"><i>187</i>&nbsp;    }</b>
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    /**
+<i>190</i>&nbsp;     * Fills the internal char buffer from the reader.
+<i>191</i>&nbsp;     *
+<i>192</i>&nbsp;     * @throws IOException
+<i>193</i>&nbsp;     *             If an I/O error occurs
+<i>194</i>&nbsp;     */
+<b class="fc"><i>195</i>&nbsp;    private void fillBuffer() throws IOException {</b>
+<b class="fc"><i>196</i>&nbsp;        if (!endOfInput &amp;&amp; (lastCoderResult == null || lastCoderResult.isUnderflow())) {</b>
+<b class="fc"><i>197</i>&nbsp;            encoderIn.compact();</b>
+<b class="fc"><i>198</i>&nbsp;            final int position = encoderIn.position();</b>
+<i>199</i>&nbsp;            // We don&#39;t use Reader#read(CharBuffer) here because it is more efficient
+<i>200</i>&nbsp;            // to write directly to the underlying char array (the default implementation
+<i>201</i>&nbsp;            // copies data to a temporary char array).
+<b class="fc"><i>202</i>&nbsp;            final int c = reader.read(encoderIn.array(), position, encoderIn.remaining());</b>
+<b class="fc"><i>203</i>&nbsp;            if (c == EOF) {</b>
+<b class="fc"><i>204</i>&nbsp;                endOfInput = true;</b>
+<i>205</i>&nbsp;            } else {
+<b class="fc"><i>206</i>&nbsp;                encoderIn.position(position+c);</b>
+<i>207</i>&nbsp;            }
+<b class="fc"><i>208</i>&nbsp;            encoderIn.flip();</b>
+<i>209</i>&nbsp;        }
+<b class="fc"><i>210</i>&nbsp;        encoderOut.compact();</b>
+<b class="fc"><i>211</i>&nbsp;        lastCoderResult = encoder.encode(encoderIn, encoderOut, endOfInput);</b>
+<b class="fc"><i>212</i>&nbsp;        encoderOut.flip();</b>
+<b class="fc"><i>213</i>&nbsp;    }</b>
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    /**
+<i>216</i>&nbsp;     * Read the specified number of bytes into an array.
+<i>217</i>&nbsp;     *
+<i>218</i>&nbsp;     * @param b the byte array to read into
+<i>219</i>&nbsp;     * @param off the offset to start reading bytes into
+<i>220</i>&nbsp;     * @param len the number of bytes to read
+<i>221</i>&nbsp;     * @return the number of bytes read or &lt;code&gt;-1&lt;/code&gt;
+<i>222</i>&nbsp;     *         if the end of the stream has been reached
+<i>223</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    @Override
+<b class="fc"><i>226</i>&nbsp;    public int read(final byte[] b, int off, int len) throws IOException {</b>
+<b class="fc"><i>227</i>&nbsp;        if (b == null) {</b>
+<b class="nc"><i>228</i>&nbsp;            throw new NullPointerException(&quot;Byte array must not be null&quot;);</b>
+<i>229</i>&nbsp;        }
+<b class="fc"><i>230</i>&nbsp;        if (len &lt; 0 || off &lt; 0 || (off + len) &gt; b.length) {</b>
+<b class="nc"><i>231</i>&nbsp;            throw new IndexOutOfBoundsException(&quot;Array Size=&quot; + b.length +</b>
+<i>232</i>&nbsp;                    &quot;, offset=&quot; + off + &quot;, length=&quot; + len);
+<i>233</i>&nbsp;        }
+<b class="fc"><i>234</i>&nbsp;        int read = 0;</b>
+<b class="fc"><i>235</i>&nbsp;        if (len == 0) {</b>
+<b class="fc"><i>236</i>&nbsp;            return 0; // Always return 0 if len == 0</b>
+<i>237</i>&nbsp;        }
+<b class="fc"><i>238</i>&nbsp;        while (len &gt; 0) {</b>
+<b class="fc"><i>239</i>&nbsp;            if (encoderOut.hasRemaining()) {</b>
+<b class="fc"><i>240</i>&nbsp;                final int c = Math.min(encoderOut.remaining(), len);</b>
+<b class="fc"><i>241</i>&nbsp;                encoderOut.get(b, off, c);</b>
+<b class="fc"><i>242</i>&nbsp;                off += c;</b>
+<b class="fc"><i>243</i>&nbsp;                len -= c;</b>
+<b class="fc"><i>244</i>&nbsp;                read += c;</b>
+<b class="fc"><i>245</i>&nbsp;            } else {</b>
+<b class="fc"><i>246</i>&nbsp;                fillBuffer();</b>
+<b class="fc"><i>247</i>&nbsp;                if (endOfInput &amp;&amp; !encoderOut.hasRemaining()) {</b>
+<b class="fc"><i>248</i>&nbsp;                    break;</b>
+<i>249</i>&nbsp;                }
+<i>250</i>&nbsp;            }
+<i>251</i>&nbsp;        }
+<b class="fc"><i>252</i>&nbsp;        return read == 0 &amp;&amp; endOfInput ? EOF : read;</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;    /**
+<i>256</i>&nbsp;     * Read the specified number of bytes into an array.
+<i>257</i>&nbsp;     *
+<i>258</i>&nbsp;     * @param b the byte array to read into
+<i>259</i>&nbsp;     * @return the number of bytes read or &lt;code&gt;-1&lt;/code&gt;
+<i>260</i>&nbsp;     *         if the end of the stream has been reached
+<i>261</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    @Override
+<b class="nc"><i>264</i>&nbsp;    public int read(final byte[] b) throws IOException {</b>
+<b class="nc"><i>265</i>&nbsp;        return read(b, 0, b.length);</b>
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * Read a single byte.
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @return either the byte read or &lt;code&gt;-1&lt;/code&gt; if the end of the stream
+<i>272</i>&nbsp;     *         has been reached
+<i>273</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>274</i>&nbsp;     */
+<i>275</i>&nbsp;    @Override
+<b class="fc"><i>276</i>&nbsp;    public int read() throws IOException {</b>
+<b class="fc"><i>277</i>&nbsp;        for (;;) {</b>
+<b class="fc"><i>278</i>&nbsp;            if (encoderOut.hasRemaining()) {</b>
+<b class="fc"><i>279</i>&nbsp;                return encoderOut.get() &amp; 0xFF;</b>
+<i>280</i>&nbsp;            }
+<b class="fc"><i>281</i>&nbsp;            fillBuffer();</b>
+<b class="fc"><i>282</i>&nbsp;            if (endOfInput &amp;&amp; !encoderOut.hasRemaining()) {</b>
+<b class="fc"><i>283</i>&nbsp;                return EOF;</b>
+<i>284</i>&nbsp;            }
+<i>285</i>&nbsp;        }
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    /**
+<i>289</i>&nbsp;     * Close the stream. This method will cause the underlying {@link Reader}
+<i>290</i>&nbsp;     * to be closed.
+<i>291</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>292</i>&nbsp;     */
+<i>293</i>&nbsp;    @Override
+<b class="fc"><i>294</i>&nbsp;    public void close() throws IOException {</b>
+<b class="fc"><i>295</i>&nbsp;        reader.close();</b>
+<b class="fc"><i>296</i>&nbsp;    }</b>
+<i>297</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:40</div>
+</div>
+</body>
+</html>

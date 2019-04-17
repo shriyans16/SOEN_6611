@@ -1,0 +1,2669 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: IOUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: IOUtils (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IOUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.6%
+  </span>
+  <span class="absValue">
+    (95/ 106)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.5%
+  </span>
+  <span class="absValue">
+    (443/ 479)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">IOUtils$__CLR4_1_22gp2gpjuliqt3s</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    89.7%
+  </span>
+  <span class="absValue">
+    (96/ 107)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.5%
+  </span>
+  <span class="absValue">
+    (444/ 480)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.BufferedInputStream;
+<i>20</i>&nbsp;import java.io.BufferedReader;
+<i>21</i>&nbsp;import java.io.ByteArrayInputStream;
+<i>22</i>&nbsp;import java.io.CharArrayWriter;
+<i>23</i>&nbsp;import java.io.Closeable;
+<i>24</i>&nbsp;import java.io.EOFException;
+<i>25</i>&nbsp;import java.io.File;
+<i>26</i>&nbsp;import java.io.IOException;
+<i>27</i>&nbsp;import java.io.InputStream;
+<i>28</i>&nbsp;import java.io.InputStreamReader;
+<i>29</i>&nbsp;import java.io.OutputStream;
+<i>30</i>&nbsp;import java.io.OutputStreamWriter;
+<i>31</i>&nbsp;import java.io.PrintWriter;
+<i>32</i>&nbsp;import java.io.Reader;
+<i>33</i>&nbsp;import java.io.UnsupportedEncodingException;
+<i>34</i>&nbsp;import java.io.Writer;
+<i>35</i>&nbsp;import java.net.HttpURLConnection;
+<i>36</i>&nbsp;import java.net.ServerSocket;
+<i>37</i>&nbsp;import java.net.Socket;
+<i>38</i>&nbsp;import java.net.URI;
+<i>39</i>&nbsp;import java.net.URL;
+<i>40</i>&nbsp;import java.net.URLConnection;
+<i>41</i>&nbsp;import java.nio.channels.Selector;
+<i>42</i>&nbsp;import java.nio.charset.Charset;
+<i>43</i>&nbsp;import java.nio.charset.UnsupportedCharsetException;
+<i>44</i>&nbsp;import java.util.ArrayList;
+<i>45</i>&nbsp;import java.util.Collection;
+<i>46</i>&nbsp;import java.util.List;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;import org.apache.commons.io.output.ByteArrayOutputStream;
+<i>49</i>&nbsp;import org.apache.commons.io.output.StringBuilderWriter;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;/**
+<i>52</i>&nbsp; * General IO stream manipulation utilities.
+<i>53</i>&nbsp; * &lt;p&gt;
+<i>54</i>&nbsp; * This class provides static utility methods for input/output operations.
+<i>55</i>&nbsp; * &lt;ul&gt;
+<i>56</i>&nbsp; * &lt;li&gt;closeQuietly - these methods close a stream ignoring nulls and exceptions
+<i>57</i>&nbsp; * &lt;li&gt;toXxx/read - these methods read data from a stream
+<i>58</i>&nbsp; * &lt;li&gt;write - these methods write data to a stream
+<i>59</i>&nbsp; * &lt;li&gt;copy - these methods copy all the data from one stream to another
+<i>60</i>&nbsp; * &lt;li&gt;contentEquals - these methods compare the content of two streams
+<i>61</i>&nbsp; * &lt;/ul&gt;
+<i>62</i>&nbsp; * &lt;p&gt;
+<i>63</i>&nbsp; * The byte-to-char methods and char-to-byte methods involve a conversion step.
+<i>64</i>&nbsp; * Two methods are provided in each case, one that uses the platform default
+<i>65</i>&nbsp; * encoding and the other which allows you to specify an encoding. You are
+<i>66</i>&nbsp; * encouraged to always specify an encoding because relying on the platform
+<i>67</i>&nbsp; * default can lead to unexpected results, for example when moving from
+<i>68</i>&nbsp; * development to production.
+<i>69</i>&nbsp; * &lt;p&gt;
+<i>70</i>&nbsp; * All the methods in this class that read a stream are buffered internally.
+<i>71</i>&nbsp; * This means that there is no cause to use a &lt;code&gt;BufferedInputStream&lt;/code&gt;
+<i>72</i>&nbsp; * or &lt;code&gt;BufferedReader&lt;/code&gt;. The default buffer size of 4K has been shown
+<i>73</i>&nbsp; * to be efficient in tests.
+<i>74</i>&nbsp; * &lt;p&gt;
+<i>75</i>&nbsp; * Wherever possible, the methods in this class do &lt;em&gt;not&lt;/em&gt; flush or close
+<i>76</i>&nbsp; * the stream. This is to avoid making non-portable assumptions about the
+<i>77</i>&nbsp; * streams&#39; origin and further use. Thus the caller is still responsible for
+<i>78</i>&nbsp; * closing streams after use.
+<i>79</i>&nbsp; * &lt;p&gt;
+<i>80</i>&nbsp; * Origin of code: Excalibur.
+<i>81</i>&nbsp; *
+<i>82</i>&nbsp; * @version $Id$
+<i>83</i>&nbsp; */
+<b class="fc"><i>84</i>&nbsp;public class IOUtils {</b>
+<i>85</i>&nbsp;    // NOTE: This class is focussed on InputStream, OutputStream, Reader and
+<i>86</i>&nbsp;    // Writer. Each method should take at least one of these as a parameter,
+<i>87</i>&nbsp;    // or return one of them.
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    private static final int EOF = -1;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * The Unix directory separator character.
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    public static final char DIR_SEPARATOR_UNIX = &#39;/&#39;;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * The Windows directory separator character.
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public static final char DIR_SEPARATOR_WINDOWS = &#39;\\&#39;;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * The system directory separator character.
+<i>100</i>&nbsp;     */
+<b class="fc"><i>101</i>&nbsp;    public static final char DIR_SEPARATOR = File.separatorChar;</b>
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * The Unix line separator string.
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    public static final String LINE_SEPARATOR_UNIX = &quot;\n&quot;;
+<i>106</i>&nbsp;    /**
+<i>107</i>&nbsp;     * The Windows line separator string.
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    public static final String LINE_SEPARATOR_WINDOWS = &quot;\r\n&quot;;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * The system line separator string.
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    public static final String LINE_SEPARATOR;
+<i>114</i>&nbsp;    
+<b class="fc"><i>115</i>&nbsp;    static {</b>
+<i>116</i>&nbsp;        // avoid security issues
+<b class="fc"><i>117</i>&nbsp;        StringBuilderWriter buf = new StringBuilderWriter(4);</b>
+<b class="fc"><i>118</i>&nbsp;        PrintWriter out = new PrintWriter(buf);</b>
+<b class="fc"><i>119</i>&nbsp;        out.println();</b>
+<b class="fc"><i>120</i>&nbsp;        LINE_SEPARATOR = buf.toString();</b>
+<b class="fc"><i>121</i>&nbsp;        out.close();</b>
+<b class="fc"><i>122</i>&nbsp;    }</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * The default buffer size ({@value}) to use for 
+<i>126</i>&nbsp;     * {@link #copyLarge(InputStream, OutputStream)}
+<i>127</i>&nbsp;     * and
+<i>128</i>&nbsp;     * {@link #copyLarge(Reader, Writer)}
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * The default buffer size to use for the skip() methods.
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    private static final int SKIP_BUFFER_SIZE = 2048;
+<i>136</i>&nbsp;    
+<i>137</i>&nbsp;    // Allocated in the relevant skip method if necessary.
+<i>138</i>&nbsp;    /*
+<i>139</i>&nbsp;     * N.B. no need to synchronize these because:
+<i>140</i>&nbsp;     * - we don&#39;t care if the buffer is created multiple times (the data is ignored)
+<i>141</i>&nbsp;     * - we always use the same size buffer, so if it it is recreated it will still be OK
+<i>142</i>&nbsp;     * (if the buffer size were variable, we would need to synch. to ensure some other thread
+<i>143</i>&nbsp;     * did not create a smaller one)
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    private static char[] SKIP_CHAR_BUFFER;
+<i>146</i>&nbsp;    private static byte[] SKIP_BYTE_BUFFER;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /**
+<i>149</i>&nbsp;     * Instances should NOT be constructed in standard programming.
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public IOUtils() {
+<b class="nc"><i>152</i>&nbsp;        super();</b>
+<b class="nc"><i>153</i>&nbsp;    }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    //-----------------------------------------------------------------------
+<i>156</i>&nbsp;    
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     * Closes a URLConnection.
+<i>159</i>&nbsp;     * 
+<i>160</i>&nbsp;     * @param conn the connection to close.
+<i>161</i>&nbsp;     * @since 2.4
+<i>162</i>&nbsp;     */
+<b class="fc"><i>163</i>&nbsp;    public static void close(URLConnection conn) {</b>
+<b class="fc"><i>164</i>&nbsp;        if (conn instanceof HttpURLConnection) {</b>
+<b class="nc"><i>165</i>&nbsp;            ((HttpURLConnection) conn).disconnect();</b>
+<i>166</i>&nbsp;        }
+<b class="fc"><i>167</i>&nbsp;    }</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    /**
+<i>170</i>&nbsp;     * Unconditionally close an &lt;code&gt;Reader&lt;/code&gt;.
+<i>171</i>&nbsp;     * &lt;p&gt;
+<i>172</i>&nbsp;     * Equivalent to {@link Reader#close()}, except any exceptions will be ignored.
+<i>173</i>&nbsp;     * This is typically used in finally blocks.
+<i>174</i>&nbsp;     * &lt;p&gt;
+<i>175</i>&nbsp;     * Example code:
+<i>176</i>&nbsp;     * &lt;pre&gt;
+<i>177</i>&nbsp;     *   char[] data = new char[1024];
+<i>178</i>&nbsp;     *   Reader in = null;
+<i>179</i>&nbsp;     *   try {
+<i>180</i>&nbsp;     *       in = new FileReader(&quot;foo.txt&quot;);
+<i>181</i>&nbsp;     *       in.read(data);
+<i>182</i>&nbsp;     *       in.close(); //close errors are handled
+<i>183</i>&nbsp;     *   } catch (Exception e) {
+<i>184</i>&nbsp;     *       // error handling
+<i>185</i>&nbsp;     *   } finally {
+<i>186</i>&nbsp;     *       IOUtils.closeQuietly(in);
+<i>187</i>&nbsp;     *   }
+<i>188</i>&nbsp;     * &lt;/pre&gt;
+<i>189</i>&nbsp;     * 
+<i>190</i>&nbsp;     * @param input  the Reader to close, may be null or already closed
+<i>191</i>&nbsp;     */
+<b class="fc"><i>192</i>&nbsp;    public static void closeQuietly(Reader input) {</b>
+<b class="fc"><i>193</i>&nbsp;        closeQuietly((Closeable)input);</b>
+<b class="fc"><i>194</i>&nbsp;    }</b>
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * Unconditionally close a &lt;code&gt;Writer&lt;/code&gt;.
+<i>198</i>&nbsp;     * &lt;p&gt;
+<i>199</i>&nbsp;     * Equivalent to {@link Writer#close()}, except any exceptions will be ignored.
+<i>200</i>&nbsp;     * This is typically used in finally blocks.
+<i>201</i>&nbsp;     * &lt;p&gt;
+<i>202</i>&nbsp;     * Example code:
+<i>203</i>&nbsp;     * &lt;pre&gt;
+<i>204</i>&nbsp;     *   Writer out = null;
+<i>205</i>&nbsp;     *   try {
+<i>206</i>&nbsp;     *       out = new StringWriter();
+<i>207</i>&nbsp;     *       out.write(&quot;Hello World&quot;);
+<i>208</i>&nbsp;     *       out.close(); //close errors are handled
+<i>209</i>&nbsp;     *   } catch (Exception e) {
+<i>210</i>&nbsp;     *       // error handling
+<i>211</i>&nbsp;     *   } finally {
+<i>212</i>&nbsp;     *       IOUtils.closeQuietly(out);
+<i>213</i>&nbsp;     *   }
+<i>214</i>&nbsp;     * &lt;/pre&gt;
+<i>215</i>&nbsp;     *
+<i>216</i>&nbsp;     * @param output  the Writer to close, may be null or already closed
+<i>217</i>&nbsp;     */
+<b class="fc"><i>218</i>&nbsp;    public static void closeQuietly(Writer output) {</b>
+<b class="fc"><i>219</i>&nbsp;        closeQuietly((Closeable)output);</b>
+<b class="fc"><i>220</i>&nbsp;    }</b>
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * Unconditionally close an &lt;code&gt;InputStream&lt;/code&gt;.
+<i>224</i>&nbsp;     * &lt;p&gt;
+<i>225</i>&nbsp;     * Equivalent to {@link InputStream#close()}, except any exceptions will be ignored.
+<i>226</i>&nbsp;     * This is typically used in finally blocks.
+<i>227</i>&nbsp;     * &lt;p&gt;
+<i>228</i>&nbsp;     * Example code:
+<i>229</i>&nbsp;     * &lt;pre&gt;
+<i>230</i>&nbsp;     *   byte[] data = new byte[1024];
+<i>231</i>&nbsp;     *   InputStream in = null;
+<i>232</i>&nbsp;     *   try {
+<i>233</i>&nbsp;     *       in = new FileInputStream(&quot;foo.txt&quot;);
+<i>234</i>&nbsp;     *       in.read(data);
+<i>235</i>&nbsp;     *       in.close(); //close errors are handled
+<i>236</i>&nbsp;     *   } catch (Exception e) {
+<i>237</i>&nbsp;     *       // error handling
+<i>238</i>&nbsp;     *   } finally {
+<i>239</i>&nbsp;     *       IOUtils.closeQuietly(in);
+<i>240</i>&nbsp;     *   }
+<i>241</i>&nbsp;     * &lt;/pre&gt;
+<i>242</i>&nbsp;     *
+<i>243</i>&nbsp;     * @param input  the InputStream to close, may be null or already closed
+<i>244</i>&nbsp;     */
+<b class="fc"><i>245</i>&nbsp;    public static void closeQuietly(InputStream input) {</b>
+<b class="fc"><i>246</i>&nbsp;        closeQuietly((Closeable)input);</b>
+<b class="fc"><i>247</i>&nbsp;    }</b>
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;    /**
+<i>250</i>&nbsp;     * Unconditionally close an &lt;code&gt;OutputStream&lt;/code&gt;.
+<i>251</i>&nbsp;     * &lt;p&gt;
+<i>252</i>&nbsp;     * Equivalent to {@link OutputStream#close()}, except any exceptions will be ignored.
+<i>253</i>&nbsp;     * This is typically used in finally blocks.
+<i>254</i>&nbsp;     * &lt;p&gt;
+<i>255</i>&nbsp;     * Example code:
+<i>256</i>&nbsp;     * &lt;pre&gt;
+<i>257</i>&nbsp;     * byte[] data = &quot;Hello, World&quot;.getBytes();
+<i>258</i>&nbsp;     *
+<i>259</i>&nbsp;     * OutputStream out = null;
+<i>260</i>&nbsp;     * try {
+<i>261</i>&nbsp;     *     out = new FileOutputStream(&quot;foo.txt&quot;);
+<i>262</i>&nbsp;     *     out.write(data);
+<i>263</i>&nbsp;     *     out.close(); //close errors are handled
+<i>264</i>&nbsp;     * } catch (IOException e) {
+<i>265</i>&nbsp;     *     // error handling
+<i>266</i>&nbsp;     * } finally {
+<i>267</i>&nbsp;     *     IOUtils.closeQuietly(out);
+<i>268</i>&nbsp;     * }
+<i>269</i>&nbsp;     * &lt;/pre&gt;
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @param output  the OutputStream to close, may be null or already closed
+<i>272</i>&nbsp;     */
+<b class="fc"><i>273</i>&nbsp;    public static void closeQuietly(OutputStream output) {</b>
+<b class="fc"><i>274</i>&nbsp;        closeQuietly((Closeable)output);</b>
+<b class="fc"><i>275</i>&nbsp;    }</b>
+<i>276</i>&nbsp;    
+<i>277</i>&nbsp;    /**
+<i>278</i>&nbsp;     * Unconditionally close a &lt;code&gt;Closeable&lt;/code&gt;.
+<i>279</i>&nbsp;     * &lt;p&gt;
+<i>280</i>&nbsp;     * Equivalent to {@link Closeable#close()}, except any exceptions will be ignored.
+<i>281</i>&nbsp;     * This is typically used in finally blocks.
+<i>282</i>&nbsp;     * &lt;p&gt;
+<i>283</i>&nbsp;     * Example code:
+<i>284</i>&nbsp;     * &lt;pre&gt;
+<i>285</i>&nbsp;     *   Closeable closeable = null;
+<i>286</i>&nbsp;     *   try {
+<i>287</i>&nbsp;     *       closeable = new FileReader(&quot;foo.txt&quot;);
+<i>288</i>&nbsp;     *       // process closeable
+<i>289</i>&nbsp;     *       closeable.close();
+<i>290</i>&nbsp;     *   } catch (Exception e) {
+<i>291</i>&nbsp;     *       // error handling
+<i>292</i>&nbsp;     *   } finally {
+<i>293</i>&nbsp;     *       IOUtils.closeQuietly(closeable);
+<i>294</i>&nbsp;     *   }
+<i>295</i>&nbsp;     * &lt;/pre&gt;
+<i>296</i>&nbsp;     *
+<i>297</i>&nbsp;     * @param closeable the object to close, may be null or already closed
+<i>298</i>&nbsp;     * @since 2.0
+<i>299</i>&nbsp;     */
+<b class="fc"><i>300</i>&nbsp;    public static void closeQuietly(Closeable closeable) {</b>
+<b class="fc"><i>301</i>&nbsp;        try {</b>
+<b class="fc"><i>302</i>&nbsp;            if (closeable != null) {</b>
+<b class="fc"><i>303</i>&nbsp;                closeable.close();</b>
+<i>304</i>&nbsp;            }
+<b class="fc"><i>305</i>&nbsp;        } catch (IOException ioe) {</b>
+<i>306</i>&nbsp;            // ignore
+<b class="fc"><i>307</i>&nbsp;        }</b>
+<b class="fc"><i>308</i>&nbsp;    }</b>
+<i>309</i>&nbsp;
+<i>310</i>&nbsp;    /**
+<i>311</i>&nbsp;     * Unconditionally close a &lt;code&gt;Socket&lt;/code&gt;.
+<i>312</i>&nbsp;     * &lt;p&gt;
+<i>313</i>&nbsp;     * Equivalent to {@link Socket#close()}, except any exceptions will be ignored.
+<i>314</i>&nbsp;     * This is typically used in finally blocks.
+<i>315</i>&nbsp;     * &lt;p&gt;
+<i>316</i>&nbsp;     * Example code:
+<i>317</i>&nbsp;     * &lt;pre&gt;
+<i>318</i>&nbsp;     *   Socket socket = null;
+<i>319</i>&nbsp;     *   try {
+<i>320</i>&nbsp;     *       socket = new Socket(&quot;http://www.foo.com/&quot;, 80);
+<i>321</i>&nbsp;     *       // process socket
+<i>322</i>&nbsp;     *       socket.close();
+<i>323</i>&nbsp;     *   } catch (Exception e) {
+<i>324</i>&nbsp;     *       // error handling
+<i>325</i>&nbsp;     *   } finally {
+<i>326</i>&nbsp;     *       IOUtils.closeQuietly(socket);
+<i>327</i>&nbsp;     *   }
+<i>328</i>&nbsp;     * &lt;/pre&gt;
+<i>329</i>&nbsp;     *
+<i>330</i>&nbsp;     * @param sock the Socket to close, may be null or already closed
+<i>331</i>&nbsp;     * @since 2.0
+<i>332</i>&nbsp;     */
+<b class="fc"><i>333</i>&nbsp;    public static void closeQuietly(Socket sock){</b>
+<b class="fc"><i>334</i>&nbsp;        if (sock != null){</b>
+<b class="fc"><i>335</i>&nbsp;            try {</b>
+<b class="fc"><i>336</i>&nbsp;                sock.close();</b>
+<b class="fc"><i>337</i>&nbsp;            } catch (IOException ioe) {</b>
+<i>338</i>&nbsp;                // ignored
+<b class="fc"><i>339</i>&nbsp;            }</b>
+<i>340</i>&nbsp;        }
+<b class="fc"><i>341</i>&nbsp;    }</b>
+<i>342</i>&nbsp;
+<i>343</i>&nbsp;    /**
+<i>344</i>&nbsp;     * Unconditionally close a &lt;code&gt;Selector&lt;/code&gt;.
+<i>345</i>&nbsp;     * &lt;p&gt;
+<i>346</i>&nbsp;     * Equivalent to {@link Selector#close()}, except any exceptions will be ignored.
+<i>347</i>&nbsp;     * This is typically used in finally blocks.
+<i>348</i>&nbsp;     * &lt;p&gt;
+<i>349</i>&nbsp;     * Example code:
+<i>350</i>&nbsp;     * &lt;pre&gt;
+<i>351</i>&nbsp;     *   Selector selector = null;
+<i>352</i>&nbsp;     *   try {
+<i>353</i>&nbsp;     *       selector = Selector.open();
+<i>354</i>&nbsp;     *       // process socket
+<i>355</i>&nbsp;     *       
+<i>356</i>&nbsp;     *   } catch (Exception e) {
+<i>357</i>&nbsp;     *       // error handling
+<i>358</i>&nbsp;     *   } finally {
+<i>359</i>&nbsp;     *       IOUtils.closeQuietly(selector);
+<i>360</i>&nbsp;     *   }
+<i>361</i>&nbsp;     * &lt;/pre&gt;
+<i>362</i>&nbsp;     *
+<i>363</i>&nbsp;     * @param selector the Selector to close, may be null or already closed
+<i>364</i>&nbsp;     * @since 2.2
+<i>365</i>&nbsp;     */
+<b class="fc"><i>366</i>&nbsp;    public static void closeQuietly(Selector selector){</b>
+<b class="fc"><i>367</i>&nbsp;        if (selector != null){</b>
+<b class="fc"><i>368</i>&nbsp;            try {</b>
+<b class="fc"><i>369</i>&nbsp;              selector.close();</b>
+<b class="fc"><i>370</i>&nbsp;            } catch (IOException ioe) {</b>
+<i>371</i>&nbsp;                // ignored
+<b class="fc"><i>372</i>&nbsp;            }</b>
+<i>373</i>&nbsp;        }
+<b class="fc"><i>374</i>&nbsp;    }</b>
+<i>375</i>&nbsp;    
+<i>376</i>&nbsp;    /**
+<i>377</i>&nbsp;     * Unconditionally close a &lt;code&gt;ServerSocket&lt;/code&gt;.
+<i>378</i>&nbsp;     * &lt;p&gt;
+<i>379</i>&nbsp;     * Equivalent to {@link ServerSocket#close()}, except any exceptions will be ignored.
+<i>380</i>&nbsp;     * This is typically used in finally blocks.
+<i>381</i>&nbsp;     * &lt;p&gt;
+<i>382</i>&nbsp;     * Example code:
+<i>383</i>&nbsp;     * &lt;pre&gt;
+<i>384</i>&nbsp;     *   ServerSocket socket = null;
+<i>385</i>&nbsp;     *   try {
+<i>386</i>&nbsp;     *       socket = new ServerSocket();
+<i>387</i>&nbsp;     *       // process socket
+<i>388</i>&nbsp;     *       socket.close();
+<i>389</i>&nbsp;     *   } catch (Exception e) {
+<i>390</i>&nbsp;     *       // error handling
+<i>391</i>&nbsp;     *   } finally {
+<i>392</i>&nbsp;     *       IOUtils.closeQuietly(socket);
+<i>393</i>&nbsp;     *   }
+<i>394</i>&nbsp;     * &lt;/pre&gt;
+<i>395</i>&nbsp;     *
+<i>396</i>&nbsp;     * @param sock the ServerSocket to close, may be null or already closed
+<i>397</i>&nbsp;     * @since 2.2
+<i>398</i>&nbsp;     */
+<b class="fc"><i>399</i>&nbsp;    public static void closeQuietly(ServerSocket sock){</b>
+<b class="fc"><i>400</i>&nbsp;        if (sock != null){</b>
+<b class="fc"><i>401</i>&nbsp;            try {</b>
+<b class="fc"><i>402</i>&nbsp;                sock.close();</b>
+<b class="fc"><i>403</i>&nbsp;            } catch (IOException ioe) {</b>
+<i>404</i>&nbsp;                // ignored
+<b class="fc"><i>405</i>&nbsp;            }</b>
+<i>406</i>&nbsp;        }
+<b class="fc"><i>407</i>&nbsp;    }</b>
+<i>408</i>&nbsp;
+<i>409</i>&nbsp;    /**
+<i>410</i>&nbsp;     * Fetches entire contents of an &lt;code&gt;InputStream&lt;/code&gt; and represent
+<i>411</i>&nbsp;     * same data as result InputStream.
+<i>412</i>&nbsp;     * &lt;p&gt;
+<i>413</i>&nbsp;     * This method is useful where,
+<i>414</i>&nbsp;     * &lt;ul&gt;
+<i>415</i>&nbsp;     * &lt;li&gt;Source InputStream is slow.&lt;/li&gt;
+<i>416</i>&nbsp;     * &lt;li&gt;It has network resources associated, so we cannot keep it open for
+<i>417</i>&nbsp;     * long time.&lt;/li&gt;
+<i>418</i>&nbsp;     * &lt;li&gt;It has network timeout associated.&lt;/li&gt;
+<i>419</i>&nbsp;     * &lt;/ul&gt;
+<i>420</i>&nbsp;     * It can be used in favor of {@link #toByteArray(InputStream)}, since it
+<i>421</i>&nbsp;     * avoids unnecessary allocation and copy of byte[].&lt;br&gt;
+<i>422</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>423</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>424</i>&nbsp;     * 
+<i>425</i>&nbsp;     * @param input Stream to be fully buffered.
+<i>426</i>&nbsp;     * @return A fully buffered stream.
+<i>427</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>428</i>&nbsp;     * @since 2.0
+<i>429</i>&nbsp;     */
+<b class="fc"><i>430</i>&nbsp;    public static InputStream toBufferedInputStream(InputStream input) throws IOException {</b>
+<b class="fc"><i>431</i>&nbsp;        return ByteArrayOutputStream.toBufferedInputStream(input);</b>
+<i>432</i>&nbsp;    }
+<i>433</i>&nbsp;
+<i>434</i>&nbsp;    /**
+<i>435</i>&nbsp;     * Returns the given reader if it is a {@link BufferedReader}, otherwise creates a toBufferedReader for the given
+<i>436</i>&nbsp;     * reader.
+<i>437</i>&nbsp;     * 
+<i>438</i>&nbsp;     * @param reader
+<i>439</i>&nbsp;     *            the reader to wrap or return
+<i>440</i>&nbsp;     * @return the given reader or a new {@link BufferedReader} for the given reader
+<i>441</i>&nbsp;     * @since 2.2
+<i>442</i>&nbsp;     */
+<b class="fc"><i>443</i>&nbsp;    public static BufferedReader toBufferedReader(Reader reader) {</b>
+<b class="fc"><i>444</i>&nbsp;        return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);</b>
+<i>445</i>&nbsp;    }
+<i>446</i>&nbsp;    
+<i>447</i>&nbsp;    // read toByteArray
+<i>448</i>&nbsp;    //-----------------------------------------------------------------------
+<i>449</i>&nbsp;    /**
+<i>450</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;.
+<i>451</i>&nbsp;     * &lt;p&gt;
+<i>452</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>453</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>454</i>&nbsp;     * 
+<i>455</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>456</i>&nbsp;     * @return the requested byte array
+<i>457</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>458</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>459</i>&nbsp;     */
+<b class="fc"><i>460</i>&nbsp;    public static byte[] toByteArray(InputStream input) throws IOException {</b>
+<b class="fc"><i>461</i>&nbsp;        ByteArrayOutputStream output = new ByteArrayOutputStream();</b>
+<b class="fc"><i>462</i>&nbsp;        copy(input, output);</b>
+<b class="fc"><i>463</i>&nbsp;        return output.toByteArray();</b>
+<i>464</i>&nbsp;    }
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;    /**
+<i>467</i>&nbsp;     * Get contents of an &lt;code&gt;InputStream&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;.
+<i>468</i>&nbsp;     * Use this method instead of &lt;code&gt;toByteArray(InputStream)&lt;/code&gt;
+<i>469</i>&nbsp;     * when &lt;code&gt;InputStream&lt;/code&gt; size is known.
+<i>470</i>&nbsp;     * &lt;b&gt;NOTE:&lt;/b&gt; the method checks that the length can safely be cast to an int without truncation
+<i>471</i>&nbsp;     * before using {@link IOUtils#toByteArray(java.io.InputStream, int)} to read into the byte array.
+<i>472</i>&nbsp;     * (Arrays can have no more than Integer.MAX_VALUE entries anyway)
+<i>473</i>&nbsp;     * 
+<i>474</i>&nbsp;     * @param input the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>475</i>&nbsp;     * @param size the size of &lt;code&gt;InputStream&lt;/code&gt;
+<i>476</i>&nbsp;     * @return the requested byte array
+<i>477</i>&nbsp;     * @throws IOException if an I/O error occurs or &lt;code&gt;InputStream&lt;/code&gt; size differ from parameter size
+<i>478</i>&nbsp;     * @throws IllegalArgumentException if size is less than zero or size is greater than Integer.MAX_VALUE
+<i>479</i>&nbsp;     * @see IOUtils#toByteArray(java.io.InputStream, int)
+<i>480</i>&nbsp;     * @since 2.1
+<i>481</i>&nbsp;     */
+<b class="fc"><i>482</i>&nbsp;    public static byte[] toByteArray(InputStream input, long size) throws IOException {</b>
+<i>483</i>&nbsp;
+<b class="fc"><i>484</i>&nbsp;      if(size &gt; Integer.MAX_VALUE) {</b>
+<b class="fc"><i>485</i>&nbsp;          throw new IllegalArgumentException(&quot;Size cannot be greater than Integer max value: &quot; + size);</b>
+<i>486</i>&nbsp;      }
+<i>487</i>&nbsp;
+<b class="fc"><i>488</i>&nbsp;      return toByteArray(input, (int) size);</b>
+<i>489</i>&nbsp;    }
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;    /** 
+<i>492</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;.
+<i>493</i>&nbsp;     * Use this method instead of &lt;code&gt;toByteArray(InputStream)&lt;/code&gt;
+<i>494</i>&nbsp;     * when &lt;code&gt;InputStream&lt;/code&gt; size is known
+<i>495</i>&nbsp;     * @param input the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>496</i>&nbsp;     * @param size the size of &lt;code&gt;InputStream&lt;/code&gt;
+<i>497</i>&nbsp;     * @return the requested byte array
+<i>498</i>&nbsp;     * @throws IOException if an I/O error occurs or &lt;code&gt;InputStream&lt;/code&gt; size differ from parameter size
+<i>499</i>&nbsp;     * @throws IllegalArgumentException if size is less than zero
+<i>500</i>&nbsp;     * @since 2.1
+<i>501</i>&nbsp;     */
+<b class="fc"><i>502</i>&nbsp;    public static byte[] toByteArray(InputStream input, int size) throws IOException {</b>
+<i>503</i>&nbsp;
+<b class="fc"><i>504</i>&nbsp;        if (size &lt; 0) {</b>
+<b class="fc"><i>505</i>&nbsp;            throw new IllegalArgumentException(&quot;Size must be equal or greater than zero: &quot; + size);</b>
+<i>506</i>&nbsp;        }
+<i>507</i>&nbsp;
+<b class="fc"><i>508</i>&nbsp;        if (size == 0) {</b>
+<b class="fc"><i>509</i>&nbsp;            return new byte[0];</b>
+<i>510</i>&nbsp;        }
+<i>511</i>&nbsp;
+<b class="fc"><i>512</i>&nbsp;        byte[] data = new byte[size];</b>
+<b class="fc"><i>513</i>&nbsp;        int offset = 0;</b>
+<b class="fc"><i>514</i>&nbsp;        int readed;</b>
+<i>515</i>&nbsp;
+<b class="fc"><i>516</i>&nbsp;        while (offset &lt; size &amp;&amp; (readed = input.read(data, offset, size - offset)) != EOF) {</b>
+<b class="fc"><i>517</i>&nbsp;            offset += readed;</b>
+<i>518</i>&nbsp;        }
+<i>519</i>&nbsp;
+<b class="fc"><i>520</i>&nbsp;        if (offset != size) {</b>
+<b class="fc"><i>521</i>&nbsp;            throw new IOException(&quot;Unexpected readed size. current: &quot; + offset + &quot;, excepted: &quot; + size);</b>
+<i>522</i>&nbsp;        }
+<i>523</i>&nbsp;
+<b class="fc"><i>524</i>&nbsp;        return data;</b>
+<i>525</i>&nbsp;    }
+<i>526</i>&nbsp;
+<i>527</i>&nbsp;    /**
+<i>528</i>&nbsp;     * Get the contents of a &lt;code&gt;Reader&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;
+<i>529</i>&nbsp;     * using the default character encoding of the platform.
+<i>530</i>&nbsp;     * &lt;p&gt;
+<i>531</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>532</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>533</i>&nbsp;     * 
+<i>534</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>535</i>&nbsp;     * @return the requested byte array
+<i>536</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>537</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>538</i>&nbsp;     */
+<b class="fc"><i>539</i>&nbsp;    public static byte[] toByteArray(Reader input) throws IOException {</b>
+<b class="fc"><i>540</i>&nbsp;        return toByteArray(input, Charset.defaultCharset());</b>
+<i>541</i>&nbsp;    }
+<i>542</i>&nbsp;
+<i>543</i>&nbsp;    /**
+<i>544</i>&nbsp;     * Get the contents of a &lt;code&gt;Reader&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;
+<i>545</i>&nbsp;     * using the specified character encoding.
+<i>546</i>&nbsp;     * &lt;p&gt;
+<i>547</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>548</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>549</i>&nbsp;     * 
+<i>550</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>551</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>552</i>&nbsp;     * @return the requested byte array
+<i>553</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>554</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>555</i>&nbsp;     * @since 2.3
+<i>556</i>&nbsp;     */
+<b class="fc"><i>557</i>&nbsp;    public static byte[] toByteArray(Reader input, Charset encoding) throws IOException {</b>
+<b class="fc"><i>558</i>&nbsp;        ByteArrayOutputStream output = new ByteArrayOutputStream();</b>
+<b class="fc"><i>559</i>&nbsp;        copy(input, output, encoding);</b>
+<b class="fc"><i>560</i>&nbsp;        return output.toByteArray();</b>
+<i>561</i>&nbsp;    }
+<i>562</i>&nbsp;
+<i>563</i>&nbsp;    /**
+<i>564</i>&nbsp;     * Get the contents of a &lt;code&gt;Reader&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;
+<i>565</i>&nbsp;     * using the specified character encoding.
+<i>566</i>&nbsp;     * &lt;p&gt;
+<i>567</i>&nbsp;     * Character encoding names can be found at
+<i>568</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>569</i>&nbsp;     * &lt;p&gt;
+<i>570</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>571</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>572</i>&nbsp;     * 
+<i>573</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>574</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>575</i>&nbsp;     * @return the requested byte array
+<i>576</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>577</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>578</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>579</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>580</i>&nbsp;     *             supported.
+<i>581</i>&nbsp;     * @since 1.1
+<i>582</i>&nbsp;     */
+<b class="fc"><i>583</i>&nbsp;    public static byte[] toByteArray(Reader input, String encoding) throws IOException {</b>
+<b class="fc"><i>584</i>&nbsp;        return toByteArray(input, Charsets.toCharset(encoding));</b>
+<i>585</i>&nbsp;    }
+<i>586</i>&nbsp;
+<i>587</i>&nbsp;    /**
+<i>588</i>&nbsp;     * Get the contents of a &lt;code&gt;String&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;
+<i>589</i>&nbsp;     * using the default character encoding of the platform.
+<i>590</i>&nbsp;     * &lt;p&gt;
+<i>591</i>&nbsp;     * This is the same as {@link String#getBytes()}.
+<i>592</i>&nbsp;     * 
+<i>593</i>&nbsp;     * @param input  the &lt;code&gt;String&lt;/code&gt; to convert
+<i>594</i>&nbsp;     * @return the requested byte array
+<i>595</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>596</i>&nbsp;     * @throws IOException if an I/O error occurs (never occurs)
+<i>597</i>&nbsp;     * @deprecated Use {@link String#getBytes()}
+<i>598</i>&nbsp;     */
+<i>599</i>&nbsp;    @Deprecated
+<b class="fc"><i>600</i>&nbsp;    public static byte[] toByteArray(String input) throws IOException {</b>
+<b class="fc"><i>601</i>&nbsp;        return input.getBytes();</b>
+<i>602</i>&nbsp;    }
+<i>603</i>&nbsp;
+<i>604</i>&nbsp;    /**
+<i>605</i>&nbsp;     * Get the contents of a &lt;code&gt;URI&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;.
+<i>606</i>&nbsp;     * 
+<i>607</i>&nbsp;     * @param uri
+<i>608</i>&nbsp;     *            the &lt;code&gt;URI&lt;/code&gt; to read
+<i>609</i>&nbsp;     * @return the requested byte array
+<i>610</i>&nbsp;     * @throws NullPointerException
+<i>611</i>&nbsp;     *             if the uri is null
+<i>612</i>&nbsp;     * @throws IOException
+<i>613</i>&nbsp;     *             if an I/O exception occurs
+<i>614</i>&nbsp;     * @since 2.4
+<i>615</i>&nbsp;     */
+<b class="fc"><i>616</i>&nbsp;    public static byte[] toByteArray(URI uri) throws IOException {</b>
+<b class="fc"><i>617</i>&nbsp;        return IOUtils.toByteArray(uri.toURL());</b>
+<i>618</i>&nbsp;    }
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;    /**
+<i>621</i>&nbsp;     * Get the contents of a &lt;code&gt;URL&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;.
+<i>622</i>&nbsp;     * 
+<i>623</i>&nbsp;     * @param url
+<i>624</i>&nbsp;     *            the &lt;code&gt;URL&lt;/code&gt; to read
+<i>625</i>&nbsp;     * @return the requested byte array
+<i>626</i>&nbsp;     * @throws NullPointerException
+<i>627</i>&nbsp;     *             if the input is null
+<i>628</i>&nbsp;     * @throws IOException
+<i>629</i>&nbsp;     *             if an I/O exception occurs
+<i>630</i>&nbsp;     * @since 2.4
+<i>631</i>&nbsp;     */
+<b class="fc"><i>632</i>&nbsp;    public static byte[] toByteArray(URL url) throws IOException {</b>
+<b class="fc"><i>633</i>&nbsp;        URLConnection conn = url.openConnection();</b>
+<b class="fc"><i>634</i>&nbsp;        try {</b>
+<b class="fc"><i>635</i>&nbsp;            return IOUtils.toByteArray(conn);</b>
+<i>636</i>&nbsp;        } finally {
+<b class="fc"><i>637</i>&nbsp;            close(conn);</b>
+<b class="nc"><i>638</i>&nbsp;        }</b>
+<i>639</i>&nbsp;    }
+<i>640</i>&nbsp;
+<i>641</i>&nbsp;    /**
+<i>642</i>&nbsp;     * Get the contents of a &lt;code&gt;URLConnection&lt;/code&gt; as a &lt;code&gt;byte[]&lt;/code&gt;.
+<i>643</i>&nbsp;     * 
+<i>644</i>&nbsp;     * @param urlConn
+<i>645</i>&nbsp;     *            the &lt;code&gt;URLConnection&lt;/code&gt; to read
+<i>646</i>&nbsp;     * @return the requested byte array
+<i>647</i>&nbsp;     * @throws NullPointerException
+<i>648</i>&nbsp;     *             if the urlConn is null
+<i>649</i>&nbsp;     * @throws IOException
+<i>650</i>&nbsp;     *             if an I/O exception occurs
+<i>651</i>&nbsp;     * @since 2.4
+<i>652</i>&nbsp;     */
+<b class="fc"><i>653</i>&nbsp;    public static byte[] toByteArray(URLConnection urlConn) throws IOException {</b>
+<b class="fc"><i>654</i>&nbsp;        InputStream inputStream = urlConn.getInputStream();</b>
+<b class="fc"><i>655</i>&nbsp;        try {</b>
+<b class="fc"><i>656</i>&nbsp;            return IOUtils.toByteArray(inputStream);</b>
+<i>657</i>&nbsp;        } finally {
+<b class="fc"><i>658</i>&nbsp;            inputStream.close();</b>
+<b class="nc"><i>659</i>&nbsp;        }</b>
+<i>660</i>&nbsp;    }
+<i>661</i>&nbsp;
+<i>662</i>&nbsp;    // read char[]
+<i>663</i>&nbsp;    //-----------------------------------------------------------------------
+<i>664</i>&nbsp;    /**
+<i>665</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a character array
+<i>666</i>&nbsp;     * using the default character encoding of the platform.
+<i>667</i>&nbsp;     * &lt;p&gt;
+<i>668</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>669</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>670</i>&nbsp;     * 
+<i>671</i>&nbsp;     * @param is  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>672</i>&nbsp;     * @return the requested character array
+<i>673</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>674</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>675</i>&nbsp;     * @since 1.1
+<i>676</i>&nbsp;     */
+<b class="fc"><i>677</i>&nbsp;    public static char[] toCharArray(InputStream is) throws IOException {</b>
+<b class="fc"><i>678</i>&nbsp;        return toCharArray(is, Charset.defaultCharset());</b>
+<i>679</i>&nbsp;    }
+<i>680</i>&nbsp;
+<i>681</i>&nbsp;    /**
+<i>682</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a character array
+<i>683</i>&nbsp;     * using the specified character encoding.
+<i>684</i>&nbsp;     * &lt;p&gt;
+<i>685</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>686</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>687</i>&nbsp;     * 
+<i>688</i>&nbsp;     * @param is  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>689</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>690</i>&nbsp;     * @return the requested character array
+<i>691</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>692</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>693</i>&nbsp;     * @since 2.3
+<i>694</i>&nbsp;     */
+<i>695</i>&nbsp;    public static char[] toCharArray(InputStream is, Charset encoding)
+<b class="fc"><i>696</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>697</i>&nbsp;        CharArrayWriter output = new CharArrayWriter();</b>
+<b class="fc"><i>698</i>&nbsp;        copy(is, output, encoding);</b>
+<b class="fc"><i>699</i>&nbsp;        return output.toCharArray();</b>
+<i>700</i>&nbsp;    }
+<i>701</i>&nbsp;
+<i>702</i>&nbsp;    /**
+<i>703</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a character array
+<i>704</i>&nbsp;     * using the specified character encoding.
+<i>705</i>&nbsp;     * &lt;p&gt;
+<i>706</i>&nbsp;     * Character encoding names can be found at
+<i>707</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>708</i>&nbsp;     * &lt;p&gt;
+<i>709</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>710</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>711</i>&nbsp;     * 
+<i>712</i>&nbsp;     * @param is  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>713</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>714</i>&nbsp;     * @return the requested character array
+<i>715</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>716</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>717</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>718</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>719</i>&nbsp;     *             supported.
+<i>720</i>&nbsp;     * @since 1.1
+<i>721</i>&nbsp;     */
+<b class="fc"><i>722</i>&nbsp;    public static char[] toCharArray(InputStream is, String encoding) throws IOException {</b>
+<b class="fc"><i>723</i>&nbsp;        return toCharArray(is, Charsets.toCharset(encoding));</b>
+<i>724</i>&nbsp;    }
+<i>725</i>&nbsp;
+<i>726</i>&nbsp;    /**
+<i>727</i>&nbsp;     * Get the contents of a &lt;code&gt;Reader&lt;/code&gt; as a character array.
+<i>728</i>&nbsp;     * &lt;p&gt;
+<i>729</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>730</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>731</i>&nbsp;     * 
+<i>732</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>733</i>&nbsp;     * @return the requested character array
+<i>734</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>735</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>736</i>&nbsp;     * @since 1.1
+<i>737</i>&nbsp;     */
+<b class="fc"><i>738</i>&nbsp;    public static char[] toCharArray(Reader input) throws IOException {</b>
+<b class="fc"><i>739</i>&nbsp;        CharArrayWriter sw = new CharArrayWriter();</b>
+<b class="fc"><i>740</i>&nbsp;        copy(input, sw);</b>
+<b class="fc"><i>741</i>&nbsp;        return sw.toCharArray();</b>
+<i>742</i>&nbsp;    }
+<i>743</i>&nbsp;
+<i>744</i>&nbsp;    // read toString
+<i>745</i>&nbsp;    //-----------------------------------------------------------------------
+<i>746</i>&nbsp;    /**
+<i>747</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a String
+<i>748</i>&nbsp;     * using the default character encoding of the platform.
+<i>749</i>&nbsp;     * &lt;p&gt;
+<i>750</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>751</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>752</i>&nbsp;     * 
+<i>753</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>754</i>&nbsp;     * @return the requested String
+<i>755</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>756</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>757</i>&nbsp;     */
+<b class="fc"><i>758</i>&nbsp;    public static String toString(InputStream input) throws IOException {</b>
+<b class="fc"><i>759</i>&nbsp;        return toString(input, Charset.defaultCharset());</b>
+<i>760</i>&nbsp;    }
+<i>761</i>&nbsp;
+<i>762</i>&nbsp;    /**
+<i>763</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a String
+<i>764</i>&nbsp;     * using the specified character encoding.
+<i>765</i>&nbsp;     * &lt;p&gt;
+<i>766</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>767</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>768</i>&nbsp;     * &lt;/p&gt;
+<i>769</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>770</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>771</i>&nbsp;     * @return the requested String
+<i>772</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>773</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>774</i>&nbsp;     * @since 2.3
+<i>775</i>&nbsp;     */
+<b class="fc"><i>776</i>&nbsp;    public static String toString(InputStream input, Charset encoding) throws IOException {</b>
+<b class="fc"><i>777</i>&nbsp;        StringBuilderWriter sw = new StringBuilderWriter();</b>
+<b class="fc"><i>778</i>&nbsp;        copy(input, sw, encoding);</b>
+<b class="fc"><i>779</i>&nbsp;        return sw.toString();</b>
+<i>780</i>&nbsp;    }
+<i>781</i>&nbsp;
+<i>782</i>&nbsp;    /**
+<i>783</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a String
+<i>784</i>&nbsp;     * using the specified character encoding.
+<i>785</i>&nbsp;     * &lt;p&gt;
+<i>786</i>&nbsp;     * Character encoding names can be found at
+<i>787</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>788</i>&nbsp;     * &lt;p&gt;
+<i>789</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>790</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>791</i>&nbsp;     * 
+<i>792</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>793</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>794</i>&nbsp;     * @return the requested String
+<i>795</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>796</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>797</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>798</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>799</i>&nbsp;     *             supported.
+<i>800</i>&nbsp;     */
+<i>801</i>&nbsp;    public static String toString(InputStream input, String encoding)
+<b class="nc"><i>802</i>&nbsp;            throws IOException {</b>
+<b class="nc"><i>803</i>&nbsp;        return toString(input, Charsets.toCharset(encoding));</b>
+<i>804</i>&nbsp;    }
+<i>805</i>&nbsp;
+<i>806</i>&nbsp;    /**
+<i>807</i>&nbsp;     * Get the contents of a &lt;code&gt;Reader&lt;/code&gt; as a String.
+<i>808</i>&nbsp;     * &lt;p&gt;
+<i>809</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>810</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>811</i>&nbsp;     * 
+<i>812</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>813</i>&nbsp;     * @return the requested String
+<i>814</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>815</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>816</i>&nbsp;     */
+<b class="fc"><i>817</i>&nbsp;    public static String toString(Reader input) throws IOException {</b>
+<b class="fc"><i>818</i>&nbsp;        StringBuilderWriter sw = new StringBuilderWriter();</b>
+<b class="fc"><i>819</i>&nbsp;        copy(input, sw);</b>
+<b class="fc"><i>820</i>&nbsp;        return sw.toString();</b>
+<i>821</i>&nbsp;    }
+<i>822</i>&nbsp;
+<i>823</i>&nbsp;    /**
+<i>824</i>&nbsp;     * Gets the contents at the given URI.
+<i>825</i>&nbsp;     * 
+<i>826</i>&nbsp;     * @param uri
+<i>827</i>&nbsp;     *            The URI source.
+<i>828</i>&nbsp;     * @return The contents of the URL as a String.
+<i>829</i>&nbsp;     * @throws IOException if an I/O exception occurs.
+<i>830</i>&nbsp;     * @since 2.1
+<i>831</i>&nbsp;     */
+<b class="fc"><i>832</i>&nbsp;    public static String toString(URI uri) throws IOException {</b>
+<b class="fc"><i>833</i>&nbsp;        return toString(uri, Charset.defaultCharset());</b>
+<i>834</i>&nbsp;    }
+<i>835</i>&nbsp;
+<i>836</i>&nbsp;    /**
+<i>837</i>&nbsp;     * Gets the contents at the given URI.
+<i>838</i>&nbsp;     * 
+<i>839</i>&nbsp;     * @param uri
+<i>840</i>&nbsp;     *            The URI source.
+<i>841</i>&nbsp;     * @param encoding
+<i>842</i>&nbsp;     *            The encoding name for the URL contents.
+<i>843</i>&nbsp;     * @return The contents of the URL as a String.
+<i>844</i>&nbsp;     * @throws IOException if an I/O exception occurs.
+<i>845</i>&nbsp;     * @since 2.3.
+<i>846</i>&nbsp;     */
+<b class="fc"><i>847</i>&nbsp;    public static String toString(URI uri, Charset encoding) throws IOException {</b>
+<b class="fc"><i>848</i>&nbsp;        return toString(uri.toURL(), Charsets.toCharset(encoding));</b>
+<i>849</i>&nbsp;    }
+<i>850</i>&nbsp;
+<i>851</i>&nbsp;    /**
+<i>852</i>&nbsp;     * Gets the contents at the given URI.
+<i>853</i>&nbsp;     * 
+<i>854</i>&nbsp;     * @param uri
+<i>855</i>&nbsp;     *            The URI source.
+<i>856</i>&nbsp;     * @param encoding
+<i>857</i>&nbsp;     *            The encoding name for the URL contents.
+<i>858</i>&nbsp;     * @return The contents of the URL as a String.
+<i>859</i>&nbsp;     * @throws IOException if an I/O exception occurs.
+<i>860</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>861</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>862</i>&nbsp;     *             supported.
+<i>863</i>&nbsp;     * @since 2.1
+<i>864</i>&nbsp;     */
+<b class="fc"><i>865</i>&nbsp;    public static String toString(URI uri, String encoding) throws IOException {</b>
+<b class="fc"><i>866</i>&nbsp;        return toString(uri, Charsets.toCharset(encoding));</b>
+<i>867</i>&nbsp;    }
+<i>868</i>&nbsp;
+<i>869</i>&nbsp;    /**
+<i>870</i>&nbsp;     * Gets the contents at the given URL.
+<i>871</i>&nbsp;     * 
+<i>872</i>&nbsp;     * @param url
+<i>873</i>&nbsp;     *            The URL source.
+<i>874</i>&nbsp;     * @return The contents of the URL as a String.
+<i>875</i>&nbsp;     * @throws IOException if an I/O exception occurs.
+<i>876</i>&nbsp;     * @since 2.1
+<i>877</i>&nbsp;     */
+<b class="fc"><i>878</i>&nbsp;    public static String toString(URL url) throws IOException {</b>
+<b class="fc"><i>879</i>&nbsp;        return toString(url, Charset.defaultCharset());</b>
+<i>880</i>&nbsp;    }
+<i>881</i>&nbsp;
+<i>882</i>&nbsp;    /**
+<i>883</i>&nbsp;     * Gets the contents at the given URL.
+<i>884</i>&nbsp;     * 
+<i>885</i>&nbsp;     * @param url
+<i>886</i>&nbsp;     *            The URL source.
+<i>887</i>&nbsp;     * @param encoding
+<i>888</i>&nbsp;     *            The encoding name for the URL contents.
+<i>889</i>&nbsp;     * @return The contents of the URL as a String.
+<i>890</i>&nbsp;     * @throws IOException if an I/O exception occurs.
+<i>891</i>&nbsp;     * @since 2.3
+<i>892</i>&nbsp;     */
+<b class="fc"><i>893</i>&nbsp;    public static String toString(URL url, Charset encoding) throws IOException {</b>
+<b class="fc"><i>894</i>&nbsp;        InputStream inputStream = url.openStream();</b>
+<b class="fc"><i>895</i>&nbsp;        try {</b>
+<b class="fc"><i>896</i>&nbsp;            return toString(inputStream, encoding);</b>
+<i>897</i>&nbsp;        } finally {
+<b class="fc"><i>898</i>&nbsp;            inputStream.close();</b>
+<b class="nc"><i>899</i>&nbsp;        }</b>
+<i>900</i>&nbsp;    }
+<i>901</i>&nbsp;
+<i>902</i>&nbsp;    /**
+<i>903</i>&nbsp;     * Gets the contents at the given URL.
+<i>904</i>&nbsp;     * 
+<i>905</i>&nbsp;     * @param url
+<i>906</i>&nbsp;     *            The URL source.
+<i>907</i>&nbsp;     * @param encoding
+<i>908</i>&nbsp;     *            The encoding name for the URL contents.
+<i>909</i>&nbsp;     * @return The contents of the URL as a String.
+<i>910</i>&nbsp;     * @throws IOException if an I/O exception occurs.
+<i>911</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>912</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>913</i>&nbsp;     *             supported.
+<i>914</i>&nbsp;     * @since 2.1
+<i>915</i>&nbsp;     */
+<b class="fc"><i>916</i>&nbsp;    public static String toString(URL url, String encoding) throws IOException {</b>
+<b class="fc"><i>917</i>&nbsp;        return toString(url, Charsets.toCharset(encoding));</b>
+<i>918</i>&nbsp;    }
+<i>919</i>&nbsp;
+<i>920</i>&nbsp;    /**
+<i>921</i>&nbsp;     * Get the contents of a &lt;code&gt;byte[]&lt;/code&gt; as a String
+<i>922</i>&nbsp;     * using the default character encoding of the platform.
+<i>923</i>&nbsp;     * 
+<i>924</i>&nbsp;     * @param input the byte array to read from
+<i>925</i>&nbsp;     * @return the requested String
+<i>926</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>927</i>&nbsp;     * @throws IOException if an I/O error occurs (never occurs)
+<i>928</i>&nbsp;     * @deprecated Use {@link String#String(byte[])}
+<i>929</i>&nbsp;     */
+<i>930</i>&nbsp;    @Deprecated
+<b class="fc"><i>931</i>&nbsp;    public static String toString(byte[] input) throws IOException {</b>
+<b class="fc"><i>932</i>&nbsp;        return new String(input);</b>
+<i>933</i>&nbsp;    }
+<i>934</i>&nbsp;
+<i>935</i>&nbsp;    /**
+<i>936</i>&nbsp;     * Get the contents of a &lt;code&gt;byte[]&lt;/code&gt; as a String
+<i>937</i>&nbsp;     * using the specified character encoding.
+<i>938</i>&nbsp;     * &lt;p&gt;
+<i>939</i>&nbsp;     * Character encoding names can be found at
+<i>940</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>941</i>&nbsp;     * 
+<i>942</i>&nbsp;     * @param input the byte array to read from
+<i>943</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>944</i>&nbsp;     * @return the requested String
+<i>945</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>946</i>&nbsp;     * @throws IOException if an I/O error occurs (never occurs)
+<i>947</i>&nbsp;     */
+<b class="nc"><i>948</i>&nbsp;    public static String toString(byte[] input, String encoding) throws IOException {</b>
+<b class="nc"><i>949</i>&nbsp;        return new String(input, Charsets.toCharset(encoding));</b>
+<i>950</i>&nbsp;    }
+<i>951</i>&nbsp;
+<i>952</i>&nbsp;    // readLines
+<i>953</i>&nbsp;    //-----------------------------------------------------------------------
+<i>954</i>&nbsp;    /**
+<i>955</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a list of Strings,
+<i>956</i>&nbsp;     * one entry per line, using the default character encoding of the platform.
+<i>957</i>&nbsp;     * &lt;p&gt;
+<i>958</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>959</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>960</i>&nbsp;     *
+<i>961</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from, not null
+<i>962</i>&nbsp;     * @return the list of Strings, never null
+<i>963</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>964</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>965</i>&nbsp;     * @since 1.1
+<i>966</i>&nbsp;     */
+<b class="fc"><i>967</i>&nbsp;    public static List&lt;String&gt; readLines(InputStream input) throws IOException {</b>
+<b class="fc"><i>968</i>&nbsp;        return readLines(input, Charset.defaultCharset());</b>
+<i>969</i>&nbsp;    }
+<i>970</i>&nbsp;
+<i>971</i>&nbsp;    /**
+<i>972</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a list of Strings,
+<i>973</i>&nbsp;     * one entry per line, using the specified character encoding.
+<i>974</i>&nbsp;     * &lt;p&gt;
+<i>975</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>976</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>977</i>&nbsp;     *
+<i>978</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from, not null
+<i>979</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>980</i>&nbsp;     * @return the list of Strings, never null
+<i>981</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>982</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>983</i>&nbsp;     * @since 2.3
+<i>984</i>&nbsp;     */
+<b class="fc"><i>985</i>&nbsp;    public static List&lt;String&gt; readLines(InputStream input, Charset encoding) throws IOException {</b>
+<b class="fc"><i>986</i>&nbsp;        InputStreamReader reader = new InputStreamReader(input, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>987</i>&nbsp;        return readLines(reader);</b>
+<i>988</i>&nbsp;    }
+<i>989</i>&nbsp;
+<i>990</i>&nbsp;    /**
+<i>991</i>&nbsp;     * Get the contents of an &lt;code&gt;InputStream&lt;/code&gt; as a list of Strings,
+<i>992</i>&nbsp;     * one entry per line, using the specified character encoding.
+<i>993</i>&nbsp;     * &lt;p&gt;
+<i>994</i>&nbsp;     * Character encoding names can be found at
+<i>995</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>996</i>&nbsp;     * &lt;p&gt;
+<i>997</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>998</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>999</i>&nbsp;     *
+<i>1000</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from, not null
+<i>1001</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1002</i>&nbsp;     * @return the list of Strings, never null
+<i>1003</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>1004</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1005</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1006</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1007</i>&nbsp;     *             supported.
+<i>1008</i>&nbsp;     * @since 1.1
+<i>1009</i>&nbsp;     */
+<b class="fc"><i>1010</i>&nbsp;    public static List&lt;String&gt; readLines(InputStream input, String encoding) throws IOException {</b>
+<b class="fc"><i>1011</i>&nbsp;        return readLines(input, Charsets.toCharset(encoding));</b>
+<i>1012</i>&nbsp;    }
+<i>1013</i>&nbsp;
+<i>1014</i>&nbsp;    /**
+<i>1015</i>&nbsp;     * Get the contents of a &lt;code&gt;Reader&lt;/code&gt; as a list of Strings,
+<i>1016</i>&nbsp;     * one entry per line.
+<i>1017</i>&nbsp;     * &lt;p&gt;
+<i>1018</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1019</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>1020</i>&nbsp;     *
+<i>1021</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from, not null
+<i>1022</i>&nbsp;     * @return the list of Strings, never null
+<i>1023</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>1024</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1025</i>&nbsp;     * @since 1.1
+<i>1026</i>&nbsp;     */
+<b class="fc"><i>1027</i>&nbsp;    public static List&lt;String&gt; readLines(Reader input) throws IOException {</b>
+<b class="fc"><i>1028</i>&nbsp;        BufferedReader reader = toBufferedReader(input);</b>
+<b class="fc"><i>1029</i>&nbsp;        List&lt;String&gt; list = new ArrayList&lt;String&gt;();</b>
+<b class="fc"><i>1030</i>&nbsp;        String line = reader.readLine();</b>
+<b class="fc"><i>1031</i>&nbsp;        while (line != null) {</b>
+<b class="fc"><i>1032</i>&nbsp;            list.add(line);</b>
+<b class="fc"><i>1033</i>&nbsp;            line = reader.readLine();</b>
+<i>1034</i>&nbsp;        }
+<b class="fc"><i>1035</i>&nbsp;        return list;</b>
+<i>1036</i>&nbsp;    }
+<i>1037</i>&nbsp;
+<i>1038</i>&nbsp;    // lineIterator
+<i>1039</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1040</i>&nbsp;    /**
+<i>1041</i>&nbsp;     * Return an Iterator for the lines in a &lt;code&gt;Reader&lt;/code&gt;.
+<i>1042</i>&nbsp;     * &lt;p&gt;
+<i>1043</i>&nbsp;     * &lt;code&gt;LineIterator&lt;/code&gt; holds a reference to the open
+<i>1044</i>&nbsp;     * &lt;code&gt;Reader&lt;/code&gt; specified here. When you have finished with the
+<i>1045</i>&nbsp;     * iterator you should close the reader to free internal resources.
+<i>1046</i>&nbsp;     * This can be done by closing the reader directly, or by calling
+<i>1047</i>&nbsp;     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
+<i>1048</i>&nbsp;     * &lt;p&gt;
+<i>1049</i>&nbsp;     * The recommended usage pattern is:
+<i>1050</i>&nbsp;     * &lt;pre&gt;
+<i>1051</i>&nbsp;     * try {
+<i>1052</i>&nbsp;     *   LineIterator it = IOUtils.lineIterator(reader);
+<i>1053</i>&nbsp;     *   while (it.hasNext()) {
+<i>1054</i>&nbsp;     *     String line = it.nextLine();
+<i>1055</i>&nbsp;     *     /// do something with line
+<i>1056</i>&nbsp;     *   }
+<i>1057</i>&nbsp;     * } finally {
+<i>1058</i>&nbsp;     *   IOUtils.closeQuietly(reader);
+<i>1059</i>&nbsp;     * }
+<i>1060</i>&nbsp;     * &lt;/pre&gt;
+<i>1061</i>&nbsp;     *
+<i>1062</i>&nbsp;     * @param reader  the &lt;code&gt;Reader&lt;/code&gt; to read from, not null
+<i>1063</i>&nbsp;     * @return an Iterator of the lines in the reader, never null
+<i>1064</i>&nbsp;     * @throws IllegalArgumentException if the reader is null
+<i>1065</i>&nbsp;     * @since 1.2
+<i>1066</i>&nbsp;     */
+<b class="nc"><i>1067</i>&nbsp;    public static LineIterator lineIterator(Reader reader) {</b>
+<b class="nc"><i>1068</i>&nbsp;        return new LineIterator(reader);</b>
+<i>1069</i>&nbsp;    }
+<i>1070</i>&nbsp;
+<i>1071</i>&nbsp;    /**
+<i>1072</i>&nbsp;     * Return an Iterator for the lines in an &lt;code&gt;InputStream&lt;/code&gt;, using
+<i>1073</i>&nbsp;     * the character encoding specified (or default encoding if null).
+<i>1074</i>&nbsp;     * &lt;p&gt;
+<i>1075</i>&nbsp;     * &lt;code&gt;LineIterator&lt;/code&gt; holds a reference to the open
+<i>1076</i>&nbsp;     * &lt;code&gt;InputStream&lt;/code&gt; specified here. When you have finished with
+<i>1077</i>&nbsp;     * the iterator you should close the stream to free internal resources.
+<i>1078</i>&nbsp;     * This can be done by closing the stream directly, or by calling
+<i>1079</i>&nbsp;     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
+<i>1080</i>&nbsp;     * &lt;p&gt;
+<i>1081</i>&nbsp;     * The recommended usage pattern is:
+<i>1082</i>&nbsp;     * &lt;pre&gt;
+<i>1083</i>&nbsp;     * try {
+<i>1084</i>&nbsp;     *   LineIterator it = IOUtils.lineIterator(stream, charset);
+<i>1085</i>&nbsp;     *   while (it.hasNext()) {
+<i>1086</i>&nbsp;     *     String line = it.nextLine();
+<i>1087</i>&nbsp;     *     /// do something with line
+<i>1088</i>&nbsp;     *   }
+<i>1089</i>&nbsp;     * } finally {
+<i>1090</i>&nbsp;     *   IOUtils.closeQuietly(stream);
+<i>1091</i>&nbsp;     * }
+<i>1092</i>&nbsp;     * &lt;/pre&gt;
+<i>1093</i>&nbsp;     *
+<i>1094</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from, not null
+<i>1095</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1096</i>&nbsp;     * @return an Iterator of the lines in the reader, never null
+<i>1097</i>&nbsp;     * @throws IllegalArgumentException if the input is null
+<i>1098</i>&nbsp;     * @throws IOException if an I/O error occurs, such as if the encoding is invalid
+<i>1099</i>&nbsp;     * @since 2.3
+<i>1100</i>&nbsp;     */
+<b class="fc"><i>1101</i>&nbsp;    public static LineIterator lineIterator(InputStream input, Charset encoding) throws IOException {</b>
+<b class="fc"><i>1102</i>&nbsp;        return new LineIterator(new InputStreamReader(input, Charsets.toCharset(encoding)));</b>
+<i>1103</i>&nbsp;    }
+<i>1104</i>&nbsp;
+<i>1105</i>&nbsp;    /**
+<i>1106</i>&nbsp;     * Return an Iterator for the lines in an &lt;code&gt;InputStream&lt;/code&gt;, using
+<i>1107</i>&nbsp;     * the character encoding specified (or default encoding if null).
+<i>1108</i>&nbsp;     * &lt;p&gt;
+<i>1109</i>&nbsp;     * &lt;code&gt;LineIterator&lt;/code&gt; holds a reference to the open
+<i>1110</i>&nbsp;     * &lt;code&gt;InputStream&lt;/code&gt; specified here. When you have finished with
+<i>1111</i>&nbsp;     * the iterator you should close the stream to free internal resources.
+<i>1112</i>&nbsp;     * This can be done by closing the stream directly, or by calling
+<i>1113</i>&nbsp;     * {@link LineIterator#close()} or {@link LineIterator#closeQuietly(LineIterator)}.
+<i>1114</i>&nbsp;     * &lt;p&gt;
+<i>1115</i>&nbsp;     * The recommended usage pattern is:
+<i>1116</i>&nbsp;     * &lt;pre&gt;
+<i>1117</i>&nbsp;     * try {
+<i>1118</i>&nbsp;     *   LineIterator it = IOUtils.lineIterator(stream, &quot;UTF-8&quot;);
+<i>1119</i>&nbsp;     *   while (it.hasNext()) {
+<i>1120</i>&nbsp;     *     String line = it.nextLine();
+<i>1121</i>&nbsp;     *     /// do something with line
+<i>1122</i>&nbsp;     *   }
+<i>1123</i>&nbsp;     * } finally {
+<i>1124</i>&nbsp;     *   IOUtils.closeQuietly(stream);
+<i>1125</i>&nbsp;     * }
+<i>1126</i>&nbsp;     * &lt;/pre&gt;
+<i>1127</i>&nbsp;     *
+<i>1128</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from, not null
+<i>1129</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1130</i>&nbsp;     * @return an Iterator of the lines in the reader, never null
+<i>1131</i>&nbsp;     * @throws IllegalArgumentException if the input is null
+<i>1132</i>&nbsp;     * @throws IOException if an I/O error occurs, such as if the encoding is invalid
+<i>1133</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1134</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1135</i>&nbsp;     *             supported.
+<i>1136</i>&nbsp;     * @since 1.2
+<i>1137</i>&nbsp;     */
+<b class="fc"><i>1138</i>&nbsp;    public static LineIterator lineIterator(InputStream input, String encoding) throws IOException {</b>
+<b class="fc"><i>1139</i>&nbsp;        return lineIterator(input, Charsets.toCharset(encoding));</b>
+<i>1140</i>&nbsp;    }
+<i>1141</i>&nbsp;
+<i>1142</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1143</i>&nbsp;    /**
+<i>1144</i>&nbsp;     * Convert the specified CharSequence to an input stream, encoded as bytes
+<i>1145</i>&nbsp;     * using the default character encoding of the platform.
+<i>1146</i>&nbsp;     *
+<i>1147</i>&nbsp;     * @param input the CharSequence to convert
+<i>1148</i>&nbsp;     * @return an input stream
+<i>1149</i>&nbsp;     * @since 2.0
+<i>1150</i>&nbsp;     */
+<b class="fc"><i>1151</i>&nbsp;    public static InputStream toInputStream(CharSequence input) {</b>
+<b class="fc"><i>1152</i>&nbsp;        return toInputStream(input, Charset.defaultCharset());</b>
+<i>1153</i>&nbsp;    }
+<i>1154</i>&nbsp;
+<i>1155</i>&nbsp;    /**
+<i>1156</i>&nbsp;     * Convert the specified CharSequence to an input stream, encoded as bytes
+<i>1157</i>&nbsp;     * using the specified character encoding.
+<i>1158</i>&nbsp;     *
+<i>1159</i>&nbsp;     * @param input the CharSequence to convert
+<i>1160</i>&nbsp;     * @param encoding the encoding to use, null means platform default
+<i>1161</i>&nbsp;     * @return an input stream
+<i>1162</i>&nbsp;     * @since 2.3
+<i>1163</i>&nbsp;     */
+<b class="fc"><i>1164</i>&nbsp;    public static InputStream toInputStream(CharSequence input, Charset encoding) {</b>
+<b class="fc"><i>1165</i>&nbsp;        return toInputStream(input.toString(), encoding);</b>
+<i>1166</i>&nbsp;    }
+<i>1167</i>&nbsp;
+<i>1168</i>&nbsp;    /**
+<i>1169</i>&nbsp;     * Convert the specified CharSequence to an input stream, encoded as bytes
+<i>1170</i>&nbsp;     * using the specified character encoding.
+<i>1171</i>&nbsp;     * &lt;p&gt;
+<i>1172</i>&nbsp;     * Character encoding names can be found at
+<i>1173</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1174</i>&nbsp;     *
+<i>1175</i>&nbsp;     * @param input the CharSequence to convert
+<i>1176</i>&nbsp;     * @param encoding the encoding to use, null means platform default
+<i>1177</i>&nbsp;     * @return an input stream
+<i>1178</i>&nbsp;     * @throws IOException if the encoding is invalid
+<i>1179</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1180</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1181</i>&nbsp;     *             supported.
+<i>1182</i>&nbsp;     * @since 2.0
+<i>1183</i>&nbsp;     */
+<b class="fc"><i>1184</i>&nbsp;    public static InputStream toInputStream(CharSequence input, String encoding) throws IOException {</b>
+<b class="fc"><i>1185</i>&nbsp;        return toInputStream(input, Charsets.toCharset(encoding));</b>
+<i>1186</i>&nbsp;    }
+<i>1187</i>&nbsp;
+<i>1188</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1189</i>&nbsp;    /**
+<i>1190</i>&nbsp;     * Convert the specified string to an input stream, encoded as bytes
+<i>1191</i>&nbsp;     * using the default character encoding of the platform.
+<i>1192</i>&nbsp;     *
+<i>1193</i>&nbsp;     * @param input the string to convert
+<i>1194</i>&nbsp;     * @return an input stream
+<i>1195</i>&nbsp;     * @since 1.1
+<i>1196</i>&nbsp;     */
+<b class="fc"><i>1197</i>&nbsp;    public static InputStream toInputStream(String input) {</b>
+<b class="fc"><i>1198</i>&nbsp;        return toInputStream(input, Charset.defaultCharset());</b>
+<i>1199</i>&nbsp;    }
+<i>1200</i>&nbsp;
+<i>1201</i>&nbsp;    /**
+<i>1202</i>&nbsp;     * Convert the specified string to an input stream, encoded as bytes
+<i>1203</i>&nbsp;     * using the specified character encoding.
+<i>1204</i>&nbsp;     *
+<i>1205</i>&nbsp;     * @param input the string to convert
+<i>1206</i>&nbsp;     * @param encoding the encoding to use, null means platform default
+<i>1207</i>&nbsp;     * @return an input stream
+<i>1208</i>&nbsp;     * @since 2.3
+<i>1209</i>&nbsp;     */
+<b class="fc"><i>1210</i>&nbsp;    public static InputStream toInputStream(String input, Charset encoding) {</b>
+<b class="fc"><i>1211</i>&nbsp;        return new ByteArrayInputStream(input.getBytes(Charsets.toCharset(encoding)));</b>
+<i>1212</i>&nbsp;    }
+<i>1213</i>&nbsp;
+<i>1214</i>&nbsp;    /**
+<i>1215</i>&nbsp;     * Convert the specified string to an input stream, encoded as bytes
+<i>1216</i>&nbsp;     * using the specified character encoding.
+<i>1217</i>&nbsp;     * &lt;p&gt;
+<i>1218</i>&nbsp;     * Character encoding names can be found at
+<i>1219</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1220</i>&nbsp;     *
+<i>1221</i>&nbsp;     * @param input the string to convert
+<i>1222</i>&nbsp;     * @param encoding the encoding to use, null means platform default
+<i>1223</i>&nbsp;     * @return an input stream
+<i>1224</i>&nbsp;     * @throws IOException if the encoding is invalid
+<i>1225</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1226</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1227</i>&nbsp;     *             supported.
+<i>1228</i>&nbsp;     * @since 1.1
+<i>1229</i>&nbsp;     */
+<b class="fc"><i>1230</i>&nbsp;    public static InputStream toInputStream(String input, String encoding) throws IOException {</b>
+<b class="fc"><i>1231</i>&nbsp;        byte[] bytes = input.getBytes(Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1232</i>&nbsp;        return new ByteArrayInputStream(bytes);</b>
+<i>1233</i>&nbsp;    }
+<i>1234</i>&nbsp;
+<i>1235</i>&nbsp;    // write byte[]
+<i>1236</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1237</i>&nbsp;    /**
+<i>1238</i>&nbsp;     * Writes bytes from a &lt;code&gt;byte[]&lt;/code&gt; to an &lt;code&gt;OutputStream&lt;/code&gt;.
+<i>1239</i>&nbsp;     * 
+<i>1240</i>&nbsp;     * @param data  the byte array to write, do not modify during output,
+<i>1241</i>&nbsp;     * null ignored
+<i>1242</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1243</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1244</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1245</i>&nbsp;     * @since 1.1
+<i>1246</i>&nbsp;     */
+<i>1247</i>&nbsp;    public static void write(byte[] data, OutputStream output)
+<b class="fc"><i>1248</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1249</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1250</i>&nbsp;            output.write(data);</b>
+<i>1251</i>&nbsp;        }
+<b class="fc"><i>1252</i>&nbsp;    }</b>
+<i>1253</i>&nbsp;
+<i>1254</i>&nbsp;    /**
+<i>1255</i>&nbsp;     * Writes bytes from a &lt;code&gt;byte[]&lt;/code&gt; to chars on a &lt;code&gt;Writer&lt;/code&gt;
+<i>1256</i>&nbsp;     * using the default character encoding of the platform.
+<i>1257</i>&nbsp;     * &lt;p&gt;
+<i>1258</i>&nbsp;     * This method uses {@link String#String(byte[])}.
+<i>1259</i>&nbsp;     * 
+<i>1260</i>&nbsp;     * @param data  the byte array to write, do not modify during output,
+<i>1261</i>&nbsp;     * null ignored
+<i>1262</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1263</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1264</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1265</i>&nbsp;     * @since 1.1
+<i>1266</i>&nbsp;     */
+<b class="fc"><i>1267</i>&nbsp;    public static void write(byte[] data, Writer output) throws IOException {</b>
+<b class="fc"><i>1268</i>&nbsp;        write(data, output, Charset.defaultCharset());</b>
+<b class="fc"><i>1269</i>&nbsp;    }</b>
+<i>1270</i>&nbsp;
+<i>1271</i>&nbsp;    /**
+<i>1272</i>&nbsp;     * Writes bytes from a &lt;code&gt;byte[]&lt;/code&gt; to chars on a &lt;code&gt;Writer&lt;/code&gt;
+<i>1273</i>&nbsp;     * using the specified character encoding.
+<i>1274</i>&nbsp;     * &lt;p&gt;
+<i>1275</i>&nbsp;     * This method uses {@link String#String(byte[], String)}.
+<i>1276</i>&nbsp;     * 
+<i>1277</i>&nbsp;     * @param data  the byte array to write, do not modify during output,
+<i>1278</i>&nbsp;     * null ignored
+<i>1279</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1280</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1281</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1282</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1283</i>&nbsp;     * @since 2.3
+<i>1284</i>&nbsp;     */
+<b class="fc"><i>1285</i>&nbsp;    public static void write(byte[] data, Writer output, Charset encoding) throws IOException {</b>
+<b class="fc"><i>1286</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1287</i>&nbsp;            output.write(new String(data, Charsets.toCharset(encoding)));</b>
+<i>1288</i>&nbsp;        }
+<b class="fc"><i>1289</i>&nbsp;    }</b>
+<i>1290</i>&nbsp;
+<i>1291</i>&nbsp;    /**
+<i>1292</i>&nbsp;     * Writes bytes from a &lt;code&gt;byte[]&lt;/code&gt; to chars on a &lt;code&gt;Writer&lt;/code&gt;
+<i>1293</i>&nbsp;     * using the specified character encoding.
+<i>1294</i>&nbsp;     * &lt;p&gt;
+<i>1295</i>&nbsp;     * Character encoding names can be found at
+<i>1296</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1297</i>&nbsp;     * &lt;p&gt;
+<i>1298</i>&nbsp;     * This method uses {@link String#String(byte[], String)}.
+<i>1299</i>&nbsp;     * 
+<i>1300</i>&nbsp;     * @param data  the byte array to write, do not modify during output,
+<i>1301</i>&nbsp;     * null ignored
+<i>1302</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1303</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1304</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1305</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1306</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1307</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1308</i>&nbsp;     *             supported.
+<i>1309</i>&nbsp;     * @since 1.1
+<i>1310</i>&nbsp;     */
+<b class="fc"><i>1311</i>&nbsp;    public static void write(byte[] data, Writer output, String encoding) throws IOException {</b>
+<b class="fc"><i>1312</i>&nbsp;        write(data, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1313</i>&nbsp;    }</b>
+<i>1314</i>&nbsp;
+<i>1315</i>&nbsp;    // write char[]
+<i>1316</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1317</i>&nbsp;    /**
+<i>1318</i>&nbsp;     * Writes chars from a &lt;code&gt;char[]&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;
+<i>1319</i>&nbsp;     * using the default character encoding of the platform.
+<i>1320</i>&nbsp;     * 
+<i>1321</i>&nbsp;     * @param data  the char array to write, do not modify during output,
+<i>1322</i>&nbsp;     * null ignored
+<i>1323</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1324</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1325</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1326</i>&nbsp;     * @since 1.1
+<i>1327</i>&nbsp;     */
+<b class="fc"><i>1328</i>&nbsp;    public static void write(char[] data, Writer output) throws IOException {</b>
+<b class="fc"><i>1329</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1330</i>&nbsp;            output.write(data);</b>
+<i>1331</i>&nbsp;        }
+<b class="fc"><i>1332</i>&nbsp;    }</b>
+<i>1333</i>&nbsp;
+<i>1334</i>&nbsp;    /**
+<i>1335</i>&nbsp;     * Writes chars from a &lt;code&gt;char[]&lt;/code&gt; to bytes on an
+<i>1336</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;.
+<i>1337</i>&nbsp;     * &lt;p&gt;
+<i>1338</i>&nbsp;     * This method uses {@link String#String(char[])} and
+<i>1339</i>&nbsp;     * {@link String#getBytes()}.
+<i>1340</i>&nbsp;     * 
+<i>1341</i>&nbsp;     * @param data  the char array to write, do not modify during output,
+<i>1342</i>&nbsp;     * null ignored
+<i>1343</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1344</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1345</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1346</i>&nbsp;     * @since 1.1
+<i>1347</i>&nbsp;     */
+<i>1348</i>&nbsp;    public static void write(char[] data, OutputStream output)
+<b class="fc"><i>1349</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1350</i>&nbsp;        write(data, output, Charset.defaultCharset());</b>
+<b class="fc"><i>1351</i>&nbsp;    }</b>
+<i>1352</i>&nbsp;
+<i>1353</i>&nbsp;    /**
+<i>1354</i>&nbsp;     * Writes chars from a &lt;code&gt;char[]&lt;/code&gt; to bytes on an
+<i>1355</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1356</i>&nbsp;     * &lt;p&gt;
+<i>1357</i>&nbsp;     * This method uses {@link String#String(char[])} and
+<i>1358</i>&nbsp;     * {@link String#getBytes(String)}.
+<i>1359</i>&nbsp;     * 
+<i>1360</i>&nbsp;     * @param data  the char array to write, do not modify during output,
+<i>1361</i>&nbsp;     * null ignored
+<i>1362</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1363</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1364</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1365</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1366</i>&nbsp;     * @since 2.3
+<i>1367</i>&nbsp;     */
+<b class="fc"><i>1368</i>&nbsp;    public static void write(char[] data, OutputStream output, Charset encoding) throws IOException {</b>
+<b class="fc"><i>1369</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1370</i>&nbsp;            output.write(new String(data).getBytes(Charsets.toCharset(encoding)));</b>
+<i>1371</i>&nbsp;        }
+<b class="fc"><i>1372</i>&nbsp;    }</b>
+<i>1373</i>&nbsp;
+<i>1374</i>&nbsp;    /**
+<i>1375</i>&nbsp;     * Writes chars from a &lt;code&gt;char[]&lt;/code&gt; to bytes on an
+<i>1376</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1377</i>&nbsp;     * &lt;p&gt;
+<i>1378</i>&nbsp;     * Character encoding names can be found at
+<i>1379</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1380</i>&nbsp;     * &lt;p&gt;
+<i>1381</i>&nbsp;     * This method uses {@link String#String(char[])} and
+<i>1382</i>&nbsp;     * {@link String#getBytes(String)}.
+<i>1383</i>&nbsp;     * 
+<i>1384</i>&nbsp;     * @param data  the char array to write, do not modify during output,
+<i>1385</i>&nbsp;     * null ignored
+<i>1386</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1387</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1388</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1389</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1390</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1391</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1392</i>&nbsp;     *             supported.
+<i>1393</i>&nbsp;     * @since 1.1
+<i>1394</i>&nbsp;     */
+<i>1395</i>&nbsp;    public static void write(char[] data, OutputStream output, String encoding)
+<b class="fc"><i>1396</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1397</i>&nbsp;        write(data, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1398</i>&nbsp;    }</b>
+<i>1399</i>&nbsp;
+<i>1400</i>&nbsp;    // write CharSequence
+<i>1401</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1402</i>&nbsp;    /**
+<i>1403</i>&nbsp;     * Writes chars from a &lt;code&gt;CharSequence&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;.
+<i>1404</i>&nbsp;     * 
+<i>1405</i>&nbsp;     * @param data  the &lt;code&gt;CharSequence&lt;/code&gt; to write, null ignored
+<i>1406</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1407</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1408</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1409</i>&nbsp;     * @since 2.0
+<i>1410</i>&nbsp;     */
+<b class="fc"><i>1411</i>&nbsp;    public static void write(CharSequence data, Writer output) throws IOException {</b>
+<b class="fc"><i>1412</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1413</i>&nbsp;            write(data.toString(), output);</b>
+<i>1414</i>&nbsp;        }
+<b class="fc"><i>1415</i>&nbsp;    }</b>
+<i>1416</i>&nbsp;
+<i>1417</i>&nbsp;    /**
+<i>1418</i>&nbsp;     * Writes chars from a &lt;code&gt;CharSequence&lt;/code&gt; to bytes on an
+<i>1419</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the default character encoding of the
+<i>1420</i>&nbsp;     * platform.
+<i>1421</i>&nbsp;     * &lt;p&gt;
+<i>1422</i>&nbsp;     * This method uses {@link String#getBytes()}.
+<i>1423</i>&nbsp;     * 
+<i>1424</i>&nbsp;     * @param data  the &lt;code&gt;CharSequence&lt;/code&gt; to write, null ignored
+<i>1425</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1426</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1427</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1428</i>&nbsp;     * @since 2.0
+<i>1429</i>&nbsp;     */
+<i>1430</i>&nbsp;    public static void write(CharSequence data, OutputStream output)
+<b class="fc"><i>1431</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1432</i>&nbsp;        write(data, output, Charset.defaultCharset());</b>
+<b class="fc"><i>1433</i>&nbsp;    }</b>
+<i>1434</i>&nbsp;
+<i>1435</i>&nbsp;    /**
+<i>1436</i>&nbsp;     * Writes chars from a &lt;code&gt;CharSequence&lt;/code&gt; to bytes on an
+<i>1437</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1438</i>&nbsp;     * &lt;p&gt;
+<i>1439</i>&nbsp;     * This method uses {@link String#getBytes(String)}.
+<i>1440</i>&nbsp;     * 
+<i>1441</i>&nbsp;     * @param data  the &lt;code&gt;CharSequence&lt;/code&gt; to write, null ignored
+<i>1442</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1443</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1444</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1445</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1446</i>&nbsp;     * @since 2.3
+<i>1447</i>&nbsp;     */
+<b class="fc"><i>1448</i>&nbsp;    public static void write(CharSequence data, OutputStream output, Charset encoding) throws IOException {</b>
+<b class="fc"><i>1449</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1450</i>&nbsp;            write(data.toString(), output, encoding);</b>
+<i>1451</i>&nbsp;        }
+<b class="fc"><i>1452</i>&nbsp;    }</b>
+<i>1453</i>&nbsp;
+<i>1454</i>&nbsp;    /**
+<i>1455</i>&nbsp;     * Writes chars from a &lt;code&gt;CharSequence&lt;/code&gt; to bytes on an
+<i>1456</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1457</i>&nbsp;     * &lt;p&gt;
+<i>1458</i>&nbsp;     * Character encoding names can be found at
+<i>1459</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1460</i>&nbsp;     * &lt;p&gt;
+<i>1461</i>&nbsp;     * This method uses {@link String#getBytes(String)}.
+<i>1462</i>&nbsp;     * 
+<i>1463</i>&nbsp;     * @param data  the &lt;code&gt;CharSequence&lt;/code&gt; to write, null ignored
+<i>1464</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1465</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1466</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1467</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1468</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1469</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1470</i>&nbsp;     *             supported.
+<i>1471</i>&nbsp;     * @since 2.0
+<i>1472</i>&nbsp;     */
+<b class="fc"><i>1473</i>&nbsp;    public static void write(CharSequence data, OutputStream output, String encoding) throws IOException {</b>
+<b class="fc"><i>1474</i>&nbsp;        write(data, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1475</i>&nbsp;    }</b>
+<i>1476</i>&nbsp;
+<i>1477</i>&nbsp;    // write String
+<i>1478</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1479</i>&nbsp;    /**
+<i>1480</i>&nbsp;     * Writes chars from a &lt;code&gt;String&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;.
+<i>1481</i>&nbsp;     * 
+<i>1482</i>&nbsp;     * @param data  the &lt;code&gt;String&lt;/code&gt; to write, null ignored
+<i>1483</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1484</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1485</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1486</i>&nbsp;     * @since 1.1
+<i>1487</i>&nbsp;     */
+<b class="fc"><i>1488</i>&nbsp;    public static void write(String data, Writer output) throws IOException {</b>
+<b class="fc"><i>1489</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1490</i>&nbsp;            output.write(data);</b>
+<i>1491</i>&nbsp;        }
+<b class="fc"><i>1492</i>&nbsp;    }</b>
+<i>1493</i>&nbsp;
+<i>1494</i>&nbsp;    /**
+<i>1495</i>&nbsp;     * Writes chars from a &lt;code&gt;String&lt;/code&gt; to bytes on an
+<i>1496</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the default character encoding of the
+<i>1497</i>&nbsp;     * platform.
+<i>1498</i>&nbsp;     * &lt;p&gt;
+<i>1499</i>&nbsp;     * This method uses {@link String#getBytes()}.
+<i>1500</i>&nbsp;     * 
+<i>1501</i>&nbsp;     * @param data  the &lt;code&gt;String&lt;/code&gt; to write, null ignored
+<i>1502</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1503</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1504</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1505</i>&nbsp;     * @since 1.1
+<i>1506</i>&nbsp;     */
+<i>1507</i>&nbsp;    public static void write(String data, OutputStream output)
+<b class="fc"><i>1508</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1509</i>&nbsp;        write(data, output, Charset.defaultCharset());</b>
+<b class="fc"><i>1510</i>&nbsp;    }</b>
+<i>1511</i>&nbsp;
+<i>1512</i>&nbsp;    /**
+<i>1513</i>&nbsp;     * Writes chars from a &lt;code&gt;String&lt;/code&gt; to bytes on an
+<i>1514</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1515</i>&nbsp;     * &lt;p&gt;
+<i>1516</i>&nbsp;     * This method uses {@link String#getBytes(String)}.
+<i>1517</i>&nbsp;     * 
+<i>1518</i>&nbsp;     * @param data  the &lt;code&gt;String&lt;/code&gt; to write, null ignored
+<i>1519</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1520</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1521</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1522</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1523</i>&nbsp;     * @since 2.3
+<i>1524</i>&nbsp;     */
+<b class="fc"><i>1525</i>&nbsp;    public static void write(String data, OutputStream output, Charset encoding) throws IOException {</b>
+<b class="fc"><i>1526</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>1527</i>&nbsp;            output.write(data.getBytes(Charsets.toCharset(encoding)));</b>
+<i>1528</i>&nbsp;        }
+<b class="fc"><i>1529</i>&nbsp;    }</b>
+<i>1530</i>&nbsp;
+<i>1531</i>&nbsp;    /**
+<i>1532</i>&nbsp;     * Writes chars from a &lt;code&gt;String&lt;/code&gt; to bytes on an
+<i>1533</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1534</i>&nbsp;     * &lt;p&gt;
+<i>1535</i>&nbsp;     * Character encoding names can be found at
+<i>1536</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1537</i>&nbsp;     * &lt;p&gt;
+<i>1538</i>&nbsp;     * This method uses {@link String#getBytes(String)}.
+<i>1539</i>&nbsp;     * 
+<i>1540</i>&nbsp;     * @param data  the &lt;code&gt;String&lt;/code&gt; to write, null ignored
+<i>1541</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1542</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1543</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1544</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1545</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1546</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1547</i>&nbsp;     *             supported.
+<i>1548</i>&nbsp;     * @since 1.1
+<i>1549</i>&nbsp;     */
+<i>1550</i>&nbsp;    public static void write(String data, OutputStream output, String encoding)
+<b class="fc"><i>1551</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1552</i>&nbsp;        write(data, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1553</i>&nbsp;    }</b>
+<i>1554</i>&nbsp;
+<i>1555</i>&nbsp;    // write StringBuffer
+<i>1556</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1557</i>&nbsp;    /**
+<i>1558</i>&nbsp;     * Writes chars from a &lt;code&gt;StringBuffer&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;.
+<i>1559</i>&nbsp;     * 
+<i>1560</i>&nbsp;     * @param data  the &lt;code&gt;StringBuffer&lt;/code&gt; to write, null ignored
+<i>1561</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1562</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1563</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1564</i>&nbsp;     * @since 1.1
+<i>1565</i>&nbsp;     * @deprecated replaced by write(CharSequence, Writer)
+<i>1566</i>&nbsp;     */
+<i>1567</i>&nbsp;    @Deprecated
+<i>1568</i>&nbsp;    public static void write(StringBuffer data, Writer output)
+<b class="nc"><i>1569</i>&nbsp;            throws IOException {</b>
+<b class="nc"><i>1570</i>&nbsp;        if (data != null) {</b>
+<b class="nc"><i>1571</i>&nbsp;            output.write(data.toString());</b>
+<i>1572</i>&nbsp;        }
+<b class="nc"><i>1573</i>&nbsp;    }</b>
+<i>1574</i>&nbsp;
+<i>1575</i>&nbsp;    /**
+<i>1576</i>&nbsp;     * Writes chars from a &lt;code&gt;StringBuffer&lt;/code&gt; to bytes on an
+<i>1577</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the default character encoding of the
+<i>1578</i>&nbsp;     * platform.
+<i>1579</i>&nbsp;     * &lt;p&gt;
+<i>1580</i>&nbsp;     * This method uses {@link String#getBytes()}.
+<i>1581</i>&nbsp;     * 
+<i>1582</i>&nbsp;     * @param data  the &lt;code&gt;StringBuffer&lt;/code&gt; to write, null ignored
+<i>1583</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1584</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1585</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1586</i>&nbsp;     * @since 1.1
+<i>1587</i>&nbsp;     * @deprecated replaced by write(CharSequence, OutputStream)
+<i>1588</i>&nbsp;     */
+<i>1589</i>&nbsp;    @Deprecated
+<i>1590</i>&nbsp;    public static void write(StringBuffer data, OutputStream output)
+<b class="nc"><i>1591</i>&nbsp;            throws IOException {</b>
+<b class="nc"><i>1592</i>&nbsp;        write(data, output, (String) null);</b>
+<b class="nc"><i>1593</i>&nbsp;    }</b>
+<i>1594</i>&nbsp;
+<i>1595</i>&nbsp;    /**
+<i>1596</i>&nbsp;     * Writes chars from a &lt;code&gt;StringBuffer&lt;/code&gt; to bytes on an
+<i>1597</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding.
+<i>1598</i>&nbsp;     * &lt;p&gt;
+<i>1599</i>&nbsp;     * Character encoding names can be found at
+<i>1600</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1601</i>&nbsp;     * &lt;p&gt;
+<i>1602</i>&nbsp;     * This method uses {@link String#getBytes(String)}.
+<i>1603</i>&nbsp;     * 
+<i>1604</i>&nbsp;     * @param data  the &lt;code&gt;StringBuffer&lt;/code&gt; to write, null ignored
+<i>1605</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1606</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1607</i>&nbsp;     * @throws NullPointerException if output is null
+<i>1608</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1609</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1610</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1611</i>&nbsp;     *             supported.
+<i>1612</i>&nbsp;     * @since 1.1
+<i>1613</i>&nbsp;     * @deprecated replaced by write(CharSequence, OutputStream, String)
+<i>1614</i>&nbsp;     */
+<i>1615</i>&nbsp;    @Deprecated
+<b class="nc"><i>1616</i>&nbsp;    public static void write(StringBuffer data, OutputStream output, String encoding) throws IOException {</b>
+<b class="nc"><i>1617</i>&nbsp;        if (data != null) {</b>
+<b class="nc"><i>1618</i>&nbsp;            output.write(data.toString().getBytes(Charsets.toCharset(encoding)));</b>
+<i>1619</i>&nbsp;        }
+<b class="nc"><i>1620</i>&nbsp;    }</b>
+<i>1621</i>&nbsp;
+<i>1622</i>&nbsp;    // writeLines
+<i>1623</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1624</i>&nbsp;    /**
+<i>1625</i>&nbsp;     * Writes the &lt;code&gt;toString()&lt;/code&gt; value of each item in a collection to
+<i>1626</i>&nbsp;     * an &lt;code&gt;OutputStream&lt;/code&gt; line by line, using the default character
+<i>1627</i>&nbsp;     * encoding of the platform and the specified line ending.
+<i>1628</i>&nbsp;     *
+<i>1629</i>&nbsp;     * @param lines  the lines to write, null entries produce blank lines
+<i>1630</i>&nbsp;     * @param lineEnding  the line separator to use, null is system default
+<i>1631</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to, not null, not closed
+<i>1632</i>&nbsp;     * @throws NullPointerException if the output is null
+<i>1633</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1634</i>&nbsp;     * @since 1.1
+<i>1635</i>&nbsp;     */
+<i>1636</i>&nbsp;    public static void writeLines(Collection&lt;?&gt; lines, String lineEnding,
+<b class="fc"><i>1637</i>&nbsp;            OutputStream output) throws IOException {</b>
+<b class="fc"><i>1638</i>&nbsp;        writeLines(lines, lineEnding, output, Charset.defaultCharset());</b>
+<b class="fc"><i>1639</i>&nbsp;    }</b>
+<i>1640</i>&nbsp;
+<i>1641</i>&nbsp;    /**
+<i>1642</i>&nbsp;     * Writes the &lt;code&gt;toString()&lt;/code&gt; value of each item in a collection to
+<i>1643</i>&nbsp;     * an &lt;code&gt;OutputStream&lt;/code&gt; line by line, using the specified character
+<i>1644</i>&nbsp;     * encoding and the specified line ending.
+<i>1645</i>&nbsp;     *
+<i>1646</i>&nbsp;     * @param lines  the lines to write, null entries produce blank lines
+<i>1647</i>&nbsp;     * @param lineEnding  the line separator to use, null is system default
+<i>1648</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to, not null, not closed
+<i>1649</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1650</i>&nbsp;     * @throws NullPointerException if the output is null
+<i>1651</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1652</i>&nbsp;     * @since 2.3
+<i>1653</i>&nbsp;     */
+<i>1654</i>&nbsp;    public static void writeLines(Collection&lt;?&gt; lines, String lineEnding, OutputStream output, Charset encoding)
+<b class="fc"><i>1655</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1656</i>&nbsp;        if (lines == null) {</b>
+<b class="fc"><i>1657</i>&nbsp;            return;</b>
+<i>1658</i>&nbsp;        }
+<b class="fc"><i>1659</i>&nbsp;        if (lineEnding == null) {</b>
+<b class="fc"><i>1660</i>&nbsp;            lineEnding = LINE_SEPARATOR;</b>
+<i>1661</i>&nbsp;        }
+<b class="fc"><i>1662</i>&nbsp;        Charset cs = Charsets.toCharset(encoding);</b>
+<b class="fc"><i>1663</i>&nbsp;        for (Object line : lines) {</b>
+<b class="fc"><i>1664</i>&nbsp;            if (line != null) {</b>
+<b class="fc"><i>1665</i>&nbsp;                output.write(line.toString().getBytes(cs));</b>
+<i>1666</i>&nbsp;            }
+<b class="fc"><i>1667</i>&nbsp;            output.write(lineEnding.getBytes(cs));</b>
+<i>1668</i>&nbsp;        }
+<b class="fc"><i>1669</i>&nbsp;    }</b>
+<i>1670</i>&nbsp;
+<i>1671</i>&nbsp;    /**
+<i>1672</i>&nbsp;     * Writes the &lt;code&gt;toString()&lt;/code&gt; value of each item in a collection to
+<i>1673</i>&nbsp;     * an &lt;code&gt;OutputStream&lt;/code&gt; line by line, using the specified character
+<i>1674</i>&nbsp;     * encoding and the specified line ending.
+<i>1675</i>&nbsp;     * &lt;p&gt;
+<i>1676</i>&nbsp;     * Character encoding names can be found at
+<i>1677</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1678</i>&nbsp;     *
+<i>1679</i>&nbsp;     * @param lines  the lines to write, null entries produce blank lines
+<i>1680</i>&nbsp;     * @param lineEnding  the line separator to use, null is system default
+<i>1681</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to, not null, not closed
+<i>1682</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1683</i>&nbsp;     * @throws NullPointerException if the output is null
+<i>1684</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1685</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1686</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1687</i>&nbsp;     *             supported.
+<i>1688</i>&nbsp;     * @since 1.1
+<i>1689</i>&nbsp;     */
+<i>1690</i>&nbsp;    public static void writeLines(Collection&lt;?&gt; lines, String lineEnding,
+<b class="fc"><i>1691</i>&nbsp;            OutputStream output, String encoding) throws IOException {</b>
+<b class="fc"><i>1692</i>&nbsp;        writeLines(lines, lineEnding, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1693</i>&nbsp;    }</b>
+<i>1694</i>&nbsp;
+<i>1695</i>&nbsp;    /**
+<i>1696</i>&nbsp;     * Writes the &lt;code&gt;toString()&lt;/code&gt; value of each item in a collection to
+<i>1697</i>&nbsp;     * a &lt;code&gt;Writer&lt;/code&gt; line by line, using the specified line ending.
+<i>1698</i>&nbsp;     *
+<i>1699</i>&nbsp;     * @param lines  the lines to write, null entries produce blank lines
+<i>1700</i>&nbsp;     * @param lineEnding  the line separator to use, null is system default
+<i>1701</i>&nbsp;     * @param writer  the &lt;code&gt;Writer&lt;/code&gt; to write to, not null, not closed
+<i>1702</i>&nbsp;     * @throws NullPointerException if the input is null
+<i>1703</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1704</i>&nbsp;     * @since 1.1
+<i>1705</i>&nbsp;     */
+<i>1706</i>&nbsp;    public static void writeLines(Collection&lt;?&gt; lines, String lineEnding,
+<b class="fc"><i>1707</i>&nbsp;            Writer writer) throws IOException {</b>
+<b class="fc"><i>1708</i>&nbsp;        if (lines == null) {</b>
+<b class="fc"><i>1709</i>&nbsp;            return;</b>
+<i>1710</i>&nbsp;        }
+<b class="fc"><i>1711</i>&nbsp;        if (lineEnding == null) {</b>
+<b class="fc"><i>1712</i>&nbsp;            lineEnding = LINE_SEPARATOR;</b>
+<i>1713</i>&nbsp;        }
+<b class="fc"><i>1714</i>&nbsp;        for (Object line : lines) {</b>
+<b class="fc"><i>1715</i>&nbsp;            if (line != null) {</b>
+<b class="fc"><i>1716</i>&nbsp;                writer.write(line.toString());</b>
+<i>1717</i>&nbsp;            }
+<b class="fc"><i>1718</i>&nbsp;            writer.write(lineEnding);</b>
+<i>1719</i>&nbsp;        }
+<b class="fc"><i>1720</i>&nbsp;    }</b>
+<i>1721</i>&nbsp;
+<i>1722</i>&nbsp;    // copy from InputStream
+<i>1723</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1724</i>&nbsp;    /**
+<i>1725</i>&nbsp;     * Copy bytes from an &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>1726</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;.
+<i>1727</i>&nbsp;     * &lt;p&gt;
+<i>1728</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1729</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1730</i>&nbsp;     * &lt;p&gt;
+<i>1731</i>&nbsp;     * Large streams (over 2GB) will return a bytes copied value of
+<i>1732</i>&nbsp;     * &lt;code&gt;-1&lt;/code&gt; after the copy has completed since the correct
+<i>1733</i>&nbsp;     * number of bytes cannot be returned as an int. For large streams
+<i>1734</i>&nbsp;     * use the &lt;code&gt;copyLarge(InputStream, OutputStream)&lt;/code&gt; method.
+<i>1735</i>&nbsp;     * 
+<i>1736</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1737</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1738</i>&nbsp;     * @return the number of bytes copied, or -1 if &amp;gt; Integer.MAX_VALUE
+<i>1739</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1740</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1741</i>&nbsp;     * @since 1.1
+<i>1742</i>&nbsp;     */
+<b class="fc"><i>1743</i>&nbsp;    public static int copy(InputStream input, OutputStream output) throws IOException {</b>
+<b class="fc"><i>1744</i>&nbsp;        long count = copyLarge(input, output);</b>
+<b class="fc"><i>1745</i>&nbsp;        if (count &gt; Integer.MAX_VALUE) {</b>
+<b class="fc"><i>1746</i>&nbsp;            return -1;</b>
+<i>1747</i>&nbsp;        }
+<b class="fc"><i>1748</i>&nbsp;        return (int) count;</b>
+<i>1749</i>&nbsp;    }
+<i>1750</i>&nbsp;
+<i>1751</i>&nbsp;    /**
+<i>1752</i>&nbsp;     * Copy bytes from a large (over 2GB) &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>1753</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;.
+<i>1754</i>&nbsp;     * &lt;p&gt;
+<i>1755</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1756</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1757</i>&nbsp;     * &lt;p&gt;
+<i>1758</i>&nbsp;     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+<i>1759</i>&nbsp;     * 
+<i>1760</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1761</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1762</i>&nbsp;     * @return the number of bytes copied
+<i>1763</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1764</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1765</i>&nbsp;     * @since 1.3
+<i>1766</i>&nbsp;     */
+<i>1767</i>&nbsp;    public static long copyLarge(InputStream input, OutputStream output)
+<b class="fc"><i>1768</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1769</i>&nbsp;        return copyLarge(input, output, new byte[DEFAULT_BUFFER_SIZE]);</b>
+<i>1770</i>&nbsp;    }
+<i>1771</i>&nbsp;
+<i>1772</i>&nbsp;    /**
+<i>1773</i>&nbsp;     * Copy bytes from a large (over 2GB) &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>1774</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;.
+<i>1775</i>&nbsp;     * &lt;p&gt;
+<i>1776</i>&nbsp;     * This method uses the provided buffer, so there is no need to use a
+<i>1777</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1778</i>&nbsp;     * &lt;p&gt;
+<i>1779</i>&nbsp;     * 
+<i>1780</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1781</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1782</i>&nbsp;     * @param buffer the buffer to use for the copy
+<i>1783</i>&nbsp;     * @return the number of bytes copied
+<i>1784</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1785</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1786</i>&nbsp;     * @since 2.2
+<i>1787</i>&nbsp;     */
+<i>1788</i>&nbsp;    public static long copyLarge(InputStream input, OutputStream output, byte[] buffer)
+<b class="fc"><i>1789</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1790</i>&nbsp;        long count = 0;</b>
+<b class="fc"><i>1791</i>&nbsp;        int n = 0;</b>
+<b class="fc"><i>1792</i>&nbsp;        while (EOF != (n = input.read(buffer))) {</b>
+<b class="fc"><i>1793</i>&nbsp;            output.write(buffer, 0, n);</b>
+<b class="fc"><i>1794</i>&nbsp;            count += n;</b>
+<i>1795</i>&nbsp;        }
+<b class="fc"><i>1796</i>&nbsp;        return count;</b>
+<i>1797</i>&nbsp;    }
+<i>1798</i>&nbsp;
+<i>1799</i>&nbsp;    /**
+<i>1800</i>&nbsp;     * Copy some or all bytes from a large (over 2GB) &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>1801</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;, optionally skipping input bytes.
+<i>1802</i>&nbsp;     * &lt;p&gt;
+<i>1803</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1804</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1805</i>&nbsp;     * &lt;p&gt;
+<i>1806</i>&nbsp;     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+<i>1807</i>&nbsp;     * 
+<i>1808</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1809</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1810</i>&nbsp;     * @param inputOffset : number of bytes to skip from input before copying
+<i>1811</i>&nbsp;     *         -ve values are ignored
+<i>1812</i>&nbsp;     * @param length : number of bytes to copy. -ve means all
+<i>1813</i>&nbsp;     * @return the number of bytes copied
+<i>1814</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1815</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1816</i>&nbsp;     * @since 2.2
+<i>1817</i>&nbsp;     */
+<i>1818</i>&nbsp;    public static long copyLarge(InputStream input, OutputStream output, long inputOffset, long length)
+<b class="fc"><i>1819</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1820</i>&nbsp;        return copyLarge(input, output, inputOffset, length, new byte[DEFAULT_BUFFER_SIZE]);</b>
+<i>1821</i>&nbsp;    }
+<i>1822</i>&nbsp;
+<i>1823</i>&nbsp;    /**
+<i>1824</i>&nbsp;     * Copy some or all bytes from a large (over 2GB) &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>1825</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;, optionally skipping input bytes.
+<i>1826</i>&nbsp;     * &lt;p&gt;
+<i>1827</i>&nbsp;     * This method uses the provided buffer, so there is no need to use a
+<i>1828</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1829</i>&nbsp;     * &lt;p&gt;
+<i>1830</i>&nbsp;     * 
+<i>1831</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1832</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>1833</i>&nbsp;     * @param inputOffset : number of bytes to skip from input before copying
+<i>1834</i>&nbsp;     *         -ve values are ignored
+<i>1835</i>&nbsp;     * @param length : number of bytes to copy. -ve means all
+<i>1836</i>&nbsp;     * @param buffer the buffer to use for the copy
+<i>1837</i>&nbsp;     *
+<i>1838</i>&nbsp;     * @return the number of bytes copied
+<i>1839</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1840</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1841</i>&nbsp;     * @since 2.2
+<i>1842</i>&nbsp;     */
+<i>1843</i>&nbsp;    public static long copyLarge(InputStream input, OutputStream output, 
+<b class="fc"><i>1844</i>&nbsp;            final long inputOffset, final long length, byte[] buffer)  throws IOException {</b>
+<b class="fc"><i>1845</i>&nbsp;        if (inputOffset &gt; 0) {</b>
+<b class="fc"><i>1846</i>&nbsp;            skipFully(input, inputOffset);</b>
+<i>1847</i>&nbsp;        }
+<b class="fc"><i>1848</i>&nbsp;        if (length == 0) {</b>
+<b class="nc"><i>1849</i>&nbsp;            return 0;</b>
+<i>1850</i>&nbsp;        }
+<b class="fc"><i>1851</i>&nbsp;        final int bufferLength = buffer.length;</b>
+<b class="fc"><i>1852</i>&nbsp;        int bytesToRead = bufferLength;</b>
+<b class="fc"><i>1853</i>&nbsp;        if (length &gt; 0 &amp;&amp; length &lt; bufferLength) {</b>
+<b class="fc"><i>1854</i>&nbsp;            bytesToRead = (int) length;</b>
+<i>1855</i>&nbsp;        }
+<b class="fc"><i>1856</i>&nbsp;        int read;</b>
+<b class="fc"><i>1857</i>&nbsp;        long totalRead = 0;</b>
+<b class="fc"><i>1858</i>&nbsp;        while (bytesToRead &gt; 0 &amp;&amp; EOF != (read = input.read(buffer, 0, bytesToRead))) {</b>
+<b class="fc"><i>1859</i>&nbsp;            output.write(buffer, 0, read);</b>
+<b class="fc"><i>1860</i>&nbsp;            totalRead += read;</b>
+<b class="fc"><i>1861</i>&nbsp;            if (length &gt; 0) { // only adjust length if not reading to the end</b>
+<i>1862</i>&nbsp;                // Note the cast must work because buffer.length is an integer
+<b class="fc"><i>1863</i>&nbsp;                bytesToRead = (int) Math.min(length - totalRead, bufferLength);</b>
+<i>1864</i>&nbsp;            }
+<i>1865</i>&nbsp;        }
+<b class="fc"><i>1866</i>&nbsp;        return totalRead;</b>
+<i>1867</i>&nbsp;    }
+<i>1868</i>&nbsp;
+<i>1869</i>&nbsp;    /**
+<i>1870</i>&nbsp;     * Copy bytes from an &lt;code&gt;InputStream&lt;/code&gt; to chars on a
+<i>1871</i>&nbsp;     * &lt;code&gt;Writer&lt;/code&gt; using the default character encoding of the platform.
+<i>1872</i>&nbsp;     * &lt;p&gt;
+<i>1873</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1874</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1875</i>&nbsp;     * &lt;p&gt;
+<i>1876</i>&nbsp;     * This method uses {@link InputStreamReader}.
+<i>1877</i>&nbsp;     *
+<i>1878</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1879</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1880</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1881</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1882</i>&nbsp;     * @since 1.1
+<i>1883</i>&nbsp;     */
+<i>1884</i>&nbsp;    public static void copy(InputStream input, Writer output)
+<b class="fc"><i>1885</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>1886</i>&nbsp;        copy(input, output, Charset.defaultCharset());</b>
+<b class="fc"><i>1887</i>&nbsp;    }</b>
+<i>1888</i>&nbsp;
+<i>1889</i>&nbsp;    /**
+<i>1890</i>&nbsp;     * Copy bytes from an &lt;code&gt;InputStream&lt;/code&gt; to chars on a
+<i>1891</i>&nbsp;     * &lt;code&gt;Writer&lt;/code&gt; using the specified character encoding.
+<i>1892</i>&nbsp;     * &lt;p&gt;
+<i>1893</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1894</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1895</i>&nbsp;     * &lt;p&gt;
+<i>1896</i>&nbsp;     * This method uses {@link InputStreamReader}.
+<i>1897</i>&nbsp;     *
+<i>1898</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1899</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1900</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1901</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1902</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1903</i>&nbsp;     * @since 2.3
+<i>1904</i>&nbsp;     */
+<b class="fc"><i>1905</i>&nbsp;    public static void copy(InputStream input, Writer output, Charset encoding) throws IOException {</b>
+<b class="fc"><i>1906</i>&nbsp;        InputStreamReader in = new InputStreamReader(input, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1907</i>&nbsp;        copy(in, output);</b>
+<b class="fc"><i>1908</i>&nbsp;    }</b>
+<i>1909</i>&nbsp;
+<i>1910</i>&nbsp;    /**
+<i>1911</i>&nbsp;     * Copy bytes from an &lt;code&gt;InputStream&lt;/code&gt; to chars on a
+<i>1912</i>&nbsp;     * &lt;code&gt;Writer&lt;/code&gt; using the specified character encoding.
+<i>1913</i>&nbsp;     * &lt;p&gt;
+<i>1914</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1915</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt;.
+<i>1916</i>&nbsp;     * &lt;p&gt;
+<i>1917</i>&nbsp;     * Character encoding names can be found at
+<i>1918</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>1919</i>&nbsp;     * &lt;p&gt;
+<i>1920</i>&nbsp;     * This method uses {@link InputStreamReader}.
+<i>1921</i>&nbsp;     *
+<i>1922</i>&nbsp;     * @param input  the &lt;code&gt;InputStream&lt;/code&gt; to read from
+<i>1923</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1924</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>1925</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1926</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1927</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>1928</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>1929</i>&nbsp;     *             supported.
+<i>1930</i>&nbsp;     * @since 1.1
+<i>1931</i>&nbsp;     */
+<b class="fc"><i>1932</i>&nbsp;    public static void copy(InputStream input, Writer output, String encoding) throws IOException {</b>
+<b class="fc"><i>1933</i>&nbsp;        copy(input, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>1934</i>&nbsp;    }</b>
+<i>1935</i>&nbsp;
+<i>1936</i>&nbsp;    // copy from Reader
+<i>1937</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1938</i>&nbsp;    /**
+<i>1939</i>&nbsp;     * Copy chars from a &lt;code&gt;Reader&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;.
+<i>1940</i>&nbsp;     * &lt;p&gt;
+<i>1941</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1942</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>1943</i>&nbsp;     * &lt;p&gt;
+<i>1944</i>&nbsp;     * Large streams (over 2GB) will return a chars copied value of
+<i>1945</i>&nbsp;     * &lt;code&gt;-1&lt;/code&gt; after the copy has completed since the correct
+<i>1946</i>&nbsp;     * number of chars cannot be returned as an int. For large streams
+<i>1947</i>&nbsp;     * use the &lt;code&gt;copyLarge(Reader, Writer)&lt;/code&gt; method.
+<i>1948</i>&nbsp;     *
+<i>1949</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>1950</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1951</i>&nbsp;     * @return the number of characters copied, or -1 if &amp;gt; Integer.MAX_VALUE
+<i>1952</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1953</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1954</i>&nbsp;     * @since 1.1
+<i>1955</i>&nbsp;     */
+<b class="fc"><i>1956</i>&nbsp;    public static int copy(Reader input, Writer output) throws IOException {</b>
+<b class="fc"><i>1957</i>&nbsp;        long count = copyLarge(input, output);</b>
+<b class="fc"><i>1958</i>&nbsp;        if (count &gt; Integer.MAX_VALUE) {</b>
+<b class="fc"><i>1959</i>&nbsp;            return -1;</b>
+<i>1960</i>&nbsp;        }
+<b class="fc"><i>1961</i>&nbsp;        return (int) count;</b>
+<i>1962</i>&nbsp;    }
+<i>1963</i>&nbsp;
+<i>1964</i>&nbsp;    /**
+<i>1965</i>&nbsp;     * Copy chars from a large (over 2GB) &lt;code&gt;Reader&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;.
+<i>1966</i>&nbsp;     * &lt;p&gt;
+<i>1967</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>1968</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>1969</i>&nbsp;     * &lt;p&gt;
+<i>1970</i>&nbsp;     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+<i>1971</i>&nbsp;     *
+<i>1972</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>1973</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1974</i>&nbsp;     * @return the number of characters copied
+<i>1975</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1976</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1977</i>&nbsp;     * @since 1.3
+<i>1978</i>&nbsp;     */
+<b class="fc"><i>1979</i>&nbsp;    public static long copyLarge(Reader input, Writer output) throws IOException {</b>
+<b class="fc"><i>1980</i>&nbsp;        return copyLarge(input, output, new char[DEFAULT_BUFFER_SIZE]);</b>
+<i>1981</i>&nbsp;    }
+<i>1982</i>&nbsp;
+<i>1983</i>&nbsp;    /**
+<i>1984</i>&nbsp;     * Copy chars from a large (over 2GB) &lt;code&gt;Reader&lt;/code&gt; to a &lt;code&gt;Writer&lt;/code&gt;.
+<i>1985</i>&nbsp;     * &lt;p&gt;
+<i>1986</i>&nbsp;     * This method uses the provided buffer, so there is no need to use a
+<i>1987</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>1988</i>&nbsp;     * &lt;p&gt;
+<i>1989</i>&nbsp;     *
+<i>1990</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>1991</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>1992</i>&nbsp;     * @param buffer the buffer to be used for the copy
+<i>1993</i>&nbsp;     * @return the number of characters copied
+<i>1994</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>1995</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>1996</i>&nbsp;     * @since 2.2
+<i>1997</i>&nbsp;     */
+<b class="fc"><i>1998</i>&nbsp;    public static long copyLarge(Reader input, Writer output, char [] buffer) throws IOException {</b>
+<b class="fc"><i>1999</i>&nbsp;        long count = 0;</b>
+<b class="fc"><i>2000</i>&nbsp;        int n = 0;</b>
+<b class="fc"><i>2001</i>&nbsp;        while (EOF != (n = input.read(buffer))) {</b>
+<b class="fc"><i>2002</i>&nbsp;            output.write(buffer, 0, n);</b>
+<b class="fc"><i>2003</i>&nbsp;            count += n;</b>
+<i>2004</i>&nbsp;        }
+<b class="fc"><i>2005</i>&nbsp;        return count;</b>
+<i>2006</i>&nbsp;    }
+<i>2007</i>&nbsp;
+<i>2008</i>&nbsp;    /**
+<i>2009</i>&nbsp;     * Copy some or all chars from a large (over 2GB) &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>2010</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;, optionally skipping input chars.
+<i>2011</i>&nbsp;     * &lt;p&gt;
+<i>2012</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>2013</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>2014</i>&nbsp;     * &lt;p&gt;
+<i>2015</i>&nbsp;     * The buffer size is given by {@link #DEFAULT_BUFFER_SIZE}.
+<i>2016</i>&nbsp;     * 
+<i>2017</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>2018</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>2019</i>&nbsp;     * @param inputOffset : number of chars to skip from input before copying
+<i>2020</i>&nbsp;     *         -ve values are ignored
+<i>2021</i>&nbsp;     * @param length : number of chars to copy. -ve means all
+<i>2022</i>&nbsp;     * @return the number of chars copied
+<i>2023</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>2024</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2025</i>&nbsp;     * @since 2.2
+<i>2026</i>&nbsp;     */
+<i>2027</i>&nbsp;    public static long copyLarge(Reader input, Writer output, final long inputOffset, final long length)
+<b class="fc"><i>2028</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>2029</i>&nbsp;        return  copyLarge(input, output, inputOffset, length, new char[DEFAULT_BUFFER_SIZE]);</b>
+<i>2030</i>&nbsp;    }
+<i>2031</i>&nbsp;
+<i>2032</i>&nbsp;    /**
+<i>2033</i>&nbsp;     * Copy some or all chars from a large (over 2GB) &lt;code&gt;InputStream&lt;/code&gt; to an
+<i>2034</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt;, optionally skipping input chars.
+<i>2035</i>&nbsp;     * &lt;p&gt;
+<i>2036</i>&nbsp;     * This method uses the provided buffer, so there is no need to use a
+<i>2037</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>2038</i>&nbsp;     * &lt;p&gt;
+<i>2039</i>&nbsp;     * 
+<i>2040</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>2041</i>&nbsp;     * @param output  the &lt;code&gt;Writer&lt;/code&gt; to write to
+<i>2042</i>&nbsp;     * @param inputOffset : number of chars to skip from input before copying
+<i>2043</i>&nbsp;     *         -ve values are ignored
+<i>2044</i>&nbsp;     * @param length : number of chars to copy. -ve means all
+<i>2045</i>&nbsp;     * @param buffer the buffer to be used for the copy
+<i>2046</i>&nbsp;     * @return the number of chars copied
+<i>2047</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>2048</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2049</i>&nbsp;     * @since 2.2
+<i>2050</i>&nbsp;     */
+<i>2051</i>&nbsp;    public static long copyLarge(Reader input, Writer output, final long inputOffset, final long length, char [] buffer)
+<b class="fc"><i>2052</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>2053</i>&nbsp;        if (inputOffset &gt; 0) {</b>
+<b class="fc"><i>2054</i>&nbsp;            skipFully(input, inputOffset);</b>
+<i>2055</i>&nbsp;        }
+<b class="fc"><i>2056</i>&nbsp;        if (length == 0) {</b>
+<b class="nc"><i>2057</i>&nbsp;            return 0;</b>
+<i>2058</i>&nbsp;        }
+<b class="fc"><i>2059</i>&nbsp;        int bytesToRead = buffer.length;</b>
+<b class="fc"><i>2060</i>&nbsp;        if (length &gt; 0 &amp;&amp; length &lt; buffer.length) {</b>
+<b class="fc"><i>2061</i>&nbsp;            bytesToRead = (int) length;</b>
+<i>2062</i>&nbsp;        }
+<b class="fc"><i>2063</i>&nbsp;        int read;</b>
+<b class="fc"><i>2064</i>&nbsp;        long totalRead = 0;</b>
+<b class="fc"><i>2065</i>&nbsp;        while (bytesToRead &gt; 0 &amp;&amp; EOF != (read = input.read(buffer, 0, bytesToRead))) {</b>
+<b class="fc"><i>2066</i>&nbsp;            output.write(buffer, 0, read);</b>
+<b class="fc"><i>2067</i>&nbsp;            totalRead += read;</b>
+<b class="fc"><i>2068</i>&nbsp;            if (length &gt; 0) { // only adjust length if not reading to the end</b>
+<i>2069</i>&nbsp;                // Note the cast must work because buffer.length is an integer
+<b class="fc"><i>2070</i>&nbsp;                bytesToRead = (int) Math.min(length - totalRead, buffer.length);</b>
+<i>2071</i>&nbsp;            }
+<i>2072</i>&nbsp;        }
+<b class="fc"><i>2073</i>&nbsp;        return totalRead;</b>
+<i>2074</i>&nbsp;    }
+<i>2075</i>&nbsp;
+<i>2076</i>&nbsp;    /**
+<i>2077</i>&nbsp;     * Copy chars from a &lt;code&gt;Reader&lt;/code&gt; to bytes on an
+<i>2078</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the default character encoding of the
+<i>2079</i>&nbsp;     * platform, and calling flush.
+<i>2080</i>&nbsp;     * &lt;p&gt;
+<i>2081</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>2082</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>2083</i>&nbsp;     * &lt;p&gt;
+<i>2084</i>&nbsp;     * Due to the implementation of OutputStreamWriter, this method performs a
+<i>2085</i>&nbsp;     * flush.
+<i>2086</i>&nbsp;     * &lt;p&gt;
+<i>2087</i>&nbsp;     * This method uses {@link OutputStreamWriter}.
+<i>2088</i>&nbsp;     *
+<i>2089</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>2090</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>2091</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>2092</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2093</i>&nbsp;     * @since 1.1
+<i>2094</i>&nbsp;     */
+<i>2095</i>&nbsp;    public static void copy(Reader input, OutputStream output)
+<b class="fc"><i>2096</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>2097</i>&nbsp;        copy(input, output, Charset.defaultCharset());</b>
+<b class="fc"><i>2098</i>&nbsp;    }</b>
+<i>2099</i>&nbsp;
+<i>2100</i>&nbsp;    /**
+<i>2101</i>&nbsp;     * Copy chars from a &lt;code&gt;Reader&lt;/code&gt; to bytes on an
+<i>2102</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding, and
+<i>2103</i>&nbsp;     * calling flush.
+<i>2104</i>&nbsp;     * &lt;p&gt;
+<i>2105</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>2106</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>2107</i>&nbsp;     * &lt;/p&gt;
+<i>2108</i>&nbsp;     * &lt;p&gt;
+<i>2109</i>&nbsp;     * Due to the implementation of OutputStreamWriter, this method performs a
+<i>2110</i>&nbsp;     * flush.
+<i>2111</i>&nbsp;     * &lt;/p&gt;
+<i>2112</i>&nbsp;     * &lt;p&gt;
+<i>2113</i>&nbsp;     * This method uses {@link OutputStreamWriter}.
+<i>2114</i>&nbsp;     * &lt;/p&gt;
+<i>2115</i>&nbsp;     *
+<i>2116</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>2117</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>2118</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>2119</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>2120</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2121</i>&nbsp;     * @since 2.3
+<i>2122</i>&nbsp;     */
+<b class="fc"><i>2123</i>&nbsp;    public static void copy(Reader input, OutputStream output, Charset encoding) throws IOException {</b>
+<b class="fc"><i>2124</i>&nbsp;        OutputStreamWriter out = new OutputStreamWriter(output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>2125</i>&nbsp;        copy(input, out);</b>
+<i>2126</i>&nbsp;        // XXX Unless anyone is planning on rewriting OutputStreamWriter,
+<i>2127</i>&nbsp;        // we have to flush here.
+<b class="fc"><i>2128</i>&nbsp;        out.flush();</b>
+<b class="fc"><i>2129</i>&nbsp;    }</b>
+<i>2130</i>&nbsp;
+<i>2131</i>&nbsp;    /**
+<i>2132</i>&nbsp;     * Copy chars from a &lt;code&gt;Reader&lt;/code&gt; to bytes on an
+<i>2133</i>&nbsp;     * &lt;code&gt;OutputStream&lt;/code&gt; using the specified character encoding, and
+<i>2134</i>&nbsp;     * calling flush.
+<i>2135</i>&nbsp;     * &lt;p&gt;
+<i>2136</i>&nbsp;     * This method buffers the input internally, so there is no need to use a
+<i>2137</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt;.
+<i>2138</i>&nbsp;     * &lt;p&gt;
+<i>2139</i>&nbsp;     * Character encoding names can be found at
+<i>2140</i>&nbsp;     * &lt;a href=&quot;http://www.iana.org/assignments/character-sets&quot;&gt;IANA&lt;/a&gt;.
+<i>2141</i>&nbsp;     * &lt;p&gt;
+<i>2142</i>&nbsp;     * Due to the implementation of OutputStreamWriter, this method performs a
+<i>2143</i>&nbsp;     * flush.
+<i>2144</i>&nbsp;     * &lt;p&gt;
+<i>2145</i>&nbsp;     * This method uses {@link OutputStreamWriter}.
+<i>2146</i>&nbsp;     *
+<i>2147</i>&nbsp;     * @param input  the &lt;code&gt;Reader&lt;/code&gt; to read from
+<i>2148</i>&nbsp;     * @param output  the &lt;code&gt;OutputStream&lt;/code&gt; to write to
+<i>2149</i>&nbsp;     * @param encoding  the encoding to use, null means platform default
+<i>2150</i>&nbsp;     * @throws NullPointerException if the input or output is null
+<i>2151</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2152</i>&nbsp;     * @throws UnsupportedCharsetException
+<i>2153</i>&nbsp;     *             thrown instead of {@link UnsupportedEncodingException} in version 2.2 if the encoding is not
+<i>2154</i>&nbsp;     *             supported.
+<i>2155</i>&nbsp;     * @since 1.1
+<i>2156</i>&nbsp;     */
+<b class="fc"><i>2157</i>&nbsp;    public static void copy(Reader input, OutputStream output, String encoding) throws IOException {</b>
+<b class="fc"><i>2158</i>&nbsp;        copy(input, output, Charsets.toCharset(encoding));</b>
+<b class="fc"><i>2159</i>&nbsp;    }</b>
+<i>2160</i>&nbsp;
+<i>2161</i>&nbsp;    // content equals
+<i>2162</i>&nbsp;    //-----------------------------------------------------------------------
+<i>2163</i>&nbsp;    /**
+<i>2164</i>&nbsp;     * Compare the contents of two Streams to determine if they are equal or
+<i>2165</i>&nbsp;     * not.
+<i>2166</i>&nbsp;     * &lt;p&gt;
+<i>2167</i>&nbsp;     * This method buffers the input internally using
+<i>2168</i>&nbsp;     * &lt;code&gt;BufferedInputStream&lt;/code&gt; if they are not already buffered.
+<i>2169</i>&nbsp;     *
+<i>2170</i>&nbsp;     * @param input1  the first stream
+<i>2171</i>&nbsp;     * @param input2  the second stream
+<i>2172</i>&nbsp;     * @return true if the content of the streams are equal or they both don&#39;t
+<i>2173</i>&nbsp;     * exist, false otherwise
+<i>2174</i>&nbsp;     * @throws NullPointerException if either input is null
+<i>2175</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2176</i>&nbsp;     */
+<i>2177</i>&nbsp;    public static boolean contentEquals(InputStream input1, InputStream input2)
+<b class="fc"><i>2178</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>2179</i>&nbsp;        if (!(input1 instanceof BufferedInputStream)) {</b>
+<b class="fc"><i>2180</i>&nbsp;            input1 = new BufferedInputStream(input1);</b>
+<i>2181</i>&nbsp;        }
+<b class="fc"><i>2182</i>&nbsp;        if (!(input2 instanceof BufferedInputStream)) {</b>
+<b class="fc"><i>2183</i>&nbsp;            input2 = new BufferedInputStream(input2);</b>
+<i>2184</i>&nbsp;        }
+<i>2185</i>&nbsp;
+<b class="fc"><i>2186</i>&nbsp;        int ch = input1.read();</b>
+<b class="fc"><i>2187</i>&nbsp;        while (EOF != ch) {</b>
+<b class="fc"><i>2188</i>&nbsp;            int ch2 = input2.read();</b>
+<b class="fc"><i>2189</i>&nbsp;            if (ch != ch2) {</b>
+<b class="fc"><i>2190</i>&nbsp;                return false;</b>
+<i>2191</i>&nbsp;            }
+<b class="fc"><i>2192</i>&nbsp;            ch = input1.read();</b>
+<b class="fc"><i>2193</i>&nbsp;        }</b>
+<i>2194</i>&nbsp;
+<b class="fc"><i>2195</i>&nbsp;        int ch2 = input2.read();</b>
+<b class="fc"><i>2196</i>&nbsp;        return ch2 == EOF;</b>
+<i>2197</i>&nbsp;    }
+<i>2198</i>&nbsp;
+<i>2199</i>&nbsp;    /**
+<i>2200</i>&nbsp;     * Compare the contents of two Readers to determine if they are equal or
+<i>2201</i>&nbsp;     * not.
+<i>2202</i>&nbsp;     * &lt;p&gt;
+<i>2203</i>&nbsp;     * This method buffers the input internally using
+<i>2204</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt; if they are not already buffered.
+<i>2205</i>&nbsp;     *
+<i>2206</i>&nbsp;     * @param input1  the first reader
+<i>2207</i>&nbsp;     * @param input2  the second reader
+<i>2208</i>&nbsp;     * @return true if the content of the readers are equal or they both don&#39;t
+<i>2209</i>&nbsp;     * exist, false otherwise
+<i>2210</i>&nbsp;     * @throws NullPointerException if either input is null
+<i>2211</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2212</i>&nbsp;     * @since 1.1
+<i>2213</i>&nbsp;     */
+<i>2214</i>&nbsp;    public static boolean contentEquals(Reader input1, Reader input2)
+<b class="fc"><i>2215</i>&nbsp;            throws IOException {</b>
+<i>2216</i>&nbsp;        
+<b class="fc"><i>2217</i>&nbsp;        input1 = toBufferedReader(input1);</b>
+<b class="fc"><i>2218</i>&nbsp;        input2 = toBufferedReader(input2);</b>
+<i>2219</i>&nbsp;
+<b class="fc"><i>2220</i>&nbsp;        int ch = input1.read();</b>
+<b class="fc"><i>2221</i>&nbsp;        while (EOF != ch) {</b>
+<b class="fc"><i>2222</i>&nbsp;            int ch2 = input2.read();</b>
+<b class="fc"><i>2223</i>&nbsp;            if (ch != ch2) {</b>
+<b class="fc"><i>2224</i>&nbsp;                return false;</b>
+<i>2225</i>&nbsp;            }
+<b class="fc"><i>2226</i>&nbsp;            ch = input1.read();</b>
+<b class="fc"><i>2227</i>&nbsp;        }</b>
+<i>2228</i>&nbsp;
+<b class="fc"><i>2229</i>&nbsp;        int ch2 = input2.read();</b>
+<b class="fc"><i>2230</i>&nbsp;        return ch2 == EOF;</b>
+<i>2231</i>&nbsp;    }
+<i>2232</i>&nbsp;
+<i>2233</i>&nbsp;    /**
+<i>2234</i>&nbsp;     * Compare the contents of two Readers to determine if they are equal or
+<i>2235</i>&nbsp;     * not, ignoring EOL characters.
+<i>2236</i>&nbsp;     * &lt;p&gt;
+<i>2237</i>&nbsp;     * This method buffers the input internally using
+<i>2238</i>&nbsp;     * &lt;code&gt;BufferedReader&lt;/code&gt; if they are not already buffered.
+<i>2239</i>&nbsp;     *
+<i>2240</i>&nbsp;     * @param input1  the first reader
+<i>2241</i>&nbsp;     * @param input2  the second reader
+<i>2242</i>&nbsp;     * @return true if the content of the readers are equal (ignoring EOL differences),  false otherwise
+<i>2243</i>&nbsp;     * @throws NullPointerException if either input is null
+<i>2244</i>&nbsp;     * @throws IOException if an I/O error occurs
+<i>2245</i>&nbsp;     * @since 2.2
+<i>2246</i>&nbsp;     */
+<i>2247</i>&nbsp;    public static boolean contentEqualsIgnoreEOL(Reader input1, Reader input2)
+<b class="fc"><i>2248</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>2249</i>&nbsp;        BufferedReader br1 = toBufferedReader(input1);</b>
+<b class="fc"><i>2250</i>&nbsp;        BufferedReader br2 = toBufferedReader(input2);</b>
+<i>2251</i>&nbsp;
+<b class="fc"><i>2252</i>&nbsp;        String line1 = br1.readLine();</b>
+<b class="fc"><i>2253</i>&nbsp;        String line2 = br2.readLine();</b>
+<b class="fc"><i>2254</i>&nbsp;        while (line1 != null &amp;&amp; line2 != null &amp;&amp; line1.equals(line2)) {</b>
+<b class="fc"><i>2255</i>&nbsp;            line1 = br1.readLine();</b>
+<b class="fc"><i>2256</i>&nbsp;            line2 = br2.readLine();</b>
+<i>2257</i>&nbsp;        }
+<b class="fc"><i>2258</i>&nbsp;        return line1 == null ? line2 == null ? true : false : line1.equals(line2);</b>
+<i>2259</i>&nbsp;    }
+<i>2260</i>&nbsp;
+<i>2261</i>&nbsp;    /**
+<i>2262</i>&nbsp;     * Skip bytes from an input byte stream.
+<i>2263</i>&nbsp;     * This implementation guarantees that it will read as many bytes
+<i>2264</i>&nbsp;     * as possible before giving up; this may not always be the case for
+<i>2265</i>&nbsp;     * subclasses of {@link Reader}.
+<i>2266</i>&nbsp;     *   
+<i>2267</i>&nbsp;     * @param input byte stream to skip
+<i>2268</i>&nbsp;     * @param toSkip number of bytes to skip.
+<i>2269</i>&nbsp;     * @return number of bytes actually skipped.
+<i>2270</i>&nbsp;     * 
+<i>2271</i>&nbsp;     * @see InputStream#skip(long)
+<i>2272</i>&nbsp;     * 
+<i>2273</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2274</i>&nbsp;     * @throws IllegalArgumentException if toSkip is negative
+<i>2275</i>&nbsp;     * @since 2.0
+<i>2276</i>&nbsp;     */
+<b class="fc"><i>2277</i>&nbsp;    public static long skip(InputStream input, long toSkip) throws IOException {</b>
+<b class="fc"><i>2278</i>&nbsp;        if (toSkip &lt; 0) {</b>
+<b class="nc"><i>2279</i>&nbsp;            throw new IllegalArgumentException(&quot;Skip count must be non-negative, actual: &quot; + toSkip);</b>
+<i>2280</i>&nbsp;        }
+<i>2281</i>&nbsp;        /*
+<i>2282</i>&nbsp;         * N.B. no need to synchronize this because: - we don&#39;t care if the buffer is created multiple times (the data
+<i>2283</i>&nbsp;         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
+<i>2284</i>&nbsp;         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
+<i>2285</i>&nbsp;         */
+<b class="fc"><i>2286</i>&nbsp;        if (SKIP_BYTE_BUFFER == null) {</b>
+<b class="fc"><i>2287</i>&nbsp;            SKIP_BYTE_BUFFER = new byte[SKIP_BUFFER_SIZE];</b>
+<i>2288</i>&nbsp;        }
+<b class="fc"><i>2289</i>&nbsp;        long remain = toSkip;</b>
+<b class="fc"><i>2290</i>&nbsp;        while (remain &gt; 0) {</b>
+<b class="fc"><i>2291</i>&nbsp;            long n = input.read(SKIP_BYTE_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));</b>
+<b class="fc"><i>2292</i>&nbsp;            if (n &lt; 0) { // EOF</b>
+<b class="fc"><i>2293</i>&nbsp;                break;</b>
+<i>2294</i>&nbsp;            }
+<b class="fc"><i>2295</i>&nbsp;            remain -= n;</b>
+<b class="fc"><i>2296</i>&nbsp;        }</b>
+<b class="fc"><i>2297</i>&nbsp;        return toSkip - remain;</b>
+<i>2298</i>&nbsp;    }
+<i>2299</i>&nbsp;
+<i>2300</i>&nbsp;    /**
+<i>2301</i>&nbsp;     * Skip characters from an input character stream.
+<i>2302</i>&nbsp;     * This implementation guarantees that it will read as many characters
+<i>2303</i>&nbsp;     * as possible before giving up; this may not always be the case for
+<i>2304</i>&nbsp;     * subclasses of {@link Reader}.
+<i>2305</i>&nbsp;     *   
+<i>2306</i>&nbsp;     * @param input character stream to skip
+<i>2307</i>&nbsp;     * @param toSkip number of characters to skip.
+<i>2308</i>&nbsp;     * @return number of characters actually skipped.
+<i>2309</i>&nbsp;     * 
+<i>2310</i>&nbsp;     * @see Reader#skip(long)
+<i>2311</i>&nbsp;     * 
+<i>2312</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2313</i>&nbsp;     * @throws IllegalArgumentException if toSkip is negative
+<i>2314</i>&nbsp;     * @since 2.0
+<i>2315</i>&nbsp;     */
+<b class="fc"><i>2316</i>&nbsp;    public static long skip(Reader input, long toSkip) throws IOException {</b>
+<b class="fc"><i>2317</i>&nbsp;        if (toSkip &lt; 0) {</b>
+<b class="fc"><i>2318</i>&nbsp;            throw new IllegalArgumentException(&quot;Skip count must be non-negative, actual: &quot; + toSkip);</b>
+<i>2319</i>&nbsp;        }
+<i>2320</i>&nbsp;        /*
+<i>2321</i>&nbsp;         * N.B. no need to synchronize this because: - we don&#39;t care if the buffer is created multiple times (the data
+<i>2322</i>&nbsp;         * is ignored) - we always use the same size buffer, so if it it is recreated it will still be OK (if the buffer
+<i>2323</i>&nbsp;         * size were variable, we would need to synch. to ensure some other thread did not create a smaller one)
+<i>2324</i>&nbsp;         */
+<b class="fc"><i>2325</i>&nbsp;        if (SKIP_CHAR_BUFFER == null) {</b>
+<b class="fc"><i>2326</i>&nbsp;            SKIP_CHAR_BUFFER = new char[SKIP_BUFFER_SIZE];</b>
+<i>2327</i>&nbsp;        }
+<b class="fc"><i>2328</i>&nbsp;        long remain = toSkip;</b>
+<b class="fc"><i>2329</i>&nbsp;        while (remain &gt; 0) {</b>
+<b class="fc"><i>2330</i>&nbsp;            long n = input.read(SKIP_CHAR_BUFFER, 0, (int) Math.min(remain, SKIP_BUFFER_SIZE));</b>
+<b class="fc"><i>2331</i>&nbsp;            if (n &lt; 0) { // EOF</b>
+<b class="fc"><i>2332</i>&nbsp;                break;</b>
+<i>2333</i>&nbsp;            }
+<b class="fc"><i>2334</i>&nbsp;            remain -= n;</b>
+<b class="fc"><i>2335</i>&nbsp;        }</b>
+<b class="fc"><i>2336</i>&nbsp;        return toSkip - remain;</b>
+<i>2337</i>&nbsp;    }
+<i>2338</i>&nbsp;
+<i>2339</i>&nbsp;    /**
+<i>2340</i>&nbsp;     * Skip the requested number of bytes or fail if there are not enough left.
+<i>2341</i>&nbsp;     * &lt;p&gt;
+<i>2342</i>&nbsp;     * This allows for the possibility that {@link InputStream#skip(long)} may
+<i>2343</i>&nbsp;     * not skip as many bytes as requested (most likely because of reaching EOF).
+<i>2344</i>&nbsp;     * 
+<i>2345</i>&nbsp;     * @param input stream to skip
+<i>2346</i>&nbsp;     * @param toSkip the number of bytes to skip
+<i>2347</i>&nbsp;     * @see InputStream#skip(long)
+<i>2348</i>&nbsp;     * 
+<i>2349</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2350</i>&nbsp;     * @throws IllegalArgumentException if toSkip is negative
+<i>2351</i>&nbsp;     * @throws EOFException if the number of bytes skipped was incorrect 
+<i>2352</i>&nbsp;     * @since 2.0
+<i>2353</i>&nbsp;     */
+<b class="fc"><i>2354</i>&nbsp;    public static void skipFully(InputStream input, long toSkip) throws IOException {</b>
+<b class="fc"><i>2355</i>&nbsp;        if (toSkip &lt; 0) {</b>
+<b class="fc"><i>2356</i>&nbsp;            throw new IllegalArgumentException(&quot;Bytes to skip must not be negative: &quot; + toSkip);</b>
+<i>2357</i>&nbsp;        }
+<b class="fc"><i>2358</i>&nbsp;        long skipped = skip(input, toSkip);</b>
+<b class="fc"><i>2359</i>&nbsp;        if (skipped != toSkip) {</b>
+<b class="fc"><i>2360</i>&nbsp;            throw new EOFException(&quot;Bytes to skip: &quot; + toSkip + &quot; actual: &quot; + skipped);</b>
+<i>2361</i>&nbsp;        }
+<b class="fc"><i>2362</i>&nbsp;    }</b>
+<i>2363</i>&nbsp;
+<i>2364</i>&nbsp;    /**
+<i>2365</i>&nbsp;     * Skip the requested number of characters or fail if there are not enough left.
+<i>2366</i>&nbsp;     * &lt;p&gt;
+<i>2367</i>&nbsp;     * This allows for the possibility that {@link Reader#skip(long)} may
+<i>2368</i>&nbsp;     * not skip as many characters as requested (most likely because of reaching EOF).
+<i>2369</i>&nbsp;     * 
+<i>2370</i>&nbsp;     * @param input stream to skip
+<i>2371</i>&nbsp;     * @param toSkip the number of characters to skip
+<i>2372</i>&nbsp;     * @see Reader#skip(long)
+<i>2373</i>&nbsp;     * 
+<i>2374</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2375</i>&nbsp;     * @throws IllegalArgumentException if toSkip is negative
+<i>2376</i>&nbsp;     * @throws EOFException if the number of characters skipped was incorrect
+<i>2377</i>&nbsp;     * @since 2.0
+<i>2378</i>&nbsp;     */
+<b class="fc"><i>2379</i>&nbsp;    public static void skipFully(Reader input, long toSkip) throws IOException {</b>
+<b class="fc"><i>2380</i>&nbsp;        long skipped = skip(input, toSkip);</b>
+<b class="fc"><i>2381</i>&nbsp;        if (skipped != toSkip) {</b>
+<b class="fc"><i>2382</i>&nbsp;            throw new EOFException(&quot;Chars to skip: &quot; + toSkip + &quot; actual: &quot; + skipped);</b>
+<i>2383</i>&nbsp;        }
+<b class="fc"><i>2384</i>&nbsp;    }</b>
+<i>2385</i>&nbsp;    
+<i>2386</i>&nbsp;
+<i>2387</i>&nbsp;    /**
+<i>2388</i>&nbsp;     * Read characters from an input character stream.
+<i>2389</i>&nbsp;     * This implementation guarantees that it will read as many characters
+<i>2390</i>&nbsp;     * as possible before giving up; this may not always be the case for
+<i>2391</i>&nbsp;     * subclasses of {@link Reader}.
+<i>2392</i>&nbsp;     * 
+<i>2393</i>&nbsp;     * @param input where to read input from
+<i>2394</i>&nbsp;     * @param buffer destination
+<i>2395</i>&nbsp;     * @param offset inital offset into buffer
+<i>2396</i>&nbsp;     * @param length length to read, must be &gt;= 0
+<i>2397</i>&nbsp;     * @return actual length read; may be less than requested if EOF was reached
+<i>2398</i>&nbsp;     * @throws IOException if a read error occurs
+<i>2399</i>&nbsp;     * @since 2.2
+<i>2400</i>&nbsp;     */
+<b class="fc"><i>2401</i>&nbsp;    public static int read(Reader input, char[] buffer, int offset, int length) throws IOException {</b>
+<b class="fc"><i>2402</i>&nbsp;        if (length &lt; 0) {</b>
+<b class="fc"><i>2403</i>&nbsp;            throw new IllegalArgumentException(&quot;Length must not be negative: &quot; + length);</b>
+<i>2404</i>&nbsp;        }
+<b class="fc"><i>2405</i>&nbsp;        int remaining = length;</b>
+<b class="fc"><i>2406</i>&nbsp;        while (remaining &gt; 0) {</b>
+<b class="fc"><i>2407</i>&nbsp;            int location = length - remaining;</b>
+<b class="fc"><i>2408</i>&nbsp;            int count = input.read(buffer, offset + location, remaining);</b>
+<b class="fc"><i>2409</i>&nbsp;            if (EOF == count) { // EOF</b>
+<b class="fc"><i>2410</i>&nbsp;                break;</b>
+<i>2411</i>&nbsp;            }
+<b class="fc"><i>2412</i>&nbsp;            remaining -= count;</b>
+<b class="fc"><i>2413</i>&nbsp;        }</b>
+<b class="fc"><i>2414</i>&nbsp;        return length - remaining;</b>
+<i>2415</i>&nbsp;    }
+<i>2416</i>&nbsp;
+<i>2417</i>&nbsp;    /**
+<i>2418</i>&nbsp;     * Read characters from an input character stream.
+<i>2419</i>&nbsp;     * This implementation guarantees that it will read as many characters
+<i>2420</i>&nbsp;     * as possible before giving up; this may not always be the case for
+<i>2421</i>&nbsp;     * subclasses of {@link Reader}.
+<i>2422</i>&nbsp;     * 
+<i>2423</i>&nbsp;     * @param input where to read input from
+<i>2424</i>&nbsp;     * @param buffer destination
+<i>2425</i>&nbsp;     * @return actual length read; may be less than requested if EOF was reached
+<i>2426</i>&nbsp;     * @throws IOException if a read error occurs
+<i>2427</i>&nbsp;     * @since 2.2
+<i>2428</i>&nbsp;     */
+<b class="nc"><i>2429</i>&nbsp;    public static int read(Reader input, char[] buffer) throws IOException {</b>
+<b class="nc"><i>2430</i>&nbsp;        return read(input, buffer, 0, buffer.length);</b>
+<i>2431</i>&nbsp;    }
+<i>2432</i>&nbsp;
+<i>2433</i>&nbsp;    /**
+<i>2434</i>&nbsp;     * Read bytes from an input stream.
+<i>2435</i>&nbsp;     * This implementation guarantees that it will read as many bytes
+<i>2436</i>&nbsp;     * as possible before giving up; this may not always be the case for
+<i>2437</i>&nbsp;     * subclasses of {@link InputStream}.
+<i>2438</i>&nbsp;     * 
+<i>2439</i>&nbsp;     * @param input where to read input from
+<i>2440</i>&nbsp;     * @param buffer destination
+<i>2441</i>&nbsp;     * @param offset inital offset into buffer
+<i>2442</i>&nbsp;     * @param length length to read, must be &gt;= 0
+<i>2443</i>&nbsp;     * @return actual length read; may be less than requested if EOF was reached
+<i>2444</i>&nbsp;     * @throws IOException if a read error occurs
+<i>2445</i>&nbsp;     * @since 2.2
+<i>2446</i>&nbsp;     */
+<b class="fc"><i>2447</i>&nbsp;    public static int read(InputStream input, byte[] buffer, int offset, int length) throws IOException {</b>
+<b class="fc"><i>2448</i>&nbsp;        if (length &lt; 0) {</b>
+<b class="fc"><i>2449</i>&nbsp;            throw new IllegalArgumentException(&quot;Length must not be negative: &quot; + length);</b>
+<i>2450</i>&nbsp;        }
+<b class="fc"><i>2451</i>&nbsp;        int remaining = length;</b>
+<b class="fc"><i>2452</i>&nbsp;        while (remaining &gt; 0) {</b>
+<b class="fc"><i>2453</i>&nbsp;            int location = length - remaining;</b>
+<b class="fc"><i>2454</i>&nbsp;            int count = input.read(buffer, offset + location, remaining);</b>
+<b class="fc"><i>2455</i>&nbsp;            if (EOF == count) { // EOF</b>
+<b class="fc"><i>2456</i>&nbsp;                break;</b>
+<i>2457</i>&nbsp;            }
+<b class="fc"><i>2458</i>&nbsp;            remaining -= count;</b>
+<b class="fc"><i>2459</i>&nbsp;        }</b>
+<b class="fc"><i>2460</i>&nbsp;        return length - remaining;</b>
+<i>2461</i>&nbsp;    }
+<i>2462</i>&nbsp;    
+<i>2463</i>&nbsp;    /**
+<i>2464</i>&nbsp;     * Read bytes from an input stream.
+<i>2465</i>&nbsp;     * This implementation guarantees that it will read as many bytes
+<i>2466</i>&nbsp;     * as possible before giving up; this may not always be the case for
+<i>2467</i>&nbsp;     * subclasses of {@link InputStream}.
+<i>2468</i>&nbsp;     * 
+<i>2469</i>&nbsp;     * @param input where to read input from
+<i>2470</i>&nbsp;     * @param buffer destination
+<i>2471</i>&nbsp;     * @return actual length read; may be less than requested if EOF was reached
+<i>2472</i>&nbsp;     * @throws IOException if a read error occurs
+<i>2473</i>&nbsp;     * @since 2.2
+<i>2474</i>&nbsp;     */
+<b class="nc"><i>2475</i>&nbsp;    public static int read(InputStream input, byte[] buffer) throws IOException {</b>
+<b class="nc"><i>2476</i>&nbsp;        return read(input, buffer, 0, buffer.length);</b>
+<i>2477</i>&nbsp;    }
+<i>2478</i>&nbsp;
+<i>2479</i>&nbsp;    /**
+<i>2480</i>&nbsp;     * Read the requested number of characters or fail if there are not enough left.
+<i>2481</i>&nbsp;     * &lt;p&gt;
+<i>2482</i>&nbsp;     * This allows for the possibility that {@link Reader#read(char[], int, int)} may
+<i>2483</i>&nbsp;     * not read as many characters as requested (most likely because of reaching EOF).
+<i>2484</i>&nbsp;     * 
+<i>2485</i>&nbsp;     * @param input where to read input from
+<i>2486</i>&nbsp;     * @param buffer destination
+<i>2487</i>&nbsp;     * @param offset inital offset into buffer
+<i>2488</i>&nbsp;     * @param length length to read, must be &gt;= 0
+<i>2489</i>&nbsp;     * 
+<i>2490</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2491</i>&nbsp;     * @throws IllegalArgumentException if length is negative
+<i>2492</i>&nbsp;     * @throws EOFException if the number of characters read was incorrect
+<i>2493</i>&nbsp;     * @since 2.2
+<i>2494</i>&nbsp;     */
+<b class="fc"><i>2495</i>&nbsp;    public static void readFully(Reader input, char[] buffer, int offset, int length) throws IOException {</b>
+<b class="fc"><i>2496</i>&nbsp;        int actual = read(input, buffer, offset, length);</b>
+<b class="fc"><i>2497</i>&nbsp;        if (actual != length) {</b>
+<b class="fc"><i>2498</i>&nbsp;            throw new EOFException(&quot;Length to read: &quot; + length + &quot; actual: &quot; + actual);</b>
+<i>2499</i>&nbsp;        }
+<b class="fc"><i>2500</i>&nbsp;    }</b>
+<i>2501</i>&nbsp;
+<i>2502</i>&nbsp;    /**
+<i>2503</i>&nbsp;     * Read the requested number of characters or fail if there are not enough left.
+<i>2504</i>&nbsp;     * &lt;p&gt;
+<i>2505</i>&nbsp;     * This allows for the possibility that {@link Reader#read(char[], int, int)} may
+<i>2506</i>&nbsp;     * not read as many characters as requested (most likely because of reaching EOF).
+<i>2507</i>&nbsp;     * 
+<i>2508</i>&nbsp;     * @param input where to read input from
+<i>2509</i>&nbsp;     * @param buffer destination
+<i>2510</i>&nbsp;     * 
+<i>2511</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2512</i>&nbsp;     * @throws IllegalArgumentException if length is negative
+<i>2513</i>&nbsp;     * @throws EOFException if the number of characters read was incorrect
+<i>2514</i>&nbsp;     * @since 2.2
+<i>2515</i>&nbsp;     */
+<b class="nc"><i>2516</i>&nbsp;    public static void readFully(Reader input, char[] buffer) throws IOException {</b>
+<b class="nc"><i>2517</i>&nbsp;        readFully(input, buffer, 0, buffer.length);</b>
+<b class="nc"><i>2518</i>&nbsp;    }</b>
+<i>2519</i>&nbsp;
+<i>2520</i>&nbsp;    /**
+<i>2521</i>&nbsp;     * Read the requested number of bytes or fail if there are not enough left.
+<i>2522</i>&nbsp;     * &lt;p&gt;
+<i>2523</i>&nbsp;     * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
+<i>2524</i>&nbsp;     * not read as many bytes as requested (most likely because of reaching EOF).
+<i>2525</i>&nbsp;     * 
+<i>2526</i>&nbsp;     * @param input where to read input from
+<i>2527</i>&nbsp;     * @param buffer destination
+<i>2528</i>&nbsp;     * @param offset inital offset into buffer
+<i>2529</i>&nbsp;     * @param length length to read, must be &gt;= 0
+<i>2530</i>&nbsp;     * 
+<i>2531</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2532</i>&nbsp;     * @throws IllegalArgumentException if length is negative
+<i>2533</i>&nbsp;     * @throws EOFException if the number of bytes read was incorrect
+<i>2534</i>&nbsp;     * @since 2.2
+<i>2535</i>&nbsp;     */
+<b class="fc"><i>2536</i>&nbsp;    public static void readFully(InputStream input, byte[] buffer, int offset, int length) throws IOException {</b>
+<b class="fc"><i>2537</i>&nbsp;        int actual = read(input, buffer, offset, length);</b>
+<b class="fc"><i>2538</i>&nbsp;        if (actual != length) {</b>
+<b class="fc"><i>2539</i>&nbsp;            throw new EOFException(&quot;Length to read: &quot; + length + &quot; actual: &quot; + actual);</b>
+<i>2540</i>&nbsp;        }
+<b class="fc"><i>2541</i>&nbsp;    }</b>
+<i>2542</i>&nbsp;
+<i>2543</i>&nbsp;    /**
+<i>2544</i>&nbsp;     * Read the requested number of bytes or fail if there are not enough left.
+<i>2545</i>&nbsp;     * &lt;p&gt;
+<i>2546</i>&nbsp;     * This allows for the possibility that {@link InputStream#read(byte[], int, int)} may
+<i>2547</i>&nbsp;     * not read as many bytes as requested (most likely because of reaching EOF).
+<i>2548</i>&nbsp;     * 
+<i>2549</i>&nbsp;     * @param input where to read input from
+<i>2550</i>&nbsp;     * @param buffer destination
+<i>2551</i>&nbsp;     * 
+<i>2552</i>&nbsp;     * @throws IOException if there is a problem reading the file
+<i>2553</i>&nbsp;     * @throws IllegalArgumentException if length is negative
+<i>2554</i>&nbsp;     * @throws EOFException if the number of bytes read was incorrect
+<i>2555</i>&nbsp;     * @since 2.2
+<i>2556</i>&nbsp;     */
+<b class="nc"><i>2557</i>&nbsp;    public static void readFully(InputStream input, byte[] buffer) throws IOException {</b>
+<b class="nc"><i>2558</i>&nbsp;        readFully(input, buffer, 0, buffer.length);</b>
+<b class="nc"><i>2559</i>&nbsp;    }</b>
+<i>2560</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

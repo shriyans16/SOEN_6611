@@ -1,0 +1,765 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DirectoryWalker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DirectoryWalker (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DirectoryWalker</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.1%
+  </span>
+  <span class="absValue">
+    (16/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.2%
+  </span>
+  <span class="absValue">
+    (70/ 72)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DirectoryWalker$__CLR4_1_21jk1jkjukht4ot</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DirectoryWalker$CancelException</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    95.5%
+  </span>
+  <span class="absValue">
+    (21/ 22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.6%
+  </span>
+  <span class="absValue">
+    (81/ 83)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.FileFilter;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.util.Collection;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;import org.apache.commons.io.filefilter.FileFilterUtils;
+<i>25</i>&nbsp;import org.apache.commons.io.filefilter.IOFileFilter;
+<i>26</i>&nbsp;import org.apache.commons.io.filefilter.TrueFileFilter;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;/**
+<i>29</i>&nbsp; * Abstract class that walks through a directory hierarchy and provides
+<i>30</i>&nbsp; * subclasses with convenient hooks to add specific behaviour.
+<i>31</i>&nbsp; * &lt;p&gt;
+<i>32</i>&nbsp; * This class operates with a {@link FileFilter} and maximum depth to
+<i>33</i>&nbsp; * limit the files and directories visited.
+<i>34</i>&nbsp; * Commons IO supplies many common filter implementations in the
+<i>35</i>&nbsp; * &lt;a href=&quot;filefilter/package-summary.html&quot;&gt; filefilter&lt;/a&gt; package.
+<i>36</i>&nbsp; * &lt;p&gt;
+<i>37</i>&nbsp; * The following sections describe:
+<i>38</i>&nbsp; *   &lt;ul&gt;
+<i>39</i>&nbsp; *      &lt;li&gt;&lt;a href=&quot;#example&quot;&gt;1. Example Implementation&lt;/a&gt; - example
+<i>40</i>&nbsp; *          &lt;code&gt;FileCleaner&lt;/code&gt; implementation.&lt;/li&gt;
+<i>41</i>&nbsp; *      &lt;li&gt;&lt;a href=&quot;#filter&quot;&gt;2. Filter Example&lt;/a&gt; - using
+<i>42</i>&nbsp; *          {@link FileFilter}(s) with &lt;code&gt;DirectoryWalker&lt;/code&gt;.&lt;/li&gt;
+<i>43</i>&nbsp; *      &lt;li&gt;&lt;a href=&quot;#cancel&quot;&gt;3. Cancellation&lt;/a&gt; - how to implement cancellation
+<i>44</i>&nbsp; *          behaviour.&lt;/li&gt;
+<i>45</i>&nbsp; *   &lt;/ul&gt;
+<i>46</i>&nbsp; *
+<i>47</i>&nbsp; * &lt;h3 id=&quot;example&quot;&gt;1. Example Implementation&lt;/h3&gt;
+<i>48</i>&nbsp; *
+<i>49</i>&nbsp; * There are many possible extensions, for example, to delete all
+<i>50</i>&nbsp; * files and &#39;.svn&#39; directories, and return a list of deleted files:
+<i>51</i>&nbsp; * &lt;pre&gt;
+<i>52</i>&nbsp; *  public class FileCleaner extends DirectoryWalker {
+<i>53</i>&nbsp; *
+<i>54</i>&nbsp; *    public FileCleaner() {
+<i>55</i>&nbsp; *      super();
+<i>56</i>&nbsp; *    }
+<i>57</i>&nbsp; *
+<i>58</i>&nbsp; *    public List clean(File startDirectory) {
+<i>59</i>&nbsp; *      List results = new ArrayList();
+<i>60</i>&nbsp; *      walk(startDirectory, results);
+<i>61</i>&nbsp; *      return results;
+<i>62</i>&nbsp; *    }
+<i>63</i>&nbsp; *
+<i>64</i>&nbsp; *    protected boolean handleDirectory(File directory, int depth, Collection results) {
+<i>65</i>&nbsp; *      // delete svn directories and then skip
+<i>66</i>&nbsp; *      if (&quot;.svn&quot;.equals(directory.getName())) {
+<i>67</i>&nbsp; *        directory.delete();
+<i>68</i>&nbsp; *        return false;
+<i>69</i>&nbsp; *      } else {
+<i>70</i>&nbsp; *        return true;
+<i>71</i>&nbsp; *      }
+<i>72</i>&nbsp; *
+<i>73</i>&nbsp; *    }
+<i>74</i>&nbsp; *
+<i>75</i>&nbsp; *    protected void handleFile(File file, int depth, Collection results) {
+<i>76</i>&nbsp; *      // delete file and add to list of deleted
+<i>77</i>&nbsp; *      file.delete();
+<i>78</i>&nbsp; *      results.add(file);
+<i>79</i>&nbsp; *    }
+<i>80</i>&nbsp; *  }
+<i>81</i>&nbsp; * &lt;/pre&gt;
+<i>82</i>&nbsp; *
+<i>83</i>&nbsp; * &lt;h3 id=&quot;filter&quot;&gt;2. Filter Example&lt;/h3&gt;
+<i>84</i>&nbsp; *
+<i>85</i>&nbsp; * Choosing which directories and files to process can be a key aspect
+<i>86</i>&nbsp; * of using this class. This information can be setup in three ways,
+<i>87</i>&nbsp; * via three different constructors.
+<i>88</i>&nbsp; * &lt;p&gt;
+<i>89</i>&nbsp; * The first option is to visit all directories and files.
+<i>90</i>&nbsp; * This is achieved via the no-args constructor.
+<i>91</i>&nbsp; * &lt;p&gt;
+<i>92</i>&nbsp; * The second constructor option is to supply a single {@link FileFilter}
+<i>93</i>&nbsp; * that describes the files and directories to visit. Care must be taken
+<i>94</i>&nbsp; * with this option as the same filter is used for both directories
+<i>95</i>&nbsp; * and files.
+<i>96</i>&nbsp; * &lt;p&gt;
+<i>97</i>&nbsp; * For example, if you wanted all directories which are not hidden
+<i>98</i>&nbsp; * and files which end in &quot;.txt&quot;:
+<i>99</i>&nbsp; * &lt;pre&gt;
+<i>100</i>&nbsp; *  public class FooDirectoryWalker extends DirectoryWalker {
+<i>101</i>&nbsp; *    public FooDirectoryWalker(FileFilter filter) {
+<i>102</i>&nbsp; *      super(filter, -1);
+<i>103</i>&nbsp; *    }
+<i>104</i>&nbsp; *  }
+<i>105</i>&nbsp; *
+<i>106</i>&nbsp; *  // Build up the filters and create the walker
+<i>107</i>&nbsp; *    // Create a filter for Non-hidden directories
+<i>108</i>&nbsp; *    IOFileFilter fooDirFilter =
+<i>109</i>&nbsp; *        FileFilterUtils.andFileFilter(FileFilterUtils.directoryFileFilter,
+<i>110</i>&nbsp; *                                      HiddenFileFilter.VISIBLE);
+<i>111</i>&nbsp; *
+<i>112</i>&nbsp; *    // Create a filter for Files ending in &quot;.txt&quot;
+<i>113</i>&nbsp; *    IOFileFilter fooFileFilter =
+<i>114</i>&nbsp; *        FileFilterUtils.andFileFilter(FileFilterUtils.fileFileFilter,
+<i>115</i>&nbsp; *                                      FileFilterUtils.suffixFileFilter(&quot;.txt&quot;));
+<i>116</i>&nbsp; *
+<i>117</i>&nbsp; *    // Combine the directory and file filters using an OR condition
+<i>118</i>&nbsp; *    java.io.FileFilter fooFilter =
+<i>119</i>&nbsp; *        FileFilterUtils.orFileFilter(fooDirFilter, fooFileFilter);
+<i>120</i>&nbsp; *
+<i>121</i>&nbsp; *    // Use the filter to construct a DirectoryWalker implementation
+<i>122</i>&nbsp; *    FooDirectoryWalker walker = new FooDirectoryWalker(fooFilter);
+<i>123</i>&nbsp; * &lt;/pre&gt;
+<i>124</i>&nbsp; * &lt;p&gt;
+<i>125</i>&nbsp; * The third constructor option is to specify separate filters, one for
+<i>126</i>&nbsp; * directories and one for files. These are combined internally to form
+<i>127</i>&nbsp; * the correct &lt;code&gt;FileFilter&lt;/code&gt;, something which is very easy to
+<i>128</i>&nbsp; * get wrong when attempted manually, particularly when trying to
+<i>129</i>&nbsp; * express constructs like &#39;any file in directories named docs&#39;.
+<i>130</i>&nbsp; * &lt;p&gt;
+<i>131</i>&nbsp; * For example, if you wanted all directories which are not hidden
+<i>132</i>&nbsp; * and files which end in &quot;.txt&quot;:
+<i>133</i>&nbsp; * &lt;pre&gt;
+<i>134</i>&nbsp; *  public class FooDirectoryWalker extends DirectoryWalker {
+<i>135</i>&nbsp; *    public FooDirectoryWalker(IOFileFilter dirFilter, IOFileFilter fileFilter) {
+<i>136</i>&nbsp; *      super(dirFilter, fileFilter, -1);
+<i>137</i>&nbsp; *    }
+<i>138</i>&nbsp; *  }
+<i>139</i>&nbsp; *
+<i>140</i>&nbsp; *  // Use the filters to construct the walker
+<i>141</i>&nbsp; *  FooDirectoryWalker walker = new FooDirectoryWalker(
+<i>142</i>&nbsp; *    HiddenFileFilter.VISIBLE,
+<i>143</i>&nbsp; *    FileFilterUtils.suffixFileFilter(&quot;.txt&quot;),
+<i>144</i>&nbsp; *  );
+<i>145</i>&nbsp; * &lt;/pre&gt;
+<i>146</i>&nbsp; * This is much simpler than the previous example, and is why it is the preferred
+<i>147</i>&nbsp; * option for filtering.
+<i>148</i>&nbsp; *
+<i>149</i>&nbsp; * &lt;h3 id=&quot;cancel&quot;&gt;3. Cancellation&lt;/h3&gt;
+<i>150</i>&nbsp; *
+<i>151</i>&nbsp; * The DirectoryWalker contains some of the logic required for cancel processing.
+<i>152</i>&nbsp; * Subclasses must complete the implementation.
+<i>153</i>&nbsp; * &lt;p&gt;
+<i>154</i>&nbsp; * What &lt;code&gt;DirectoryWalker&lt;/code&gt; does provide for cancellation is:
+<i>155</i>&nbsp; * &lt;ul&gt;
+<i>156</i>&nbsp; *    &lt;li&gt;{@link CancelException} which can be thrown in any of the
+<i>157</i>&nbsp; *        &lt;i&gt;lifecycle&lt;/i&gt; methods to stop processing.&lt;/li&gt;
+<i>158</i>&nbsp; *    &lt;li&gt;The &lt;code&gt;walk()&lt;/code&gt; method traps thrown {@link CancelException}
+<i>159</i>&nbsp; *        and calls the &lt;code&gt;handleCancelled()&lt;/code&gt; method, providing
+<i>160</i>&nbsp; *        a place for custom cancel processing.&lt;/li&gt;
+<i>161</i>&nbsp; * &lt;/ul&gt;
+<i>162</i>&nbsp; * &lt;p&gt;
+<i>163</i>&nbsp; * Implementations need to provide:
+<i>164</i>&nbsp; * &lt;ul&gt;
+<i>165</i>&nbsp; *    &lt;li&gt;The decision logic on whether to cancel processing or not.&lt;/li&gt;
+<i>166</i>&nbsp; *    &lt;li&gt;Constructing and throwing a {@link CancelException}.&lt;/li&gt;
+<i>167</i>&nbsp; *    &lt;li&gt;Custom cancel processing in the &lt;code&gt;handleCancelled()&lt;/code&gt; method.
+<i>168</i>&nbsp; * &lt;/ul&gt;
+<i>169</i>&nbsp; * &lt;p&gt;
+<i>170</i>&nbsp; * Two possible scenarios are envisaged for cancellation:
+<i>171</i>&nbsp; * &lt;ul&gt;
+<i>172</i>&nbsp; *    &lt;li&gt;&lt;a href=&quot;#external&quot;&gt;3.1 External / Multi-threaded&lt;/a&gt; - cancellation being
+<i>173</i>&nbsp; *        decided/initiated by an external process.&lt;/li&gt;
+<i>174</i>&nbsp; *    &lt;li&gt;&lt;a href=&quot;#internal&quot;&gt;3.2 Internal&lt;/a&gt; - cancellation being decided/initiated
+<i>175</i>&nbsp; *        from within a DirectoryWalker implementation.&lt;/li&gt;
+<i>176</i>&nbsp; * &lt;/ul&gt;
+<i>177</i>&nbsp; * &lt;p&gt;
+<i>178</i>&nbsp; * The following sections provide example implementations for these two different
+<i>179</i>&nbsp; * scenarios.
+<i>180</i>&nbsp; *
+<i>181</i>&nbsp; * &lt;h4 id=&quot;external&quot;&gt;3.1 External / Multi-threaded&lt;/h4&gt;
+<i>182</i>&nbsp; *
+<i>183</i>&nbsp; * This example provides a public &lt;code&gt;cancel()&lt;/code&gt; method that can be
+<i>184</i>&nbsp; * called by another thread to stop the processing. A typical example use-case
+<i>185</i>&nbsp; * would be a cancel button on a GUI. Calling this method sets a
+<i>186</i>&nbsp; * &lt;a href=&quot;http://java.sun.com/docs/books/jls/second_edition/html/classes.doc.html#36930&quot;&gt;
+<i>187</i>&nbsp; * volatile&lt;/a&gt; flag to ensure it will work properly in a multi-threaded environment.
+<i>188</i>&nbsp; * The flag is returned by the &lt;code&gt;handleIsCancelled()&lt;/code&gt; method, which
+<i>189</i>&nbsp; * will cause the walk to stop immediately. The &lt;code&gt;handleCancelled()&lt;/code&gt;
+<i>190</i>&nbsp; * method will be the next, and last, callback method received once cancellation
+<i>191</i>&nbsp; * has occurred.
+<i>192</i>&nbsp; *
+<i>193</i>&nbsp; * &lt;pre&gt;
+<i>194</i>&nbsp; *  public class FooDirectoryWalker extends DirectoryWalker {
+<i>195</i>&nbsp; *
+<i>196</i>&nbsp; *    private volatile boolean cancelled = false;
+<i>197</i>&nbsp; *
+<i>198</i>&nbsp; *    public void cancel() {
+<i>199</i>&nbsp; *        cancelled = true;
+<i>200</i>&nbsp; *    }
+<i>201</i>&nbsp; *
+<i>202</i>&nbsp; *    protected boolean handleIsCancelled(File file, int depth, Collection results) {
+<i>203</i>&nbsp; *        return cancelled;
+<i>204</i>&nbsp; *    }
+<i>205</i>&nbsp; *
+<i>206</i>&nbsp; *    protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
+<i>207</i>&nbsp; *        // implement processing required when a cancellation occurs
+<i>208</i>&nbsp; *    }
+<i>209</i>&nbsp; *  }
+<i>210</i>&nbsp; * &lt;/pre&gt;
+<i>211</i>&nbsp; *
+<i>212</i>&nbsp; * &lt;h4 id=&quot;internal&quot;&gt;3.2 Internal&lt;/h4&gt;
+<i>213</i>&nbsp; *
+<i>214</i>&nbsp; * This shows an example of how internal cancellation processing could be implemented.
+<i>215</i>&nbsp; * &lt;b&gt;Note&lt;/b&gt; the decision logic and throwing a {@link CancelException} could be implemented
+<i>216</i>&nbsp; * in any of the &lt;i&gt;lifecycle&lt;/i&gt; methods.
+<i>217</i>&nbsp; *
+<i>218</i>&nbsp; * &lt;pre&gt;
+<i>219</i>&nbsp; *  public class BarDirectoryWalker extends DirectoryWalker {
+<i>220</i>&nbsp; *
+<i>221</i>&nbsp; *    protected boolean handleDirectory(File directory, int depth, Collection results) throws IOException {
+<i>222</i>&nbsp; *        // cancel if hidden directory
+<i>223</i>&nbsp; *        if (directory.isHidden()) {
+<i>224</i>&nbsp; *            throw new CancelException(file, depth);
+<i>225</i>&nbsp; *        }
+<i>226</i>&nbsp; *        return true;
+<i>227</i>&nbsp; *    }
+<i>228</i>&nbsp; *
+<i>229</i>&nbsp; *    protected void handleFile(File file, int depth, Collection results) throws IOException {
+<i>230</i>&nbsp; *        // cancel if read-only file
+<i>231</i>&nbsp; *        if (!file.canWrite()) {
+<i>232</i>&nbsp; *            throw new CancelException(file, depth);
+<i>233</i>&nbsp; *        }
+<i>234</i>&nbsp; *        results.add(file);
+<i>235</i>&nbsp; *    }
+<i>236</i>&nbsp; *
+<i>237</i>&nbsp; *    protected void handleCancelled(File startDirectory, Collection results, CancelException cancel) {
+<i>238</i>&nbsp; *        // implement processing required when a cancellation occurs
+<i>239</i>&nbsp; *    }
+<i>240</i>&nbsp; *  }
+<i>241</i>&nbsp; * &lt;/pre&gt;
+<i>242</i>&nbsp; *
+<i>243</i>&nbsp; * @since 1.3
+<i>244</i>&nbsp; * @version $Id$
+<i>245</i>&nbsp; */
+<b class="fc"><i>246</i>&nbsp;public abstract class DirectoryWalker&lt;T&gt; {</b>
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;    /**
+<i>249</i>&nbsp;     * The file filter to use to filter files and directories.
+<i>250</i>&nbsp;     */
+<i>251</i>&nbsp;    private final FileFilter filter;
+<i>252</i>&nbsp;    /**
+<i>253</i>&nbsp;     * The limit on the directory depth to walk.
+<i>254</i>&nbsp;     */
+<i>255</i>&nbsp;    private final int depthLimit;
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Construct an instance with no filtering and unlimited &lt;i&gt;depth&lt;/i&gt;.
+<i>259</i>&nbsp;     */
+<i>260</i>&nbsp;    protected DirectoryWalker() {
+<b class="fc"><i>261</i>&nbsp;        this(null, -1);</b>
+<b class="fc"><i>262</i>&nbsp;    }</b>
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;    /**
+<i>265</i>&nbsp;     * Construct an instance with a filter and limit the &lt;i&gt;depth&lt;/i&gt; navigated to.
+<i>266</i>&nbsp;     * &lt;p&gt;
+<i>267</i>&nbsp;     * The filter controls which files and directories will be navigated to as
+<i>268</i>&nbsp;     * part of the walk. The {@link FileFilterUtils} class is useful for combining
+<i>269</i>&nbsp;     * various filters together. A {@code null} filter means that no
+<i>270</i>&nbsp;     * filtering should occur and all files and directories will be visited.
+<i>271</i>&nbsp;     *
+<i>272</i>&nbsp;     * @param filter  the filter to apply, null means visit all files
+<i>273</i>&nbsp;     * @param depthLimit  controls how &lt;i&gt;deep&lt;/i&gt; the hierarchy is
+<i>274</i>&nbsp;     *  navigated to (less than 0 means unlimited)
+<i>275</i>&nbsp;     */
+<b class="fc"><i>276</i>&nbsp;    protected DirectoryWalker(final FileFilter filter, final int depthLimit) {</b>
+<b class="fc"><i>277</i>&nbsp;        this.filter = filter;</b>
+<b class="fc"><i>278</i>&nbsp;        this.depthLimit = depthLimit;</b>
+<b class="fc"><i>279</i>&nbsp;    }</b>
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Construct an instance with a directory and a file filter and an optional
+<i>283</i>&nbsp;     * limit on the &lt;i&gt;depth&lt;/i&gt; navigated to.
+<i>284</i>&nbsp;     * &lt;p&gt;
+<i>285</i>&nbsp;     * The filters control which files and directories will be navigated to as part
+<i>286</i>&nbsp;     * of the walk. This constructor uses {@link FileFilterUtils#makeDirectoryOnly(IOFileFilter)}
+<i>287</i>&nbsp;     * and {@link FileFilterUtils#makeFileOnly(IOFileFilter)} internally to combine the filters.
+<i>288</i>&nbsp;     * A {@code null} filter means that no filtering should occur.
+<i>289</i>&nbsp;     *
+<i>290</i>&nbsp;     * @param directoryFilter  the filter to apply to directories, null means visit all directories
+<i>291</i>&nbsp;     * @param fileFilter  the filter to apply to files, null means visit all files
+<i>292</i>&nbsp;     * @param depthLimit  controls how &lt;i&gt;deep&lt;/i&gt; the hierarchy is
+<i>293</i>&nbsp;     *  navigated to (less than 0 means unlimited)
+<i>294</i>&nbsp;     */
+<b class="fc"><i>295</i>&nbsp;    protected DirectoryWalker(IOFileFilter directoryFilter, IOFileFilter fileFilter, final int depthLimit) {</b>
+<b class="fc"><i>296</i>&nbsp;        if (directoryFilter == null &amp;&amp; fileFilter == null) {</b>
+<b class="fc"><i>297</i>&nbsp;            this.filter = null;</b>
+<i>298</i>&nbsp;        } else {
+<b class="fc"><i>299</i>&nbsp;            directoryFilter = directoryFilter != null ? directoryFilter : TrueFileFilter.TRUE;</b>
+<b class="fc"><i>300</i>&nbsp;            fileFilter = fileFilter != null ? fileFilter : TrueFileFilter.TRUE;</b>
+<b class="fc"><i>301</i>&nbsp;            directoryFilter = FileFilterUtils.makeDirectoryOnly(directoryFilter);</b>
+<b class="fc"><i>302</i>&nbsp;            fileFilter = FileFilterUtils.makeFileOnly(fileFilter);</b>
+<b class="fc"><i>303</i>&nbsp;            this.filter = FileFilterUtils.or(directoryFilter, fileFilter);</b>
+<i>304</i>&nbsp;        }
+<b class="fc"><i>305</i>&nbsp;        this.depthLimit = depthLimit;</b>
+<b class="fc"><i>306</i>&nbsp;    }</b>
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    //-----------------------------------------------------------------------
+<i>309</i>&nbsp;    /**
+<i>310</i>&nbsp;     * Internal method that walks the directory hierarchy in a depth-first manner.
+<i>311</i>&nbsp;     * &lt;p&gt;
+<i>312</i>&nbsp;     * Users of this class do not need to call this method. This method will
+<i>313</i>&nbsp;     * be called automatically by another (public) method on the specific subclass.
+<i>314</i>&nbsp;     * &lt;p&gt;
+<i>315</i>&nbsp;     * Writers of subclasses should call this method to start the directory walk.
+<i>316</i>&nbsp;     * Once called, this method will emit events as it walks the hierarchy.
+<i>317</i>&nbsp;     * The event methods have the prefix &lt;code&gt;handle&lt;/code&gt;.
+<i>318</i>&nbsp;     *
+<i>319</i>&nbsp;     * @param startDirectory  the directory to start from, not null
+<i>320</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>321</i>&nbsp;     * @throws NullPointerException if the start directory is null
+<i>322</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>323</i>&nbsp;     */
+<b class="fc"><i>324</i>&nbsp;    protected final void walk(final File startDirectory, final Collection&lt;T&gt; results) throws IOException {</b>
+<b class="fc"><i>325</i>&nbsp;        if (startDirectory == null) {</b>
+<b class="fc"><i>326</i>&nbsp;            throw new NullPointerException(&quot;Start Directory is null&quot;);</b>
+<i>327</i>&nbsp;        }
+<b class="fc"><i>328</i>&nbsp;        try {</b>
+<b class="fc"><i>329</i>&nbsp;            handleStart(startDirectory, results);</b>
+<b class="fc"><i>330</i>&nbsp;            walk(startDirectory, 0, results);</b>
+<b class="fc"><i>331</i>&nbsp;            handleEnd(results);</b>
+<b class="fc"><i>332</i>&nbsp;        } catch(final CancelException cancel) {</b>
+<b class="fc"><i>333</i>&nbsp;            handleCancelled(startDirectory, results, cancel);</b>
+<b class="fc"><i>334</i>&nbsp;        }</b>
+<b class="fc"><i>335</i>&nbsp;    }</b>
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * Main recursive method to examine the directory hierarchy.
+<i>339</i>&nbsp;     *
+<i>340</i>&nbsp;     * @param directory  the directory to examine, not null
+<i>341</i>&nbsp;     * @param depth  the directory level (starting directory = 0)
+<i>342</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>343</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>344</i>&nbsp;     */
+<b class="fc"><i>345</i>&nbsp;    private void walk(final File directory, final int depth, final Collection&lt;T&gt; results) throws IOException {</b>
+<b class="fc"><i>346</i>&nbsp;        checkIfCancelled(directory, depth, results);</b>
+<b class="fc"><i>347</i>&nbsp;        if (handleDirectory(directory, depth, results)) {</b>
+<b class="fc"><i>348</i>&nbsp;            handleDirectoryStart(directory, depth, results);</b>
+<b class="fc"><i>349</i>&nbsp;            final int childDepth = depth + 1;</b>
+<b class="fc"><i>350</i>&nbsp;            if (depthLimit &lt; 0 || childDepth &lt;= depthLimit) {</b>
+<b class="fc"><i>351</i>&nbsp;                checkIfCancelled(directory, depth, results);</b>
+<b class="fc"><i>352</i>&nbsp;                File[] childFiles = filter == null ? directory.listFiles() : directory.listFiles(filter);</b>
+<b class="fc"><i>353</i>&nbsp;                childFiles = filterDirectoryContents(directory, depth, childFiles);</b>
+<b class="fc"><i>354</i>&nbsp;                if (childFiles == null) {</b>
+<b class="fc"><i>355</i>&nbsp;                    handleRestricted(directory, childDepth, results);</b>
+<i>356</i>&nbsp;                } else {
+<b class="fc"><i>357</i>&nbsp;                    for (final File childFile : childFiles) {</b>
+<b class="fc"><i>358</i>&nbsp;                        if (childFile.isDirectory()) {</b>
+<b class="fc"><i>359</i>&nbsp;                            walk(childFile, childDepth, results);</b>
+<i>360</i>&nbsp;                        } else {
+<b class="fc"><i>361</i>&nbsp;                            checkIfCancelled(childFile, childDepth, results);</b>
+<b class="fc"><i>362</i>&nbsp;                            handleFile(childFile, childDepth, results);</b>
+<b class="fc"><i>363</i>&nbsp;                            checkIfCancelled(childFile, childDepth, results);</b>
+<i>364</i>&nbsp;                        }
+<i>365</i>&nbsp;                    }
+<i>366</i>&nbsp;                }
+<i>367</i>&nbsp;            }
+<b class="fc"><i>368</i>&nbsp;            handleDirectoryEnd(directory, depth, results);</b>
+<i>369</i>&nbsp;        }
+<b class="fc"><i>370</i>&nbsp;        checkIfCancelled(directory, depth, results);</b>
+<b class="fc"><i>371</i>&nbsp;    }</b>
+<i>372</i>&nbsp;
+<i>373</i>&nbsp;    //-----------------------------------------------------------------------
+<i>374</i>&nbsp;    /**
+<i>375</i>&nbsp;     * Checks whether the walk has been cancelled by calling {@link #handleIsCancelled},
+<i>376</i>&nbsp;     * throwing a &lt;code&gt;CancelException&lt;/code&gt; if it has.
+<i>377</i>&nbsp;     * &lt;p&gt;
+<i>378</i>&nbsp;     * Writers of subclasses should not normally call this method as it is called
+<i>379</i>&nbsp;     * automatically by the walk of the tree. However, sometimes a single method,
+<i>380</i>&nbsp;     * typically {@link #handleFile}, may take a long time to run. In that case,
+<i>381</i>&nbsp;     * you may wish to check for cancellation by calling this method.
+<i>382</i>&nbsp;     *
+<i>383</i>&nbsp;     * @param file  the current file being processed
+<i>384</i>&nbsp;     * @param depth  the current file level (starting directory = 0)
+<i>385</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>386</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>387</i>&nbsp;     */
+<i>388</i>&nbsp;    protected final void checkIfCancelled(final File file, final int depth, final Collection&lt;T&gt; results) throws
+<b class="fc"><i>389</i>&nbsp;            IOException {</b>
+<b class="fc"><i>390</i>&nbsp;        if (handleIsCancelled(file, depth, results)) {</b>
+<b class="fc"><i>391</i>&nbsp;            throw new CancelException(file, depth);</b>
+<i>392</i>&nbsp;        }
+<b class="fc"><i>393</i>&nbsp;    }</b>
+<i>394</i>&nbsp;
+<i>395</i>&nbsp;    /**
+<i>396</i>&nbsp;     * Overridable callback method invoked to determine if the entire walk
+<i>397</i>&nbsp;     * operation should be immediately cancelled.
+<i>398</i>&nbsp;     * &lt;p&gt;
+<i>399</i>&nbsp;     * This method should be implemented by those subclasses that want to
+<i>400</i>&nbsp;     * provide a public &lt;code&gt;cancel()&lt;/code&gt; method available from another
+<i>401</i>&nbsp;     * thread. The design pattern for the subclass should be as follows:
+<i>402</i>&nbsp;     * &lt;pre&gt;
+<i>403</i>&nbsp;     *  public class FooDirectoryWalker extends DirectoryWalker {
+<i>404</i>&nbsp;     *    private volatile boolean cancelled = false;
+<i>405</i>&nbsp;     *
+<i>406</i>&nbsp;     *    public void cancel() {
+<i>407</i>&nbsp;     *        cancelled = true;
+<i>408</i>&nbsp;     *    }
+<i>409</i>&nbsp;     *    private void handleIsCancelled(File file, int depth, Collection results) {
+<i>410</i>&nbsp;     *        return cancelled;
+<i>411</i>&nbsp;     *    }
+<i>412</i>&nbsp;     *    protected void handleCancelled(File startDirectory,
+<i>413</i>&nbsp;     *              Collection results, CancelException cancel) {
+<i>414</i>&nbsp;     *        // implement processing required when a cancellation occurs
+<i>415</i>&nbsp;     *    }
+<i>416</i>&nbsp;     *  }
+<i>417</i>&nbsp;     * &lt;/pre&gt;
+<i>418</i>&nbsp;     * &lt;p&gt;
+<i>419</i>&nbsp;     * If this method returns true, then the directory walk is immediately
+<i>420</i>&nbsp;     * cancelled. The next callback method will be {@link #handleCancelled}.
+<i>421</i>&nbsp;     * &lt;p&gt;
+<i>422</i>&nbsp;     * This implementation returns false.
+<i>423</i>&nbsp;     *
+<i>424</i>&nbsp;     * @param file  the file or directory being processed
+<i>425</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>426</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>427</i>&nbsp;     * @return true if the walk has been cancelled
+<i>428</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>429</i>&nbsp;     */
+<i>430</i>&nbsp;    protected boolean handleIsCancelled(
+<b class="fc"><i>431</i>&nbsp;            final File file, final int depth, final Collection&lt;T&gt; results) throws IOException {</b>
+<i>432</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>433</i>&nbsp;        return false;  // not cancelled</b>
+<i>434</i>&nbsp;    }
+<i>435</i>&nbsp;
+<i>436</i>&nbsp;    /**
+<i>437</i>&nbsp;     * Overridable callback method invoked when the operation is cancelled.
+<i>438</i>&nbsp;     * The file being processed when the cancellation occurred can be
+<i>439</i>&nbsp;     * obtained from the exception.
+<i>440</i>&nbsp;     * &lt;p&gt;
+<i>441</i>&nbsp;     * This implementation just re-throws the {@link CancelException}.
+<i>442</i>&nbsp;     *
+<i>443</i>&nbsp;     * @param startDirectory  the directory that the walk started from
+<i>444</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>445</i>&nbsp;     * @param cancel  the exception throw to cancel further processing
+<i>446</i>&nbsp;     * containing details at the point of cancellation.
+<i>447</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>448</i>&nbsp;     */
+<i>449</i>&nbsp;    protected void handleCancelled(final File startDirectory, final Collection&lt;T&gt; results,
+<b class="fc"><i>450</i>&nbsp;                       final CancelException cancel) throws IOException {</b>
+<i>451</i>&nbsp;        // re-throw exception - overridable by subclass
+<b class="fc"><i>452</i>&nbsp;        throw cancel;</b>
+<i>453</i>&nbsp;    }
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;    //-----------------------------------------------------------------------
+<i>456</i>&nbsp;    /**
+<i>457</i>&nbsp;     * Overridable callback method invoked at the start of processing.
+<i>458</i>&nbsp;     * &lt;p&gt;
+<i>459</i>&nbsp;     * This implementation does nothing.
+<i>460</i>&nbsp;     *
+<i>461</i>&nbsp;     * @param startDirectory  the directory to start from
+<i>462</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>463</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>464</i>&nbsp;     */
+<b class="fc"><i>465</i>&nbsp;    protected void handleStart(final File startDirectory, final Collection&lt;T&gt; results) throws IOException {</b>
+<i>466</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>467</i>&nbsp;    }</b>
+<i>468</i>&nbsp;
+<i>469</i>&nbsp;    /**
+<i>470</i>&nbsp;     * Overridable callback method invoked to determine if a directory should be processed.
+<i>471</i>&nbsp;     * &lt;p&gt;
+<i>472</i>&nbsp;     * This method returns a boolean to indicate if the directory should be examined or not.
+<i>473</i>&nbsp;     * If you return false, the entire directory and any subdirectories will be skipped.
+<i>474</i>&nbsp;     * Note that this functionality is in addition to the filtering by file filter.
+<i>475</i>&nbsp;     * &lt;p&gt;
+<i>476</i>&nbsp;     * This implementation does nothing and returns true.
+<i>477</i>&nbsp;     *
+<i>478</i>&nbsp;     * @param directory  the current directory being processed
+<i>479</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>480</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>481</i>&nbsp;     * @return true to process this directory, false to skip this directory
+<i>482</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>483</i>&nbsp;     */
+<i>484</i>&nbsp;    protected boolean handleDirectory(final File directory, final int depth, final Collection&lt;T&gt; results) throws
+<b class="fc"><i>485</i>&nbsp;            IOException {</b>
+<i>486</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>487</i>&nbsp;        return true;  // process directory</b>
+<i>488</i>&nbsp;    }
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;    /**
+<i>491</i>&nbsp;     * Overridable callback method invoked at the start of processing each directory.
+<i>492</i>&nbsp;     * &lt;p&gt;
+<i>493</i>&nbsp;     * This implementation does nothing.
+<i>494</i>&nbsp;     *
+<i>495</i>&nbsp;     * @param directory  the current directory being processed
+<i>496</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>497</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>498</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>499</i>&nbsp;     */
+<i>500</i>&nbsp;    protected void handleDirectoryStart(final File directory, final int depth, final Collection&lt;T&gt; results) throws
+<b class="fc"><i>501</i>&nbsp;            IOException {</b>
+<i>502</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>503</i>&nbsp;    }</b>
+<i>504</i>&nbsp;
+<i>505</i>&nbsp;    /**
+<i>506</i>&nbsp;     * Overridable callback method invoked with the contents of each directory.
+<i>507</i>&nbsp;     * &lt;p&gt;
+<i>508</i>&nbsp;     * This implementation returns the files unchanged
+<i>509</i>&nbsp;     *
+<i>510</i>&nbsp;     * @param directory  the current directory being processed
+<i>511</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>512</i>&nbsp;     * @param files the files (possibly filtered) in the directory, may be {@code null}
+<i>513</i>&nbsp;     * @return the filtered list of files
+<i>514</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>515</i>&nbsp;     * @since 2.0
+<i>516</i>&nbsp;     */
+<i>517</i>&nbsp;    protected File[] filterDirectoryContents(final File directory, final int depth, final File[] files) throws
+<b class="fc"><i>518</i>&nbsp;            IOException {</b>
+<b class="fc"><i>519</i>&nbsp;        return files;</b>
+<i>520</i>&nbsp;    }
+<i>521</i>&nbsp;
+<i>522</i>&nbsp;    /**
+<i>523</i>&nbsp;     * Overridable callback method invoked for each (non-directory) file.
+<i>524</i>&nbsp;     * &lt;p&gt;
+<i>525</i>&nbsp;     * This implementation does nothing.
+<i>526</i>&nbsp;     *
+<i>527</i>&nbsp;     * @param file  the current file being processed
+<i>528</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>529</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>530</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>531</i>&nbsp;     */
+<b class="nc"><i>532</i>&nbsp;    protected void handleFile(final File file, final int depth, final Collection&lt;T&gt; results) throws IOException {</b>
+<i>533</i>&nbsp;        // do nothing - overridable by subclass
+<b class="nc"><i>534</i>&nbsp;    }</b>
+<i>535</i>&nbsp;
+<i>536</i>&nbsp;    /**
+<i>537</i>&nbsp;     * Overridable callback method invoked for each restricted directory.
+<i>538</i>&nbsp;     * &lt;p&gt;
+<i>539</i>&nbsp;     * This implementation does nothing.
+<i>540</i>&nbsp;     *
+<i>541</i>&nbsp;     * @param directory  the restricted directory
+<i>542</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>543</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>544</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>545</i>&nbsp;     */
+<i>546</i>&nbsp;    protected void handleRestricted(final File directory, final int depth, final Collection&lt;T&gt; results) throws
+<b class="fc"><i>547</i>&nbsp;            IOException {</b>
+<i>548</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>549</i>&nbsp;    }</b>
+<i>550</i>&nbsp;
+<i>551</i>&nbsp;    /**
+<i>552</i>&nbsp;     * Overridable callback method invoked at the end of processing each directory.
+<i>553</i>&nbsp;     * &lt;p&gt;
+<i>554</i>&nbsp;     * This implementation does nothing.
+<i>555</i>&nbsp;     *
+<i>556</i>&nbsp;     * @param directory  the directory being processed
+<i>557</i>&nbsp;     * @param depth  the current directory level (starting directory = 0)
+<i>558</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>559</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>560</i>&nbsp;     */
+<i>561</i>&nbsp;    protected void handleDirectoryEnd(final File directory, final int depth, final Collection&lt;T&gt; results) throws
+<b class="fc"><i>562</i>&nbsp;            IOException {</b>
+<i>563</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>564</i>&nbsp;    }</b>
+<i>565</i>&nbsp;
+<i>566</i>&nbsp;    /**
+<i>567</i>&nbsp;     * Overridable callback method invoked at the end of processing.
+<i>568</i>&nbsp;     * &lt;p&gt;
+<i>569</i>&nbsp;     * This implementation does nothing.
+<i>570</i>&nbsp;     *
+<i>571</i>&nbsp;     * @param results  the collection of result objects, may be updated
+<i>572</i>&nbsp;     * @throws IOException if an I/O Error occurs
+<i>573</i>&nbsp;     */
+<b class="fc"><i>574</i>&nbsp;    protected void handleEnd(final Collection&lt;T&gt; results) throws IOException {</b>
+<i>575</i>&nbsp;        // do nothing - overridable by subclass
+<b class="fc"><i>576</i>&nbsp;    }</b>
+<i>577</i>&nbsp;
+<i>578</i>&nbsp;    //-----------------------------------------------------------------------
+<i>579</i>&nbsp;    /**
+<i>580</i>&nbsp;     * CancelException is thrown in DirectoryWalker to cancel the current
+<i>581</i>&nbsp;     * processing.
+<i>582</i>&nbsp;     */
+<i>583</i>&nbsp;    public static class CancelException extends IOException {
+<i>584</i>&nbsp;
+<i>585</i>&nbsp;        /** Serialization id. */
+<i>586</i>&nbsp;        private static final long serialVersionUID = 1347339620135041008L;
+<i>587</i>&nbsp;
+<i>588</i>&nbsp;        /** The file being processed when the exception was thrown. */
+<i>589</i>&nbsp;        private final File file;
+<i>590</i>&nbsp;        /** The file depth when the exception was thrown. */
+<i>591</i>&nbsp;        private final int depth;
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;        /**
+<i>594</i>&nbsp;         * Constructs a &lt;code&gt;CancelException&lt;/code&gt; with
+<i>595</i>&nbsp;         * the file and depth when cancellation occurred.
+<i>596</i>&nbsp;         *
+<i>597</i>&nbsp;         * @param file  the file when the operation was cancelled, may be null
+<i>598</i>&nbsp;         * @param depth  the depth when the operation was cancelled, may be null
+<i>599</i>&nbsp;         */
+<i>600</i>&nbsp;        public CancelException(final File file, final int depth) {
+<b class="fc"><i>601</i>&nbsp;            this(&quot;Operation Cancelled&quot;, file, depth);</b>
+<b class="fc"><i>602</i>&nbsp;        }</b>
+<i>603</i>&nbsp;
+<i>604</i>&nbsp;        /**
+<i>605</i>&nbsp;         * Constructs a &lt;code&gt;CancelException&lt;/code&gt; with
+<i>606</i>&nbsp;         * an appropriate message and the file and depth when
+<i>607</i>&nbsp;         * cancellation occurred.
+<i>608</i>&nbsp;         *
+<i>609</i>&nbsp;         * @param message  the detail message
+<i>610</i>&nbsp;         * @param file  the file when the operation was cancelled
+<i>611</i>&nbsp;         * @param depth  the depth when the operation was cancelled
+<i>612</i>&nbsp;         */
+<i>613</i>&nbsp;        public CancelException(final String message, final File file, final int depth) {
+<b class="fc"><i>614</i>&nbsp;            super(message);</b>
+<b class="fc"><i>615</i>&nbsp;            this.file = file;</b>
+<b class="fc"><i>616</i>&nbsp;            this.depth = depth;</b>
+<b class="fc"><i>617</i>&nbsp;        }</b>
+<i>618</i>&nbsp;
+<i>619</i>&nbsp;        /**
+<i>620</i>&nbsp;         * Return the file when the operation was cancelled.
+<i>621</i>&nbsp;         *
+<i>622</i>&nbsp;         * @return the file when the operation was cancelled
+<i>623</i>&nbsp;         */
+<b class="fc"><i>624</i>&nbsp;        public File getFile() {</b>
+<b class="fc"><i>625</i>&nbsp;            return file;</b>
+<i>626</i>&nbsp;        }
+<i>627</i>&nbsp;
+<i>628</i>&nbsp;        /**
+<i>629</i>&nbsp;         * Return the depth when the operation was cancelled.
+<i>630</i>&nbsp;         *
+<i>631</i>&nbsp;         * @return the depth when the operation was cancelled
+<i>632</i>&nbsp;         */
+<b class="fc"><i>633</i>&nbsp;        public int getDepth() {</b>
+<b class="fc"><i>634</i>&nbsp;            return depth;</b>
+<i>635</i>&nbsp;        }
+<i>636</i>&nbsp;    }
+<i>637</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:40</div>
+</div>
+</body>
+</html>

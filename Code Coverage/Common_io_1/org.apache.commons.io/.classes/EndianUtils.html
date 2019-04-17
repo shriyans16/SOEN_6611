@@ -1,0 +1,590 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: EndianUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: EndianUtils (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EndianUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/ 32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (118/ 118)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">EndianUtils$__CLR4_1_25x35x3jukht5ib</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (33/ 33)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (119/ 119)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import static org.apache.commons.io.IOUtils.EOF;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.EOFException;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.InputStream;
+<i>24</i>&nbsp;import java.io.OutputStream;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Utility code for dealing with different endian systems.
+<i>28</i>&nbsp; * &lt;p&gt;
+<i>29</i>&nbsp; * Different computer architectures adopt different conventions for
+<i>30</i>&nbsp; * byte ordering. In so-called &quot;Little Endian&quot; architectures (eg Intel),
+<i>31</i>&nbsp; * the low-order byte is stored in memory at the lowest address, and
+<i>32</i>&nbsp; * subsequent bytes at higher addresses. For &quot;Big Endian&quot; architectures
+<i>33</i>&nbsp; * (eg Motorola), the situation is reversed.
+<i>34</i>&nbsp; * This class helps you solve this incompatibility.
+<i>35</i>&nbsp; * &lt;p&gt;
+<i>36</i>&nbsp; * Origin of code: Excalibur
+<i>37</i>&nbsp; *
+<i>38</i>&nbsp; * @see org.apache.commons.io.input.SwappedDataInputStream
+<i>39</i>&nbsp; */
+<b class="fc"><i>40</i>&nbsp;public class EndianUtils {</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Instances should NOT be constructed in standard programming.
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public EndianUtils() {
+<b class="fc"><i>46</i>&nbsp;        super();</b>
+<b class="fc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    // ========================================== Swapping routines
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Converts a &quot;short&quot; value between endian systems.
+<i>53</i>&nbsp;     * @param value value to convert
+<i>54</i>&nbsp;     * @return the converted value
+<i>55</i>&nbsp;     */
+<b class="fc"><i>56</i>&nbsp;    public static short swapShort(final short value) {</b>
+<b class="fc"><i>57</i>&nbsp;        return (short) ( ( ( ( value &gt;&gt; 0 ) &amp; 0xff ) &lt;&lt; 8 ) +</b>
+<i>58</i>&nbsp;            ( ( ( value &gt;&gt; 8 ) &amp; 0xff ) &lt;&lt; 0 ) );
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Converts a &quot;int&quot; value between endian systems.
+<i>63</i>&nbsp;     * @param value value to convert
+<i>64</i>&nbsp;     * @return the converted value
+<i>65</i>&nbsp;     */
+<b class="fc"><i>66</i>&nbsp;    public static int swapInteger(final int value) {</b>
+<b class="fc"><i>67</i>&nbsp;        return</b>
+<i>68</i>&nbsp;            ( ( ( value &gt;&gt; 0 ) &amp; 0xff ) &lt;&lt; 24 ) +
+<i>69</i>&nbsp;            ( ( ( value &gt;&gt; 8 ) &amp; 0xff ) &lt;&lt; 16 ) +
+<i>70</i>&nbsp;            ( ( ( value &gt;&gt; 16 ) &amp; 0xff ) &lt;&lt; 8 ) +
+<i>71</i>&nbsp;            ( ( ( value &gt;&gt; 24 ) &amp; 0xff ) &lt;&lt; 0 );
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Converts a &quot;long&quot; value between endian systems.
+<i>76</i>&nbsp;     * @param value value to convert
+<i>77</i>&nbsp;     * @return the converted value
+<i>78</i>&nbsp;     */
+<b class="fc"><i>79</i>&nbsp;    public static long swapLong(final long value) {</b>
+<b class="fc"><i>80</i>&nbsp;        return</b>
+<i>81</i>&nbsp;            ( ( ( value &gt;&gt; 0 ) &amp; 0xff ) &lt;&lt; 56 ) +
+<i>82</i>&nbsp;            ( ( ( value &gt;&gt; 8 ) &amp; 0xff ) &lt;&lt; 48 ) +
+<i>83</i>&nbsp;            ( ( ( value &gt;&gt; 16 ) &amp; 0xff ) &lt;&lt; 40 ) +
+<i>84</i>&nbsp;            ( ( ( value &gt;&gt; 24 ) &amp; 0xff ) &lt;&lt; 32 ) +
+<i>85</i>&nbsp;            ( ( ( value &gt;&gt; 32 ) &amp; 0xff ) &lt;&lt; 24 ) +
+<i>86</i>&nbsp;            ( ( ( value &gt;&gt; 40 ) &amp; 0xff ) &lt;&lt; 16 ) +
+<i>87</i>&nbsp;            ( ( ( value &gt;&gt; 48 ) &amp; 0xff ) &lt;&lt; 8 ) +
+<i>88</i>&nbsp;            ( ( ( value &gt;&gt; 56 ) &amp; 0xff ) &lt;&lt; 0 );
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * Converts a &quot;float&quot; value between endian systems.
+<i>93</i>&nbsp;     * @param value value to convert
+<i>94</i>&nbsp;     * @return the converted value
+<i>95</i>&nbsp;     */
+<b class="fc"><i>96</i>&nbsp;    public static float swapFloat(final float value) {</b>
+<b class="fc"><i>97</i>&nbsp;        return Float.intBitsToFloat( swapInteger( Float.floatToIntBits( value ) ) );</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Converts a &quot;double&quot; value between endian systems.
+<i>102</i>&nbsp;     * @param value value to convert
+<i>103</i>&nbsp;     * @return the converted value
+<i>104</i>&nbsp;     */
+<b class="fc"><i>105</i>&nbsp;    public static double swapDouble(final double value) {</b>
+<b class="fc"><i>106</i>&nbsp;        return Double.longBitsToDouble( swapLong( Double.doubleToLongBits( value ) ) );</b>
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    // ========================================== Swapping read/write routines
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Writes a &quot;short&quot; value to a byte array at a given offset. The value is
+<i>113</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>114</i>&nbsp;     * @param data target byte array
+<i>115</i>&nbsp;     * @param offset starting offset in the byte array
+<i>116</i>&nbsp;     * @param value value to write
+<i>117</i>&nbsp;     */
+<b class="fc"><i>118</i>&nbsp;    public static void writeSwappedShort(final byte[] data, final int offset, final short value) {</b>
+<b class="fc"><i>119</i>&nbsp;        data[ offset + 0 ] = (byte)( ( value &gt;&gt; 0 ) &amp; 0xff );</b>
+<b class="fc"><i>120</i>&nbsp;        data[ offset + 1 ] = (byte)( ( value &gt;&gt; 8 ) &amp; 0xff );</b>
+<b class="fc"><i>121</i>&nbsp;    }</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * Reads a &quot;short&quot; value from a byte array at a given offset. The value is
+<i>125</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>126</i>&nbsp;     * @param data source byte array
+<i>127</i>&nbsp;     * @param offset starting offset in the byte array
+<i>128</i>&nbsp;     * @return the value read
+<i>129</i>&nbsp;     */
+<b class="fc"><i>130</i>&nbsp;    public static short readSwappedShort(final byte[] data, final int offset) {</b>
+<b class="fc"><i>131</i>&nbsp;        return (short)( ( ( data[ offset + 0 ] &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>132</i>&nbsp;            ( ( data[ offset + 1 ] &amp; 0xff ) &lt;&lt; 8 ) );
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Reads an unsigned short (16-bit) value from a byte array at a given
+<i>137</i>&nbsp;     * offset. The value is converted to the opposed endian system while
+<i>138</i>&nbsp;     * reading.
+<i>139</i>&nbsp;     * @param data source byte array
+<i>140</i>&nbsp;     * @param offset starting offset in the byte array
+<i>141</i>&nbsp;     * @return the value read
+<i>142</i>&nbsp;     */
+<b class="fc"><i>143</i>&nbsp;    public static int readSwappedUnsignedShort(final byte[] data, final int offset) {</b>
+<b class="fc"><i>144</i>&nbsp;        return ( ( ( data[ offset + 0 ] &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>145</i>&nbsp;            ( ( data[ offset + 1 ] &amp; 0xff ) &lt;&lt; 8 ) );
+<i>146</i>&nbsp;    }
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /**
+<i>149</i>&nbsp;     * Writes a &quot;int&quot; value to a byte array at a given offset. The value is
+<i>150</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>151</i>&nbsp;     * @param data target byte array
+<i>152</i>&nbsp;     * @param offset starting offset in the byte array
+<i>153</i>&nbsp;     * @param value value to write
+<i>154</i>&nbsp;     */
+<b class="fc"><i>155</i>&nbsp;    public static void writeSwappedInteger(final byte[] data, final int offset, final int value) {</b>
+<b class="fc"><i>156</i>&nbsp;        data[ offset + 0 ] = (byte)( ( value &gt;&gt; 0 ) &amp; 0xff );</b>
+<b class="fc"><i>157</i>&nbsp;        data[ offset + 1 ] = (byte)( ( value &gt;&gt; 8 ) &amp; 0xff );</b>
+<b class="fc"><i>158</i>&nbsp;        data[ offset + 2 ] = (byte)( ( value &gt;&gt; 16 ) &amp; 0xff );</b>
+<b class="fc"><i>159</i>&nbsp;        data[ offset + 3 ] = (byte)( ( value &gt;&gt; 24 ) &amp; 0xff );</b>
+<b class="fc"><i>160</i>&nbsp;    }</b>
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    /**
+<i>163</i>&nbsp;     * Reads a &quot;int&quot; value from a byte array at a given offset. The value is
+<i>164</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>165</i>&nbsp;     * @param data source byte array
+<i>166</i>&nbsp;     * @param offset starting offset in the byte array
+<i>167</i>&nbsp;     * @return the value read
+<i>168</i>&nbsp;     */
+<b class="fc"><i>169</i>&nbsp;    public static int readSwappedInteger(final byte[] data, final int offset) {</b>
+<b class="fc"><i>170</i>&nbsp;        return ( ( ( data[ offset + 0 ] &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>171</i>&nbsp;            ( ( data[ offset + 1 ] &amp; 0xff ) &lt;&lt; 8 ) +
+<i>172</i>&nbsp;            ( ( data[ offset + 2 ] &amp; 0xff ) &lt;&lt; 16 ) +
+<i>173</i>&nbsp;            ( ( data[ offset + 3 ] &amp; 0xff ) &lt;&lt; 24 ) );
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * Reads an unsigned integer (32-bit) value from a byte array at a given
+<i>178</i>&nbsp;     * offset. The value is converted to the opposed endian system while
+<i>179</i>&nbsp;     * reading.
+<i>180</i>&nbsp;     * @param data source byte array
+<i>181</i>&nbsp;     * @param offset starting offset in the byte array
+<i>182</i>&nbsp;     * @return the value read
+<i>183</i>&nbsp;     */
+<b class="fc"><i>184</i>&nbsp;    public static long readSwappedUnsignedInteger(final byte[] data, final int offset) {</b>
+<b class="fc"><i>185</i>&nbsp;        final long low = ( ( ( data[ offset + 0 ] &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>186</i>&nbsp;                     ( ( data[ offset + 1 ] &amp; 0xff ) &lt;&lt; 8 ) +
+<i>187</i>&nbsp;                     ( ( data[ offset + 2 ] &amp; 0xff ) &lt;&lt; 16 ) );
+<i>188</i>&nbsp;
+<b class="fc"><i>189</i>&nbsp;        final long high = data[ offset + 3 ] &amp; 0xff;</b>
+<i>190</i>&nbsp;
+<b class="fc"><i>191</i>&nbsp;        return (high &lt;&lt; 24) + (0xffffffffL &amp; low);</b>
+<i>192</i>&nbsp;    }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;    /**
+<i>195</i>&nbsp;     * Writes a &quot;long&quot; value to a byte array at a given offset. The value is
+<i>196</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>197</i>&nbsp;     * @param data target byte array
+<i>198</i>&nbsp;     * @param offset starting offset in the byte array
+<i>199</i>&nbsp;     * @param value value to write
+<i>200</i>&nbsp;     */
+<b class="fc"><i>201</i>&nbsp;    public static void writeSwappedLong(final byte[] data, final int offset, final long value) {</b>
+<b class="fc"><i>202</i>&nbsp;        data[ offset + 0 ] = (byte)( ( value &gt;&gt; 0 ) &amp; 0xff );</b>
+<b class="fc"><i>203</i>&nbsp;        data[ offset + 1 ] = (byte)( ( value &gt;&gt; 8 ) &amp; 0xff );</b>
+<b class="fc"><i>204</i>&nbsp;        data[ offset + 2 ] = (byte)( ( value &gt;&gt; 16 ) &amp; 0xff );</b>
+<b class="fc"><i>205</i>&nbsp;        data[ offset + 3 ] = (byte)( ( value &gt;&gt; 24 ) &amp; 0xff );</b>
+<b class="fc"><i>206</i>&nbsp;        data[ offset + 4 ] = (byte)( ( value &gt;&gt; 32 ) &amp; 0xff );</b>
+<b class="fc"><i>207</i>&nbsp;        data[ offset + 5 ] = (byte)( ( value &gt;&gt; 40 ) &amp; 0xff );</b>
+<b class="fc"><i>208</i>&nbsp;        data[ offset + 6 ] = (byte)( ( value &gt;&gt; 48 ) &amp; 0xff );</b>
+<b class="fc"><i>209</i>&nbsp;        data[ offset + 7 ] = (byte)( ( value &gt;&gt; 56 ) &amp; 0xff );</b>
+<b class="fc"><i>210</i>&nbsp;    }</b>
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /**
+<i>213</i>&nbsp;     * Reads a &quot;long&quot; value from a byte array at a given offset. The value is
+<i>214</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>215</i>&nbsp;     * @param data source byte array
+<i>216</i>&nbsp;     * @param offset starting offset in the byte array
+<i>217</i>&nbsp;     * @return the value read
+<i>218</i>&nbsp;     */
+<b class="fc"><i>219</i>&nbsp;    public static long readSwappedLong(final byte[] data, final int offset) {</b>
+<b class="fc"><i>220</i>&nbsp;        final long low = readSwappedInteger(data, offset);</b>
+<b class="fc"><i>221</i>&nbsp;        final long high = readSwappedInteger(data, offset + 4);</b>
+<b class="fc"><i>222</i>&nbsp;        return (high &lt;&lt; 32) + (0xffffffffL &amp; low);</b>
+<i>223</i>&nbsp;    }
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;    /**
+<i>226</i>&nbsp;     * Writes a &quot;float&quot; value to a byte array at a given offset. The value is
+<i>227</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>228</i>&nbsp;     * @param data target byte array
+<i>229</i>&nbsp;     * @param offset starting offset in the byte array
+<i>230</i>&nbsp;     * @param value value to write
+<i>231</i>&nbsp;     */
+<b class="fc"><i>232</i>&nbsp;    public static void writeSwappedFloat(final byte[] data, final int offset, final float value) {</b>
+<b class="fc"><i>233</i>&nbsp;        writeSwappedInteger( data, offset, Float.floatToIntBits( value ) );</b>
+<b class="fc"><i>234</i>&nbsp;    }</b>
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /**
+<i>237</i>&nbsp;     * Reads a &quot;float&quot; value from a byte array at a given offset. The value is
+<i>238</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>239</i>&nbsp;     * @param data source byte array
+<i>240</i>&nbsp;     * @param offset starting offset in the byte array
+<i>241</i>&nbsp;     * @return the value read
+<i>242</i>&nbsp;     */
+<b class="fc"><i>243</i>&nbsp;    public static float readSwappedFloat(final byte[] data, final int offset) {</b>
+<b class="fc"><i>244</i>&nbsp;        return Float.intBitsToFloat( readSwappedInteger( data, offset ) );</b>
+<i>245</i>&nbsp;    }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /**
+<i>248</i>&nbsp;     * Writes a &quot;double&quot; value to a byte array at a given offset. The value is
+<i>249</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>250</i>&nbsp;     * @param data target byte array
+<i>251</i>&nbsp;     * @param offset starting offset in the byte array
+<i>252</i>&nbsp;     * @param value value to write
+<i>253</i>&nbsp;     */
+<b class="fc"><i>254</i>&nbsp;    public static void writeSwappedDouble(final byte[] data, final int offset, final double value) {</b>
+<b class="fc"><i>255</i>&nbsp;        writeSwappedLong( data, offset, Double.doubleToLongBits( value ) );</b>
+<b class="fc"><i>256</i>&nbsp;    }</b>
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /**
+<i>259</i>&nbsp;     * Reads a &quot;double&quot; value from a byte array at a given offset. The value is
+<i>260</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>261</i>&nbsp;     * @param data source byte array
+<i>262</i>&nbsp;     * @param offset starting offset in the byte array
+<i>263</i>&nbsp;     * @return the value read
+<i>264</i>&nbsp;     */
+<b class="fc"><i>265</i>&nbsp;    public static double readSwappedDouble(final byte[] data, final int offset) {</b>
+<b class="fc"><i>266</i>&nbsp;        return Double.longBitsToDouble( readSwappedLong( data, offset ) );</b>
+<i>267</i>&nbsp;    }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    /**
+<i>270</i>&nbsp;     * Writes a &quot;short&quot; value to an OutputStream. The value is
+<i>271</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>272</i>&nbsp;     * @param output target OutputStream
+<i>273</i>&nbsp;     * @param value value to write
+<i>274</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>275</i>&nbsp;     */
+<i>276</i>&nbsp;    public static void writeSwappedShort(final OutputStream output, final short value)
+<i>277</i>&nbsp;        throws IOException
+<b class="fc"><i>278</i>&nbsp;    {</b>
+<b class="fc"><i>279</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 0 ) &amp; 0xff ) );</b>
+<b class="fc"><i>280</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 8 ) &amp; 0xff ) );</b>
+<b class="fc"><i>281</i>&nbsp;    }</b>
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;    /**
+<i>284</i>&nbsp;     * Reads a &quot;short&quot; value from an InputStream. The value is
+<i>285</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>286</i>&nbsp;     * @param input source InputStream
+<i>287</i>&nbsp;     * @return the value just read
+<i>288</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>289</i>&nbsp;     */
+<i>290</i>&nbsp;    public static short readSwappedShort(final InputStream input)
+<i>291</i>&nbsp;        throws IOException
+<b class="fc"><i>292</i>&nbsp;    {</b>
+<b class="fc"><i>293</i>&nbsp;        return (short)( ( ( read( input ) &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<b class="fc"><i>294</i>&nbsp;            ( ( read( input ) &amp; 0xff ) &lt;&lt; 8 ) );</b>
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    /**
+<i>298</i>&nbsp;     * Reads a unsigned short (16-bit) from an InputStream. The value is
+<i>299</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>300</i>&nbsp;     * @param input source InputStream
+<i>301</i>&nbsp;     * @return the value just read
+<i>302</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>303</i>&nbsp;     */
+<i>304</i>&nbsp;    public static int readSwappedUnsignedShort(final InputStream input)
+<i>305</i>&nbsp;        throws IOException
+<b class="fc"><i>306</i>&nbsp;    {</b>
+<b class="fc"><i>307</i>&nbsp;        final int value1 = read( input );</b>
+<b class="fc"><i>308</i>&nbsp;        final int value2 = read( input );</b>
+<i>309</i>&nbsp;
+<b class="fc"><i>310</i>&nbsp;        return ( ( ( value1 &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>311</i>&nbsp;            ( ( value2 &amp; 0xff ) &lt;&lt; 8 ) );
+<i>312</i>&nbsp;    }
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;    /**
+<i>315</i>&nbsp;     * Writes a &quot;int&quot; value to an OutputStream. The value is
+<i>316</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>317</i>&nbsp;     * @param output target OutputStream
+<i>318</i>&nbsp;     * @param value value to write
+<i>319</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>320</i>&nbsp;     */
+<i>321</i>&nbsp;    public static void writeSwappedInteger(final OutputStream output, final int value)
+<i>322</i>&nbsp;        throws IOException
+<b class="fc"><i>323</i>&nbsp;    {</b>
+<b class="fc"><i>324</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 0 ) &amp; 0xff ) );</b>
+<b class="fc"><i>325</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 8 ) &amp; 0xff ) );</b>
+<b class="fc"><i>326</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 16 ) &amp; 0xff ) );</b>
+<b class="fc"><i>327</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 24 ) &amp; 0xff ) );</b>
+<b class="fc"><i>328</i>&nbsp;    }</b>
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;    /**
+<i>331</i>&nbsp;     * Reads a &quot;int&quot; value from an InputStream. The value is
+<i>332</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>333</i>&nbsp;     * @param input source InputStream
+<i>334</i>&nbsp;     * @return the value just read
+<i>335</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>336</i>&nbsp;     */
+<i>337</i>&nbsp;    public static int readSwappedInteger(final InputStream input)
+<i>338</i>&nbsp;        throws IOException
+<b class="fc"><i>339</i>&nbsp;    {</b>
+<b class="fc"><i>340</i>&nbsp;        final int value1 = read( input );</b>
+<b class="fc"><i>341</i>&nbsp;        final int value2 = read( input );</b>
+<b class="fc"><i>342</i>&nbsp;        final int value3 = read( input );</b>
+<b class="fc"><i>343</i>&nbsp;        final int value4 = read( input );</b>
+<i>344</i>&nbsp;
+<b class="fc"><i>345</i>&nbsp;        return ( ( value1 &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>346</i>&nbsp;            ( ( value2 &amp; 0xff ) &lt;&lt; 8 ) +
+<i>347</i>&nbsp;            ( ( value3 &amp; 0xff ) &lt;&lt; 16 ) +
+<i>348</i>&nbsp;            ( ( value4 &amp; 0xff ) &lt;&lt; 24 );
+<i>349</i>&nbsp;    }
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;    /**
+<i>352</i>&nbsp;     * Reads a unsigned integer (32-bit) from an InputStream. The value is
+<i>353</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>354</i>&nbsp;     * @param input source InputStream
+<i>355</i>&nbsp;     * @return the value just read
+<i>356</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>357</i>&nbsp;     */
+<i>358</i>&nbsp;    public static long readSwappedUnsignedInteger(final InputStream input)
+<i>359</i>&nbsp;        throws IOException
+<b class="fc"><i>360</i>&nbsp;    {</b>
+<b class="fc"><i>361</i>&nbsp;        final int value1 = read( input );</b>
+<b class="fc"><i>362</i>&nbsp;        final int value2 = read( input );</b>
+<b class="fc"><i>363</i>&nbsp;        final int value3 = read( input );</b>
+<b class="fc"><i>364</i>&nbsp;        final int value4 = read( input );</b>
+<i>365</i>&nbsp;
+<b class="fc"><i>366</i>&nbsp;        final long low = ( ( ( value1 &amp; 0xff ) &lt;&lt; 0 ) +</b>
+<i>367</i>&nbsp;                     ( ( value2 &amp; 0xff ) &lt;&lt; 8 ) +
+<i>368</i>&nbsp;                     ( ( value3 &amp; 0xff ) &lt;&lt; 16 ) );
+<i>369</i>&nbsp;
+<b class="fc"><i>370</i>&nbsp;        final long high = value4 &amp; 0xff;</b>
+<i>371</i>&nbsp;
+<b class="fc"><i>372</i>&nbsp;        return (high &lt;&lt; 24) + (0xffffffffL &amp; low);</b>
+<i>373</i>&nbsp;    }
+<i>374</i>&nbsp;
+<i>375</i>&nbsp;    /**
+<i>376</i>&nbsp;     * Writes a &quot;long&quot; value to an OutputStream. The value is
+<i>377</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>378</i>&nbsp;     * @param output target OutputStream
+<i>379</i>&nbsp;     * @param value value to write
+<i>380</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>381</i>&nbsp;     */
+<i>382</i>&nbsp;    public static void writeSwappedLong(final OutputStream output, final long value)
+<i>383</i>&nbsp;        throws IOException
+<b class="fc"><i>384</i>&nbsp;    {</b>
+<b class="fc"><i>385</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 0 ) &amp; 0xff ) );</b>
+<b class="fc"><i>386</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 8 ) &amp; 0xff ) );</b>
+<b class="fc"><i>387</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 16 ) &amp; 0xff ) );</b>
+<b class="fc"><i>388</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 24 ) &amp; 0xff ) );</b>
+<b class="fc"><i>389</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 32 ) &amp; 0xff ) );</b>
+<b class="fc"><i>390</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 40 ) &amp; 0xff ) );</b>
+<b class="fc"><i>391</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 48 ) &amp; 0xff ) );</b>
+<b class="fc"><i>392</i>&nbsp;        output.write( (byte)( ( value &gt;&gt; 56 ) &amp; 0xff ) );</b>
+<b class="fc"><i>393</i>&nbsp;    }</b>
+<i>394</i>&nbsp;
+<i>395</i>&nbsp;    /**
+<i>396</i>&nbsp;     * Reads a &quot;long&quot; value from an InputStream. The value is
+<i>397</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>398</i>&nbsp;     * @param input source InputStream
+<i>399</i>&nbsp;     * @return the value just read
+<i>400</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>401</i>&nbsp;     */
+<i>402</i>&nbsp;    public static long readSwappedLong(final InputStream input)
+<i>403</i>&nbsp;        throws IOException
+<b class="fc"><i>404</i>&nbsp;    {</b>
+<b class="fc"><i>405</i>&nbsp;        final byte[] bytes = new byte[8];</b>
+<b class="fc"><i>406</i>&nbsp;        for ( int i=0; i&lt;8; i++ ) {</b>
+<b class="fc"><i>407</i>&nbsp;            bytes[i] = (byte) read( input );</b>
+<i>408</i>&nbsp;        }
+<b class="fc"><i>409</i>&nbsp;        return readSwappedLong( bytes, 0 );</b>
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;    /**
+<i>413</i>&nbsp;     * Writes a &quot;float&quot; value to an OutputStream. The value is
+<i>414</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>415</i>&nbsp;     * @param output target OutputStream
+<i>416</i>&nbsp;     * @param value value to write
+<i>417</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>418</i>&nbsp;     */
+<i>419</i>&nbsp;    public static void writeSwappedFloat(final OutputStream output, final float value)
+<i>420</i>&nbsp;        throws IOException
+<b class="fc"><i>421</i>&nbsp;    {</b>
+<b class="fc"><i>422</i>&nbsp;        writeSwappedInteger( output, Float.floatToIntBits( value ) );</b>
+<b class="fc"><i>423</i>&nbsp;    }</b>
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;    /**
+<i>426</i>&nbsp;     * Reads a &quot;float&quot; value from an InputStream. The value is
+<i>427</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>428</i>&nbsp;     * @param input source InputStream
+<i>429</i>&nbsp;     * @return the value just read
+<i>430</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>431</i>&nbsp;     */
+<i>432</i>&nbsp;    public static float readSwappedFloat(final InputStream input)
+<i>433</i>&nbsp;        throws IOException
+<b class="fc"><i>434</i>&nbsp;    {</b>
+<b class="fc"><i>435</i>&nbsp;        return Float.intBitsToFloat( readSwappedInteger( input ) );</b>
+<i>436</i>&nbsp;    }
+<i>437</i>&nbsp;
+<i>438</i>&nbsp;    /**
+<i>439</i>&nbsp;     * Writes a &quot;double&quot; value to an OutputStream. The value is
+<i>440</i>&nbsp;     * converted to the opposed endian system while writing.
+<i>441</i>&nbsp;     * @param output target OutputStream
+<i>442</i>&nbsp;     * @param value value to write
+<i>443</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>444</i>&nbsp;     */
+<i>445</i>&nbsp;    public static void writeSwappedDouble(final OutputStream output, final double value)
+<i>446</i>&nbsp;        throws IOException
+<b class="fc"><i>447</i>&nbsp;    {</b>
+<b class="fc"><i>448</i>&nbsp;        writeSwappedLong( output, Double.doubleToLongBits( value ) );</b>
+<b class="fc"><i>449</i>&nbsp;    }</b>
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;    /**
+<i>452</i>&nbsp;     * Reads a &quot;double&quot; value from an InputStream. The value is
+<i>453</i>&nbsp;     * converted to the opposed endian system while reading.
+<i>454</i>&nbsp;     * @param input source InputStream
+<i>455</i>&nbsp;     * @return the value just read
+<i>456</i>&nbsp;     * @throws IOException in case of an I/O problem
+<i>457</i>&nbsp;     */
+<i>458</i>&nbsp;    public static double readSwappedDouble(final InputStream input)
+<i>459</i>&nbsp;        throws IOException
+<b class="fc"><i>460</i>&nbsp;    {</b>
+<b class="fc"><i>461</i>&nbsp;        return Double.longBitsToDouble( readSwappedLong( input ) );</b>
+<i>462</i>&nbsp;    }
+<i>463</i>&nbsp;
+<i>464</i>&nbsp;    /**
+<i>465</i>&nbsp;     * Reads the next byte from the input stream.
+<i>466</i>&nbsp;     * @param input  the stream
+<i>467</i>&nbsp;     * @return the byte
+<i>468</i>&nbsp;     * @throws IOException if the end of file is reached
+<i>469</i>&nbsp;     */
+<i>470</i>&nbsp;    private static int read(final InputStream input)
+<i>471</i>&nbsp;        throws IOException
+<b class="fc"><i>472</i>&nbsp;    {</b>
+<b class="fc"><i>473</i>&nbsp;        final int value = input.read();</b>
+<i>474</i>&nbsp;
+<b class="fc"><i>475</i>&nbsp;        if( EOF == value ) {</b>
+<b class="fc"><i>476</i>&nbsp;            throw new EOFException( &quot;Unexpected EOF reached&quot; );</b>
+<i>477</i>&nbsp;        }
+<i>478</i>&nbsp;
+<b class="fc"><i>479</i>&nbsp;        return value;</b>
+<i>480</i>&nbsp;    }
+<i>481</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:05</div>
+</div>
+</body>
+</html>

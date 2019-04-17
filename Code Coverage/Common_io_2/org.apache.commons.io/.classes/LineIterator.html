@@ -1,0 +1,230 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LineIterator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LineIterator (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">LineIterator$__CLR4_1_226j26jjulisae6</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.BufferedReader;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.Reader;
+<i>22</i>&nbsp;import java.util.Iterator;
+<i>23</i>&nbsp;import java.util.NoSuchElementException;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * An Iterator over the lines in a &lt;code&gt;Reader&lt;/code&gt;.
+<i>27</i>&nbsp; * &lt;p&gt;
+<i>28</i>&nbsp; * &lt;code&gt;LineIterator&lt;/code&gt; holds a reference to an open &lt;code&gt;Reader&lt;/code&gt;.
+<i>29</i>&nbsp; * When you have finished with the iterator you should close the reader
+<i>30</i>&nbsp; * to free internal resources. This can be done by closing the reader directly,
+<i>31</i>&nbsp; * or by calling the {@link #close()} or {@link #closeQuietly(LineIterator)}
+<i>32</i>&nbsp; * method on the iterator.
+<i>33</i>&nbsp; * &lt;p&gt;
+<i>34</i>&nbsp; * The recommended usage pattern is:
+<i>35</i>&nbsp; * &lt;pre&gt;
+<i>36</i>&nbsp; * LineIterator it = FileUtils.lineIterator(file, &quot;UTF-8&quot;);
+<i>37</i>&nbsp; * try {
+<i>38</i>&nbsp; *   while (it.hasNext()) {
+<i>39</i>&nbsp; *     String line = it.nextLine();
+<i>40</i>&nbsp; *     // do something with line
+<i>41</i>&nbsp; *   }
+<i>42</i>&nbsp; * } finally {
+<i>43</i>&nbsp; *   it.close();
+<i>44</i>&nbsp; * }
+<i>45</i>&nbsp; * &lt;/pre&gt;
+<i>46</i>&nbsp; *
+<i>47</i>&nbsp; * @version $Id$
+<i>48</i>&nbsp; * @since 1.2
+<i>49</i>&nbsp; */
+<i>50</i>&nbsp;public class LineIterator implements Iterator&lt;String&gt; {
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    // N.B. This class deliberately does not implement Iterable, see https://issues.apache.org/jira/browse/IO-181
+<i>53</i>&nbsp;    
+<i>54</i>&nbsp;    /** The reader that is being read. */
+<i>55</i>&nbsp;    private final BufferedReader bufferedReader;
+<i>56</i>&nbsp;    /** The current line. */
+<i>57</i>&nbsp;    private String cachedLine;
+<i>58</i>&nbsp;    /** A flag indicating if the iterator has been fully read. */
+<i>59</i>&nbsp;    private boolean finished = false;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Constructs an iterator of the lines for a &lt;code&gt;Reader&lt;/code&gt;.
+<i>63</i>&nbsp;     *
+<i>64</i>&nbsp;     * @param reader the &lt;code&gt;Reader&lt;/code&gt; to read from, not null
+<i>65</i>&nbsp;     * @throws IllegalArgumentException if the reader is null
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public LineIterator(final Reader reader) throws IllegalArgumentException {
+<i>68</i>&nbsp;        if (reader == null) {
+<i>69</i>&nbsp;            throw new IllegalArgumentException(&quot;Reader must not be null&quot;);
+<i>70</i>&nbsp;        }
+<i>71</i>&nbsp;        if (reader instanceof BufferedReader) {
+<i>72</i>&nbsp;            bufferedReader = (BufferedReader) reader;
+<i>73</i>&nbsp;        } else {
+<i>74</i>&nbsp;            bufferedReader = new BufferedReader(reader);
+<i>75</i>&nbsp;        }
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    //-----------------------------------------------------------------------
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Indicates whether the &lt;code&gt;Reader&lt;/code&gt; has more lines.
+<i>81</i>&nbsp;     * If there is an &lt;code&gt;IOException&lt;/code&gt; then {@link #close()} will
+<i>82</i>&nbsp;     * be called on this instance.
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if the Reader has more lines
+<i>85</i>&nbsp;     * @throws IllegalStateException if an IO exception occurs
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public boolean hasNext() {
+<i>88</i>&nbsp;        if (cachedLine != null) {
+<i>89</i>&nbsp;            return true;
+<i>90</i>&nbsp;        } else if (finished) {
+<i>91</i>&nbsp;            return false;
+<i>92</i>&nbsp;        } else {
+<i>93</i>&nbsp;            try {
+<i>94</i>&nbsp;                while (true) {
+<i>95</i>&nbsp;                    String line = bufferedReader.readLine();
+<i>96</i>&nbsp;                    if (line == null) {
+<i>97</i>&nbsp;                        finished = true;
+<i>98</i>&nbsp;                        return false;
+<i>99</i>&nbsp;                    } else if (isValidLine(line)) {
+<i>100</i>&nbsp;                        cachedLine = line;
+<i>101</i>&nbsp;                        return true;
+<i>102</i>&nbsp;                    }
+<i>103</i>&nbsp;                }
+<i>104</i>&nbsp;            } catch(IOException ioe) {
+<i>105</i>&nbsp;                close();
+<i>106</i>&nbsp;                throw new IllegalStateException(ioe);
+<i>107</i>&nbsp;            }
+<i>108</i>&nbsp;        }
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Overridable method to validate each line that is returned.
+<i>113</i>&nbsp;     * This implementation always returns true.
+<i>114</i>&nbsp;     * @param line  the line that is to be validated
+<i>115</i>&nbsp;     * @return true if valid, false to remove from the iterator
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    protected boolean isValidLine(String line) {
+<i>118</i>&nbsp;        return true;
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Returns the next line in the wrapped &lt;code&gt;Reader&lt;/code&gt;.
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @return the next line from the input
+<i>125</i>&nbsp;     * @throws NoSuchElementException if there is no line to return
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    public String next() {
+<i>128</i>&nbsp;        return nextLine();
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Returns the next line in the wrapped &lt;code&gt;Reader&lt;/code&gt;.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @return the next line from the input
+<i>135</i>&nbsp;     * @throws NoSuchElementException if there is no line to return
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public String nextLine() {
+<i>138</i>&nbsp;        if (!hasNext()) {
+<i>139</i>&nbsp;            throw new NoSuchElementException(&quot;No more lines&quot;);
+<i>140</i>&nbsp;        }
+<i>141</i>&nbsp;        String currentLine = cachedLine;
+<i>142</i>&nbsp;        cachedLine = null;
+<i>143</i>&nbsp;        return currentLine;        
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Closes the underlying &lt;code&gt;Reader&lt;/code&gt; quietly.
+<i>148</i>&nbsp;     * This method is useful if you only want to process the first few
+<i>149</i>&nbsp;     * lines of a larger file. If you do not close the iterator
+<i>150</i>&nbsp;     * then the &lt;code&gt;Reader&lt;/code&gt; remains open.
+<i>151</i>&nbsp;     * This method can safely be called multiple times.
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public void close() {
+<i>154</i>&nbsp;        finished = true;
+<i>155</i>&nbsp;        IOUtils.closeQuietly(bufferedReader);
+<i>156</i>&nbsp;        cachedLine = null;
+<i>157</i>&nbsp;    }
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /**
+<i>160</i>&nbsp;     * Unsupported.
+<i>161</i>&nbsp;     *
+<i>162</i>&nbsp;     * @throws UnsupportedOperationException always
+<i>163</i>&nbsp;     */
+<i>164</i>&nbsp;    public void remove() {
+<i>165</i>&nbsp;        throw new UnsupportedOperationException(&quot;Remove unsupported on LineIterator&quot;);
+<i>166</i>&nbsp;    }
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    //-----------------------------------------------------------------------
+<i>169</i>&nbsp;    /**
+<i>170</i>&nbsp;     * Closes the iterator, handling null and ignoring exceptions.
+<i>171</i>&nbsp;     *
+<i>172</i>&nbsp;     * @param iterator  the iterator to close
+<i>173</i>&nbsp;     */
+<i>174</i>&nbsp;    public static void closeQuietly(LineIterator iterator) {
+<i>175</i>&nbsp;        if (iterator != null) {
+<i>176</i>&nbsp;            iterator.close();
+<i>177</i>&nbsp;        }
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

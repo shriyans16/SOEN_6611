@@ -1,0 +1,583 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FileAlterationObserver</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.monitor</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FileAlterationObserver (org.apache.commons.io.monitor)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FileAlterationObserver</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (21/ 24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.9%
+  </span>
+  <span class="absValue">
+    (125/ 136)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">FileAlterationObserver$__CLR4_1_24qy4qyjukjeega</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    88%
+  </span>
+  <span class="absValue">
+    (22/ 25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92%
+  </span>
+  <span class="absValue">
+    (126/ 137)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.monitor;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.FileFilter;
+<i>21</i>&nbsp;import java.io.Serializable;
+<i>22</i>&nbsp;import java.util.Arrays;
+<i>23</i>&nbsp;import java.util.Comparator;
+<i>24</i>&nbsp;import java.util.List;
+<i>25</i>&nbsp;import java.util.concurrent.CopyOnWriteArrayList;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;import org.apache.commons.io.FileUtils;
+<i>28</i>&nbsp;import org.apache.commons.io.IOCase;
+<i>29</i>&nbsp;import org.apache.commons.io.comparator.NameFileComparator;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;/**
+<i>32</i>&nbsp; * FileAlterationObserver represents the state of files below a root directory,
+<i>33</i>&nbsp; * checking the filesystem and notifying listeners of create, change or
+<i>34</i>&nbsp; * delete events.
+<i>35</i>&nbsp; * &lt;p&gt;
+<i>36</i>&nbsp; * To use this implementation:
+<i>37</i>&nbsp; * &lt;ul&gt;
+<i>38</i>&nbsp; *   &lt;li&gt;Create {@link FileAlterationListener} implementation(s) that process
+<i>39</i>&nbsp; *      the file/directory create, change and delete events&lt;/li&gt;
+<i>40</i>&nbsp; *   &lt;li&gt;Register the listener(s) with a {@link FileAlterationObserver} for
+<i>41</i>&nbsp; *       the appropriate directory.&lt;/li&gt;
+<i>42</i>&nbsp; *   &lt;li&gt;Either register the observer(s) with a {@link FileAlterationMonitor} or
+<i>43</i>&nbsp; *       run manually.&lt;/li&gt;
+<i>44</i>&nbsp; * &lt;/ul&gt;
+<i>45</i>&nbsp; *
+<i>46</i>&nbsp; * &lt;h2&gt;Basic Usage&lt;/h2&gt;
+<i>47</i>&nbsp; * Create a {@link FileAlterationObserver} for the directory and register the listeners:
+<i>48</i>&nbsp; * &lt;pre&gt;
+<i>49</i>&nbsp; *      File directory = new File(new File(&quot;.&quot;), &quot;src&quot;);
+<i>50</i>&nbsp; *      FileAlterationObserver observer = new FileAlterationObserver(directory);
+<i>51</i>&nbsp; *      observer.addListener(...);
+<i>52</i>&nbsp; *      observer.addListener(...);
+<i>53</i>&nbsp; * &lt;/pre&gt;
+<i>54</i>&nbsp; * To manually observe a directory, initialize the observer and invoked the
+<i>55</i>&nbsp; * {@link #checkAndNotify()} method as required:
+<i>56</i>&nbsp; * &lt;pre&gt;
+<i>57</i>&nbsp; *      // intialize
+<i>58</i>&nbsp; *      observer.init();
+<i>59</i>&nbsp; *      ...
+<i>60</i>&nbsp; *      // invoke as required
+<i>61</i>&nbsp; *      observer.checkAndNotify();
+<i>62</i>&nbsp; *      ...
+<i>63</i>&nbsp; *      observer.checkAndNotify();
+<i>64</i>&nbsp; *      ...
+<i>65</i>&nbsp; *      // finished
+<i>66</i>&nbsp; *      observer.finish();
+<i>67</i>&nbsp; * &lt;/pre&gt;
+<i>68</i>&nbsp; * Alternatively, register the oberver(s) with a {@link FileAlterationMonitor},
+<i>69</i>&nbsp; * which creates a new thread, invoking the observer at the specified interval:
+<i>70</i>&nbsp; * &lt;pre&gt;
+<i>71</i>&nbsp; *      long interval = ...
+<i>72</i>&nbsp; *      FileAlterationMonitor monitor = new FileAlterationMonitor(interval);
+<i>73</i>&nbsp; *      monitor.addObserver(observer);
+<i>74</i>&nbsp; *      monitor.start();
+<i>75</i>&nbsp; *      ...
+<i>76</i>&nbsp; *      monitor.stop();
+<i>77</i>&nbsp; * &lt;/pre&gt;
+<i>78</i>&nbsp; *
+<i>79</i>&nbsp; * &lt;h2&gt;File Filters&lt;/h2&gt;
+<i>80</i>&nbsp; * This implementation can monitor portions of the file system
+<i>81</i>&nbsp; * by using {@link FileFilter}s to observe only the files and/or directories
+<i>82</i>&nbsp; * that are of interest. This makes it more efficient and reduces the
+<i>83</i>&nbsp; * noise from &lt;i&gt;unwanted&lt;/i&gt; file system events.
+<i>84</i>&nbsp; * &lt;p&gt;
+<i>85</i>&nbsp; * &lt;a href=&quot;http://commons.apache.org/io/&quot;&gt;Commons IO&lt;/a&gt; has a good range of
+<i>86</i>&nbsp; * useful, ready made 
+<i>87</i>&nbsp; * &lt;a href=&quot;../filefilter/package-summary.html&quot;&gt;File Filter&lt;/a&gt;
+<i>88</i>&nbsp; * implementations for this purpose.
+<i>89</i>&nbsp; * &lt;p&gt;
+<i>90</i>&nbsp; * For example, to only observe 1) visible directories and 2) files with a &quot;.java&quot; suffix
+<i>91</i>&nbsp; * in a root directory called &quot;src&quot; you could set up a {@link FileAlterationObserver} in the following
+<i>92</i>&nbsp; * way:
+<i>93</i>&nbsp; * &lt;pre&gt;
+<i>94</i>&nbsp; *      // Create a FileFilter
+<i>95</i>&nbsp; *      IOFileFilter directories = FileFilterUtils.and(
+<i>96</i>&nbsp; *                                      FileFilterUtils.directoryFileFilter(),
+<i>97</i>&nbsp; *                                      HiddenFileFilter.VISIBLE);
+<i>98</i>&nbsp; *      IOFileFilter files       = FileFilterUtils.and(
+<i>99</i>&nbsp; *                                      FileFilterUtils.fileFileFilter(),
+<i>100</i>&nbsp; *                                      FileFilterUtils.suffixFileFilter(&quot;.java&quot;));
+<i>101</i>&nbsp; *      IOFileFilter filter = FileFilterUtils.or(directories, files);
+<i>102</i>&nbsp; *
+<i>103</i>&nbsp; *      // Create the File system observer and register File Listeners
+<i>104</i>&nbsp; *      FileAlterationObserver observer = new FileAlterationObserver(new File(&quot;src&quot;), filter);
+<i>105</i>&nbsp; *      observer.addListener(...);
+<i>106</i>&nbsp; *      observer.addListener(...);
+<i>107</i>&nbsp; * &lt;/pre&gt;
+<i>108</i>&nbsp; *
+<i>109</i>&nbsp; * &lt;h2&gt;FileEntry&lt;/h2&gt;
+<i>110</i>&nbsp; * {@link FileEntry} represents the state of a file or directory, capturing
+<i>111</i>&nbsp; * {@link File} attributes at a point in time. Custom implementations of
+<i>112</i>&nbsp; * {@link FileEntry} can be used to capture additional properties that the
+<i>113</i>&nbsp; * basic implementation does not support. The {@link FileEntry#refresh(File)}
+<i>114</i>&nbsp; * method is used to determine if a file or directory has changed since the last
+<i>115</i>&nbsp; * check and stores the current state of the {@link File}&#39;s properties.
+<i>116</i>&nbsp; *
+<i>117</i>&nbsp; * @see FileAlterationListener
+<i>118</i>&nbsp; * @see FileAlterationMonitor
+<i>119</i>&nbsp; * @version $Id$
+<i>120</i>&nbsp; * @since 2.0
+<i>121</i>&nbsp; */
+<b class="fc"><i>122</i>&nbsp;public class FileAlterationObserver implements Serializable {</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    private static final long serialVersionUID = 1185122225658782848L;
+<b class="fc"><i>125</i>&nbsp;    private final List&lt;FileAlterationListener&gt; listeners = new CopyOnWriteArrayList&lt;FileAlterationListener&gt;();</b>
+<i>126</i>&nbsp;    private final FileEntry rootEntry;
+<i>127</i>&nbsp;    private final FileFilter fileFilter;
+<i>128</i>&nbsp;    private final Comparator&lt;File&gt; comparator;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * Construct an observer for the specified directory.
+<i>132</i>&nbsp;     *
+<i>133</i>&nbsp;     * @param directoryName the name of the directory to observe
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    public FileAlterationObserver(final String directoryName) {
+<b class="fc"><i>136</i>&nbsp;        this(new File(directoryName));</b>
+<b class="fc"><i>137</i>&nbsp;    }</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /**
+<i>140</i>&nbsp;     * Construct an observer for the specified directory and file filter.
+<i>141</i>&nbsp;     *
+<i>142</i>&nbsp;     * @param directoryName the name of the directory to observe
+<i>143</i>&nbsp;     * @param fileFilter The file filter or null if none
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter) {
+<b class="nc"><i>146</i>&nbsp;        this(new File(directoryName), fileFilter);</b>
+<b class="nc"><i>147</i>&nbsp;    }</b>
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * Construct an observer for the specified directory, file filter and
+<i>151</i>&nbsp;     * file comparator.
+<i>152</i>&nbsp;     *
+<i>153</i>&nbsp;     * @param directoryName the name of the directory to observe
+<i>154</i>&nbsp;     * @param fileFilter The file filter or null if none
+<i>155</i>&nbsp;     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    public FileAlterationObserver(final String directoryName, final FileFilter fileFilter,
+<i>158</i>&nbsp;                                  final IOCase caseSensitivity) {
+<b class="nc"><i>159</i>&nbsp;        this(new File(directoryName), fileFilter, caseSensitivity);</b>
+<b class="nc"><i>160</i>&nbsp;    }</b>
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    /**
+<i>163</i>&nbsp;     * Construct an observer for the specified directory.
+<i>164</i>&nbsp;     *
+<i>165</i>&nbsp;     * @param directory the directory to observe
+<i>166</i>&nbsp;     */
+<i>167</i>&nbsp;    public FileAlterationObserver(final File directory) {
+<b class="fc"><i>168</i>&nbsp;        this(directory, null);</b>
+<b class="fc"><i>169</i>&nbsp;    }</b>
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /**
+<i>172</i>&nbsp;     * Construct an observer for the specified directory and file filter.
+<i>173</i>&nbsp;     *
+<i>174</i>&nbsp;     * @param directory the directory to observe
+<i>175</i>&nbsp;     * @param fileFilter The file filter or null if none
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;    public FileAlterationObserver(final File directory, final FileFilter fileFilter) {
+<b class="fc"><i>178</i>&nbsp;        this(directory, fileFilter, null);</b>
+<b class="fc"><i>179</i>&nbsp;    }</b>
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /**
+<i>182</i>&nbsp;     * Construct an observer for the specified directory, file filter and
+<i>183</i>&nbsp;     * file comparator.
+<i>184</i>&nbsp;     *
+<i>185</i>&nbsp;     * @param directory the directory to observe
+<i>186</i>&nbsp;     * @param fileFilter The file filter or null if none
+<i>187</i>&nbsp;     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
+<i>188</i>&nbsp;     */
+<i>189</i>&nbsp;    public FileAlterationObserver(final File directory, final FileFilter fileFilter, final IOCase caseSensitivity) {
+<b class="fc"><i>190</i>&nbsp;        this(new FileEntry(directory), fileFilter, caseSensitivity);</b>
+<b class="fc"><i>191</i>&nbsp;    }</b>
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    /**
+<i>194</i>&nbsp;     * Construct an observer for the specified directory, file filter and
+<i>195</i>&nbsp;     * file comparator.
+<i>196</i>&nbsp;     *
+<i>197</i>&nbsp;     * @param rootEntry the root directory to observe
+<i>198</i>&nbsp;     * @param fileFilter The file filter or null if none
+<i>199</i>&nbsp;     * @param caseSensitivity  what case sensitivity to use comparing file names, null means system sensitive
+<i>200</i>&nbsp;     */
+<i>201</i>&nbsp;    protected FileAlterationObserver(final FileEntry rootEntry, final FileFilter fileFilter,
+<b class="fc"><i>202</i>&nbsp;                                     final IOCase caseSensitivity) {</b>
+<b class="fc"><i>203</i>&nbsp;        if (rootEntry == null) {</b>
+<b class="nc"><i>204</i>&nbsp;            throw new IllegalArgumentException(&quot;Root entry is missing&quot;);</b>
+<i>205</i>&nbsp;        }
+<b class="fc"><i>206</i>&nbsp;        if (rootEntry.getFile() == null) {</b>
+<b class="nc"><i>207</i>&nbsp;            throw new IllegalArgumentException(&quot;Root directory is missing&quot;);</b>
+<i>208</i>&nbsp;        }
+<b class="fc"><i>209</i>&nbsp;        this.rootEntry = rootEntry;</b>
+<b class="fc"><i>210</i>&nbsp;        this.fileFilter = fileFilter;</b>
+<b class="fc"><i>211</i>&nbsp;        if (caseSensitivity == null || caseSensitivity.equals(IOCase.SYSTEM)) {</b>
+<b class="fc"><i>212</i>&nbsp;            this.comparator = NameFileComparator.NAME_SYSTEM_COMPARATOR;</b>
+<b class="nc"><i>213</i>&nbsp;        } else if (caseSensitivity.equals(IOCase.INSENSITIVE)) {</b>
+<b class="nc"><i>214</i>&nbsp;            this.comparator = NameFileComparator.NAME_INSENSITIVE_COMPARATOR;</b>
+<i>215</i>&nbsp;        } else {
+<b class="nc"><i>216</i>&nbsp;            this.comparator = NameFileComparator.NAME_COMPARATOR;</b>
+<i>217</i>&nbsp;        }
+<b class="fc"><i>218</i>&nbsp;    }</b>
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Return the directory being observed.
+<i>222</i>&nbsp;     *
+<i>223</i>&nbsp;     * @return the directory being observed
+<i>224</i>&nbsp;     */
+<b class="fc"><i>225</i>&nbsp;    public File getDirectory() {</b>
+<b class="fc"><i>226</i>&nbsp;        return rootEntry.getFile();</b>
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Return the fileFilter.
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @return the fileFilter
+<i>233</i>&nbsp;     * @since 2.1
+<i>234</i>&nbsp;     */
+<b class="nc"><i>235</i>&nbsp;    public FileFilter getFileFilter() {</b>
+<b class="nc"><i>236</i>&nbsp;        return fileFilter;</b>
+<i>237</i>&nbsp;    }
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;    /**
+<i>240</i>&nbsp;     * Add a file system listener.
+<i>241</i>&nbsp;     *
+<i>242</i>&nbsp;     * @param listener The file system listener
+<i>243</i>&nbsp;     */
+<b class="fc"><i>244</i>&nbsp;    public void addListener(final FileAlterationListener listener) {</b>
+<b class="fc"><i>245</i>&nbsp;        if (listener != null) {</b>
+<b class="fc"><i>246</i>&nbsp;            listeners.add(listener);</b>
+<i>247</i>&nbsp;        }
+<b class="fc"><i>248</i>&nbsp;    }</b>
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * Remove a file system listener.
+<i>252</i>&nbsp;     *
+<i>253</i>&nbsp;     * @param listener The file system listener
+<i>254</i>&nbsp;     */
+<b class="fc"><i>255</i>&nbsp;    public void removeListener(final FileAlterationListener listener) {</b>
+<b class="fc"><i>256</i>&nbsp;        if (listener != null) {</b>
+<b class="fc"><i>257</i>&nbsp;            while (listeners.remove(listener)) {</b>
+<i>258</i>&nbsp;            }
+<i>259</i>&nbsp;        }
+<b class="fc"><i>260</i>&nbsp;    }</b>
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    /**
+<i>263</i>&nbsp;     * Returns the set of registered file system listeners.
+<i>264</i>&nbsp;     *
+<i>265</i>&nbsp;     * @return The file system listeners
+<i>266</i>&nbsp;     */
+<b class="fc"><i>267</i>&nbsp;    public Iterable&lt;FileAlterationListener&gt; getListeners() {</b>
+<b class="fc"><i>268</i>&nbsp;        return listeners;</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * Initialize the observer.
+<i>273</i>&nbsp;     *
+<i>274</i>&nbsp;     * @throws Exception if an error occurs
+<i>275</i>&nbsp;     */
+<b class="fc"><i>276</i>&nbsp;    public void initialize() throws Exception {</b>
+<b class="fc"><i>277</i>&nbsp;        rootEntry.refresh(rootEntry.getFile());</b>
+<b class="fc"><i>278</i>&nbsp;        final FileEntry[] children = doListFiles(rootEntry.getFile(), rootEntry);</b>
+<b class="fc"><i>279</i>&nbsp;        rootEntry.setChildren(children);</b>
+<b class="fc"><i>280</i>&nbsp;    }</b>
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    /**
+<i>283</i>&nbsp;     * Final processing.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @throws Exception if an error occurs
+<i>286</i>&nbsp;     */
+<b class="fc"><i>287</i>&nbsp;    public void destroy() throws Exception {</b>
+<b class="fc"><i>288</i>&nbsp;    }</b>
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;    /**
+<i>291</i>&nbsp;     * Check whether the file and its chlidren have been created, modified or deleted.
+<i>292</i>&nbsp;     */
+<b class="fc"><i>293</i>&nbsp;    public void checkAndNotify() {</b>
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;        /* fire onStart() */
+<b class="fc"><i>296</i>&nbsp;        for (final FileAlterationListener listener : listeners) {</b>
+<b class="fc"><i>297</i>&nbsp;            listener.onStart(this);</b>
+<i>298</i>&nbsp;        }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;        /* fire directory/file events */
+<b class="fc"><i>301</i>&nbsp;        final File rootFile = rootEntry.getFile();</b>
+<b class="fc"><i>302</i>&nbsp;        if (rootFile.exists()) {</b>
+<b class="fc"><i>303</i>&nbsp;            checkAndNotify(rootEntry, rootEntry.getChildren(), listFiles(rootFile));</b>
+<b class="fc"><i>304</i>&nbsp;        } else if (rootEntry.isExists()) {</b>
+<b class="fc"><i>305</i>&nbsp;            checkAndNotify(rootEntry, rootEntry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);</b>
+<i>306</i>&nbsp;        } else {
+<i>307</i>&nbsp;            // Didn&#39;t exist and still doesn&#39;t
+<i>308</i>&nbsp;        }
+<i>309</i>&nbsp;
+<i>310</i>&nbsp;        /* fire onStop() */
+<b class="fc"><i>311</i>&nbsp;        for (final FileAlterationListener listener : listeners) {</b>
+<b class="fc"><i>312</i>&nbsp;            listener.onStop(this);</b>
+<i>313</i>&nbsp;        }
+<b class="fc"><i>314</i>&nbsp;    }</b>
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;    /**
+<i>317</i>&nbsp;     * Compare two file lists for files which have been created, modified or deleted.
+<i>318</i>&nbsp;     *
+<i>319</i>&nbsp;     * @param parent The parent entry
+<i>320</i>&nbsp;     * @param previous The original list of files
+<i>321</i>&nbsp;     * @param files  The current list of files
+<i>322</i>&nbsp;     */
+<b class="fc"><i>323</i>&nbsp;    private void checkAndNotify(final FileEntry parent, final FileEntry[] previous, final File[] files) {</b>
+<b class="fc"><i>324</i>&nbsp;        int c = 0;</b>
+<b class="fc"><i>325</i>&nbsp;        final FileEntry[] current = files.length &gt; 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;</b>
+<b class="fc"><i>326</i>&nbsp;        for (final FileEntry entry : previous) {</b>
+<b class="fc"><i>327</i>&nbsp;            while (c &lt; files.length &amp;&amp; comparator.compare(entry.getFile(), files[c]) &gt; 0) {</b>
+<b class="fc"><i>328</i>&nbsp;                current[c] = createFileEntry(parent, files[c]);</b>
+<b class="fc"><i>329</i>&nbsp;                doCreate(current[c]);</b>
+<b class="fc"><i>330</i>&nbsp;                c++;</b>
+<i>331</i>&nbsp;            }
+<b class="fc"><i>332</i>&nbsp;            if (c &lt; files.length &amp;&amp; comparator.compare(entry.getFile(), files[c]) == 0) {</b>
+<b class="fc"><i>333</i>&nbsp;                doMatch(entry, files[c]);</b>
+<b class="fc"><i>334</i>&nbsp;                checkAndNotify(entry, entry.getChildren(), listFiles(files[c]));</b>
+<b class="fc"><i>335</i>&nbsp;                current[c] = entry;</b>
+<b class="fc"><i>336</i>&nbsp;                c++;</b>
+<i>337</i>&nbsp;            } else {
+<b class="fc"><i>338</i>&nbsp;                checkAndNotify(entry, entry.getChildren(), FileUtils.EMPTY_FILE_ARRAY);</b>
+<b class="fc"><i>339</i>&nbsp;                doDelete(entry);</b>
+<i>340</i>&nbsp;            }
+<i>341</i>&nbsp;        }
+<b class="fc"><i>342</i>&nbsp;        for (; c &lt; files.length; c++) {</b>
+<b class="fc"><i>343</i>&nbsp;            current[c] = createFileEntry(parent, files[c]);</b>
+<b class="fc"><i>344</i>&nbsp;            doCreate(current[c]);</b>
+<i>345</i>&nbsp;        }
+<b class="fc"><i>346</i>&nbsp;        parent.setChildren(current);</b>
+<b class="fc"><i>347</i>&nbsp;    }</b>
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    /**
+<i>350</i>&nbsp;     * Create a new file entry for the specified file.
+<i>351</i>&nbsp;     *
+<i>352</i>&nbsp;     * @param parent The parent file entry
+<i>353</i>&nbsp;     * @param file The file to create an entry for
+<i>354</i>&nbsp;     * @return A new file entry
+<i>355</i>&nbsp;     */
+<b class="fc"><i>356</i>&nbsp;    private FileEntry createFileEntry(final FileEntry parent, final File file) {</b>
+<b class="fc"><i>357</i>&nbsp;        final FileEntry entry = parent.newChildInstance(file);</b>
+<b class="fc"><i>358</i>&nbsp;        entry.refresh(file);</b>
+<b class="fc"><i>359</i>&nbsp;        final FileEntry[] children = doListFiles(file, entry);</b>
+<b class="fc"><i>360</i>&nbsp;        entry.setChildren(children);</b>
+<b class="fc"><i>361</i>&nbsp;        return entry;</b>
+<i>362</i>&nbsp;    }
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;    /**
+<i>365</i>&nbsp;     * List the files
+<i>366</i>&nbsp;     * @param file The file to list files for
+<i>367</i>&nbsp;     * @param entry the parent entry
+<i>368</i>&nbsp;     * @return The child files
+<i>369</i>&nbsp;     */
+<b class="fc"><i>370</i>&nbsp;    private FileEntry[] doListFiles(File file, FileEntry entry) {</b>
+<b class="fc"><i>371</i>&nbsp;        final File[] files = listFiles(file);</b>
+<b class="fc"><i>372</i>&nbsp;        final FileEntry[] children = files.length &gt; 0 ? new FileEntry[files.length] : FileEntry.EMPTY_ENTRIES;</b>
+<b class="fc"><i>373</i>&nbsp;        for (int i = 0; i &lt; files.length; i++) {</b>
+<b class="fc"><i>374</i>&nbsp;            children[i] = createFileEntry(entry, files[i]);</b>
+<i>375</i>&nbsp;        }
+<b class="fc"><i>376</i>&nbsp;        return children;</b>
+<i>377</i>&nbsp;    }
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;    /**
+<i>380</i>&nbsp;     * Fire directory/file created events to the registered listeners.
+<i>381</i>&nbsp;     *
+<i>382</i>&nbsp;     * @param entry The file entry
+<i>383</i>&nbsp;     */
+<b class="fc"><i>384</i>&nbsp;    private void doCreate(final FileEntry entry) {</b>
+<b class="fc"><i>385</i>&nbsp;        for (final FileAlterationListener listener : listeners) {</b>
+<b class="fc"><i>386</i>&nbsp;            if (entry.isDirectory()) {</b>
+<b class="fc"><i>387</i>&nbsp;                listener.onDirectoryCreate(entry.getFile());</b>
+<i>388</i>&nbsp;            } else {
+<b class="fc"><i>389</i>&nbsp;                listener.onFileCreate(entry.getFile());</b>
+<i>390</i>&nbsp;            }
+<i>391</i>&nbsp;        }
+<b class="fc"><i>392</i>&nbsp;        final FileEntry[] children = entry.getChildren();</b>
+<b class="fc"><i>393</i>&nbsp;        for (final FileEntry aChildren : children) {</b>
+<b class="fc"><i>394</i>&nbsp;            doCreate(aChildren);</b>
+<i>395</i>&nbsp;        }
+<b class="fc"><i>396</i>&nbsp;    }</b>
+<i>397</i>&nbsp;
+<i>398</i>&nbsp;    /**
+<i>399</i>&nbsp;     * Fire directory/file change events to the registered listeners.
+<i>400</i>&nbsp;     *
+<i>401</i>&nbsp;     * @param entry The previous file system entry
+<i>402</i>&nbsp;     * @param file The current file
+<i>403</i>&nbsp;     */
+<b class="fc"><i>404</i>&nbsp;    private void doMatch(final FileEntry entry, final File file) {</b>
+<b class="fc"><i>405</i>&nbsp;        if (entry.refresh(file)) {</b>
+<b class="fc"><i>406</i>&nbsp;            for (final FileAlterationListener listener : listeners) {</b>
+<b class="fc"><i>407</i>&nbsp;                if (entry.isDirectory()) {</b>
+<b class="fc"><i>408</i>&nbsp;                    listener.onDirectoryChange(file);</b>
+<i>409</i>&nbsp;                } else {
+<b class="fc"><i>410</i>&nbsp;                    listener.onFileChange(file);</b>
+<i>411</i>&nbsp;                }
+<i>412</i>&nbsp;            }
+<b class="fc"><i>413</i>&nbsp;        }</b>
+<b class="fc"><i>414</i>&nbsp;    }</b>
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;    /**
+<i>417</i>&nbsp;     * Fire directory/file delete events to the registered listeners.
+<i>418</i>&nbsp;     *
+<i>419</i>&nbsp;     * @param entry The file entry
+<i>420</i>&nbsp;     */
+<b class="fc"><i>421</i>&nbsp;    private void doDelete(final FileEntry entry) {</b>
+<b class="fc"><i>422</i>&nbsp;        for (final FileAlterationListener listener : listeners) {</b>
+<b class="fc"><i>423</i>&nbsp;            if (entry.isDirectory()) {</b>
+<b class="fc"><i>424</i>&nbsp;                listener.onDirectoryDelete(entry.getFile());</b>
+<i>425</i>&nbsp;            } else {
+<b class="fc"><i>426</i>&nbsp;                listener.onFileDelete(entry.getFile());</b>
+<i>427</i>&nbsp;            }
+<i>428</i>&nbsp;        }
+<b class="fc"><i>429</i>&nbsp;    }</b>
+<i>430</i>&nbsp;
+<i>431</i>&nbsp;    /**
+<i>432</i>&nbsp;     * List the contents of a directory
+<i>433</i>&nbsp;     *
+<i>434</i>&nbsp;     * @param file The file to list the contents of
+<i>435</i>&nbsp;     * @return the directory contents or a zero length array if
+<i>436</i>&nbsp;     * the empty or the file is not a directory
+<i>437</i>&nbsp;     */
+<b class="fc"><i>438</i>&nbsp;    private File[] listFiles(final File file) {</b>
+<b class="fc"><i>439</i>&nbsp;        File[] children = null;</b>
+<b class="fc"><i>440</i>&nbsp;        if (file.isDirectory()) {</b>
+<b class="fc"><i>441</i>&nbsp;            children = fileFilter == null ? file.listFiles() : file.listFiles(fileFilter);</b>
+<i>442</i>&nbsp;        }
+<b class="fc"><i>443</i>&nbsp;        if (children == null) {</b>
+<b class="fc"><i>444</i>&nbsp;            children = FileUtils.EMPTY_FILE_ARRAY;</b>
+<i>445</i>&nbsp;        }
+<b class="fc"><i>446</i>&nbsp;        if (comparator != null &amp;&amp; children.length &gt; 1) {</b>
+<b class="fc"><i>447</i>&nbsp;            Arrays.sort(children, comparator);</b>
+<i>448</i>&nbsp;        }
+<b class="fc"><i>449</i>&nbsp;        return children;</b>
+<i>450</i>&nbsp;    }
+<i>451</i>&nbsp;
+<i>452</i>&nbsp;    /**
+<i>453</i>&nbsp;     * Provide a String representation of this observer.
+<i>454</i>&nbsp;     *
+<i>455</i>&nbsp;     * @return a String representation of this observer
+<i>456</i>&nbsp;     */
+<i>457</i>&nbsp;    @Override
+<b class="fc"><i>458</i>&nbsp;    public String toString() {</b>
+<b class="fc"><i>459</i>&nbsp;        final StringBuilder builder = new StringBuilder();</b>
+<b class="fc"><i>460</i>&nbsp;        builder.append(getClass().getSimpleName());</b>
+<b class="fc"><i>461</i>&nbsp;        builder.append(&quot;[file=&#39;&quot;);</b>
+<b class="fc"><i>462</i>&nbsp;        builder.append(getDirectory().getPath());</b>
+<b class="fc"><i>463</i>&nbsp;        builder.append(&#39;\&#39;&#39;);</b>
+<b class="fc"><i>464</i>&nbsp;        if (fileFilter != null) {</b>
+<b class="fc"><i>465</i>&nbsp;            builder.append(&quot;, &quot;);</b>
+<b class="fc"><i>466</i>&nbsp;            builder.append(fileFilter.toString());</b>
+<i>467</i>&nbsp;        }
+<b class="fc"><i>468</i>&nbsp;        builder.append(&quot;, listeners=&quot;);</b>
+<b class="fc"><i>469</i>&nbsp;        builder.append(listeners.size());</b>
+<b class="fc"><i>470</i>&nbsp;        builder.append(&quot;]&quot;);</b>
+<b class="fc"><i>471</i>&nbsp;        return builder.toString();</b>
+<i>472</i>&nbsp;    }
+<i>473</i>&nbsp;
+<i>474</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

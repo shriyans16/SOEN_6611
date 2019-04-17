@@ -1,0 +1,211 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ExtensionFileComparator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.comparator</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ExtensionFileComparator (org.apache.commons.io.comparator)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">ExtensionFileComparator$__CLR4_1_21mz1mzjulisjeo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.comparator;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.util.Comparator;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.io.FilenameUtils;
+<i>24</i>&nbsp;import org.apache.commons.io.IOCase;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Compare the file name &lt;b&gt;extensions&lt;/b&gt; for order
+<i>28</i>&nbsp; * (see {@link FilenameUtils#getExtension(String)}).
+<i>29</i>&nbsp; * &lt;p&gt;
+<i>30</i>&nbsp; * This comparator can be used to sort lists or arrays of files
+<i>31</i>&nbsp; * by their file extension either in a case-sensitive, case-insensitive or
+<i>32</i>&nbsp; * system dependant case sensitive way. A number of singleton instances
+<i>33</i>&nbsp; * are provided for the various case sensitivity options (using {@link IOCase})
+<i>34</i>&nbsp; * and the reverse of those options.
+<i>35</i>&nbsp; * &lt;p&gt;
+<i>36</i>&nbsp; * Example of a &lt;i&gt;case-sensitive&lt;/i&gt; file extension sort using the
+<i>37</i>&nbsp; * {@link #EXTENSION_COMPARATOR} singleton instance:
+<i>38</i>&nbsp; * &lt;pre&gt;
+<i>39</i>&nbsp; *       List&amp;lt;File&amp;gt; list = ...
+<i>40</i>&nbsp; *       ExtensionFileComparator.EXTENSION_COMPARATOR.sort(list);
+<i>41</i>&nbsp; * &lt;/pre&gt;
+<i>42</i>&nbsp; * &lt;p&gt;
+<i>43</i>&nbsp; * Example of a &lt;i&gt;reverse case-insensitive&lt;/i&gt; file extension sort using the
+<i>44</i>&nbsp; * {@link #EXTENSION_INSENSITIVE_REVERSE} singleton instance:
+<i>45</i>&nbsp; * &lt;pre&gt;
+<i>46</i>&nbsp; *       File[] array = ...
+<i>47</i>&nbsp; *       ExtensionFileComparator.EXTENSION_INSENSITIVE_REVERSE.sort(array);
+<i>48</i>&nbsp; * &lt;/pre&gt;
+<i>49</i>&nbsp; * &lt;p&gt;
+<i>50</i>&nbsp; *
+<i>51</i>&nbsp; * @version $Id$
+<i>52</i>&nbsp; * @since 1.4
+<i>53</i>&nbsp; */
+<b class="fc"><i>54</i>&nbsp;public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /** Case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
+<i>57</i>&nbsp;    public static final Comparator&lt;File&gt; EXTENSION_COMPARATOR = new ExtensionFileComparator();
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /** Reverse case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */
+<i>60</i>&nbsp;    public static final Comparator&lt;File&gt; EXTENSION_REVERSE = new ReverseComparator(EXTENSION_COMPARATOR);
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /** Case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
+<i>63</i>&nbsp;    public static final Comparator&lt;File&gt; EXTENSION_INSENSITIVE_COMPARATOR
+<i>64</i>&nbsp;                                                = new ExtensionFileComparator(IOCase.INSENSITIVE);
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /** Reverse case-insensitive extension comparator instance (see {@link IOCase#INSENSITIVE}) */
+<i>67</i>&nbsp;    public static final Comparator&lt;File&gt; EXTENSION_INSENSITIVE_REVERSE
+<i>68</i>&nbsp;                                                = new ReverseComparator(EXTENSION_INSENSITIVE_COMPARATOR);
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /** System sensitive extension comparator instance (see {@link IOCase#SYSTEM}) */
+<i>71</i>&nbsp;    public static final Comparator&lt;File&gt; EXTENSION_SYSTEM_COMPARATOR = new ExtensionFileComparator(IOCase.SYSTEM);
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
+<i>74</i>&nbsp;    public static final Comparator&lt;File&gt; EXTENSION_SYSTEM_REVERSE = new ReverseComparator(EXTENSION_SYSTEM_COMPARATOR);
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /** Whether the comparison is case sensitive. */
+<i>77</i>&nbsp;    private final IOCase caseSensitivity;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Construct a case sensitive file extension comparator instance.
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public ExtensionFileComparator() {
+<i>83</i>&nbsp;        this.caseSensitivity = IOCase.SENSITIVE;
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Construct a file extension comparator instance with the specified case-sensitivity.
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param caseSensitivity how to handle case sensitivity, null means case-sensitive
+<i>90</i>&nbsp;     */
+<i>91</i>&nbsp;    public ExtensionFileComparator(IOCase caseSensitivity) {
+<i>92</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Compare the extensions of two files the specified case sensitivity.
+<i>97</i>&nbsp;     * 
+<i>98</i>&nbsp;     * @param file1 The first file to compare
+<i>99</i>&nbsp;     * @param file2 The second file to compare
+<i>100</i>&nbsp;     * @return a negative value if the first file&#39;s extension
+<i>101</i>&nbsp;     * is less than the second, zero if the extensions are the
+<i>102</i>&nbsp;     * same and a positive value if the first files extension
+<i>103</i>&nbsp;     * is greater than the second file.
+<i>104</i>&nbsp;     * 
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public int compare(File file1, File file2) {
+<i>107</i>&nbsp;        String suffix1 = FilenameUtils.getExtension(file1.getName());
+<i>108</i>&nbsp;        String suffix2 = FilenameUtils.getExtension(file2.getName());
+<i>109</i>&nbsp;        return caseSensitivity.checkCompareTo(suffix1, suffix2);
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * String representation of this file comparator.
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @return String representation of this file comparator
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    @Override
+<i>118</i>&nbsp;    public String toString() {
+<i>119</i>&nbsp;        return super.toString() + &quot;[caseSensitivity=&quot; + caseSensitivity + &quot;]&quot;;
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

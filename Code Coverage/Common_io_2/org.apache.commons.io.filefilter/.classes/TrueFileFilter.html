@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TrueFileFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.filefilter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TrueFileFilter (org.apache.commons.io.filefilter)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+  <tr>
+    <td class="name">TrueFileFilter$__CLR4_1_2430430julisc9j</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.filefilter;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * A file filter that always returns true.
+<i>24</i>&nbsp; *
+<i>25</i>&nbsp; * @since 1.0
+<i>26</i>&nbsp; * @version $Id$
+<i>27</i>&nbsp; * @see FileFilterUtils#trueFileFilter()
+<i>28</i>&nbsp; */
+<b class="fc"><i>29</i>&nbsp;public class TrueFileFilter implements IOFileFilter, Serializable {</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Singleton instance of true filter.
+<i>33</i>&nbsp;     * @since 1.3
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    public static final IOFileFilter TRUE = new TrueFileFilter();
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Singleton instance of true filter.
+<i>38</i>&nbsp;     * Please use the identical TrueFileFilter.TRUE constant.
+<i>39</i>&nbsp;     * The new name is more JDK 1.5 friendly as it doesn&#39;t clash with other
+<i>40</i>&nbsp;     * values when using static imports.
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    public static final IOFileFilter INSTANCE = TRUE;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * Restrictive consructor.
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    protected TrueFileFilter() {
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * Returns true.
+<i>52</i>&nbsp;     *
+<i>53</i>&nbsp;     * @param file  the file to check (ignored)
+<i>54</i>&nbsp;     * @return true
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    public boolean accept(File file) {
+<i>57</i>&nbsp;        return true;
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Returns true.
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @param dir  the directory to check (ignored)
+<i>64</i>&nbsp;     * @param name  the filename (ignored)
+<i>65</i>&nbsp;     * @return true
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public boolean accept(File dir, String name) {
+<i>68</i>&nbsp;        return true;
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

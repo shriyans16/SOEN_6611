@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FalseFileFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.filefilter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FalseFileFilter (org.apache.commons.io.filefilter)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FalseFileFilter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">FalseFileFilter$__CLR4_1_2bbjuliqrdc</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.filefilter;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * A file filter that always returns false.
+<i>24</i>&nbsp; *
+<i>25</i>&nbsp; * @since 1.0
+<i>26</i>&nbsp; * @version $Id$
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @see FileFilterUtils#falseFileFilter()
+<i>29</i>&nbsp; */
+<b class="fc"><i>30</i>&nbsp;public class FalseFileFilter implements IOFileFilter, Serializable {</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * Singleton instance of false filter.
+<i>34</i>&nbsp;     * @since 1.3
+<i>35</i>&nbsp;     */
+<b class="fc"><i>36</i>&nbsp;    public static final IOFileFilter FALSE = new FalseFileFilter();</b>
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Singleton instance of false filter.
+<i>39</i>&nbsp;     * Please use the identical FalseFileFilter.FALSE constant.
+<i>40</i>&nbsp;     * The new name is more JDK 1.5 friendly as it doesn&#39;t clash with other
+<i>41</i>&nbsp;     * values when using static imports.
+<i>42</i>&nbsp;     */
+<b class="fc"><i>43</i>&nbsp;    public static final IOFileFilter INSTANCE = FALSE;</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    /**
+<i>46</i>&nbsp;     * Restrictive consructor.
+<i>47</i>&nbsp;     */
+<b class="fc"><i>48</i>&nbsp;    protected FalseFileFilter() {</b>
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Returns false.
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @param file  the file to check (ignored)
+<i>55</i>&nbsp;     * @return false
+<i>56</i>&nbsp;     */
+<b class="fc"><i>57</i>&nbsp;    public boolean accept(File file) {</b>
+<b class="fc"><i>58</i>&nbsp;        return false;</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Returns false.
+<i>63</i>&nbsp;     *
+<i>64</i>&nbsp;     * @param dir  the directory to check (ignored)
+<i>65</i>&nbsp;     * @param name  the filename (ignored)
+<i>66</i>&nbsp;     * @return false
+<i>67</i>&nbsp;     */
+<b class="fc"><i>68</i>&nbsp;    public boolean accept(File dir, String name) {</b>
+<b class="fc"><i>69</i>&nbsp;        return false;</b>
+<i>70</i>&nbsp;    }
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

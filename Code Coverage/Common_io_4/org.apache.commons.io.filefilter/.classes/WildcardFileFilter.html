@@ -1,0 +1,308 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WildcardFileFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.filefilter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WildcardFileFilter (org.apache.commons.io.filefilter)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WildcardFileFilter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (48/ 48)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">WildcardFileFilter$__CLR4_1_2n8n8juliqynm</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (49/ 49)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.filefilter;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.io.FilenameUtils;
+<i>24</i>&nbsp;import org.apache.commons.io.IOCase;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Filters files using the supplied wildcards.
+<i>28</i>&nbsp; * &lt;p&gt;
+<i>29</i>&nbsp; * This filter selects files and directories based on one or more wildcards.
+<i>30</i>&nbsp; * Testing is case-sensitive by default, but this can be configured.
+<i>31</i>&nbsp; * &lt;p&gt;
+<i>32</i>&nbsp; * The wildcard matcher uses the characters &#39;?&#39; and &#39;*&#39; to represent a
+<i>33</i>&nbsp; * single or multiple wildcard characters.
+<i>34</i>&nbsp; * This is the same as often found on Dos/Unix command lines.
+<i>35</i>&nbsp; * The extension check is case-sensitive by .
+<i>36</i>&nbsp; * See {@link FilenameUtils#wildcardMatchOnSystem} for more information.
+<i>37</i>&nbsp; * &lt;p&gt;
+<i>38</i>&nbsp; * For example:
+<i>39</i>&nbsp; * &lt;pre&gt;
+<i>40</i>&nbsp; * File dir = new File(&quot;.&quot;);
+<i>41</i>&nbsp; * FileFilter fileFilter = new WildcardFileFilter(&quot;*test*.java~*~&quot;);
+<i>42</i>&nbsp; * File[] files = dir.listFiles(fileFilter);
+<i>43</i>&nbsp; * for (int i = 0; i &lt; files.length; i++) {
+<i>44</i>&nbsp; *   System.out.println(files[i]);
+<i>45</i>&nbsp; * }
+<i>46</i>&nbsp; * &lt;/pre&gt;
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; * @version $Id$
+<i>49</i>&nbsp; * @since 1.3
+<i>50</i>&nbsp; */
+<b class="fc"><i>51</i>&nbsp;public class WildcardFileFilter extends AbstractFileFilter implements Serializable {</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /** The wildcards that will be used to match filenames. */
+<i>54</i>&nbsp;    private final String[] wildcards;
+<i>55</i>&nbsp;    /** Whether the comparison is case sensitive. */
+<i>56</i>&nbsp;    private final IOCase caseSensitivity;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Construct a new case-sensitive wildcard filter for a single wildcard.
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     * @param wildcard  the wildcard to match
+<i>62</i>&nbsp;     * @throws IllegalArgumentException if the pattern is null
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public WildcardFileFilter(String wildcard) {
+<b class="fc"><i>65</i>&nbsp;        this(wildcard, null);</b>
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Construct a new wildcard filter for a single wildcard specifying case-sensitivity.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param wildcard  the wildcard to match, not null
+<i>72</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>73</i>&nbsp;     * @throws IllegalArgumentException if the pattern is null
+<i>74</i>&nbsp;     */
+<b class="fc"><i>75</i>&nbsp;    public WildcardFileFilter(String wildcard, IOCase caseSensitivity) {</b>
+<b class="fc"><i>76</i>&nbsp;        if (wildcard == null) {</b>
+<b class="fc"><i>77</i>&nbsp;            throw new IllegalArgumentException(&quot;The wildcard must not be null&quot;);</b>
+<i>78</i>&nbsp;        }
+<b class="fc"><i>79</i>&nbsp;        this.wildcards = new String[] { wildcard };</b>
+<b class="fc"><i>80</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;</b>
+<b class="fc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Construct a new case-sensitive wildcard filter for an array of wildcards.
+<i>85</i>&nbsp;     * &lt;p&gt;
+<i>86</i>&nbsp;     * The array is not cloned, so could be changed after constructing the
+<i>87</i>&nbsp;     * instance. This would be inadvisable however.
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param wildcards  the array of wildcards to match
+<i>90</i>&nbsp;     * @throws IllegalArgumentException if the pattern array is null
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public WildcardFileFilter(String[] wildcards) {
+<b class="fc"><i>93</i>&nbsp;        this(wildcards, null);</b>
+<b class="fc"><i>94</i>&nbsp;    }</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /**
+<i>97</i>&nbsp;     * Construct a new wildcard filter for an array of wildcards specifying case-sensitivity.
+<i>98</i>&nbsp;     * &lt;p&gt;
+<i>99</i>&nbsp;     * The array is not cloned, so could be changed after constructing the
+<i>100</i>&nbsp;     * instance. This would be inadvisable however.
+<i>101</i>&nbsp;     *
+<i>102</i>&nbsp;     * @param wildcards  the array of wildcards to match, not null
+<i>103</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>104</i>&nbsp;     * @throws IllegalArgumentException if the pattern array is null
+<i>105</i>&nbsp;     */
+<b class="fc"><i>106</i>&nbsp;    public WildcardFileFilter(String[] wildcards, IOCase caseSensitivity) {</b>
+<b class="fc"><i>107</i>&nbsp;        if (wildcards == null) {</b>
+<b class="fc"><i>108</i>&nbsp;            throw new IllegalArgumentException(&quot;The wildcard array must not be null&quot;);</b>
+<i>109</i>&nbsp;        }
+<b class="fc"><i>110</i>&nbsp;        this.wildcards = new String[wildcards.length];</b>
+<b class="fc"><i>111</i>&nbsp;        System.arraycopy(wildcards, 0, this.wildcards, 0, wildcards.length);</b>
+<b class="fc"><i>112</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;</b>
+<b class="fc"><i>113</i>&nbsp;    }</b>
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * Construct a new case-sensitive wildcard filter for a list of wildcards.
+<i>117</i>&nbsp;     *
+<i>118</i>&nbsp;     * @param wildcards  the list of wildcards to match, not null
+<i>119</i>&nbsp;     * @throws IllegalArgumentException if the pattern list is null
+<i>120</i>&nbsp;     * @throws ClassCastException if the list does not contain Strings
+<i>121</i>&nbsp;     */
+<i>122</i>&nbsp;    public WildcardFileFilter(List&lt;String&gt; wildcards) {
+<b class="fc"><i>123</i>&nbsp;        this(wildcards, null);</b>
+<b class="fc"><i>124</i>&nbsp;    }</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    /**
+<i>127</i>&nbsp;     * Construct a new wildcard filter for a list of wildcards specifying case-sensitivity.
+<i>128</i>&nbsp;     *
+<i>129</i>&nbsp;     * @param wildcards  the list of wildcards to match, not null
+<i>130</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>131</i>&nbsp;     * @throws IllegalArgumentException if the pattern list is null
+<i>132</i>&nbsp;     * @throws ClassCastException if the list does not contain Strings
+<i>133</i>&nbsp;     */
+<b class="fc"><i>134</i>&nbsp;    public WildcardFileFilter(List&lt;String&gt; wildcards, IOCase caseSensitivity) {</b>
+<b class="fc"><i>135</i>&nbsp;        if (wildcards == null) {</b>
+<b class="fc"><i>136</i>&nbsp;            throw new IllegalArgumentException(&quot;The wildcard list must not be null&quot;);</b>
+<i>137</i>&nbsp;        }
+<b class="fc"><i>138</i>&nbsp;        this.wildcards = wildcards.toArray(new String[wildcards.size()]);</b>
+<b class="fc"><i>139</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;</b>
+<b class="fc"><i>140</i>&nbsp;    }</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    //-----------------------------------------------------------------------
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * Checks to see if the filename matches one of the wildcards.
+<i>145</i>&nbsp;     *
+<i>146</i>&nbsp;     * @param dir  the file directory (ignored)
+<i>147</i>&nbsp;     * @param name  the filename
+<i>148</i>&nbsp;     * @return true if the filename matches one of the wildcards
+<i>149</i>&nbsp;     */
+<i>150</i>&nbsp;    @Override
+<b class="fc"><i>151</i>&nbsp;    public boolean accept(File dir, String name) {</b>
+<b class="fc"><i>152</i>&nbsp;        for (String wildcard : wildcards) {</b>
+<b class="fc"><i>153</i>&nbsp;            if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {</b>
+<b class="fc"><i>154</i>&nbsp;                return true;</b>
+<i>155</i>&nbsp;            }
+<i>156</i>&nbsp;        }
+<b class="fc"><i>157</i>&nbsp;        return false;</b>
+<i>158</i>&nbsp;    }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * Checks to see if the filename matches one of the wildcards.
+<i>162</i>&nbsp;     *
+<i>163</i>&nbsp;     * @param file  the file to check
+<i>164</i>&nbsp;     * @return true if the filename matches one of the wildcards
+<i>165</i>&nbsp;     */
+<i>166</i>&nbsp;    @Override
+<b class="fc"><i>167</i>&nbsp;    public boolean accept(File file) {</b>
+<b class="fc"><i>168</i>&nbsp;        String name = file.getName();</b>
+<b class="fc"><i>169</i>&nbsp;        for (String wildcard : wildcards) {</b>
+<b class="fc"><i>170</i>&nbsp;            if (FilenameUtils.wildcardMatch(name, wildcard, caseSensitivity)) {</b>
+<b class="fc"><i>171</i>&nbsp;                return true;</b>
+<i>172</i>&nbsp;            }
+<i>173</i>&nbsp;        }
+<b class="fc"><i>174</i>&nbsp;        return false;</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Provide a String representaion of this file filter.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @return a String representaion
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    @Override
+<b class="fc"><i>183</i>&nbsp;    public String toString() {</b>
+<b class="fc"><i>184</i>&nbsp;        StringBuilder buffer = new StringBuilder();</b>
+<b class="fc"><i>185</i>&nbsp;        buffer.append(super.toString());</b>
+<b class="fc"><i>186</i>&nbsp;        buffer.append(&quot;(&quot;);</b>
+<b class="fc"><i>187</i>&nbsp;        if (wildcards != null) {</b>
+<b class="fc"><i>188</i>&nbsp;            for (int i = 0; i &lt; wildcards.length; i++) {</b>
+<b class="fc"><i>189</i>&nbsp;                if (i &gt; 0) {</b>
+<b class="fc"><i>190</i>&nbsp;                    buffer.append(&quot;,&quot;);</b>
+<i>191</i>&nbsp;                }
+<b class="fc"><i>192</i>&nbsp;                buffer.append(wildcards[i]);</b>
+<i>193</i>&nbsp;            }
+<i>194</i>&nbsp;        }
+<b class="fc"><i>195</i>&nbsp;        buffer.append(&quot;)&quot;);</b>
+<b class="fc"><i>196</i>&nbsp;        return buffer.toString();</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,249 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SizeFileComparator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.comparator</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SizeFileComparator (org.apache.commons.io.comparator)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SizeFileComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (28/ 28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SizeFileComparator$__CLR4_1_21td1tdjuliqykx</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/ 29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.comparator;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.util.Comparator;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.io.FileUtils;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Compare the &lt;b&gt;length/size&lt;/b&gt; of two files for order (see
+<i>27</i>&nbsp; * {@link File#length()} and {@link FileUtils#sizeOfDirectory(File)}).
+<i>28</i>&nbsp; * &lt;p&gt;
+<i>29</i>&nbsp; * This comparator can be used to sort lists or arrays of files
+<i>30</i>&nbsp; * by their length/size.
+<i>31</i>&nbsp; * &lt;p&gt;
+<i>32</i>&nbsp; * Example of sorting a list of files using the
+<i>33</i>&nbsp; * {@link #SIZE_COMPARATOR} singleton instance:
+<i>34</i>&nbsp; * &lt;pre&gt;
+<i>35</i>&nbsp; *       List&amp;lt;File&amp;gt; list = ...
+<i>36</i>&nbsp; *       SizeFileComparator.SIZE_COMPARATOR.sort(list);
+<i>37</i>&nbsp; * &lt;/pre&gt;
+<i>38</i>&nbsp; * &lt;p&gt;
+<i>39</i>&nbsp; * Example of doing a &lt;i&gt;reverse&lt;/i&gt; sort of an array of files using the
+<i>40</i>&nbsp; * {@link #SIZE_REVERSE} singleton instance:
+<i>41</i>&nbsp; * &lt;pre&gt;
+<i>42</i>&nbsp; *       File[] array = ...
+<i>43</i>&nbsp; *       SizeFileComparator.SIZE_REVERSE.sort(array);
+<i>44</i>&nbsp; * &lt;/pre&gt;
+<i>45</i>&nbsp; * &lt;p&gt;
+<i>46</i>&nbsp; * &lt;strong&gt;N.B.&lt;/strong&gt; Directories are treated as &lt;b&gt;zero size&lt;/b&gt; unless
+<i>47</i>&nbsp; * &lt;code&gt;sumDirectoryContents&lt;/code&gt; is {@code true}.
+<i>48</i>&nbsp; *
+<i>49</i>&nbsp; * @version $Id$
+<i>50</i>&nbsp; * @since 1.4
+<i>51</i>&nbsp; */
+<b class="fc"><i>52</i>&nbsp;public class SizeFileComparator extends AbstractFileComparator implements Serializable {</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /** Size comparator instance - directories are treated as zero size */
+<b class="fc"><i>55</i>&nbsp;    public static final Comparator&lt;File&gt; SIZE_COMPARATOR = new SizeFileComparator();</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /** Reverse size comparator instance - directories are treated as zero size */
+<b class="fc"><i>58</i>&nbsp;    public static final Comparator&lt;File&gt; SIZE_REVERSE = new ReverseComparator(SIZE_COMPARATOR);</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Size comparator instance which sums the size of a directory&#39;s contents
+<i>62</i>&nbsp;     * using {@link FileUtils#sizeOfDirectory(File)}
+<i>63</i>&nbsp;     */
+<b class="fc"><i>64</i>&nbsp;    public static final Comparator&lt;File&gt; SIZE_SUMDIR_COMPARATOR = new SizeFileComparator(true);</b>
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * Reverse size comparator instance which sums the size of a directory&#39;s contents
+<i>68</i>&nbsp;     * using {@link FileUtils#sizeOfDirectory(File)}
+<i>69</i>&nbsp;     */
+<b class="fc"><i>70</i>&nbsp;    public static final Comparator&lt;File&gt; SIZE_SUMDIR_REVERSE = new ReverseComparator(SIZE_SUMDIR_COMPARATOR);</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /** Whether the sum of the directory&#39;s contents should be calculated. */
+<i>73</i>&nbsp;    private final boolean sumDirectoryContents;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Construct a file size comparator instance (directories treated as zero size).
+<i>77</i>&nbsp;     */
+<b class="fc"><i>78</i>&nbsp;    public SizeFileComparator() {</b>
+<b class="fc"><i>79</i>&nbsp;        this.sumDirectoryContents = false;</b>
+<b class="fc"><i>80</i>&nbsp;    }</b>
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Construct a file size comparator instance specifying whether the size of
+<i>84</i>&nbsp;     * the directory contents should be aggregated.
+<i>85</i>&nbsp;     * &lt;p&gt;
+<i>86</i>&nbsp;     * If the &lt;code&gt;sumDirectoryContents&lt;/code&gt; is {@code true} The size of
+<i>87</i>&nbsp;     * directories is calculated using  {@link FileUtils#sizeOfDirectory(File)}.
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param sumDirectoryContents {@code true} if the sum of the directoryies contents
+<i>90</i>&nbsp;     *  should be calculated, otherwise {@code false} if directories should be treated
+<i>91</i>&nbsp;     *  as size zero (see {@link FileUtils#sizeOfDirectory(File)}).
+<i>92</i>&nbsp;     */
+<b class="fc"><i>93</i>&nbsp;    public SizeFileComparator(boolean sumDirectoryContents) {</b>
+<b class="fc"><i>94</i>&nbsp;        this.sumDirectoryContents = sumDirectoryContents;</b>
+<b class="fc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * Compare the length of two files.
+<i>99</i>&nbsp;     * 
+<i>100</i>&nbsp;     * @param file1 The first file to compare
+<i>101</i>&nbsp;     * @param file2 The second file to compare
+<i>102</i>&nbsp;     * @return a negative value if the first file&#39;s length
+<i>103</i>&nbsp;     * is less than the second, zero if the lengths are the
+<i>104</i>&nbsp;     * same and a positive value if the first files length
+<i>105</i>&nbsp;     * is greater than the second file.
+<i>106</i>&nbsp;     * 
+<i>107</i>&nbsp;     */
+<b class="fc"><i>108</i>&nbsp;    public int compare(File file1, File file2) {</b>
+<b class="fc"><i>109</i>&nbsp;        long size1 = 0;</b>
+<b class="fc"><i>110</i>&nbsp;        if (file1.isDirectory()) {</b>
+<b class="fc"><i>111</i>&nbsp;            size1 = sumDirectoryContents &amp;&amp; file1.exists() ? FileUtils.sizeOfDirectory(file1) : 0;</b>
+<i>112</i>&nbsp;        } else {
+<b class="fc"><i>113</i>&nbsp;            size1 = file1.length();</b>
+<i>114</i>&nbsp;        }
+<b class="fc"><i>115</i>&nbsp;        long size2 = 0;</b>
+<b class="fc"><i>116</i>&nbsp;        if (file2.isDirectory()) {</b>
+<b class="fc"><i>117</i>&nbsp;            size2 = sumDirectoryContents &amp;&amp; file2.exists() ? FileUtils.sizeOfDirectory(file2) : 0;</b>
+<i>118</i>&nbsp;        } else {
+<b class="fc"><i>119</i>&nbsp;            size2 = file2.length();</b>
+<i>120</i>&nbsp;        }
+<b class="fc"><i>121</i>&nbsp;        long result = size1 - size2;</b>
+<b class="fc"><i>122</i>&nbsp;        if (result &lt; 0) {</b>
+<b class="fc"><i>123</i>&nbsp;            return -1;</b>
+<b class="fc"><i>124</i>&nbsp;        } else if (result &gt; 0) {</b>
+<b class="fc"><i>125</i>&nbsp;            return 1;</b>
+<i>126</i>&nbsp;        } else {
+<b class="fc"><i>127</i>&nbsp;            return 0;</b>
+<i>128</i>&nbsp;        }
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * String representation of this file comparator.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @return String representation of this file comparator
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    @Override
+<b class="fc"><i>137</i>&nbsp;    public String toString() {</b>
+<b class="fc"><i>138</i>&nbsp;        return super.toString() + &quot;[sumDirectoryContents=&quot; + sumDirectoryContents + &quot;]&quot;;</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

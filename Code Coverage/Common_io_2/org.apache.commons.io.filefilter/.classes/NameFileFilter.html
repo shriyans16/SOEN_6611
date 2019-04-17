@@ -1,0 +1,242 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: NameFileFilter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.filefilter</a> ]
+</div>
+
+<h1>Coverage Summary for Class: NameFileFilter (org.apache.commons.io.filefilter)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">NameFileFilter$__CLR4_1_22a62a6julisjda</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.filefilter;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.Serializable;
+<i>21</i>&nbsp;import java.util.List;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.io.IOCase;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Filters filenames for a certain name.
+<i>27</i>&nbsp; * &lt;p&gt;
+<i>28</i>&nbsp; * For example, to print all files and directories in the 
+<i>29</i>&nbsp; * current directory whose name is &lt;code&gt;Test&lt;/code&gt;:
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * &lt;pre&gt;
+<i>32</i>&nbsp; * File dir = new File(&quot;.&quot;);
+<i>33</i>&nbsp; * String[] files = dir.list( new NameFileFilter(&quot;Test&quot;) );
+<i>34</i>&nbsp; * for ( int i = 0; i &amp;lt; files.length; i++ ) {
+<i>35</i>&nbsp; *     System.out.println(files[i]);
+<i>36</i>&nbsp; * }
+<i>37</i>&nbsp; * &lt;/pre&gt;
+<i>38</i>&nbsp; *
+<i>39</i>&nbsp; * @since 1.0
+<i>40</i>&nbsp; * @version $Id$
+<i>41</i>&nbsp; * @see FileFilterUtils#nameFileFilter(String)
+<i>42</i>&nbsp; * @see FileFilterUtils#nameFileFilter(String, IOCase)
+<i>43</i>&nbsp; */
+<i>44</i>&nbsp;public class NameFileFilter extends AbstractFileFilter implements Serializable {
+<i>45</i>&nbsp;    
+<i>46</i>&nbsp;    /** The filenames to search for */
+<i>47</i>&nbsp;    private final String[] names;
+<i>48</i>&nbsp;    /** Whether the comparison is case sensitive. */
+<i>49</i>&nbsp;    private final IOCase caseSensitivity;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Constructs a new case-sensitive name file filter for a single name.
+<i>53</i>&nbsp;     * 
+<i>54</i>&nbsp;     * @param name  the name to allow, must not be null
+<i>55</i>&nbsp;     * @throws IllegalArgumentException if the name is null
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public NameFileFilter(String name) {
+<i>58</i>&nbsp;        this(name, null);
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Construct a new name file filter specifying case-sensitivity.
+<i>63</i>&nbsp;     *
+<i>64</i>&nbsp;     * @param name  the name to allow, must not be null
+<i>65</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>66</i>&nbsp;     * @throws IllegalArgumentException if the name is null
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public NameFileFilter(String name, IOCase caseSensitivity) {
+<i>69</i>&nbsp;        if (name == null) {
+<i>70</i>&nbsp;            throw new IllegalArgumentException(&quot;The wildcard must not be null&quot;);
+<i>71</i>&nbsp;        }
+<i>72</i>&nbsp;        this.names = new String[] {name};
+<i>73</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+<i>74</i>&nbsp;    }
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Constructs a new case-sensitive name file filter for an array of names.
+<i>78</i>&nbsp;     * &lt;p&gt;
+<i>79</i>&nbsp;     * The array is not cloned, so could be changed after constructing the
+<i>80</i>&nbsp;     * instance. This would be inadvisable however.
+<i>81</i>&nbsp;     * 
+<i>82</i>&nbsp;     * @param names  the names to allow, must not be null
+<i>83</i>&nbsp;     * @throws IllegalArgumentException if the names array is null
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    public NameFileFilter(String[] names) {
+<i>86</i>&nbsp;        this(names, null);
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Constructs a new name file filter for an array of names specifying case-sensitivity.
+<i>91</i>&nbsp;     * &lt;p&gt;
+<i>92</i>&nbsp;     * The array is not cloned, so could be changed after constructing the
+<i>93</i>&nbsp;     * instance. This would be inadvisable however.
+<i>94</i>&nbsp;     * 
+<i>95</i>&nbsp;     * @param names  the names to allow, must not be null
+<i>96</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>97</i>&nbsp;     * @throws IllegalArgumentException if the names array is null
+<i>98</i>&nbsp;     */
+<i>99</i>&nbsp;    public NameFileFilter(String[] names, IOCase caseSensitivity) {
+<i>100</i>&nbsp;        if (names == null) {
+<i>101</i>&nbsp;            throw new IllegalArgumentException(&quot;The array of names must not be null&quot;);
+<i>102</i>&nbsp;        }
+<i>103</i>&nbsp;        this.names = new String[names.length];
+<i>104</i>&nbsp;        System.arraycopy(names, 0, this.names, 0, names.length);
+<i>105</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+<i>106</i>&nbsp;    }
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * Constructs a new case-sensitive name file filter for a list of names.
+<i>110</i>&nbsp;     * 
+<i>111</i>&nbsp;     * @param names  the names to allow, must not be null
+<i>112</i>&nbsp;     * @throws IllegalArgumentException if the name list is null
+<i>113</i>&nbsp;     * @throws ClassCastException if the list does not contain Strings
+<i>114</i>&nbsp;     */
+<i>115</i>&nbsp;    public NameFileFilter(List&lt;String&gt; names) {
+<i>116</i>&nbsp;        this(names, null);
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /**
+<i>120</i>&nbsp;     * Constructs a new name file filter for a list of names specifying case-sensitivity.
+<i>121</i>&nbsp;     * 
+<i>122</i>&nbsp;     * @param names  the names to allow, must not be null
+<i>123</i>&nbsp;     * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
+<i>124</i>&nbsp;     * @throws IllegalArgumentException if the name list is null
+<i>125</i>&nbsp;     * @throws ClassCastException if the list does not contain Strings
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    public NameFileFilter(List&lt;String&gt; names, IOCase caseSensitivity) {
+<i>128</i>&nbsp;        if (names == null) {
+<i>129</i>&nbsp;            throw new IllegalArgumentException(&quot;The list of names must not be null&quot;);
+<i>130</i>&nbsp;        }
+<i>131</i>&nbsp;        this.names = names.toArray(new String[names.size()]);
+<i>132</i>&nbsp;        this.caseSensitivity = caseSensitivity == null ? IOCase.SENSITIVE : caseSensitivity;
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    //-----------------------------------------------------------------------
+<i>136</i>&nbsp;    /**
+<i>137</i>&nbsp;     * Checks to see if the filename matches.
+<i>138</i>&nbsp;     * 
+<i>139</i>&nbsp;     * @param file  the File to check
+<i>140</i>&nbsp;     * @return true if the filename matches
+<i>141</i>&nbsp;     */
+<i>142</i>&nbsp;    @Override
+<i>143</i>&nbsp;    public boolean accept(File file) {
+<i>144</i>&nbsp;        String name = file.getName();
+<i>145</i>&nbsp;        for (String name2 : this.names) {
+<i>146</i>&nbsp;            if (caseSensitivity.checkEquals(name, name2)) {
+<i>147</i>&nbsp;                return true;
+<i>148</i>&nbsp;            }
+<i>149</i>&nbsp;        }
+<i>150</i>&nbsp;        return false;
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * Checks to see if the filename matches.
+<i>155</i>&nbsp;     * 
+<i>156</i>&nbsp;     * @param dir  the File directory (ignored)
+<i>157</i>&nbsp;     * @param name  the filename
+<i>158</i>&nbsp;     * @return true if the filename matches
+<i>159</i>&nbsp;     */
+<i>160</i>&nbsp;    @Override
+<i>161</i>&nbsp;    public boolean accept(File dir, String name) {
+<i>162</i>&nbsp;        for (String name2 : names) {
+<i>163</i>&nbsp;            if (caseSensitivity.checkEquals(name, name2)) {
+<i>164</i>&nbsp;                return true;
+<i>165</i>&nbsp;            }
+<i>166</i>&nbsp;        }
+<i>167</i>&nbsp;        return false;
+<i>168</i>&nbsp;    }
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Provide a String representaion of this file filter.
+<i>172</i>&nbsp;     *
+<i>173</i>&nbsp;     * @return a String representaion
+<i>174</i>&nbsp;     */
+<i>175</i>&nbsp;    @Override
+<i>176</i>&nbsp;    public String toString() {
+<i>177</i>&nbsp;        StringBuilder buffer = new StringBuilder();
+<i>178</i>&nbsp;        buffer.append(super.toString());
+<i>179</i>&nbsp;        buffer.append(&quot;(&quot;);
+<i>180</i>&nbsp;        if (names != null) {
+<i>181</i>&nbsp;            for (int i = 0; i &lt; names.length; i++) {
+<i>182</i>&nbsp;                if (i &gt; 0) {
+<i>183</i>&nbsp;                    buffer.append(&quot;,&quot;);
+<i>184</i>&nbsp;                }
+<i>185</i>&nbsp;                buffer.append(names[i]);
+<i>186</i>&nbsp;            }
+<i>187</i>&nbsp;        }
+<i>188</i>&nbsp;        buffer.append(&quot;)&quot;);
+<i>189</i>&nbsp;        return buffer.toString();
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

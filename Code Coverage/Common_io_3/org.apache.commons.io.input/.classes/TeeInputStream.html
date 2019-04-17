@@ -1,0 +1,262 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TeeInputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.input</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TeeInputStream (org.apache.commons.io.input)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TeeInputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (6/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75.9%
+  </span>
+  <span class="absValue">
+    (22/ 29)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TeeInputStream$__CLR4_1_24ki4kijukhtais</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76.7%
+  </span>
+  <span class="absValue">
+    (23/ 30)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.input;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import static org.apache.commons.io.IOUtils.EOF;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.io.InputStream;
+<i>23</i>&nbsp;import java.io.OutputStream;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * InputStream proxy that transparently writes a copy of all bytes read
+<i>27</i>&nbsp; * from the proxied stream to a given OutputStream. Using {@link #skip(long)}
+<i>28</i>&nbsp; * or {@link #mark(int)}/{@link #reset()} on the stream will result on some
+<i>29</i>&nbsp; * bytes from the input stream being skipped or duplicated in the output
+<i>30</i>&nbsp; * stream.
+<i>31</i>&nbsp; * &lt;p&gt;
+<i>32</i>&nbsp; * The proxied input stream is closed when the {@link #close()} method is
+<i>33</i>&nbsp; * called on this proxy. It is configurable whether the associated output
+<i>34</i>&nbsp; * stream will also closed.
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * @since 1.4
+<i>37</i>&nbsp; * @see ObservableInputStream
+<i>38</i>&nbsp; */
+<b class="fc"><i>39</i>&nbsp;public class TeeInputStream extends ProxyInputStream {</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * The output stream that will receive a copy of all bytes read from the
+<i>43</i>&nbsp;     * proxied input stream.
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    private final OutputStream branch;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * Flag for closing also the associated output stream when this
+<i>49</i>&nbsp;     * stream is closed.
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    private final boolean closeBranch;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * Creates a TeeInputStream that proxies the given {@link InputStream}
+<i>55</i>&nbsp;     * and copies all read bytes to the given {@link OutputStream}. The given
+<i>56</i>&nbsp;     * output stream will not be closed when this stream gets closed.
+<i>57</i>&nbsp;     *
+<i>58</i>&nbsp;     * @param input input stream to be proxied
+<i>59</i>&nbsp;     * @param branch output stream that will receive a copy of all bytes read
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public TeeInputStream(final InputStream input, final OutputStream branch) {
+<b class="fc"><i>62</i>&nbsp;        this(input, branch, false);</b>
+<b class="fc"><i>63</i>&nbsp;    }</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Creates a TeeInputStream that proxies the given {@link InputStream}
+<i>67</i>&nbsp;     * and copies all read bytes to the given {@link OutputStream}. The given
+<i>68</i>&nbsp;     * output stream will be closed when this stream gets closed if the
+<i>69</i>&nbsp;     * closeBranch parameter is {@code true}.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param input input stream to be proxied
+<i>72</i>&nbsp;     * @param branch output stream that will receive a copy of all bytes read
+<i>73</i>&nbsp;     * @param closeBranch flag for closing also the output stream when this
+<i>74</i>&nbsp;     *                    stream is closed
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public TeeInputStream(
+<i>77</i>&nbsp;            final InputStream input, final OutputStream branch, final boolean closeBranch) {
+<b class="fc"><i>78</i>&nbsp;        super(input);</b>
+<b class="fc"><i>79</i>&nbsp;        this.branch = branch;</b>
+<b class="fc"><i>80</i>&nbsp;        this.closeBranch = closeBranch;</b>
+<b class="fc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Closes the proxied input stream and, if so configured, the associated
+<i>85</i>&nbsp;     * output stream. An exception thrown from one stream will not prevent
+<i>86</i>&nbsp;     * closing of the other stream.
+<i>87</i>&nbsp;     *
+<i>88</i>&nbsp;     * @throws IOException if either of the streams could not be closed
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    @Override
+<b class="nc"><i>91</i>&nbsp;    public void close() throws IOException {</b>
+<b class="nc"><i>92</i>&nbsp;        try {</b>
+<b class="nc"><i>93</i>&nbsp;            super.close();</b>
+<i>94</i>&nbsp;        } finally {
+<b class="nc"><i>95</i>&nbsp;            if (closeBranch) {</b>
+<b class="nc"><i>96</i>&nbsp;                branch.close();</b>
+<i>97</i>&nbsp;            }
+<b class="nc"><i>98</i>&nbsp;        }</b>
+<b class="nc"><i>99</i>&nbsp;    }</b>
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Reads a single byte from the proxied input stream and writes it to
+<i>103</i>&nbsp;     * the associated output stream.
+<i>104</i>&nbsp;     *
+<i>105</i>&nbsp;     * @return next byte from the stream, or -1 if the stream has ended
+<i>106</i>&nbsp;     * @throws IOException if the stream could not be read (or written)
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    @Override
+<b class="fc"><i>109</i>&nbsp;    public int read() throws IOException {</b>
+<b class="fc"><i>110</i>&nbsp;        final int ch = super.read();</b>
+<b class="fc"><i>111</i>&nbsp;        if (ch != EOF) {</b>
+<b class="fc"><i>112</i>&nbsp;            branch.write(ch);</b>
+<i>113</i>&nbsp;        }
+<b class="fc"><i>114</i>&nbsp;        return ch;</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * Reads bytes from the proxied input stream and writes the read bytes
+<i>119</i>&nbsp;     * to the associated output stream.
+<i>120</i>&nbsp;     *
+<i>121</i>&nbsp;     * @param bts byte buffer
+<i>122</i>&nbsp;     * @param st start offset within the buffer
+<i>123</i>&nbsp;     * @param end maximum number of bytes to read
+<i>124</i>&nbsp;     * @return number of bytes read, or -1 if the stream has ended
+<i>125</i>&nbsp;     * @throws IOException if the stream could not be read (or written)
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    @Override
+<b class="fc"><i>128</i>&nbsp;    public int read(final byte[] bts, final int st, final int end) throws IOException {</b>
+<b class="fc"><i>129</i>&nbsp;        final int n = super.read(bts, st, end);</b>
+<b class="fc"><i>130</i>&nbsp;        if (n != -1) {</b>
+<b class="fc"><i>131</i>&nbsp;            branch.write(bts, st, n);</b>
+<i>132</i>&nbsp;        }
+<b class="fc"><i>133</i>&nbsp;        return n;</b>
+<i>134</i>&nbsp;    }
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /**
+<i>137</i>&nbsp;     * Reads bytes from the proxied input stream and writes the read bytes
+<i>138</i>&nbsp;     * to the associated output stream.
+<i>139</i>&nbsp;     *
+<i>140</i>&nbsp;     * @param bts byte buffer
+<i>141</i>&nbsp;     * @return number of bytes read, or -1 if the stream has ended
+<i>142</i>&nbsp;     * @throws IOException if the stream could not be read (or written)
+<i>143</i>&nbsp;     */
+<i>144</i>&nbsp;    @Override
+<b class="fc"><i>145</i>&nbsp;    public int read(final byte[] bts) throws IOException {</b>
+<b class="fc"><i>146</i>&nbsp;        final int n = super.read(bts);</b>
+<b class="fc"><i>147</i>&nbsp;        if (n != EOF) {</b>
+<b class="fc"><i>148</i>&nbsp;            branch.write(bts, 0, n);</b>
+<i>149</i>&nbsp;        }
+<b class="fc"><i>150</i>&nbsp;        return n;</b>
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:40</div>
+</div>
+</body>
+</html>

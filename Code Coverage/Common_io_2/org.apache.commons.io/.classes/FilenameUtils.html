@@ -1,0 +1,1451 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FilenameUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FilenameUtils (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">FilenameUtils$__CLR4_1_27676julis8uj</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.Collection;
+<i>23</i>&nbsp;import java.util.Stack;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * General filename and filepath manipulation utilities.
+<i>27</i>&nbsp; * &lt;p&gt;
+<i>28</i>&nbsp; * When dealing with filenames you can hit problems when moving from a Windows
+<i>29</i>&nbsp; * based development machine to a Unix based production machine.
+<i>30</i>&nbsp; * This class aims to help avoid those problems.
+<i>31</i>&nbsp; * &lt;p&gt;
+<i>32</i>&nbsp; * &lt;b&gt;NOTE&lt;/b&gt;: You may be able to avoid using this class entirely simply by
+<i>33</i>&nbsp; * using JDK {@link java.io.File File} objects and the two argument constructor
+<i>34</i>&nbsp; * {@link java.io.File#File(java.io.File, java.lang.String) File(File,String)}.
+<i>35</i>&nbsp; * &lt;p&gt;
+<i>36</i>&nbsp; * Most methods on this class are designed to work the same on both Unix and Windows.
+<i>37</i>&nbsp; * Those that don&#39;t include &#39;System&#39;, &#39;Unix&#39; or &#39;Windows&#39; in their name.
+<i>38</i>&nbsp; * &lt;p&gt;
+<i>39</i>&nbsp; * Most methods recognise both separators (forward and back), and both
+<i>40</i>&nbsp; * sets of prefixes. See the javadoc of each method for details.
+<i>41</i>&nbsp; * &lt;p&gt;
+<i>42</i>&nbsp; * This class defines six components within a filename
+<i>43</i>&nbsp; * (example C:\dev\project\file.txt):
+<i>44</i>&nbsp; * &lt;ul&gt;
+<i>45</i>&nbsp; * &lt;li&gt;the prefix - C:\&lt;/li&gt;
+<i>46</i>&nbsp; * &lt;li&gt;the path - dev\project\&lt;/li&gt;
+<i>47</i>&nbsp; * &lt;li&gt;the full path - C:\dev\project\&lt;/li&gt;
+<i>48</i>&nbsp; * &lt;li&gt;the name - file.txt&lt;/li&gt;
+<i>49</i>&nbsp; * &lt;li&gt;the base name - file&lt;/li&gt;
+<i>50</i>&nbsp; * &lt;li&gt;the extension - txt&lt;/li&gt;
+<i>51</i>&nbsp; * &lt;/ul&gt;
+<i>52</i>&nbsp; * Note that this class works best if directory filenames end with a separator.
+<i>53</i>&nbsp; * If you omit the last separator, it is impossible to determine if the filename
+<i>54</i>&nbsp; * corresponds to a file or a directory. As a result, we have chosen to say
+<i>55</i>&nbsp; * it corresponds to a file.
+<i>56</i>&nbsp; * &lt;p&gt;
+<i>57</i>&nbsp; * This class only supports Unix and Windows style names.
+<i>58</i>&nbsp; * Prefixes are matched as follows:
+<i>59</i>&nbsp; * &lt;pre&gt;
+<i>60</i>&nbsp; * Windows:
+<i>61</i>&nbsp; * a\b\c.txt           --&gt; &quot;&quot;          --&gt; relative
+<i>62</i>&nbsp; * \a\b\c.txt          --&gt; &quot;\&quot;         --&gt; current drive absolute
+<i>63</i>&nbsp; * C:a\b\c.txt         --&gt; &quot;C:&quot;        --&gt; drive relative
+<i>64</i>&nbsp; * C:\a\b\c.txt        --&gt; &quot;C:\&quot;       --&gt; absolute
+<i>65</i>&nbsp; * \\server\a\b\c.txt  --&gt; &quot;\\server\&quot; --&gt; UNC
+<i>66</i>&nbsp; *
+<i>67</i>&nbsp; * Unix:
+<i>68</i>&nbsp; * a/b/c.txt           --&gt; &quot;&quot;          --&gt; relative
+<i>69</i>&nbsp; * /a/b/c.txt          --&gt; &quot;/&quot;         --&gt; absolute
+<i>70</i>&nbsp; * ~/a/b/c.txt         --&gt; &quot;~/&quot;        --&gt; current user
+<i>71</i>&nbsp; * ~                   --&gt; &quot;~/&quot;        --&gt; current user (slash added)
+<i>72</i>&nbsp; * ~user/a/b/c.txt     --&gt; &quot;~user/&quot;    --&gt; named user
+<i>73</i>&nbsp; * ~user               --&gt; &quot;~user/&quot;    --&gt; named user (slash added)
+<i>74</i>&nbsp; * &lt;/pre&gt;
+<i>75</i>&nbsp; * Both prefix styles are matched always, irrespective of the machine that you are
+<i>76</i>&nbsp; * currently running on.
+<i>77</i>&nbsp; * &lt;p&gt;
+<i>78</i>&nbsp; * Origin of code: Excalibur, Alexandria, Tomcat, Commons-Utils.
+<i>79</i>&nbsp; *
+<i>80</i>&nbsp; * @version $Id$
+<i>81</i>&nbsp; * @since 1.1
+<i>82</i>&nbsp; */
+<i>83</i>&nbsp;public class FilenameUtils {
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * The extension separator character.
+<i>87</i>&nbsp;     * @since 1.4
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public static final char EXTENSION_SEPARATOR = &#39;.&#39;;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * The extension separator String.
+<i>93</i>&nbsp;     * @since 1.4
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * The Unix separator character.
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    private static final char UNIX_SEPARATOR = &#39;/&#39;;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * The Windows separator character.
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    private static final char WINDOWS_SEPARATOR = &#39;\\&#39;;
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * The system separator character.
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    private static final char SYSTEM_SEPARATOR = File.separatorChar;
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * The separator character that is the opposite of the system separator.
+<i>114</i>&nbsp;     */
+<i>115</i>&nbsp;    private static final char OTHER_SEPARATOR;
+<i>116</i>&nbsp;    static {
+<i>117</i>&nbsp;        if (isSystemWindows()) {
+<i>118</i>&nbsp;            OTHER_SEPARATOR = UNIX_SEPARATOR;
+<i>119</i>&nbsp;        } else {
+<i>120</i>&nbsp;            OTHER_SEPARATOR = WINDOWS_SEPARATOR;
+<i>121</i>&nbsp;        }
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * Instances should NOT be constructed in standard programming.
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    public FilenameUtils() {
+<i>128</i>&nbsp;        super();
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    //-----------------------------------------------------------------------
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * Determines if Windows file system is in use.
+<i>134</i>&nbsp;     * 
+<i>135</i>&nbsp;     * @return true if the system is Windows
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    static boolean isSystemWindows() {
+<i>138</i>&nbsp;        return SYSTEM_SEPARATOR == WINDOWS_SEPARATOR;
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    //-----------------------------------------------------------------------
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * Checks if the character is a separator.
+<i>144</i>&nbsp;     * 
+<i>145</i>&nbsp;     * @param ch  the character to check
+<i>146</i>&nbsp;     * @return true if it is a separator character
+<i>147</i>&nbsp;     */
+<i>148</i>&nbsp;    private static boolean isSeparator(char ch) {
+<i>149</i>&nbsp;        return ch == UNIX_SEPARATOR || ch == WINDOWS_SEPARATOR;
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    //-----------------------------------------------------------------------
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * Normalizes a path, removing double and single dot path steps.
+<i>155</i>&nbsp;     * &lt;p&gt;
+<i>156</i>&nbsp;     * This method normalizes a path to a standard format.
+<i>157</i>&nbsp;     * The input may contain separators in either Unix or Windows format.
+<i>158</i>&nbsp;     * The output will contain separators in the format of the system.
+<i>159</i>&nbsp;     * &lt;p&gt;
+<i>160</i>&nbsp;     * A trailing slash will be retained.
+<i>161</i>&nbsp;     * A double slash will be merged to a single slash (but UNC names are handled).
+<i>162</i>&nbsp;     * A single dot path segment will be removed.
+<i>163</i>&nbsp;     * A double dot will cause that path segment and the one before to be removed.
+<i>164</i>&nbsp;     * If the double dot has no parent path segment to work with, &lt;code&gt;null&lt;/code&gt;
+<i>165</i>&nbsp;     * is returned.
+<i>166</i>&nbsp;     * &lt;p&gt;
+<i>167</i>&nbsp;     * The output will be the same on both Unix and Windows except
+<i>168</i>&nbsp;     * for the separator character.
+<i>169</i>&nbsp;     * &lt;pre&gt;
+<i>170</i>&nbsp;     * /foo//               --&gt;   /foo/
+<i>171</i>&nbsp;     * /foo/./              --&gt;   /foo/
+<i>172</i>&nbsp;     * /foo/../bar          --&gt;   /bar
+<i>173</i>&nbsp;     * /foo/../bar/         --&gt;   /bar/
+<i>174</i>&nbsp;     * /foo/../bar/../baz   --&gt;   /baz
+<i>175</i>&nbsp;     * //foo//./bar         --&gt;   /foo/bar
+<i>176</i>&nbsp;     * /../                 --&gt;   null
+<i>177</i>&nbsp;     * ../foo               --&gt;   null
+<i>178</i>&nbsp;     * foo/bar/..           --&gt;   foo/
+<i>179</i>&nbsp;     * foo/../../bar        --&gt;   null
+<i>180</i>&nbsp;     * foo/../bar           --&gt;   bar
+<i>181</i>&nbsp;     * //server/foo/../bar  --&gt;   //server/bar
+<i>182</i>&nbsp;     * //server/../bar      --&gt;   null
+<i>183</i>&nbsp;     * C:\foo\..\bar        --&gt;   C:\bar
+<i>184</i>&nbsp;     * C:\..\bar            --&gt;   null
+<i>185</i>&nbsp;     * ~/foo/../bar/        --&gt;   ~/bar/
+<i>186</i>&nbsp;     * ~/../bar             --&gt;   null
+<i>187</i>&nbsp;     * &lt;/pre&gt;
+<i>188</i>&nbsp;     * (Note the file separator returned will be correct for Windows/Unix)
+<i>189</i>&nbsp;     *
+<i>190</i>&nbsp;     * @param filename  the filename to normalize, null returns null
+<i>191</i>&nbsp;     * @return the normalized filename, or null if invalid
+<i>192</i>&nbsp;     */
+<i>193</i>&nbsp;    public static String normalize(String filename) {
+<i>194</i>&nbsp;        return doNormalize(filename, SYSTEM_SEPARATOR, true);
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * Normalizes a path, removing double and single dot path steps.
+<i>198</i>&nbsp;     * &lt;p&gt;
+<i>199</i>&nbsp;     * This method normalizes a path to a standard format.
+<i>200</i>&nbsp;     * The input may contain separators in either Unix or Windows format.
+<i>201</i>&nbsp;     * The output will contain separators in the format specified.
+<i>202</i>&nbsp;     * &lt;p&gt;
+<i>203</i>&nbsp;     * A trailing slash will be retained.
+<i>204</i>&nbsp;     * A double slash will be merged to a single slash (but UNC names are handled).
+<i>205</i>&nbsp;     * A single dot path segment will be removed.
+<i>206</i>&nbsp;     * A double dot will cause that path segment and the one before to be removed.
+<i>207</i>&nbsp;     * If the double dot has no parent path segment to work with, &lt;code&gt;null&lt;/code&gt;
+<i>208</i>&nbsp;     * is returned.
+<i>209</i>&nbsp;     * &lt;p&gt;
+<i>210</i>&nbsp;     * The output will be the same on both Unix and Windows except
+<i>211</i>&nbsp;     * for the separator character.
+<i>212</i>&nbsp;     * &lt;pre&gt;
+<i>213</i>&nbsp;     * /foo//               --&gt;   /foo/
+<i>214</i>&nbsp;     * /foo/./              --&gt;   /foo/
+<i>215</i>&nbsp;     * /foo/../bar          --&gt;   /bar
+<i>216</i>&nbsp;     * /foo/../bar/         --&gt;   /bar/
+<i>217</i>&nbsp;     * /foo/../bar/../baz   --&gt;   /baz
+<i>218</i>&nbsp;     * //foo//./bar         --&gt;   /foo/bar
+<i>219</i>&nbsp;     * /../                 --&gt;   null
+<i>220</i>&nbsp;     * ../foo               --&gt;   null
+<i>221</i>&nbsp;     * foo/bar/..           --&gt;   foo/
+<i>222</i>&nbsp;     * foo/../../bar        --&gt;   null
+<i>223</i>&nbsp;     * foo/../bar           --&gt;   bar
+<i>224</i>&nbsp;     * //server/foo/../bar  --&gt;   //server/bar
+<i>225</i>&nbsp;     * //server/../bar      --&gt;   null
+<i>226</i>&nbsp;     * C:\foo\..\bar        --&gt;   C:\bar
+<i>227</i>&nbsp;     * C:\..\bar            --&gt;   null
+<i>228</i>&nbsp;     * ~/foo/../bar/        --&gt;   ~/bar/
+<i>229</i>&nbsp;     * ~/../bar             --&gt;   null
+<i>230</i>&nbsp;     * &lt;/pre&gt;
+<i>231</i>&nbsp;     * The output will be the same on both Unix and Windows including
+<i>232</i>&nbsp;     * the separator character.
+<i>233</i>&nbsp;     *
+<i>234</i>&nbsp;     * @param filename  the filename to normalize, null returns null
+<i>235</i>&nbsp;     * @param unixSeparator &lt;code&gt;true&lt;/code&gt; if a unix separator should
+<i>236</i>&nbsp;     * be used or &lt;code&gt;false&lt;/code&gt; if a windows separator should be used.
+<i>237</i>&nbsp;     * @return the normalized filename, or null if invalid
+<i>238</i>&nbsp;     * @since 2.0
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    public static String normalize(String filename, boolean unixSeparator) {
+<i>241</i>&nbsp;        char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
+<i>242</i>&nbsp;        return doNormalize(filename, separator, true);
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    //-----------------------------------------------------------------------
+<i>246</i>&nbsp;    /**
+<i>247</i>&nbsp;     * Normalizes a path, removing double and single dot path steps,
+<i>248</i>&nbsp;     * and removing any final directory separator.
+<i>249</i>&nbsp;     * &lt;p&gt;
+<i>250</i>&nbsp;     * This method normalizes a path to a standard format.
+<i>251</i>&nbsp;     * The input may contain separators in either Unix or Windows format.
+<i>252</i>&nbsp;     * The output will contain separators in the format of the system.
+<i>253</i>&nbsp;     * &lt;p&gt;
+<i>254</i>&nbsp;     * A trailing slash will be removed.
+<i>255</i>&nbsp;     * A double slash will be merged to a single slash (but UNC names are handled).
+<i>256</i>&nbsp;     * A single dot path segment will be removed.
+<i>257</i>&nbsp;     * A double dot will cause that path segment and the one before to be removed.
+<i>258</i>&nbsp;     * If the double dot has no parent path segment to work with, &lt;code&gt;null&lt;/code&gt;
+<i>259</i>&nbsp;     * is returned.
+<i>260</i>&nbsp;     * &lt;p&gt;
+<i>261</i>&nbsp;     * The output will be the same on both Unix and Windows except
+<i>262</i>&nbsp;     * for the separator character.
+<i>263</i>&nbsp;     * &lt;pre&gt;
+<i>264</i>&nbsp;     * /foo//               --&gt;   /foo
+<i>265</i>&nbsp;     * /foo/./              --&gt;   /foo
+<i>266</i>&nbsp;     * /foo/../bar          --&gt;   /bar
+<i>267</i>&nbsp;     * /foo/../bar/         --&gt;   /bar
+<i>268</i>&nbsp;     * /foo/../bar/../baz   --&gt;   /baz
+<i>269</i>&nbsp;     * //foo//./bar         --&gt;   /foo/bar
+<i>270</i>&nbsp;     * /../                 --&gt;   null
+<i>271</i>&nbsp;     * ../foo               --&gt;   null
+<i>272</i>&nbsp;     * foo/bar/..           --&gt;   foo
+<i>273</i>&nbsp;     * foo/../../bar        --&gt;   null
+<i>274</i>&nbsp;     * foo/../bar           --&gt;   bar
+<i>275</i>&nbsp;     * //server/foo/../bar  --&gt;   //server/bar
+<i>276</i>&nbsp;     * //server/../bar      --&gt;   null
+<i>277</i>&nbsp;     * C:\foo\..\bar        --&gt;   C:\bar
+<i>278</i>&nbsp;     * C:\..\bar            --&gt;   null
+<i>279</i>&nbsp;     * ~/foo/../bar/        --&gt;   ~/bar
+<i>280</i>&nbsp;     * ~/../bar             --&gt;   null
+<i>281</i>&nbsp;     * &lt;/pre&gt;
+<i>282</i>&nbsp;     * (Note the file separator returned will be correct for Windows/Unix)
+<i>283</i>&nbsp;     *
+<i>284</i>&nbsp;     * @param filename  the filename to normalize, null returns null
+<i>285</i>&nbsp;     * @return the normalized filename, or null if invalid
+<i>286</i>&nbsp;     */
+<i>287</i>&nbsp;    public static String normalizeNoEndSeparator(String filename) {
+<i>288</i>&nbsp;        return doNormalize(filename, SYSTEM_SEPARATOR, false);
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    /**
+<i>292</i>&nbsp;     * Normalizes a path, removing double and single dot path steps,
+<i>293</i>&nbsp;     * and removing any final directory separator.
+<i>294</i>&nbsp;     * &lt;p&gt;
+<i>295</i>&nbsp;     * This method normalizes a path to a standard format.
+<i>296</i>&nbsp;     * The input may contain separators in either Unix or Windows format.
+<i>297</i>&nbsp;     * The output will contain separators in the format specified.
+<i>298</i>&nbsp;     * &lt;p&gt;
+<i>299</i>&nbsp;     * A trailing slash will be removed.
+<i>300</i>&nbsp;     * A double slash will be merged to a single slash (but UNC names are handled).
+<i>301</i>&nbsp;     * A single dot path segment will be removed.
+<i>302</i>&nbsp;     * A double dot will cause that path segment and the one before to be removed.
+<i>303</i>&nbsp;     * If the double dot has no parent path segment to work with, &lt;code&gt;null&lt;/code&gt;
+<i>304</i>&nbsp;     * is returned.
+<i>305</i>&nbsp;     * &lt;p&gt;
+<i>306</i>&nbsp;     * The output will be the same on both Unix and Windows including
+<i>307</i>&nbsp;     * the separator character.
+<i>308</i>&nbsp;     * &lt;pre&gt;
+<i>309</i>&nbsp;     * /foo//               --&gt;   /foo
+<i>310</i>&nbsp;     * /foo/./              --&gt;   /foo
+<i>311</i>&nbsp;     * /foo/../bar          --&gt;   /bar
+<i>312</i>&nbsp;     * /foo/../bar/         --&gt;   /bar
+<i>313</i>&nbsp;     * /foo/../bar/../baz   --&gt;   /baz
+<i>314</i>&nbsp;     * //foo//./bar         --&gt;   /foo/bar
+<i>315</i>&nbsp;     * /../                 --&gt;   null
+<i>316</i>&nbsp;     * ../foo               --&gt;   null
+<i>317</i>&nbsp;     * foo/bar/..           --&gt;   foo
+<i>318</i>&nbsp;     * foo/../../bar        --&gt;   null
+<i>319</i>&nbsp;     * foo/../bar           --&gt;   bar
+<i>320</i>&nbsp;     * //server/foo/../bar  --&gt;   //server/bar
+<i>321</i>&nbsp;     * //server/../bar      --&gt;   null
+<i>322</i>&nbsp;     * C:\foo\..\bar        --&gt;   C:\bar
+<i>323</i>&nbsp;     * C:\..\bar            --&gt;   null
+<i>324</i>&nbsp;     * ~/foo/../bar/        --&gt;   ~/bar
+<i>325</i>&nbsp;     * ~/../bar             --&gt;   null
+<i>326</i>&nbsp;     * &lt;/pre&gt;
+<i>327</i>&nbsp;     *
+<i>328</i>&nbsp;     * @param filename  the filename to normalize, null returns null
+<i>329</i>&nbsp;     * @param unixSeparator &lt;code&gt;true&lt;/code&gt; if a unix separator should
+<i>330</i>&nbsp;     * be used or &lt;code&gt;false&lt;/code&gt; if a windows separtor should be used.
+<i>331</i>&nbsp;     * @return the normalized filename, or null if invalid
+<i>332</i>&nbsp;     * @since 2.0
+<i>333</i>&nbsp;     */
+<i>334</i>&nbsp;    public static String normalizeNoEndSeparator(String filename, boolean unixSeparator) {
+<i>335</i>&nbsp;         char separator = unixSeparator ? UNIX_SEPARATOR : WINDOWS_SEPARATOR;
+<i>336</i>&nbsp;        return doNormalize(filename, separator, false);
+<i>337</i>&nbsp;    }
+<i>338</i>&nbsp;
+<i>339</i>&nbsp;    /**
+<i>340</i>&nbsp;     * Internal method to perform the normalization.
+<i>341</i>&nbsp;     *
+<i>342</i>&nbsp;     * @param filename  the filename
+<i>343</i>&nbsp;     * @param separator The separator character to use
+<i>344</i>&nbsp;     * @param keepSeparator  true to keep the final separator
+<i>345</i>&nbsp;     * @return the normalized filename
+<i>346</i>&nbsp;     */
+<i>347</i>&nbsp;    private static String doNormalize(String filename, char separator, boolean keepSeparator) {
+<i>348</i>&nbsp;        if (filename == null) {
+<i>349</i>&nbsp;            return null;
+<i>350</i>&nbsp;        }
+<i>351</i>&nbsp;        int size = filename.length();
+<i>352</i>&nbsp;        if (size == 0) {
+<i>353</i>&nbsp;            return filename;
+<i>354</i>&nbsp;        }
+<i>355</i>&nbsp;        int prefix = getPrefixLength(filename);
+<i>356</i>&nbsp;        if (prefix &lt; 0) {
+<i>357</i>&nbsp;            return null;
+<i>358</i>&nbsp;        }
+<i>359</i>&nbsp;        
+<i>360</i>&nbsp;        char[] array = new char[size + 2];  // +1 for possible extra slash, +2 for arraycopy
+<i>361</i>&nbsp;        filename.getChars(0, filename.length(), array, 0);
+<i>362</i>&nbsp;        
+<i>363</i>&nbsp;        // fix separators throughout
+<i>364</i>&nbsp;        char otherSeparator = separator == SYSTEM_SEPARATOR ? OTHER_SEPARATOR : SYSTEM_SEPARATOR;
+<i>365</i>&nbsp;        for (int i = 0; i &lt; array.length; i++) {
+<i>366</i>&nbsp;            if (array[i] == otherSeparator) {
+<i>367</i>&nbsp;                array[i] = separator;
+<i>368</i>&nbsp;            }
+<i>369</i>&nbsp;        }
+<i>370</i>&nbsp;        
+<i>371</i>&nbsp;        // add extra separator on the end to simplify code below
+<i>372</i>&nbsp;        boolean lastIsDirectory = true;
+<i>373</i>&nbsp;        if (array[size - 1] != separator) {
+<i>374</i>&nbsp;            array[size++] = separator;
+<i>375</i>&nbsp;            lastIsDirectory = false;
+<i>376</i>&nbsp;        }
+<i>377</i>&nbsp;        
+<i>378</i>&nbsp;        // adjoining slashes
+<i>379</i>&nbsp;        for (int i = prefix + 1; i &lt; size; i++) {
+<i>380</i>&nbsp;            if (array[i] == separator &amp;&amp; array[i - 1] == separator) {
+<i>381</i>&nbsp;                System.arraycopy(array, i, array, i - 1, size - i);
+<i>382</i>&nbsp;                size--;
+<i>383</i>&nbsp;                i--;
+<i>384</i>&nbsp;            }
+<i>385</i>&nbsp;        }
+<i>386</i>&nbsp;        
+<i>387</i>&nbsp;        // dot slash
+<i>388</i>&nbsp;        for (int i = prefix + 1; i &lt; size; i++) {
+<i>389</i>&nbsp;            if (array[i] == separator &amp;&amp; array[i - 1] == &#39;.&#39; &amp;&amp;
+<i>390</i>&nbsp;                    (i == prefix + 1 || array[i - 2] == separator)) {
+<i>391</i>&nbsp;                if (i == size - 1) {
+<i>392</i>&nbsp;                    lastIsDirectory = true;
+<i>393</i>&nbsp;                }
+<i>394</i>&nbsp;                System.arraycopy(array, i + 1, array, i - 1, size - i);
+<i>395</i>&nbsp;                size -=2;
+<i>396</i>&nbsp;                i--;
+<i>397</i>&nbsp;            }
+<i>398</i>&nbsp;        }
+<i>399</i>&nbsp;        
+<i>400</i>&nbsp;        // double dot slash
+<i>401</i>&nbsp;        outer:
+<i>402</i>&nbsp;        for (int i = prefix + 2; i &lt; size; i++) {
+<i>403</i>&nbsp;            if (array[i] == separator &amp;&amp; array[i - 1] == &#39;.&#39; &amp;&amp; array[i - 2] == &#39;.&#39; &amp;&amp;
+<i>404</i>&nbsp;                    (i == prefix + 2 || array[i - 3] == separator)) {
+<i>405</i>&nbsp;                if (i == prefix + 2) {
+<i>406</i>&nbsp;                    return null;
+<i>407</i>&nbsp;                }
+<i>408</i>&nbsp;                if (i == size - 1) {
+<i>409</i>&nbsp;                    lastIsDirectory = true;
+<i>410</i>&nbsp;                }
+<i>411</i>&nbsp;                int j;
+<i>412</i>&nbsp;                for (j = i - 4 ; j &gt;= prefix; j--) {
+<i>413</i>&nbsp;                    if (array[j] == separator) {
+<i>414</i>&nbsp;                        // remove b/../ from a/b/../c
+<i>415</i>&nbsp;                        System.arraycopy(array, i + 1, array, j + 1, size - i);
+<i>416</i>&nbsp;                        size -= i - j;
+<i>417</i>&nbsp;                        i = j + 1;
+<i>418</i>&nbsp;                        continue outer;
+<i>419</i>&nbsp;                    }
+<i>420</i>&nbsp;                }
+<i>421</i>&nbsp;                // remove a/../ from a/../c
+<i>422</i>&nbsp;                System.arraycopy(array, i + 1, array, prefix, size - i);
+<i>423</i>&nbsp;                size -= i + 1 - prefix;
+<i>424</i>&nbsp;                i = prefix + 1;
+<i>425</i>&nbsp;            }
+<i>426</i>&nbsp;        }
+<i>427</i>&nbsp;        
+<i>428</i>&nbsp;        if (size &lt;= 0) {  // should never be less than 0
+<i>429</i>&nbsp;            return &quot;&quot;;
+<i>430</i>&nbsp;        }
+<i>431</i>&nbsp;        if (size &lt;= prefix) {  // should never be less than prefix
+<i>432</i>&nbsp;            return new String(array, 0, size);
+<i>433</i>&nbsp;        }
+<i>434</i>&nbsp;        if (lastIsDirectory &amp;&amp; keepSeparator) {
+<i>435</i>&nbsp;            return new String(array, 0, size);  // keep trailing separator
+<i>436</i>&nbsp;        }
+<i>437</i>&nbsp;        return new String(array, 0, size - 1);  // lose trailing separator
+<i>438</i>&nbsp;    }
+<i>439</i>&nbsp;
+<i>440</i>&nbsp;    //-----------------------------------------------------------------------
+<i>441</i>&nbsp;    /**
+<i>442</i>&nbsp;     * Concatenates a filename to a base path using normal command line style rules.
+<i>443</i>&nbsp;     * &lt;p&gt;
+<i>444</i>&nbsp;     * The effect is equivalent to resultant directory after changing
+<i>445</i>&nbsp;     * directory to the first argument, followed by changing directory to
+<i>446</i>&nbsp;     * the second argument.
+<i>447</i>&nbsp;     * &lt;p&gt;
+<i>448</i>&nbsp;     * The first argument is the base path, the second is the path to concatenate.
+<i>449</i>&nbsp;     * The returned path is always normalized via {@link #normalize(String)},
+<i>450</i>&nbsp;     * thus &lt;code&gt;..&lt;/code&gt; is handled.
+<i>451</i>&nbsp;     * &lt;p&gt;
+<i>452</i>&nbsp;     * If &lt;code&gt;pathToAdd&lt;/code&gt; is absolute (has an absolute prefix), then
+<i>453</i>&nbsp;     * it will be normalized and returned.
+<i>454</i>&nbsp;     * Otherwise, the paths will be joined, normalized and returned.
+<i>455</i>&nbsp;     * &lt;p&gt;
+<i>456</i>&nbsp;     * The output will be the same on both Unix and Windows except
+<i>457</i>&nbsp;     * for the separator character.
+<i>458</i>&nbsp;     * &lt;pre&gt;
+<i>459</i>&nbsp;     * /foo/ + bar          --&gt;   /foo/bar
+<i>460</i>&nbsp;     * /foo + bar           --&gt;   /foo/bar
+<i>461</i>&nbsp;     * /foo + /bar          --&gt;   /bar
+<i>462</i>&nbsp;     * /foo + C:/bar        --&gt;   C:/bar
+<i>463</i>&nbsp;     * /foo + C:bar         --&gt;   C:bar (*)
+<i>464</i>&nbsp;     * /foo/a/ + ../bar     --&gt;   foo/bar
+<i>465</i>&nbsp;     * /foo/ + ../../bar    --&gt;   null
+<i>466</i>&nbsp;     * /foo/ + /bar         --&gt;   /bar
+<i>467</i>&nbsp;     * /foo/.. + /bar       --&gt;   /bar
+<i>468</i>&nbsp;     * /foo + bar/c.txt     --&gt;   /foo/bar/c.txt
+<i>469</i>&nbsp;     * /foo/c.txt + bar     --&gt;   /foo/c.txt/bar (!)
+<i>470</i>&nbsp;     * &lt;/pre&gt;
+<i>471</i>&nbsp;     * (*) Note that the Windows relative drive prefix is unreliable when
+<i>472</i>&nbsp;     * used with this method.
+<i>473</i>&nbsp;     * (!) Note that the first parameter must be a path. If it ends with a name, then
+<i>474</i>&nbsp;     * the name will be built into the concatenated path. If this might be a problem,
+<i>475</i>&nbsp;     * use {@link #getFullPath(String)} on the base path argument.
+<i>476</i>&nbsp;     *
+<i>477</i>&nbsp;     * @param basePath  the base path to attach to, always treated as a path
+<i>478</i>&nbsp;     * @param fullFilenameToAdd  the filename (or path) to attach to the base
+<i>479</i>&nbsp;     * @return the concatenated path, or null if invalid
+<i>480</i>&nbsp;     */
+<i>481</i>&nbsp;    public static String concat(String basePath, String fullFilenameToAdd) {
+<i>482</i>&nbsp;        int prefix = getPrefixLength(fullFilenameToAdd);
+<i>483</i>&nbsp;        if (prefix &lt; 0) {
+<i>484</i>&nbsp;            return null;
+<i>485</i>&nbsp;        }
+<i>486</i>&nbsp;        if (prefix &gt; 0) {
+<i>487</i>&nbsp;            return normalize(fullFilenameToAdd);
+<i>488</i>&nbsp;        }
+<i>489</i>&nbsp;        if (basePath == null) {
+<i>490</i>&nbsp;            return null;
+<i>491</i>&nbsp;        }
+<i>492</i>&nbsp;        int len = basePath.length();
+<i>493</i>&nbsp;        if (len == 0) {
+<i>494</i>&nbsp;            return normalize(fullFilenameToAdd);
+<i>495</i>&nbsp;        }
+<i>496</i>&nbsp;        char ch = basePath.charAt(len - 1);
+<i>497</i>&nbsp;        if (isSeparator(ch)) {
+<i>498</i>&nbsp;            return normalize(basePath + fullFilenameToAdd);
+<i>499</i>&nbsp;        } else {
+<i>500</i>&nbsp;            return normalize(basePath + &#39;/&#39; + fullFilenameToAdd);
+<i>501</i>&nbsp;        }
+<i>502</i>&nbsp;    }
+<i>503</i>&nbsp;
+<i>504</i>&nbsp;    /**
+<i>505</i>&nbsp;     * Determines whether the {@code parent} directory contains the {@code child} element (a file or directory).
+<i>506</i>&nbsp;     * &lt;p&gt;
+<i>507</i>&nbsp;     * The files names are expected to be normalized.
+<i>508</i>&nbsp;     * &lt;/p&gt;
+<i>509</i>&nbsp;     * 
+<i>510</i>&nbsp;     * Edge cases:
+<i>511</i>&nbsp;     * &lt;ul&gt;
+<i>512</i>&nbsp;     * &lt;li&gt;A {@code directory} must not be null: if null, throw IllegalArgumentException&lt;/li&gt;
+<i>513</i>&nbsp;     * &lt;li&gt;A directory does not contain itself: return false&lt;/li&gt;
+<i>514</i>&nbsp;     * &lt;li&gt;A null child file is not contained in any parent: return false&lt;/li&gt;
+<i>515</i>&nbsp;     * &lt;/ul&gt;
+<i>516</i>&nbsp;     * 
+<i>517</i>&nbsp;     * @param canonicalParent
+<i>518</i>&nbsp;     *            the file to consider as the parent.
+<i>519</i>&nbsp;     * @param canonicalChild
+<i>520</i>&nbsp;     *            the file to consider as the child.
+<i>521</i>&nbsp;     * @return true is the candidate leaf is under by the specified composite. False otherwise.
+<i>522</i>&nbsp;     * @throws IOException
+<i>523</i>&nbsp;     *             if an IO error occurs while checking the files.
+<i>524</i>&nbsp;     * @since 2.2
+<i>525</i>&nbsp;     * @see FileUtils#directoryContains(File, File)
+<i>526</i>&nbsp;     */
+<i>527</i>&nbsp;    public static boolean directoryContains(final String canonicalParent, final String canonicalChild)
+<i>528</i>&nbsp;            throws IOException {
+<i>529</i>&nbsp;
+<i>530</i>&nbsp;        // Fail fast against NullPointerException
+<i>531</i>&nbsp;        if (canonicalParent == null) {
+<i>532</i>&nbsp;            throw new IllegalArgumentException(&quot;Directory must not be null&quot;);
+<i>533</i>&nbsp;        }
+<i>534</i>&nbsp;
+<i>535</i>&nbsp;        if (canonicalChild == null) {
+<i>536</i>&nbsp;            return false;
+<i>537</i>&nbsp;        }
+<i>538</i>&nbsp;
+<i>539</i>&nbsp;        if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
+<i>540</i>&nbsp;            return false;
+<i>541</i>&nbsp;        }
+<i>542</i>&nbsp;
+<i>543</i>&nbsp;        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
+<i>544</i>&nbsp;    }
+<i>545</i>&nbsp;
+<i>546</i>&nbsp;    //-----------------------------------------------------------------------
+<i>547</i>&nbsp;    /**
+<i>548</i>&nbsp;     * Converts all separators to the Unix separator of forward slash.
+<i>549</i>&nbsp;     * 
+<i>550</i>&nbsp;     * @param path  the path to be changed, null ignored
+<i>551</i>&nbsp;     * @return the updated path
+<i>552</i>&nbsp;     */
+<i>553</i>&nbsp;    public static String separatorsToUnix(String path) {
+<i>554</i>&nbsp;        if (path == null || path.indexOf(WINDOWS_SEPARATOR) == -1) {
+<i>555</i>&nbsp;            return path;
+<i>556</i>&nbsp;        }
+<i>557</i>&nbsp;        return path.replace(WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+<i>558</i>&nbsp;    }
+<i>559</i>&nbsp;
+<i>560</i>&nbsp;    /**
+<i>561</i>&nbsp;     * Converts all separators to the Windows separator of backslash.
+<i>562</i>&nbsp;     * 
+<i>563</i>&nbsp;     * @param path  the path to be changed, null ignored
+<i>564</i>&nbsp;     * @return the updated path
+<i>565</i>&nbsp;     */
+<i>566</i>&nbsp;    public static String separatorsToWindows(String path) {
+<i>567</i>&nbsp;        if (path == null || path.indexOf(UNIX_SEPARATOR) == -1) {
+<i>568</i>&nbsp;            return path;
+<i>569</i>&nbsp;        }
+<i>570</i>&nbsp;        return path.replace(UNIX_SEPARATOR, WINDOWS_SEPARATOR);
+<i>571</i>&nbsp;    }
+<i>572</i>&nbsp;
+<i>573</i>&nbsp;    /**
+<i>574</i>&nbsp;     * Converts all separators to the system separator.
+<i>575</i>&nbsp;     * 
+<i>576</i>&nbsp;     * @param path  the path to be changed, null ignored
+<i>577</i>&nbsp;     * @return the updated path
+<i>578</i>&nbsp;     */
+<i>579</i>&nbsp;    public static String separatorsToSystem(String path) {
+<i>580</i>&nbsp;        if (path == null) {
+<i>581</i>&nbsp;            return null;
+<i>582</i>&nbsp;        }
+<i>583</i>&nbsp;        if (isSystemWindows()) {
+<i>584</i>&nbsp;            return separatorsToWindows(path);
+<i>585</i>&nbsp;        } else {
+<i>586</i>&nbsp;            return separatorsToUnix(path);
+<i>587</i>&nbsp;        }
+<i>588</i>&nbsp;    }
+<i>589</i>&nbsp;
+<i>590</i>&nbsp;    //-----------------------------------------------------------------------
+<i>591</i>&nbsp;    /**
+<i>592</i>&nbsp;     * Returns the length of the filename prefix, such as &lt;code&gt;C:/&lt;/code&gt; or &lt;code&gt;~/&lt;/code&gt;.
+<i>593</i>&nbsp;     * &lt;p&gt;
+<i>594</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>595</i>&nbsp;     * &lt;p&gt;
+<i>596</i>&nbsp;     * The prefix length includes the first slash in the full filename
+<i>597</i>&nbsp;     * if applicable. Thus, it is possible that the length returned is greater
+<i>598</i>&nbsp;     * than the length of the input string.
+<i>599</i>&nbsp;     * &lt;pre&gt;
+<i>600</i>&nbsp;     * Windows:
+<i>601</i>&nbsp;     * a\b\c.txt           --&gt; &quot;&quot;          --&gt; relative
+<i>602</i>&nbsp;     * \a\b\c.txt          --&gt; &quot;\&quot;         --&gt; current drive absolute
+<i>603</i>&nbsp;     * C:a\b\c.txt         --&gt; &quot;C:&quot;        --&gt; drive relative
+<i>604</i>&nbsp;     * C:\a\b\c.txt        --&gt; &quot;C:\&quot;       --&gt; absolute
+<i>605</i>&nbsp;     * \\server\a\b\c.txt  --&gt; &quot;\\server\&quot; --&gt; UNC
+<i>606</i>&nbsp;     *
+<i>607</i>&nbsp;     * Unix:
+<i>608</i>&nbsp;     * a/b/c.txt           --&gt; &quot;&quot;          --&gt; relative
+<i>609</i>&nbsp;     * /a/b/c.txt          --&gt; &quot;/&quot;         --&gt; absolute
+<i>610</i>&nbsp;     * ~/a/b/c.txt         --&gt; &quot;~/&quot;        --&gt; current user
+<i>611</i>&nbsp;     * ~                   --&gt; &quot;~/&quot;        --&gt; current user (slash added)
+<i>612</i>&nbsp;     * ~user/a/b/c.txt     --&gt; &quot;~user/&quot;    --&gt; named user
+<i>613</i>&nbsp;     * ~user               --&gt; &quot;~user/&quot;    --&gt; named user (slash added)
+<i>614</i>&nbsp;     * &lt;/pre&gt;
+<i>615</i>&nbsp;     * &lt;p&gt;
+<i>616</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>617</i>&nbsp;     * ie. both Unix and Windows prefixes are matched regardless.
+<i>618</i>&nbsp;     *
+<i>619</i>&nbsp;     * @param filename  the filename to find the prefix in, null returns -1
+<i>620</i>&nbsp;     * @return the length of the prefix, -1 if invalid or null
+<i>621</i>&nbsp;     */
+<i>622</i>&nbsp;    public static int getPrefixLength(String filename) {
+<i>623</i>&nbsp;        if (filename == null) {
+<i>624</i>&nbsp;            return -1;
+<i>625</i>&nbsp;        }
+<i>626</i>&nbsp;        int len = filename.length();
+<i>627</i>&nbsp;        if (len == 0) {
+<i>628</i>&nbsp;            return 0;
+<i>629</i>&nbsp;        }
+<i>630</i>&nbsp;        char ch0 = filename.charAt(0);
+<i>631</i>&nbsp;        if (ch0 == &#39;:&#39;) {
+<i>632</i>&nbsp;            return -1;
+<i>633</i>&nbsp;        }
+<i>634</i>&nbsp;        if (len == 1) {
+<i>635</i>&nbsp;            if (ch0 == &#39;~&#39;) {
+<i>636</i>&nbsp;                return 2;  // return a length greater than the input
+<i>637</i>&nbsp;            }
+<i>638</i>&nbsp;            return isSeparator(ch0) ? 1 : 0;
+<i>639</i>&nbsp;        } else {
+<i>640</i>&nbsp;            if (ch0 == &#39;~&#39;) {
+<i>641</i>&nbsp;                int posUnix = filename.indexOf(UNIX_SEPARATOR, 1);
+<i>642</i>&nbsp;                int posWin = filename.indexOf(WINDOWS_SEPARATOR, 1);
+<i>643</i>&nbsp;                if (posUnix == -1 &amp;&amp; posWin == -1) {
+<i>644</i>&nbsp;                    return len + 1;  // return a length greater than the input
+<i>645</i>&nbsp;                }
+<i>646</i>&nbsp;                posUnix = posUnix == -1 ? posWin : posUnix;
+<i>647</i>&nbsp;                posWin = posWin == -1 ? posUnix : posWin;
+<i>648</i>&nbsp;                return Math.min(posUnix, posWin) + 1;
+<i>649</i>&nbsp;            }
+<i>650</i>&nbsp;            char ch1 = filename.charAt(1);
+<i>651</i>&nbsp;            if (ch1 == &#39;:&#39;) {
+<i>652</i>&nbsp;                ch0 = Character.toUpperCase(ch0);
+<i>653</i>&nbsp;                if (ch0 &gt;= &#39;A&#39; &amp;&amp; ch0 &lt;= &#39;Z&#39;) {
+<i>654</i>&nbsp;                    if (len == 2 || isSeparator(filename.charAt(2)) == false) {
+<i>655</i>&nbsp;                        return 2;
+<i>656</i>&nbsp;                    }
+<i>657</i>&nbsp;                    return 3;
+<i>658</i>&nbsp;                }
+<i>659</i>&nbsp;                return -1;
+<i>660</i>&nbsp;                
+<i>661</i>&nbsp;            } else if (isSeparator(ch0) &amp;&amp; isSeparator(ch1)) {
+<i>662</i>&nbsp;                int posUnix = filename.indexOf(UNIX_SEPARATOR, 2);
+<i>663</i>&nbsp;                int posWin = filename.indexOf(WINDOWS_SEPARATOR, 2);
+<i>664</i>&nbsp;                if (posUnix == -1 &amp;&amp; posWin == -1 || posUnix == 2 || posWin == 2) {
+<i>665</i>&nbsp;                    return -1;
+<i>666</i>&nbsp;                }
+<i>667</i>&nbsp;                posUnix = posUnix == -1 ? posWin : posUnix;
+<i>668</i>&nbsp;                posWin = posWin == -1 ? posUnix : posWin;
+<i>669</i>&nbsp;                return Math.min(posUnix, posWin) + 1;
+<i>670</i>&nbsp;            } else {
+<i>671</i>&nbsp;                return isSeparator(ch0) ? 1 : 0;
+<i>672</i>&nbsp;            }
+<i>673</i>&nbsp;        }
+<i>674</i>&nbsp;    }
+<i>675</i>&nbsp;
+<i>676</i>&nbsp;    /**
+<i>677</i>&nbsp;     * Returns the index of the last directory separator character.
+<i>678</i>&nbsp;     * &lt;p&gt;
+<i>679</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>680</i>&nbsp;     * The position of the last forward or backslash is returned.
+<i>681</i>&nbsp;     * &lt;p&gt;
+<i>682</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>683</i>&nbsp;     * 
+<i>684</i>&nbsp;     * @param filename  the filename to find the last path separator in, null returns -1
+<i>685</i>&nbsp;     * @return the index of the last separator character, or -1 if there
+<i>686</i>&nbsp;     * is no such character
+<i>687</i>&nbsp;     */
+<i>688</i>&nbsp;    public static int indexOfLastSeparator(String filename) {
+<i>689</i>&nbsp;        if (filename == null) {
+<i>690</i>&nbsp;            return -1;
+<i>691</i>&nbsp;        }
+<i>692</i>&nbsp;        int lastUnixPos = filename.lastIndexOf(UNIX_SEPARATOR);
+<i>693</i>&nbsp;        int lastWindowsPos = filename.lastIndexOf(WINDOWS_SEPARATOR);
+<i>694</i>&nbsp;        return Math.max(lastUnixPos, lastWindowsPos);
+<i>695</i>&nbsp;    }
+<i>696</i>&nbsp;
+<i>697</i>&nbsp;    /**
+<i>698</i>&nbsp;     * Returns the index of the last extension separator character, which is a dot.
+<i>699</i>&nbsp;     * &lt;p&gt;
+<i>700</i>&nbsp;     * This method also checks that there is no directory separator after the last dot.
+<i>701</i>&nbsp;     * To do this it uses {@link #indexOfLastSeparator(String)} which will
+<i>702</i>&nbsp;     * handle a file in either Unix or Windows format.
+<i>703</i>&nbsp;     * &lt;p&gt;
+<i>704</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>705</i>&nbsp;     * 
+<i>706</i>&nbsp;     * @param filename  the filename to find the last path separator in, null returns -1
+<i>707</i>&nbsp;     * @return the index of the last separator character, or -1 if there
+<i>708</i>&nbsp;     * is no such character
+<i>709</i>&nbsp;     */
+<i>710</i>&nbsp;    public static int indexOfExtension(String filename) {
+<i>711</i>&nbsp;        if (filename == null) {
+<i>712</i>&nbsp;            return -1;
+<i>713</i>&nbsp;        }
+<i>714</i>&nbsp;        int extensionPos = filename.lastIndexOf(EXTENSION_SEPARATOR);
+<i>715</i>&nbsp;        int lastSeparator = indexOfLastSeparator(filename);
+<i>716</i>&nbsp;        return lastSeparator &gt; extensionPos ? -1 : extensionPos;
+<i>717</i>&nbsp;    }
+<i>718</i>&nbsp;
+<i>719</i>&nbsp;    //-----------------------------------------------------------------------
+<i>720</i>&nbsp;    /**
+<i>721</i>&nbsp;     * Gets the prefix from a full filename, such as &lt;code&gt;C:/&lt;/code&gt;
+<i>722</i>&nbsp;     * or &lt;code&gt;~/&lt;/code&gt;.
+<i>723</i>&nbsp;     * &lt;p&gt;
+<i>724</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>725</i>&nbsp;     * The prefix includes the first slash in the full filename where applicable.
+<i>726</i>&nbsp;     * &lt;pre&gt;
+<i>727</i>&nbsp;     * Windows:
+<i>728</i>&nbsp;     * a\b\c.txt           --&gt; &quot;&quot;          --&gt; relative
+<i>729</i>&nbsp;     * \a\b\c.txt          --&gt; &quot;\&quot;         --&gt; current drive absolute
+<i>730</i>&nbsp;     * C:a\b\c.txt         --&gt; &quot;C:&quot;        --&gt; drive relative
+<i>731</i>&nbsp;     * C:\a\b\c.txt        --&gt; &quot;C:\&quot;       --&gt; absolute
+<i>732</i>&nbsp;     * \\server\a\b\c.txt  --&gt; &quot;\\server\&quot; --&gt; UNC
+<i>733</i>&nbsp;     *
+<i>734</i>&nbsp;     * Unix:
+<i>735</i>&nbsp;     * a/b/c.txt           --&gt; &quot;&quot;          --&gt; relative
+<i>736</i>&nbsp;     * /a/b/c.txt          --&gt; &quot;/&quot;         --&gt; absolute
+<i>737</i>&nbsp;     * ~/a/b/c.txt         --&gt; &quot;~/&quot;        --&gt; current user
+<i>738</i>&nbsp;     * ~                   --&gt; &quot;~/&quot;        --&gt; current user (slash added)
+<i>739</i>&nbsp;     * ~user/a/b/c.txt     --&gt; &quot;~user/&quot;    --&gt; named user
+<i>740</i>&nbsp;     * ~user               --&gt; &quot;~user/&quot;    --&gt; named user (slash added)
+<i>741</i>&nbsp;     * &lt;/pre&gt;
+<i>742</i>&nbsp;     * &lt;p&gt;
+<i>743</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>744</i>&nbsp;     * ie. both Unix and Windows prefixes are matched regardless.
+<i>745</i>&nbsp;     *
+<i>746</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>747</i>&nbsp;     * @return the prefix of the file, null if invalid
+<i>748</i>&nbsp;     */
+<i>749</i>&nbsp;    public static String getPrefix(String filename) {
+<i>750</i>&nbsp;        if (filename == null) {
+<i>751</i>&nbsp;            return null;
+<i>752</i>&nbsp;        }
+<i>753</i>&nbsp;        int len = getPrefixLength(filename);
+<i>754</i>&nbsp;        if (len &lt; 0) {
+<i>755</i>&nbsp;            return null;
+<i>756</i>&nbsp;        }
+<i>757</i>&nbsp;        if (len &gt; filename.length()) {
+<i>758</i>&nbsp;            return filename + UNIX_SEPARATOR;  // we know this only happens for unix
+<i>759</i>&nbsp;        }
+<i>760</i>&nbsp;        return filename.substring(0, len);
+<i>761</i>&nbsp;    }
+<i>762</i>&nbsp;
+<i>763</i>&nbsp;    /**
+<i>764</i>&nbsp;     * Gets the path from a full filename, which excludes the prefix.
+<i>765</i>&nbsp;     * &lt;p&gt;
+<i>766</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>767</i>&nbsp;     * The method is entirely text based, and returns the text before and
+<i>768</i>&nbsp;     * including the last forward or backslash.
+<i>769</i>&nbsp;     * &lt;pre&gt;
+<i>770</i>&nbsp;     * C:\a\b\c.txt --&gt; a\b\
+<i>771</i>&nbsp;     * ~/a/b/c.txt  --&gt; a/b/
+<i>772</i>&nbsp;     * a.txt        --&gt; &quot;&quot;
+<i>773</i>&nbsp;     * a/b/c        --&gt; a/b/
+<i>774</i>&nbsp;     * a/b/c/       --&gt; a/b/c/
+<i>775</i>&nbsp;     * &lt;/pre&gt;
+<i>776</i>&nbsp;     * &lt;p&gt;
+<i>777</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>778</i>&nbsp;     * &lt;p&gt;
+<i>779</i>&nbsp;     * This method drops the prefix from the result.
+<i>780</i>&nbsp;     * See {@link #getFullPath(String)} for the method that retains the prefix.
+<i>781</i>&nbsp;     *
+<i>782</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>783</i>&nbsp;     * @return the path of the file, an empty string if none exists, null if invalid
+<i>784</i>&nbsp;     */
+<i>785</i>&nbsp;    public static String getPath(String filename) {
+<i>786</i>&nbsp;        return doGetPath(filename, 1);
+<i>787</i>&nbsp;    }
+<i>788</i>&nbsp;
+<i>789</i>&nbsp;    /**
+<i>790</i>&nbsp;     * Gets the path from a full filename, which excludes the prefix, and
+<i>791</i>&nbsp;     * also excluding the final directory separator.
+<i>792</i>&nbsp;     * &lt;p&gt;
+<i>793</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>794</i>&nbsp;     * The method is entirely text based, and returns the text before the
+<i>795</i>&nbsp;     * last forward or backslash.
+<i>796</i>&nbsp;     * &lt;pre&gt;
+<i>797</i>&nbsp;     * C:\a\b\c.txt --&gt; a\b
+<i>798</i>&nbsp;     * ~/a/b/c.txt  --&gt; a/b
+<i>799</i>&nbsp;     * a.txt        --&gt; &quot;&quot;
+<i>800</i>&nbsp;     * a/b/c        --&gt; a/b
+<i>801</i>&nbsp;     * a/b/c/       --&gt; a/b/c
+<i>802</i>&nbsp;     * &lt;/pre&gt;
+<i>803</i>&nbsp;     * &lt;p&gt;
+<i>804</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>805</i>&nbsp;     * &lt;p&gt;
+<i>806</i>&nbsp;     * This method drops the prefix from the result.
+<i>807</i>&nbsp;     * See {@link #getFullPathNoEndSeparator(String)} for the method that retains the prefix.
+<i>808</i>&nbsp;     *
+<i>809</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>810</i>&nbsp;     * @return the path of the file, an empty string if none exists, null if invalid
+<i>811</i>&nbsp;     */
+<i>812</i>&nbsp;    public static String getPathNoEndSeparator(String filename) {
+<i>813</i>&nbsp;        return doGetPath(filename, 0);
+<i>814</i>&nbsp;    }
+<i>815</i>&nbsp;
+<i>816</i>&nbsp;    /**
+<i>817</i>&nbsp;     * Does the work of getting the path.
+<i>818</i>&nbsp;     * 
+<i>819</i>&nbsp;     * @param filename  the filename
+<i>820</i>&nbsp;     * @param separatorAdd  0 to omit the end separator, 1 to return it
+<i>821</i>&nbsp;     * @return the path
+<i>822</i>&nbsp;     */
+<i>823</i>&nbsp;    private static String doGetPath(String filename, int separatorAdd) {
+<i>824</i>&nbsp;        if (filename == null) {
+<i>825</i>&nbsp;            return null;
+<i>826</i>&nbsp;        }
+<i>827</i>&nbsp;        int prefix = getPrefixLength(filename);
+<i>828</i>&nbsp;        if (prefix &lt; 0) {
+<i>829</i>&nbsp;            return null;
+<i>830</i>&nbsp;        }
+<i>831</i>&nbsp;        int index = indexOfLastSeparator(filename);
+<i>832</i>&nbsp;        int endIndex = index+separatorAdd;
+<i>833</i>&nbsp;        if (prefix &gt;= filename.length() || index &lt; 0 || prefix &gt;= endIndex) {
+<i>834</i>&nbsp;            return &quot;&quot;;
+<i>835</i>&nbsp;        }
+<i>836</i>&nbsp;        return filename.substring(prefix, endIndex);
+<i>837</i>&nbsp;    }
+<i>838</i>&nbsp;
+<i>839</i>&nbsp;    /**
+<i>840</i>&nbsp;     * Gets the full path from a full filename, which is the prefix + path.
+<i>841</i>&nbsp;     * &lt;p&gt;
+<i>842</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>843</i>&nbsp;     * The method is entirely text based, and returns the text before and
+<i>844</i>&nbsp;     * including the last forward or backslash.
+<i>845</i>&nbsp;     * &lt;pre&gt;
+<i>846</i>&nbsp;     * C:\a\b\c.txt --&gt; C:\a\b\
+<i>847</i>&nbsp;     * ~/a/b/c.txt  --&gt; ~/a/b/
+<i>848</i>&nbsp;     * a.txt        --&gt; &quot;&quot;
+<i>849</i>&nbsp;     * a/b/c        --&gt; a/b/
+<i>850</i>&nbsp;     * a/b/c/       --&gt; a/b/c/
+<i>851</i>&nbsp;     * C:           --&gt; C:
+<i>852</i>&nbsp;     * C:\          --&gt; C:\
+<i>853</i>&nbsp;     * ~            --&gt; ~/
+<i>854</i>&nbsp;     * ~/           --&gt; ~/
+<i>855</i>&nbsp;     * ~user        --&gt; ~user/
+<i>856</i>&nbsp;     * ~user/       --&gt; ~user/
+<i>857</i>&nbsp;     * &lt;/pre&gt;
+<i>858</i>&nbsp;     * &lt;p&gt;
+<i>859</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>860</i>&nbsp;     *
+<i>861</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>862</i>&nbsp;     * @return the path of the file, an empty string if none exists, null if invalid
+<i>863</i>&nbsp;     */
+<i>864</i>&nbsp;    public static String getFullPath(String filename) {
+<i>865</i>&nbsp;        return doGetFullPath(filename, true);
+<i>866</i>&nbsp;    }
+<i>867</i>&nbsp;
+<i>868</i>&nbsp;    /**
+<i>869</i>&nbsp;     * Gets the full path from a full filename, which is the prefix + path,
+<i>870</i>&nbsp;     * and also excluding the final directory separator.
+<i>871</i>&nbsp;     * &lt;p&gt;
+<i>872</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>873</i>&nbsp;     * The method is entirely text based, and returns the text before the
+<i>874</i>&nbsp;     * last forward or backslash.
+<i>875</i>&nbsp;     * &lt;pre&gt;
+<i>876</i>&nbsp;     * C:\a\b\c.txt --&gt; C:\a\b
+<i>877</i>&nbsp;     * ~/a/b/c.txt  --&gt; ~/a/b
+<i>878</i>&nbsp;     * a.txt        --&gt; &quot;&quot;
+<i>879</i>&nbsp;     * a/b/c        --&gt; a/b
+<i>880</i>&nbsp;     * a/b/c/       --&gt; a/b/c
+<i>881</i>&nbsp;     * C:           --&gt; C:
+<i>882</i>&nbsp;     * C:\          --&gt; C:\
+<i>883</i>&nbsp;     * ~            --&gt; ~
+<i>884</i>&nbsp;     * ~/           --&gt; ~
+<i>885</i>&nbsp;     * ~user        --&gt; ~user
+<i>886</i>&nbsp;     * ~user/       --&gt; ~user
+<i>887</i>&nbsp;     * &lt;/pre&gt;
+<i>888</i>&nbsp;     * &lt;p&gt;
+<i>889</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>890</i>&nbsp;     *
+<i>891</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>892</i>&nbsp;     * @return the path of the file, an empty string if none exists, null if invalid
+<i>893</i>&nbsp;     */
+<i>894</i>&nbsp;    public static String getFullPathNoEndSeparator(String filename) {
+<i>895</i>&nbsp;        return doGetFullPath(filename, false);
+<i>896</i>&nbsp;    }
+<i>897</i>&nbsp;
+<i>898</i>&nbsp;    /**
+<i>899</i>&nbsp;     * Does the work of getting the path.
+<i>900</i>&nbsp;     * 
+<i>901</i>&nbsp;     * @param filename  the filename
+<i>902</i>&nbsp;     * @param includeSeparator  true to include the end separator
+<i>903</i>&nbsp;     * @return the path
+<i>904</i>&nbsp;     */
+<i>905</i>&nbsp;    private static String doGetFullPath(String filename, boolean includeSeparator) {
+<i>906</i>&nbsp;        if (filename == null) {
+<i>907</i>&nbsp;            return null;
+<i>908</i>&nbsp;        }
+<i>909</i>&nbsp;        int prefix = getPrefixLength(filename);
+<i>910</i>&nbsp;        if (prefix &lt; 0) {
+<i>911</i>&nbsp;            return null;
+<i>912</i>&nbsp;        }
+<i>913</i>&nbsp;        if (prefix &gt;= filename.length()) {
+<i>914</i>&nbsp;            if (includeSeparator) {
+<i>915</i>&nbsp;                return getPrefix(filename);  // add end slash if necessary
+<i>916</i>&nbsp;            } else {
+<i>917</i>&nbsp;                return filename;
+<i>918</i>&nbsp;            }
+<i>919</i>&nbsp;        }
+<i>920</i>&nbsp;        int index = indexOfLastSeparator(filename);
+<i>921</i>&nbsp;        if (index &lt; 0) {
+<i>922</i>&nbsp;            return filename.substring(0, prefix);
+<i>923</i>&nbsp;        }
+<i>924</i>&nbsp;        int end = index + (includeSeparator ?  1 : 0);
+<i>925</i>&nbsp;        if (end == 0) {
+<i>926</i>&nbsp;            end++;
+<i>927</i>&nbsp;        }
+<i>928</i>&nbsp;        return filename.substring(0, end);
+<i>929</i>&nbsp;    }
+<i>930</i>&nbsp;
+<i>931</i>&nbsp;    /**
+<i>932</i>&nbsp;     * Gets the name minus the path from a full filename.
+<i>933</i>&nbsp;     * &lt;p&gt;
+<i>934</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>935</i>&nbsp;     * The text after the last forward or backslash is returned.
+<i>936</i>&nbsp;     * &lt;pre&gt;
+<i>937</i>&nbsp;     * a/b/c.txt --&gt; c.txt
+<i>938</i>&nbsp;     * a.txt     --&gt; a.txt
+<i>939</i>&nbsp;     * a/b/c     --&gt; c
+<i>940</i>&nbsp;     * a/b/c/    --&gt; &quot;&quot;
+<i>941</i>&nbsp;     * &lt;/pre&gt;
+<i>942</i>&nbsp;     * &lt;p&gt;
+<i>943</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>944</i>&nbsp;     *
+<i>945</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>946</i>&nbsp;     * @return the name of the file without the path, or an empty string if none exists
+<i>947</i>&nbsp;     */
+<i>948</i>&nbsp;    public static String getName(String filename) {
+<i>949</i>&nbsp;        if (filename == null) {
+<i>950</i>&nbsp;            return null;
+<i>951</i>&nbsp;        }
+<i>952</i>&nbsp;        int index = indexOfLastSeparator(filename);
+<i>953</i>&nbsp;        return filename.substring(index + 1);
+<i>954</i>&nbsp;    }
+<i>955</i>&nbsp;
+<i>956</i>&nbsp;    /**
+<i>957</i>&nbsp;     * Gets the base name, minus the full path and extension, from a full filename.
+<i>958</i>&nbsp;     * &lt;p&gt;
+<i>959</i>&nbsp;     * This method will handle a file in either Unix or Windows format.
+<i>960</i>&nbsp;     * The text after the last forward or backslash and before the last dot is returned.
+<i>961</i>&nbsp;     * &lt;pre&gt;
+<i>962</i>&nbsp;     * a/b/c.txt --&gt; c
+<i>963</i>&nbsp;     * a.txt     --&gt; a
+<i>964</i>&nbsp;     * a/b/c     --&gt; c
+<i>965</i>&nbsp;     * a/b/c/    --&gt; &quot;&quot;
+<i>966</i>&nbsp;     * &lt;/pre&gt;
+<i>967</i>&nbsp;     * &lt;p&gt;
+<i>968</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>969</i>&nbsp;     *
+<i>970</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>971</i>&nbsp;     * @return the name of the file without the path, or an empty string if none exists
+<i>972</i>&nbsp;     */
+<i>973</i>&nbsp;    public static String getBaseName(String filename) {
+<i>974</i>&nbsp;        return removeExtension(getName(filename));
+<i>975</i>&nbsp;    }
+<i>976</i>&nbsp;
+<i>977</i>&nbsp;    /**
+<i>978</i>&nbsp;     * Gets the extension of a filename.
+<i>979</i>&nbsp;     * &lt;p&gt;
+<i>980</i>&nbsp;     * This method returns the textual part of the filename after the last dot.
+<i>981</i>&nbsp;     * There must be no directory separator after the dot.
+<i>982</i>&nbsp;     * &lt;pre&gt;
+<i>983</i>&nbsp;     * foo.txt      --&gt; &quot;txt&quot;
+<i>984</i>&nbsp;     * a/b/c.jpg    --&gt; &quot;jpg&quot;
+<i>985</i>&nbsp;     * a/b.txt/c    --&gt; &quot;&quot;
+<i>986</i>&nbsp;     * a/b/c        --&gt; &quot;&quot;
+<i>987</i>&nbsp;     * &lt;/pre&gt;
+<i>988</i>&nbsp;     * &lt;p&gt;
+<i>989</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>990</i>&nbsp;     *
+<i>991</i>&nbsp;     * @param filename the filename to retrieve the extension of.
+<i>992</i>&nbsp;     * @return the extension of the file or an empty string if none exists or &lt;code&gt;null&lt;/code&gt;
+<i>993</i>&nbsp;     * if the filename is &lt;code&gt;null&lt;/code&gt;.
+<i>994</i>&nbsp;     */
+<i>995</i>&nbsp;    public static String getExtension(String filename) {
+<i>996</i>&nbsp;        if (filename == null) {
+<i>997</i>&nbsp;            return null;
+<i>998</i>&nbsp;        }
+<i>999</i>&nbsp;        int index = indexOfExtension(filename);
+<i>1000</i>&nbsp;        if (index == -1) {
+<i>1001</i>&nbsp;            return &quot;&quot;;
+<i>1002</i>&nbsp;        } else {
+<i>1003</i>&nbsp;            return filename.substring(index + 1);
+<i>1004</i>&nbsp;        }
+<i>1005</i>&nbsp;    }
+<i>1006</i>&nbsp;
+<i>1007</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1008</i>&nbsp;    /**
+<i>1009</i>&nbsp;     * Removes the extension from a filename.
+<i>1010</i>&nbsp;     * &lt;p&gt;
+<i>1011</i>&nbsp;     * This method returns the textual part of the filename before the last dot.
+<i>1012</i>&nbsp;     * There must be no directory separator after the dot.
+<i>1013</i>&nbsp;     * &lt;pre&gt;
+<i>1014</i>&nbsp;     * foo.txt    --&gt; foo
+<i>1015</i>&nbsp;     * a\b\c.jpg  --&gt; a\b\c
+<i>1016</i>&nbsp;     * a\b\c      --&gt; a\b\c
+<i>1017</i>&nbsp;     * a.b\c      --&gt; a.b\c
+<i>1018</i>&nbsp;     * &lt;/pre&gt;
+<i>1019</i>&nbsp;     * &lt;p&gt;
+<i>1020</i>&nbsp;     * The output will be the same irrespective of the machine that the code is running on.
+<i>1021</i>&nbsp;     *
+<i>1022</i>&nbsp;     * @param filename  the filename to query, null returns null
+<i>1023</i>&nbsp;     * @return the filename minus the extension
+<i>1024</i>&nbsp;     */
+<i>1025</i>&nbsp;    public static String removeExtension(String filename) {
+<i>1026</i>&nbsp;        if (filename == null) {
+<i>1027</i>&nbsp;            return null;
+<i>1028</i>&nbsp;        }
+<i>1029</i>&nbsp;        int index = indexOfExtension(filename);
+<i>1030</i>&nbsp;        if (index == -1) {
+<i>1031</i>&nbsp;            return filename;
+<i>1032</i>&nbsp;        } else {
+<i>1033</i>&nbsp;            return filename.substring(0, index);
+<i>1034</i>&nbsp;        }
+<i>1035</i>&nbsp;    }
+<i>1036</i>&nbsp;
+<i>1037</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1038</i>&nbsp;    /**
+<i>1039</i>&nbsp;     * Checks whether two filenames are equal exactly.
+<i>1040</i>&nbsp;     * &lt;p&gt;
+<i>1041</i>&nbsp;     * No processing is performed on the filenames other than comparison,
+<i>1042</i>&nbsp;     * thus this is merely a null-safe case-sensitive equals.
+<i>1043</i>&nbsp;     *
+<i>1044</i>&nbsp;     * @param filename1  the first filename to query, may be null
+<i>1045</i>&nbsp;     * @param filename2  the second filename to query, may be null
+<i>1046</i>&nbsp;     * @return true if the filenames are equal, null equals null
+<i>1047</i>&nbsp;     * @see IOCase#SENSITIVE
+<i>1048</i>&nbsp;     */
+<i>1049</i>&nbsp;    public static boolean equals(String filename1, String filename2) {
+<i>1050</i>&nbsp;        return equals(filename1, filename2, false, IOCase.SENSITIVE);
+<i>1051</i>&nbsp;    }
+<i>1052</i>&nbsp;
+<i>1053</i>&nbsp;    /**
+<i>1054</i>&nbsp;     * Checks whether two filenames are equal using the case rules of the system.
+<i>1055</i>&nbsp;     * &lt;p&gt;
+<i>1056</i>&nbsp;     * No processing is performed on the filenames other than comparison.
+<i>1057</i>&nbsp;     * The check is case-sensitive on Unix and case-insensitive on Windows.
+<i>1058</i>&nbsp;     *
+<i>1059</i>&nbsp;     * @param filename1  the first filename to query, may be null
+<i>1060</i>&nbsp;     * @param filename2  the second filename to query, may be null
+<i>1061</i>&nbsp;     * @return true if the filenames are equal, null equals null
+<i>1062</i>&nbsp;     * @see IOCase#SYSTEM
+<i>1063</i>&nbsp;     */
+<i>1064</i>&nbsp;    public static boolean equalsOnSystem(String filename1, String filename2) {
+<i>1065</i>&nbsp;        return equals(filename1, filename2, false, IOCase.SYSTEM);
+<i>1066</i>&nbsp;    }
+<i>1067</i>&nbsp;
+<i>1068</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1069</i>&nbsp;    /**
+<i>1070</i>&nbsp;     * Checks whether two filenames are equal after both have been normalized.
+<i>1071</i>&nbsp;     * &lt;p&gt;
+<i>1072</i>&nbsp;     * Both filenames are first passed to {@link #normalize(String)}.
+<i>1073</i>&nbsp;     * The check is then performed in a case-sensitive manner.
+<i>1074</i>&nbsp;     *
+<i>1075</i>&nbsp;     * @param filename1  the first filename to query, may be null
+<i>1076</i>&nbsp;     * @param filename2  the second filename to query, may be null
+<i>1077</i>&nbsp;     * @return true if the filenames are equal, null equals null
+<i>1078</i>&nbsp;     * @see IOCase#SENSITIVE
+<i>1079</i>&nbsp;     */
+<i>1080</i>&nbsp;    public static boolean equalsNormalized(String filename1, String filename2) {
+<i>1081</i>&nbsp;        return equals(filename1, filename2, true, IOCase.SENSITIVE);
+<i>1082</i>&nbsp;    }
+<i>1083</i>&nbsp;
+<i>1084</i>&nbsp;    /**
+<i>1085</i>&nbsp;     * Checks whether two filenames are equal after both have been normalized
+<i>1086</i>&nbsp;     * and using the case rules of the system.
+<i>1087</i>&nbsp;     * &lt;p&gt;
+<i>1088</i>&nbsp;     * Both filenames are first passed to {@link #normalize(String)}.
+<i>1089</i>&nbsp;     * The check is then performed case-sensitive on Unix and
+<i>1090</i>&nbsp;     * case-insensitive on Windows.
+<i>1091</i>&nbsp;     *
+<i>1092</i>&nbsp;     * @param filename1  the first filename to query, may be null
+<i>1093</i>&nbsp;     * @param filename2  the second filename to query, may be null
+<i>1094</i>&nbsp;     * @return true if the filenames are equal, null equals null
+<i>1095</i>&nbsp;     * @see IOCase#SYSTEM
+<i>1096</i>&nbsp;     */
+<i>1097</i>&nbsp;    public static boolean equalsNormalizedOnSystem(String filename1, String filename2) {
+<i>1098</i>&nbsp;        return equals(filename1, filename2, true, IOCase.SYSTEM);
+<i>1099</i>&nbsp;    }
+<i>1100</i>&nbsp;
+<i>1101</i>&nbsp;    /**
+<i>1102</i>&nbsp;     * Checks whether two filenames are equal, optionally normalizing and providing
+<i>1103</i>&nbsp;     * control over the case-sensitivity.
+<i>1104</i>&nbsp;     *
+<i>1105</i>&nbsp;     * @param filename1  the first filename to query, may be null
+<i>1106</i>&nbsp;     * @param filename2  the second filename to query, may be null
+<i>1107</i>&nbsp;     * @param normalized  whether to normalize the filenames
+<i>1108</i>&nbsp;     * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
+<i>1109</i>&nbsp;     * @return true if the filenames are equal, null equals null
+<i>1110</i>&nbsp;     * @since 1.3
+<i>1111</i>&nbsp;     */
+<i>1112</i>&nbsp;    public static boolean equals(
+<i>1113</i>&nbsp;            String filename1, String filename2,
+<i>1114</i>&nbsp;            boolean normalized, IOCase caseSensitivity) {
+<i>1115</i>&nbsp;        
+<i>1116</i>&nbsp;        if (filename1 == null || filename2 == null) {
+<i>1117</i>&nbsp;            return filename1 == null &amp;&amp; filename2 == null;
+<i>1118</i>&nbsp;        }
+<i>1119</i>&nbsp;        if (normalized) {
+<i>1120</i>&nbsp;            filename1 = normalize(filename1);
+<i>1121</i>&nbsp;            filename2 = normalize(filename2);
+<i>1122</i>&nbsp;            if (filename1 == null || filename2 == null) {
+<i>1123</i>&nbsp;                throw new NullPointerException(
+<i>1124</i>&nbsp;                    &quot;Error normalizing one or both of the file names&quot;);
+<i>1125</i>&nbsp;            }
+<i>1126</i>&nbsp;        }
+<i>1127</i>&nbsp;        if (caseSensitivity == null) {
+<i>1128</i>&nbsp;            caseSensitivity = IOCase.SENSITIVE;
+<i>1129</i>&nbsp;        }
+<i>1130</i>&nbsp;        return caseSensitivity.checkEquals(filename1, filename2);
+<i>1131</i>&nbsp;    }
+<i>1132</i>&nbsp;
+<i>1133</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1134</i>&nbsp;    /**
+<i>1135</i>&nbsp;     * Checks whether the extension of the filename is that specified.
+<i>1136</i>&nbsp;     * &lt;p&gt;
+<i>1137</i>&nbsp;     * This method obtains the extension as the textual part of the filename
+<i>1138</i>&nbsp;     * after the last dot. There must be no directory separator after the dot.
+<i>1139</i>&nbsp;     * The extension check is case-sensitive on all platforms.
+<i>1140</i>&nbsp;     *
+<i>1141</i>&nbsp;     * @param filename  the filename to query, null returns false
+<i>1142</i>&nbsp;     * @param extension  the extension to check for, null or empty checks for no extension
+<i>1143</i>&nbsp;     * @return true if the filename has the specified extension
+<i>1144</i>&nbsp;     */
+<i>1145</i>&nbsp;    public static boolean isExtension(String filename, String extension) {
+<i>1146</i>&nbsp;        if (filename == null) {
+<i>1147</i>&nbsp;            return false;
+<i>1148</i>&nbsp;        }
+<i>1149</i>&nbsp;        if (extension == null || extension.length() == 0) {
+<i>1150</i>&nbsp;            return indexOfExtension(filename) == -1;
+<i>1151</i>&nbsp;        }
+<i>1152</i>&nbsp;        String fileExt = getExtension(filename);
+<i>1153</i>&nbsp;        return fileExt.equals(extension);
+<i>1154</i>&nbsp;    }
+<i>1155</i>&nbsp;
+<i>1156</i>&nbsp;    /**
+<i>1157</i>&nbsp;     * Checks whether the extension of the filename is one of those specified.
+<i>1158</i>&nbsp;     * &lt;p&gt;
+<i>1159</i>&nbsp;     * This method obtains the extension as the textual part of the filename
+<i>1160</i>&nbsp;     * after the last dot. There must be no directory separator after the dot.
+<i>1161</i>&nbsp;     * The extension check is case-sensitive on all platforms.
+<i>1162</i>&nbsp;     *
+<i>1163</i>&nbsp;     * @param filename  the filename to query, null returns false
+<i>1164</i>&nbsp;     * @param extensions  the extensions to check for, null checks for no extension
+<i>1165</i>&nbsp;     * @return true if the filename is one of the extensions
+<i>1166</i>&nbsp;     */
+<i>1167</i>&nbsp;    public static boolean isExtension(String filename, String[] extensions) {
+<i>1168</i>&nbsp;        if (filename == null) {
+<i>1169</i>&nbsp;            return false;
+<i>1170</i>&nbsp;        }
+<i>1171</i>&nbsp;        if (extensions == null || extensions.length == 0) {
+<i>1172</i>&nbsp;            return indexOfExtension(filename) == -1;
+<i>1173</i>&nbsp;        }
+<i>1174</i>&nbsp;        String fileExt = getExtension(filename);
+<i>1175</i>&nbsp;        for (String extension : extensions) {
+<i>1176</i>&nbsp;            if (fileExt.equals(extension)) {
+<i>1177</i>&nbsp;                return true;
+<i>1178</i>&nbsp;            }
+<i>1179</i>&nbsp;        }
+<i>1180</i>&nbsp;        return false;
+<i>1181</i>&nbsp;    }
+<i>1182</i>&nbsp;
+<i>1183</i>&nbsp;    /**
+<i>1184</i>&nbsp;     * Checks whether the extension of the filename is one of those specified.
+<i>1185</i>&nbsp;     * &lt;p&gt;
+<i>1186</i>&nbsp;     * This method obtains the extension as the textual part of the filename
+<i>1187</i>&nbsp;     * after the last dot. There must be no directory separator after the dot.
+<i>1188</i>&nbsp;     * The extension check is case-sensitive on all platforms.
+<i>1189</i>&nbsp;     *
+<i>1190</i>&nbsp;     * @param filename  the filename to query, null returns false
+<i>1191</i>&nbsp;     * @param extensions  the extensions to check for, null checks for no extension
+<i>1192</i>&nbsp;     * @return true if the filename is one of the extensions
+<i>1193</i>&nbsp;     */
+<i>1194</i>&nbsp;    public static boolean isExtension(String filename, Collection&lt;String&gt; extensions) {
+<i>1195</i>&nbsp;        if (filename == null) {
+<i>1196</i>&nbsp;            return false;
+<i>1197</i>&nbsp;        }
+<i>1198</i>&nbsp;        if (extensions == null || extensions.isEmpty()) {
+<i>1199</i>&nbsp;            return indexOfExtension(filename) == -1;
+<i>1200</i>&nbsp;        }
+<i>1201</i>&nbsp;        String fileExt = getExtension(filename);
+<i>1202</i>&nbsp;        for (String extension : extensions) {
+<i>1203</i>&nbsp;            if (fileExt.equals(extension)) {
+<i>1204</i>&nbsp;                return true;
+<i>1205</i>&nbsp;            }
+<i>1206</i>&nbsp;        }
+<i>1207</i>&nbsp;        return false;
+<i>1208</i>&nbsp;    }
+<i>1209</i>&nbsp;
+<i>1210</i>&nbsp;    //-----------------------------------------------------------------------
+<i>1211</i>&nbsp;    /**
+<i>1212</i>&nbsp;     * Checks a filename to see if it matches the specified wildcard matcher,
+<i>1213</i>&nbsp;     * always testing case-sensitive.
+<i>1214</i>&nbsp;     * &lt;p&gt;
+<i>1215</i>&nbsp;     * The wildcard matcher uses the characters &#39;?&#39; and &#39;*&#39; to represent a
+<i>1216</i>&nbsp;     * single or multiple (zero or more) wildcard characters.
+<i>1217</i>&nbsp;     * This is the same as often found on Dos/Unix command lines.
+<i>1218</i>&nbsp;     * The check is case-sensitive always.
+<i>1219</i>&nbsp;     * &lt;pre&gt;
+<i>1220</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.txt&quot;)      --&gt; true
+<i>1221</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.jpg&quot;)      --&gt; false
+<i>1222</i>&nbsp;     * wildcardMatch(&quot;a/b/c.txt&quot;, &quot;a/b/*&quot;)  --&gt; true
+<i>1223</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.???&quot;)      --&gt; true
+<i>1224</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.????&quot;)     --&gt; false
+<i>1225</i>&nbsp;     * &lt;/pre&gt;
+<i>1226</i>&nbsp;     * N.B. the sequence &quot;*?&quot; does not work properly at present in match strings.
+<i>1227</i>&nbsp;     * 
+<i>1228</i>&nbsp;     * @param filename  the filename to match on
+<i>1229</i>&nbsp;     * @param wildcardMatcher  the wildcard string to match against
+<i>1230</i>&nbsp;     * @return true if the filename matches the wilcard string
+<i>1231</i>&nbsp;     * @see IOCase#SENSITIVE
+<i>1232</i>&nbsp;     */
+<i>1233</i>&nbsp;    public static boolean wildcardMatch(String filename, String wildcardMatcher) {
+<i>1234</i>&nbsp;        return wildcardMatch(filename, wildcardMatcher, IOCase.SENSITIVE);
+<i>1235</i>&nbsp;    }
+<i>1236</i>&nbsp;
+<i>1237</i>&nbsp;    /**
+<i>1238</i>&nbsp;     * Checks a filename to see if it matches the specified wildcard matcher
+<i>1239</i>&nbsp;     * using the case rules of the system.
+<i>1240</i>&nbsp;     * &lt;p&gt;
+<i>1241</i>&nbsp;     * The wildcard matcher uses the characters &#39;?&#39; and &#39;*&#39; to represent a
+<i>1242</i>&nbsp;     * single or multiple (zero or more) wildcard characters.
+<i>1243</i>&nbsp;     * This is the same as often found on Dos/Unix command lines.
+<i>1244</i>&nbsp;     * The check is case-sensitive on Unix and case-insensitive on Windows.
+<i>1245</i>&nbsp;     * &lt;pre&gt;
+<i>1246</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.txt&quot;)      --&gt; true
+<i>1247</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.jpg&quot;)      --&gt; false
+<i>1248</i>&nbsp;     * wildcardMatch(&quot;a/b/c.txt&quot;, &quot;a/b/*&quot;)  --&gt; true
+<i>1249</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.???&quot;)      --&gt; true
+<i>1250</i>&nbsp;     * wildcardMatch(&quot;c.txt&quot;, &quot;*.????&quot;)     --&gt; false
+<i>1251</i>&nbsp;     * &lt;/pre&gt;
+<i>1252</i>&nbsp;     * N.B. the sequence &quot;*?&quot; does not work properly at present in match strings.
+<i>1253</i>&nbsp;     * 
+<i>1254</i>&nbsp;     * @param filename  the filename to match on
+<i>1255</i>&nbsp;     * @param wildcardMatcher  the wildcard string to match against
+<i>1256</i>&nbsp;     * @return true if the filename matches the wilcard string
+<i>1257</i>&nbsp;     * @see IOCase#SYSTEM
+<i>1258</i>&nbsp;     */
+<i>1259</i>&nbsp;    public static boolean wildcardMatchOnSystem(String filename, String wildcardMatcher) {
+<i>1260</i>&nbsp;        return wildcardMatch(filename, wildcardMatcher, IOCase.SYSTEM);
+<i>1261</i>&nbsp;    }
+<i>1262</i>&nbsp;
+<i>1263</i>&nbsp;    /**
+<i>1264</i>&nbsp;     * Checks a filename to see if it matches the specified wildcard matcher
+<i>1265</i>&nbsp;     * allowing control over case-sensitivity.
+<i>1266</i>&nbsp;     * &lt;p&gt;
+<i>1267</i>&nbsp;     * The wildcard matcher uses the characters &#39;?&#39; and &#39;*&#39; to represent a
+<i>1268</i>&nbsp;     * single or multiple (zero or more) wildcard characters.
+<i>1269</i>&nbsp;     * N.B. the sequence &quot;*?&quot; does not work properly at present in match strings.
+<i>1270</i>&nbsp;     * 
+<i>1271</i>&nbsp;     * @param filename  the filename to match on
+<i>1272</i>&nbsp;     * @param wildcardMatcher  the wildcard string to match against
+<i>1273</i>&nbsp;     * @param caseSensitivity  what case sensitivity rule to use, null means case-sensitive
+<i>1274</i>&nbsp;     * @return true if the filename matches the wilcard string
+<i>1275</i>&nbsp;     * @since 1.3
+<i>1276</i>&nbsp;     */
+<i>1277</i>&nbsp;    public static boolean wildcardMatch(String filename, String wildcardMatcher, IOCase caseSensitivity) {
+<i>1278</i>&nbsp;        if (filename == null &amp;&amp; wildcardMatcher == null) {
+<i>1279</i>&nbsp;            return true;
+<i>1280</i>&nbsp;        }
+<i>1281</i>&nbsp;        if (filename == null || wildcardMatcher == null) {
+<i>1282</i>&nbsp;            return false;
+<i>1283</i>&nbsp;        }
+<i>1284</i>&nbsp;        if (caseSensitivity == null) {
+<i>1285</i>&nbsp;            caseSensitivity = IOCase.SENSITIVE;
+<i>1286</i>&nbsp;        }
+<i>1287</i>&nbsp;        String[] wcs = splitOnTokens(wildcardMatcher);
+<i>1288</i>&nbsp;        boolean anyChars = false;
+<i>1289</i>&nbsp;        int textIdx = 0;
+<i>1290</i>&nbsp;        int wcsIdx = 0;
+<i>1291</i>&nbsp;        Stack&lt;int[]&gt; backtrack = new Stack&lt;int[]&gt;();
+<i>1292</i>&nbsp;        
+<i>1293</i>&nbsp;        // loop around a backtrack stack, to handle complex * matching
+<i>1294</i>&nbsp;        do {
+<i>1295</i>&nbsp;            if (backtrack.size() &gt; 0) {
+<i>1296</i>&nbsp;                int[] array = backtrack.pop();
+<i>1297</i>&nbsp;                wcsIdx = array[0];
+<i>1298</i>&nbsp;                textIdx = array[1];
+<i>1299</i>&nbsp;                anyChars = true;
+<i>1300</i>&nbsp;            }
+<i>1301</i>&nbsp;            
+<i>1302</i>&nbsp;            // loop whilst tokens and text left to process
+<i>1303</i>&nbsp;            while (wcsIdx &lt; wcs.length) {
+<i>1304</i>&nbsp;      
+<i>1305</i>&nbsp;                if (wcs[wcsIdx].equals(&quot;?&quot;)) {
+<i>1306</i>&nbsp;                    // ? so move to next text char
+<i>1307</i>&nbsp;                    textIdx++;
+<i>1308</i>&nbsp;                    if (textIdx &gt; filename.length()) {
+<i>1309</i>&nbsp;                        break;
+<i>1310</i>&nbsp;                    }
+<i>1311</i>&nbsp;                    anyChars = false;
+<i>1312</i>&nbsp;                    
+<i>1313</i>&nbsp;                } else if (wcs[wcsIdx].equals(&quot;*&quot;)) {
+<i>1314</i>&nbsp;                    // set any chars status
+<i>1315</i>&nbsp;                    anyChars = true;
+<i>1316</i>&nbsp;                    if (wcsIdx == wcs.length - 1) {
+<i>1317</i>&nbsp;                        textIdx = filename.length();
+<i>1318</i>&nbsp;                    }
+<i>1319</i>&nbsp;                    
+<i>1320</i>&nbsp;                } else {
+<i>1321</i>&nbsp;                    // matching text token
+<i>1322</i>&nbsp;                    if (anyChars) {
+<i>1323</i>&nbsp;                        // any chars then try to locate text token
+<i>1324</i>&nbsp;                        textIdx = caseSensitivity.checkIndexOf(filename, textIdx, wcs[wcsIdx]);
+<i>1325</i>&nbsp;                        if (textIdx == -1) {
+<i>1326</i>&nbsp;                            // token not found
+<i>1327</i>&nbsp;                            break;
+<i>1328</i>&nbsp;                        }
+<i>1329</i>&nbsp;                        int repeat = caseSensitivity.checkIndexOf(filename, textIdx + 1, wcs[wcsIdx]);
+<i>1330</i>&nbsp;                        if (repeat &gt;= 0) {
+<i>1331</i>&nbsp;                            backtrack.push(new int[] {wcsIdx, repeat});
+<i>1332</i>&nbsp;                        }
+<i>1333</i>&nbsp;                    } else {
+<i>1334</i>&nbsp;                        // matching from current position
+<i>1335</i>&nbsp;                        if (!caseSensitivity.checkRegionMatches(filename, textIdx, wcs[wcsIdx])) {
+<i>1336</i>&nbsp;                            // couldnt match token
+<i>1337</i>&nbsp;                            break;
+<i>1338</i>&nbsp;                        }
+<i>1339</i>&nbsp;                    }
+<i>1340</i>&nbsp;      
+<i>1341</i>&nbsp;                    // matched text token, move text index to end of matched token
+<i>1342</i>&nbsp;                    textIdx += wcs[wcsIdx].length();
+<i>1343</i>&nbsp;                    anyChars = false;
+<i>1344</i>&nbsp;                }
+<i>1345</i>&nbsp;      
+<i>1346</i>&nbsp;                wcsIdx++;
+<i>1347</i>&nbsp;            }
+<i>1348</i>&nbsp;            
+<i>1349</i>&nbsp;            // full match
+<i>1350</i>&nbsp;            if (wcsIdx == wcs.length &amp;&amp; textIdx == filename.length()) {
+<i>1351</i>&nbsp;                return true;
+<i>1352</i>&nbsp;            }
+<i>1353</i>&nbsp;            
+<i>1354</i>&nbsp;        } while (backtrack.size() &gt; 0);
+<i>1355</i>&nbsp;  
+<i>1356</i>&nbsp;        return false;
+<i>1357</i>&nbsp;    }
+<i>1358</i>&nbsp;
+<i>1359</i>&nbsp;    /**
+<i>1360</i>&nbsp;     * Splits a string into a number of tokens.
+<i>1361</i>&nbsp;     * The text is split by &#39;?&#39; and &#39;*&#39;.
+<i>1362</i>&nbsp;     * Where multiple &#39;*&#39; occur consecutively they are collapsed into a single &#39;*&#39;.
+<i>1363</i>&nbsp;     * 
+<i>1364</i>&nbsp;     * @param text  the text to split
+<i>1365</i>&nbsp;     * @return the array of tokens, never null
+<i>1366</i>&nbsp;     */
+<i>1367</i>&nbsp;    static String[] splitOnTokens(String text) {
+<i>1368</i>&nbsp;        // used by wildcardMatch
+<i>1369</i>&nbsp;        // package level so a unit test may run on this
+<i>1370</i>&nbsp;        
+<i>1371</i>&nbsp;        if (text.indexOf(&#39;?&#39;) == -1 &amp;&amp; text.indexOf(&#39;*&#39;) == -1) {
+<i>1372</i>&nbsp;            return new String[] { text };
+<i>1373</i>&nbsp;        }
+<i>1374</i>&nbsp;
+<i>1375</i>&nbsp;        char[] array = text.toCharArray();
+<i>1376</i>&nbsp;        ArrayList&lt;String&gt; list = new ArrayList&lt;String&gt;();
+<i>1377</i>&nbsp;        StringBuilder buffer = new StringBuilder();
+<i>1378</i>&nbsp;        for (int i = 0; i &lt; array.length; i++) {
+<i>1379</i>&nbsp;            if (array[i] == &#39;?&#39; || array[i] == &#39;*&#39;) {
+<i>1380</i>&nbsp;                if (buffer.length() != 0) {
+<i>1381</i>&nbsp;                    list.add(buffer.toString());
+<i>1382</i>&nbsp;                    buffer.setLength(0);
+<i>1383</i>&nbsp;                }
+<i>1384</i>&nbsp;                if (array[i] == &#39;?&#39;) {
+<i>1385</i>&nbsp;                    list.add(&quot;?&quot;);
+<i>1386</i>&nbsp;                } else if (list.isEmpty() ||
+<i>1387</i>&nbsp;                        i &gt; 0 &amp;&amp; list.get(list.size() - 1).equals(&quot;*&quot;) == false) {
+<i>1388</i>&nbsp;                    list.add(&quot;*&quot;);
+<i>1389</i>&nbsp;                }
+<i>1390</i>&nbsp;            } else {
+<i>1391</i>&nbsp;                buffer.append(array[i]);
+<i>1392</i>&nbsp;            }
+<i>1393</i>&nbsp;        }
+<i>1394</i>&nbsp;        if (buffer.length() != 0) {
+<i>1395</i>&nbsp;            list.add(buffer.toString());
+<i>1396</i>&nbsp;        }
+<i>1397</i>&nbsp;
+<i>1398</i>&nbsp;        return list.toArray( new String[ list.size() ] );
+<i>1399</i>&nbsp;    }
+<i>1400</i>&nbsp;
+<i>1401</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

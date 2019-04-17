@@ -1,0 +1,533 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BOMInputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.input</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BOMInputStream (org.apache.commons.io.input)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BOMInputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (85/ 85)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BOMInputStream$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">BOMInputStream$__CLR4_1_2exexjuliqyok</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/ 21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (95/ 95)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.input;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.IOException;
+<i>20</i>&nbsp;import java.io.InputStream;
+<i>21</i>&nbsp;import java.util.Arrays;
+<i>22</i>&nbsp;import java.util.Comparator;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import org.apache.commons.io.ByteOrderMark;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;/**
+<i>28</i>&nbsp; * This class is used to wrap a stream that includes an encoded {@link ByteOrderMark} as its first bytes.
+<i>29</i>&nbsp; * 
+<i>30</i>&nbsp; * This class detects these bytes and, if required, can automatically skip them and return the subsequent byte as the
+<i>31</i>&nbsp; * first byte in the stream.
+<i>32</i>&nbsp; * 
+<i>33</i>&nbsp; * The {@link ByteOrderMark} implementation has the following pre-defined BOMs:
+<i>34</i>&nbsp; * &lt;ul&gt;
+<i>35</i>&nbsp; * &lt;li&gt;UTF-8 - {@link ByteOrderMark#UTF_8}&lt;/li&gt;
+<i>36</i>&nbsp; * &lt;li&gt;UTF-16BE - {@link ByteOrderMark#UTF_16LE}&lt;/li&gt;
+<i>37</i>&nbsp; * &lt;li&gt;UTF-16LE - {@link ByteOrderMark#UTF_16BE}&lt;/li&gt;
+<i>38</i>&nbsp; * &lt;li&gt;UTF-32BE - {@link ByteOrderMark#UTF_32LE}&lt;/li&gt;
+<i>39</i>&nbsp; * &lt;li&gt;UTF-32LE - {@link ByteOrderMark#UTF_32BE}&lt;/li&gt;
+<i>40</i>&nbsp; * &lt;/ul&gt;
+<i>41</i>&nbsp; * 
+<i>42</i>&nbsp; * 
+<i>43</i>&nbsp; * &lt;h3&gt;Example 1 - Detect and exclude a UTF-8 BOM&lt;/h3&gt;
+<i>44</i>&nbsp; * 
+<i>45</i>&nbsp; * &lt;pre&gt;
+<i>46</i>&nbsp; * BOMInputStream bomIn = new BOMInputStream(in);
+<i>47</i>&nbsp; * if (bomIn.hasBOM()) {
+<i>48</i>&nbsp; *     // has a UTF-8 BOM
+<i>49</i>&nbsp; * }
+<i>50</i>&nbsp; * &lt;/pre&gt;
+<i>51</i>&nbsp; * 
+<i>52</i>&nbsp; * &lt;h3&gt;Example 2 - Detect a UTF-8 BOM (but don&#39;t exclude it)&lt;/h3&gt;
+<i>53</i>&nbsp; * 
+<i>54</i>&nbsp; * &lt;pre&gt;
+<i>55</i>&nbsp; * boolean include = true;
+<i>56</i>&nbsp; * BOMInputStream bomIn = new BOMInputStream(in, include);
+<i>57</i>&nbsp; * if (bomIn.hasBOM()) {
+<i>58</i>&nbsp; *     // has a UTF-8 BOM
+<i>59</i>&nbsp; * }
+<i>60</i>&nbsp; * &lt;/pre&gt;
+<i>61</i>&nbsp; * 
+<i>62</i>&nbsp; * &lt;h3&gt;Example 3 - Detect Multiple BOMs&lt;/h3&gt;
+<i>63</i>&nbsp; * 
+<i>64</i>&nbsp; * &lt;pre&gt;
+<i>65</i>&nbsp; * BOMInputStream bomIn = new BOMInputStream(in, 
+<i>66</i>&nbsp; *   ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_16BE,
+<i>67</i>&nbsp; *   ByteOrderMark.UTF_32LE, ByteOrderMark.UTF_32BE
+<i>68</i>&nbsp; *   );
+<i>69</i>&nbsp; * if (bomIn.hasBOM() == false) {
+<i>70</i>&nbsp; *     // No BOM found
+<i>71</i>&nbsp; * } else if (bomIn.hasBOM(ByteOrderMark.UTF_16LE)) {
+<i>72</i>&nbsp; *     // has a UTF-16LE BOM
+<i>73</i>&nbsp; * } else if (bomIn.hasBOM(ByteOrderMark.UTF_16BE)) {
+<i>74</i>&nbsp; *     // has a UTF-16BE BOM
+<i>75</i>&nbsp; * } else if (bomIn.hasBOM(ByteOrderMark.UTF_32LE)) {
+<i>76</i>&nbsp; *     // has a UTF-32LE BOM
+<i>77</i>&nbsp; * } else if (bomIn.hasBOM(ByteOrderMark.UTF_32BE)) {
+<i>78</i>&nbsp; *     // has a UTF-32BE BOM
+<i>79</i>&nbsp; * }
+<i>80</i>&nbsp; * &lt;/pre&gt;
+<i>81</i>&nbsp; * 
+<i>82</i>&nbsp; * @see org.apache.commons.io.ByteOrderMark
+<i>83</i>&nbsp; * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Byte_order_mark&quot;&gt;Wikipedia - Byte Order Mark&lt;/a&gt;
+<i>84</i>&nbsp; * @version $Id$
+<i>85</i>&nbsp; * @since 2.0
+<i>86</i>&nbsp; */
+<b class="fc"><i>87</i>&nbsp;public class BOMInputStream extends ProxyInputStream {</b>
+<i>88</i>&nbsp;    private final boolean include;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * BOMs are sorted from longest to shortest.
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    private final List&lt;ByteOrderMark&gt; boms;
+<i>93</i>&nbsp;    private ByteOrderMark byteOrderMark;
+<i>94</i>&nbsp;    private int[] firstBytes;
+<i>95</i>&nbsp;    private int fbLength;
+<i>96</i>&nbsp;    private int fbIndex;
+<i>97</i>&nbsp;    private int markFbIndex;
+<i>98</i>&nbsp;    private boolean markedAtStart;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Constructs a new BOM InputStream that excludes a {@link ByteOrderMark#UTF_8} BOM.
+<i>102</i>&nbsp;     * 
+<i>103</i>&nbsp;     * @param delegate
+<i>104</i>&nbsp;     *            the InputStream to delegate to
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public BOMInputStream(InputStream delegate) {
+<b class="fc"><i>107</i>&nbsp;        this(delegate, false, ByteOrderMark.UTF_8);</b>
+<b class="fc"><i>108</i>&nbsp;    }</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Constructs a new BOM InputStream that detects a a {@link ByteOrderMark#UTF_8} and optionally includes it.
+<i>112</i>&nbsp;     * 
+<i>113</i>&nbsp;     * @param delegate
+<i>114</i>&nbsp;     *            the InputStream to delegate to
+<i>115</i>&nbsp;     * @param include
+<i>116</i>&nbsp;     *            true to include the UTF-8 BOM or false to exclude it
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    public BOMInputStream(InputStream delegate, boolean include) {
+<b class="fc"><i>119</i>&nbsp;        this(delegate, include, ByteOrderMark.UTF_8);</b>
+<b class="fc"><i>120</i>&nbsp;    }</b>
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Constructs a new BOM InputStream that excludes the specified BOMs.
+<i>124</i>&nbsp;     * 
+<i>125</i>&nbsp;     * @param delegate
+<i>126</i>&nbsp;     *            the InputStream to delegate to
+<i>127</i>&nbsp;     * @param boms
+<i>128</i>&nbsp;     *            The BOMs to detect and exclude
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    public BOMInputStream(InputStream delegate, ByteOrderMark... boms) {
+<b class="fc"><i>131</i>&nbsp;        this(delegate, false, boms);</b>
+<b class="fc"><i>132</i>&nbsp;    }</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Compares ByteOrderMark objects in descending length order.
+<i>136</i>&nbsp;     */
+<b class="fc"><i>137</i>&nbsp;    private static final Comparator&lt;ByteOrderMark&gt; ByteOrderMarkLengthComparator = new Comparator&lt;ByteOrderMark&gt;() {</b>
+<i>138</i>&nbsp;
+<b class="fc"><i>139</i>&nbsp;        public int compare(ByteOrderMark bom1, ByteOrderMark bom2) {</b>
+<b class="fc"><i>140</i>&nbsp;            int len1 = bom1.length();</b>
+<b class="fc"><i>141</i>&nbsp;            int len2 = bom2.length();</b>
+<b class="fc"><i>142</i>&nbsp;            if (len1 &gt; len2) {</b>
+<b class="fc"><i>143</i>&nbsp;                return -1;</b>
+<i>144</i>&nbsp;            }
+<b class="fc"><i>145</i>&nbsp;            if (len2 &gt; len1) {</b>
+<b class="fc"><i>146</i>&nbsp;                return 1;</b>
+<i>147</i>&nbsp;            }
+<b class="fc"><i>148</i>&nbsp;            return 0;</b>
+<i>149</i>&nbsp;        }
+<i>150</i>&nbsp;    };
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    /**
+<i>153</i>&nbsp;     * Constructs a new BOM InputStream that detects the specified BOMs and optionally includes them.
+<i>154</i>&nbsp;     * 
+<i>155</i>&nbsp;     * @param delegate
+<i>156</i>&nbsp;     *            the InputStream to delegate to
+<i>157</i>&nbsp;     * @param include
+<i>158</i>&nbsp;     *            true to include the specified BOMs or false to exclude them
+<i>159</i>&nbsp;     * @param boms
+<i>160</i>&nbsp;     *            The BOMs to detect and optionally exclude
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public BOMInputStream(InputStream delegate, boolean include, ByteOrderMark... boms) {
+<b class="fc"><i>163</i>&nbsp;        super(delegate);</b>
+<b class="fc"><i>164</i>&nbsp;        if (boms == null || boms.length == 0) {</b>
+<b class="fc"><i>165</i>&nbsp;            throw new IllegalArgumentException(&quot;No BOMs specified&quot;);</b>
+<i>166</i>&nbsp;        }
+<b class="fc"><i>167</i>&nbsp;        this.include = include;</b>
+<i>168</i>&nbsp;        // Sort the BOMs to match the longest BOM first because some BOMs have the same starting two bytes.
+<b class="fc"><i>169</i>&nbsp;        Arrays.sort(boms, ByteOrderMarkLengthComparator);</b>
+<b class="fc"><i>170</i>&nbsp;        this.boms = Arrays.asList(boms);</b>
+<i>171</i>&nbsp;
+<b class="fc"><i>172</i>&nbsp;    }</b>
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    /**
+<i>175</i>&nbsp;     * Indicates whether the stream contains one of the specified BOMs.
+<i>176</i>&nbsp;     * 
+<i>177</i>&nbsp;     * @return true if the stream has one of the specified BOMs, otherwise false if it does not
+<i>178</i>&nbsp;     * @throws IOException
+<i>179</i>&nbsp;     *             if an error reading the first bytes of the stream occurs
+<i>180</i>&nbsp;     */
+<b class="fc"><i>181</i>&nbsp;    public boolean hasBOM() throws IOException {</b>
+<b class="fc"><i>182</i>&nbsp;        return getBOM() != null;</b>
+<i>183</i>&nbsp;    }
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;    /**
+<i>186</i>&nbsp;     * Indicates whether the stream contains the specified BOM.
+<i>187</i>&nbsp;     * 
+<i>188</i>&nbsp;     * @param bom
+<i>189</i>&nbsp;     *            The BOM to check for
+<i>190</i>&nbsp;     * @return true if the stream has the specified BOM, otherwise false if it does not
+<i>191</i>&nbsp;     * @throws IllegalArgumentException
+<i>192</i>&nbsp;     *             if the BOM is not one the stream is configured to detect
+<i>193</i>&nbsp;     * @throws IOException
+<i>194</i>&nbsp;     *             if an error reading the first bytes of the stream occurs
+<i>195</i>&nbsp;     */
+<b class="fc"><i>196</i>&nbsp;    public boolean hasBOM(ByteOrderMark bom) throws IOException {</b>
+<b class="fc"><i>197</i>&nbsp;        if (!boms.contains(bom)) {</b>
+<b class="fc"><i>198</i>&nbsp;            throw new IllegalArgumentException(&quot;Stream not configure to detect &quot; + bom);</b>
+<i>199</i>&nbsp;        }
+<b class="fc"><i>200</i>&nbsp;        return byteOrderMark != null &amp;&amp; getBOM().equals(bom);</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /**
+<i>204</i>&nbsp;     * Return the BOM (Byte Order Mark).
+<i>205</i>&nbsp;     * 
+<i>206</i>&nbsp;     * @return The BOM or null if none
+<i>207</i>&nbsp;     * @throws IOException
+<i>208</i>&nbsp;     *             if an error reading the first bytes of the stream occurs
+<i>209</i>&nbsp;     */
+<b class="fc"><i>210</i>&nbsp;    public ByteOrderMark getBOM() throws IOException {</b>
+<b class="fc"><i>211</i>&nbsp;        if (firstBytes == null) {</b>
+<b class="fc"><i>212</i>&nbsp;            fbLength = 0;</b>
+<i>213</i>&nbsp;            // BOMs are sorted from longest to shortest
+<b class="fc"><i>214</i>&nbsp;            final int maxBomSize = boms.get(0).length();</b>
+<b class="fc"><i>215</i>&nbsp;            firstBytes = new int[maxBomSize];</b>
+<i>216</i>&nbsp;            // Read first maxBomSize bytes
+<b class="fc"><i>217</i>&nbsp;            for (int i = 0; i &lt; firstBytes.length; i++) {</b>
+<b class="fc"><i>218</i>&nbsp;                firstBytes[i] = in.read();</b>
+<b class="fc"><i>219</i>&nbsp;                fbLength++;</b>
+<b class="fc"><i>220</i>&nbsp;                if (firstBytes[i] &lt; 0) {</b>
+<b class="fc"><i>221</i>&nbsp;                    break;</b>
+<i>222</i>&nbsp;                }
+<i>223</i>&nbsp;            }
+<i>224</i>&nbsp;            // match BOM in firstBytes
+<b class="fc"><i>225</i>&nbsp;            byteOrderMark = find();</b>
+<b class="fc"><i>226</i>&nbsp;            if (byteOrderMark != null) {</b>
+<b class="fc"><i>227</i>&nbsp;                if (!include) {</b>
+<b class="fc"><i>228</i>&nbsp;                    if (byteOrderMark.length() &lt; firstBytes.length) {</b>
+<b class="fc"><i>229</i>&nbsp;                        fbIndex = byteOrderMark.length();</b>
+<i>230</i>&nbsp;                    } else {
+<b class="fc"><i>231</i>&nbsp;                        fbLength = 0;</b>
+<i>232</i>&nbsp;                    }
+<i>233</i>&nbsp;                }
+<i>234</i>&nbsp;            }
+<i>235</i>&nbsp;        }
+<b class="fc"><i>236</i>&nbsp;        return byteOrderMark;</b>
+<i>237</i>&nbsp;    }
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;    /**
+<i>240</i>&nbsp;     * Return the BOM charset Name - {@link ByteOrderMark#getCharsetName()}.
+<i>241</i>&nbsp;     * 
+<i>242</i>&nbsp;     * @return The BOM charset Name or null if no BOM found
+<i>243</i>&nbsp;     * @throws IOException
+<i>244</i>&nbsp;     *             if an error reading the first bytes of the stream occurs
+<i>245</i>&nbsp;     * 
+<i>246</i>&nbsp;     */
+<b class="fc"><i>247</i>&nbsp;    public String getBOMCharsetName() throws IOException {</b>
+<b class="fc"><i>248</i>&nbsp;        getBOM();</b>
+<b class="fc"><i>249</i>&nbsp;        return byteOrderMark == null ? null : byteOrderMark.getCharsetName();</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    /**
+<i>253</i>&nbsp;     * This method reads and either preserves or skips the first bytes in the stream. It behaves like the single-byte
+<i>254</i>&nbsp;     * &lt;code&gt;read()&lt;/code&gt; method, either returning a valid byte or -1 to indicate that the initial bytes have been
+<i>255</i>&nbsp;     * processed already.
+<i>256</i>&nbsp;     * 
+<i>257</i>&nbsp;     * @return the byte read (excluding BOM) or -1 if the end of stream
+<i>258</i>&nbsp;     * @throws IOException
+<i>259</i>&nbsp;     *             if an I/O error occurs
+<i>260</i>&nbsp;     */
+<b class="fc"><i>261</i>&nbsp;    private int readFirstBytes() throws IOException {</b>
+<b class="fc"><i>262</i>&nbsp;        getBOM();</b>
+<b class="fc"><i>263</i>&nbsp;        return fbIndex &lt; fbLength ? firstBytes[fbIndex++] : -1;</b>
+<i>264</i>&nbsp;    }
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;    /**
+<i>267</i>&nbsp;     * Find a BOM with the specified bytes.
+<i>268</i>&nbsp;     * 
+<i>269</i>&nbsp;     * @return The matched BOM or null if none matched
+<i>270</i>&nbsp;     */
+<b class="fc"><i>271</i>&nbsp;    private ByteOrderMark find() {</b>
+<b class="fc"><i>272</i>&nbsp;        for (ByteOrderMark bom : boms) {</b>
+<b class="fc"><i>273</i>&nbsp;            if (matches(bom)) {</b>
+<b class="fc"><i>274</i>&nbsp;                return bom;</b>
+<i>275</i>&nbsp;            }
+<i>276</i>&nbsp;        }
+<b class="fc"><i>277</i>&nbsp;        return null;</b>
+<i>278</i>&nbsp;    }
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;    /**
+<i>281</i>&nbsp;     * Check if the bytes match a BOM.
+<i>282</i>&nbsp;     * 
+<i>283</i>&nbsp;     * @param bom
+<i>284</i>&nbsp;     *            The BOM
+<i>285</i>&nbsp;     * @return true if the bytes match the bom, otherwise false
+<i>286</i>&nbsp;     */
+<b class="fc"><i>287</i>&nbsp;    private boolean matches(ByteOrderMark bom) {</b>
+<i>288</i>&nbsp;        // if (bom.length() != fbLength) {
+<i>289</i>&nbsp;        // return false;
+<i>290</i>&nbsp;        // }
+<i>291</i>&nbsp;        // firstBytes may be bigger than the BOM bytes
+<b class="fc"><i>292</i>&nbsp;        for (int i = 0; i &lt; bom.length(); i++) {</b>
+<b class="fc"><i>293</i>&nbsp;            if (bom.get(i) != firstBytes[i]) {</b>
+<b class="fc"><i>294</i>&nbsp;                return false;</b>
+<i>295</i>&nbsp;            }
+<i>296</i>&nbsp;        }
+<b class="fc"><i>297</i>&nbsp;        return true;</b>
+<i>298</i>&nbsp;    }
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;    // ----------------------------------------------------------------------------
+<i>301</i>&nbsp;    // Implementation of InputStream
+<i>302</i>&nbsp;    // ----------------------------------------------------------------------------
+<i>303</i>&nbsp;
+<i>304</i>&nbsp;    /**
+<i>305</i>&nbsp;     * Invokes the delegate&#39;s &lt;code&gt;read()&lt;/code&gt; method, detecting and optionally skipping BOM.
+<i>306</i>&nbsp;     * 
+<i>307</i>&nbsp;     * @return the byte read (excluding BOM) or -1 if the end of stream
+<i>308</i>&nbsp;     * @throws IOException
+<i>309</i>&nbsp;     *             if an I/O error occurs
+<i>310</i>&nbsp;     */
+<i>311</i>&nbsp;    @Override
+<b class="fc"><i>312</i>&nbsp;    public int read() throws IOException {</b>
+<b class="fc"><i>313</i>&nbsp;        int b = readFirstBytes();</b>
+<b class="fc"><i>314</i>&nbsp;        return b &gt;= 0 ? b : in.read();</b>
+<i>315</i>&nbsp;    }
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    /**
+<i>318</i>&nbsp;     * Invokes the delegate&#39;s &lt;code&gt;read(byte[], int, int)&lt;/code&gt; method, detecting and optionally skipping BOM.
+<i>319</i>&nbsp;     * 
+<i>320</i>&nbsp;     * @param buf
+<i>321</i>&nbsp;     *            the buffer to read the bytes into
+<i>322</i>&nbsp;     * @param off
+<i>323</i>&nbsp;     *            The start offset
+<i>324</i>&nbsp;     * @param len
+<i>325</i>&nbsp;     *            The number of bytes to read (excluding BOM)
+<i>326</i>&nbsp;     * @return the number of bytes read or -1 if the end of stream
+<i>327</i>&nbsp;     * @throws IOException
+<i>328</i>&nbsp;     *             if an I/O error occurs
+<i>329</i>&nbsp;     */
+<i>330</i>&nbsp;    @Override
+<b class="fc"><i>331</i>&nbsp;    public int read(byte[] buf, int off, int len) throws IOException {</b>
+<b class="fc"><i>332</i>&nbsp;        int firstCount = 0;</b>
+<b class="fc"><i>333</i>&nbsp;        int b = 0;</b>
+<b class="fc"><i>334</i>&nbsp;        while (len &gt; 0 &amp;&amp; b &gt;= 0) {</b>
+<b class="fc"><i>335</i>&nbsp;            b = readFirstBytes();</b>
+<b class="fc"><i>336</i>&nbsp;            if (b &gt;= 0) {</b>
+<b class="fc"><i>337</i>&nbsp;                buf[off++] = (byte) (b &amp; 0xFF);</b>
+<b class="fc"><i>338</i>&nbsp;                len--;</b>
+<b class="fc"><i>339</i>&nbsp;                firstCount++;</b>
+<i>340</i>&nbsp;            }
+<i>341</i>&nbsp;        }
+<b class="fc"><i>342</i>&nbsp;        int secondCount = in.read(buf, off, len);</b>
+<b class="fc"><i>343</i>&nbsp;        return secondCount &lt; 0 ? firstCount &gt; 0 ? firstCount : -1 : firstCount + secondCount;</b>
+<i>344</i>&nbsp;    }
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;    /**
+<i>347</i>&nbsp;     * Invokes the delegate&#39;s &lt;code&gt;read(byte[])&lt;/code&gt; method, detecting and optionally skipping BOM.
+<i>348</i>&nbsp;     * 
+<i>349</i>&nbsp;     * @param buf
+<i>350</i>&nbsp;     *            the buffer to read the bytes into
+<i>351</i>&nbsp;     * @return the number of bytes read (excluding BOM) or -1 if the end of stream
+<i>352</i>&nbsp;     * @throws IOException
+<i>353</i>&nbsp;     *             if an I/O error occurs
+<i>354</i>&nbsp;     */
+<i>355</i>&nbsp;    @Override
+<b class="fc"><i>356</i>&nbsp;    public int read(byte[] buf) throws IOException {</b>
+<b class="fc"><i>357</i>&nbsp;        return read(buf, 0, buf.length);</b>
+<i>358</i>&nbsp;    }
+<i>359</i>&nbsp;
+<i>360</i>&nbsp;    /**
+<i>361</i>&nbsp;     * Invokes the delegate&#39;s &lt;code&gt;mark(int)&lt;/code&gt; method.
+<i>362</i>&nbsp;     * 
+<i>363</i>&nbsp;     * @param readlimit
+<i>364</i>&nbsp;     *            read ahead limit
+<i>365</i>&nbsp;     */
+<i>366</i>&nbsp;    @Override
+<b class="fc"><i>367</i>&nbsp;    public synchronized void mark(int readlimit) {</b>
+<b class="fc"><i>368</i>&nbsp;        markFbIndex = fbIndex;</b>
+<b class="fc"><i>369</i>&nbsp;        markedAtStart = firstBytes == null;</b>
+<b class="fc"><i>370</i>&nbsp;        in.mark(readlimit);</b>
+<b class="fc"><i>371</i>&nbsp;    }</b>
+<i>372</i>&nbsp;
+<i>373</i>&nbsp;    /**
+<i>374</i>&nbsp;     * Invokes the delegate&#39;s &lt;code&gt;reset()&lt;/code&gt; method.
+<i>375</i>&nbsp;     * 
+<i>376</i>&nbsp;     * @throws IOException
+<i>377</i>&nbsp;     *             if an I/O error occurs
+<i>378</i>&nbsp;     */
+<i>379</i>&nbsp;    @Override
+<b class="fc"><i>380</i>&nbsp;    public synchronized void reset() throws IOException {</b>
+<b class="fc"><i>381</i>&nbsp;        fbIndex = markFbIndex;</b>
+<b class="fc"><i>382</i>&nbsp;        if (markedAtStart) {</b>
+<b class="fc"><i>383</i>&nbsp;            firstBytes = null;</b>
+<i>384</i>&nbsp;        }
+<i>385</i>&nbsp;
+<b class="fc"><i>386</i>&nbsp;        in.reset();</b>
+<b class="fc"><i>387</i>&nbsp;    }</b>
+<i>388</i>&nbsp;
+<i>389</i>&nbsp;    /**
+<i>390</i>&nbsp;     * Invokes the delegate&#39;s &lt;code&gt;skip(long)&lt;/code&gt; method, detecting and optionallyskipping BOM.
+<i>391</i>&nbsp;     * 
+<i>392</i>&nbsp;     * @param n
+<i>393</i>&nbsp;     *            the number of bytes to skip
+<i>394</i>&nbsp;     * @return the number of bytes to skipped or -1 if the end of stream
+<i>395</i>&nbsp;     * @throws IOException
+<i>396</i>&nbsp;     *             if an I/O error occurs
+<i>397</i>&nbsp;     */
+<i>398</i>&nbsp;    @Override
+<b class="fc"><i>399</i>&nbsp;    public long skip(long n) throws IOException {</b>
+<b class="fc"><i>400</i>&nbsp;        while (n &gt; 0 &amp;&amp; readFirstBytes() &gt;= 0) {</b>
+<b class="fc"><i>401</i>&nbsp;            n--;</b>
+<i>402</i>&nbsp;        }
+<b class="fc"><i>403</i>&nbsp;        return in.skip(n);</b>
+<i>404</i>&nbsp;    }
+<i>405</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:01</div>
+</div>
+</body>
+</html>

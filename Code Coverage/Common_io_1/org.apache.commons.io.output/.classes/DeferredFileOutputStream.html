@@ -1,0 +1,472 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DeferredFileOutputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.output</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DeferredFileOutputStream (org.apache.commons.io.output)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DeferredFileOutputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (56/ 63)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DeferredFileOutputStream$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DeferredFileOutputStream$1__CLR4_1_2$AC0</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DeferredFileOutputStream$__CLR4_1_2wewejukhtaof</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (16/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.4%
+  </span>
+  <span class="absValue">
+    (59/ 66)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.output;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.FileInputStream;
+<i>21</i>&nbsp;import java.io.FileOutputStream;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;import java.io.OutputStream;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;import org.apache.commons.io.FileUtils;
+<i>26</i>&nbsp;import org.apache.commons.io.IOUtils;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;/**
+<i>30</i>&nbsp; * An output stream which will retain data in memory until a specified
+<i>31</i>&nbsp; * threshold is reached, and only then commit it to disk. If the stream is
+<i>32</i>&nbsp; * closed before the threshold is reached, the data will not be written to
+<i>33</i>&nbsp; * disk at all.
+<i>34</i>&nbsp; * &lt;p&gt;
+<i>35</i>&nbsp; * This class originated in FileUpload processing. In this use case, you do
+<i>36</i>&nbsp; * not know in advance the size of the file being uploaded. If the file is small
+<i>37</i>&nbsp; * you want to store it in memory (for speed), but if the file is large you want
+<i>38</i>&nbsp; * to store it to file (to avoid memory issues).
+<i>39</i>&nbsp; */
+<i>40</i>&nbsp;public class DeferredFileOutputStream
+<i>41</i>&nbsp;    extends ThresholdingOutputStream
+<b class="fc"><i>42</i>&nbsp;{</b>
+<i>43</i>&nbsp;    // ----------------------------------------------------------- Data members
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * The output stream to which data will be written prior to the threshold
+<i>48</i>&nbsp;     * being reached.
+<i>49</i>&nbsp;     */
+<i>50</i>&nbsp;    private ByteArrayOutputStream memoryOutputStream;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * The output stream to which data will be written at any given time. This
+<i>55</i>&nbsp;     * will always be one of &lt;code&gt;memoryOutputStream&lt;/code&gt; or
+<i>56</i>&nbsp;     * &lt;code&gt;diskOutputStream&lt;/code&gt;.
+<i>57</i>&nbsp;     */
+<i>58</i>&nbsp;    private OutputStream currentOutputStream;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * The file to which output will be directed if the threshold is exceeded.
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    private File outputFile;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * The temporary file prefix.
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    private final String prefix;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    /**
+<i>72</i>&nbsp;     * The temporary file suffix.
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    private final String suffix;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * The directory to use for temporary files.
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    private final File directory;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * True when close() has been called successfully.
+<i>84</i>&nbsp;     */
+<b class="fc"><i>85</i>&nbsp;    private boolean closed = false;</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    // ----------------------------------------------------------- Constructors
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Constructs an instance of this class which will trigger an event at the
+<i>92</i>&nbsp;     * specified threshold, and save data to a file beyond that point.
+<i>93</i>&nbsp;     * The initial buffer size will default to 1024 bytes which is ByteArrayOutputStream&#39;s default buffer size.
+<i>94</i>&nbsp;     *
+<i>95</i>&nbsp;     * @param threshold  The number of bytes at which to trigger an event.
+<i>96</i>&nbsp;     * @param outputFile The file to which data is saved beyond the threshold.
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    public DeferredFileOutputStream(final int threshold, final File outputFile)
+<i>99</i>&nbsp;    {
+<b class="fc"><i>100</i>&nbsp;        this(threshold,  outputFile, null, null, null, ByteArrayOutputStream.DEFAULT_SIZE);</b>
+<b class="fc"><i>101</i>&nbsp;    }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * Constructs an instance of this class which will trigger an event at the
+<i>105</i>&nbsp;     * specified threshold, and save data to a file beyond that point.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param threshold  The number of bytes at which to trigger an event.
+<i>108</i>&nbsp;     * @param initialBufferSize The initial size of the in memory buffer.
+<i>109</i>&nbsp;     * @param outputFile The file to which data is saved beyond the threshold.
+<i>110</i>&nbsp;     *
+<i>111</i>&nbsp;     * @since 2.5
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final File outputFile)
+<i>114</i>&nbsp;    {
+<b class="fc"><i>115</i>&nbsp;        this(threshold, outputFile, null, null, null, initialBufferSize);</b>
+<b class="fc"><i>116</i>&nbsp;        if (initialBufferSize &lt; 0) {</b>
+<b class="nc"><i>117</i>&nbsp;            throw new IllegalArgumentException(&quot;Initial buffer size must be atleast 0.&quot;);</b>
+<i>118</i>&nbsp;        }
+<b class="fc"><i>119</i>&nbsp;    }</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Constructs an instance of this class which will trigger an event at the
+<i>123</i>&nbsp;     * specified threshold, and save data to a temporary file beyond that point.
+<i>124</i>&nbsp;     * The initial buffer size will default to 32 bytes which is ByteArrayOutputStream&#39;s default buffer size.
+<i>125</i>&nbsp;     *
+<i>126</i>&nbsp;     * @param threshold  The number of bytes at which to trigger an event.
+<i>127</i>&nbsp;     * @param prefix Prefix to use for the temporary file.
+<i>128</i>&nbsp;     * @param suffix Suffix to use for the temporary file.
+<i>129</i>&nbsp;     * @param directory Temporary file directory.
+<i>130</i>&nbsp;     *
+<i>131</i>&nbsp;     * @since 1.4
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    public DeferredFileOutputStream(final int threshold, final String prefix, final String suffix, final File directory)
+<i>134</i>&nbsp;    {
+<b class="fc"><i>135</i>&nbsp;        this(threshold, null, prefix, suffix, directory, ByteArrayOutputStream.DEFAULT_SIZE);</b>
+<b class="fc"><i>136</i>&nbsp;        if (prefix == null) {</b>
+<b class="fc"><i>137</i>&nbsp;            throw new IllegalArgumentException(&quot;Temporary file prefix is missing&quot;);</b>
+<i>138</i>&nbsp;        }
+<b class="nc"><i>139</i>&nbsp;    }</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Constructs an instance of this class which will trigger an event at the
+<i>143</i>&nbsp;     * specified threshold, and save data to a temporary file beyond that point.
+<i>144</i>&nbsp;     *
+<i>145</i>&nbsp;     * @param threshold  The number of bytes at which to trigger an event.
+<i>146</i>&nbsp;     * @param initialBufferSize The initial size of the in memory buffer.
+<i>147</i>&nbsp;     * @param prefix Prefix to use for the temporary file.
+<i>148</i>&nbsp;     * @param suffix Suffix to use for the temporary file.
+<i>149</i>&nbsp;     * @param directory Temporary file directory.
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @since 2.5
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public DeferredFileOutputStream(final int threshold, final int initialBufferSize, final String prefix,
+<i>154</i>&nbsp;                                    final String suffix, final File directory)
+<i>155</i>&nbsp;    {
+<b class="fc"><i>156</i>&nbsp;        this(threshold, null, prefix, suffix, directory, initialBufferSize);</b>
+<b class="fc"><i>157</i>&nbsp;        if (prefix == null) {</b>
+<b class="nc"><i>158</i>&nbsp;            throw new IllegalArgumentException(&quot;Temporary file prefix is missing&quot;);</b>
+<i>159</i>&nbsp;        }
+<b class="fc"><i>160</i>&nbsp;        if (initialBufferSize &lt; 0) {</b>
+<b class="nc"><i>161</i>&nbsp;            throw new IllegalArgumentException(&quot;Initial buffer size must be atleast 0.&quot;);</b>
+<i>162</i>&nbsp;        }
+<b class="fc"><i>163</i>&nbsp;    }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * Constructs an instance of this class which will trigger an event at the
+<i>167</i>&nbsp;     * specified threshold, and save data either to a file beyond that point.
+<i>168</i>&nbsp;     *
+<i>169</i>&nbsp;     * @param threshold  The number of bytes at which to trigger an event.
+<i>170</i>&nbsp;     * @param outputFile The file to which data is saved beyond the threshold.
+<i>171</i>&nbsp;     * @param prefix Prefix to use for the temporary file.
+<i>172</i>&nbsp;     * @param suffix Suffix to use for the temporary file.
+<i>173</i>&nbsp;     * @param directory Temporary file directory.
+<i>174</i>&nbsp;     * @param initialBufferSize The initial size of the in memory buffer.
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    private DeferredFileOutputStream(final int threshold, final File outputFile, final String prefix,
+<i>177</i>&nbsp;                                     final String suffix, final File directory, final int initialBufferSize) {
+<b class="fc"><i>178</i>&nbsp;        super(threshold);</b>
+<b class="fc"><i>179</i>&nbsp;        this.outputFile = outputFile;</b>
+<b class="fc"><i>180</i>&nbsp;        this.prefix = prefix;</b>
+<b class="fc"><i>181</i>&nbsp;        this.suffix = suffix;</b>
+<b class="fc"><i>182</i>&nbsp;        this.directory = directory;</b>
+<i>183</i>&nbsp;
+<b class="fc"><i>184</i>&nbsp;        memoryOutputStream = new ByteArrayOutputStream(initialBufferSize);</b>
+<b class="fc"><i>185</i>&nbsp;        currentOutputStream = memoryOutputStream;</b>
+<b class="fc"><i>186</i>&nbsp;    }</b>
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    // --------------------------------------- ThresholdingOutputStream methods
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * Returns the current output stream. This may be memory based or disk
+<i>194</i>&nbsp;     * based, depending on the current state with respect to the threshold.
+<i>195</i>&nbsp;     *
+<i>196</i>&nbsp;     * @return The underlying output stream.
+<i>197</i>&nbsp;     *
+<i>198</i>&nbsp;     * @throws IOException if an error occurs.
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    @Override
+<i>201</i>&nbsp;    protected OutputStream getStream() throws IOException
+<b class="fc"><i>202</i>&nbsp;    {</b>
+<b class="fc"><i>203</i>&nbsp;        return currentOutputStream;</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    /**
+<i>208</i>&nbsp;     * Switches the underlying output stream from a memory based stream to one
+<i>209</i>&nbsp;     * that is backed by disk. This is the point at which we realise that too
+<i>210</i>&nbsp;     * much data is being written to keep in memory, so we elect to switch to
+<i>211</i>&nbsp;     * disk-based storage.
+<i>212</i>&nbsp;     *
+<i>213</i>&nbsp;     * @throws IOException if an error occurs.
+<i>214</i>&nbsp;     */
+<i>215</i>&nbsp;    @Override
+<i>216</i>&nbsp;    protected void thresholdReached() throws IOException
+<b class="fc"><i>217</i>&nbsp;    {</b>
+<b class="fc"><i>218</i>&nbsp;        if (prefix != null) {</b>
+<b class="fc"><i>219</i>&nbsp;            outputFile = File.createTempFile(prefix, suffix, directory);</b>
+<i>220</i>&nbsp;        }
+<b class="fc"><i>221</i>&nbsp;        FileUtils.forceMkdirParent(outputFile);</b>
+<b class="fc"><i>222</i>&nbsp;        final FileOutputStream fos = new FileOutputStream(outputFile);</b>
+<b class="fc"><i>223</i>&nbsp;        try {</b>
+<b class="fc"><i>224</i>&nbsp;            memoryOutputStream.writeTo(fos);</b>
+<b class="nc"><i>225</i>&nbsp;        } catch (final IOException e){</b>
+<b class="nc"><i>226</i>&nbsp;            fos.close();</b>
+<b class="nc"><i>227</i>&nbsp;            throw e;</b>
+<b class="fc"><i>228</i>&nbsp;        }</b>
+<b class="fc"><i>229</i>&nbsp;        currentOutputStream = fos;</b>
+<b class="fc"><i>230</i>&nbsp;        memoryOutputStream = null;</b>
+<b class="fc"><i>231</i>&nbsp;    }</b>
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    // --------------------------------------------------------- Public methods
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;    /**
+<i>238</i>&nbsp;     * Determines whether or not the data for this output stream has been
+<i>239</i>&nbsp;     * retained in memory.
+<i>240</i>&nbsp;     *
+<i>241</i>&nbsp;     * @return {@code true} if the data is available in memory;
+<i>242</i>&nbsp;     *         {@code false} otherwise.
+<i>243</i>&nbsp;     */
+<i>244</i>&nbsp;    public boolean isInMemory()
+<b class="fc"><i>245</i>&nbsp;    {</b>
+<b class="fc"><i>246</i>&nbsp;        return !isThresholdExceeded();</b>
+<i>247</i>&nbsp;    }
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * Returns the data for this output stream as an array of bytes, assuming
+<i>252</i>&nbsp;     * that the data has been retained in memory. If the data was written to
+<i>253</i>&nbsp;     * disk, this method returns {@code null}.
+<i>254</i>&nbsp;     *
+<i>255</i>&nbsp;     * @return The data for this output stream, or {@code null} if no such
+<i>256</i>&nbsp;     *         data is available.
+<i>257</i>&nbsp;     */
+<i>258</i>&nbsp;    public byte[] getData()
+<b class="fc"><i>259</i>&nbsp;    {</b>
+<b class="fc"><i>260</i>&nbsp;        if (memoryOutputStream != null)</b>
+<i>261</i>&nbsp;        {
+<b class="fc"><i>262</i>&nbsp;            return memoryOutputStream.toByteArray();</b>
+<i>263</i>&nbsp;        }
+<b class="fc"><i>264</i>&nbsp;        return null;</b>
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * Returns either the output file specified in the constructor or
+<i>270</i>&nbsp;     * the temporary file created or null.
+<i>271</i>&nbsp;     * &lt;p&gt;
+<i>272</i>&nbsp;     * If the constructor specifying the file is used then it returns that
+<i>273</i>&nbsp;     * same output file, even when threshold has not been reached.
+<i>274</i>&nbsp;     * &lt;p&gt;
+<i>275</i>&nbsp;     * If constructor specifying a temporary file prefix/suffix is used
+<i>276</i>&nbsp;     * then the temporary file created once the threshold is reached is returned
+<i>277</i>&nbsp;     * If the threshold was not reached then {@code null} is returned.
+<i>278</i>&nbsp;     *
+<i>279</i>&nbsp;     * @return The file for this output stream, or {@code null} if no such
+<i>280</i>&nbsp;     *         file exists.
+<i>281</i>&nbsp;     */
+<i>282</i>&nbsp;    public File getFile()
+<b class="fc"><i>283</i>&nbsp;    {</b>
+<b class="fc"><i>284</i>&nbsp;        return outputFile;</b>
+<i>285</i>&nbsp;    }
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    /**
+<i>289</i>&nbsp;     * Closes underlying output stream, and mark this as closed
+<i>290</i>&nbsp;     *
+<i>291</i>&nbsp;     * @throws IOException if an error occurs.
+<i>292</i>&nbsp;     */
+<i>293</i>&nbsp;    @Override
+<i>294</i>&nbsp;    public void close() throws IOException
+<b class="fc"><i>295</i>&nbsp;    {</b>
+<b class="fc"><i>296</i>&nbsp;        super.close();</b>
+<b class="fc"><i>297</i>&nbsp;        closed = true;</b>
+<b class="fc"><i>298</i>&nbsp;    }</b>
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    /**
+<i>302</i>&nbsp;     * Writes the data from this output stream to the specified output stream,
+<i>303</i>&nbsp;     * after it has been closed.
+<i>304</i>&nbsp;     *
+<i>305</i>&nbsp;     * @param out output stream to write to.
+<i>306</i>&nbsp;     * @throws IOException if this stream is not yet closed or an error occurs.
+<i>307</i>&nbsp;     */
+<i>308</i>&nbsp;    public void writeTo(final OutputStream out) throws IOException
+<b class="fc"><i>309</i>&nbsp;    {</b>
+<i>310</i>&nbsp;        // we may only need to check if this is closed if we are working with a file
+<i>311</i>&nbsp;        // but we should force the habit of closing wether we are working with
+<i>312</i>&nbsp;        // a file or memory.
+<b class="fc"><i>313</i>&nbsp;        if (!closed) {</b>
+<b class="fc"><i>314</i>&nbsp;            throw new IOException(&quot;Stream not closed&quot;);</b>
+<i>315</i>&nbsp;        }
+<i>316</i>&nbsp;
+<b class="fc"><i>317</i>&nbsp;        if (isInMemory()) {</b>
+<b class="fc"><i>318</i>&nbsp;            memoryOutputStream.writeTo(out);</b>
+<i>319</i>&nbsp;        } else {
+<b class="fc"><i>320</i>&nbsp;            try (FileInputStream fis = new FileInputStream(outputFile)) {</b>
+<b class="fc"><i>321</i>&nbsp;                IOUtils.copy(fis, out);</b>
+<b class="fc"><i>322</i>&nbsp;            }</b>
+<i>323</i>&nbsp;        }
+<b class="fc"><i>324</i>&nbsp;    }</b>
+<i>325</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:05</div>
+</div>
+</body>
+</html>

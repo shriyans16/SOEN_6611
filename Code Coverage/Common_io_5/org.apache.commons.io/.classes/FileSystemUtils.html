@@ -1,0 +1,650 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FileSystemUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FileSystemUtils (org.apache.commons.io)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FileSystemUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (12/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.6%
+  </span>
+  <span class="absValue">
+    (142/ 172)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">FileSystemUtils$__CLR4_1_2ewewjukjec30</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    86.7%
+  </span>
+  <span class="absValue">
+    (13/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.7%
+  </span>
+  <span class="absValue">
+    (143/ 173)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.BufferedReader;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.IOException;
+<i>22</i>&nbsp;import java.io.InputStream;
+<i>23</i>&nbsp;import java.io.InputStreamReader;
+<i>24</i>&nbsp;import java.io.OutputStream;
+<i>25</i>&nbsp;import java.nio.charset.Charset;
+<i>26</i>&nbsp;import java.util.ArrayList;
+<i>27</i>&nbsp;import java.util.Arrays;
+<i>28</i>&nbsp;import java.util.List;
+<i>29</i>&nbsp;import java.util.Locale;
+<i>30</i>&nbsp;import java.util.StringTokenizer;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;/**
+<i>33</i>&nbsp; * General File System utilities.
+<i>34</i>&nbsp; * &lt;p&gt;
+<i>35</i>&nbsp; * This class provides static utility methods for general file system
+<i>36</i>&nbsp; * functions not provided via the JDK {@link java.io.File File} class.
+<i>37</i>&nbsp; * &lt;p&gt;
+<i>38</i>&nbsp; * The current functions provided are:
+<i>39</i>&nbsp; * &lt;ul&gt;
+<i>40</i>&nbsp; * &lt;li&gt;Get the free space on a drive
+<i>41</i>&nbsp; * &lt;/ul&gt;
+<i>42</i>&nbsp; *
+<i>43</i>&nbsp; * @version $Id$
+<i>44</i>&nbsp; * @since 1.1
+<i>45</i>&nbsp; */
+<b class="fc"><i>46</i>&nbsp;public class FileSystemUtils {</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /** Singleton instance, used mainly for testing. */
+<b class="fc"><i>49</i>&nbsp;    private static final FileSystemUtils INSTANCE = new FileSystemUtils();</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /** Operating system state flag for error. */
+<i>52</i>&nbsp;    private static final int INIT_PROBLEM = -1;
+<i>53</i>&nbsp;    /** Operating system state flag for neither Unix nor Windows. */
+<i>54</i>&nbsp;    private static final int OTHER = 0;
+<i>55</i>&nbsp;    /** Operating system state flag for Windows. */
+<i>56</i>&nbsp;    private static final int WINDOWS = 1;
+<i>57</i>&nbsp;    /** Operating system state flag for Unix. */
+<i>58</i>&nbsp;    private static final int UNIX = 2;
+<i>59</i>&nbsp;    /** Operating system state flag for Posix flavour Unix. */
+<i>60</i>&nbsp;    private static final int POSIX_UNIX = 3;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /** The operating system flag. */
+<i>63</i>&nbsp;    private static final int OS;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /** The path to df */
+<i>66</i>&nbsp;    private static final String DF;
+<i>67</i>&nbsp;
+<b class="fc"><i>68</i>&nbsp;    static {</b>
+<b class="fc"><i>69</i>&nbsp;        int os = OTHER;</b>
+<b class="fc"><i>70</i>&nbsp;        String dfPath = &quot;df&quot;;</b>
+<b class="fc"><i>71</i>&nbsp;        try {</b>
+<b class="fc"><i>72</i>&nbsp;            String osName = System.getProperty(&quot;os.name&quot;);</b>
+<b class="fc"><i>73</i>&nbsp;            if (osName == null) {</b>
+<b class="nc"><i>74</i>&nbsp;                throw new IOException(&quot;os.name not found&quot;);</b>
+<i>75</i>&nbsp;            }
+<b class="fc"><i>76</i>&nbsp;            osName = osName.toLowerCase(Locale.ENGLISH);</b>
+<i>77</i>&nbsp;            // match
+<b class="fc"><i>78</i>&nbsp;            if (osName.contains(&quot;windows&quot;)) {</b>
+<b class="fc"><i>79</i>&nbsp;                os = WINDOWS;</b>
+<b class="nc"><i>80</i>&nbsp;            } else if (osName.contains(&quot;linux&quot;) ||</b>
+<b class="nc"><i>81</i>&nbsp;                    osName.contains(&quot;mpe/ix&quot;) ||</b>
+<b class="nc"><i>82</i>&nbsp;                    osName.contains(&quot;freebsd&quot;) ||</b>
+<b class="nc"><i>83</i>&nbsp;                    osName.contains(&quot;irix&quot;) ||</b>
+<b class="nc"><i>84</i>&nbsp;                    osName.contains(&quot;digital unix&quot;) ||</b>
+<b class="nc"><i>85</i>&nbsp;                    osName.contains(&quot;unix&quot;) ||</b>
+<b class="nc"><i>86</i>&nbsp;                    osName.contains(&quot;mac os x&quot;)) {</b>
+<b class="nc"><i>87</i>&nbsp;                os = UNIX;</b>
+<b class="nc"><i>88</i>&nbsp;            } else if (osName.contains(&quot;sun os&quot;) ||</b>
+<b class="nc"><i>89</i>&nbsp;                    osName.contains(&quot;sunos&quot;) ||</b>
+<b class="nc"><i>90</i>&nbsp;                    osName.contains(&quot;solaris&quot;)) {</b>
+<b class="nc"><i>91</i>&nbsp;                os = POSIX_UNIX;</b>
+<b class="nc"><i>92</i>&nbsp;                dfPath = &quot;/usr/xpg4/bin/df&quot;;</b>
+<b class="nc"><i>93</i>&nbsp;            } else if (osName.contains(&quot;hp-ux&quot;) ||</b>
+<b class="nc"><i>94</i>&nbsp;                    osName.contains(&quot;aix&quot;)) {</b>
+<b class="nc"><i>95</i>&nbsp;                os = POSIX_UNIX;</b>
+<i>96</i>&nbsp;            } else {
+<b class="nc"><i>97</i>&nbsp;                os = OTHER;</b>
+<i>98</i>&nbsp;            }
+<i>99</i>&nbsp;
+<b class="nc"><i>100</i>&nbsp;        } catch (final Exception ex) {</b>
+<b class="nc"><i>101</i>&nbsp;            os = INIT_PROBLEM;</b>
+<b class="fc"><i>102</i>&nbsp;        }</b>
+<b class="fc"><i>103</i>&nbsp;        OS = os;</b>
+<b class="fc"><i>104</i>&nbsp;        DF = dfPath;</b>
+<b class="fc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * Instances should NOT be constructed in standard programming.
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public FileSystemUtils() {
+<b class="fc"><i>111</i>&nbsp;        super();</b>
+<b class="fc"><i>112</i>&nbsp;    }</b>
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    //-----------------------------------------------------------------------
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * Returns the free space on a drive or volume by invoking
+<i>117</i>&nbsp;     * the command line.
+<i>118</i>&nbsp;     * This method does not normalize the result, and typically returns
+<i>119</i>&nbsp;     * bytes on Windows, 512 byte units on OS X and kilobytes on Unix.
+<i>120</i>&nbsp;     * As this is not very useful, this method is deprecated in favour
+<i>121</i>&nbsp;     * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
+<i>122</i>&nbsp;     * &lt;p&gt;
+<i>123</i>&nbsp;     * Note that some OS&#39;s are NOT currently supported, including OS/390,
+<i>124</i>&nbsp;     * OpenVMS.
+<i>125</i>&nbsp;     * &lt;pre&gt;
+<i>126</i>&nbsp;     * FileSystemUtils.freeSpace(&quot;C:&quot;);       // Windows
+<i>127</i>&nbsp;     * FileSystemUtils.freeSpace(&quot;/volume&quot;);  // *nix
+<i>128</i>&nbsp;     * &lt;/pre&gt;
+<i>129</i>&nbsp;     * The free space is calculated via the command line.
+<i>130</i>&nbsp;     * It uses &#39;dir /-c&#39; on Windows and &#39;df&#39; on *nix.
+<i>131</i>&nbsp;     *
+<i>132</i>&nbsp;     * @param path  the path to get free space for, not null, not empty on Unix
+<i>133</i>&nbsp;     * @return the amount of free drive space on the drive or volume
+<i>134</i>&nbsp;     * @throws IllegalArgumentException if the path is invalid
+<i>135</i>&nbsp;     * @throws IllegalStateException if an error occurred in initialisation
+<i>136</i>&nbsp;     * @throws IOException if an error occurs when finding the free space
+<i>137</i>&nbsp;     * @since 1.1, enhanced OS support in 1.2 and 1.3
+<i>138</i>&nbsp;     * @deprecated Use freeSpaceKb(String)
+<i>139</i>&nbsp;     *  Deprecated from 1.3, may be removed in 2.0
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    @Deprecated
+<b class="fc"><i>142</i>&nbsp;    public static long freeSpace(final String path) throws IOException {</b>
+<b class="fc"><i>143</i>&nbsp;        return INSTANCE.freeSpaceOS(path, OS, false, -1);</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    //-----------------------------------------------------------------------
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Returns the free space on a drive or volume in kilobytes by invoking
+<i>149</i>&nbsp;     * the command line.
+<i>150</i>&nbsp;     * &lt;pre&gt;
+<i>151</i>&nbsp;     * FileSystemUtils.freeSpaceKb(&quot;C:&quot;);       // Windows
+<i>152</i>&nbsp;     * FileSystemUtils.freeSpaceKb(&quot;/volume&quot;);  // *nix
+<i>153</i>&nbsp;     * &lt;/pre&gt;
+<i>154</i>&nbsp;     * The free space is calculated via the command line.
+<i>155</i>&nbsp;     * It uses &#39;dir /-c&#39; on Windows, &#39;df -kP&#39; on AIX/HP-UX and &#39;df -k&#39; on other Unix.
+<i>156</i>&nbsp;     * &lt;p&gt;
+<i>157</i>&nbsp;     * In order to work, you must be running Windows, or have a implementation of
+<i>158</i>&nbsp;     * Unix df that supports GNU format when passed -k (or -kP). If you are going
+<i>159</i>&nbsp;     * to rely on this code, please check that it works on your OS by running
+<i>160</i>&nbsp;     * some simple tests to compare the command line with the output from this class.
+<i>161</i>&nbsp;     * If your operating system isn&#39;t supported, please raise a JIRA call detailing
+<i>162</i>&nbsp;     * the exact result from df -k and as much other detail as possible, thanks.
+<i>163</i>&nbsp;     *
+<i>164</i>&nbsp;     * @param path  the path to get free space for, not null, not empty on Unix
+<i>165</i>&nbsp;     * @return the amount of free drive space on the drive or volume in kilobytes
+<i>166</i>&nbsp;     * @throws IllegalArgumentException if the path is invalid
+<i>167</i>&nbsp;     * @throws IllegalStateException if an error occurred in initialisation
+<i>168</i>&nbsp;     * @throws IOException if an error occurs when finding the free space
+<i>169</i>&nbsp;     * @since 1.2, enhanced OS support in 1.3
+<i>170</i>&nbsp;     */
+<b class="fc"><i>171</i>&nbsp;    public static long freeSpaceKb(final String path) throws IOException {</b>
+<b class="fc"><i>172</i>&nbsp;        return freeSpaceKb(path, -1);</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;    /**
+<i>175</i>&nbsp;     * Returns the free space on a drive or volume in kilobytes by invoking
+<i>176</i>&nbsp;     * the command line.
+<i>177</i>&nbsp;     * &lt;pre&gt;
+<i>178</i>&nbsp;     * FileSystemUtils.freeSpaceKb(&quot;C:&quot;);       // Windows
+<i>179</i>&nbsp;     * FileSystemUtils.freeSpaceKb(&quot;/volume&quot;);  // *nix
+<i>180</i>&nbsp;     * &lt;/pre&gt;
+<i>181</i>&nbsp;     * The free space is calculated via the command line.
+<i>182</i>&nbsp;     * It uses &#39;dir /-c&#39; on Windows, &#39;df -kP&#39; on AIX/HP-UX and &#39;df -k&#39; on other Unix.
+<i>183</i>&nbsp;     * &lt;p&gt;
+<i>184</i>&nbsp;     * In order to work, you must be running Windows, or have a implementation of
+<i>185</i>&nbsp;     * Unix df that supports GNU format when passed -k (or -kP). If you are going
+<i>186</i>&nbsp;     * to rely on this code, please check that it works on your OS by running
+<i>187</i>&nbsp;     * some simple tests to compare the command line with the output from this class.
+<i>188</i>&nbsp;     * If your operating system isn&#39;t supported, please raise a JIRA call detailing
+<i>189</i>&nbsp;     * the exact result from df -k and as much other detail as possible, thanks.
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @param path  the path to get free space for, not null, not empty on Unix
+<i>192</i>&nbsp;     * @param timeout The timeout amount in milliseconds or no timeout if the value
+<i>193</i>&nbsp;     *  is zero or less
+<i>194</i>&nbsp;     * @return the amount of free drive space on the drive or volume in kilobytes
+<i>195</i>&nbsp;     * @throws IllegalArgumentException if the path is invalid
+<i>196</i>&nbsp;     * @throws IllegalStateException if an error occurred in initialisation
+<i>197</i>&nbsp;     * @throws IOException if an error occurs when finding the free space
+<i>198</i>&nbsp;     * @since 2.0
+<i>199</i>&nbsp;     */
+<b class="fc"><i>200</i>&nbsp;    public static long freeSpaceKb(final String path, final long timeout) throws IOException {</b>
+<b class="fc"><i>201</i>&nbsp;        return INSTANCE.freeSpaceOS(path, OS, true, timeout);</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Returns the disk size of the volume which holds the working directory.
+<i>206</i>&nbsp;     * &lt;p&gt;
+<i>207</i>&nbsp;     * Identical to:
+<i>208</i>&nbsp;     * &lt;pre&gt;
+<i>209</i>&nbsp;     * freeSpaceKb(new File(&quot;.&quot;).getAbsolutePath())
+<i>210</i>&nbsp;     * &lt;/pre&gt;
+<i>211</i>&nbsp;     * @return the amount of free drive space on the drive or volume in kilobytes
+<i>212</i>&nbsp;     * @throws IllegalStateException if an error occurred in initialisation
+<i>213</i>&nbsp;     * @throws IOException if an error occurs when finding the free space
+<i>214</i>&nbsp;     * @since 2.0
+<i>215</i>&nbsp;     */
+<b class="nc"><i>216</i>&nbsp;    public static long freeSpaceKb() throws IOException {</b>
+<b class="nc"><i>217</i>&nbsp;        return freeSpaceKb(-1);</b>
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Returns the disk size of the volume which holds the working directory.
+<i>222</i>&nbsp;     * &lt;p&gt;
+<i>223</i>&nbsp;     * Identical to:
+<i>224</i>&nbsp;     * &lt;pre&gt;
+<i>225</i>&nbsp;     * freeSpaceKb(new File(&quot;.&quot;).getAbsolutePath())
+<i>226</i>&nbsp;     * &lt;/pre&gt;
+<i>227</i>&nbsp;     * @param timeout The timeout amount in milliseconds or no timeout if the value
+<i>228</i>&nbsp;     *  is zero or less
+<i>229</i>&nbsp;     * @return the amount of free drive space on the drive or volume in kilobytes
+<i>230</i>&nbsp;     * @throws IllegalStateException if an error occurred in initialisation
+<i>231</i>&nbsp;     * @throws IOException if an error occurs when finding the free space
+<i>232</i>&nbsp;     * @since 2.0
+<i>233</i>&nbsp;     */
+<b class="nc"><i>234</i>&nbsp;    public static long freeSpaceKb(final long timeout) throws IOException {</b>
+<b class="nc"><i>235</i>&nbsp;        return freeSpaceKb(new File(&quot;.&quot;).getAbsolutePath(), timeout);</b>
+<i>236</i>&nbsp;    }
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    //-----------------------------------------------------------------------
+<i>239</i>&nbsp;    /**
+<i>240</i>&nbsp;     * Returns the free space on a drive or volume in a cross-platform manner.
+<i>241</i>&nbsp;     * Note that some OS&#39;s are NOT currently supported, including OS/390.
+<i>242</i>&nbsp;     * &lt;pre&gt;
+<i>243</i>&nbsp;     * FileSystemUtils.freeSpace(&quot;C:&quot;);  // Windows
+<i>244</i>&nbsp;     * FileSystemUtils.freeSpace(&quot;/volume&quot;);  // *nix
+<i>245</i>&nbsp;     * &lt;/pre&gt;
+<i>246</i>&nbsp;     * The free space is calculated via the command line.
+<i>247</i>&nbsp;     * It uses &#39;dir /-c&#39; on Windows and &#39;df&#39; on *nix.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @param path  the path to get free space for, not null, not empty on Unix
+<i>250</i>&nbsp;     * @param os  the operating system code
+<i>251</i>&nbsp;     * @param kb  whether to normalize to kilobytes
+<i>252</i>&nbsp;     * @param timeout The timeout amount in milliseconds or no timeout if the value
+<i>253</i>&nbsp;     *  is zero or less
+<i>254</i>&nbsp;     * @return the amount of free drive space on the drive or volume
+<i>255</i>&nbsp;     * @throws IllegalArgumentException if the path is invalid
+<i>256</i>&nbsp;     * @throws IllegalStateException if an error occurred in initialisation
+<i>257</i>&nbsp;     * @throws IOException if an error occurs when finding the free space
+<i>258</i>&nbsp;     */
+<b class="fc"><i>259</i>&nbsp;    long freeSpaceOS(final String path, final int os, final boolean kb, final long timeout) throws IOException {</b>
+<b class="fc"><i>260</i>&nbsp;        if (path == null) {</b>
+<b class="fc"><i>261</i>&nbsp;            throw new IllegalArgumentException(&quot;Path must not be null&quot;);</b>
+<i>262</i>&nbsp;        }
+<b class="fc"><i>263</i>&nbsp;        switch (os) {</b>
+<b class="fc"><i>264</i>&nbsp;            case WINDOWS:</b>
+<b class="fc"><i>265</i>&nbsp;                return kb ? freeSpaceWindows(path, timeout) / FileUtils.ONE_KB : freeSpaceWindows(path, timeout);</b>
+<b class="fc"><i>266</i>&nbsp;            case UNIX:</b>
+<b class="fc"><i>267</i>&nbsp;                return freeSpaceUnix(path, kb, false, timeout);</b>
+<b class="nc"><i>268</i>&nbsp;            case POSIX_UNIX:</b>
+<b class="nc"><i>269</i>&nbsp;                return freeSpaceUnix(path, kb, true, timeout);</b>
+<b class="fc"><i>270</i>&nbsp;            case OTHER:</b>
+<b class="fc"><i>271</i>&nbsp;                throw new IllegalStateException(&quot;Unsupported operating system&quot;);</b>
+<b class="fc"><i>272</i>&nbsp;            default:</b>
+<b class="fc"><i>273</i>&nbsp;                throw new IllegalStateException(</b>
+<i>274</i>&nbsp;                  &quot;Exception caught when determining operating system&quot;);
+<i>275</i>&nbsp;        }
+<i>276</i>&nbsp;    }
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    //-----------------------------------------------------------------------
+<i>279</i>&nbsp;    /**
+<i>280</i>&nbsp;     * Find free space on the Windows platform using the &#39;dir&#39; command.
+<i>281</i>&nbsp;     *
+<i>282</i>&nbsp;     * @param path  the path to get free space for, including the colon
+<i>283</i>&nbsp;     * @param timeout The timeout amount in milliseconds or no timeout if the value
+<i>284</i>&nbsp;     *  is zero or less
+<i>285</i>&nbsp;     * @return the amount of free drive space on the drive
+<i>286</i>&nbsp;     * @throws IOException if an error occurs
+<i>287</i>&nbsp;     */
+<b class="fc"><i>288</i>&nbsp;    long freeSpaceWindows(String path, final long timeout) throws IOException {</b>
+<b class="fc"><i>289</i>&nbsp;        path = FilenameUtils.normalize(path, false);</b>
+<b class="fc"><i>290</i>&nbsp;        if (path.length() &gt; 0 &amp;&amp; path.charAt(0) != &#39;&quot;&#39;) {</b>
+<b class="fc"><i>291</i>&nbsp;            path = &quot;\&quot;&quot; + path + &quot;\&quot;&quot;;</b>
+<i>292</i>&nbsp;        }
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;        // build and run the &#39;dir&#39; command
+<b class="fc"><i>295</i>&nbsp;        final String[] cmdAttribs = new String[] {&quot;cmd.exe&quot;, &quot;/C&quot;, &quot;dir /a /-c &quot; + path};</b>
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;        // read in the output of the command to an ArrayList
+<b class="fc"><i>298</i>&nbsp;        final List&lt;String&gt; lines = performCommand(cmdAttribs, Integer.MAX_VALUE, timeout);</b>
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;        // now iterate over the lines we just read and find the LAST
+<i>301</i>&nbsp;        // non-empty line (the free space bytes should be in the last element
+<i>302</i>&nbsp;        // of the ArrayList anyway, but this will ensure it works even if it&#39;s
+<i>303</i>&nbsp;        // not, still assuming it is on the last non-blank line)
+<b class="fc"><i>304</i>&nbsp;        for (int i = lines.size() - 1; i &gt;= 0; i--) {</b>
+<b class="fc"><i>305</i>&nbsp;            final String line = lines.get(i);</b>
+<b class="fc"><i>306</i>&nbsp;            if (line.length() &gt; 0) {</b>
+<b class="fc"><i>307</i>&nbsp;                return parseDir(line, path);</b>
+<i>308</i>&nbsp;            }
+<i>309</i>&nbsp;        }
+<i>310</i>&nbsp;        // all lines are blank
+<b class="fc"><i>311</i>&nbsp;        throw new IOException(</b>
+<i>312</i>&nbsp;                &quot;Command line &#39;dir /-c&#39; did not return any info &quot; +
+<i>313</i>&nbsp;                &quot;for path &#39;&quot; + path + &quot;&#39;&quot;);
+<i>314</i>&nbsp;    }
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;    /**
+<i>317</i>&nbsp;     * Parses the Windows dir response last line
+<i>318</i>&nbsp;     *
+<i>319</i>&nbsp;     * @param line  the line to parse
+<i>320</i>&nbsp;     * @param path  the path that was sent
+<i>321</i>&nbsp;     * @return the number of bytes
+<i>322</i>&nbsp;     * @throws IOException if an error occurs
+<i>323</i>&nbsp;     */
+<b class="fc"><i>324</i>&nbsp;    long parseDir(final String line, final String path) throws IOException {</b>
+<i>325</i>&nbsp;        // read from the end of the line to find the last numeric
+<i>326</i>&nbsp;        // character on the line, then continue until we find the first
+<i>327</i>&nbsp;        // non-numeric character, and everything between that and the last
+<i>328</i>&nbsp;        // numeric character inclusive is our free space bytes count
+<b class="fc"><i>329</i>&nbsp;        int bytesStart = 0;</b>
+<b class="fc"><i>330</i>&nbsp;        int bytesEnd = 0;</b>
+<b class="fc"><i>331</i>&nbsp;        int j = line.length() - 1;</b>
+<b class="fc"><i>332</i>&nbsp;        innerLoop1: while (j &gt;= 0) {</b>
+<b class="fc"><i>333</i>&nbsp;            final char c = line.charAt(j);</b>
+<b class="fc"><i>334</i>&nbsp;            if (Character.isDigit(c)) {</b>
+<i>335</i>&nbsp;              // found the last numeric character, this is the end of
+<i>336</i>&nbsp;              // the free space bytes count
+<b class="fc"><i>337</i>&nbsp;              bytesEnd = j + 1;</b>
+<b class="fc"><i>338</i>&nbsp;              break innerLoop1;</b>
+<i>339</i>&nbsp;            }
+<b class="fc"><i>340</i>&nbsp;            j--;</b>
+<b class="fc"><i>341</i>&nbsp;        }</b>
+<b class="fc"><i>342</i>&nbsp;        innerLoop2: while (j &gt;= 0) {</b>
+<b class="fc"><i>343</i>&nbsp;            final char c = line.charAt(j);</b>
+<b class="fc"><i>344</i>&nbsp;            if (!Character.isDigit(c) &amp;&amp; c != &#39;,&#39; &amp;&amp; c != &#39;.&#39;) {</b>
+<i>345</i>&nbsp;              // found the next non-numeric character, this is the
+<i>346</i>&nbsp;              // beginning of the free space bytes count
+<b class="fc"><i>347</i>&nbsp;              bytesStart = j + 1;</b>
+<b class="fc"><i>348</i>&nbsp;              break innerLoop2;</b>
+<i>349</i>&nbsp;            }
+<b class="fc"><i>350</i>&nbsp;            j--;</b>
+<b class="fc"><i>351</i>&nbsp;        }</b>
+<b class="fc"><i>352</i>&nbsp;        if (j &lt; 0) {</b>
+<b class="fc"><i>353</i>&nbsp;            throw new IOException(</b>
+<i>354</i>&nbsp;                    &quot;Command line &#39;dir /-c&#39; did not return valid info &quot; +
+<i>355</i>&nbsp;                    &quot;for path &#39;&quot; + path + &quot;&#39;&quot;);
+<i>356</i>&nbsp;        }
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;        // remove commas and dots in the bytes count
+<b class="fc"><i>359</i>&nbsp;        final StringBuilder buf = new StringBuilder(line.substring(bytesStart, bytesEnd));</b>
+<b class="fc"><i>360</i>&nbsp;        for (int k = 0; k &lt; buf.length(); k++) {</b>
+<b class="fc"><i>361</i>&nbsp;            if (buf.charAt(k) == &#39;,&#39; || buf.charAt(k) == &#39;.&#39;) {</b>
+<b class="fc"><i>362</i>&nbsp;                buf.deleteCharAt(k--);</b>
+<i>363</i>&nbsp;            }
+<i>364</i>&nbsp;        }
+<b class="fc"><i>365</i>&nbsp;        return parseBytes(buf.toString(), path);</b>
+<i>366</i>&nbsp;    }
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;    //-----------------------------------------------------------------------
+<i>369</i>&nbsp;    /**
+<i>370</i>&nbsp;     * Find free space on the *nix platform using the &#39;df&#39; command.
+<i>371</i>&nbsp;     *
+<i>372</i>&nbsp;     * @param path  the path to get free space for
+<i>373</i>&nbsp;     * @param kb  whether to normalize to kilobytes
+<i>374</i>&nbsp;     * @param posix  whether to use the POSIX standard format flag
+<i>375</i>&nbsp;     * @param timeout The timeout amount in milliseconds or no timeout if the value
+<i>376</i>&nbsp;     *  is zero or less
+<i>377</i>&nbsp;     * @return the amount of free drive space on the volume
+<i>378</i>&nbsp;     * @throws IOException if an error occurs
+<i>379</i>&nbsp;     */
+<i>380</i>&nbsp;    long freeSpaceUnix(final String path, final boolean kb, final boolean posix, final long timeout)
+<b class="fc"><i>381</i>&nbsp;            throws IOException {</b>
+<b class="fc"><i>382</i>&nbsp;        if (path.isEmpty()) {</b>
+<b class="fc"><i>383</i>&nbsp;            throw new IllegalArgumentException(&quot;Path must not be empty&quot;);</b>
+<i>384</i>&nbsp;        }
+<i>385</i>&nbsp;
+<i>386</i>&nbsp;        // build and run the &#39;dir&#39; command
+<b class="fc"><i>387</i>&nbsp;        String flags = &quot;-&quot;;</b>
+<b class="fc"><i>388</i>&nbsp;        if (kb) {</b>
+<b class="fc"><i>389</i>&nbsp;            flags += &quot;k&quot;;</b>
+<i>390</i>&nbsp;        }
+<b class="fc"><i>391</i>&nbsp;        if (posix) {</b>
+<b class="fc"><i>392</i>&nbsp;            flags += &quot;P&quot;;</b>
+<i>393</i>&nbsp;        }
+<b class="fc"><i>394</i>&nbsp;        final String[] cmdAttribs =</b>
+<b class="fc"><i>395</i>&nbsp;            flags.length() &gt; 1 ? new String[] {DF, flags, path} : new String[] {DF, path};</b>
+<i>396</i>&nbsp;
+<i>397</i>&nbsp;        // perform the command, asking for up to 3 lines (header, interesting, overflow)
+<b class="fc"><i>398</i>&nbsp;        final List&lt;String&gt; lines = performCommand(cmdAttribs, 3, timeout);</b>
+<b class="fc"><i>399</i>&nbsp;        if (lines.size() &lt; 2) {</b>
+<i>400</i>&nbsp;            // unknown problem, throw exception
+<b class="nc"><i>401</i>&nbsp;            throw new IOException(</b>
+<i>402</i>&nbsp;                    &quot;Command line &#39;&quot; + DF + &quot;&#39; did not return info as expected &quot; +
+<i>403</i>&nbsp;                    &quot;for path &#39;&quot; + path + &quot;&#39;- response was &quot; + lines);
+<i>404</i>&nbsp;        }
+<b class="fc"><i>405</i>&nbsp;        final String line2 = lines.get(1); // the line we&#39;re interested in</b>
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;        // Now, we tokenize the string. The fourth element is what we want.
+<b class="fc"><i>408</i>&nbsp;        StringTokenizer tok = new StringTokenizer(line2, &quot; &quot;);</b>
+<b class="fc"><i>409</i>&nbsp;        if (tok.countTokens() &lt; 4) {</b>
+<i>410</i>&nbsp;            // could be long Filesystem, thus data on third line
+<b class="fc"><i>411</i>&nbsp;            if (tok.countTokens() == 1 &amp;&amp; lines.size() &gt;= 3) {</b>
+<b class="fc"><i>412</i>&nbsp;                final String line3 = lines.get(2); // the line may be interested in</b>
+<b class="fc"><i>413</i>&nbsp;                tok = new StringTokenizer(line3, &quot; &quot;);</b>
+<b class="fc"><i>414</i>&nbsp;            } else {</b>
+<b class="fc"><i>415</i>&nbsp;                throw new IOException(</b>
+<i>416</i>&nbsp;                        &quot;Command line &#39;&quot; + DF + &quot;&#39; did not return data as expected &quot; +
+<i>417</i>&nbsp;                        &quot;for path &#39;&quot; + path + &quot;&#39;- check path is valid&quot;);
+<i>418</i>&nbsp;            }
+<i>419</i>&nbsp;        } else {
+<b class="fc"><i>420</i>&nbsp;            tok.nextToken(); // Ignore Filesystem</b>
+<i>421</i>&nbsp;        }
+<b class="fc"><i>422</i>&nbsp;        tok.nextToken(); // Ignore 1K-blocks</b>
+<b class="fc"><i>423</i>&nbsp;        tok.nextToken(); // Ignore Used</b>
+<b class="fc"><i>424</i>&nbsp;        final String freeSpace = tok.nextToken();</b>
+<b class="fc"><i>425</i>&nbsp;        return parseBytes(freeSpace, path);</b>
+<i>426</i>&nbsp;    }
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;    //-----------------------------------------------------------------------
+<i>429</i>&nbsp;    /**
+<i>430</i>&nbsp;     * Parses the bytes from a string.
+<i>431</i>&nbsp;     *
+<i>432</i>&nbsp;     * @param freeSpace  the free space string
+<i>433</i>&nbsp;     * @param path  the path
+<i>434</i>&nbsp;     * @return the number of bytes
+<i>435</i>&nbsp;     * @throws IOException if an error occurs
+<i>436</i>&nbsp;     */
+<b class="fc"><i>437</i>&nbsp;    long parseBytes(final String freeSpace, final String path) throws IOException {</b>
+<b class="fc"><i>438</i>&nbsp;        try {</b>
+<b class="fc"><i>439</i>&nbsp;            final long bytes = Long.parseLong(freeSpace);</b>
+<b class="fc"><i>440</i>&nbsp;            if (bytes &lt; 0) {</b>
+<b class="fc"><i>441</i>&nbsp;                throw new IOException(</b>
+<i>442</i>&nbsp;                        &quot;Command line &#39;&quot; + DF + &quot;&#39; did not find free space in response &quot; +
+<i>443</i>&nbsp;                        &quot;for path &#39;&quot; + path + &quot;&#39;- check path is valid&quot;);
+<i>444</i>&nbsp;            }
+<b class="fc"><i>445</i>&nbsp;            return bytes;</b>
+<i>446</i>&nbsp;
+<b class="fc"><i>447</i>&nbsp;        } catch (final NumberFormatException ex) {</b>
+<b class="fc"><i>448</i>&nbsp;            throw new IOException(</b>
+<i>449</i>&nbsp;                    &quot;Command line &#39;&quot; + DF + &quot;&#39; did not return numeric data as expected &quot; +
+<i>450</i>&nbsp;                    &quot;for path &#39;&quot; + path + &quot;&#39;- check path is valid&quot;, ex);
+<i>451</i>&nbsp;        }
+<i>452</i>&nbsp;    }
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;    //-----------------------------------------------------------------------
+<i>455</i>&nbsp;    /**
+<i>456</i>&nbsp;     * Performs the os command.
+<i>457</i>&nbsp;     *
+<i>458</i>&nbsp;     * @param cmdAttribs  the command line parameters
+<i>459</i>&nbsp;     * @param max The maximum limit for the lines returned
+<i>460</i>&nbsp;     * @param timeout The timeout amount in milliseconds or no timeout if the value
+<i>461</i>&nbsp;     *  is zero or less
+<i>462</i>&nbsp;     * @return the lines returned by the command, converted to lower-case
+<i>463</i>&nbsp;     * @throws IOException if an error occurs
+<i>464</i>&nbsp;     */
+<b class="fc"><i>465</i>&nbsp;    List&lt;String&gt; performCommand(final String[] cmdAttribs, final int max, final long timeout) throws IOException {</b>
+<i>466</i>&nbsp;        // this method does what it can to avoid the &#39;Too many open files&#39; error
+<i>467</i>&nbsp;        // based on trial and error and these links:
+<i>468</i>&nbsp;        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
+<i>469</i>&nbsp;        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
+<i>470</i>&nbsp;        // http://forum.java.sun.com/thread.jspa?threadID=533029&amp;messageID=2572018
+<i>471</i>&nbsp;        // however, its still not perfect as the JDK support is so poor
+<i>472</i>&nbsp;        // (see commons-exec or Ant for a better multi-threaded multi-os solution)
+<i>473</i>&nbsp;
+<b class="fc"><i>474</i>&nbsp;        final List&lt;String&gt; lines = new ArrayList&lt;String&gt;(20);</b>
+<b class="fc"><i>475</i>&nbsp;        Process proc = null;</b>
+<b class="fc"><i>476</i>&nbsp;        InputStream in = null;</b>
+<b class="fc"><i>477</i>&nbsp;        OutputStream out = null;</b>
+<b class="fc"><i>478</i>&nbsp;        InputStream err = null;</b>
+<b class="fc"><i>479</i>&nbsp;        BufferedReader inr = null;</b>
+<b class="fc"><i>480</i>&nbsp;        try {</b>
+<i>481</i>&nbsp;
+<b class="fc"><i>482</i>&nbsp;            final Thread monitor = ThreadMonitor.start(timeout);</b>
+<i>483</i>&nbsp;
+<b class="fc"><i>484</i>&nbsp;            proc = openProcess(cmdAttribs);</b>
+<b class="fc"><i>485</i>&nbsp;            in = proc.getInputStream();</b>
+<b class="fc"><i>486</i>&nbsp;            out = proc.getOutputStream();</b>
+<b class="fc"><i>487</i>&nbsp;            err = proc.getErrorStream();</b>
+<i>488</i>&nbsp;            // default charset is most likely appropriate here
+<b class="fc"><i>489</i>&nbsp;            inr = new BufferedReader(new InputStreamReader(in, Charset.defaultCharset()));</b>
+<b class="fc"><i>490</i>&nbsp;            String line = inr.readLine();</b>
+<b class="fc"><i>491</i>&nbsp;            while (line != null &amp;&amp; lines.size() &lt; max) {</b>
+<b class="fc"><i>492</i>&nbsp;                line = line.toLowerCase(Locale.ENGLISH).trim();</b>
+<b class="fc"><i>493</i>&nbsp;                lines.add(line);</b>
+<b class="fc"><i>494</i>&nbsp;                line = inr.readLine();</b>
+<i>495</i>&nbsp;            }
+<i>496</i>&nbsp;
+<b class="fc"><i>497</i>&nbsp;            proc.waitFor();</b>
+<i>498</i>&nbsp;
+<b class="fc"><i>499</i>&nbsp;            ThreadMonitor.stop(monitor);</b>
+<i>500</i>&nbsp;
+<b class="fc"><i>501</i>&nbsp;            if (proc.exitValue() != 0) {</b>
+<i>502</i>&nbsp;                // os command problem, throw exception
+<b class="fc"><i>503</i>&nbsp;                throw new IOException(</b>
+<b class="fc"><i>504</i>&nbsp;                        &quot;Command line returned OS error code &#39;&quot; + proc.exitValue() +</b>
+<b class="fc"><i>505</i>&nbsp;                        &quot;&#39; for command &quot; + Arrays.asList(cmdAttribs));</b>
+<i>506</i>&nbsp;            }
+<b class="fc"><i>507</i>&nbsp;            if (lines.isEmpty()) {</b>
+<i>508</i>&nbsp;                // unknown problem, throw exception
+<b class="fc"><i>509</i>&nbsp;                throw new IOException(</b>
+<i>510</i>&nbsp;                        &quot;Command line did not return any info &quot; +
+<b class="fc"><i>511</i>&nbsp;                        &quot;for command &quot; + Arrays.asList(cmdAttribs));</b>
+<i>512</i>&nbsp;            }
+<b class="fc"><i>513</i>&nbsp;            return lines;</b>
+<i>514</i>&nbsp;
+<b class="nc"><i>515</i>&nbsp;        } catch (final InterruptedException ex) {</b>
+<b class="nc"><i>516</i>&nbsp;            throw new IOException(</b>
+<i>517</i>&nbsp;                    &quot;Command line threw an InterruptedException &quot; +
+<b class="nc"><i>518</i>&nbsp;                    &quot;for command &quot; + Arrays.asList(cmdAttribs) + &quot; timeout=&quot; + timeout, ex);</b>
+<i>519</i>&nbsp;        } finally {
+<b class="fc"><i>520</i>&nbsp;            IOUtils.closeQuietly(in);</b>
+<b class="fc"><i>521</i>&nbsp;            IOUtils.closeQuietly(out);</b>
+<b class="fc"><i>522</i>&nbsp;            IOUtils.closeQuietly(err);</b>
+<b class="fc"><i>523</i>&nbsp;            IOUtils.closeQuietly(inr);</b>
+<b class="fc"><i>524</i>&nbsp;            if (proc != null) {</b>
+<b class="fc"><i>525</i>&nbsp;                proc.destroy();</b>
+<i>526</i>&nbsp;            }
+<b class="fc"><i>527</i>&nbsp;        }</b>
+<i>528</i>&nbsp;    }
+<i>529</i>&nbsp;
+<i>530</i>&nbsp;    /**
+<i>531</i>&nbsp;     * Opens the process to the operating system.
+<i>532</i>&nbsp;     *
+<i>533</i>&nbsp;     * @param cmdAttribs  the command line parameters
+<i>534</i>&nbsp;     * @return the process
+<i>535</i>&nbsp;     * @throws IOException if an error occurs
+<i>536</i>&nbsp;     */
+<b class="fc"><i>537</i>&nbsp;    Process openProcess(final String[] cmdAttribs) throws IOException {</b>
+<b class="fc"><i>538</i>&nbsp;        return Runtime.getRuntime().exec(cmdAttribs);</b>
+<i>539</i>&nbsp;    }
+<i>540</i>&nbsp;
+<i>541</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 13:56</div>
+</div>
+</body>
+</html>

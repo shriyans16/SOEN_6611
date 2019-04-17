@@ -1,0 +1,256 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CharSequenceInputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.input</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CharSequenceInputStream (org.apache.commons.io.input)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">CharSequenceInputStream$__CLR4_1_22oa2oajulisapr</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; * 
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; * 
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.io.input;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.InputStream;
+<i>22</i>&nbsp;import java.nio.ByteBuffer;
+<i>23</i>&nbsp;import java.nio.CharBuffer;
+<i>24</i>&nbsp;import java.nio.charset.CharacterCodingException;
+<i>25</i>&nbsp;import java.nio.charset.Charset;
+<i>26</i>&nbsp;import java.nio.charset.CharsetEncoder;
+<i>27</i>&nbsp;import java.nio.charset.CoderResult;
+<i>28</i>&nbsp;import java.nio.charset.CodingErrorAction;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * {@link InputStream} implementation that can read from String, StringBuffer,
+<i>32</i>&nbsp; * StringBuilder or CharBuffer.
+<i>33</i>&nbsp; * &lt;p&gt;
+<i>34</i>&nbsp; * &lt;strong&gt;Note:&lt;/strong&gt; Supports {@link #mark(int)} and {@link #reset()}.
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * @since 2.2
+<i>37</i>&nbsp; */
+<i>38</i>&nbsp;public class CharSequenceInputStream extends InputStream {
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    private final CharsetEncoder encoder;
+<i>41</i>&nbsp;    private final CharBuffer cbuf;
+<i>42</i>&nbsp;    private final ByteBuffer bbuf;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    private int mark;
+<i>45</i>&nbsp;    
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Constructor.
+<i>48</i>&nbsp;     * 
+<i>49</i>&nbsp;     * @param s the input character sequence
+<i>50</i>&nbsp;     * @param charset the character set name to use
+<i>51</i>&nbsp;     * @param bufferSize the buffer size to use.
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public CharSequenceInputStream(final CharSequence s, final Charset charset, int bufferSize) {
+<i>54</i>&nbsp;        super();
+<i>55</i>&nbsp;        this.encoder = charset.newEncoder()
+<i>56</i>&nbsp;            .onMalformedInput(CodingErrorAction.REPLACE)
+<i>57</i>&nbsp;            .onUnmappableCharacter(CodingErrorAction.REPLACE);
+<i>58</i>&nbsp;        this.bbuf = ByteBuffer.allocate(bufferSize);
+<i>59</i>&nbsp;        this.bbuf.flip();
+<i>60</i>&nbsp;        this.cbuf = CharBuffer.wrap(s);
+<i>61</i>&nbsp;        this.mark = -1;
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}.
+<i>66</i>&nbsp;     * 
+<i>67</i>&nbsp;     * @param s the input character sequence
+<i>68</i>&nbsp;     * @param charset the character set name to use
+<i>69</i>&nbsp;     * @param bufferSize the buffer size to use.
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    public CharSequenceInputStream(final CharSequence s, final String charset, int bufferSize) {
+<i>72</i>&nbsp;        this(s, Charset.forName(charset), bufferSize);
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, Charset, int)}
+<i>77</i>&nbsp;     * with a buffer size of 2048.
+<i>78</i>&nbsp;     * 
+<i>79</i>&nbsp;     * @param s the input character sequence
+<i>80</i>&nbsp;     * @param charset the character set name to use
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public CharSequenceInputStream(final CharSequence s, final Charset charset) {
+<i>83</i>&nbsp;        this(s, charset, 2048);
+<i>84</i>&nbsp;    }
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Constructor, calls {@link #CharSequenceInputStream(CharSequence, String, int)}
+<i>88</i>&nbsp;     * with a buffer size of 2048.
+<i>89</i>&nbsp;     * 
+<i>90</i>&nbsp;     * @param s the input character sequence
+<i>91</i>&nbsp;     * @param charset the character set name to use
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    public CharSequenceInputStream(final CharSequence s, final String charset) {
+<i>94</i>&nbsp;        this(s, charset, 2048);
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * Fills the byte output buffer from the input char buffer.
+<i>99</i>&nbsp;     * 
+<i>100</i>&nbsp;     * @throws CharacterCodingException
+<i>101</i>&nbsp;     *             an error encoding data
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    private void fillBuffer() throws CharacterCodingException {
+<i>104</i>&nbsp;        this.bbuf.compact();
+<i>105</i>&nbsp;        CoderResult result = this.encoder.encode(this.cbuf, this.bbuf, true);
+<i>106</i>&nbsp;        if (result.isError()) {
+<i>107</i>&nbsp;            result.throwException();
+<i>108</i>&nbsp;        }
+<i>109</i>&nbsp;        this.bbuf.flip();
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;    
+<i>112</i>&nbsp;    @Override
+<i>113</i>&nbsp;    public int read(byte[] b, int off, int len) throws IOException {
+<i>114</i>&nbsp;        if (b == null) {
+<i>115</i>&nbsp;            throw new NullPointerException(&quot;Byte array is null&quot;);
+<i>116</i>&nbsp;        }
+<i>117</i>&nbsp;        if (len &lt; 0 || (off + len) &gt; b.length) {
+<i>118</i>&nbsp;            throw new IndexOutOfBoundsException(&quot;Array Size=&quot; + b.length +
+<i>119</i>&nbsp;                    &quot;, offset=&quot; + off + &quot;, length=&quot; + len);
+<i>120</i>&nbsp;        }
+<i>121</i>&nbsp;        if (len == 0) {
+<i>122</i>&nbsp;            return 0; // must return 0 for zero length read
+<i>123</i>&nbsp;        }
+<i>124</i>&nbsp;        if (!this.bbuf.hasRemaining() &amp;&amp; !this.cbuf.hasRemaining()) {
+<i>125</i>&nbsp;            return -1;
+<i>126</i>&nbsp;        }
+<i>127</i>&nbsp;        int bytesRead = 0;
+<i>128</i>&nbsp;        while (len &gt; 0) {
+<i>129</i>&nbsp;            if (this.bbuf.hasRemaining()) {
+<i>130</i>&nbsp;                int chunk = Math.min(this.bbuf.remaining(), len);
+<i>131</i>&nbsp;                this.bbuf.get(b, off, chunk);
+<i>132</i>&nbsp;                off += chunk;
+<i>133</i>&nbsp;                len -= chunk;
+<i>134</i>&nbsp;                bytesRead += chunk;
+<i>135</i>&nbsp;            } else {
+<i>136</i>&nbsp;                fillBuffer();
+<i>137</i>&nbsp;                if (!this.bbuf.hasRemaining() &amp;&amp; !this.cbuf.hasRemaining()) {
+<i>138</i>&nbsp;                    break;
+<i>139</i>&nbsp;                }
+<i>140</i>&nbsp;            }
+<i>141</i>&nbsp;        }
+<i>142</i>&nbsp;        return bytesRead == 0 &amp;&amp; !this.cbuf.hasRemaining() ? -1 : bytesRead;
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    @Override
+<i>146</i>&nbsp;    public int read() throws IOException {
+<i>147</i>&nbsp;        for (;;) {
+<i>148</i>&nbsp;            if (this.bbuf.hasRemaining()) {
+<i>149</i>&nbsp;                return this.bbuf.get() &amp; 0xFF;
+<i>150</i>&nbsp;            } else {
+<i>151</i>&nbsp;                fillBuffer();
+<i>152</i>&nbsp;                if (!this.bbuf.hasRemaining() &amp;&amp; !this.cbuf.hasRemaining()) {
+<i>153</i>&nbsp;                    return -1;
+<i>154</i>&nbsp;                }
+<i>155</i>&nbsp;            }
+<i>156</i>&nbsp;        }
+<i>157</i>&nbsp;    }
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    @Override
+<i>160</i>&nbsp;    public int read(byte[] b) throws IOException {
+<i>161</i>&nbsp;        return read(b, 0, b.length);
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    @Override
+<i>165</i>&nbsp;    public long skip(long n) throws IOException {
+<i>166</i>&nbsp;        int skipped = 0;
+<i>167</i>&nbsp;        while (n &gt; 0 &amp;&amp; this.cbuf.hasRemaining()) {
+<i>168</i>&nbsp;            this.cbuf.get();
+<i>169</i>&nbsp;            n--;
+<i>170</i>&nbsp;            skipped++;
+<i>171</i>&nbsp;        }
+<i>172</i>&nbsp;        return skipped;
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    @Override
+<i>176</i>&nbsp;    public int available() throws IOException {
+<i>177</i>&nbsp;        return this.cbuf.remaining();
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    @Override
+<i>181</i>&nbsp;    public void close() throws IOException {
+<i>182</i>&nbsp;    }
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * {@inheritDoc}
+<i>186</i>&nbsp;     * @param readlimit max read limit (ignored)
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    @Override
+<i>189</i>&nbsp;    public synchronized void mark(@SuppressWarnings(&quot;unused&quot;) int readlimit) {
+<i>190</i>&nbsp;        this.mark = this.cbuf.position();
+<i>191</i>&nbsp;    }
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    @Override
+<i>194</i>&nbsp;    public synchronized void reset() throws IOException {
+<i>195</i>&nbsp;        if (this.mark != -1) {
+<i>196</i>&nbsp;            this.cbuf.position(this.mark);
+<i>197</i>&nbsp;            this.mark = -1;
+<i>198</i>&nbsp;        }
+<i>199</i>&nbsp;    }
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    @Override
+<i>202</i>&nbsp;    public boolean markSupported() {
+<i>203</i>&nbsp;        return true;
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;    
+<i>206</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:02</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChunkedWriter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.io.output</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChunkedWriter (org.apache.commons.io.output)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChunkedWriter</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ChunkedWriter$__CLR4_1_21sv1svjukht4rf</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/ 19)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.io.output;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.FilterWriter;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.Writer;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Writer which breaks larger output blocks into chunks.
+<i>25</i>&nbsp; * Native code may need to copy the input array; if the write buffer
+<i>26</i>&nbsp; * is very large this can cause OOME.
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @since 2.5
+<i>29</i>&nbsp; */
+<b class="fc"><i>30</i>&nbsp;public class ChunkedWriter extends FilterWriter {</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * The default chunk size to use, i.e. {@value} bytes.
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    private static final int DEFAULT_CHUNK_SIZE = 1024 * 4;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * The maximum chunk size to us when writing data arrays
+<i>39</i>&nbsp;     */
+<i>40</i>&nbsp;    private final int chunkSize;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Creates a new writer that uses the specified chunk size.
+<i>44</i>&nbsp;     *
+<i>45</i>&nbsp;     * @param writer the writer to wrap
+<i>46</i>&nbsp;     * @param chunkSize the chunk size to use; must be a positive number.
+<i>47</i>&nbsp;     * @throws IllegalArgumentException if the chunk size is &amp;lt;= 0
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    public ChunkedWriter(final Writer writer, final int chunkSize) {
+<b class="fc"><i>50</i>&nbsp;       super(writer);</b>
+<b class="fc"><i>51</i>&nbsp;       if (chunkSize &lt;= 0) {</b>
+<b class="fc"><i>52</i>&nbsp;           throw new IllegalArgumentException();</b>
+<i>53</i>&nbsp;       }
+<b class="fc"><i>54</i>&nbsp;       this.chunkSize = chunkSize;</b>
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * Creates a new writer that uses a chunk size of {@link #DEFAULT_CHUNK_SIZE}
+<i>59</i>&nbsp;     * @param writer the writer to wrap
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public ChunkedWriter(final Writer writer) {
+<b class="fc"><i>62</i>&nbsp;        this(writer, DEFAULT_CHUNK_SIZE);</b>
+<b class="fc"><i>63</i>&nbsp;    }</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * writes the data buffer in chunks to the underlying writer
+<i>67</i>&nbsp;     * @param data The data
+<i>68</i>&nbsp;     * @param srcOffset the offset
+<i>69</i>&nbsp;     * @param length the number of bytes to write
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @throws IOException upon error
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    @Override
+<b class="fc"><i>74</i>&nbsp;    public void write(final char[] data, final int srcOffset, final int length) throws IOException {</b>
+<b class="fc"><i>75</i>&nbsp;        int bytes = length;</b>
+<b class="fc"><i>76</i>&nbsp;        int dstOffset = srcOffset;</b>
+<b class="fc"><i>77</i>&nbsp;        while(bytes &gt; 0) {</b>
+<b class="fc"><i>78</i>&nbsp;            final int chunk = Math.min(bytes, chunkSize);</b>
+<b class="fc"><i>79</i>&nbsp;            out.write(data, dstOffset, chunk);</b>
+<b class="fc"><i>80</i>&nbsp;            bytes -= chunk;</b>
+<b class="fc"><i>81</i>&nbsp;            dstOffset += chunk;</b>
+<b class="fc"><i>82</i>&nbsp;        }</b>
+<b class="fc"><i>83</i>&nbsp;    }</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 14:05</div>
+</div>
+</body>
+</html>
