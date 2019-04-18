@@ -1,0 +1,408 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractCategoryItemLabelGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.labels</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractCategoryItemLabelGenerator (org.jfree.chart.labels)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractCategoryItemLabelGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.2%
+  </span>
+  <span class="absValue">
+    (9/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.3%
+  </span>
+  <span class="absValue">
+    (62/ 71)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------------------------------
+<i>28</i>&nbsp; * AbstractCategoryItemLabelGenerator.java
+<i>29</i>&nbsp; * ---------------------------------------
+<i>30</i>&nbsp; * (C) Copyright 2005-2013, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 11-May-2004 : Version 1, distilled from StandardCategoryLabelGenerator (DG);
+<i>38</i>&nbsp; * 31-Jan-2005 : Added methods to return row and column labels (DG);
+<i>39</i>&nbsp; * 17-May-2005 : Added percentage to item array (DG);
+<i>40</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>41</i>&nbsp; * 03-May-2006 : Added new constructor (DG);
+<i>42</i>&nbsp; * 23-Nov-2007 : Implemented hashCode() (DG);
+<i>43</i>&nbsp; * 02-Jul-2013 : Use ParamChecks (DG);
+<i>44</i>&nbsp; *
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;package org.jfree.chart.labels;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;import java.io.Serializable;
+<i>50</i>&nbsp;import java.text.DateFormat;
+<i>51</i>&nbsp;import java.text.MessageFormat;
+<i>52</i>&nbsp;import java.text.NumberFormat;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;import org.jfree.chart.HashUtilities;
+<i>55</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>56</i>&nbsp;import org.jfree.data.DataUtilities;
+<i>57</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>58</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>59</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;/**
+<i>62</i>&nbsp; * A base class that can be used to create a label or tooltip generator that
+<i>63</i>&nbsp; * can be assigned to a
+<i>64</i>&nbsp; * {@link org.jfree.chart.renderer.category.CategoryItemRenderer}.
+<i>65</i>&nbsp; */
+<i>66</i>&nbsp;public abstract class AbstractCategoryItemLabelGenerator
+<i>67</i>&nbsp;        implements PublicCloneable, Cloneable, Serializable {
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /** For serialization. */
+<i>70</i>&nbsp;    private static final long serialVersionUID = -7108591260223293197L;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * The label format string used by a &lt;code&gt;MessageFormat&lt;/code&gt; object to
+<i>74</i>&nbsp;     * combine the standard items:  {0} = series name, {1} = category,
+<i>75</i>&nbsp;     * {2} = value, {3} = value as a percentage of the column total.
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    private String labelFormat;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /** The string used to represent a null value. */
+<i>80</i>&nbsp;    private String nullValueString;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * A number formatter used to preformat the value before it is passed to
+<i>84</i>&nbsp;     * the MessageFormat object.
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    private NumberFormat numberFormat;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * A date formatter used to preformat the value before it is passed to the
+<i>90</i>&nbsp;     * MessageFormat object.
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    private DateFormat dateFormat;
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * A number formatter used to preformat the percentage value before it is
+<i>96</i>&nbsp;     * passed to the MessageFormat object.
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    private NumberFormat percentFormat;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Creates a label generator with the specified number formatter.
+<i>102</i>&nbsp;     *
+<i>103</i>&nbsp;     * @param labelFormat  the label format string (&lt;code&gt;null&lt;/code&gt; not
+<i>104</i>&nbsp;     *                     permitted).
+<i>105</i>&nbsp;     * @param formatter  the number formatter (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>106</i>&nbsp;     */
+<i>107</i>&nbsp;    protected AbstractCategoryItemLabelGenerator(String labelFormat,
+<i>108</i>&nbsp;                                                 NumberFormat formatter) {
+<b class="fc"><i>109</i>&nbsp;        this(labelFormat, formatter, NumberFormat.getPercentInstance());</b>
+<b class="fc"><i>110</i>&nbsp;    }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * Creates a label generator with the specified number formatter.
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @param labelFormat  the label format string (&lt;code&gt;null&lt;/code&gt; not
+<i>116</i>&nbsp;     *                     permitted).
+<i>117</i>&nbsp;     * @param formatter  the number formatter (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>118</i>&nbsp;     * @param percentFormatter  the percent formatter (&lt;code&gt;null&lt;/code&gt; not
+<i>119</i>&nbsp;     *     permitted).
+<i>120</i>&nbsp;     *
+<i>121</i>&nbsp;     * @since 1.0.2
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    protected AbstractCategoryItemLabelGenerator(String labelFormat,
+<b class="fc"><i>124</i>&nbsp;            NumberFormat formatter, NumberFormat percentFormatter) {</b>
+<b class="fc"><i>125</i>&nbsp;        ParamChecks.nullNotPermitted(labelFormat, &quot;labelFormat&quot;);</b>
+<b class="fc"><i>126</i>&nbsp;        ParamChecks.nullNotPermitted(formatter, &quot;formatter&quot;);</b>
+<b class="fc"><i>127</i>&nbsp;        ParamChecks.nullNotPermitted(percentFormatter, &quot;percentFormatter&quot;);</b>
+<b class="fc"><i>128</i>&nbsp;        this.labelFormat = labelFormat;</b>
+<b class="fc"><i>129</i>&nbsp;        this.numberFormat = formatter;</b>
+<b class="fc"><i>130</i>&nbsp;        this.percentFormat = percentFormatter;</b>
+<b class="fc"><i>131</i>&nbsp;        this.dateFormat = null;</b>
+<b class="fc"><i>132</i>&nbsp;        this.nullValueString = &quot;-&quot;;</b>
+<b class="fc"><i>133</i>&nbsp;    }</b>
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Creates a label generator with the specified date formatter.
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @param labelFormat  the label format string (&lt;code&gt;null&lt;/code&gt; not
+<i>139</i>&nbsp;     *                     permitted).
+<i>140</i>&nbsp;     * @param formatter  the date formatter (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>141</i>&nbsp;     */
+<i>142</i>&nbsp;    protected AbstractCategoryItemLabelGenerator(String labelFormat,
+<b class="fc"><i>143</i>&nbsp;            DateFormat formatter) {</b>
+<b class="fc"><i>144</i>&nbsp;        ParamChecks.nullNotPermitted(labelFormat, &quot;labelFormat&quot;);</b>
+<b class="fc"><i>145</i>&nbsp;        ParamChecks.nullNotPermitted(formatter, &quot;formatter&quot;);</b>
+<b class="fc"><i>146</i>&nbsp;        this.labelFormat = labelFormat;</b>
+<b class="fc"><i>147</i>&nbsp;        this.numberFormat = null;</b>
+<b class="fc"><i>148</i>&nbsp;        this.percentFormat = NumberFormat.getPercentInstance();</b>
+<b class="fc"><i>149</i>&nbsp;        this.dateFormat = formatter;</b>
+<b class="fc"><i>150</i>&nbsp;        this.nullValueString = &quot;-&quot;;</b>
+<b class="fc"><i>151</i>&nbsp;    }</b>
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * Generates a label for the specified row.
+<i>155</i>&nbsp;     *
+<i>156</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>157</i>&nbsp;     * @param row  the row index (zero-based).
+<i>158</i>&nbsp;     *
+<i>159</i>&nbsp;     * @return The label.
+<i>160</i>&nbsp;     */
+<i>161</i>&nbsp;    public String generateRowLabel(CategoryDataset dataset, int row) {
+<b class="nc"><i>162</i>&nbsp;        return dataset.getRowKey(row).toString();</b>
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * Generates a label for the specified row.
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>169</i>&nbsp;     * @param column  the column index (zero-based).
+<i>170</i>&nbsp;     *
+<i>171</i>&nbsp;     * @return The label.
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    public String generateColumnLabel(CategoryDataset dataset, int column) {
+<b class="fc"><i>174</i>&nbsp;        return dataset.getColumnKey(column).toString();</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Returns the label format string.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @return The label format string (never &lt;code&gt;null&lt;/code&gt;).
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public String getLabelFormat() {
+<b class="nc"><i>183</i>&nbsp;        return this.labelFormat;</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * Returns the number formatter.
+<i>188</i>&nbsp;     *
+<i>189</i>&nbsp;     * @return The number formatter (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>190</i>&nbsp;     */
+<i>191</i>&nbsp;    public NumberFormat getNumberFormat() {
+<b class="nc"><i>192</i>&nbsp;        return this.numberFormat;</b>
+<i>193</i>&nbsp;    }
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    /**
+<i>196</i>&nbsp;     * Returns the date formatter.
+<i>197</i>&nbsp;     *
+<i>198</i>&nbsp;     * @return The date formatter (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public DateFormat getDateFormat() {
+<b class="nc"><i>201</i>&nbsp;        return this.dateFormat;</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Generates a for the specified item.
+<i>206</i>&nbsp;     *
+<i>207</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>208</i>&nbsp;     * @param row  the row index (zero-based).
+<i>209</i>&nbsp;     * @param column  the column index (zero-based).
+<i>210</i>&nbsp;     *
+<i>211</i>&nbsp;     * @return The label (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>212</i>&nbsp;     */
+<i>213</i>&nbsp;    protected String generateLabelString(CategoryDataset dataset,
+<i>214</i>&nbsp;                                         int row, int column) {
+<b class="fc"><i>215</i>&nbsp;        ParamChecks.nullNotPermitted(dataset, &quot;dataset&quot;);</b>
+<i>216</i>&nbsp;        String result;
+<b class="fc"><i>217</i>&nbsp;        Object[] items = createItemArray(dataset, row, column);</b>
+<b class="fc"><i>218</i>&nbsp;        result = MessageFormat.format(this.labelFormat, items);</b>
+<b class="fc"><i>219</i>&nbsp;        return result;</b>
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    /**
+<i>224</i>&nbsp;     * Creates the array of items that can be passed to the
+<i>225</i>&nbsp;     * {@link MessageFormat} class for creating labels.
+<i>226</i>&nbsp;     *
+<i>227</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>228</i>&nbsp;     * @param row  the row index (zero-based).
+<i>229</i>&nbsp;     * @param column  the column index (zero-based).
+<i>230</i>&nbsp;     *
+<i>231</i>&nbsp;     * @return The items (never &lt;code&gt;null&lt;/code&gt;).
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    protected Object[] createItemArray(CategoryDataset dataset,
+<i>234</i>&nbsp;                                       int row, int column) {
+<b class="fc"><i>235</i>&nbsp;        Object[] result = new Object[4];</b>
+<b class="fc"><i>236</i>&nbsp;        result[0] = dataset.getRowKey(row).toString();</b>
+<b class="fc"><i>237</i>&nbsp;        result[1] = dataset.getColumnKey(column).toString();</b>
+<b class="fc"><i>238</i>&nbsp;        Number value = dataset.getValue(row, column);</b>
+<b class="fc"><i>239</i>&nbsp;        if (value != null) {</b>
+<b class="fc"><i>240</i>&nbsp;            if (this.numberFormat != null) {</b>
+<b class="fc"><i>241</i>&nbsp;                result[2] = this.numberFormat.format(value);</b>
+<i>242</i>&nbsp;            }
+<b class="nc"><i>243</i>&nbsp;            else if (this.dateFormat != null) {</b>
+<b class="nc"><i>244</i>&nbsp;                result[2] = this.dateFormat.format(value);</b>
+<i>245</i>&nbsp;            }
+<i>246</i>&nbsp;        }
+<i>247</i>&nbsp;        else {
+<b class="fc"><i>248</i>&nbsp;            result[2] = this.nullValueString;</b>
+<i>249</i>&nbsp;        }
+<b class="fc"><i>250</i>&nbsp;        if (value != null) {</b>
+<b class="fc"><i>251</i>&nbsp;            double total = DataUtilities.calculateColumnTotal(dataset, column);</b>
+<b class="fc"><i>252</i>&nbsp;            double percent = value.doubleValue() / total;</b>
+<b class="fc"><i>253</i>&nbsp;            result[3] = this.percentFormat.format(percent);</b>
+<i>254</i>&nbsp;        }
+<i>255</i>&nbsp;
+<b class="fc"><i>256</i>&nbsp;        return result;</b>
+<i>257</i>&nbsp;    }
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * Tests this object for equality with an arbitrary object.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @param obj  the other object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>263</i>&nbsp;     *
+<i>264</i>&nbsp;     * @return A boolean.
+<i>265</i>&nbsp;     */
+<i>266</i>&nbsp;    @Override
+<i>267</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>268</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>269</i>&nbsp;            return true;</b>
+<i>270</i>&nbsp;        }
+<b class="fc"><i>271</i>&nbsp;        if (!(obj instanceof AbstractCategoryItemLabelGenerator)) {</b>
+<b class="nc"><i>272</i>&nbsp;            return false;</b>
+<i>273</i>&nbsp;        }
+<i>274</i>&nbsp;
+<b class="fc"><i>275</i>&nbsp;        AbstractCategoryItemLabelGenerator that</b>
+<i>276</i>&nbsp;            = (AbstractCategoryItemLabelGenerator) obj;
+<b class="fc"><i>277</i>&nbsp;        if (!this.labelFormat.equals(that.labelFormat)) {</b>
+<b class="fc"><i>278</i>&nbsp;            return false;</b>
+<i>279</i>&nbsp;        }
+<b class="fc"><i>280</i>&nbsp;        if (!ObjectUtilities.equal(this.dateFormat, that.dateFormat)) {</b>
+<b class="fc"><i>281</i>&nbsp;            return false;</b>
+<i>282</i>&nbsp;        }
+<b class="fc"><i>283</i>&nbsp;        if (!ObjectUtilities.equal(this.numberFormat, that.numberFormat)) {</b>
+<b class="fc"><i>284</i>&nbsp;            return false;</b>
+<i>285</i>&nbsp;        }
+<b class="fc"><i>286</i>&nbsp;        return true;</b>
+<i>287</i>&nbsp;    }
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    /**
+<i>290</i>&nbsp;     * Returns a hash code for this instance.
+<i>291</i>&nbsp;     *
+<i>292</i>&nbsp;     * @return A hash code.
+<i>293</i>&nbsp;     */
+<i>294</i>&nbsp;    @Override
+<i>295</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>296</i>&nbsp;        int result = 127;</b>
+<b class="fc"><i>297</i>&nbsp;        result = HashUtilities.hashCode(result, this.labelFormat);</b>
+<b class="fc"><i>298</i>&nbsp;        result = HashUtilities.hashCode(result, this.nullValueString);</b>
+<b class="fc"><i>299</i>&nbsp;        result = HashUtilities.hashCode(result, this.dateFormat);</b>
+<b class="fc"><i>300</i>&nbsp;        result = HashUtilities.hashCode(result, this.numberFormat);</b>
+<b class="fc"><i>301</i>&nbsp;        result = HashUtilities.hashCode(result, this.percentFormat);</b>
+<b class="fc"><i>302</i>&nbsp;        return result;</b>
+<i>303</i>&nbsp;    }
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    /**
+<i>306</i>&nbsp;     * Returns an independent copy of the generator.
+<i>307</i>&nbsp;     *
+<i>308</i>&nbsp;     * @return A clone.
+<i>309</i>&nbsp;     *
+<i>310</i>&nbsp;     * @throws CloneNotSupportedException  should not happen.
+<i>311</i>&nbsp;     */
+<i>312</i>&nbsp;    @Override
+<i>313</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>314</i>&nbsp;        AbstractCategoryItemLabelGenerator clone</b>
+<b class="fc"><i>315</i>&nbsp;            = (AbstractCategoryItemLabelGenerator) super.clone();</b>
+<b class="fc"><i>316</i>&nbsp;        if (this.numberFormat != null) {</b>
+<b class="fc"><i>317</i>&nbsp;            clone.numberFormat = (NumberFormat) this.numberFormat.clone();</b>
+<i>318</i>&nbsp;        }
+<b class="fc"><i>319</i>&nbsp;        if (this.dateFormat != null) {</b>
+<b class="nc"><i>320</i>&nbsp;            clone.dateFormat = (DateFormat) this.dateFormat.clone();</b>
+<i>321</i>&nbsp;        }
+<b class="fc"><i>322</i>&nbsp;        return clone;</b>
+<i>323</i>&nbsp;    }
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

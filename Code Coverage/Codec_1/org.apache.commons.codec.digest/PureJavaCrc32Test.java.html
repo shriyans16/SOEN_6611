@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PureJavaCrc32Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">PureJavaCrc32Test.java</span></div><h1>PureJavaCrc32Test.java</h1><pre class="source lang-java linenums">/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * &quot;License&quot;); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.digest;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Unit test to verify that the pure-Java CRC32 algorithm gives
+ * the same results as the built-in implementation.
+ *
+ * Copied from Hadoop 2.6.3 (Renamed TestPureJavaCrc32 to PureJavaCrc32Test).
+ * @since 1.11
+ */
+<span class="pc bpc" id="L41" title="3 of 4 branches missed.">public class PureJavaCrc32Test {</span>
+<span class="fc" id="L42">  private final CRC32 theirs = new CRC32();</span>
+<span class="fc" id="L43">  private final PureJavaCrc32 ours = new PureJavaCrc32();</span>
+
+  @Test
+<span class="pc bnc" id="L46" title="All 4 branches missed.">  public void testCorrectness() throws Exception {</span>
+<span class="fc" id="L47">    checkSame();</span>
+
+<span class="fc" id="L49">    theirs.update(104);</span>
+<span class="fc" id="L50">    ours.update(104);</span>
+<span class="fc" id="L51">    checkSame();</span>
+
+<span class="fc" id="L53">    checkOnBytes(new byte[] {40, 60, 97, -70}, false);</span>
+
+<span class="fc" id="L55">    checkOnBytes(&quot;hello world!&quot;.getBytes(&quot;UTF-8&quot;), false);</span>
+
+<span class="fc" id="L57">    final Random random1 = new Random();</span>
+<span class="fc" id="L58">    final Random random2 = new Random();</span>
+<span class="pc bpc" id="L59" title="4 of 10 branches missed.">    for (int i = 0; i &lt; 10000; i++) {</span>
+<span class="fc" id="L60">      final byte randomBytes[] = new byte[random1.nextInt(2048)];</span>
+<span class="fc" id="L61">      random2.nextBytes(randomBytes);</span>
+<span class="fc" id="L62">      checkOnBytes(randomBytes, false);</span>
+    }
+
+<span class="fc" id="L65">  }</span>
+
+<span class="fc" id="L67">  private void checkOnBytes(final byte[] bytes, final boolean print) {</span>
+<span class="fc" id="L68">    theirs.reset();</span>
+<span class="fc" id="L69">    ours.reset();</span>
+<span class="fc" id="L70">    checkSame();</span>
+
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    for (final byte b : bytes) {</span>
+<span class="fc" id="L73">      ours.update(b);</span>
+<span class="fc" id="L74">      theirs.update(b);</span>
+<span class="fc" id="L75">      checkSame();</span>
+    }
+
+<span class="pc bpc" id="L78" title="7 of 10 branches missed.">    if (print) {</span>
+<span class="nc" id="L79">      System.out.println(&quot;theirs:\t&quot; + Long.toHexString(theirs.getValue())</span>
+<span class="nc" id="L80">                         + &quot;\nours:\t&quot; + Long.toHexString(ours.getValue()));</span>
+    }
+
+<span class="fc" id="L83">    theirs.reset();</span>
+<span class="fc" id="L84">    ours.reset();</span>
+
+<span class="fc" id="L86">    ours.update(bytes, 0, bytes.length);</span>
+<span class="fc" id="L87">    theirs.update(bytes, 0, bytes.length);</span>
+<span class="pc bpc" id="L88" title="7 of 10 branches missed.">    if (print) {</span>
+<span class="nc" id="L89">      System.out.println(&quot;theirs:\t&quot; + Long.toHexString(theirs.getValue())</span>
+<span class="nc" id="L90">                         + &quot;\nours:\t&quot; + Long.toHexString(ours.getValue()));</span>
+    }
+
+<span class="fc" id="L93">    checkSame();</span>
+
+<span class="pc bpc" id="L95" title="4 of 10 branches missed.">    if (bytes.length &gt;= 10) {</span>
+<span class="fc" id="L96">      ours.update(bytes, 5, 5);</span>
+<span class="fc" id="L97">      theirs.update(bytes, 5, 5);</span>
+<span class="fc" id="L98">      checkSame();</span>
+    }
+<span class="fc" id="L100">  }</span>
+
+<span class="fc" id="L102">  private void checkSame() {</span>
+<span class="fc" id="L103">    Assert.assertEquals(theirs.getValue(), ours.getValue());</span>
+<span class="fc" id="L104">  }</span>
+
+  /**
+   * Generate a table to perform checksums based on the same CRC-32 polynomial
+   * that java.util.zip.CRC32 uses.
+   */
+  public static class Table {
+    private final int[][] tables;
+
+    private Table(final int nBits, final int nTables,
+<span class="nc" id="L114">        final long polynomial) {</span>
+<span class="nc" id="L115">      tables = new int[nTables][];</span>
+<span class="nc" id="L116">      final int size = 1 &lt;&lt; nBits;</span>
+<span class="nc bnc" id="L117" title="All 10 branches missed.">      for(int i = 0; i &lt; tables.length; i++) {</span>
+<span class="nc" id="L118">        tables[i] = new int[size];</span>
+      }
+
+      //compute the first table
+<span class="nc" id="L122">      final int[] first = tables[0];</span>
+<span class="nc bnc" id="L123" title="All 10 branches missed.">      for (int i = 0; i &lt; first.length; i++) {</span>
+<span class="nc" id="L124">        int crc = i;</span>
+<span class="nc bnc" id="L125" title="All 10 branches missed.">        for (int j = 0; j &lt; nBits; j++) {</span>
+<span class="nc bnc" id="L126" title="All 10 branches missed.">          if ((crc &amp; 1) == 1) {</span>
+<span class="nc" id="L127">            crc &gt;&gt;&gt;= 1;</span>
+<span class="nc" id="L128">            crc ^= polynomial;</span>
+          } else {
+<span class="nc" id="L130">            crc &gt;&gt;&gt;= 1;</span>
+          }
+        }
+<span class="nc" id="L133">        first[i] = crc;</span>
+      }
+
+      //compute the remaining tables
+<span class="nc" id="L137">      final int mask = first.length - 1;</span>
+<span class="nc bnc" id="L138" title="All 10 branches missed.">      for(int j = 1; j &lt; tables.length; j++) {</span>
+<span class="nc" id="L139">        final int[] previous = tables[j-1];</span>
+<span class="nc" id="L140">        final int[] current = tables[j];</span>
+<span class="nc bnc" id="L141" title="All 10 branches missed.">        for (int i = 0; i &lt; current.length; i++) {</span>
+<span class="nc" id="L142">          current[i] = (previous[i] &gt;&gt;&gt; nBits) ^ first[previous[i] &amp; mask];</span>
+        }
+      }
+<span class="nc" id="L145">    }</span>
+
+<span class="nc" id="L147">    String[] toStrings(final String nameformat) {</span>
+<span class="nc" id="L148">      final String[] s = new String[tables.length];</span>
+<span class="nc bnc" id="L149" title="All 10 branches missed.">      for (int j = 0; j &lt; tables.length; j++) {</span>
+<span class="nc" id="L150">        final int[] t = tables[j];</span>
+<span class="nc" id="L151">        final StringBuilder b = new StringBuilder();</span>
+<span class="nc" id="L152">        b.append(String.format(&quot;    /* &quot;+ nameformat +&quot; */&quot;, j));</span>
+<span class="nc bnc" id="L153" title="All 10 branches missed.">        for (int i = 0; i &lt; t.length;) {</span>
+<span class="nc" id="L154">          b.append(&quot;\n    &quot;);</span>
+<span class="nc bnc" id="L155" title="All 10 branches missed.">          for(int k = 0; k &lt; 4; k++) {</span>
+<span class="nc" id="L156">            b.append(String.format(&quot;0x%08X, &quot;, t[i++]));</span>
+          }
+        }
+<span class="nc" id="L159">        s[j] = b.toString();</span>
+      }
+<span class="nc" id="L161">      return s;</span>
+    }
+
+    @Override
+<span class="nc" id="L165">    public String toString() {</span>
+<span class="nc" id="L166">      final StringBuilder b = new StringBuilder();</span>
+
+<span class="nc" id="L168">      final String tableFormat = String.format(&quot;T%d_&quot;,</span>
+<span class="nc" id="L169">        Integer.numberOfTrailingZeros(tables[0].length)) + &quot;%d&quot;;</span>
+<span class="nc" id="L170">      final String startFormat = &quot;  private static final int &quot;+tableFormat+&quot;_start = %d*256;&quot;;</span>
+
+<span class="nc bnc" id="L172" title="All 10 branches missed.">      for (int j = 0; j &lt; tables.length; j++) {</span>
+<span class="nc" id="L173">        b.append(String.format(startFormat, j, j));</span>
+<span class="nc" id="L174">        b.append(&quot;\n&quot;);</span>
+      }
+
+<span class="nc" id="L177">      b.append(&quot;  private static final int[] T = new int[] {&quot;);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">      for(final String s : toStrings(tableFormat)) {</span>
+<span class="nc" id="L179">        b.append(&quot;\n&quot;);</span>
+<span class="nc" id="L180">        b.append(s);</span>
+      }
+<span class="nc" id="L182">      b.setCharAt(b.length() - 2, '\n');</span>
+<span class="nc" id="L183">      b.append(&quot; };\n&quot;);</span>
+<span class="nc" id="L184">      return b.toString();</span>
+    }
+
+        /** Generate CRC-32 lookup tables */
+<span class="nc" id="L188">        public static void main(final String[] args) throws FileNotFoundException {</span>
+<span class="nc bnc" id="L189" title="All 10 branches missed.">            if (args.length != 1) {</span>
+<span class="nc" id="L190">                System.err.println(&quot;Usage: &quot; + Table.class.getName() + &quot; &lt;polynomial&gt;&quot;);</span>
+<span class="nc" id="L191">                System.exit(1);</span>
+            }
+<span class="nc" id="L193">            final long polynomial = Long.parseLong(args[0], 16);</span>
+
+<span class="nc" id="L195">            final int i = 8;</span>
+<span class="nc" id="L196">            final Table t = new Table(i, 16, polynomial);</span>
+<span class="nc" id="L197">            final String s = t.toString();</span>
+<span class="nc" id="L198">            System.out.println(s);</span>
+
+            // print to a file
+<span class="nc" id="L201">            try (final PrintStream out = new PrintStream(new FileOutputStream(&quot;table&quot; + i + &quot;.txt&quot;), true)) {</span>
+<span class="nc" id="L202">                out.println(s);</span>
+            }
+<span class="nc" id="L204">        }</span>
+    }
+
+  /**
+   * Performance tests to compare performance of the Pure Java implementation
+   * to the built-in java.util.zip implementation. This can be run from the
+   * command line with:
+   *
+   *   java -cp path/to/test/classes:path/to/common/classes \
+   *      'org.apache.hadoop.util.TestPureJavaCrc32$PerformanceTest'
+   *
+   * The output is in JIRA table format.
+   */
+<span class="nc" id="L217">  public static class PerformanceTest {</span>
+    public static final int MAX_LEN = 32*1024*1024; // up to 32MB chunks
+    public static final int BYTES_PER_SIZE = MAX_LEN * 4;
+
+<span class="nc" id="L221">    static final Class&lt;? extends Checksum&gt; zip = CRC32.class;</span>
+<span class="nc" id="L222">    static final List&lt;Class&lt;? extends Checksum&gt;&gt; CRCS = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L223">    static {</span>
+<span class="nc" id="L224">      CRCS.add(zip);</span>
+<span class="nc" id="L225">      CRCS.add(PureJavaCrc32.class);</span>
+<span class="nc" id="L226">    }</span>
+
+
+<span class="nc" id="L229">    public static void main(final String args[]) throws Exception {</span>
+<span class="nc" id="L230">      printSystemProperties(System.out);</span>
+<span class="nc" id="L231">      doBench(CRCS, System.out);</span>
+<span class="nc" id="L232">    }</span>
+
+<span class="nc" id="L234">    private static void printCell(final String s, final int width, final PrintStream out) {</span>
+<span class="nc bnc" id="L235" title="All 10 branches missed.">      final int w = s.length() &gt; width? s.length(): width;</span>
+<span class="nc" id="L236">      out.printf(&quot; %&quot; + w + &quot;s |&quot;, s);</span>
+<span class="nc" id="L237">    }</span>
+
+    private static void doBench(final List&lt;Class&lt;? extends Checksum&gt;&gt; crcs,
+<span class="nc" id="L240">        final PrintStream out) throws Exception {</span>
+<span class="nc" id="L241">      final byte[] bytes = new byte[MAX_LEN];</span>
+<span class="nc" id="L242">      new Random().nextBytes(bytes);</span>
+
+      // Print header
+<span class="nc" id="L245">      out.printf(&quot;\nPerformance Table (The unit is MB/sec; #T = #Theads)\n&quot;);</span>
+
+      // Warm up implementations to get jit going.
+<span class="nc bnc" id="L248" title="All 2 branches missed.">      for (final Class&lt;? extends Checksum&gt; c : crcs) {</span>
+<span class="nc" id="L249">        doBench(c, 1, bytes, 2);</span>
+<span class="nc" id="L250">        doBench(c, 1, bytes, 2101);</span>
+      }
+
+      // Test on a variety of sizes with different number of threads
+<span class="nc bnc" id="L254" title="All 10 branches missed.">      for (int size = 32; size &lt;= MAX_LEN; size &lt;&lt;= 1) {</span>
+<span class="nc" id="L255">        doBench(crcs, bytes, size, out);</span>
+      }
+<span class="nc" id="L257">    }</span>
+
+    private static void doBench(final List&lt;Class&lt;? extends Checksum&gt;&gt; crcs,
+<span class="nc" id="L260">        final byte[] bytes, final int size, final PrintStream out) throws Exception {</span>
+<span class="nc" id="L261">      final String numBytesStr = &quot; #Bytes &quot;;</span>
+<span class="nc" id="L262">      final String numThreadsStr = &quot;#T&quot;;</span>
+<span class="nc" id="L263">      final String diffStr = &quot;% diff&quot;;</span>
+
+<span class="nc" id="L265">      out.print('|');</span>
+<span class="nc" id="L266">      printCell(numBytesStr, 0, out);</span>
+<span class="nc" id="L267">      printCell(numThreadsStr, 0, out);</span>
+<span class="nc bnc" id="L268" title="All 10 branches missed.">      for (int i = 0; i &lt; crcs.size(); i++) {</span>
+<span class="nc" id="L269">        final Class&lt;? extends Checksum&gt; c = crcs.get(i);</span>
+<span class="nc" id="L270">        out.print('|');</span>
+<span class="nc" id="L271">        printCell(c.getSimpleName(), 8, out);</span>
+<span class="nc bnc" id="L272" title="All 10 branches missed.">        for(int j = 0; j &lt; i; j++) {</span>
+<span class="nc" id="L273">          printCell(diffStr, diffStr.length(), out);</span>
+        }
+      }
+<span class="nc" id="L276">      out.printf(&quot;\n&quot;);</span>
+
+<span class="nc bnc" id="L278" title="All 10 branches missed.">      for(int numThreads = 1; numThreads &lt;= 16; numThreads &lt;&lt;= 1) {</span>
+<span class="nc" id="L279">        out.printf(&quot;|&quot;);</span>
+<span class="nc" id="L280">        printCell(String.valueOf(size), numBytesStr.length(), out);</span>
+<span class="nc" id="L281">        printCell(String.valueOf(numThreads), numThreadsStr.length(), out);</span>
+
+<span class="nc" id="L283">        BenchResult expected = null;</span>
+<span class="nc" id="L284">        final List&lt;BenchResult&gt; previous = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        for(final Class&lt;? extends Checksum&gt; c : crcs) {</span>
+<span class="nc" id="L286">          System.gc();</span>
+
+<span class="nc" id="L288">          final BenchResult result = doBench(c, numThreads, bytes, size);</span>
+<span class="nc" id="L289">          printCell(String.format(&quot;%9.1f&quot;, result.mbps),</span>
+<span class="nc" id="L290">              c.getSimpleName().length()+1, out);</span>
+
+          //check result
+<span class="nc bnc" id="L293" title="All 10 branches missed.">          if(c == zip) {</span>
+<span class="nc" id="L294">            expected = result;</span>
+<span class="nc bnc" id="L295" title="All 10 branches missed.">          } else if (expected == null) {</span>
+<span class="nc" id="L296">            throw new RuntimeException(&quot;The first class is &quot;</span>
+<span class="nc" id="L297">                + c.getName() + &quot; but not &quot; + zip.getName());</span>
+<span class="nc bnc" id="L298" title="All 10 branches missed.">          } else if (result.value != expected.value) {</span>
+<span class="nc" id="L299">            throw new RuntimeException(c + &quot; has bugs!&quot;);</span>
+          }
+
+          //compare result with previous
+<span class="nc bnc" id="L303" title="All 2 branches missed.">          for(final BenchResult p : previous) {</span>
+<span class="nc" id="L304">            final double diff = (result.mbps - p.mbps) / p.mbps * 100;</span>
+<span class="nc" id="L305">            printCell(String.format(&quot;%5.1f%%&quot;, diff), diffStr.length(), out);</span>
+          }
+<span class="nc" id="L307">          previous.add(result);</span>
+        }
+<span class="nc" id="L309">        out.printf(&quot;\n&quot;);</span>
+      }
+<span class="nc" id="L311">    }</span>
+
+    private static BenchResult doBench(final Class&lt;? extends Checksum&gt; clazz,
+        final int numThreads, final byte[] bytes, final int size)
+<span class="nc" id="L315">            throws Exception {</span>
+
+<span class="nc" id="L317">      final Thread[] threads = new Thread[numThreads];</span>
+<span class="nc" id="L318">      final BenchResult[] results = new BenchResult[threads.length];</span>
+
+      {
+<span class="nc" id="L321">        final int trials = BYTES_PER_SIZE / size;</span>
+<span class="nc" id="L322">        final double mbProcessed = trials * size / 1024.0 / 1024.0;</span>
+<span class="nc" id="L323">        final Constructor&lt;? extends Checksum&gt; ctor = clazz.getConstructor();</span>
+
+<span class="nc bnc" id="L325" title="All 10 branches missed.">        for(int i = 0; i &lt; threads.length; i++) {</span>
+<span class="nc" id="L326">          final int index = i;</span>
+<span class="nc" id="L327">          threads[i] = new Thread() {</span>
+<span class="nc" id="L328">            final Checksum crc = ctor.newInstance();</span>
+
+            @Override
+<span class="nc" id="L331">            public void run() {</span>
+<span class="nc" id="L332">              final long st = System.nanoTime();</span>
+<span class="nc" id="L333">              crc.reset();</span>
+<span class="nc bnc" id="L334" title="All 10 branches missed.">              for (int trialIndex = 0; trialIndex &lt; trials; trialIndex++) {</span>
+<span class="nc" id="L335">                crc.update(bytes, 0, size);</span>
+              }
+<span class="nc" id="L337">              final long et = System.nanoTime();</span>
+<span class="nc" id="L338">              final double secsElapsed = (et - st) / 1000000000.0d;</span>
+<span class="nc" id="L339">              results[index] = new BenchResult(crc.getValue(), mbProcessed/secsElapsed);</span>
+<span class="nc" id="L340">            }</span>
+          };
+        }
+      }
+
+<span class="nc bnc" id="L345" title="All 2 branches missed.">      for (final Thread thread : threads) {</span>
+<span class="nc" id="L346">        thread.start();</span>
+      }
+<span class="nc bnc" id="L348" title="All 2 branches missed.">      for (final Thread thread : threads) {</span>
+<span class="nc" id="L349">        thread.join();</span>
+      }
+
+<span class="nc" id="L352">      final long expected = results[0].value;</span>
+<span class="nc" id="L353">      double sum = results[0].mbps;</span>
+<span class="nc bnc" id="L354" title="All 10 branches missed.">      for(int i = 1; i &lt; results.length; i++) {</span>
+<span class="nc bnc" id="L355" title="All 10 branches missed.">        if (results[i].value != expected) {</span>
+<span class="nc" id="L356">          throw new AssertionError(clazz.getSimpleName() + &quot; results not matched.&quot;);</span>
+        }
+<span class="nc" id="L358">        sum += results[i].mbps;</span>
+      }
+<span class="nc" id="L360">      return new BenchResult(expected, sum/results.length);</span>
+    }
+
+    private static class BenchResult {
+      /** CRC value */
+      final long value;
+      /** Speed (MB per second) */
+      final double mbps;
+
+<span class="nc" id="L369">      BenchResult(final long value, final double mbps) {</span>
+<span class="nc" id="L370">        this.value = value;</span>
+<span class="nc" id="L371">        this.mbps = mbps;</span>
+<span class="nc" id="L372">      }</span>
+    }
+
+<span class="nc" id="L375">    private static void printSystemProperties(final PrintStream out) {</span>
+<span class="nc" id="L376">      final String[] names = {</span>
+          &quot;java.version&quot;,
+          &quot;java.runtime.name&quot;,
+          &quot;java.runtime.version&quot;,
+          &quot;java.vm.version&quot;,
+          &quot;java.vm.vendor&quot;,
+          &quot;java.vm.name&quot;,
+          &quot;java.vm.specification.version&quot;,
+          &quot;java.specification.version&quot;,
+          &quot;os.arch&quot;,
+          &quot;os.name&quot;,
+          &quot;os.version&quot;
+      };
+<span class="nc" id="L389">      final Properties p = System.getProperties();</span>
+<span class="nc bnc" id="L390" title="All 2 branches missed.">      for(final String n : names) {</span>
+<span class="nc" id="L391">        out.println(n + &quot; = &quot; + p.getProperty(n));</span>
+      }
+<span class="nc" id="L393">    }</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

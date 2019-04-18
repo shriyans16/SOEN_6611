@@ -1,0 +1,260 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Crypt</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.digest</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Crypt (org.apache.commons.codec.digest)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Crypt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/ 17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Crypt$__CLR4_1_200julvhqyp</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.codec.digest;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import org.apache.commons.codec.Charsets;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;/**
+<i>22</i>&nbsp; * GNU libc crypt(3) compatible hash method.
+<i>23</i>&nbsp; * &lt;p&gt;
+<i>24</i>&nbsp; * See {@link #crypt(String, String)} for further details.
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * This class is immutable and thread-safe.
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @version $Id$
+<i>29</i>&nbsp; * @since 1.7
+<i>30</i>&nbsp; */
+<b class="fc"><i>31</i>&nbsp;public class Crypt {</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Encrypts a password in a crypt(3) compatible way.
+<i>35</i>&nbsp;     * &lt;p&gt;
+<i>36</i>&nbsp;     * A random salt and the default algorithm (currently SHA-512) are used. See {@link #crypt(String, String)} for
+<i>37</i>&nbsp;     * details.
+<i>38</i>&nbsp;     *
+<i>39</i>&nbsp;     * @param keyBytes
+<i>40</i>&nbsp;     *            plaintext password
+<i>41</i>&nbsp;     * @return hash value
+<i>42</i>&nbsp;     * @throws RuntimeException
+<i>43</i>&nbsp;     *             when a {@link java.security.NoSuchAlgorithmException} is caught.
+<i>44</i>&nbsp;     */
+<b class="fc"><i>45</i>&nbsp;    public static String crypt(final byte[] keyBytes) {</b>
+<b class="fc"><i>46</i>&nbsp;        return crypt(keyBytes, null);</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Encrypts a password in a crypt(3) compatible way.
+<i>51</i>&nbsp;     * &lt;p&gt;
+<i>52</i>&nbsp;     * If no salt is provided, a random salt and the default algorithm (currently SHA-512) will be used. See
+<i>53</i>&nbsp;     * {@link #crypt(String, String)} for details.
+<i>54</i>&nbsp;     *
+<i>55</i>&nbsp;     * @param keyBytes
+<i>56</i>&nbsp;     *            plaintext password
+<i>57</i>&nbsp;     * @param salt
+<i>58</i>&nbsp;     *            salt value
+<i>59</i>&nbsp;     * @return hash value
+<i>60</i>&nbsp;     * @throws IllegalArgumentException
+<i>61</i>&nbsp;     *             if the salt does not match the allowed pattern
+<i>62</i>&nbsp;     * @throws RuntimeException
+<i>63</i>&nbsp;     *             when a {@link java.security.NoSuchAlgorithmException} is caught.
+<i>64</i>&nbsp;     */
+<b class="fc"><i>65</i>&nbsp;    public static String crypt(final byte[] keyBytes, final String salt) {</b>
+<b class="fc"><i>66</i>&nbsp;        if (salt == null) {</b>
+<b class="fc"><i>67</i>&nbsp;            return Sha2Crypt.sha512Crypt(keyBytes);</b>
+<b class="fc"><i>68</i>&nbsp;        } else if (salt.startsWith(Sha2Crypt.SHA512_PREFIX)) {</b>
+<b class="fc"><i>69</i>&nbsp;            return Sha2Crypt.sha512Crypt(keyBytes, salt);</b>
+<b class="fc"><i>70</i>&nbsp;        } else if (salt.startsWith(Sha2Crypt.SHA256_PREFIX)) {</b>
+<b class="fc"><i>71</i>&nbsp;            return Sha2Crypt.sha256Crypt(keyBytes, salt);</b>
+<b class="fc"><i>72</i>&nbsp;        } else if (salt.startsWith(Md5Crypt.MD5_PREFIX)) {</b>
+<b class="fc"><i>73</i>&nbsp;            return Md5Crypt.md5Crypt(keyBytes, salt);</b>
+<i>74</i>&nbsp;        } else {
+<b class="fc"><i>75</i>&nbsp;            return UnixCrypt.crypt(keyBytes, salt);</b>
+<i>76</i>&nbsp;        }
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Calculates the digest using the strongest crypt(3) algorithm.
+<i>81</i>&nbsp;     * &lt;p&gt;
+<i>82</i>&nbsp;     * A random salt and the default algorithm (currently SHA-512) are used.
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @see #crypt(String, String)
+<i>85</i>&nbsp;     * @param key
+<i>86</i>&nbsp;     *            plaintext password
+<i>87</i>&nbsp;     * @return hash value
+<i>88</i>&nbsp;     * @throws RuntimeException
+<i>89</i>&nbsp;     *             when a {@link java.security.NoSuchAlgorithmException} is caught.
+<i>90</i>&nbsp;     */
+<b class="fc"><i>91</i>&nbsp;    public static String crypt(final String key) {</b>
+<b class="fc"><i>92</i>&nbsp;        return crypt(key, null);</b>
+<i>93</i>&nbsp;    }
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Encrypts a password in a crypt(3) compatible way.
+<i>97</i>&nbsp;     * &lt;p&gt;
+<i>98</i>&nbsp;     * The exact algorithm depends on the format of the salt string:
+<i>99</i>&nbsp;     * &lt;ul&gt;
+<i>100</i>&nbsp;     * &lt;li&gt;SHA-512 salts start with $6$ and are up to 16 chars long.
+<i>101</i>&nbsp;     * &lt;li&gt;SHA-256 salts start with $5$ and are up to 16 chars long
+<i>102</i>&nbsp;     * &lt;li&gt;MD5 salts start with &quot;$1$&quot; and are up to 8 chars long
+<i>103</i>&nbsp;     * &lt;li&gt;DES, the traditional UnixCrypt algorithm is used else with only 2 chars
+<i>104</i>&nbsp;     * &lt;li&gt;Only the first 8 chars of the passwords are used in the DES algorithm!
+<i>105</i>&nbsp;     * &lt;/ul&gt;
+<i>106</i>&nbsp;     * The magic strings &quot;$apr1$&quot; and &quot;$2a$&quot; are not recognised by this method as its output should be identical with
+<i>107</i>&nbsp;     * that of the libc implementation.
+<i>108</i>&nbsp;     * &lt;p&gt;
+<i>109</i>&nbsp;     * The rest of the salt string is drawn from the set [a-zA-Z0-9./] and is cut at the maximum length of if a &quot;$&quot;
+<i>110</i>&nbsp;     * sign is encountered. It is therefore valid to enter a complete hash value as salt to e.g. verify a password
+<i>111</i>&nbsp;     * with:
+<i>112</i>&nbsp;     *
+<i>113</i>&nbsp;     * &lt;pre&gt;
+<i>114</i>&nbsp;     * storedPwd.equals(crypt(enteredPwd, storedPwd))
+<i>115</i>&nbsp;     * &lt;/pre&gt;
+<i>116</i>&nbsp;     * &lt;p&gt;
+<i>117</i>&nbsp;     * The resulting string starts with the marker string ($6$), continues with the salt value and ends with a &quot;$&quot; sign
+<i>118</i>&nbsp;     * followed by the actual hash value. For DES the string only contains the salt and actual hash. It&#39;s total length
+<i>119</i>&nbsp;     * is dependent on the algorithm used:
+<i>120</i>&nbsp;     * &lt;ul&gt;
+<i>121</i>&nbsp;     * &lt;li&gt;SHA-512: 106 chars
+<i>122</i>&nbsp;     * &lt;li&gt;SHA-256: 63 chars
+<i>123</i>&nbsp;     * &lt;li&gt;MD5: 34 chars
+<i>124</i>&nbsp;     * &lt;li&gt;DES: 13 chars
+<i>125</i>&nbsp;     * &lt;/ul&gt;
+<i>126</i>&nbsp;     * &lt;p&gt;
+<i>127</i>&nbsp;     * Example:
+<i>128</i>&nbsp;     *
+<i>129</i>&nbsp;     * &lt;pre&gt;
+<i>130</i>&nbsp;     *      crypt(&quot;secret&quot;, &quot;$1$xxxx&quot;) =&gt; &quot;$1$xxxx$aMkevjfEIpa35Bh3G4bAc.&quot;
+<i>131</i>&nbsp;     *      crypt(&quot;secret&quot;, &quot;xx&quot;) =&gt; &quot;xxWAum7tHdIUw&quot;
+<i>132</i>&nbsp;     * &lt;/pre&gt;
+<i>133</i>&nbsp;     * &lt;p&gt;
+<i>134</i>&nbsp;     * This method comes in a variation that accepts a byte[] array to support input strings that are not encoded in
+<i>135</i>&nbsp;     * UTF-8 but e.g. in ISO-8859-1 where equal characters result in different byte values.
+<i>136</i>&nbsp;     *
+<i>137</i>&nbsp;     * @see &quot;The man page of the libc crypt (3) function.&quot;
+<i>138</i>&nbsp;     * @param key
+<i>139</i>&nbsp;     *            plaintext password as entered by the used
+<i>140</i>&nbsp;     * @param salt
+<i>141</i>&nbsp;     *            salt value
+<i>142</i>&nbsp;     * @return hash value, i.e. encrypted password including the salt string
+<i>143</i>&nbsp;     * @throws IllegalArgumentException
+<i>144</i>&nbsp;     *             if the salt does not match the allowed pattern
+<i>145</i>&nbsp;     * @throws RuntimeException
+<i>146</i>&nbsp;     *             when a {@link java.security.NoSuchAlgorithmException} is caught. *
+<i>147</i>&nbsp;     */
+<b class="fc"><i>148</i>&nbsp;    public static String crypt(final String key, final String salt) {</b>
+<b class="fc"><i>149</i>&nbsp;        return crypt(key.getBytes(Charsets.UTF_8), salt);</b>
+<i>150</i>&nbsp;    }
+<i>151</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 20:07</div>
+</div>
+</body>
+</html>

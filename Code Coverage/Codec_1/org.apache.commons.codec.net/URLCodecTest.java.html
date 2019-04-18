@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>URLCodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.net</a> &gt; <span class="el_source">URLCodecTest.java</span></div><h1>URLCodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.net;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.junit.Test;
+
+/**
+ * URL codec test cases
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L37" title="3 of 4 branches missed.">public class URLCodecTest {</span>
+
+<span class="fc" id="L39">    static final int SWISS_GERMAN_STUFF_UNICODE [] = {</span>
+        0x47, 0x72, 0xFC, 0x65, 0x7A, 0x69, 0x5F, 0x7A, 0xE4, 0x6D, 0xE4
+    };
+
+<span class="fc" id="L43">    static final int RUSSIAN_STUFF_UNICODE [] = {</span>
+        0x412, 0x441, 0x435, 0x43C, 0x5F, 0x43F, 0x440, 0x438,
+        0x432, 0x435, 0x442
+    };
+
+<span class="fc" id="L48">    private void validateState(final URLCodec urlCodec) {</span>
+        // no tests for now.
+<span class="fc" id="L50">    }</span>
+
+<span class="fc" id="L52">    private String constructString(final int [] unicodeChars) {</span>
+<span class="fc" id="L53">        final StringBuilder buffer = new StringBuilder();</span>
+<span class="pc bpc" id="L54" title="7 of 10 branches missed.">        if (unicodeChars != null) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            for (final int unicodeChar : unicodeChars) {</span>
+<span class="fc" id="L56">                buffer.append((char)unicodeChar);</span>
+            }
+        }
+<span class="fc" id="L59">        return buffer.toString();</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L63" title="All 4 branches missed.">    public void testUTF8RoundTrip() throws Exception {</span>
+
+<span class="fc" id="L65">        final String ru_msg = constructString(RUSSIAN_STUFF_UNICODE);</span>
+<span class="fc" id="L66">        final String ch_msg = constructString(SWISS_GERMAN_STUFF_UNICODE);</span>
+
+<span class="fc" id="L68">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L69">        this.validateState(urlCodec);</span>
+
+<span class="fc" id="L71">        assertEquals(</span>
+            &quot;%D0%92%D1%81%D0%B5%D0%BC_%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82&quot;,
+<span class="fc" id="L73">            urlCodec.encode(ru_msg, CharEncoding.UTF_8)</span>
+        );
+<span class="fc" id="L75">        assertEquals(&quot;Gr%C3%BCezi_z%C3%A4m%C3%A4&quot;, urlCodec.encode(ch_msg, CharEncoding.UTF_8));</span>
+
+<span class="fc" id="L77">        assertEquals(ru_msg, urlCodec.decode(urlCodec.encode(ru_msg, CharEncoding.UTF_8), CharEncoding.UTF_8));</span>
+<span class="fc" id="L78">        assertEquals(ch_msg, urlCodec.decode(urlCodec.encode(ch_msg, CharEncoding.UTF_8), CharEncoding.UTF_8));</span>
+<span class="fc" id="L79">        this.validateState(urlCodec);</span>
+<span class="fc" id="L80">    }</span>
+
+    @Test
+<span class="pc bnc" id="L83" title="All 4 branches missed.">    public void testBasicEncodeDecode() throws Exception {</span>
+<span class="fc" id="L84">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L85">        final String plain = &quot;Hello there!&quot;;</span>
+<span class="fc" id="L86">        final String encoded = urlCodec.encode(plain);</span>
+<span class="fc" id="L87">        assertEquals(&quot;Basic URL encoding test&quot;,</span>
+            &quot;Hello+there%21&quot;, encoded);
+<span class="fc" id="L89">        assertEquals(&quot;Basic URL decoding test&quot;,</span>
+<span class="fc" id="L90">            plain, urlCodec.decode(encoded));</span>
+<span class="fc" id="L91">        this.validateState(urlCodec);</span>
+<span class="fc" id="L92">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L96" title="All 4 branches missed.">    public void testSafeCharEncodeDecode() throws Exception {</span>
+<span class="fc" id="L97">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L98">        final String plain = &quot;abc123_-.*&quot;;</span>
+<span class="fc" id="L99">        final String encoded = urlCodec.encode(plain);</span>
+<span class="fc" id="L100">        assertEquals(&quot;Safe chars URL encoding test&quot;,</span>
+            plain, encoded);
+<span class="fc" id="L102">        assertEquals(&quot;Safe chars URL decoding test&quot;,</span>
+<span class="fc" id="L103">            plain, urlCodec.decode(encoded));</span>
+<span class="fc" id="L104">        this.validateState(urlCodec);</span>
+<span class="fc" id="L105">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L109" title="All 4 branches missed.">    public void testUnsafeEncodeDecode() throws Exception {</span>
+<span class="fc" id="L110">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L111">        final String plain = &quot;~!@#$%^&amp;()+{}\&quot;\\;:`,/[]&quot;;</span>
+<span class="fc" id="L112">        final String encoded = urlCodec.encode(plain);</span>
+<span class="fc" id="L113">        assertEquals(&quot;Unsafe chars URL encoding test&quot;,</span>
+            &quot;%7E%21%40%23%24%25%5E%26%28%29%2B%7B%7D%22%5C%3B%3A%60%2C%2F%5B%5D&quot;, encoded);
+<span class="fc" id="L115">        assertEquals(&quot;Unsafe chars URL decoding test&quot;,</span>
+<span class="fc" id="L116">            plain, urlCodec.decode(encoded));</span>
+<span class="fc" id="L117">        this.validateState(urlCodec);</span>
+<span class="fc" id="L118">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L122" title="All 4 branches missed.">    public void testEncodeDecodeNull() throws Exception {</span>
+<span class="fc" id="L123">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L124">        assertNull(&quot;Null string URL encoding test&quot;,</span>
+<span class="fc" id="L125">            urlCodec.encode((String)null));</span>
+<span class="fc" id="L126">        assertNull(&quot;Null string URL decoding test&quot;,</span>
+<span class="fc" id="L127">            urlCodec.decode((String)null));</span>
+<span class="fc" id="L128">        this.validateState(urlCodec);</span>
+<span class="fc" id="L129">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L133" title="All 4 branches missed.">    public void testDecodeInvalid() throws Exception {</span>
+<span class="fc" id="L134">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L135">        try {</span>
+<span class="nc" id="L136">            urlCodec.decode(&quot;%&quot;);</span>
+<span class="nc" id="L137">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L138">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L140">        }</span>
+<span class="fc" id="L141">        try {</span>
+<span class="nc" id="L142">            urlCodec.decode(&quot;%A&quot;);</span>
+<span class="nc" id="L143">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L144">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L146">        }</span>
+<span class="fc" id="L147">        try {</span>
+            // Bad 1st char after %
+<span class="nc" id="L149">            urlCodec.decode(&quot;%WW&quot;);</span>
+<span class="nc" id="L150">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L151">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L153">        }</span>
+<span class="fc" id="L154">        try {</span>
+            // Bad 2nd char after %
+<span class="nc" id="L156">            urlCodec.decode(&quot;%0W&quot;);</span>
+<span class="nc" id="L157">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L158">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L160">        }</span>
+<span class="fc" id="L161">        this.validateState(urlCodec);</span>
+<span class="fc" id="L162">    }</span>
+
+    @Test
+<span class="pc bnc" id="L165" title="All 4 branches missed.">    public void testDecodeInvalidContent() throws UnsupportedEncodingException, DecoderException {</span>
+<span class="fc" id="L166">        final String ch_msg = constructString(SWISS_GERMAN_STUFF_UNICODE);</span>
+<span class="fc" id="L167">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L168">        final byte[] input = ch_msg.getBytes(&quot;ISO-8859-1&quot;);</span>
+<span class="fc" id="L169">        final byte[] output = urlCodec.decode(input);</span>
+<span class="fc" id="L170">        assertEquals(input.length, output.length);</span>
+<span class="pc bpc" id="L171" title="4 of 10 branches missed.">        for (int i = 0; i &lt; input.length; i++) {</span>
+<span class="fc" id="L172">            assertEquals(input[i], output[i]);</span>
+        }
+<span class="fc" id="L174">        this.validateState(urlCodec);</span>
+<span class="fc" id="L175">    }</span>
+
+    @Test
+<span class="pc bnc" id="L178" title="All 4 branches missed.">    public void testEncodeNull() throws Exception {</span>
+<span class="fc" id="L179">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L180">        final byte[] plain = null;</span>
+<span class="fc" id="L181">        final byte[] encoded = urlCodec.encode(plain);</span>
+<span class="fc" id="L182">        assertEquals(&quot;Encoding a null string should return null&quot;,</span>
+            null, encoded);
+<span class="fc" id="L184">        this.validateState(urlCodec);</span>
+<span class="fc" id="L185">    }</span>
+
+    @Test
+<span class="pc bnc" id="L188" title="All 4 branches missed.">    public void testEncodeUrlWithNullBitSet() throws Exception {</span>
+<span class="fc" id="L189">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L190">        final String plain = &quot;Hello there!&quot;;</span>
+<span class="fc" id="L191">        final String encoded = new String( URLCodec.encodeUrl(null, plain.getBytes(Charsets.UTF_8)));</span>
+<span class="fc" id="L192">        assertEquals(&quot;Basic URL encoding test&quot;,</span>
+            &quot;Hello+there%21&quot;, encoded);
+<span class="fc" id="L194">        assertEquals(&quot;Basic URL decoding test&quot;,</span>
+<span class="fc" id="L195">            plain, urlCodec.decode(encoded));</span>
+<span class="fc" id="L196">        this.validateState(urlCodec);</span>
+<span class="fc" id="L197">    }</span>
+
+    @Test
+<span class="pc bnc" id="L200" title="All 4 branches missed.">    public void testDecodeWithNullArray() throws Exception {</span>
+<span class="fc" id="L201">        final byte[] plain = null;</span>
+<span class="fc" id="L202">        final byte[] result = URLCodec.decodeUrl( plain );</span>
+<span class="fc" id="L203">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L204">    }</span>
+
+    @Test
+<span class="pc bnc" id="L207" title="All 4 branches missed.">    public void testEncodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L208">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L209">        final String test = null;</span>
+<span class="fc" id="L210">        final String result = urlCodec.encode( test, &quot;charset&quot; );</span>
+<span class="fc" id="L211">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L212">    }</span>
+
+    @Test
+<span class="pc bnc" id="L215" title="All 4 branches missed.">    public void testDecodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L216">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L217">        final String test = null;</span>
+<span class="fc" id="L218">        final String result = urlCodec.decode( test, &quot;charset&quot; );</span>
+<span class="fc" id="L219">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L220">    }</span>
+
+    @Test
+<span class="pc bnc" id="L223" title="All 4 branches missed.">    public void testEncodeObjects() throws Exception {</span>
+<span class="fc" id="L224">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L225">        final String plain = &quot;Hello there!&quot;;</span>
+<span class="fc" id="L226">        String encoded = (String) urlCodec.encode((Object) plain);</span>
+<span class="fc" id="L227">        assertEquals(&quot;Basic URL encoding test&quot;,</span>
+            &quot;Hello+there%21&quot;, encoded);
+
+<span class="fc" id="L230">        final byte[] plainBA = plain.getBytes(Charsets.UTF_8);</span>
+<span class="fc" id="L231">        final byte[] encodedBA = (byte[]) urlCodec.encode((Object) plainBA);</span>
+<span class="fc" id="L232">        encoded = new String(encodedBA);</span>
+<span class="fc" id="L233">        assertEquals(&quot;Basic URL encoding test&quot;,</span>
+            &quot;Hello+there%21&quot;, encoded);
+
+<span class="fc" id="L236">        final Object result = urlCodec.encode((Object) null);</span>
+<span class="fc" id="L237">        assertEquals( &quot;Encoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L239">        try {</span>
+<span class="fc" id="L240">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L241">            urlCodec.encode( dObj );</span>
+<span class="nc" id="L242">            fail( &quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L243">        } catch (final EncoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L245">        }</span>
+<span class="fc" id="L246">        this.validateState(urlCodec);</span>
+<span class="fc" id="L247">    }</span>
+
+    @Test
+<span class="pc bnc" id="L250" title="All 4 branches missed.">    public void testInvalidEncoding() {</span>
+<span class="fc" id="L251">        final URLCodec urlCodec = new URLCodec(&quot;NONSENSE&quot;);</span>
+<span class="fc" id="L252">        final String plain = &quot;Hello there!&quot;;</span>
+<span class="fc" id="L253">        try {</span>
+<span class="nc" id="L254">            urlCodec.encode(plain);</span>
+<span class="nc" id="L255">            fail(&quot;We set the encoding to a bogus NONSENSE vlaue, this shouldn't have worked.&quot;);</span>
+<span class="fc" id="L256">        } catch (final EncoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L258">        }</span>
+<span class="fc" id="L259">        try {</span>
+<span class="nc" id="L260">            urlCodec.decode(plain);</span>
+<span class="nc" id="L261">            fail(&quot;We set the encoding to a bogus NONSENSE vlaue, this shouldn't have worked.&quot;);</span>
+<span class="fc" id="L262">        } catch (final DecoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L264">        }</span>
+<span class="fc" id="L265">        this.validateState(urlCodec);</span>
+<span class="fc" id="L266">    }</span>
+
+    @Test
+<span class="pc bnc" id="L269" title="All 4 branches missed.">    public void testDecodeObjects() throws Exception {</span>
+<span class="fc" id="L270">        final URLCodec urlCodec = new URLCodec();</span>
+<span class="fc" id="L271">        final String plain = &quot;Hello+there%21&quot;;</span>
+<span class="fc" id="L272">        String decoded = (String) urlCodec.decode((Object) plain);</span>
+<span class="fc" id="L273">        assertEquals(&quot;Basic URL decoding test&quot;,</span>
+            &quot;Hello there!&quot;, decoded);
+
+<span class="fc" id="L276">        final byte[] plainBA = plain.getBytes(Charsets.UTF_8);</span>
+<span class="fc" id="L277">        final byte[] decodedBA = (byte[]) urlCodec.decode((Object) plainBA);</span>
+<span class="fc" id="L278">        decoded = new String(decodedBA);</span>
+<span class="fc" id="L279">        assertEquals(&quot;Basic URL decoding test&quot;,</span>
+            &quot;Hello there!&quot;, decoded);
+
+<span class="fc" id="L282">        final Object result = urlCodec.decode((Object) null);</span>
+<span class="fc" id="L283">        assertEquals( &quot;Decoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L285">        try {</span>
+<span class="fc" id="L286">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L287">            urlCodec.decode( dObj );</span>
+<span class="nc" id="L288">            fail( &quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L289">        } catch (final DecoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L291">        }</span>
+<span class="fc" id="L292">        this.validateState(urlCodec);</span>
+<span class="fc" id="L293">    }</span>
+
+    @Test
+<span class="pc bnc" id="L296" title="All 4 branches missed.">    public void testDefaultEncoding() throws Exception {</span>
+<span class="fc" id="L297">        final String plain = &quot;Hello there!&quot;;</span>
+<span class="fc" id="L298">        final URLCodec urlCodec = new URLCodec(&quot;UnicodeBig&quot;);</span>
+<span class="fc" id="L299">        urlCodec.encode(plain); // To work around a weird quirk in Java 1.2.2</span>
+<span class="fc" id="L300">        final String encoded1 = urlCodec.encode(plain, &quot;UnicodeBig&quot;);</span>
+<span class="fc" id="L301">        final String encoded2 = urlCodec.encode(plain);</span>
+<span class="fc" id="L302">        assertEquals(encoded1, encoded2);</span>
+<span class="fc" id="L303">        this.validateState(urlCodec);</span>
+<span class="fc" id="L304">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

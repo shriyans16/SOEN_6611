@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Base32Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">Base32Test.java</span></div><h1>Base32Test.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package org.apache.commons.codec.binary;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.nio.charset.Charset;
+import java.util.Arrays;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.lang3.ArrayUtils;
+import org.junit.Test;
+
+<span class="pc bpc" id="L34" title="3 of 4 branches missed.">public class Base32Test {</span>
+
+
+<span class="fc" id="L37">    private static final Charset CHARSET_UTF8 = Charsets.UTF_8;</span>
+
+<span class="fc" id="L39">    private static final String [][] BASE32_TEST_CASES = { // RFC 4648</span>
+        {&quot;&quot;       ,&quot;&quot;},
+        {&quot;f&quot;      ,&quot;MY======&quot;},
+        {&quot;fo&quot;     ,&quot;MZXQ====&quot;},
+        {&quot;foo&quot;    ,&quot;MZXW6===&quot;},
+        {&quot;foob&quot;   ,&quot;MZXW6YQ=&quot;},
+        {&quot;fooba&quot;  ,&quot;MZXW6YTB&quot;},
+        {&quot;foobar&quot; ,&quot;MZXW6YTBOI======&quot;},
+    };
+
+    private static final Object[][] BASE32_BINARY_TEST_CASES;
+
+    //            { null, &quot;O0o0O0o0&quot; }
+//            BASE32_BINARY_TEST_CASES[2][0] = new Hex().decode(&quot;739ce739ce&quot;);
+
+<span class="fc" id="L54">    static {</span>
+<span class="fc" id="L55">        final Hex hex = new Hex();</span>
+<span class="fc" id="L56">        try {</span>
+<span class="fc" id="L57">            BASE32_BINARY_TEST_CASES = new Object[][] {</span>
+<span class="fc" id="L58">                    new Object[] { hex.decode(&quot;623a01735836e9a126e12fbf95e013ee6892997c&quot;),</span>
+                                   &quot;MI5AC42YG3U2CJXBF67ZLYAT5ZUJFGL4&quot; },
+<span class="fc" id="L60">                    new Object[] { hex.decode(&quot;623a01735836e9a126e12fbf95e013ee6892997c&quot;),</span>
+                                   &quot;mi5ac42yg3u2cjxbf67zlyat5zujfgl4&quot; },
+<span class="fc" id="L62">                    new Object[] { hex.decode(&quot;739ce42108&quot;),</span>
+                                   &quot;OOOOIIII&quot; }
+            };
+<span class="nc" id="L65">        } catch (final DecoderException de) {</span>
+<span class="nc" id="L66">            throw new Error(&quot;:(&quot;, de);</span>
+<span class="fc" id="L67">        }</span>
+    }
+<span class="fc" id="L69">    private static final String [][] BASE32HEX_TEST_CASES = { // RFC 4648</span>
+        {&quot;&quot;       ,&quot;&quot;},
+        {&quot;f&quot;      ,&quot;CO======&quot;},
+        {&quot;fo&quot;     ,&quot;CPNG====&quot;},
+        {&quot;foo&quot;    ,&quot;CPNMU===&quot;},
+        {&quot;foob&quot;   ,&quot;CPNMUOG=&quot;},
+        {&quot;fooba&quot;  ,&quot;CPNMUOJ1&quot;},
+        {&quot;foobar&quot; ,&quot;CPNMUOJ1E8======&quot;},
+    };
+
+<span class="fc" id="L79">    private static final String [][] BASE32_TEST_CASES_CHUNKED = { //Chunked</span>
+        {&quot;&quot;       ,&quot;&quot;},
+        {&quot;f&quot;      ,&quot;MY======\r\n&quot;},
+        {&quot;fo&quot;     ,&quot;MZXQ====\r\n&quot;},
+        {&quot;foo&quot;    ,&quot;MZXW6===\r\n&quot;},
+        {&quot;foob&quot;   ,&quot;MZXW6YQ=\r\n&quot;},
+        {&quot;fooba&quot;  ,&quot;MZXW6YTB\r\n&quot;},
+        {&quot;foobar&quot; ,&quot;MZXW6YTBOI======\r\n&quot;},
+    };
+
+<span class="fc" id="L89">    private static final String [][] BASE32_PAD_TEST_CASES = { // RFC 4648</span>
+        {&quot;&quot;       ,&quot;&quot;},
+        {&quot;f&quot;      ,&quot;MY%%%%%%&quot;},
+        {&quot;fo&quot;     ,&quot;MZXQ%%%%&quot;},
+        {&quot;foo&quot;    ,&quot;MZXW6%%%&quot;},
+        {&quot;foob&quot;   ,&quot;MZXW6YQ%&quot;},
+        {&quot;fooba&quot;  ,&quot;MZXW6YTB&quot;},
+        {&quot;foobar&quot; ,&quot;MZXW6YTBOI%%%%%%&quot;},
+    };
+
+    @Test
+<span class="pc bnc" id="L100" title="All 4 branches missed.">    public void testBase64AtBufferStart() {</span>
+<span class="fc" id="L101">        testBase64InBuffer(0, 100);</span>
+<span class="fc" id="L102">    }</span>
+
+    @Test
+<span class="pc bnc" id="L105" title="All 4 branches missed.">    public void testBase64AtBufferEnd() {</span>
+<span class="fc" id="L106">        testBase64InBuffer(100, 0);</span>
+<span class="fc" id="L107">    }</span>
+
+    @Test
+<span class="pc bnc" id="L110" title="All 4 branches missed.">    public void testBase64AtBufferMiddle() {</span>
+<span class="fc" id="L111">        testBase64InBuffer(100, 100);</span>
+<span class="fc" id="L112">    }</span>
+
+<span class="fc" id="L114">    private void testBase64InBuffer(final int startPasSize, final int endPadSize) {</span>
+<span class="fc" id="L115">        final Base32 codec = new Base32();</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        for (final String[] element : BASE32_TEST_CASES) {</span>
+<span class="fc" id="L117">            final byte[] bytes = element[0].getBytes(CHARSET_UTF8);</span>
+<span class="fc" id="L118">            byte[] buffer = ArrayUtils.addAll(bytes, new byte[endPadSize]);</span>
+<span class="fc" id="L119">            buffer = ArrayUtils.addAll(new byte[startPasSize], buffer);</span>
+<span class="fc" id="L120">            assertEquals(element[1], StringUtils.newStringUtf8(codec.encode(buffer, startPasSize, bytes.length)));</span>
+        }
+<span class="fc" id="L122">    }</span>
+
+    @Test
+<span class="pc bnc" id="L125" title="All 4 branches missed.">    public void testBase32Chunked () throws Exception {</span>
+<span class="fc" id="L126">        final Base32 codec = new Base32(20);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (final String[] element : BASE32_TEST_CASES_CHUNKED) {</span>
+<span class="fc" id="L128">                assertEquals(element[1], codec.encodeAsString(element[0].getBytes(CHARSET_UTF8)));</span>
+        }
+<span class="fc" id="L130">    }</span>
+
+    @Test
+<span class="pc bnc" id="L133" title="All 4 branches missed.">    public void testBase32HexSamples() throws Exception {</span>
+<span class="fc" id="L134">        final Base32 codec = new Base32(true);</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (final String[] element : BASE32HEX_TEST_CASES) {</span>
+<span class="fc" id="L136">                assertEquals(element[1], codec.encodeAsString(element[0].getBytes(CHARSET_UTF8)));</span>
+        }
+<span class="fc" id="L138">    }</span>
+
+    @Test
+<span class="pc bnc" id="L141" title="All 4 branches missed.">    public void testBase32HexSamplesReverse() throws Exception {</span>
+<span class="fc" id="L142">        final Base32 codec = new Base32(true);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (final String[] element : BASE32HEX_TEST_CASES) {</span>
+<span class="fc" id="L144">            assertEquals(element[0], new String(codec.decode(element[1]), CHARSET_UTF8));</span>
+        }
+<span class="fc" id="L146">    }</span>
+
+    @Test
+<span class="pc bnc" id="L149" title="All 4 branches missed.">    public void testBase32HexSamplesReverseLowercase() throws Exception {</span>
+<span class="fc" id="L150">        final Base32 codec = new Base32(true);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (final String[] element : BASE32HEX_TEST_CASES) {</span>
+<span class="fc" id="L152">            assertEquals(element[0], new String(codec.decode(element[1].toLowerCase()), CHARSET_UTF8));</span>
+        }
+<span class="fc" id="L154">    }</span>
+
+    @Test
+<span class="pc bnc" id="L157" title="All 4 branches missed.">    public void testBase32Samples() throws Exception {</span>
+<span class="fc" id="L158">        final Base32 codec = new Base32();</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        for (final String[] element : BASE32_TEST_CASES) {</span>
+<span class="fc" id="L160">                assertEquals(element[1], codec.encodeAsString(element[0].getBytes(CHARSET_UTF8)));</span>
+        }
+<span class="fc" id="L162">    }</span>
+
+    @Test
+<span class="pc bnc" id="L165" title="All 4 branches missed.">    public void testBase32BinarySamples() throws Exception {</span>
+<span class="fc" id="L166">        final Base32 codec = new Base32();</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        for (final Object[] element : BASE32_BINARY_TEST_CASES) {</span>
+<span class="fc" id="L168">            String expected;</span>
+<span class="pc bpc" id="L169" title="7 of 10 branches missed.">            if(element.length &gt; 2) {</span>
+<span class="nc" id="L170">                expected = (String)element[2];</span>
+            } else {
+<span class="fc" id="L172">                expected = (String)element[1];</span>
+            }
+<span class="fc" id="L174">                assertEquals(expected.toUpperCase(), codec.encodeAsString((byte[])element[0]));</span>
+        }
+<span class="fc" id="L176">    }</span>
+
+    @Test
+<span class="pc bnc" id="L179" title="All 4 branches missed.">    public void testBase32BinarySamplesReverse() throws Exception {</span>
+<span class="fc" id="L180">        final Base32 codec = new Base32();</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        for (final Object[] element : BASE32_BINARY_TEST_CASES) {</span>
+<span class="fc" id="L182">            assertArrayEquals((byte[])element[0], codec.decode((String)element[1]));</span>
+        }
+<span class="fc" id="L184">    }</span>
+
+    @Test
+<span class="pc bnc" id="L187" title="All 4 branches missed.">    public void testBase32SamplesNonDefaultPadding() throws Exception {</span>
+<span class="fc" id="L188">        final Base32 codec = new Base32((byte)0x25); // '%' &lt;=&gt; 0x25</span>
+
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        for (final String[] element : BASE32_PAD_TEST_CASES) {</span>
+<span class="fc" id="L191">                assertEquals(element[1], codec.encodeAsString(element[0].getBytes(CHARSET_UTF8)));</span>
+        }
+<span class="fc" id="L193">    }</span>
+
+    @Test
+<span class="pc bnc" id="L196" title="All 4 branches missed.">    public void testCodec200() {</span>
+<span class="fc" id="L197">        final Base32 codec = new Base32(true, (byte)'W'); // should be allowed</span>
+<span class="fc" id="L198">        assertNotNull(codec);</span>
+<span class="fc" id="L199">    }</span>
+
+    @Test
+<span class="pc bnc" id="L202" title="All 4 branches missed.">    public void testRandomBytes() {</span>
+<span class="pc bpc" id="L203" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 20; i++) {</span>
+<span class="fc" id="L204">            final Base32 codec = new Base32();</span>
+<span class="fc" id="L205">            final byte[][] b = Base32TestData.randomData(codec, i);</span>
+<span class="fc" id="L206">            assertEquals(&quot;&quot;+i+&quot; &quot;+codec.lineLength,b[1].length,codec.getEncodedLength(b[0]));</span>
+            //assertEquals(b[0],codec.decode(b[1]));
+        }
+<span class="fc" id="L209">    }</span>
+
+    @Test
+<span class="pc bnc" id="L212" title="All 4 branches missed.">    public void testRandomBytesChunked() {</span>
+<span class="pc bpc" id="L213" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 20; i++) {</span>
+<span class="fc" id="L214">            final Base32 codec = new Base32(10);</span>
+<span class="fc" id="L215">            final byte[][] b = Base32TestData.randomData(codec, i);</span>
+<span class="fc" id="L216">            assertEquals(&quot;&quot;+i+&quot; &quot;+codec.lineLength,b[1].length,codec.getEncodedLength(b[0]));</span>
+            //assertEquals(b[0],codec.decode(b[1]));
+        }
+<span class="fc" id="L219">    }</span>
+
+    @Test
+<span class="pc bnc" id="L222" title="All 4 branches missed.">    public void testRandomBytesHex() {</span>
+<span class="pc bpc" id="L223" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 20; i++) {</span>
+<span class="fc" id="L224">            final Base32 codec = new Base32(true);</span>
+<span class="fc" id="L225">            final byte[][] b = Base32TestData.randomData(codec, i);</span>
+<span class="fc" id="L226">            assertEquals(&quot;&quot;+i+&quot; &quot;+codec.lineLength,b[1].length,codec.getEncodedLength(b[0]));</span>
+            //assertEquals(b[0],codec.decode(b[1]));
+        }
+<span class="fc" id="L229">    }</span>
+
+    @Test
+<span class="pc bnc" id="L232" title="All 4 branches missed.">    public void testSingleCharEncoding() {</span>
+<span class="pc bpc" id="L233" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 20; i++) {</span>
+<span class="fc" id="L234">            Base32 codec = new Base32();</span>
+<span class="fc" id="L235">            final BaseNCodec.Context context = new BaseNCodec.Context();</span>
+<span class="fc" id="L236">            final byte unencoded[] = new byte[i];</span>
+<span class="fc" id="L237">            final byte allInOne[] = codec.encode(unencoded);</span>
+<span class="fc" id="L238">            codec = new Base32();</span>
+<span class="pc bpc" id="L239" title="4 of 10 branches missed.">            for (int j=0; j&lt; unencoded.length; j++) {</span>
+<span class="fc" id="L240">                codec.encode(unencoded, j, 1, context);</span>
+            }
+<span class="fc" id="L242">            codec.encode(unencoded, 0, -1, context);</span>
+<span class="fc" id="L243">            final byte singly[] = new byte[allInOne.length];</span>
+<span class="fc" id="L244">            codec.readResults(singly, 0, 100, context);</span>
+<span class="pc bpc" id="L245" title="7 of 10 branches missed.">            if (!Arrays.equals(allInOne, singly)){</span>
+<span class="nc" id="L246">                fail();</span>
+            }
+        }
+<span class="fc" id="L249">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

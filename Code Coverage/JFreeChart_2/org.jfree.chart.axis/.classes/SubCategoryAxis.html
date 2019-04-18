@@ -1,0 +1,537 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SubCategoryAxis</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.axis</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SubCategoryAxis (org.jfree.chart.axis)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SubCategoryAxis</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+  <span class="absValue">
+    (12/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    51.8%
+  </span>
+  <span class="absValue">
+    (71/ 137)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------------
+<i>28</i>&nbsp; * SubCategoryAxis.java
+<i>29</i>&nbsp; * --------------------
+<i>30</i>&nbsp; * (C) Copyright 2004-2017, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert;
+<i>33</i>&nbsp; * Contributor(s):   Adriaan Joubert;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 12-May-2004 : Version 1 (DG);
+<i>38</i>&nbsp; * 30-Sep-2004 : Moved drawRotatedString() from RefineryUtilities
+<i>39</i>&nbsp; *               --&gt; TextUtilities (DG);
+<i>40</i>&nbsp; * 26-Apr-2005 : Removed logger (DG);
+<i>41</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>42</i>&nbsp; * 18-Aug-2006 : Fix for bug drawing category labels, thanks to Adriaan
+<i>43</i>&nbsp; *               Joubert (1277726) (DG);
+<i>44</i>&nbsp; * 30-May-2007 : Added argument check and event notification to
+<i>45</i>&nbsp; *               addSubCategory() (DG);
+<i>46</i>&nbsp; * 13-Nov-2008 : Fix NullPointerException when dataset is null - see bug
+<i>47</i>&nbsp; *               report 2275695 (DG);
+<i>48</i>&nbsp; * 02-Jul-2013 : Use ParamChecks (DG);
+<i>49</i>&nbsp; * 01-Aug-2013 : Added attributedLabel override to support superscripts,
+<i>50</i>&nbsp; *               subscripts and more (DG);
+<i>51</i>&nbsp; */
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;package org.jfree.chart.axis;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;import java.awt.Color;
+<i>56</i>&nbsp;import java.awt.Font;
+<i>57</i>&nbsp;import java.awt.FontMetrics;
+<i>58</i>&nbsp;import java.awt.Graphics2D;
+<i>59</i>&nbsp;import java.awt.Paint;
+<i>60</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>61</i>&nbsp;import java.io.IOException;
+<i>62</i>&nbsp;import java.io.ObjectInputStream;
+<i>63</i>&nbsp;import java.io.ObjectOutputStream;
+<i>64</i>&nbsp;import java.io.Serializable;
+<i>65</i>&nbsp;import java.util.Iterator;
+<i>66</i>&nbsp;import java.util.List;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;import org.jfree.chart.event.AxisChangeEvent;
+<i>69</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>70</i>&nbsp;import org.jfree.chart.plot.Plot;
+<i>71</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>72</i>&nbsp;import org.jfree.chart.text.TextUtils;
+<i>73</i>&nbsp;import org.jfree.chart.ui.RectangleEdge;
+<i>74</i>&nbsp;import org.jfree.chart.ui.TextAnchor;
+<i>75</i>&nbsp;import org.jfree.chart.util.Args;
+<i>76</i>&nbsp;import org.jfree.chart.util.SerialUtils;
+<i>77</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;/**
+<i>80</i>&nbsp; * A specialised category axis that can display sub-categories.
+<i>81</i>&nbsp; */
+<i>82</i>&nbsp;public class SubCategoryAxis extends CategoryAxis
+<i>83</i>&nbsp;        implements Cloneable, Serializable {
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /** For serialization. */
+<i>86</i>&nbsp;    private static final long serialVersionUID = -1279463299793228344L;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /** Storage for the sub-categories (these need to be set manually). */
+<i>89</i>&nbsp;    private List subCategories;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /** The font for the sub-category labels. */
+<b class="fc"><i>92</i>&nbsp;    private Font subLabelFont = new Font(&quot;SansSerif&quot;, Font.PLAIN, 10);</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /** The paint for the sub-category labels. */
+<b class="fc"><i>95</i>&nbsp;    private transient Paint subLabelPaint = Color.BLACK;</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * Creates a new axis.
+<i>99</i>&nbsp;     *
+<i>100</i>&nbsp;     * @param label  the axis label.
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    public SubCategoryAxis(String label) {
+<b class="fc"><i>103</i>&nbsp;        super(label);</b>
+<b class="fc"><i>104</i>&nbsp;        this.subCategories = new java.util.ArrayList();</b>
+<b class="fc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * Adds a sub-category to the axis and sends an {@link AxisChangeEvent} to
+<i>109</i>&nbsp;     * all registered listeners.
+<i>110</i>&nbsp;     *
+<i>111</i>&nbsp;     * @param subCategory  the sub-category ({@code null} not permitted).
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    public void addSubCategory(Comparable subCategory) {
+<b class="fc"><i>114</i>&nbsp;        Args.nullNotPermitted(subCategory, &quot;subCategory&quot;);</b>
+<b class="fc"><i>115</i>&nbsp;        this.subCategories.add(subCategory);</b>
+<b class="fc"><i>116</i>&nbsp;        notifyListeners(new AxisChangeEvent(this));</b>
+<b class="fc"><i>117</i>&nbsp;    }</b>
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /**
+<i>120</i>&nbsp;     * Returns the font used to display the sub-category labels.
+<i>121</i>&nbsp;     *
+<i>122</i>&nbsp;     * @return The font (never {@code null}).
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @see #setSubLabelFont(Font)
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    public Font getSubLabelFont() {
+<b class="nc"><i>127</i>&nbsp;        return this.subLabelFont;</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * Sets the font used to display the sub-category labels and sends an
+<i>132</i>&nbsp;     * {@link AxisChangeEvent} to all registered listeners.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @param font  the font ({@code null} not permitted).
+<i>135</i>&nbsp;     *
+<i>136</i>&nbsp;     * @see #getSubLabelFont()
+<i>137</i>&nbsp;     */
+<i>138</i>&nbsp;    public void setSubLabelFont(Font font) {
+<b class="fc"><i>139</i>&nbsp;        Args.nullNotPermitted(font, &quot;font&quot;);</b>
+<b class="fc"><i>140</i>&nbsp;        this.subLabelFont = font;</b>
+<b class="fc"><i>141</i>&nbsp;        notifyListeners(new AxisChangeEvent(this));</b>
+<b class="fc"><i>142</i>&nbsp;    }</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * Returns the paint used to display the sub-category labels.
+<i>146</i>&nbsp;     *
+<i>147</i>&nbsp;     * @return The paint (never {@code null}).
+<i>148</i>&nbsp;     *
+<i>149</i>&nbsp;     * @see #setSubLabelPaint(Paint)
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public Paint getSubLabelPaint() {
+<b class="nc"><i>152</i>&nbsp;        return this.subLabelPaint;</b>
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Sets the paint used to display the sub-category labels and sends an
+<i>157</i>&nbsp;     * {@link AxisChangeEvent} to all registered listeners.
+<i>158</i>&nbsp;     *
+<i>159</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>160</i>&nbsp;     *
+<i>161</i>&nbsp;     * @see #getSubLabelPaint()
+<i>162</i>&nbsp;     */
+<i>163</i>&nbsp;    public void setSubLabelPaint(Paint paint) {
+<b class="fc"><i>164</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>165</i>&nbsp;        this.subLabelPaint = paint;</b>
+<b class="fc"><i>166</i>&nbsp;        notifyListeners(new AxisChangeEvent(this));</b>
+<b class="fc"><i>167</i>&nbsp;    }</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    /**
+<i>170</i>&nbsp;     * Estimates the space required for the axis, given a specific drawing area.
+<i>171</i>&nbsp;     *
+<i>172</i>&nbsp;     * @param g2  the graphics device (used to obtain font information).
+<i>173</i>&nbsp;     * @param plot  the plot that the axis belongs to.
+<i>174</i>&nbsp;     * @param plotArea  the area within which the axis should be drawn.
+<i>175</i>&nbsp;     * @param edge  the axis location (top or bottom).
+<i>176</i>&nbsp;     * @param space  the space already reserved.
+<i>177</i>&nbsp;     *
+<i>178</i>&nbsp;     * @return The space required to draw the axis.
+<i>179</i>&nbsp;     */
+<i>180</i>&nbsp;    @Override
+<i>181</i>&nbsp;    public AxisSpace reserveSpace(Graphics2D g2, Plot plot, 
+<i>182</i>&nbsp;            Rectangle2D plotArea, RectangleEdge edge, AxisSpace space) {
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;        // create a new space object if one wasn&#39;t supplied...
+<b class="fc"><i>185</i>&nbsp;        if (space == null) {</b>
+<b class="nc"><i>186</i>&nbsp;            space = new AxisSpace();</b>
+<i>187</i>&nbsp;        }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;        // if the axis is not visible, no additional space is required...
+<b class="fc"><i>190</i>&nbsp;        if (!isVisible()) {</b>
+<b class="nc"><i>191</i>&nbsp;            return space;</b>
+<i>192</i>&nbsp;        }
+<i>193</i>&nbsp;
+<b class="fc"><i>194</i>&nbsp;        space = super.reserveSpace(g2, plot, plotArea, edge, space);</b>
+<b class="fc"><i>195</i>&nbsp;        double maxdim = getMaxDim(g2, edge);</b>
+<b class="fc"><i>196</i>&nbsp;        if (RectangleEdge.isTopOrBottom(edge)) {</b>
+<b class="fc"><i>197</i>&nbsp;            space.add(maxdim, edge);</b>
+<i>198</i>&nbsp;        }
+<b class="nc"><i>199</i>&nbsp;        else if (RectangleEdge.isLeftOrRight(edge)) {</b>
+<b class="nc"><i>200</i>&nbsp;            space.add(maxdim, edge);</b>
+<i>201</i>&nbsp;        }
+<b class="fc"><i>202</i>&nbsp;        return space;</b>
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    /**
+<i>206</i>&nbsp;     * Returns the maximum of the relevant dimension (height or width) of the
+<i>207</i>&nbsp;     * subcategory labels.
+<i>208</i>&nbsp;     *
+<i>209</i>&nbsp;     * @param g2  the graphics device.
+<i>210</i>&nbsp;     * @param edge  the edge.
+<i>211</i>&nbsp;     *
+<i>212</i>&nbsp;     * @return The maximum dimension.
+<i>213</i>&nbsp;     */
+<i>214</i>&nbsp;    private double getMaxDim(Graphics2D g2, RectangleEdge edge) {
+<b class="fc"><i>215</i>&nbsp;        double result = 0.0;</b>
+<b class="fc"><i>216</i>&nbsp;        g2.setFont(this.subLabelFont);</b>
+<b class="fc"><i>217</i>&nbsp;        FontMetrics fm = g2.getFontMetrics();</b>
+<b class="fc"><i>218</i>&nbsp;        Iterator iterator = this.subCategories.iterator();</b>
+<b class="fc"><i>219</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>220</i>&nbsp;            Comparable subcategory = (Comparable) iterator.next();</b>
+<b class="nc"><i>221</i>&nbsp;            String label = subcategory.toString();</b>
+<b class="nc"><i>222</i>&nbsp;            Rectangle2D bounds = TextUtils.getTextBounds(label, g2, fm);</b>
+<i>223</i>&nbsp;            double dim;
+<b class="nc"><i>224</i>&nbsp;            if (RectangleEdge.isLeftOrRight(edge)) {</b>
+<b class="nc"><i>225</i>&nbsp;                dim = bounds.getWidth();</b>
+<i>226</i>&nbsp;            }
+<i>227</i>&nbsp;            else {  // must be top or bottom
+<b class="nc"><i>228</i>&nbsp;                dim = bounds.getHeight();</b>
+<i>229</i>&nbsp;            }
+<b class="nc"><i>230</i>&nbsp;            result = Math.max(result, dim);</b>
+<b class="nc"><i>231</i>&nbsp;        }</b>
+<b class="fc"><i>232</i>&nbsp;        return result;</b>
+<i>233</i>&nbsp;    }
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;    /**
+<i>236</i>&nbsp;     * Draws the axis on a Java 2D graphics device (such as the screen or a
+<i>237</i>&nbsp;     * printer).
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @param g2  the graphics device ({@code null} not permitted).
+<i>240</i>&nbsp;     * @param cursor  the cursor location.
+<i>241</i>&nbsp;     * @param plotArea  the area within which the axis should be drawn
+<i>242</i>&nbsp;     *                  ({@code null} not permitted).
+<i>243</i>&nbsp;     * @param dataArea  the area within which the plot is being drawn
+<i>244</i>&nbsp;     *                  ({@code null} not permitted).
+<i>245</i>&nbsp;     * @param edge  the location of the axis ({@code null} not permitted).
+<i>246</i>&nbsp;     * @param plotState  collects information about the plot
+<i>247</i>&nbsp;     *                   ({@code null} permitted).
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @return The axis state (never {@code null}).
+<i>250</i>&nbsp;     */
+<i>251</i>&nbsp;    @Override
+<i>252</i>&nbsp;    public AxisState draw(Graphics2D g2, double cursor, Rectangle2D plotArea,
+<i>253</i>&nbsp;            Rectangle2D dataArea, RectangleEdge edge, 
+<i>254</i>&nbsp;            PlotRenderingInfo plotState) {
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;        // if the axis is not visible, don&#39;t draw it...
+<b class="fc"><i>257</i>&nbsp;        if (!isVisible()) {</b>
+<b class="nc"><i>258</i>&nbsp;            return new AxisState(cursor);</b>
+<i>259</i>&nbsp;        }
+<i>260</i>&nbsp;
+<b class="fc"><i>261</i>&nbsp;        if (isAxisLineVisible()) {</b>
+<b class="fc"><i>262</i>&nbsp;            drawAxisLine(g2, cursor, dataArea, edge);</b>
+<i>263</i>&nbsp;        }
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;        // draw the category labels and axis label
+<b class="fc"><i>266</i>&nbsp;        AxisState state = new AxisState(cursor);</b>
+<b class="fc"><i>267</i>&nbsp;        state = drawSubCategoryLabels(g2, plotArea, dataArea, edge, state, </b>
+<i>268</i>&nbsp;                plotState);
+<b class="fc"><i>269</i>&nbsp;        state = drawCategoryLabels(g2, plotArea, dataArea, edge, state,</b>
+<i>270</i>&nbsp;                plotState);
+<b class="fc"><i>271</i>&nbsp;        if (getAttributedLabel() != null) {</b>
+<b class="nc"><i>272</i>&nbsp;            state = drawAttributedLabel(getAttributedLabel(), g2, plotArea, </b>
+<i>273</i>&nbsp;                    dataArea, edge, state);
+<i>274</i>&nbsp;        } else {
+<b class="fc"><i>275</i>&nbsp;            state = drawLabel(getLabel(), g2, plotArea, dataArea, edge, state);</b>
+<i>276</i>&nbsp;        } 
+<b class="fc"><i>277</i>&nbsp;        return state;</b>
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Draws the category labels and returns the updated axis state.
+<i>283</i>&nbsp;     *
+<i>284</i>&nbsp;     * @param g2  the graphics device ({@code null} not permitted).
+<i>285</i>&nbsp;     * @param plotArea  the plot area ({@code null} not permitted).
+<i>286</i>&nbsp;     * @param dataArea  the area inside the axes ({@code null} not
+<i>287</i>&nbsp;     *                  permitted).
+<i>288</i>&nbsp;     * @param edge  the axis location ({@code null} not permitted).
+<i>289</i>&nbsp;     * @param state  the axis state ({@code null} not permitted).
+<i>290</i>&nbsp;     * @param plotState  collects information about the plot ({@code null}
+<i>291</i>&nbsp;     *                   permitted).
+<i>292</i>&nbsp;     *
+<i>293</i>&nbsp;     * @return The updated axis state (never {@code null}).
+<i>294</i>&nbsp;     */
+<i>295</i>&nbsp;    protected AxisState drawSubCategoryLabels(Graphics2D g2,
+<i>296</i>&nbsp;            Rectangle2D plotArea, Rectangle2D dataArea, RectangleEdge edge,
+<i>297</i>&nbsp;            AxisState state, PlotRenderingInfo plotState) {
+<i>298</i>&nbsp;
+<b class="fc"><i>299</i>&nbsp;        Args.nullNotPermitted(state, &quot;state&quot;);</b>
+<i>300</i>&nbsp;
+<b class="fc"><i>301</i>&nbsp;        g2.setFont(this.subLabelFont);</b>
+<b class="fc"><i>302</i>&nbsp;        g2.setPaint(this.subLabelPaint);</b>
+<b class="fc"><i>303</i>&nbsp;        CategoryPlot plot = (CategoryPlot) getPlot();</b>
+<b class="fc"><i>304</i>&nbsp;        int categoryCount = 0;</b>
+<b class="fc"><i>305</i>&nbsp;        CategoryDataset dataset = plot.getDataset();</b>
+<b class="fc"><i>306</i>&nbsp;        if (dataset != null) {</b>
+<b class="nc"><i>307</i>&nbsp;            categoryCount = dataset.getColumnCount();</b>
+<i>308</i>&nbsp;        }
+<i>309</i>&nbsp;
+<b class="fc"><i>310</i>&nbsp;        double maxdim = getMaxDim(g2, edge);</b>
+<b class="fc"><i>311</i>&nbsp;        for (int categoryIndex = 0; categoryIndex &lt; categoryCount;</b>
+<b class="nc"><i>312</i>&nbsp;             categoryIndex++) {</b>
+<i>313</i>&nbsp;
+<b class="nc"><i>314</i>&nbsp;            double x0 = 0.0;</b>
+<b class="nc"><i>315</i>&nbsp;            double x1 = 0.0;</b>
+<b class="nc"><i>316</i>&nbsp;            double y0 = 0.0;</b>
+<b class="nc"><i>317</i>&nbsp;            double y1 = 0.0;</b>
+<b class="nc"><i>318</i>&nbsp;            if (edge == RectangleEdge.TOP) {</b>
+<b class="nc"><i>319</i>&nbsp;                x0 = getCategoryStart(categoryIndex, categoryCount, dataArea,</b>
+<i>320</i>&nbsp;                        edge);
+<b class="nc"><i>321</i>&nbsp;                x1 = getCategoryEnd(categoryIndex, categoryCount, dataArea,</b>
+<i>322</i>&nbsp;                        edge);
+<b class="nc"><i>323</i>&nbsp;                y1 = state.getCursor();</b>
+<b class="nc"><i>324</i>&nbsp;                y0 = y1 - maxdim;</b>
+<i>325</i>&nbsp;            }
+<b class="nc"><i>326</i>&nbsp;            else if (edge == RectangleEdge.BOTTOM) {</b>
+<b class="nc"><i>327</i>&nbsp;                x0 = getCategoryStart(categoryIndex, categoryCount, dataArea,</b>
+<i>328</i>&nbsp;                        edge);
+<b class="nc"><i>329</i>&nbsp;                x1 = getCategoryEnd(categoryIndex, categoryCount, dataArea,</b>
+<i>330</i>&nbsp;                        edge);
+<b class="nc"><i>331</i>&nbsp;                y0 = state.getCursor();</b>
+<b class="nc"><i>332</i>&nbsp;                y1 = y0 + maxdim;</b>
+<i>333</i>&nbsp;            }
+<b class="nc"><i>334</i>&nbsp;            else if (edge == RectangleEdge.LEFT) {</b>
+<b class="nc"><i>335</i>&nbsp;                y0 = getCategoryStart(categoryIndex, categoryCount, dataArea,</b>
+<i>336</i>&nbsp;                        edge);
+<b class="nc"><i>337</i>&nbsp;                y1 = getCategoryEnd(categoryIndex, categoryCount, dataArea,</b>
+<i>338</i>&nbsp;                        edge);
+<b class="nc"><i>339</i>&nbsp;                x1 = state.getCursor();</b>
+<b class="nc"><i>340</i>&nbsp;                x0 = x1 - maxdim;</b>
+<i>341</i>&nbsp;            }
+<b class="nc"><i>342</i>&nbsp;            else if (edge == RectangleEdge.RIGHT) {</b>
+<b class="nc"><i>343</i>&nbsp;                y0 = getCategoryStart(categoryIndex, categoryCount, dataArea,</b>
+<i>344</i>&nbsp;                        edge);
+<b class="nc"><i>345</i>&nbsp;                y1 = getCategoryEnd(categoryIndex, categoryCount, dataArea,</b>
+<i>346</i>&nbsp;                        edge);
+<b class="nc"><i>347</i>&nbsp;                x0 = state.getCursor();</b>
+<b class="nc"><i>348</i>&nbsp;                x1 = x0 + maxdim;</b>
+<i>349</i>&nbsp;            }
+<b class="nc"><i>350</i>&nbsp;            Rectangle2D area = new Rectangle2D.Double(x0, y0, (x1 - x0),</b>
+<i>351</i>&nbsp;                    (y1 - y0));
+<b class="nc"><i>352</i>&nbsp;            int subCategoryCount = this.subCategories.size();</b>
+<b class="nc"><i>353</i>&nbsp;            float width = (float) ((x1 - x0) / subCategoryCount);</b>
+<b class="nc"><i>354</i>&nbsp;            float height = (float) ((y1 - y0) / subCategoryCount);</b>
+<i>355</i>&nbsp;            float xx, yy;
+<b class="nc"><i>356</i>&nbsp;            for (int i = 0; i &lt; subCategoryCount; i++) {</b>
+<b class="nc"><i>357</i>&nbsp;                if (RectangleEdge.isTopOrBottom(edge)) {</b>
+<b class="nc"><i>358</i>&nbsp;                    xx = (float) (x0 + (i + 0.5) * width);</b>
+<b class="nc"><i>359</i>&nbsp;                    yy = (float) area.getCenterY();</b>
+<i>360</i>&nbsp;                }
+<i>361</i>&nbsp;                else {
+<b class="nc"><i>362</i>&nbsp;                    xx = (float) area.getCenterX();</b>
+<b class="nc"><i>363</i>&nbsp;                    yy = (float) (y0 + (i + 0.5) * height);</b>
+<i>364</i>&nbsp;                }
+<b class="nc"><i>365</i>&nbsp;                String label = this.subCategories.get(i).toString();</b>
+<b class="nc"><i>366</i>&nbsp;                TextUtils.drawRotatedString(label, g2, xx, yy,</b>
+<i>367</i>&nbsp;                        TextAnchor.CENTER, 0.0, TextAnchor.CENTER);
+<i>368</i>&nbsp;            }
+<i>369</i>&nbsp;        }
+<i>370</i>&nbsp;
+<b class="fc"><i>371</i>&nbsp;        if (edge.equals(RectangleEdge.TOP)) {</b>
+<b class="nc"><i>372</i>&nbsp;            double h = maxdim;</b>
+<b class="nc"><i>373</i>&nbsp;            state.cursorUp(h);</b>
+<b class="nc"><i>374</i>&nbsp;        }</b>
+<b class="fc"><i>375</i>&nbsp;        else if (edge.equals(RectangleEdge.BOTTOM)) {</b>
+<b class="fc"><i>376</i>&nbsp;            double h = maxdim;</b>
+<b class="fc"><i>377</i>&nbsp;            state.cursorDown(h);</b>
+<b class="fc"><i>378</i>&nbsp;        }</b>
+<b class="nc"><i>379</i>&nbsp;        else if (edge == RectangleEdge.LEFT) {</b>
+<b class="nc"><i>380</i>&nbsp;            double w = maxdim;</b>
+<b class="nc"><i>381</i>&nbsp;            state.cursorLeft(w);</b>
+<b class="nc"><i>382</i>&nbsp;        }</b>
+<b class="nc"><i>383</i>&nbsp;        else if (edge == RectangleEdge.RIGHT) {</b>
+<b class="nc"><i>384</i>&nbsp;            double w = maxdim;</b>
+<b class="nc"><i>385</i>&nbsp;            state.cursorRight(w);</b>
+<i>386</i>&nbsp;        }
+<b class="fc"><i>387</i>&nbsp;        return state;</b>
+<i>388</i>&nbsp;    }
+<i>389</i>&nbsp;
+<i>390</i>&nbsp;    /**
+<i>391</i>&nbsp;     * Tests the axis for equality with an arbitrary object.
+<i>392</i>&nbsp;     *
+<i>393</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>394</i>&nbsp;     *
+<i>395</i>&nbsp;     * @return A boolean.
+<i>396</i>&nbsp;     */
+<i>397</i>&nbsp;    @Override
+<i>398</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>399</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>400</i>&nbsp;            return true;</b>
+<i>401</i>&nbsp;        }
+<b class="fc"><i>402</i>&nbsp;        if (obj instanceof SubCategoryAxis &amp;&amp; super.equals(obj)) {</b>
+<b class="fc"><i>403</i>&nbsp;            SubCategoryAxis axis = (SubCategoryAxis) obj;</b>
+<b class="fc"><i>404</i>&nbsp;            if (!this.subCategories.equals(axis.subCategories)) {</b>
+<b class="fc"><i>405</i>&nbsp;                return false;</b>
+<i>406</i>&nbsp;            }
+<b class="fc"><i>407</i>&nbsp;            if (!this.subLabelFont.equals(axis.subLabelFont)) {</b>
+<b class="fc"><i>408</i>&nbsp;                return false;</b>
+<i>409</i>&nbsp;            }
+<b class="fc"><i>410</i>&nbsp;            if (!this.subLabelPaint.equals(axis.subLabelPaint)) {</b>
+<b class="fc"><i>411</i>&nbsp;                return false;</b>
+<i>412</i>&nbsp;            }
+<b class="fc"><i>413</i>&nbsp;            return true;</b>
+<i>414</i>&nbsp;        }
+<b class="nc"><i>415</i>&nbsp;        return false;</b>
+<i>416</i>&nbsp;    }
+<i>417</i>&nbsp;
+<i>418</i>&nbsp;    /**
+<i>419</i>&nbsp;     * Returns a hashcode for this instance.
+<i>420</i>&nbsp;     * 
+<i>421</i>&nbsp;     * @return A hashcode for this instance. 
+<i>422</i>&nbsp;     */
+<i>423</i>&nbsp;    @Override
+<i>424</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>425</i>&nbsp;        return super.hashCode();</b>
+<i>426</i>&nbsp;    }
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;    /**
+<i>429</i>&nbsp;     * Provides serialization support.
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @param stream  the output stream.
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>434</i>&nbsp;     */
+<i>435</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>436</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>437</i>&nbsp;        SerialUtils.writePaint(this.subLabelPaint, stream);</b>
+<b class="fc"><i>438</i>&nbsp;    }</b>
+<i>439</i>&nbsp;
+<i>440</i>&nbsp;    /**
+<i>441</i>&nbsp;     * Provides serialization support.
+<i>442</i>&nbsp;     *
+<i>443</i>&nbsp;     * @param stream  the input stream.
+<i>444</i>&nbsp;     *
+<i>445</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>446</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>447</i>&nbsp;     */
+<i>448</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>449</i>&nbsp;        throws IOException, ClassNotFoundException {
+<b class="fc"><i>450</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>451</i>&nbsp;        this.subLabelPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>452</i>&nbsp;    }</b>
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:56</div>
+</div>
+</body>
+</html>

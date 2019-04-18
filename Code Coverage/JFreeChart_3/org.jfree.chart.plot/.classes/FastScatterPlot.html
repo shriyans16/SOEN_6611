@@ -1,0 +1,1216 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FastScatterPlot</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FastScatterPlot (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FastScatterPlot</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (30/ 50)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75.7%
+  </span>
+  <span class="absValue">
+    (218/ 288)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------------
+<i>28</i>&nbsp; * FastScatterPlot.java
+<i>29</i>&nbsp; * --------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2014, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Arnaud Lelievre;
+<i>34</i>&nbsp; *                   Ulrich Voigt (patch #307);
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * Changes
+<i>37</i>&nbsp; * -------
+<i>38</i>&nbsp; * 29-Oct-2002 : Added standard header (DG);
+<i>39</i>&nbsp; * 07-Nov-2002 : Fixed errors reported by Checkstyle (DG);
+<i>40</i>&nbsp; * 26-Mar-2003 : Implemented Serializable (DG);
+<i>41</i>&nbsp; * 19-Aug-2003 : Implemented Cloneable (DG);
+<i>42</i>&nbsp; * 08-Sep-2003 : Added internationalization via use of properties
+<i>43</i>&nbsp; *               resourceBundle (RFE 690236) (AL);
+<i>44</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>45</i>&nbsp; * 12-Nov-2003 : Implemented zooming (DG);
+<i>46</i>&nbsp; * 21-Jan-2004 : Update for renamed method in ValueAxis (DG);
+<i>47</i>&nbsp; * 26-Jan-2004 : Added domain and range grid lines (DG);
+<i>48</i>&nbsp; * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState (DG);
+<i>49</i>&nbsp; * 29-Sep-2004 : Removed hard-coded color (DG);
+<i>50</i>&nbsp; * 04-Oct-2004 : Reworked equals() method and renamed ArrayUtils
+<i>51</i>&nbsp; *               --&gt; ArrayUtilities (DG);
+<i>52</i>&nbsp; * 12-Nov-2004 : Implemented the new Zoomable interface (DG);
+<i>53</i>&nbsp; * 05-May-2005 : Updated draw() method parameters (DG);
+<i>54</i>&nbsp; * 16-Jun-2005 : Added get/setData() methods (DG);
+<i>55</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>56</i>&nbsp; * 10-Nov-2006 : Fixed bug 1593150, by not allowing null axes, and added
+<i>57</i>&nbsp; *               setDomainAxis() and setRangeAxis() methods (DG);
+<i>58</i>&nbsp; * 24-Sep-2007 : Implemented new zooming methods (DG);
+<i>59</i>&nbsp; * 25-Mar-2008 : Make use of new fireChangeEvent() method (DG);
+<i>60</i>&nbsp; * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
+<i>61</i>&nbsp; *               Jess Thrysoee (DG);
+<i>62</i>&nbsp; * 26-Mar-2009 : Implemented Pannable, and fixed bug in zooming (DG);
+<i>63</i>&nbsp; * 02-Jul-2013 : Use ParamChecks (DG);
+<i>64</i>&nbsp; * 21-Jul-2014 : Fix panning (patch #307 by Ulrich Voigt) (DG);
+<i>65</i>&nbsp; * 29-Jul-2014 : Add rendering hint to normalise stroke for gridlines (DG);
+<i>66</i>&nbsp; *
+<i>67</i>&nbsp; */
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;package org.jfree.chart.plot;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;import java.awt.AlphaComposite;
+<i>72</i>&nbsp;import java.awt.BasicStroke;
+<i>73</i>&nbsp;import java.awt.Color;
+<i>74</i>&nbsp;import java.awt.Composite;
+<i>75</i>&nbsp;import java.awt.Graphics2D;
+<i>76</i>&nbsp;import java.awt.Paint;
+<i>77</i>&nbsp;import java.awt.RenderingHints;
+<i>78</i>&nbsp;import java.awt.Shape;
+<i>79</i>&nbsp;import java.awt.Stroke;
+<i>80</i>&nbsp;import java.awt.geom.Line2D;
+<i>81</i>&nbsp;import java.awt.geom.Point2D;
+<i>82</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>83</i>&nbsp;import java.io.IOException;
+<i>84</i>&nbsp;import java.io.ObjectInputStream;
+<i>85</i>&nbsp;import java.io.ObjectOutputStream;
+<i>86</i>&nbsp;import java.io.Serializable;
+<i>87</i>&nbsp;import java.util.Iterator;
+<i>88</i>&nbsp;import java.util.List;
+<i>89</i>&nbsp;import java.util.ResourceBundle;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;import org.jfree.chart.axis.AxisSpace;
+<i>92</i>&nbsp;import org.jfree.chart.axis.AxisState;
+<i>93</i>&nbsp;import org.jfree.chart.axis.NumberAxis;
+<i>94</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>95</i>&nbsp;import org.jfree.chart.axis.ValueTick;
+<i>96</i>&nbsp;import org.jfree.chart.event.PlotChangeEvent;
+<i>97</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>98</i>&nbsp;import org.jfree.chart.util.ResourceBundleWrapper;
+<i>99</i>&nbsp;import org.jfree.data.Range;
+<i>100</i>&nbsp;import org.jfree.io.SerialUtilities;
+<i>101</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>102</i>&nbsp;import org.jfree.ui.RectangleInsets;
+<i>103</i>&nbsp;import org.jfree.util.ArrayUtilities;
+<i>104</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>105</i>&nbsp;import org.jfree.util.PaintUtilities;
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;/**
+<i>108</i>&nbsp; * A fast scatter plot.
+<i>109</i>&nbsp; */
+<i>110</i>&nbsp;public class FastScatterPlot extends Plot implements ValueAxisPlot, Pannable,
+<i>111</i>&nbsp;        Zoomable, Cloneable, Serializable {
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /** For serialization. */
+<i>114</i>&nbsp;    private static final long serialVersionUID = 7871545897358563521L;
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /** The default grid line stroke. */
+<b class="fc"><i>117</i>&nbsp;    public static final Stroke DEFAULT_GRIDLINE_STROKE = new BasicStroke(0.5f,</b>
+<i>118</i>&nbsp;            BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.0f, new float[]
+<i>119</i>&nbsp;            {2.0f, 2.0f}, 0.0f);
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /** The default grid line paint. */
+<b class="fc"><i>122</i>&nbsp;    public static final Paint DEFAULT_GRIDLINE_PAINT = Color.lightGray;</b>
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /** The data. */
+<i>125</i>&nbsp;    private float[][] data;
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /** The x data range. */
+<i>128</i>&nbsp;    private Range xDataRange;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /** The y data range. */
+<i>131</i>&nbsp;    private Range yDataRange;
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    /** The domain axis (used for the x-values). */
+<i>134</i>&nbsp;    private ValueAxis domainAxis;
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /** The range axis (used for the y-values). */
+<i>137</i>&nbsp;    private ValueAxis rangeAxis;
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /** The paint used to plot data points. */
+<i>140</i>&nbsp;    private transient Paint paint;
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /** A flag that controls whether the domain grid-lines are visible. */
+<i>143</i>&nbsp;    private boolean domainGridlinesVisible;
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /** The stroke used to draw the domain grid-lines. */
+<i>146</i>&nbsp;    private transient Stroke domainGridlineStroke;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /** The paint used to draw the domain grid-lines. */
+<i>149</i>&nbsp;    private transient Paint domainGridlinePaint;
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /** A flag that controls whether the range grid-lines are visible. */
+<i>152</i>&nbsp;    private boolean rangeGridlinesVisible;
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    /** The stroke used to draw the range grid-lines. */
+<i>155</i>&nbsp;    private transient Stroke rangeGridlineStroke;
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /** The paint used to draw the range grid-lines. */
+<i>158</i>&nbsp;    private transient Paint rangeGridlinePaint;
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * A flag that controls whether or not panning is enabled for the domain
+<i>162</i>&nbsp;     * axis.
+<i>163</i>&nbsp;     *
+<i>164</i>&nbsp;     * @since 1.0.13
+<i>165</i>&nbsp;     */
+<i>166</i>&nbsp;    private boolean domainPannable;
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * A flag that controls whether or not panning is enabled for the range
+<i>170</i>&nbsp;     * axis.
+<i>171</i>&nbsp;     *
+<i>172</i>&nbsp;     * @since 1.0.13
+<i>173</i>&nbsp;     */
+<i>174</i>&nbsp;    private boolean rangePannable;
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /** The resourceBundle for the localization. */
+<b class="fc"><i>177</i>&nbsp;    protected static ResourceBundle localizationResources</b>
+<b class="fc"><i>178</i>&nbsp;            = ResourceBundleWrapper.getBundle(</b>
+<i>179</i>&nbsp;            &quot;org.jfree.chart.plot.LocalizationBundle&quot;);
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /**
+<i>182</i>&nbsp;     * Creates a new instance of &lt;code&gt;FastScatterPlot&lt;/code&gt; with default
+<i>183</i>&nbsp;     * axes.
+<i>184</i>&nbsp;     */
+<i>185</i>&nbsp;    public FastScatterPlot() {
+<b class="fc"><i>186</i>&nbsp;        this(null, new NumberAxis(&quot;X&quot;), new NumberAxis(&quot;Y&quot;));</b>
+<b class="fc"><i>187</i>&nbsp;    }</b>
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    /**
+<i>190</i>&nbsp;     * Creates a new fast scatter plot.
+<i>191</i>&nbsp;     * &lt;p&gt;
+<i>192</i>&nbsp;     * The data is an array of x, y values:  data[0][i] = x, data[1][i] = y.
+<i>193</i>&nbsp;     *
+<i>194</i>&nbsp;     * @param data  the data (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>195</i>&nbsp;     * @param domainAxis  the domain (x) axis (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>196</i>&nbsp;     * @param rangeAxis  the range (y) axis (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>197</i>&nbsp;     */
+<i>198</i>&nbsp;    public FastScatterPlot(float[][] data,
+<i>199</i>&nbsp;                           ValueAxis domainAxis, ValueAxis rangeAxis) {
+<i>200</i>&nbsp;
+<b class="fc"><i>201</i>&nbsp;        super();</b>
+<b class="fc"><i>202</i>&nbsp;        ParamChecks.nullNotPermitted(domainAxis, &quot;domainAxis&quot;);</b>
+<b class="fc"><i>203</i>&nbsp;        ParamChecks.nullNotPermitted(rangeAxis, &quot;rangeAxis&quot;);</b>
+<i>204</i>&nbsp;
+<b class="fc"><i>205</i>&nbsp;        this.data = data;</b>
+<b class="fc"><i>206</i>&nbsp;        this.xDataRange = calculateXDataRange(data);</b>
+<b class="fc"><i>207</i>&nbsp;        this.yDataRange = calculateYDataRange(data);</b>
+<b class="fc"><i>208</i>&nbsp;        this.domainAxis = domainAxis;</b>
+<b class="fc"><i>209</i>&nbsp;        this.domainAxis.setPlot(this);</b>
+<b class="fc"><i>210</i>&nbsp;        this.domainAxis.addChangeListener(this);</b>
+<b class="fc"><i>211</i>&nbsp;        this.rangeAxis = rangeAxis;</b>
+<b class="fc"><i>212</i>&nbsp;        this.rangeAxis.setPlot(this);</b>
+<b class="fc"><i>213</i>&nbsp;        this.rangeAxis.addChangeListener(this);</b>
+<i>214</i>&nbsp;
+<b class="fc"><i>215</i>&nbsp;        this.paint = Color.red;</b>
+<i>216</i>&nbsp;
+<b class="fc"><i>217</i>&nbsp;        this.domainGridlinesVisible = true;</b>
+<b class="fc"><i>218</i>&nbsp;        this.domainGridlinePaint = FastScatterPlot.DEFAULT_GRIDLINE_PAINT;</b>
+<b class="fc"><i>219</i>&nbsp;        this.domainGridlineStroke = FastScatterPlot.DEFAULT_GRIDLINE_STROKE;</b>
+<i>220</i>&nbsp;
+<b class="fc"><i>221</i>&nbsp;        this.rangeGridlinesVisible = true;</b>
+<b class="fc"><i>222</i>&nbsp;        this.rangeGridlinePaint = FastScatterPlot.DEFAULT_GRIDLINE_PAINT;</b>
+<b class="fc"><i>223</i>&nbsp;        this.rangeGridlineStroke = FastScatterPlot.DEFAULT_GRIDLINE_STROKE;</b>
+<b class="fc"><i>224</i>&nbsp;    }</b>
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    /**
+<i>227</i>&nbsp;     * Returns a short string describing the plot type.
+<i>228</i>&nbsp;     *
+<i>229</i>&nbsp;     * @return A short string describing the plot type.
+<i>230</i>&nbsp;     */
+<i>231</i>&nbsp;    @Override
+<i>232</i>&nbsp;    public String getPlotType() {
+<b class="nc"><i>233</i>&nbsp;        return localizationResources.getString(&quot;Fast_Scatter_Plot&quot;);</b>
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /**
+<i>237</i>&nbsp;     * Returns the data array used by the plot.
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @return The data array (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>240</i>&nbsp;     *
+<i>241</i>&nbsp;     * @see #setData(float[][])
+<i>242</i>&nbsp;     */
+<i>243</i>&nbsp;    public float[][] getData() {
+<b class="nc"><i>244</i>&nbsp;        return this.data;</b>
+<i>245</i>&nbsp;    }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /**
+<i>248</i>&nbsp;     * Sets the data array used by the plot and sends a {@link PlotChangeEvent}
+<i>249</i>&nbsp;     * to all registered listeners.
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @param data  the data array (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>252</i>&nbsp;     *
+<i>253</i>&nbsp;     * @see #getData()
+<i>254</i>&nbsp;     */
+<i>255</i>&nbsp;    public void setData(float[][] data) {
+<b class="fc"><i>256</i>&nbsp;        this.data = data;</b>
+<b class="fc"><i>257</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>258</i>&nbsp;    }</b>
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    /**
+<i>261</i>&nbsp;     * Returns the orientation of the plot.
+<i>262</i>&nbsp;     *
+<i>263</i>&nbsp;     * @return The orientation (always {@link PlotOrientation#VERTICAL}).
+<i>264</i>&nbsp;     */
+<i>265</i>&nbsp;    @Override
+<i>266</i>&nbsp;    public PlotOrientation getOrientation() {
+<b class="nc"><i>267</i>&nbsp;        return PlotOrientation.VERTICAL;</b>
+<i>268</i>&nbsp;    }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;    /**
+<i>271</i>&nbsp;     * Returns the domain axis for the plot.
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @return The domain axis (never &lt;code&gt;null&lt;/code&gt;).
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @see #setDomainAxis(ValueAxis)
+<i>276</i>&nbsp;     */
+<i>277</i>&nbsp;    public ValueAxis getDomainAxis() {
+<b class="nc"><i>278</i>&nbsp;        return this.domainAxis;</b>
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Sets the domain axis and sends a {@link PlotChangeEvent} to all
+<i>283</i>&nbsp;     * registered listeners.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @param axis  the axis (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>286</i>&nbsp;     *
+<i>287</i>&nbsp;     * @since 1.0.3
+<i>288</i>&nbsp;     *
+<i>289</i>&nbsp;     * @see #getDomainAxis()
+<i>290</i>&nbsp;     */
+<i>291</i>&nbsp;    public void setDomainAxis(ValueAxis axis) {
+<b class="nc"><i>292</i>&nbsp;        ParamChecks.nullNotPermitted(axis, &quot;axis&quot;);</b>
+<b class="nc"><i>293</i>&nbsp;        this.domainAxis = axis;</b>
+<b class="nc"><i>294</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>295</i>&nbsp;    }</b>
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    /**
+<i>298</i>&nbsp;     * Returns the range axis for the plot.
+<i>299</i>&nbsp;     *
+<i>300</i>&nbsp;     * @return The range axis (never &lt;code&gt;null&lt;/code&gt;).
+<i>301</i>&nbsp;     *
+<i>302</i>&nbsp;     * @see #setRangeAxis(ValueAxis)
+<i>303</i>&nbsp;     */
+<i>304</i>&nbsp;    public ValueAxis getRangeAxis() {
+<b class="nc"><i>305</i>&nbsp;        return this.rangeAxis;</b>
+<i>306</i>&nbsp;    }
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    /**
+<i>309</i>&nbsp;     * Sets the range axis and sends a {@link PlotChangeEvent} to all
+<i>310</i>&nbsp;     * registered listeners.
+<i>311</i>&nbsp;     *
+<i>312</i>&nbsp;     * @param axis  the axis (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>313</i>&nbsp;     *
+<i>314</i>&nbsp;     * @since 1.0.3
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @see #getRangeAxis()
+<i>317</i>&nbsp;     */
+<i>318</i>&nbsp;    public void setRangeAxis(ValueAxis axis) {
+<b class="nc"><i>319</i>&nbsp;        ParamChecks.nullNotPermitted(axis, &quot;axis&quot;);</b>
+<b class="nc"><i>320</i>&nbsp;        this.rangeAxis = axis;</b>
+<b class="nc"><i>321</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>322</i>&nbsp;    }</b>
+<i>323</i>&nbsp;
+<i>324</i>&nbsp;    /**
+<i>325</i>&nbsp;     * Returns the paint used to plot data points.  The default is
+<i>326</i>&nbsp;     * &lt;code&gt;Color.red&lt;/code&gt;.
+<i>327</i>&nbsp;     *
+<i>328</i>&nbsp;     * @return The paint.
+<i>329</i>&nbsp;     *
+<i>330</i>&nbsp;     * @see #setPaint(Paint)
+<i>331</i>&nbsp;     */
+<i>332</i>&nbsp;    public Paint getPaint() {
+<b class="nc"><i>333</i>&nbsp;        return this.paint;</b>
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    /**
+<i>337</i>&nbsp;     * Sets the color for the data points and sends a {@link PlotChangeEvent}
+<i>338</i>&nbsp;     * to all registered listeners.
+<i>339</i>&nbsp;     *
+<i>340</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>341</i>&nbsp;     *
+<i>342</i>&nbsp;     * @see #getPaint()
+<i>343</i>&nbsp;     */
+<i>344</i>&nbsp;    public void setPaint(Paint paint) {
+<b class="fc"><i>345</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>346</i>&nbsp;        this.paint = paint;</b>
+<b class="fc"><i>347</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>348</i>&nbsp;    }</b>
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;    /**
+<i>351</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the domain gridlines are visible, and
+<i>352</i>&nbsp;     * &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>353</i>&nbsp;     *
+<i>354</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>355</i>&nbsp;     *
+<i>356</i>&nbsp;     * @see #setDomainGridlinesVisible(boolean)
+<i>357</i>&nbsp;     * @see #setDomainGridlinePaint(Paint)
+<i>358</i>&nbsp;     */
+<i>359</i>&nbsp;    public boolean isDomainGridlinesVisible() {
+<b class="fc"><i>360</i>&nbsp;        return this.domainGridlinesVisible;</b>
+<i>361</i>&nbsp;    }
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;    /**
+<i>364</i>&nbsp;     * Sets the flag that controls whether or not the domain grid-lines are
+<i>365</i>&nbsp;     * visible.  If the flag value is changed, a {@link PlotChangeEvent} is
+<i>366</i>&nbsp;     * sent to all registered listeners.
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @param visible  the new value of the flag.
+<i>369</i>&nbsp;     *
+<i>370</i>&nbsp;     * @see #getDomainGridlinePaint()
+<i>371</i>&nbsp;     */
+<i>372</i>&nbsp;    public void setDomainGridlinesVisible(boolean visible) {
+<b class="fc"><i>373</i>&nbsp;        if (this.domainGridlinesVisible != visible) {</b>
+<b class="fc"><i>374</i>&nbsp;            this.domainGridlinesVisible = visible;</b>
+<b class="fc"><i>375</i>&nbsp;            fireChangeEvent();</b>
+<i>376</i>&nbsp;        }
+<b class="fc"><i>377</i>&nbsp;    }</b>
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;    /**
+<i>380</i>&nbsp;     * Returns the stroke for the grid-lines (if any) plotted against the
+<i>381</i>&nbsp;     * domain axis.
+<i>382</i>&nbsp;     *
+<i>383</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>384</i>&nbsp;     *
+<i>385</i>&nbsp;     * @see #setDomainGridlineStroke(Stroke)
+<i>386</i>&nbsp;     */
+<i>387</i>&nbsp;    public Stroke getDomainGridlineStroke() {
+<b class="fc"><i>388</i>&nbsp;        return this.domainGridlineStroke;</b>
+<i>389</i>&nbsp;    }
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;    /**
+<i>392</i>&nbsp;     * Sets the stroke for the grid lines plotted against the domain axis and
+<i>393</i>&nbsp;     * sends a {@link PlotChangeEvent} to all registered listeners.
+<i>394</i>&nbsp;     *
+<i>395</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>396</i>&nbsp;     *
+<i>397</i>&nbsp;     * @see #getDomainGridlineStroke()
+<i>398</i>&nbsp;     */
+<i>399</i>&nbsp;    public void setDomainGridlineStroke(Stroke stroke) {
+<b class="fc"><i>400</i>&nbsp;        ParamChecks.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="fc"><i>401</i>&nbsp;        this.domainGridlineStroke = stroke;</b>
+<b class="fc"><i>402</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>403</i>&nbsp;    }</b>
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    /**
+<i>406</i>&nbsp;     * Returns the paint for the grid lines (if any) plotted against the domain
+<i>407</i>&nbsp;     * axis.
+<i>408</i>&nbsp;     *
+<i>409</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>410</i>&nbsp;     *
+<i>411</i>&nbsp;     * @see #setDomainGridlinePaint(Paint)
+<i>412</i>&nbsp;     */
+<i>413</i>&nbsp;    public Paint getDomainGridlinePaint() {
+<b class="fc"><i>414</i>&nbsp;        return this.domainGridlinePaint;</b>
+<i>415</i>&nbsp;    }
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    /**
+<i>418</i>&nbsp;     * Sets the paint for the grid lines plotted against the domain axis and
+<i>419</i>&nbsp;     * sends a {@link PlotChangeEvent} to all registered listeners.
+<i>420</i>&nbsp;     *
+<i>421</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>422</i>&nbsp;     *
+<i>423</i>&nbsp;     * @see #getDomainGridlinePaint()
+<i>424</i>&nbsp;     */
+<i>425</i>&nbsp;    public void setDomainGridlinePaint(Paint paint) {
+<b class="fc"><i>426</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>427</i>&nbsp;        this.domainGridlinePaint = paint;</b>
+<b class="fc"><i>428</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>429</i>&nbsp;    }</b>
+<i>430</i>&nbsp;
+<i>431</i>&nbsp;    /**
+<i>432</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the range axis grid is visible, and
+<i>433</i>&nbsp;     * &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>434</i>&nbsp;     *
+<i>435</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>436</i>&nbsp;     *
+<i>437</i>&nbsp;     * @see #setRangeGridlinesVisible(boolean)
+<i>438</i>&nbsp;     */
+<i>439</i>&nbsp;    public boolean isRangeGridlinesVisible() {
+<b class="fc"><i>440</i>&nbsp;        return this.rangeGridlinesVisible;</b>
+<i>441</i>&nbsp;    }
+<i>442</i>&nbsp;
+<i>443</i>&nbsp;    /**
+<i>444</i>&nbsp;     * Sets the flag that controls whether or not the range axis grid lines are
+<i>445</i>&nbsp;     * visible.  If the flag value is changed, a {@link PlotChangeEvent} is
+<i>446</i>&nbsp;     * sent to all registered listeners.
+<i>447</i>&nbsp;     *
+<i>448</i>&nbsp;     * @param visible  the new value of the flag.
+<i>449</i>&nbsp;     *
+<i>450</i>&nbsp;     * @see #isRangeGridlinesVisible()
+<i>451</i>&nbsp;     */
+<i>452</i>&nbsp;    public void setRangeGridlinesVisible(boolean visible) {
+<b class="fc"><i>453</i>&nbsp;        if (this.rangeGridlinesVisible != visible) {</b>
+<b class="fc"><i>454</i>&nbsp;            this.rangeGridlinesVisible = visible;</b>
+<b class="fc"><i>455</i>&nbsp;            fireChangeEvent();</b>
+<i>456</i>&nbsp;        }
+<b class="fc"><i>457</i>&nbsp;    }</b>
+<i>458</i>&nbsp;
+<i>459</i>&nbsp;    /**
+<i>460</i>&nbsp;     * Returns the stroke for the grid lines (if any) plotted against the range
+<i>461</i>&nbsp;     * axis.
+<i>462</i>&nbsp;     *
+<i>463</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>464</i>&nbsp;     *
+<i>465</i>&nbsp;     * @see #setRangeGridlineStroke(Stroke)
+<i>466</i>&nbsp;     */
+<i>467</i>&nbsp;    public Stroke getRangeGridlineStroke() {
+<b class="fc"><i>468</i>&nbsp;        return this.rangeGridlineStroke;</b>
+<i>469</i>&nbsp;    }
+<i>470</i>&nbsp;
+<i>471</i>&nbsp;    /**
+<i>472</i>&nbsp;     * Sets the stroke for the grid lines plotted against the range axis and
+<i>473</i>&nbsp;     * sends a {@link PlotChangeEvent} to all registered listeners.
+<i>474</i>&nbsp;     *
+<i>475</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>476</i>&nbsp;     *
+<i>477</i>&nbsp;     * @see #getRangeGridlineStroke()
+<i>478</i>&nbsp;     */
+<i>479</i>&nbsp;    public void setRangeGridlineStroke(Stroke stroke) {
+<b class="fc"><i>480</i>&nbsp;        ParamChecks.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="fc"><i>481</i>&nbsp;        this.rangeGridlineStroke = stroke;</b>
+<b class="fc"><i>482</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>483</i>&nbsp;    }</b>
+<i>484</i>&nbsp;
+<i>485</i>&nbsp;    /**
+<i>486</i>&nbsp;     * Returns the paint for the grid lines (if any) plotted against the range
+<i>487</i>&nbsp;     * axis.
+<i>488</i>&nbsp;     *
+<i>489</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>490</i>&nbsp;     *
+<i>491</i>&nbsp;     * @see #setRangeGridlinePaint(Paint)
+<i>492</i>&nbsp;     */
+<i>493</i>&nbsp;    public Paint getRangeGridlinePaint() {
+<b class="fc"><i>494</i>&nbsp;        return this.rangeGridlinePaint;</b>
+<i>495</i>&nbsp;    }
+<i>496</i>&nbsp;
+<i>497</i>&nbsp;    /**
+<i>498</i>&nbsp;     * Sets the paint for the grid lines plotted against the range axis and
+<i>499</i>&nbsp;     * sends a {@link PlotChangeEvent} to all registered listeners.
+<i>500</i>&nbsp;     *
+<i>501</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>502</i>&nbsp;     *
+<i>503</i>&nbsp;     * @see #getRangeGridlinePaint()
+<i>504</i>&nbsp;     */
+<i>505</i>&nbsp;    public void setRangeGridlinePaint(Paint paint) {
+<b class="fc"><i>506</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>507</i>&nbsp;        this.rangeGridlinePaint = paint;</b>
+<b class="fc"><i>508</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>509</i>&nbsp;    }</b>
+<i>510</i>&nbsp;
+<i>511</i>&nbsp;    /**
+<i>512</i>&nbsp;     * Draws the fast scatter plot on a Java 2D graphics device (such as the
+<i>513</i>&nbsp;     * screen or a printer).
+<i>514</i>&nbsp;     *
+<i>515</i>&nbsp;     * @param g2  the graphics device.
+<i>516</i>&nbsp;     * @param area   the area within which the plot (including axis labels)
+<i>517</i>&nbsp;     *                   should be drawn.
+<i>518</i>&nbsp;     * @param anchor  the anchor point (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>519</i>&nbsp;     * @param parentState  the state from the parent plot (ignored).
+<i>520</i>&nbsp;     * @param info  collects chart drawing information (&lt;code&gt;null&lt;/code&gt;
+<i>521</i>&nbsp;     *              permitted).
+<i>522</i>&nbsp;     */
+<i>523</i>&nbsp;    @Override
+<i>524</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
+<i>525</i>&nbsp;                     PlotState parentState, PlotRenderingInfo info) {
+<i>526</i>&nbsp;
+<i>527</i>&nbsp;        // set up info collection...
+<b class="fc"><i>528</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>529</i>&nbsp;            info.setPlotArea(area);</b>
+<i>530</i>&nbsp;        }
+<i>531</i>&nbsp;
+<i>532</i>&nbsp;        // adjust the drawing area for plot insets (if any)...
+<b class="fc"><i>533</i>&nbsp;        RectangleInsets insets = getInsets();</b>
+<b class="fc"><i>534</i>&nbsp;        insets.trim(area);</b>
+<i>535</i>&nbsp;
+<b class="fc"><i>536</i>&nbsp;        AxisSpace space = new AxisSpace();</b>
+<b class="fc"><i>537</i>&nbsp;        space = this.domainAxis.reserveSpace(g2, this, area,</b>
+<i>538</i>&nbsp;                RectangleEdge.BOTTOM, space);
+<b class="fc"><i>539</i>&nbsp;        space = this.rangeAxis.reserveSpace(g2, this, area, RectangleEdge.LEFT,</b>
+<i>540</i>&nbsp;                space);
+<b class="fc"><i>541</i>&nbsp;        Rectangle2D dataArea = space.shrink(area, null);</b>
+<i>542</i>&nbsp;
+<b class="fc"><i>543</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>544</i>&nbsp;            info.setDataArea(dataArea);</b>
+<i>545</i>&nbsp;        }
+<i>546</i>&nbsp;
+<i>547</i>&nbsp;        // draw the plot background and axes...
+<b class="fc"><i>548</i>&nbsp;        drawBackground(g2, dataArea);</b>
+<i>549</i>&nbsp;
+<b class="fc"><i>550</i>&nbsp;        AxisState domainAxisState = this.domainAxis.draw(g2,</b>
+<b class="fc"><i>551</i>&nbsp;                dataArea.getMaxY(), area, dataArea, RectangleEdge.BOTTOM, info);</b>
+<b class="fc"><i>552</i>&nbsp;        AxisState rangeAxisState = this.rangeAxis.draw(g2, dataArea.getMinX(),</b>
+<i>553</i>&nbsp;                area, dataArea, RectangleEdge.LEFT, info);
+<b class="fc"><i>554</i>&nbsp;        drawDomainGridlines(g2, dataArea, domainAxisState.getTicks());</b>
+<b class="fc"><i>555</i>&nbsp;        drawRangeGridlines(g2, dataArea, rangeAxisState.getTicks());</b>
+<i>556</i>&nbsp;
+<b class="fc"><i>557</i>&nbsp;        Shape originalClip = g2.getClip();</b>
+<b class="fc"><i>558</i>&nbsp;        Composite originalComposite = g2.getComposite();</b>
+<i>559</i>&nbsp;
+<b class="fc"><i>560</i>&nbsp;        g2.clip(dataArea);</b>
+<b class="fc"><i>561</i>&nbsp;        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,</b>
+<b class="fc"><i>562</i>&nbsp;                getForegroundAlpha()));</b>
+<i>563</i>&nbsp;
+<b class="fc"><i>564</i>&nbsp;        render(g2, dataArea, info, null);</b>
+<i>565</i>&nbsp;
+<b class="fc"><i>566</i>&nbsp;        g2.setClip(originalClip);</b>
+<b class="fc"><i>567</i>&nbsp;        g2.setComposite(originalComposite);</b>
+<b class="fc"><i>568</i>&nbsp;        drawOutline(g2, dataArea);</b>
+<i>569</i>&nbsp;
+<b class="fc"><i>570</i>&nbsp;    }</b>
+<i>571</i>&nbsp;
+<i>572</i>&nbsp;    /**
+<i>573</i>&nbsp;     * Draws a representation of the data within the dataArea region.  The
+<i>574</i>&nbsp;     * &lt;code&gt;info&lt;/code&gt; and &lt;code&gt;crosshairState&lt;/code&gt; arguments may be
+<i>575</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;.
+<i>576</i>&nbsp;     *
+<i>577</i>&nbsp;     * @param g2  the graphics device.
+<i>578</i>&nbsp;     * @param dataArea  the region in which the data is to be drawn.
+<i>579</i>&nbsp;     * @param info  an optional object for collection dimension information.
+<i>580</i>&nbsp;     * @param crosshairState  collects crosshair information (&lt;code&gt;null&lt;/code&gt;
+<i>581</i>&nbsp;     *                        permitted).
+<i>582</i>&nbsp;     */
+<i>583</i>&nbsp;    public void render(Graphics2D g2, Rectangle2D dataArea,
+<i>584</i>&nbsp;                       PlotRenderingInfo info, CrosshairState crosshairState) {
+<b class="fc"><i>585</i>&nbsp;        g2.setPaint(this.paint);</b>
+<i>586</i>&nbsp;
+<i>587</i>&nbsp;        // if the axes use a linear scale, you can uncomment the code below and
+<i>588</i>&nbsp;        // switch to the alternative transX/transY calculation inside the loop
+<i>589</i>&nbsp;        // that follows - it is a little bit faster then.
+<i>590</i>&nbsp;        //
+<i>591</i>&nbsp;        // int xx = (int) dataArea.getMinX();
+<i>592</i>&nbsp;        // int ww = (int) dataArea.getWidth();
+<i>593</i>&nbsp;        // int yy = (int) dataArea.getMaxY();
+<i>594</i>&nbsp;        // int hh = (int) dataArea.getHeight();
+<i>595</i>&nbsp;        // double domainMin = this.domainAxis.getLowerBound();
+<i>596</i>&nbsp;        // double domainLength = this.domainAxis.getUpperBound() - domainMin;
+<i>597</i>&nbsp;        // double rangeMin = this.rangeAxis.getLowerBound();
+<i>598</i>&nbsp;        // double rangeLength = this.rangeAxis.getUpperBound() - rangeMin;
+<i>599</i>&nbsp;
+<b class="fc"><i>600</i>&nbsp;        if (this.data != null) {</b>
+<b class="fc"><i>601</i>&nbsp;            for (int i = 0; i &lt; this.data[0].length; i++) {</b>
+<b class="fc"><i>602</i>&nbsp;                float x = this.data[0][i];</b>
+<b class="fc"><i>603</i>&nbsp;                float y = this.data[1][i];</b>
+<i>604</i>&nbsp;
+<i>605</i>&nbsp;                //int transX = (int) (xx + ww * (x - domainMin) / domainLength);
+<i>606</i>&nbsp;                //int transY = (int) (yy - hh * (y - rangeMin) / rangeLength);
+<b class="fc"><i>607</i>&nbsp;                int transX = (int) this.domainAxis.valueToJava2D(x, dataArea,</b>
+<i>608</i>&nbsp;                        RectangleEdge.BOTTOM);
+<b class="fc"><i>609</i>&nbsp;                int transY = (int) this.rangeAxis.valueToJava2D(y, dataArea,</b>
+<i>610</i>&nbsp;                        RectangleEdge.LEFT);
+<b class="fc"><i>611</i>&nbsp;                g2.fillRect(transX, transY, 1, 1);</b>
+<i>612</i>&nbsp;            }
+<i>613</i>&nbsp;        }
+<b class="fc"><i>614</i>&nbsp;    }</b>
+<i>615</i>&nbsp;
+<i>616</i>&nbsp;    /**
+<i>617</i>&nbsp;     * Draws the gridlines for the plot, if they are visible.
+<i>618</i>&nbsp;     *
+<i>619</i>&nbsp;     * @param g2  the graphics device.
+<i>620</i>&nbsp;     * @param dataArea  the data area.
+<i>621</i>&nbsp;     * @param ticks  the ticks.
+<i>622</i>&nbsp;     */
+<i>623</i>&nbsp;    protected void drawDomainGridlines(Graphics2D g2, Rectangle2D dataArea,
+<i>624</i>&nbsp;            List ticks) {
+<b class="fc"><i>625</i>&nbsp;        if (!isDomainGridlinesVisible()) {</b>
+<b class="nc"><i>626</i>&nbsp;            return;</b>
+<i>627</i>&nbsp;        }
+<b class="fc"><i>628</i>&nbsp;        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="fc"><i>629</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, </b>
+<i>630</i>&nbsp;                RenderingHints.VALUE_STROKE_NORMALIZE);
+<b class="fc"><i>631</i>&nbsp;        Iterator iterator = ticks.iterator();</b>
+<b class="fc"><i>632</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>633</i>&nbsp;            ValueTick tick = (ValueTick) iterator.next();</b>
+<b class="fc"><i>634</i>&nbsp;            double v = this.domainAxis.valueToJava2D(tick.getValue(),</b>
+<i>635</i>&nbsp;                    dataArea, RectangleEdge.BOTTOM);
+<b class="fc"><i>636</i>&nbsp;            Line2D line = new Line2D.Double(v, dataArea.getMinY(), v,</b>
+<b class="fc"><i>637</i>&nbsp;                    dataArea.getMaxY());</b>
+<b class="fc"><i>638</i>&nbsp;            g2.setPaint(getDomainGridlinePaint());</b>
+<b class="fc"><i>639</i>&nbsp;            g2.setStroke(getDomainGridlineStroke());</b>
+<b class="fc"><i>640</i>&nbsp;            g2.draw(line);</b>
+<b class="fc"><i>641</i>&nbsp;        }</b>
+<b class="fc"><i>642</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);</b>
+<b class="fc"><i>643</i>&nbsp;    }</b>
+<i>644</i>&nbsp;
+<i>645</i>&nbsp;    /**
+<i>646</i>&nbsp;     * Draws the gridlines for the plot, if they are visible.
+<i>647</i>&nbsp;     *
+<i>648</i>&nbsp;     * @param g2  the graphics device.
+<i>649</i>&nbsp;     * @param dataArea  the data area.
+<i>650</i>&nbsp;     * @param ticks  the ticks.
+<i>651</i>&nbsp;     */
+<i>652</i>&nbsp;    protected void drawRangeGridlines(Graphics2D g2, Rectangle2D dataArea,
+<i>653</i>&nbsp;            List ticks) {
+<i>654</i>&nbsp;
+<b class="fc"><i>655</i>&nbsp;        if (!isRangeGridlinesVisible()) {</b>
+<b class="nc"><i>656</i>&nbsp;            return;</b>
+<i>657</i>&nbsp;        }
+<b class="fc"><i>658</i>&nbsp;        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="fc"><i>659</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, </b>
+<i>660</i>&nbsp;                RenderingHints.VALUE_STROKE_NORMALIZE);
+<i>661</i>&nbsp;
+<b class="fc"><i>662</i>&nbsp;        Iterator iterator = ticks.iterator();</b>
+<b class="fc"><i>663</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>664</i>&nbsp;            ValueTick tick = (ValueTick) iterator.next();</b>
+<b class="fc"><i>665</i>&nbsp;            double v = this.rangeAxis.valueToJava2D(tick.getValue(),</b>
+<i>666</i>&nbsp;                    dataArea, RectangleEdge.LEFT);
+<b class="fc"><i>667</i>&nbsp;            Line2D line = new Line2D.Double(dataArea.getMinX(), v,</b>
+<b class="fc"><i>668</i>&nbsp;                    dataArea.getMaxX(), v);</b>
+<b class="fc"><i>669</i>&nbsp;            g2.setPaint(getRangeGridlinePaint());</b>
+<b class="fc"><i>670</i>&nbsp;            g2.setStroke(getRangeGridlineStroke());</b>
+<b class="fc"><i>671</i>&nbsp;            g2.draw(line);</b>
+<b class="fc"><i>672</i>&nbsp;        }</b>
+<b class="fc"><i>673</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);</b>
+<b class="fc"><i>674</i>&nbsp;    }</b>
+<i>675</i>&nbsp;
+<i>676</i>&nbsp;    /**
+<i>677</i>&nbsp;     * Returns the range of data values to be plotted along the axis, or
+<i>678</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt; if the specified axis isn&#39;t the domain axis or the
+<i>679</i>&nbsp;     * range axis for the plot.
+<i>680</i>&nbsp;     *
+<i>681</i>&nbsp;     * @param axis  the axis (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>682</i>&nbsp;     *
+<i>683</i>&nbsp;     * @return The range (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>684</i>&nbsp;     */
+<i>685</i>&nbsp;    @Override
+<i>686</i>&nbsp;    public Range getDataRange(ValueAxis axis) {
+<b class="fc"><i>687</i>&nbsp;        Range result = null;</b>
+<b class="fc"><i>688</i>&nbsp;        if (axis == this.domainAxis) {</b>
+<b class="fc"><i>689</i>&nbsp;            result = this.xDataRange;</b>
+<i>690</i>&nbsp;        }
+<b class="fc"><i>691</i>&nbsp;        else if (axis == this.rangeAxis) {</b>
+<b class="fc"><i>692</i>&nbsp;            result = this.yDataRange;</b>
+<i>693</i>&nbsp;        }
+<b class="fc"><i>694</i>&nbsp;        return result;</b>
+<i>695</i>&nbsp;    }
+<i>696</i>&nbsp;
+<i>697</i>&nbsp;    /**
+<i>698</i>&nbsp;     * Calculates the X data range.
+<i>699</i>&nbsp;     *
+<i>700</i>&nbsp;     * @param data  the data (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>701</i>&nbsp;     *
+<i>702</i>&nbsp;     * @return The range.
+<i>703</i>&nbsp;     */
+<i>704</i>&nbsp;    private Range calculateXDataRange(float[][] data) {
+<i>705</i>&nbsp;
+<b class="fc"><i>706</i>&nbsp;        Range result = null;</b>
+<i>707</i>&nbsp;
+<b class="fc"><i>708</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>709</i>&nbsp;            float lowest = Float.POSITIVE_INFINITY;</b>
+<b class="fc"><i>710</i>&nbsp;            float highest = Float.NEGATIVE_INFINITY;</b>
+<b class="fc"><i>711</i>&nbsp;            for (int i = 0; i &lt; data[0].length; i++) {</b>
+<b class="fc"><i>712</i>&nbsp;                float v = data[0][i];</b>
+<b class="fc"><i>713</i>&nbsp;                if (v &lt; lowest) {</b>
+<b class="fc"><i>714</i>&nbsp;                    lowest = v;</b>
+<i>715</i>&nbsp;                }
+<b class="fc"><i>716</i>&nbsp;                if (v &gt; highest) {</b>
+<b class="fc"><i>717</i>&nbsp;                    highest = v;</b>
+<i>718</i>&nbsp;                }
+<i>719</i>&nbsp;            }
+<b class="fc"><i>720</i>&nbsp;            if (lowest &lt;= highest) {</b>
+<b class="fc"><i>721</i>&nbsp;                result = new Range(lowest, highest);</b>
+<i>722</i>&nbsp;            }
+<i>723</i>&nbsp;        }
+<i>724</i>&nbsp;
+<b class="fc"><i>725</i>&nbsp;        return result;</b>
+<i>726</i>&nbsp;
+<i>727</i>&nbsp;    }
+<i>728</i>&nbsp;
+<i>729</i>&nbsp;    /**
+<i>730</i>&nbsp;     * Calculates the Y data range.
+<i>731</i>&nbsp;     *
+<i>732</i>&nbsp;     * @param data  the data (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>733</i>&nbsp;     *
+<i>734</i>&nbsp;     * @return The range.
+<i>735</i>&nbsp;     */
+<i>736</i>&nbsp;    private Range calculateYDataRange(float[][] data) {
+<i>737</i>&nbsp;
+<b class="fc"><i>738</i>&nbsp;        Range result = null;</b>
+<b class="fc"><i>739</i>&nbsp;        if (data != null) {</b>
+<b class="fc"><i>740</i>&nbsp;            float lowest = Float.POSITIVE_INFINITY;</b>
+<b class="fc"><i>741</i>&nbsp;            float highest = Float.NEGATIVE_INFINITY;</b>
+<b class="fc"><i>742</i>&nbsp;            for (int i = 0; i &lt; data[0].length; i++) {</b>
+<b class="fc"><i>743</i>&nbsp;                float v = data[1][i];</b>
+<b class="fc"><i>744</i>&nbsp;                if (v &lt; lowest) {</b>
+<b class="fc"><i>745</i>&nbsp;                    lowest = v;</b>
+<i>746</i>&nbsp;                }
+<b class="fc"><i>747</i>&nbsp;                if (v &gt; highest) {</b>
+<b class="fc"><i>748</i>&nbsp;                    highest = v;</b>
+<i>749</i>&nbsp;                }
+<i>750</i>&nbsp;            }
+<b class="fc"><i>751</i>&nbsp;            if (lowest &lt;= highest) {</b>
+<b class="fc"><i>752</i>&nbsp;                result = new Range(lowest, highest);</b>
+<i>753</i>&nbsp;            }
+<i>754</i>&nbsp;        }
+<b class="fc"><i>755</i>&nbsp;        return result;</b>
+<i>756</i>&nbsp;
+<i>757</i>&nbsp;    }
+<i>758</i>&nbsp;
+<i>759</i>&nbsp;    /**
+<i>760</i>&nbsp;     * Multiplies the range on the domain axis by the specified factor.
+<i>761</i>&nbsp;     *
+<i>762</i>&nbsp;     * @param factor  the zoom factor.
+<i>763</i>&nbsp;     * @param info  the plot rendering info.
+<i>764</i>&nbsp;     * @param source  the source point.
+<i>765</i>&nbsp;     */
+<i>766</i>&nbsp;    @Override
+<i>767</i>&nbsp;    public void zoomDomainAxes(double factor, PlotRenderingInfo info,
+<i>768</i>&nbsp;                               Point2D source) {
+<b class="nc"><i>769</i>&nbsp;        this.domainAxis.resizeRange(factor);</b>
+<b class="nc"><i>770</i>&nbsp;    }</b>
+<i>771</i>&nbsp;
+<i>772</i>&nbsp;    /**
+<i>773</i>&nbsp;     * Multiplies the range on the domain axis by the specified factor.
+<i>774</i>&nbsp;     *
+<i>775</i>&nbsp;     * @param factor  the zoom factor.
+<i>776</i>&nbsp;     * @param info  the plot rendering info.
+<i>777</i>&nbsp;     * @param source  the source point (in Java2D space).
+<i>778</i>&nbsp;     * @param useAnchor  use source point as zoom anchor?
+<i>779</i>&nbsp;     *
+<i>780</i>&nbsp;     * @see #zoomRangeAxes(double, PlotRenderingInfo, Point2D, boolean)
+<i>781</i>&nbsp;     *
+<i>782</i>&nbsp;     * @since 1.0.7
+<i>783</i>&nbsp;     */
+<i>784</i>&nbsp;    @Override
+<i>785</i>&nbsp;    public void zoomDomainAxes(double factor, PlotRenderingInfo info,
+<i>786</i>&nbsp;                               Point2D source, boolean useAnchor) {
+<i>787</i>&nbsp;
+<b class="nc"><i>788</i>&nbsp;        if (useAnchor) {</b>
+<i>789</i>&nbsp;            // get the source coordinate - this plot has always a VERTICAL
+<i>790</i>&nbsp;            // orientation
+<b class="nc"><i>791</i>&nbsp;            double sourceX = source.getX();</b>
+<b class="nc"><i>792</i>&nbsp;            double anchorX = this.domainAxis.java2DToValue(sourceX,</b>
+<b class="nc"><i>793</i>&nbsp;                    info.getDataArea(), RectangleEdge.BOTTOM);</b>
+<b class="nc"><i>794</i>&nbsp;            this.domainAxis.resizeRange2(factor, anchorX);</b>
+<b class="nc"><i>795</i>&nbsp;        }</b>
+<i>796</i>&nbsp;        else {
+<b class="nc"><i>797</i>&nbsp;            this.domainAxis.resizeRange(factor);</b>
+<i>798</i>&nbsp;        }
+<i>799</i>&nbsp;
+<b class="nc"><i>800</i>&nbsp;    }</b>
+<i>801</i>&nbsp;
+<i>802</i>&nbsp;    /**
+<i>803</i>&nbsp;     * Zooms in on the domain axes.
+<i>804</i>&nbsp;     *
+<i>805</i>&nbsp;     * @param lowerPercent  the new lower bound as a percentage of the current
+<i>806</i>&nbsp;     *                      range.
+<i>807</i>&nbsp;     * @param upperPercent  the new upper bound as a percentage of the current
+<i>808</i>&nbsp;     *                      range.
+<i>809</i>&nbsp;     * @param info  the plot rendering info.
+<i>810</i>&nbsp;     * @param source  the source point.
+<i>811</i>&nbsp;     */
+<i>812</i>&nbsp;    @Override
+<i>813</i>&nbsp;    public void zoomDomainAxes(double lowerPercent, double upperPercent,
+<i>814</i>&nbsp;                               PlotRenderingInfo info, Point2D source) {
+<b class="nc"><i>815</i>&nbsp;        this.domainAxis.zoomRange(lowerPercent, upperPercent);</b>
+<b class="nc"><i>816</i>&nbsp;    }</b>
+<i>817</i>&nbsp;
+<i>818</i>&nbsp;    /**
+<i>819</i>&nbsp;     * Multiplies the range on the range axis/axes by the specified factor.
+<i>820</i>&nbsp;     *
+<i>821</i>&nbsp;     * @param factor  the zoom factor.
+<i>822</i>&nbsp;     * @param info  the plot rendering info.
+<i>823</i>&nbsp;     * @param source  the source point.
+<i>824</i>&nbsp;     */
+<i>825</i>&nbsp;    @Override
+<i>826</i>&nbsp;    public void zoomRangeAxes(double factor, PlotRenderingInfo info, 
+<i>827</i>&nbsp;            Point2D source) {
+<b class="nc"><i>828</i>&nbsp;        this.rangeAxis.resizeRange(factor);</b>
+<b class="nc"><i>829</i>&nbsp;    }</b>
+<i>830</i>&nbsp;
+<i>831</i>&nbsp;    /**
+<i>832</i>&nbsp;     * Multiplies the range on the range axis by the specified factor.
+<i>833</i>&nbsp;     *
+<i>834</i>&nbsp;     * @param factor  the zoom factor.
+<i>835</i>&nbsp;     * @param info  the plot rendering info.
+<i>836</i>&nbsp;     * @param source  the source point (in Java2D space).
+<i>837</i>&nbsp;     * @param useAnchor  use source point as zoom anchor?
+<i>838</i>&nbsp;     *
+<i>839</i>&nbsp;     * @see #zoomDomainAxes(double, PlotRenderingInfo, Point2D, boolean)
+<i>840</i>&nbsp;     *
+<i>841</i>&nbsp;     * @since 1.0.7
+<i>842</i>&nbsp;     */
+<i>843</i>&nbsp;    @Override
+<i>844</i>&nbsp;    public void zoomRangeAxes(double factor, PlotRenderingInfo info,
+<i>845</i>&nbsp;                              Point2D source, boolean useAnchor) {
+<i>846</i>&nbsp;
+<b class="nc"><i>847</i>&nbsp;        if (useAnchor) {</b>
+<i>848</i>&nbsp;            // get the source coordinate - this plot has always a VERTICAL
+<i>849</i>&nbsp;            // orientation
+<b class="nc"><i>850</i>&nbsp;            double sourceY = source.getY();</b>
+<b class="nc"><i>851</i>&nbsp;            double anchorY = this.rangeAxis.java2DToValue(sourceY,</b>
+<b class="nc"><i>852</i>&nbsp;                    info.getDataArea(), RectangleEdge.LEFT);</b>
+<b class="nc"><i>853</i>&nbsp;            this.rangeAxis.resizeRange2(factor, anchorY);</b>
+<b class="nc"><i>854</i>&nbsp;        }</b>
+<i>855</i>&nbsp;        else {
+<b class="nc"><i>856</i>&nbsp;            this.rangeAxis.resizeRange(factor);</b>
+<i>857</i>&nbsp;        }
+<i>858</i>&nbsp;
+<b class="nc"><i>859</i>&nbsp;    }</b>
+<i>860</i>&nbsp;
+<i>861</i>&nbsp;    /**
+<i>862</i>&nbsp;     * Zooms in on the range axes.
+<i>863</i>&nbsp;     *
+<i>864</i>&nbsp;     * @param lowerPercent  the new lower bound as a percentage of the current
+<i>865</i>&nbsp;     *                      range.
+<i>866</i>&nbsp;     * @param upperPercent  the new upper bound as a percentage of the current
+<i>867</i>&nbsp;     *                      range.
+<i>868</i>&nbsp;     * @param info  the plot rendering info.
+<i>869</i>&nbsp;     * @param source  the source point.
+<i>870</i>&nbsp;     */
+<i>871</i>&nbsp;    @Override
+<i>872</i>&nbsp;    public void zoomRangeAxes(double lowerPercent, double upperPercent,
+<i>873</i>&nbsp;                              PlotRenderingInfo info, Point2D source) {
+<b class="nc"><i>874</i>&nbsp;        this.rangeAxis.zoomRange(lowerPercent, upperPercent);</b>
+<b class="nc"><i>875</i>&nbsp;    }</b>
+<i>876</i>&nbsp;
+<i>877</i>&nbsp;    /**
+<i>878</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt;.
+<i>879</i>&nbsp;     *
+<i>880</i>&nbsp;     * @return A boolean.
+<i>881</i>&nbsp;     */
+<i>882</i>&nbsp;    @Override
+<i>883</i>&nbsp;    public boolean isDomainZoomable() {
+<b class="nc"><i>884</i>&nbsp;        return true;</b>
+<i>885</i>&nbsp;    }
+<i>886</i>&nbsp;
+<i>887</i>&nbsp;    /**
+<i>888</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt;.
+<i>889</i>&nbsp;     *
+<i>890</i>&nbsp;     * @return A boolean.
+<i>891</i>&nbsp;     */
+<i>892</i>&nbsp;    @Override
+<i>893</i>&nbsp;    public boolean isRangeZoomable() {
+<b class="nc"><i>894</i>&nbsp;        return true;</b>
+<i>895</i>&nbsp;    }
+<i>896</i>&nbsp;
+<i>897</i>&nbsp;    /**
+<i>898</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if panning is enabled for the domain axes,
+<i>899</i>&nbsp;     * and &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>900</i>&nbsp;     *
+<i>901</i>&nbsp;     * @return A boolean.
+<i>902</i>&nbsp;     *
+<i>903</i>&nbsp;     * @since 1.0.13
+<i>904</i>&nbsp;     */
+<i>905</i>&nbsp;    @Override
+<i>906</i>&nbsp;    public boolean isDomainPannable() {
+<b class="nc"><i>907</i>&nbsp;        return this.domainPannable;</b>
+<i>908</i>&nbsp;    }
+<i>909</i>&nbsp;
+<i>910</i>&nbsp;    /**
+<i>911</i>&nbsp;     * Sets the flag that enables or disables panning of the plot along the
+<i>912</i>&nbsp;     * domain axes.
+<i>913</i>&nbsp;     *
+<i>914</i>&nbsp;     * @param pannable  the new flag value.
+<i>915</i>&nbsp;     *
+<i>916</i>&nbsp;     * @since 1.0.13
+<i>917</i>&nbsp;     */
+<i>918</i>&nbsp;    public void setDomainPannable(boolean pannable) {
+<b class="fc"><i>919</i>&nbsp;        this.domainPannable = pannable;</b>
+<b class="fc"><i>920</i>&nbsp;    }</b>
+<i>921</i>&nbsp;
+<i>922</i>&nbsp;    /**
+<i>923</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if panning is enabled for the range axes,
+<i>924</i>&nbsp;     * and &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>925</i>&nbsp;     *
+<i>926</i>&nbsp;     * @return A boolean.
+<i>927</i>&nbsp;     *
+<i>928</i>&nbsp;     * @since 1.0.13
+<i>929</i>&nbsp;     */
+<i>930</i>&nbsp;    @Override
+<i>931</i>&nbsp;    public boolean isRangePannable() {
+<b class="nc"><i>932</i>&nbsp;        return this.rangePannable;</b>
+<i>933</i>&nbsp;    }
+<i>934</i>&nbsp;
+<i>935</i>&nbsp;    /**
+<i>936</i>&nbsp;     * Sets the flag that enables or disables panning of the plot along
+<i>937</i>&nbsp;     * the range axes.
+<i>938</i>&nbsp;     *
+<i>939</i>&nbsp;     * @param pannable  the new flag value.
+<i>940</i>&nbsp;     *
+<i>941</i>&nbsp;     * @since 1.0.13
+<i>942</i>&nbsp;     */
+<i>943</i>&nbsp;    public void setRangePannable(boolean pannable) {
+<b class="fc"><i>944</i>&nbsp;        this.rangePannable = pannable;</b>
+<b class="fc"><i>945</i>&nbsp;    }</b>
+<i>946</i>&nbsp;
+<i>947</i>&nbsp;    /**
+<i>948</i>&nbsp;     * Pans the domain axes by the specified percentage.
+<i>949</i>&nbsp;     *
+<i>950</i>&nbsp;     * @param percent  the distance to pan (as a percentage of the axis length).
+<i>951</i>&nbsp;     * @param info the plot info
+<i>952</i>&nbsp;     * @param source the source point where the pan action started.
+<i>953</i>&nbsp;     *
+<i>954</i>&nbsp;     * @since 1.0.13
+<i>955</i>&nbsp;     */
+<i>956</i>&nbsp;    @Override
+<i>957</i>&nbsp;    public void panDomainAxes(double percent, PlotRenderingInfo info,
+<i>958</i>&nbsp;            Point2D source) {
+<b class="nc"><i>959</i>&nbsp;        if (!isDomainPannable() || this.domainAxis == null) {</b>
+<b class="nc"><i>960</i>&nbsp;            return;</b>
+<i>961</i>&nbsp;        }
+<b class="nc"><i>962</i>&nbsp;        double length = this.domainAxis.getRange().getLength();</b>
+<b class="nc"><i>963</i>&nbsp;        double adj = percent * length;</b>
+<b class="nc"><i>964</i>&nbsp;        if (this.domainAxis.isInverted()) {</b>
+<b class="nc"><i>965</i>&nbsp;            adj = -adj;</b>
+<i>966</i>&nbsp;        }
+<b class="nc"><i>967</i>&nbsp;        this.domainAxis.setRange(this.domainAxis.getLowerBound() + adj,</b>
+<b class="nc"><i>968</i>&nbsp;                this.domainAxis.getUpperBound() + adj);</b>
+<b class="nc"><i>969</i>&nbsp;    }</b>
+<i>970</i>&nbsp;
+<i>971</i>&nbsp;    /**
+<i>972</i>&nbsp;     * Pans the range axes by the specified percentage.
+<i>973</i>&nbsp;     *
+<i>974</i>&nbsp;     * @param percent  the distance to pan (as a percentage of the axis length).
+<i>975</i>&nbsp;     * @param info the plot info
+<i>976</i>&nbsp;     * @param source the source point where the pan action started.
+<i>977</i>&nbsp;     *
+<i>978</i>&nbsp;     * @since 1.0.13
+<i>979</i>&nbsp;     */
+<i>980</i>&nbsp;    @Override
+<i>981</i>&nbsp;    public void panRangeAxes(double percent, PlotRenderingInfo info,
+<i>982</i>&nbsp;            Point2D source) {
+<b class="nc"><i>983</i>&nbsp;        if (!isRangePannable() || this.rangeAxis == null) {</b>
+<b class="nc"><i>984</i>&nbsp;            return;</b>
+<i>985</i>&nbsp;        }
+<b class="nc"><i>986</i>&nbsp;        double length = this.rangeAxis.getRange().getLength();</b>
+<b class="nc"><i>987</i>&nbsp;        double adj = percent * length;</b>
+<b class="nc"><i>988</i>&nbsp;        if (this.rangeAxis.isInverted()) {</b>
+<b class="nc"><i>989</i>&nbsp;            adj = -adj;</b>
+<i>990</i>&nbsp;        }
+<b class="nc"><i>991</i>&nbsp;        this.rangeAxis.setRange(this.rangeAxis.getLowerBound() + adj,</b>
+<b class="nc"><i>992</i>&nbsp;                this.rangeAxis.getUpperBound() + adj);</b>
+<b class="nc"><i>993</i>&nbsp;    }</b>
+<i>994</i>&nbsp;
+<i>995</i>&nbsp;    /**
+<i>996</i>&nbsp;     * Tests an arbitrary object for equality with this plot.  Note that
+<i>997</i>&nbsp;     * &lt;code&gt;FastScatterPlot&lt;/code&gt; carries its data around with it (rather
+<i>998</i>&nbsp;     * than referencing a dataset), and the data is included in the
+<i>999</i>&nbsp;     * equality test.
+<i>1000</i>&nbsp;     *
+<i>1001</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1002</i>&nbsp;     *
+<i>1003</i>&nbsp;     * @return A boolean.
+<i>1004</i>&nbsp;     */
+<i>1005</i>&nbsp;    @Override
+<i>1006</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1007</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>1008</i>&nbsp;            return true;</b>
+<i>1009</i>&nbsp;        }
+<b class="fc"><i>1010</i>&nbsp;        if (!super.equals(obj)) {</b>
+<b class="nc"><i>1011</i>&nbsp;            return false;</b>
+<i>1012</i>&nbsp;        }
+<b class="fc"><i>1013</i>&nbsp;        if (!(obj instanceof FastScatterPlot)) {</b>
+<b class="nc"><i>1014</i>&nbsp;            return false;</b>
+<i>1015</i>&nbsp;        }
+<b class="fc"><i>1016</i>&nbsp;        FastScatterPlot that = (FastScatterPlot) obj;</b>
+<b class="fc"><i>1017</i>&nbsp;        if (this.domainPannable != that.domainPannable) {</b>
+<b class="fc"><i>1018</i>&nbsp;            return false;</b>
+<i>1019</i>&nbsp;        }
+<b class="fc"><i>1020</i>&nbsp;        if (this.rangePannable != that.rangePannable) {</b>
+<b class="fc"><i>1021</i>&nbsp;            return false;</b>
+<i>1022</i>&nbsp;        }
+<b class="fc"><i>1023</i>&nbsp;        if (!ArrayUtilities.equal(this.data, that.data)) {</b>
+<b class="fc"><i>1024</i>&nbsp;            return false;</b>
+<i>1025</i>&nbsp;        }
+<b class="fc"><i>1026</i>&nbsp;        if (!ObjectUtilities.equal(this.domainAxis, that.domainAxis)) {</b>
+<b class="nc"><i>1027</i>&nbsp;            return false;</b>
+<i>1028</i>&nbsp;        }
+<b class="fc"><i>1029</i>&nbsp;        if (!ObjectUtilities.equal(this.rangeAxis, that.rangeAxis)) {</b>
+<b class="nc"><i>1030</i>&nbsp;            return false;</b>
+<i>1031</i>&nbsp;        }
+<b class="fc"><i>1032</i>&nbsp;        if (!PaintUtilities.equal(this.paint, that.paint)) {</b>
+<b class="fc"><i>1033</i>&nbsp;            return false;</b>
+<i>1034</i>&nbsp;        }
+<b class="fc"><i>1035</i>&nbsp;        if (this.domainGridlinesVisible != that.domainGridlinesVisible) {</b>
+<b class="fc"><i>1036</i>&nbsp;            return false;</b>
+<i>1037</i>&nbsp;        }
+<b class="fc"><i>1038</i>&nbsp;        if (!PaintUtilities.equal(this.domainGridlinePaint,</b>
+<i>1039</i>&nbsp;                that.domainGridlinePaint)) {
+<b class="fc"><i>1040</i>&nbsp;            return false;</b>
+<i>1041</i>&nbsp;        }
+<b class="fc"><i>1042</i>&nbsp;        if (!ObjectUtilities.equal(this.domainGridlineStroke,</b>
+<i>1043</i>&nbsp;                that.domainGridlineStroke)) {
+<b class="fc"><i>1044</i>&nbsp;            return false;</b>
+<i>1045</i>&nbsp;        }
+<b class="fc"><i>1046</i>&nbsp;        if (!this.rangeGridlinesVisible == that.rangeGridlinesVisible) {</b>
+<b class="fc"><i>1047</i>&nbsp;            return false;</b>
+<i>1048</i>&nbsp;        }
+<b class="fc"><i>1049</i>&nbsp;        if (!PaintUtilities.equal(this.rangeGridlinePaint,</b>
+<i>1050</i>&nbsp;                that.rangeGridlinePaint)) {
+<b class="fc"><i>1051</i>&nbsp;            return false;</b>
+<i>1052</i>&nbsp;        }
+<b class="fc"><i>1053</i>&nbsp;        if (!ObjectUtilities.equal(this.rangeGridlineStroke,</b>
+<i>1054</i>&nbsp;                that.rangeGridlineStroke)) {
+<b class="fc"><i>1055</i>&nbsp;            return false;</b>
+<i>1056</i>&nbsp;        }
+<b class="fc"><i>1057</i>&nbsp;        return true;</b>
+<i>1058</i>&nbsp;    }
+<i>1059</i>&nbsp;
+<i>1060</i>&nbsp;    /**
+<i>1061</i>&nbsp;     * Returns a clone of the plot.
+<i>1062</i>&nbsp;     *
+<i>1063</i>&nbsp;     * @return A clone.
+<i>1064</i>&nbsp;     *
+<i>1065</i>&nbsp;     * @throws CloneNotSupportedException if some component of the plot does
+<i>1066</i>&nbsp;     *                                    not support cloning.
+<i>1067</i>&nbsp;     */
+<i>1068</i>&nbsp;    @Override
+<i>1069</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<i>1070</i>&nbsp;
+<b class="fc"><i>1071</i>&nbsp;        FastScatterPlot clone = (FastScatterPlot) super.clone();</b>
+<b class="fc"><i>1072</i>&nbsp;        if (this.data != null) {</b>
+<b class="nc"><i>1073</i>&nbsp;            clone.data = ArrayUtilities.clone(this.data);</b>
+<i>1074</i>&nbsp;        }
+<b class="fc"><i>1075</i>&nbsp;        if (this.domainAxis != null) {</b>
+<b class="fc"><i>1076</i>&nbsp;            clone.domainAxis = (ValueAxis) this.domainAxis.clone();</b>
+<b class="fc"><i>1077</i>&nbsp;            clone.domainAxis.setPlot(clone);</b>
+<b class="fc"><i>1078</i>&nbsp;            clone.domainAxis.addChangeListener(clone);</b>
+<i>1079</i>&nbsp;        }
+<b class="fc"><i>1080</i>&nbsp;        if (this.rangeAxis != null) {</b>
+<b class="fc"><i>1081</i>&nbsp;            clone.rangeAxis = (ValueAxis) this.rangeAxis.clone();</b>
+<b class="fc"><i>1082</i>&nbsp;            clone.rangeAxis.setPlot(clone);</b>
+<b class="fc"><i>1083</i>&nbsp;            clone.rangeAxis.addChangeListener(clone);</b>
+<i>1084</i>&nbsp;        }
+<b class="fc"><i>1085</i>&nbsp;        return clone;</b>
+<i>1086</i>&nbsp;
+<i>1087</i>&nbsp;    }
+<i>1088</i>&nbsp;
+<i>1089</i>&nbsp;    /**
+<i>1090</i>&nbsp;     * Provides serialization support.
+<i>1091</i>&nbsp;     *
+<i>1092</i>&nbsp;     * @param stream  the output stream.
+<i>1093</i>&nbsp;     *
+<i>1094</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1095</i>&nbsp;     */
+<i>1096</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>1097</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>1098</i>&nbsp;        SerialUtilities.writePaint(this.paint, stream);</b>
+<b class="fc"><i>1099</i>&nbsp;        SerialUtilities.writeStroke(this.domainGridlineStroke, stream);</b>
+<b class="fc"><i>1100</i>&nbsp;        SerialUtilities.writePaint(this.domainGridlinePaint, stream);</b>
+<b class="fc"><i>1101</i>&nbsp;        SerialUtilities.writeStroke(this.rangeGridlineStroke, stream);</b>
+<b class="fc"><i>1102</i>&nbsp;        SerialUtilities.writePaint(this.rangeGridlinePaint, stream);</b>
+<b class="fc"><i>1103</i>&nbsp;    }</b>
+<i>1104</i>&nbsp;
+<i>1105</i>&nbsp;    /**
+<i>1106</i>&nbsp;     * Provides serialization support.
+<i>1107</i>&nbsp;     *
+<i>1108</i>&nbsp;     * @param stream  the input stream.
+<i>1109</i>&nbsp;     *
+<i>1110</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1111</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>1112</i>&nbsp;     */
+<i>1113</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>1114</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>1115</i>&nbsp;        stream.defaultReadObject();</b>
+<i>1116</i>&nbsp;
+<b class="fc"><i>1117</i>&nbsp;        this.paint = SerialUtilities.readPaint(stream);</b>
+<b class="fc"><i>1118</i>&nbsp;        this.domainGridlineStroke = SerialUtilities.readStroke(stream);</b>
+<b class="fc"><i>1119</i>&nbsp;        this.domainGridlinePaint = SerialUtilities.readPaint(stream);</b>
+<i>1120</i>&nbsp;
+<b class="fc"><i>1121</i>&nbsp;        this.rangeGridlineStroke = SerialUtilities.readStroke(stream);</b>
+<b class="fc"><i>1122</i>&nbsp;        this.rangeGridlinePaint = SerialUtilities.readPaint(stream);</b>
+<i>1123</i>&nbsp;
+<b class="fc"><i>1124</i>&nbsp;        if (this.domainAxis != null) {</b>
+<b class="fc"><i>1125</i>&nbsp;            this.domainAxis.addChangeListener(this);</b>
+<i>1126</i>&nbsp;        }
+<i>1127</i>&nbsp;
+<b class="fc"><i>1128</i>&nbsp;        if (this.rangeAxis != null) {</b>
+<b class="fc"><i>1129</i>&nbsp;            this.rangeAxis.addChangeListener(this);</b>
+<i>1130</i>&nbsp;        }
+<b class="fc"><i>1131</i>&nbsp;    }</b>
+<i>1132</i>&nbsp;
+<i>1133</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

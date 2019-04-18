@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RFC1522CodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.net</a> &gt; <span class="el_source">RFC1522CodecTest.java</span></div><h1>RFC1522CodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.net;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.codec.DecoderException;
+import org.junit.Test;
+
+/**
+ * RFC 1522 compliant codec test cases
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L32" title="3 of 4 branches missed.">public class RFC1522CodecTest {</span>
+
+<span class="fc" id="L34">    static class RFC1522TestCodec extends RFC1522Codec {</span>
+
+        @Override
+<span class="nc" id="L37">        protected byte[] doDecoding(final byte[] bytes) {</span>
+<span class="nc" id="L38">            return bytes;</span>
+        }
+
+        @Override
+<span class="nc" id="L42">        protected byte[] doEncoding(final byte[] bytes) {</span>
+<span class="nc" id="L43">            return bytes;</span>
+        }
+
+        @Override
+<span class="fc" id="L47">        protected String getEncoding() {</span>
+<span class="fc" id="L48">            return &quot;T&quot;;</span>
+        }
+
+    }
+
+    @Test
+<span class="pc bnc" id="L54" title="All 4 branches missed.">    public void testNullInput() throws Exception {</span>
+<span class="fc" id="L55">        final RFC1522TestCodec testcodec = new RFC1522TestCodec();</span>
+<span class="fc" id="L56">        assertNull(testcodec.decodeText(null));</span>
+<span class="fc" id="L57">        assertNull(testcodec.encodeText(null, CharEncoding.UTF_8));</span>
+<span class="fc" id="L58">    }</span>
+
+<span class="fc" id="L60">    private void assertExpectedDecoderException(final String s) throws Exception {</span>
+<span class="fc" id="L61">        final RFC1522TestCodec testcodec = new RFC1522TestCodec();</span>
+<span class="fc" id="L62">        try {</span>
+<span class="nc" id="L63">            testcodec.decodeText(s);</span>
+<span class="nc" id="L64">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L65">        } catch (final DecoderException e) {</span>
+            // Expected.
+<span class="nc" id="L67">        }</span>
+<span class="fc" id="L68">    }</span>
+
+    @Test
+<span class="pc bnc" id="L71" title="All 4 branches missed.">    public void testDecodeInvalid() throws Exception {</span>
+<span class="fc" id="L72">        assertExpectedDecoderException(&quot;whatever&quot;);</span>
+<span class="fc" id="L73">        assertExpectedDecoderException(&quot;=?&quot;);</span>
+<span class="fc" id="L74">        assertExpectedDecoderException(&quot;?=&quot;);</span>
+<span class="fc" id="L75">        assertExpectedDecoderException(&quot;==&quot;);</span>
+<span class="fc" id="L76">        assertExpectedDecoderException(&quot;=??=&quot;);</span>
+<span class="fc" id="L77">        assertExpectedDecoderException(&quot;=?stuff?=&quot;);</span>
+<span class="fc" id="L78">        assertExpectedDecoderException(&quot;=?UTF-8??=&quot;);</span>
+<span class="fc" id="L79">        assertExpectedDecoderException(&quot;=?UTF-8?stuff?=&quot;);</span>
+<span class="fc" id="L80">        assertExpectedDecoderException(&quot;=?UTF-8?T?stuff&quot;);</span>
+<span class="fc" id="L81">        assertExpectedDecoderException(&quot;=??T?stuff?=&quot;);</span>
+<span class="fc" id="L82">        assertExpectedDecoderException(&quot;=?UTF-8??stuff?=&quot;);</span>
+<span class="fc" id="L83">        assertExpectedDecoderException(&quot;=?UTF-8?W?stuff?=&quot;);</span>
+<span class="fc" id="L84">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

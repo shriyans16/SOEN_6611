@@ -1,0 +1,509 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MatchRatingApproachEncoder</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MatchRatingApproachEncoder (org.apache.commons.codec.language)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MatchRatingApproachEncoder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (114/ 114)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.codec.language;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.util.Locale;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;import org.apache.commons.codec.EncoderException;
+<i>22</i>&nbsp;import org.apache.commons.codec.StringEncoder;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * Match Rating Approach Phonetic Algorithm Developed by &lt;CITE&gt;Western Airlines&lt;/CITE&gt; in 1977.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * This class is immutable and thread-safe.
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Match_rating_approach&quot;&gt;Wikipedia - Match Rating Approach&lt;/a&gt;
+<i>30</i>&nbsp; * @since 1.8
+<i>31</i>&nbsp; */
+<b class="fc"><i>32</i>&nbsp;public class MatchRatingApproachEncoder implements StringEncoder {</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    private static final String SPACE = &quot; &quot;;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    private static final String EMPTY = &quot;&quot;;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Constants used mainly for the min rating value.
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    private static final int ONE = 1, TWO = 2, THREE = 3, FOUR = 4, FIVE = 5, SIX = 6, SEVEN = 7, EIGHT = 8,
+<i>42</i>&nbsp;                             ELEVEN = 11, TWELVE = 12;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * The plain letter equivalent of the accented letters.
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    private static final String PLAIN_ASCII = &quot;AaEeIiOoUu&quot; + // grave
+<i>48</i>&nbsp;            &quot;AaEeIiOoUuYy&quot; + // acute
+<i>49</i>&nbsp;            &quot;AaEeIiOoUuYy&quot; + // circumflex
+<i>50</i>&nbsp;            &quot;AaOoNn&quot; + // tilde
+<i>51</i>&nbsp;            &quot;AaEeIiOoUuYy&quot; + // umlaut
+<i>52</i>&nbsp;            &quot;Aa&quot; + // ring
+<i>53</i>&nbsp;            &quot;Cc&quot; + // cedilla
+<i>54</i>&nbsp;            &quot;OoUu&quot;; // double acute
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Unicode characters corresponding to various accented letters. For example: \u00DA is U acute etc...
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    private static final String UNICODE = &quot;\u00C0\u00E0\u00C8\u00E8\u00CC\u00EC\u00D2\u00F2\u00D9\u00F9&quot; +
+<i>60</i>&nbsp;            &quot;\u00C1\u00E1\u00C9\u00E9\u00CD\u00ED\u00D3\u00F3\u00DA\u00FA\u00DD\u00FD&quot; +
+<i>61</i>&nbsp;            &quot;\u00C2\u00E2\u00CA\u00EA\u00CE\u00EE\u00D4\u00F4\u00DB\u00FB\u0176\u0177&quot; +
+<i>62</i>&nbsp;            &quot;\u00C3\u00E3\u00D5\u00F5\u00D1\u00F1&quot; +
+<i>63</i>&nbsp;            &quot;\u00C4\u00E4\u00CB\u00EB\u00CF\u00EF\u00D6\u00F6\u00DC\u00FC\u0178\u00FF&quot; +
+<i>64</i>&nbsp;            &quot;\u00C5\u00E5&quot; + &quot;\u00C7\u00E7&quot; + &quot;\u0150\u0151\u0170\u0171&quot;;
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;    private static final String[] DOUBLE_CONSONANT =</b>
+<i>67</i>&nbsp;            new String[] { &quot;BB&quot;, &quot;CC&quot;, &quot;DD&quot;, &quot;FF&quot;, &quot;GG&quot;, &quot;HH&quot;, &quot;JJ&quot;, &quot;KK&quot;, &quot;LL&quot;, &quot;MM&quot;, &quot;NN&quot;, &quot;PP&quot;, &quot;QQ&quot;, &quot;RR&quot;, &quot;SS&quot;,
+<i>68</i>&nbsp;                           &quot;TT&quot;, &quot;VV&quot;, &quot;WW&quot;, &quot;XX&quot;, &quot;YY&quot;, &quot;ZZ&quot; };
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * Cleans up a name: 1. Upper-cases everything 2. Removes some common punctuation 3. Removes accents 4. Removes any
+<i>72</i>&nbsp;     * spaces.
+<i>73</i>&nbsp;     *
+<i>74</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>75</i>&nbsp;     * &lt;p&gt;
+<i>76</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>77</i>&nbsp;     * &lt;/p&gt;
+<i>78</i>&nbsp;     *
+<i>79</i>&nbsp;     * @param name
+<i>80</i>&nbsp;     *            The name to be cleaned
+<i>81</i>&nbsp;     * @return The cleaned name
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    String cleanName(final String name) {
+<b class="fc"><i>84</i>&nbsp;        String upperName = name.toUpperCase(Locale.ENGLISH);</b>
+<i>85</i>&nbsp;
+<b class="fc"><i>86</i>&nbsp;        final String[] charsToTrim = { &quot;\\-&quot;, &quot;[&amp;]&quot;, &quot;\\&#39;&quot;, &quot;\\.&quot;, &quot;[\\,]&quot; };</b>
+<b class="fc"><i>87</i>&nbsp;        for (final String str : charsToTrim) {</b>
+<b class="fc"><i>88</i>&nbsp;            upperName = upperName.replaceAll(str, EMPTY);</b>
+<i>89</i>&nbsp;        }
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;        upperName = removeAccents(upperName);</b>
+<b class="fc"><i>92</i>&nbsp;        upperName = upperName.replaceAll(&quot;\\s+&quot;, EMPTY);</b>
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;        return upperName;</b>
+<i>95</i>&nbsp;    }
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * Encodes an Object using the Match Rating Approach algorithm. Method is here to satisfy the requirements of the
+<i>99</i>&nbsp;     * Encoder interface Throws an EncoderException if input object is not of type java.lang.String.
+<i>100</i>&nbsp;     *
+<i>101</i>&nbsp;     * @param pObject
+<i>102</i>&nbsp;     *            Object to encode
+<i>103</i>&nbsp;     * @return An object (or type java.lang.String) containing the Match Rating Approach code which corresponds to the
+<i>104</i>&nbsp;     *         String supplied.
+<i>105</i>&nbsp;     * @throws EncoderException
+<i>106</i>&nbsp;     *             if the parameter supplied is not of type java.lang.String
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    @Override
+<i>109</i>&nbsp;    public final Object encode(final Object pObject) throws EncoderException {
+<b class="fc"><i>110</i>&nbsp;        if (!(pObject instanceof String)) {</b>
+<b class="fc"><i>111</i>&nbsp;            throw new EncoderException(</b>
+<i>112</i>&nbsp;                    &quot;Parameter supplied to Match Rating Approach encoder is not of type java.lang.String&quot;);
+<i>113</i>&nbsp;        }
+<b class="fc"><i>114</i>&nbsp;        return encode((String) pObject);</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * Encodes a String using the Match Rating Approach (MRA) algorithm.
+<i>119</i>&nbsp;     *
+<i>120</i>&nbsp;     * @param name
+<i>121</i>&nbsp;     *            String object to encode
+<i>122</i>&nbsp;     * @return The MRA code corresponding to the String supplied
+<i>123</i>&nbsp;     */
+<i>124</i>&nbsp;    @Override
+<i>125</i>&nbsp;    public final String encode(String name) {
+<i>126</i>&nbsp;        // Bulletproof for trivial input - NINO
+<b class="fc"><i>127</i>&nbsp;        if (name == null || EMPTY.equalsIgnoreCase(name) || SPACE.equalsIgnoreCase(name) || name.length() == 1) {</b>
+<b class="fc"><i>128</i>&nbsp;            return EMPTY;</b>
+<i>129</i>&nbsp;        }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;        // Preprocessing
+<b class="fc"><i>132</i>&nbsp;        name = cleanName(name);</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;        // BEGIN: Actual encoding part of the algorithm...
+<i>135</i>&nbsp;        // 1. Delete all vowels unless the vowel begins the word
+<b class="fc"><i>136</i>&nbsp;        name = removeVowels(name);</b>
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;        // 2. Remove second consonant from any double consonant
+<b class="fc"><i>139</i>&nbsp;        name = removeDoubleConsonants(name);</b>
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;        // 3. Reduce codex to 6 letters by joining the first 3 and last 3 letters
+<b class="fc"><i>142</i>&nbsp;        name = getFirst3Last3(name);</b>
+<i>143</i>&nbsp;
+<b class="fc"><i>144</i>&nbsp;        return name;</b>
+<i>145</i>&nbsp;    }
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Gets the first and last 3 letters of a name (if &amp;gt; 6 characters) Else just returns the name.
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>151</i>&nbsp;     * &lt;p&gt;
+<i>152</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>153</i>&nbsp;     * &lt;/p&gt;
+<i>154</i>&nbsp;     *
+<i>155</i>&nbsp;     * @param name
+<i>156</i>&nbsp;     *            The string to get the substrings from
+<i>157</i>&nbsp;     * @return Annexed first and last 3 letters of input word.
+<i>158</i>&nbsp;     */
+<i>159</i>&nbsp;    String getFirst3Last3(final String name) {
+<b class="fc"><i>160</i>&nbsp;        final int nameLength = name.length();</b>
+<i>161</i>&nbsp;
+<b class="fc"><i>162</i>&nbsp;        if (nameLength &gt; SIX) {</b>
+<b class="fc"><i>163</i>&nbsp;            final String firstThree = name.substring(0, THREE);</b>
+<b class="fc"><i>164</i>&nbsp;            final String lastThree = name.substring(nameLength - THREE, nameLength);</b>
+<b class="fc"><i>165</i>&nbsp;            return firstThree + lastThree;</b>
+<i>166</i>&nbsp;        } else {
+<b class="fc"><i>167</i>&nbsp;            return name;</b>
+<i>168</i>&nbsp;        }
+<i>169</i>&nbsp;    }
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /**
+<i>172</i>&nbsp;     * Obtains the min rating of the length sum of the 2 names. In essence the larger the sum length the smaller the
+<i>173</i>&nbsp;     * min rating. Values strictly from documentation.
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>176</i>&nbsp;     * &lt;p&gt;
+<i>177</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>178</i>&nbsp;     * &lt;/p&gt;
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param sumLength
+<i>181</i>&nbsp;     *            The length of 2 strings sent down
+<i>182</i>&nbsp;     * @return The min rating value
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    int getMinRating(final int sumLength) {
+<b class="fc"><i>185</i>&nbsp;        int minRating = 0;</b>
+<i>186</i>&nbsp;
+<b class="fc"><i>187</i>&nbsp;        if (sumLength &lt;= FOUR) {</b>
+<b class="fc"><i>188</i>&nbsp;            minRating = FIVE;</b>
+<b class="fc"><i>189</i>&nbsp;        } else if (sumLength &gt;= FIVE &amp;&amp; sumLength &lt;= SEVEN) {</b>
+<b class="fc"><i>190</i>&nbsp;            minRating = FOUR;</b>
+<b class="fc"><i>191</i>&nbsp;        } else if (sumLength &gt;= EIGHT &amp;&amp; sumLength &lt;= ELEVEN) {</b>
+<b class="fc"><i>192</i>&nbsp;            minRating = THREE;</b>
+<b class="fc"><i>193</i>&nbsp;        } else if (sumLength == TWELVE) {</b>
+<b class="fc"><i>194</i>&nbsp;            minRating = TWO;</b>
+<i>195</i>&nbsp;        } else {
+<b class="fc"><i>196</i>&nbsp;            minRating = ONE; // docs said little here.</b>
+<i>197</i>&nbsp;        }
+<i>198</i>&nbsp;
+<b class="fc"><i>199</i>&nbsp;        return minRating;</b>
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * Determines if two names are homophonous via Match Rating Approach (MRA) algorithm. It should be noted that the
+<i>204</i>&nbsp;     * strings are cleaned in the same way as {@link #encode(String)}.
+<i>205</i>&nbsp;     *
+<i>206</i>&nbsp;     * @param name1
+<i>207</i>&nbsp;     *            First of the 2 strings (names) to compare
+<i>208</i>&nbsp;     * @param name2
+<i>209</i>&nbsp;     *            Second of the 2 names to compare
+<i>210</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if the encodings are identical &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>211</i>&nbsp;     */
+<i>212</i>&nbsp;    public boolean isEncodeEquals(String name1, String name2) {
+<i>213</i>&nbsp;        // Bulletproof for trivial input - NINO
+<b class="fc"><i>214</i>&nbsp;        if (name1 == null || EMPTY.equalsIgnoreCase(name1) || SPACE.equalsIgnoreCase(name1)) {</b>
+<b class="fc"><i>215</i>&nbsp;            return false;</b>
+<b class="fc"><i>216</i>&nbsp;        } else if (name2 == null || EMPTY.equalsIgnoreCase(name2) || SPACE.equalsIgnoreCase(name2)) {</b>
+<b class="fc"><i>217</i>&nbsp;            return false;</b>
+<b class="fc"><i>218</i>&nbsp;        } else if (name1.length() == 1 || name2.length() == 1) {</b>
+<b class="fc"><i>219</i>&nbsp;            return false;</b>
+<b class="fc"><i>220</i>&nbsp;        } else if (name1.equalsIgnoreCase(name2)) {</b>
+<b class="fc"><i>221</i>&nbsp;            return true;</b>
+<i>222</i>&nbsp;        }
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;        // Preprocessing
+<b class="fc"><i>225</i>&nbsp;        name1 = cleanName(name1);</b>
+<b class="fc"><i>226</i>&nbsp;        name2 = cleanName(name2);</b>
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;        // Actual MRA Algorithm
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;        // 1. Remove vowels
+<b class="fc"><i>231</i>&nbsp;        name1 = removeVowels(name1);</b>
+<b class="fc"><i>232</i>&nbsp;        name2 = removeVowels(name2);</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;        // 2. Remove double consonants
+<b class="fc"><i>235</i>&nbsp;        name1 = removeDoubleConsonants(name1);</b>
+<b class="fc"><i>236</i>&nbsp;        name2 = removeDoubleConsonants(name2);</b>
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;        // 3. Reduce down to 3 letters
+<b class="fc"><i>239</i>&nbsp;        name1 = getFirst3Last3(name1);</b>
+<b class="fc"><i>240</i>&nbsp;        name2 = getFirst3Last3(name2);</b>
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;        // 4. Check for length difference - if 3 or greater then no similarity
+<i>243</i>&nbsp;        // comparison is done
+<b class="fc"><i>244</i>&nbsp;        if (Math.abs(name1.length() - name2.length()) &gt;= THREE) {</b>
+<b class="fc"><i>245</i>&nbsp;            return false;</b>
+<i>246</i>&nbsp;        }
+<i>247</i>&nbsp;
+<i>248</i>&nbsp;        // 5. Obtain the minimum rating value by calculating the length sum of the
+<i>249</i>&nbsp;        // encoded Strings and sending it down.
+<b class="fc"><i>250</i>&nbsp;        final int sumLength = Math.abs(name1.length() + name2.length());</b>
+<b class="fc"><i>251</i>&nbsp;        int minRating = 0;</b>
+<b class="fc"><i>252</i>&nbsp;        minRating = getMinRating(sumLength);</b>
+<i>253</i>&nbsp;
+<i>254</i>&nbsp;        // 6. Process the encoded Strings from left to right and remove any
+<i>255</i>&nbsp;        // identical characters found from both Strings respectively.
+<b class="fc"><i>256</i>&nbsp;        final int count = leftToRightThenRightToLeftProcessing(name1, name2);</b>
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;        // 7. Each PNI item that has a similarity rating equal to or greater than
+<i>259</i>&nbsp;        // the min is considered to be a good candidate match
+<b class="fc"><i>260</i>&nbsp;        return count &gt;= minRating;</b>
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;    /**
+<i>265</i>&nbsp;     * Determines if a letter is a vowel.
+<i>266</i>&nbsp;     *
+<i>267</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>268</i>&nbsp;     * &lt;p&gt;
+<i>269</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>270</i>&nbsp;     * &lt;/p&gt;
+<i>271</i>&nbsp;     *
+<i>272</i>&nbsp;     * @param letter
+<i>273</i>&nbsp;     *            The letter under investiagtion
+<i>274</i>&nbsp;     * @return True if a vowel, else false
+<i>275</i>&nbsp;     */
+<i>276</i>&nbsp;    boolean isVowel(final String letter) {
+<b class="fc"><i>277</i>&nbsp;        return letter.equalsIgnoreCase(&quot;E&quot;) || letter.equalsIgnoreCase(&quot;A&quot;) || letter.equalsIgnoreCase(&quot;O&quot;) ||</b>
+<b class="fc"><i>278</i>&nbsp;               letter.equalsIgnoreCase(&quot;I&quot;) || letter.equalsIgnoreCase(&quot;U&quot;);</b>
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Processes the names from left to right (first) then right to left removing identical letters in same positions.
+<i>283</i>&nbsp;     * Then subtracts the longer string that remains from 6 and returns this.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>286</i>&nbsp;     * &lt;p&gt;
+<i>287</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>288</i>&nbsp;     * &lt;/p&gt;
+<i>289</i>&nbsp;     *
+<i>290</i>&nbsp;     * @param name1
+<i>291</i>&nbsp;     *            name2
+<i>292</i>&nbsp;     * @return
+<i>293</i>&nbsp;     */
+<i>294</i>&nbsp;    int leftToRightThenRightToLeftProcessing(final String name1, final String name2) {
+<b class="fc"><i>295</i>&nbsp;        final char[] name1Char = name1.toCharArray();</b>
+<b class="fc"><i>296</i>&nbsp;        final char[] name2Char = name2.toCharArray();</b>
+<i>297</i>&nbsp;
+<b class="fc"><i>298</i>&nbsp;        final int name1Size = name1.length() - 1;</b>
+<b class="fc"><i>299</i>&nbsp;        final int name2Size = name2.length() - 1;</b>
+<i>300</i>&nbsp;
+<b class="fc"><i>301</i>&nbsp;        String name1LtRStart = EMPTY;</b>
+<b class="fc"><i>302</i>&nbsp;        String name1LtREnd = EMPTY;</b>
+<i>303</i>&nbsp;
+<b class="fc"><i>304</i>&nbsp;        String name2RtLStart = EMPTY;</b>
+<b class="fc"><i>305</i>&nbsp;        String name2RtLEnd = EMPTY;</b>
+<i>306</i>&nbsp;
+<b class="fc"><i>307</i>&nbsp;        for (int i = 0; i &lt; name1Char.length; i++) {</b>
+<b class="fc"><i>308</i>&nbsp;            if (i &gt; name2Size) {</b>
+<b class="fc"><i>309</i>&nbsp;                break;</b>
+<i>310</i>&nbsp;            }
+<i>311</i>&nbsp;
+<b class="fc"><i>312</i>&nbsp;            name1LtRStart = name1.substring(i, i + 1);</b>
+<b class="fc"><i>313</i>&nbsp;            name1LtREnd = name1.substring(name1Size - i, name1Size - i + 1);</b>
+<i>314</i>&nbsp;
+<b class="fc"><i>315</i>&nbsp;            name2RtLStart = name2.substring(i, i + 1);</b>
+<b class="fc"><i>316</i>&nbsp;            name2RtLEnd = name2.substring(name2Size - i, name2Size - i + 1);</b>
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;            // Left to right...
+<b class="fc"><i>319</i>&nbsp;            if (name1LtRStart.equals(name2RtLStart)) {</b>
+<b class="fc"><i>320</i>&nbsp;                name1Char[i] = &#39; &#39;;</b>
+<b class="fc"><i>321</i>&nbsp;                name2Char[i] = &#39; &#39;;</b>
+<i>322</i>&nbsp;            }
+<i>323</i>&nbsp;
+<i>324</i>&nbsp;            // Right to left...
+<b class="fc"><i>325</i>&nbsp;            if (name1LtREnd.equals(name2RtLEnd)) {</b>
+<b class="fc"><i>326</i>&nbsp;                name1Char[name1Size - i] = &#39; &#39;;</b>
+<b class="fc"><i>327</i>&nbsp;                name2Char[name2Size - i] = &#39; &#39;;</b>
+<i>328</i>&nbsp;            }
+<i>329</i>&nbsp;        }
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;        // Char arrays -&gt; string &amp; remove extraneous space
+<b class="fc"><i>332</i>&nbsp;        final String strA = new String(name1Char).replaceAll(&quot;\\s+&quot;, EMPTY);</b>
+<b class="fc"><i>333</i>&nbsp;        final String strB = new String(name2Char).replaceAll(&quot;\\s+&quot;, EMPTY);</b>
+<i>334</i>&nbsp;
+<i>335</i>&nbsp;        // Final bit - subtract longest string from 6 and return this int value
+<b class="fc"><i>336</i>&nbsp;        if (strA.length() &gt; strB.length()) {</b>
+<b class="fc"><i>337</i>&nbsp;            return Math.abs(SIX - strA.length());</b>
+<i>338</i>&nbsp;        } else {
+<b class="fc"><i>339</i>&nbsp;            return Math.abs(SIX - strB.length());</b>
+<i>340</i>&nbsp;        }
+<i>341</i>&nbsp;    }
+<i>342</i>&nbsp;
+<i>343</i>&nbsp;    /**
+<i>344</i>&nbsp;     * Removes accented letters and replaces with non-accented ascii equivalent Case is preserved.
+<i>345</i>&nbsp;     * http://www.codecodex.com/wiki/Remove_accent_from_letters_%28ex_.%C3%A9_to_e%29
+<i>346</i>&nbsp;     *
+<i>347</i>&nbsp;     * @param accentedWord
+<i>348</i>&nbsp;     *            The word that may have accents in it.
+<i>349</i>&nbsp;     * @return De-accented word
+<i>350</i>&nbsp;     */
+<i>351</i>&nbsp;    String removeAccents(final String accentedWord) {
+<b class="fc"><i>352</i>&nbsp;        if (accentedWord == null) {</b>
+<b class="fc"><i>353</i>&nbsp;            return null;</b>
+<i>354</i>&nbsp;        }
+<i>355</i>&nbsp;
+<b class="fc"><i>356</i>&nbsp;        final StringBuilder sb = new StringBuilder();</b>
+<b class="fc"><i>357</i>&nbsp;        final int n = accentedWord.length();</b>
+<i>358</i>&nbsp;
+<b class="fc"><i>359</i>&nbsp;        for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc"><i>360</i>&nbsp;            final char c = accentedWord.charAt(i);</b>
+<b class="fc"><i>361</i>&nbsp;            final int pos = UNICODE.indexOf(c);</b>
+<b class="fc"><i>362</i>&nbsp;            if (pos &gt; -1) {</b>
+<b class="fc"><i>363</i>&nbsp;                sb.append(PLAIN_ASCII.charAt(pos));</b>
+<i>364</i>&nbsp;            } else {
+<b class="fc"><i>365</i>&nbsp;                sb.append(c);</b>
+<i>366</i>&nbsp;            }
+<i>367</i>&nbsp;        }
+<i>368</i>&nbsp;
+<b class="fc"><i>369</i>&nbsp;        return sb.toString();</b>
+<i>370</i>&nbsp;    }
+<i>371</i>&nbsp;
+<i>372</i>&nbsp;    /**
+<i>373</i>&nbsp;     * Replaces any double consonant pair with the single letter equivalent.
+<i>374</i>&nbsp;     *
+<i>375</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>376</i>&nbsp;     * &lt;p&gt;
+<i>377</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>378</i>&nbsp;     * &lt;/p&gt;
+<i>379</i>&nbsp;     *
+<i>380</i>&nbsp;     * @param name
+<i>381</i>&nbsp;     *            String to have double consonants removed
+<i>382</i>&nbsp;     * @return Single consonant word
+<i>383</i>&nbsp;     */
+<i>384</i>&nbsp;    String removeDoubleConsonants(final String name) {
+<b class="fc"><i>385</i>&nbsp;        String replacedName = name.toUpperCase();</b>
+<b class="fc"><i>386</i>&nbsp;        for (final String dc : DOUBLE_CONSONANT) {</b>
+<b class="fc"><i>387</i>&nbsp;            if (replacedName.contains(dc)) {</b>
+<b class="fc"><i>388</i>&nbsp;                final String singleLetter = dc.substring(0, 1);</b>
+<b class="fc"><i>389</i>&nbsp;                replacedName = replacedName.replace(dc, singleLetter);</b>
+<i>390</i>&nbsp;            }
+<i>391</i>&nbsp;        }
+<b class="fc"><i>392</i>&nbsp;        return replacedName;</b>
+<i>393</i>&nbsp;    }
+<i>394</i>&nbsp;
+<i>395</i>&nbsp;    /**
+<i>396</i>&nbsp;     * Deletes all vowels unless the vowel begins the word.
+<i>397</i>&nbsp;     *
+<i>398</i>&nbsp;     * &lt;h2&gt;API Usage&lt;/h2&gt;
+<i>399</i>&nbsp;     * &lt;p&gt;
+<i>400</i>&nbsp;     * Consider this method private, it is package protected for unit testing only.
+<i>401</i>&nbsp;     * &lt;/p&gt;
+<i>402</i>&nbsp;     *
+<i>403</i>&nbsp;     * @param name
+<i>404</i>&nbsp;     *            The name to have vowels removed
+<i>405</i>&nbsp;     * @return De-voweled word
+<i>406</i>&nbsp;     */
+<i>407</i>&nbsp;    String removeVowels(String name) {
+<i>408</i>&nbsp;        // Extract first letter
+<b class="fc"><i>409</i>&nbsp;        final String firstLetter = name.substring(0, 1);</b>
+<i>410</i>&nbsp;
+<b class="fc"><i>411</i>&nbsp;        name = name.replaceAll(&quot;A&quot;, EMPTY);</b>
+<b class="fc"><i>412</i>&nbsp;        name = name.replaceAll(&quot;E&quot;, EMPTY);</b>
+<b class="fc"><i>413</i>&nbsp;        name = name.replaceAll(&quot;I&quot;, EMPTY);</b>
+<b class="fc"><i>414</i>&nbsp;        name = name.replaceAll(&quot;O&quot;, EMPTY);</b>
+<b class="fc"><i>415</i>&nbsp;        name = name.replaceAll(&quot;U&quot;, EMPTY);</b>
+<i>416</i>&nbsp;
+<b class="fc"><i>417</i>&nbsp;        name = name.replaceAll(&quot;\\s{2,}\\b&quot;, SPACE);</b>
+<i>418</i>&nbsp;
+<i>419</i>&nbsp;        // return isVowel(firstLetter) ? (firstLetter + name) : name;
+<b class="fc"><i>420</i>&nbsp;        if (isVowel(firstLetter)) {</b>
+<b class="fc"><i>421</i>&nbsp;            return firstLetter + name;</b>
+<i>422</i>&nbsp;        } else {
+<b class="fc"><i>423</i>&nbsp;            return name;</b>
+<i>424</i>&nbsp;        }
+<i>425</i>&nbsp;    }
+<i>426</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 18:48</div>
+</div>
+</body>
+</html>

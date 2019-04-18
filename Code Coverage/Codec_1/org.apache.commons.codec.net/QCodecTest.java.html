@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QCodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.net</a> &gt; <span class="el_source">QCodecTest.java</span></div><h1>QCodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package org.apache.commons.codec.net;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.nio.charset.UnsupportedCharsetException;
+
+import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.junit.Test;
+
+/**
+ * Quoted-printable codec test cases
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L39" title="3 of 4 branches missed.">public class QCodecTest {</span>
+
+<span class="fc" id="L41">    static final int SWISS_GERMAN_STUFF_UNICODE [] = {</span>
+        0x47, 0x72, 0xFC, 0x65, 0x7A, 0x69, 0x5F, 0x7A, 0xE4, 0x6D, 0xE4
+    };
+
+<span class="fc" id="L45">    static final int RUSSIAN_STUFF_UNICODE [] = {</span>
+        0x412, 0x441, 0x435, 0x43C, 0x5F, 0x43F, 0x440, 0x438,
+        0x432, 0x435, 0x442
+    };
+
+<span class="fc" id="L50">    private String constructString(final int [] unicodeChars) {</span>
+<span class="fc" id="L51">        final StringBuilder buffer = new StringBuilder();</span>
+<span class="pc bpc" id="L52" title="7 of 10 branches missed.">        if (unicodeChars != null) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            for (final int unicodeChar : unicodeChars) {</span>
+<span class="fc" id="L54">                buffer.append((char)unicodeChar);</span>
+            }
+        }
+<span class="fc" id="L57">        return buffer.toString();</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L61" title="All 4 branches missed.">    public void testNullInput() throws Exception {</span>
+<span class="fc" id="L62">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L63">        assertNull(qcodec.doDecoding(null));</span>
+<span class="fc" id="L64">        assertNull(qcodec.doEncoding(null));</span>
+<span class="fc" id="L65">    }</span>
+
+    @Test
+<span class="pc bnc" id="L68" title="All 4 branches missed.">    public void testUTF8RoundTrip() throws Exception {</span>
+
+<span class="fc" id="L70">        final String ru_msg = constructString(RUSSIAN_STUFF_UNICODE);</span>
+<span class="fc" id="L71">        final String ch_msg = constructString(SWISS_GERMAN_STUFF_UNICODE);</span>
+
+<span class="fc" id="L73">        final QCodec qcodec = new QCodec(CharEncoding.UTF_8);</span>
+
+<span class="fc" id="L75">        assertEquals(</span>
+            &quot;=?UTF-8?Q?=D0=92=D1=81=D0=B5=D0=BC=5F=D0=BF=D1=80=D0=B8=D0=B2=D0=B5=D1=82?=&quot;,
+<span class="fc" id="L77">        qcodec.encode(ru_msg)</span>
+        );
+<span class="fc" id="L79">        assertEquals(&quot;=?UTF-8?Q?Gr=C3=BCezi=5Fz=C3=A4m=C3=A4?=&quot;, qcodec.encode(ch_msg));</span>
+
+<span class="fc" id="L81">        assertEquals(ru_msg, qcodec.decode(qcodec.encode(ru_msg)));</span>
+<span class="fc" id="L82">        assertEquals(ch_msg, qcodec.decode(qcodec.encode(ch_msg)));</span>
+<span class="fc" id="L83">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L87" title="All 4 branches missed.">    public void testBasicEncodeDecode() throws Exception {</span>
+<span class="fc" id="L88">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L89">        final String plain = &quot;= Hello there =\r\n&quot;;</span>
+<span class="fc" id="L90">        final String encoded = qcodec.encode(plain);</span>
+<span class="fc" id="L91">        assertEquals(&quot;Basic Q encoding test&quot;,</span>
+            &quot;=?UTF-8?Q?=3D Hello there =3D=0D=0A?=&quot;, encoded);
+<span class="fc" id="L93">        assertEquals(&quot;Basic Q decoding test&quot;,</span>
+<span class="fc" id="L94">            plain, qcodec.decode(encoded));</span>
+<span class="fc" id="L95">    }</span>
+
+    @Test
+<span class="pc bnc" id="L98" title="All 4 branches missed.">    public void testUnsafeEncodeDecode() throws Exception {</span>
+<span class="fc" id="L99">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L100">        final String plain = &quot;?_=\r\n&quot;;</span>
+<span class="fc" id="L101">        final String encoded = qcodec.encode(plain);</span>
+<span class="fc" id="L102">        assertEquals(&quot;Unsafe chars Q encoding test&quot;,</span>
+            &quot;=?UTF-8?Q?=3F=5F=3D=0D=0A?=&quot;, encoded);
+<span class="fc" id="L104">        assertEquals(&quot;Unsafe chars Q decoding test&quot;,</span>
+<span class="fc" id="L105">            plain, qcodec.decode(encoded));</span>
+<span class="fc" id="L106">    }</span>
+
+    @Test
+<span class="pc bnc" id="L109" title="All 4 branches missed.">    public void testEncodeDecodeNull() throws Exception {</span>
+<span class="fc" id="L110">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L111">        assertNull(&quot;Null string Q encoding test&quot;,</span>
+<span class="fc" id="L112">            qcodec.encode((String)null));</span>
+<span class="fc" id="L113">        assertNull(&quot;Null string Q decoding test&quot;,</span>
+<span class="fc" id="L114">            qcodec.decode((String)null));</span>
+<span class="fc" id="L115">    }</span>
+
+    @Test
+<span class="pc bnc" id="L118" title="All 4 branches missed.">    public void testEncodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L119">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L120">        final String test = null;</span>
+<span class="fc" id="L121">        final String result = qcodec.encode( test, &quot;charset&quot; );</span>
+<span class="fc" id="L122">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L123">    }</span>
+
+    @Test
+<span class="pc bnc" id="L126" title="All 4 branches missed.">    public void testDecodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L127">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L128">        final String test = null;</span>
+<span class="fc" id="L129">        final String result = qcodec.decode( test );</span>
+<span class="fc" id="L130">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L131">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L135" title="All 4 branches missed.">    public void testEncodeObjects() throws Exception {</span>
+<span class="fc" id="L136">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L137">        final String plain = &quot;1+1 = 2&quot;;</span>
+<span class="fc" id="L138">        final String encoded = (String) qcodec.encode((Object) plain);</span>
+<span class="fc" id="L139">        assertEquals(&quot;Basic Q encoding test&quot;,</span>
+            &quot;=?UTF-8?Q?1+1 =3D 2?=&quot;, encoded);
+
+<span class="fc" id="L142">        final Object result = qcodec.encode((Object) null);</span>
+<span class="fc" id="L143">        assertEquals( &quot;Encoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L145">        try {</span>
+<span class="fc" id="L146">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L147">            qcodec.encode( dObj );</span>
+<span class="nc" id="L148">            fail( &quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L149">        } catch (final EncoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L151">        }</span>
+<span class="fc" id="L152">    }</span>
+
+
+    @Test(expected=UnsupportedCharsetException.class)
+<span class="pc bpc" id="L156" title="4 of 6 branches missed.">    public void testInvalidEncoding() {</span>
+<span class="nc" id="L157">        new QCodec(&quot;NONSENSE&quot;);</span>
+<span class="nc" id="L158">    }</span>
+
+    @Test
+<span class="pc bnc" id="L161" title="All 4 branches missed.">    public void testDecodeObjects() throws Exception {</span>
+<span class="fc" id="L162">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L163">        final String decoded = &quot;=?UTF-8?Q?1+1 =3D 2?=&quot;;</span>
+<span class="fc" id="L164">        final String plain = (String) qcodec.decode((Object) decoded);</span>
+<span class="fc" id="L165">        assertEquals(&quot;Basic Q decoding test&quot;,</span>
+            &quot;1+1 = 2&quot;, plain);
+
+<span class="fc" id="L168">        final Object result = qcodec.decode((Object) null);</span>
+<span class="fc" id="L169">        assertEquals( &quot;Decoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L171">        try {</span>
+<span class="fc" id="L172">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L173">            qcodec.decode( dObj );</span>
+<span class="nc" id="L174">            fail( &quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L175">        } catch (final DecoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L177">        }</span>
+<span class="fc" id="L178">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L182" title="All 4 branches missed.">    public void testEncodeDecodeBlanks() throws Exception {</span>
+<span class="fc" id="L183">        final String plain = &quot;Mind those pesky blanks&quot;;</span>
+<span class="fc" id="L184">        final String encoded1 = &quot;=?UTF-8?Q?Mind those pesky blanks?=&quot;;</span>
+<span class="fc" id="L185">        final String encoded2 = &quot;=?UTF-8?Q?Mind_those_pesky_blanks?=&quot;;</span>
+<span class="fc" id="L186">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L187">        qcodec.setEncodeBlanks(false);</span>
+<span class="fc" id="L188">        String s = qcodec.encode(plain);</span>
+<span class="fc" id="L189">        assertEquals(&quot;Blanks encoding with the Q codec test&quot;, encoded1, s);</span>
+<span class="fc" id="L190">        qcodec.setEncodeBlanks(true);</span>
+<span class="fc" id="L191">        s = qcodec.encode(plain);</span>
+<span class="fc" id="L192">        assertEquals(&quot;Blanks encoding with the Q codec test&quot;, encoded2, s);</span>
+<span class="fc" id="L193">        s = qcodec.decode(encoded1);</span>
+<span class="fc" id="L194">        assertEquals(&quot;Blanks decoding with the Q codec test&quot;, plain, s);</span>
+<span class="fc" id="L195">        s = qcodec.decode(encoded2);</span>
+<span class="fc" id="L196">        assertEquals(&quot;Blanks decoding with the Q codec test&quot;, plain, s);</span>
+<span class="fc" id="L197">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L201" title="All 4 branches missed.">    public void testLetUsMakeCloverHappy() throws Exception {</span>
+<span class="fc" id="L202">        final QCodec qcodec = new QCodec();</span>
+<span class="fc" id="L203">        qcodec.setEncodeBlanks(true);</span>
+<span class="fc" id="L204">        assertTrue(qcodec.isEncodeBlanks());</span>
+<span class="fc" id="L205">        qcodec.setEncodeBlanks(false);</span>
+<span class="fc" id="L206">        assertFalse(qcodec.isEncodeBlanks());</span>
+<span class="fc" id="L207">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

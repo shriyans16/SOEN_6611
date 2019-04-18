@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Caverphone2Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">Caverphone2Test.java</span></div><h1>Caverphone2Test.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests Caverphone2.
+ *
+ * @version $Id$
+ * @since 1.5
+ */
+<span class="pc bpc" id="L31" title="3 of 4 branches missed.">public class Caverphone2Test extends StringEncoderAbstractTest&lt;Caverphone2&gt; {</span>
+
+    @Override
+<span class="fc" id="L34">    protected Caverphone2 createStringEncoder() {</span>
+<span class="fc" id="L35">        return new Caverphone2();</span>
+    }
+
+    /**
+     * See http://caversham.otago.ac.nz/files/working/ctp150804.pdf
+     *
+     * AT11111111 words: add, aid, at, art, eat, earth, head, hit, hot, hold, hard, heart, it, out, old
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L46" title="All 4 branches missed.">    public void testCaverphoneRevisitedCommonCodeAT11111111() throws EncoderException {</span>
+<span class="fc" id="L47">        this.checkEncodingVariations(&quot;AT11111111&quot;, new String[]{</span>
+            &quot;add&quot;,
+            &quot;aid&quot;,
+            &quot;at&quot;,
+            &quot;art&quot;,
+            &quot;eat&quot;,
+            &quot;earth&quot;,
+            &quot;head&quot;,
+            &quot;hit&quot;,
+            &quot;hot&quot;,
+            &quot;hold&quot;,
+            &quot;hard&quot;,
+            &quot;heart&quot;,
+            &quot;it&quot;,
+            &quot;out&quot;,
+            &quot;old&quot;});
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * See http://caversham.otago.ac.nz/files/working/ctp150804.pdf
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L71" title="All 4 branches missed.">    public void testCaverphoneRevisitedExamples() throws EncoderException {</span>
+<span class="fc" id="L72">        final String[][] data = {{&quot;Stevenson&quot;, &quot;STFNSN1111&quot;}, {&quot;Peter&quot;, &quot;PTA1111111&quot;}};</span>
+<span class="fc" id="L73">        this.checkEncodings(data);</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * See http://caversham.otago.ac.nz/files/working/ctp150804.pdf
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L82" title="All 4 branches missed.">    public void testCaverphoneRevisitedRandomNameKLN1111111() throws EncoderException {</span>
+<span class="fc" id="L83">        this.checkEncodingVariations(&quot;KLN1111111&quot;, new String[]{</span>
+            &quot;Cailean&quot;,
+            &quot;Calan&quot;,
+            &quot;Calen&quot;,
+            &quot;Callahan&quot;,
+            &quot;Callan&quot;,
+            &quot;Callean&quot;,
+            &quot;Carleen&quot;,
+            &quot;Carlen&quot;,
+            &quot;Carlene&quot;,
+            &quot;Carlin&quot;,
+            &quot;Carline&quot;,
+            &quot;Carlyn&quot;,
+            &quot;Carlynn&quot;,
+            &quot;Carlynne&quot;,
+            &quot;Charlean&quot;,
+            &quot;Charleen&quot;,
+            &quot;Charlene&quot;,
+            &quot;Charline&quot;,
+            &quot;Cherlyn&quot;,
+            &quot;Chirlin&quot;,
+            &quot;Clein&quot;,
+            &quot;Cleon&quot;,
+            &quot;Cline&quot;,
+            &quot;Cohleen&quot;,
+            &quot;Colan&quot;,
+            &quot;Coleen&quot;,
+            &quot;Colene&quot;,
+            &quot;Colin&quot;,
+            &quot;Colleen&quot;,
+            &quot;Collen&quot;,
+            &quot;Collin&quot;,
+            &quot;Colline&quot;,
+            &quot;Colon&quot;,
+            &quot;Cullan&quot;,
+            &quot;Cullen&quot;,
+            &quot;Cullin&quot;,
+            &quot;Gaelan&quot;,
+            &quot;Galan&quot;,
+            &quot;Galen&quot;,
+            &quot;Garlan&quot;,
+            &quot;Garlen&quot;,
+            &quot;Gaulin&quot;,
+            &quot;Gayleen&quot;,
+            &quot;Gaylene&quot;,
+            &quot;Giliane&quot;,
+            &quot;Gillan&quot;,
+            &quot;Gillian&quot;,
+            &quot;Glen&quot;,
+            &quot;Glenn&quot;,
+            &quot;Glyn&quot;,
+            &quot;Glynn&quot;,
+            &quot;Gollin&quot;,
+            &quot;Gorlin&quot;,
+            &quot;Kalin&quot;,
+            &quot;Karlan&quot;,
+            &quot;Karleen&quot;,
+            &quot;Karlen&quot;,
+            &quot;Karlene&quot;,
+            &quot;Karlin&quot;,
+            &quot;Karlyn&quot;,
+            &quot;Kaylyn&quot;,
+            &quot;Keelin&quot;,
+            &quot;Kellen&quot;,
+            &quot;Kellene&quot;,
+            &quot;Kellyann&quot;,
+            &quot;Kellyn&quot;,
+            &quot;Khalin&quot;,
+            &quot;Kilan&quot;,
+            &quot;Kilian&quot;,
+            &quot;Killen&quot;,
+            &quot;Killian&quot;,
+            &quot;Killion&quot;,
+            &quot;Klein&quot;,
+            &quot;Kleon&quot;,
+            &quot;Kline&quot;,
+            &quot;Koerlin&quot;,
+            &quot;Kylen&quot;,
+            &quot;Kylynn&quot;,
+            &quot;Quillan&quot;,
+            &quot;Quillon&quot;,
+            &quot;Qulllon&quot;,
+            &quot;Xylon&quot;});
+<span class="fc" id="L166">    }</span>
+
+    /**
+     * See http://caversham.otago.ac.nz/files/working/ctp150804.pdf
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L174" title="All 4 branches missed.">    public void testCaverphoneRevisitedRandomNameTN11111111() throws EncoderException {</span>
+<span class="fc" id="L175">        this.checkEncodingVariations(&quot;TN11111111&quot;, new String[]{</span>
+            &quot;Dan&quot;,
+            &quot;Dane&quot;,
+            &quot;Dann&quot;,
+            &quot;Darn&quot;,
+            &quot;Daune&quot;,
+            &quot;Dawn&quot;,
+            &quot;Ddene&quot;,
+            &quot;Dean&quot;,
+            &quot;Deane&quot;,
+            &quot;Deanne&quot;,
+            &quot;DeeAnn&quot;,
+            &quot;Deeann&quot;,
+            &quot;Deeanne&quot;,
+            &quot;Deeyn&quot;,
+            &quot;Den&quot;,
+            &quot;Dene&quot;,
+            &quot;Denn&quot;,
+            &quot;Deonne&quot;,
+            &quot;Diahann&quot;,
+            &quot;Dian&quot;,
+            &quot;Diane&quot;,
+            &quot;Diann&quot;,
+            &quot;Dianne&quot;,
+            &quot;Diannne&quot;,
+            &quot;Dine&quot;,
+            &quot;Dion&quot;,
+            &quot;Dione&quot;,
+            &quot;Dionne&quot;,
+            &quot;Doane&quot;,
+            &quot;Doehne&quot;,
+            &quot;Don&quot;,
+            &quot;Donn&quot;,
+            &quot;Doone&quot;,
+            &quot;Dorn&quot;,
+            &quot;Down&quot;,
+            &quot;Downe&quot;,
+            &quot;Duane&quot;,
+            &quot;Dun&quot;,
+            &quot;Dunn&quot;,
+            &quot;Duyne&quot;,
+            &quot;Dyan&quot;,
+            &quot;Dyane&quot;,
+            &quot;Dyann&quot;,
+            &quot;Dyanne&quot;,
+            &quot;Dyun&quot;,
+            &quot;Tan&quot;,
+            &quot;Tann&quot;,
+            &quot;Teahan&quot;,
+            &quot;Ten&quot;,
+            &quot;Tenn&quot;,
+            &quot;Terhune&quot;,
+            &quot;Thain&quot;,
+            &quot;Thaine&quot;,
+            &quot;Thane&quot;,
+            &quot;Thanh&quot;,
+            &quot;Thayne&quot;,
+            &quot;Theone&quot;,
+            &quot;Thin&quot;,
+            &quot;Thorn&quot;,
+            &quot;Thorne&quot;,
+            &quot;Thun&quot;,
+            &quot;Thynne&quot;,
+            &quot;Tien&quot;,
+            &quot;Tine&quot;,
+            &quot;Tjon&quot;,
+            &quot;Town&quot;,
+            &quot;Towne&quot;,
+            &quot;Turne&quot;,
+            &quot;Tyne&quot;});
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * See http://caversham.otago.ac.nz/files/working/ctp150804.pdf
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L253" title="All 4 branches missed.">    public void testCaverphoneRevisitedRandomNameTTA1111111() throws EncoderException {</span>
+<span class="fc" id="L254">        this.checkEncodingVariations(&quot;TTA1111111&quot;, new String[]{</span>
+            &quot;Darda&quot;,
+            &quot;Datha&quot;,
+            &quot;Dedie&quot;,
+            &quot;Deedee&quot;,
+            &quot;Deerdre&quot;,
+            &quot;Deidre&quot;,
+            &quot;Deirdre&quot;,
+            &quot;Detta&quot;,
+            &quot;Didi&quot;,
+            &quot;Didier&quot;,
+            &quot;Dido&quot;,
+            &quot;Dierdre&quot;,
+            &quot;Dieter&quot;,
+            &quot;Dita&quot;,
+            &quot;Ditter&quot;,
+            &quot;Dodi&quot;,
+            &quot;Dodie&quot;,
+            &quot;Dody&quot;,
+            &quot;Doherty&quot;,
+            &quot;Dorthea&quot;,
+            &quot;Dorthy&quot;,
+            &quot;Doti&quot;,
+            &quot;Dotti&quot;,
+            &quot;Dottie&quot;,
+            &quot;Dotty&quot;,
+            &quot;Doty&quot;,
+            &quot;Doughty&quot;,
+            &quot;Douty&quot;,
+            &quot;Dowdell&quot;,
+            &quot;Duthie&quot;,
+            &quot;Tada&quot;,
+            &quot;Taddeo&quot;,
+            &quot;Tadeo&quot;,
+            &quot;Tadio&quot;,
+            &quot;Tati&quot;,
+            &quot;Teador&quot;,
+            &quot;Tedda&quot;,
+            &quot;Tedder&quot;,
+            &quot;Teddi&quot;,
+            &quot;Teddie&quot;,
+            &quot;Teddy&quot;,
+            &quot;Tedi&quot;,
+            &quot;Tedie&quot;,
+            &quot;Teeter&quot;,
+            &quot;Teodoor&quot;,
+            &quot;Teodor&quot;,
+            &quot;Terti&quot;,
+            &quot;Theda&quot;,
+            &quot;Theodor&quot;,
+            &quot;Theodore&quot;,
+            &quot;Theta&quot;,
+            &quot;Thilda&quot;,
+            &quot;Thordia&quot;,
+            &quot;Tilda&quot;,
+            &quot;Tildi&quot;,
+            &quot;Tildie&quot;,
+            &quot;Tildy&quot;,
+            &quot;Tita&quot;,
+            &quot;Tito&quot;,
+            &quot;Tjader&quot;,
+            &quot;Toddie&quot;,
+            &quot;Toddy&quot;,
+            &quot;Torto&quot;,
+            &quot;Tuddor&quot;,
+            &quot;Tudor&quot;,
+            &quot;Turtle&quot;,
+            &quot;Tuttle&quot;,
+            &quot;Tutto&quot;});
+<span class="fc" id="L323">    }</span>
+
+    /**
+     * See http://caversham.otago.ac.nz/files/working/ctp150804.pdf
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L331" title="All 4 branches missed.">    public void testCaverphoneRevisitedRandomWords() throws EncoderException {</span>
+<span class="fc" id="L332">        this.checkEncodingVariations(&quot;RTA1111111&quot;, new String[]{&quot;rather&quot;, &quot;ready&quot;, &quot;writer&quot;});</span>
+<span class="fc" id="L333">        this.checkEncoding(&quot;SSA1111111&quot;, &quot;social&quot;);</span>
+<span class="fc" id="L334">        this.checkEncodingVariations(&quot;APA1111111&quot;, new String[]{&quot;able&quot;, &quot;appear&quot;});</span>
+<span class="fc" id="L335">    }</span>
+
+    @Test
+<span class="pc bnc" id="L338" title="All 4 branches missed.">    public void testEndMb() throws EncoderException {</span>
+<span class="fc" id="L339">        final String[][] data = {{&quot;mb&quot;, &quot;M111111111&quot;}, {&quot;mbmb&quot;, &quot;MPM1111111&quot;}};</span>
+<span class="fc" id="L340">        this.checkEncodings(data);</span>
+<span class="fc" id="L341">    }</span>
+
+    // Caverphone Revisited
+    @Test
+<span class="pc bnc" id="L345" title="All 4 branches missed.">    public void testIsCaverphoneEquals() throws EncoderException {</span>
+<span class="fc" id="L346">        final Caverphone2 caverphone = new Caverphone2();</span>
+<span class="fc" id="L347">        Assert.assertFalse(&quot;Caverphone encodings should not be equal&quot;, caverphone.isEncodeEqual(&quot;Peter&quot;, &quot;Stevenson&quot;));</span>
+<span class="fc" id="L348">        Assert.assertTrue(&quot;Caverphone encodings should be equal&quot;, caverphone.isEncodeEqual(&quot;Peter&quot;, &quot;Peady&quot;));</span>
+<span class="fc" id="L349">    }</span>
+
+    @Test
+<span class="pc bnc" id="L352" title="All 4 branches missed.">    public void testSpecificationExamples() throws EncoderException {</span>
+<span class="fc" id="L353">        final String[][] data = {</span>
+            {&quot;Peter&quot;, &quot;PTA1111111&quot;},
+            {&quot;ready&quot;, &quot;RTA1111111&quot;},
+            {&quot;social&quot;, &quot;SSA1111111&quot;},
+            {&quot;able&quot;, &quot;APA1111111&quot;},
+            {&quot;Tedder&quot;, &quot;TTA1111111&quot;},
+            {&quot;Karleen&quot;, &quot;KLN1111111&quot;},
+            {&quot;Dyun&quot;, &quot;TN11111111&quot;}};
+<span class="fc" id="L361">        this.checkEncodings(data);</span>
+<span class="fc" id="L362">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

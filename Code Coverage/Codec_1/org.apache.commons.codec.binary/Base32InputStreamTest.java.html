@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Base32InputStreamTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">Base32InputStreamTest.java</span></div><h1>Base32InputStreamTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.binary;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+
+import org.junit.Test;
+
+<span class="pc bpc" id="L34" title="3 of 4 branches missed.">public class Base32InputStreamTest {</span>
+
+    private static final String ENCODED_FOO = &quot;MZXW6===&quot;;
+
+<span class="fc" id="L38">    private final static byte[] CRLF = { (byte) '\r', (byte) '\n' };</span>
+
+<span class="fc" id="L40">    private final static byte[] LF = { (byte) '\n' };</span>
+
+    private static final String STRING_FIXTURE = &quot;Hello World&quot;;
+
+    /**
+     * Tests the problem reported in CODEC-130. Missing / wrong implementation of skip.
+     */
+    @Test
+<span class="pc bnc" id="L48" title="All 4 branches missed.">    public void testCodec130() throws IOException {</span>
+<span class="fc" id="L49">        final ByteArrayOutputStream bos = new ByteArrayOutputStream();</span>
+<span class="fc" id="L50">        try (final Base32OutputStream base32os = new Base32OutputStream(bos)) {</span>
+<span class="fc" id="L51">            base32os.write(StringUtils.getBytesUtf8(STRING_FIXTURE));</span>
+        }
+
+<span class="fc" id="L54">        final ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());</span>
+<span class="fc" id="L55">        final Base32InputStream ins = new Base32InputStream(bis);</span>
+
+        // we skip the first character read from the reader
+<span class="fc" id="L58">        ins.skip(1);</span>
+<span class="fc" id="L59">        final byte[] decodedBytes = Base32TestData.streamToBytes(ins, new byte[64]);</span>
+<span class="fc" id="L60">        final String str = StringUtils.newStringUtf8(decodedBytes);</span>
+
+<span class="fc" id="L62">        assertEquals(STRING_FIXTURE.substring(1), str);</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Tests the bug reported in CODEC-105. Bad interactions with InputStream when reading one byte at a time.
+     */
+    @Test
+<span class="pc bnc" id="L69" title="All 4 branches missed.">    public void testCodec105() throws IOException {</span>
+<span class="fc" id="L70">        try (final Base32InputStream in = new Base32InputStream(new Codec105ErrorInputStream(), true, 0, null)) {</span>
+<span class="pc bpc" id="L71" title="4 of 10 branches missed.">            for (int i = 0; i &lt; 5; i++) {</span>
+<span class="fc" id="L72">                in.read();</span>
+            }
+        }
+<span class="fc" id="L75">    }</span>
+
+    // /**
+    // * Test for the CODEC-101 bug: InputStream.read(byte[]) should never return 0
+    // * because Java's builtin InputStreamReader hates that.
+    // *
+    // * @throws Exception for some failure scenarios.
+    // */
+    // @Test
+    // public void testCodec101() throws Exception {
+    // byte[] codec101 = StringUtils.getBytesUtf8(Base32TestData.CODEC_101_MULTIPLE_OF_3);
+    // ByteArrayInputStream bais = new ByteArrayInputStream(codec101);
+    // Base32InputStream in = new Base32InputStream(bais);
+    // byte[] result = new byte[8192];
+    // int c = in.read(result);
+    // assertTrue(&quot;Codec101: First read successful [c=&quot; + c + &quot;]&quot;, c &gt; 0);
+    //
+    // c = in.read(result);
+    // assertTrue(&quot;Codec101: Second read should report end-of-stream [c=&quot; + c + &quot;]&quot;, c &lt; 0);
+    // }
+
+    /**
+     * Another test for the CODEC-101 bug: In commons-codec-1.4 this test shows InputStreamReader explicitly hating an
+     * InputStream.read(byte[]) return of 0:
+     *
+     * java.io.IOException: Underlying input stream returned zero bytes at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:268) at
+     * sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:306) at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:158) at
+     * java.io.InputStreamReader.read(InputStreamReader.java:167) at java.io.BufferedReader.fill(BufferedReader.java:136) at
+     * java.io.BufferedReader.readLine(BufferedReader.java:299) at java.io.BufferedReader.readLine(BufferedReader.java:362) at
+     * org.apache.commons.codec.binary.Base32InputStreamTest.testInputStreamReader(Base32InputStreamTest.java:75)
+     *
+     * But in commons-codec-1.5 it's fixed. :-)
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    // @Test
+    // public void testInputStreamReader() throws Exception {
+    // byte[] codec101 = StringUtils.getBytesUtf8(Base32TestData.CODEC_101_MULTIPLE_OF_3);
+    // ByteArrayInputStream bais = new ByteArrayInputStream(codec101);
+    // Base32InputStream in = new Base32InputStream(bais);
+    // InputStreamReader isr = new InputStreamReader(in);
+    // BufferedReader br = new BufferedReader(isr);
+    // String line = br.readLine();
+    // assertNotNull(&quot;Codec101:  InputStreamReader works!&quot;, line);
+    // }
+
+    /**
+     * Test the Base32InputStream implementation against the special NPE inducing input identified in the CODEC-98 bug.
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    // @Test
+    // public void testCodec98NPE() throws Exception {
+    // byte[] codec98 = StringUtils.getBytesUtf8(Base32TestData.CODEC_98_NPE);
+    // ByteArrayInputStream data = new ByteArrayInputStream(codec98);
+    // Base32InputStream stream = new Base32InputStream(data);
+    //
+    // // This line causes an NPE in commons-codec-1.4.jar:
+    // byte[] decodedBytes = Base32TestData.streamToBytes(stream, new byte[1024]);
+    //
+    // String decoded = StringUtils.newStringUtf8(decodedBytes);
+    // assertEquals(
+    // &quot;codec-98 NPE Base32InputStream&quot;, Base32TestData.CODEC_98_NPE_DECODED, decoded
+    // );
+    // }
+
+    /**
+     * Tests skipping past the end of a stream.
+     *
+     * @throws Throwable
+     */
+    @Test
+<span class="pc bnc" id="L149" title="All 4 branches missed.">    public void testAvailable() throws Throwable {</span>
+<span class="fc" id="L150">        final InputStream ins = new ByteArrayInputStream(StringUtils.getBytesIso8859_1(ENCODED_FOO));</span>
+<span class="fc" id="L151">        try (final Base32InputStream b32stream = new Base32InputStream(ins)) {</span>
+<span class="fc" id="L152">            assertEquals(1, b32stream.available());</span>
+<span class="fc" id="L153">            assertEquals(3, b32stream.skip(10));</span>
+            // End of stream reached
+<span class="fc" id="L155">            assertEquals(0, b32stream.available());</span>
+<span class="fc" id="L156">            assertEquals(-1, b32stream.read());</span>
+<span class="fc" id="L157">            assertEquals(-1, b32stream.read());</span>
+<span class="fc" id="L158">            assertEquals(0, b32stream.available());</span>
+        }
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Tests the Base32InputStream implementation against empty input.
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    @Test
+<span class="pc bnc" id="L169" title="All 4 branches missed.">    public void testBase32EmptyInputStreamMimeChuckSize() throws Exception {</span>
+<span class="fc" id="L170">        testBase32EmptyInputStream(BaseNCodec.MIME_CHUNK_SIZE);</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * Tests the Base32InputStream implementation against empty input.
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    @Test
+<span class="pc bnc" id="L180" title="All 4 branches missed.">    public void testBase32EmptyInputStreamPemChuckSize() throws Exception {</span>
+<span class="fc" id="L181">        testBase32EmptyInputStream(BaseNCodec.PEM_CHUNK_SIZE);</span>
+<span class="fc" id="L182">    }</span>
+
+<span class="fc" id="L184">    private void testBase32EmptyInputStream(final int chuckSize) throws Exception {</span>
+<span class="fc" id="L185">        final byte[] emptyEncoded = new byte[0];</span>
+<span class="fc" id="L186">        final byte[] emptyDecoded = new byte[0];</span>
+<span class="fc" id="L187">        testByteByByte(emptyEncoded, emptyDecoded, chuckSize, CRLF);</span>
+<span class="fc" id="L188">        testByChunk(emptyEncoded, emptyDecoded, chuckSize, CRLF);</span>
+<span class="fc" id="L189">    }</span>
+
+    /**
+     * Tests the Base32InputStream implementation.
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    @Test
+<span class="pc bnc" id="L198" title="All 4 branches missed.">    public void testBase32InputStreamByChunk() throws Exception {</span>
+        // Hello World test.
+<span class="fc" id="L200">        byte[] encoded = StringUtils.getBytesUtf8(Base32TestData.BASE32_FIXTURE);</span>
+<span class="fc" id="L201">        byte[] decoded = StringUtils.getBytesUtf8(Base32TestData.STRING_FIXTURE);</span>
+<span class="fc" id="L202">        testByChunk(encoded, decoded, BaseNCodec.MIME_CHUNK_SIZE, CRLF);</span>
+
+        // Single Byte test.
+<span class="fc" id="L205">        encoded = StringUtils.getBytesUtf8(&quot;AA======\r\n&quot;);</span>
+<span class="fc" id="L206">        decoded = new byte[] { (byte) 0 };</span>
+<span class="fc" id="L207">        testByChunk(encoded, decoded, BaseNCodec.MIME_CHUNK_SIZE, CRLF);</span>
+
+        // // OpenSSL interop test.
+        // encoded = StringUtils.getBytesUtf8(Base32TestData.ENCODED_32_CHARS_PER_LINE);
+        // decoded = Base32TestData.DECODED;
+        // testByChunk(encoded, decoded, Base32.PEM_CHUNK_SIZE, LF);
+        //
+        // // Single Line test.
+        // String singleLine = Base32TestData.ENCODED_32_CHARS_PER_LINE.replaceAll(&quot;\n&quot;, &quot;&quot;);
+        // encoded = StringUtils.getBytesUtf8(singleLine);
+        // decoded = Base32TestData.DECODED;
+        // testByChunk(encoded, decoded, 0, LF);
+
+        // test random data of sizes 0 thru 150
+<span class="fc" id="L221">        final BaseNCodec codec = new Base32();</span>
+<span class="pc bpc" id="L222" title="4 of 10 branches missed.">        for (int i = 0; i &lt;= 150; i++) {</span>
+<span class="fc" id="L223">            final byte[][] randomData = Base32TestData.randomData(codec, i);</span>
+<span class="fc" id="L224">            encoded = randomData[1];</span>
+<span class="fc" id="L225">            decoded = randomData[0];</span>
+<span class="fc" id="L226">            testByChunk(encoded, decoded, 0, LF);</span>
+        }
+<span class="fc" id="L228">    }</span>
+
+    /**
+     * Tests the Base32InputStream implementation.
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    @Test
+<span class="pc bnc" id="L237" title="All 4 branches missed.">    public void testBase32InputStreamByteByByte() throws Exception {</span>
+        // Hello World test.
+<span class="fc" id="L239">        byte[] encoded = StringUtils.getBytesUtf8(Base32TestData.BASE32_FIXTURE);</span>
+<span class="fc" id="L240">        byte[] decoded = StringUtils.getBytesUtf8(Base32TestData.STRING_FIXTURE);</span>
+<span class="fc" id="L241">        testByteByByte(encoded, decoded, BaseNCodec.MIME_CHUNK_SIZE, CRLF);</span>
+
+        // Single Byte test.
+<span class="fc" id="L244">        encoded = StringUtils.getBytesUtf8(&quot;AA======\r\n&quot;);</span>
+<span class="fc" id="L245">        decoded = new byte[] { (byte) 0 };</span>
+<span class="fc" id="L246">        testByteByByte(encoded, decoded, BaseNCodec.MIME_CHUNK_SIZE, CRLF);</span>
+
+        // // Single Line test.
+        // String singleLine = Base32TestData.ENCODED_32_CHARS_PER_LINE.replaceAll(&quot;\n&quot;, &quot;&quot;);
+        // encoded = StringUtils.getBytesUtf8(singleLine);
+        // decoded = Base32TestData.DECODED;
+        // testByteByByte(encoded, decoded, 0, LF);
+
+        // test random data of sizes 0 thru 150
+<span class="fc" id="L255">        final BaseNCodec codec = new Base32();</span>
+<span class="pc bpc" id="L256" title="4 of 10 branches missed.">        for (int i = 0; i &lt;= 150; i++) {</span>
+<span class="fc" id="L257">            final byte[][] randomData = Base32TestData.randomData(codec, i);</span>
+<span class="fc" id="L258">            encoded = randomData[1];</span>
+<span class="fc" id="L259">            decoded = randomData[0];</span>
+<span class="fc" id="L260">            testByteByByte(encoded, decoded, 0, LF);</span>
+        }
+<span class="fc" id="L262">    }</span>
+
+    /**
+     * Tests method does three tests on the supplied data: 1. encoded ---[DECODE]--&gt; decoded 2. decoded ---[ENCODE]--&gt; encoded 3. decoded
+     * ---[WRAP-WRAP-WRAP-etc...] --&gt; decoded
+     * &lt;p/&gt;
+     * By &quot;[WRAP-WRAP-WRAP-etc...]&quot; we mean situation where the Base32InputStream wraps itself in encode and decode mode over and over
+     * again.
+     *
+     * @param encoded
+     *            base32 encoded data
+     * @param decoded
+     *            the data from above, but decoded
+     * @param chunkSize
+     *            chunk size (line-length) of the base32 encoded data.
+     * @param separator
+     *            Line separator in the base32 encoded data.
+     * @throws Exception
+     *             Usually signifies a bug in the Base32 commons-codec implementation.
+     */
+<span class="fc" id="L282">    private void testByChunk(final byte[] encoded, final byte[] decoded, final int chunkSize, final byte[] separator) throws Exception {</span>
+
+        // Start with encode.
+<span class="fc" id="L285">        InputStream in;</span>
+
+<span class="fc" id="L287">        in = new Base32InputStream(new ByteArrayInputStream(decoded), true, chunkSize, separator);</span>
+<span class="fc" id="L288">        byte[] output = Base32TestData.streamToBytes(in);</span>
+
+<span class="fc" id="L290">        assertEquals(&quot;EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L291">        assertEquals(&quot;Still EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L292">        assertTrue(&quot;Streaming base32 encode&quot;, Arrays.equals(output, encoded));</span>
+
+        // Now let's try decode.
+<span class="fc" id="L295">        in = new Base32InputStream(new ByteArrayInputStream(encoded));</span>
+<span class="fc" id="L296">        output = Base32TestData.streamToBytes(in);</span>
+
+<span class="fc" id="L298">        assertEquals(&quot;EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L299">        assertEquals(&quot;Still EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L300">        assertTrue(&quot;Streaming base32 decode&quot;, Arrays.equals(output, decoded));</span>
+
+        // I always wanted to do this! (wrap encoder with decoder etc etc).
+<span class="fc" id="L303">        in = new ByteArrayInputStream(decoded);</span>
+<span class="pc bpc" id="L304" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="fc" id="L305">            in = new Base32InputStream(in, true, chunkSize, separator);</span>
+<span class="fc" id="L306">            in = new Base32InputStream(in, false);</span>
+        }
+<span class="fc" id="L308">        output = Base32TestData.streamToBytes(in);</span>
+
+<span class="fc" id="L310">        assertEquals(&quot;EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L311">        assertEquals(&quot;Still EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L312">        assertTrue(&quot;Streaming base32 wrap-wrap-wrap!&quot;, Arrays.equals(output, decoded));</span>
+<span class="fc" id="L313">        in.close();</span>
+<span class="fc" id="L314">    }</span>
+
+    /**
+     * Tests method does three tests on the supplied data: 1. encoded ---[DECODE]--&gt; decoded 2. decoded ---[ENCODE]--&gt; encoded 3. decoded
+     * ---[WRAP-WRAP-WRAP-etc...] --&gt; decoded
+     * &lt;p/&gt;
+     * By &quot;[WRAP-WRAP-WRAP-etc...]&quot; we mean situation where the Base32InputStream wraps itself in encode and decode mode over and over
+     * again.
+     *
+     * @param encoded
+     *            base32 encoded data
+     * @param decoded
+     *            the data from above, but decoded
+     * @param chunkSize
+     *            chunk size (line-length) of the base32 encoded data.
+     * @param separator
+     *            Line separator in the base32 encoded data.
+     * @throws Exception
+     *             Usually signifies a bug in the Base32 commons-codec implementation.
+     */
+<span class="fc" id="L334">    private void testByteByByte(final byte[] encoded, final byte[] decoded, final int chunkSize, final byte[] separator) throws Exception {</span>
+
+        // Start with encode.
+<span class="fc" id="L337">        InputStream in;</span>
+<span class="fc" id="L338">        in = new Base32InputStream(new ByteArrayInputStream(decoded), true, chunkSize, separator);</span>
+<span class="fc" id="L339">        byte[] output = new byte[encoded.length];</span>
+<span class="pc bpc" id="L340" title="4 of 10 branches missed.">        for (int i = 0; i &lt; output.length; i++) {</span>
+<span class="fc" id="L341">            output[i] = (byte) in.read();</span>
+        }
+
+<span class="fc" id="L344">        assertEquals(&quot;EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L345">        assertEquals(&quot;Still EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L346">        assertTrue(&quot;Streaming base32 encode&quot;, Arrays.equals(output, encoded));</span>
+
+<span class="fc" id="L348">        in.close();</span>
+
+        // Now let's try decode.
+<span class="fc" id="L351">        in = new Base32InputStream(new ByteArrayInputStream(encoded));</span>
+<span class="fc" id="L352">        output = new byte[decoded.length];</span>
+<span class="pc bpc" id="L353" title="4 of 10 branches missed.">        for (int i = 0; i &lt; output.length; i++) {</span>
+<span class="fc" id="L354">            output[i] = (byte) in.read();</span>
+        }
+
+<span class="fc" id="L357">        assertEquals(&quot;EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L358">        assertEquals(&quot;Still EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L359">        assertTrue(&quot;Streaming base32 decode&quot;, Arrays.equals(output, decoded));</span>
+
+<span class="fc" id="L361">        in.close();</span>
+
+        // I always wanted to do this! (wrap encoder with decoder etc etc).
+<span class="fc" id="L364">        in = new ByteArrayInputStream(decoded);</span>
+<span class="pc bpc" id="L365" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 10; i++) {</span>
+<span class="fc" id="L366">            in = new Base32InputStream(in, true, chunkSize, separator);</span>
+<span class="fc" id="L367">            in = new Base32InputStream(in, false);</span>
+        }
+<span class="fc" id="L369">        output = new byte[decoded.length];</span>
+<span class="pc bpc" id="L370" title="4 of 10 branches missed.">        for (int i = 0; i &lt; output.length; i++) {</span>
+<span class="fc" id="L371">            output[i] = (byte) in.read();</span>
+        }
+
+<span class="fc" id="L374">        assertEquals(&quot;EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L375">        assertEquals(&quot;Still EOF&quot;, -1, in.read());</span>
+<span class="fc" id="L376">        assertTrue(&quot;Streaming base32 wrap-wrap-wrap!&quot;, Arrays.equals(output, decoded));</span>
+<span class="fc" id="L377">    }</span>
+
+    /**
+     * Tests markSupported.
+     *
+     * @throws Exception
+     */
+    @Test
+<span class="pc bnc" id="L385" title="All 4 branches missed.">    public void testMarkSupported() throws Exception {</span>
+<span class="fc" id="L386">        final byte[] decoded = StringUtils.getBytesUtf8(Base32TestData.STRING_FIXTURE);</span>
+<span class="fc" id="L387">        final ByteArrayInputStream bin = new ByteArrayInputStream(decoded);</span>
+<span class="fc" id="L388">        try (final Base32InputStream in = new Base32InputStream(bin, true, 4, new byte[] { 0, 0, 0 })) {</span>
+            // Always returns false for now.
+<span class="fc" id="L390">            assertFalse(&quot;Base32InputStream.markSupported() is false&quot;, in.markSupported());</span>
+        }
+<span class="fc" id="L392">    }</span>
+
+    /**
+     * Tests read returning 0
+     *
+     * @throws Exception
+     */
+    @Test
+<span class="pc bnc" id="L400" title="All 4 branches missed.">    public void testRead0() throws Exception {</span>
+<span class="fc" id="L401">        final byte[] decoded = StringUtils.getBytesUtf8(Base32TestData.STRING_FIXTURE);</span>
+<span class="fc" id="L402">        final byte[] buf = new byte[1024];</span>
+<span class="fc" id="L403">        int bytesRead = 0;</span>
+<span class="fc" id="L404">        final ByteArrayInputStream bin = new ByteArrayInputStream(decoded);</span>
+<span class="fc" id="L405">        try (final Base32InputStream in = new Base32InputStream(bin, true, 4, new byte[] { 0, 0, 0 })) {</span>
+<span class="fc" id="L406">            bytesRead = in.read(buf, 0, 0);</span>
+<span class="fc" id="L407">            assertEquals(&quot;Base32InputStream.read(buf, 0, 0) returns 0&quot;, 0, bytesRead);</span>
+        }
+<span class="fc" id="L409">    }</span>
+
+    /**
+     * Tests read with null.
+     *
+     * @throws Exception
+     *             for some failure scenarios.
+     */
+    @Test
+<span class="pc bnc" id="L418" title="All 4 branches missed.">    public void testReadNull() throws Exception {</span>
+<span class="fc" id="L419">        final byte[] decoded = StringUtils.getBytesUtf8(Base32TestData.STRING_FIXTURE);</span>
+<span class="fc" id="L420">        final ByteArrayInputStream bin = new ByteArrayInputStream(decoded);</span>
+<span class="fc" id="L421">        try (final Base32InputStream in = new Base32InputStream(bin, true, 4, new byte[] { 0, 0, 0 })) {</span>
+<span class="nc" id="L422">            in.read(null, 0, 0);</span>
+<span class="nc" id="L423">            fail(&quot;Base32InputStream.read(null, 0, 0) to throw a NullPointerException&quot;);</span>
+<span class="fc" id="L424">        } catch (final NullPointerException e) {</span>
+            // Expected
+<span class="nc" id="L426">        }</span>
+<span class="fc" id="L427">    }</span>
+
+    /**
+     * Tests read throwing IndexOutOfBoundsException
+     *
+     * @throws Exception
+     */
+    @Test
+<span class="pc bnc" id="L435" title="All 4 branches missed.">    public void testReadOutOfBounds() throws Exception {</span>
+<span class="fc" id="L436">        final byte[] decoded = StringUtils.getBytesUtf8(Base32TestData.STRING_FIXTURE);</span>
+<span class="fc" id="L437">        final byte[] buf = new byte[1024];</span>
+<span class="fc" id="L438">        final ByteArrayInputStream bin = new ByteArrayInputStream(decoded);</span>
+<span class="fc" id="L439">        try (final Base32InputStream in = new Base32InputStream(bin, true, 4, new byte[] { 0, 0, 0 })) {</span>
+
+<span class="fc" id="L441">            try {</span>
+<span class="nc" id="L442">                in.read(buf, -1, 0);</span>
+<span class="nc" id="L443">                fail(&quot;Expected Base32InputStream.read(buf, -1, 0) to throw IndexOutOfBoundsException&quot;);</span>
+<span class="fc" id="L444">            } catch (final IndexOutOfBoundsException e) {</span>
+                // Expected
+<span class="nc" id="L446">            }</span>
+
+<span class="fc" id="L448">            try {</span>
+<span class="nc" id="L449">                in.read(buf, 0, -1);</span>
+<span class="nc" id="L450">                fail(&quot;Expected Base32InputStream.read(buf, 0, -1) to throw IndexOutOfBoundsException&quot;);</span>
+<span class="fc" id="L451">            } catch (final IndexOutOfBoundsException e) {</span>
+                // Expected
+<span class="nc" id="L453">            }</span>
+
+<span class="fc" id="L455">            try {</span>
+<span class="nc" id="L456">                in.read(buf, buf.length + 1, 0);</span>
+<span class="nc" id="L457">                fail(&quot;Base32InputStream.read(buf, buf.length + 1, 0) throws IndexOutOfBoundsException&quot;);</span>
+<span class="fc" id="L458">            } catch (final IndexOutOfBoundsException e) {</span>
+                // Expected
+<span class="nc" id="L460">            }</span>
+
+<span class="fc" id="L462">            try {</span>
+<span class="nc" id="L463">                in.read(buf, buf.length - 1, 2);</span>
+<span class="nc" id="L464">                fail(&quot;Base32InputStream.read(buf, buf.length - 1, 2) throws IndexOutOfBoundsException&quot;);</span>
+<span class="fc" id="L465">            } catch (final IndexOutOfBoundsException e) {</span>
+                // Expected
+<span class="nc" id="L467">            }</span>
+        }
+<span class="fc" id="L469">    }</span>
+
+    /**
+     * Tests skipping as a noop
+     *
+     * @throws Throwable
+     */
+    @Test
+<span class="pc bnc" id="L477" title="All 4 branches missed.">    public void testSkipNone() throws Throwable {</span>
+<span class="fc" id="L478">        final InputStream ins = new ByteArrayInputStream(StringUtils.getBytesIso8859_1(ENCODED_FOO));</span>
+<span class="fc" id="L479">        try (final Base32InputStream b32stream = new Base32InputStream(ins)) {</span>
+<span class="fc" id="L480">            final byte[] actualBytes = new byte[6];</span>
+<span class="fc" id="L481">            assertEquals(0, b32stream.skip(0));</span>
+<span class="fc" id="L482">            b32stream.read(actualBytes, 0, actualBytes.length);</span>
+<span class="fc" id="L483">            assertArrayEquals(actualBytes, new byte[] { 102, 111, 111, 0, 0, 0 });</span>
+            // End of stream reached
+<span class="fc" id="L485">            assertEquals(-1, b32stream.read());</span>
+        }
+<span class="fc" id="L487">    }</span>
+
+    /**
+     * Tests skipping number of characters larger than the internal buffer.
+     *
+     * @throws Throwable
+     */
+    @Test
+<span class="pc bnc" id="L495" title="All 4 branches missed.">    public void testSkipBig() throws Throwable {</span>
+<span class="fc" id="L496">        final InputStream ins = new ByteArrayInputStream(StringUtils.getBytesIso8859_1(ENCODED_FOO));</span>
+<span class="fc" id="L497">        try (final Base32InputStream b32stream = new Base32InputStream(ins)) {</span>
+<span class="fc" id="L498">            assertEquals(3, b32stream.skip(1024));</span>
+            // End of stream reached
+<span class="fc" id="L500">            assertEquals(-1, b32stream.read());</span>
+<span class="fc" id="L501">            assertEquals(-1, b32stream.read());</span>
+        }
+<span class="fc" id="L503">    }</span>
+
+    /**
+     * Tests skipping past the end of a stream.
+     *
+     * @throws Throwable
+     */
+    @Test
+<span class="pc bnc" id="L511" title="All 4 branches missed.">    public void testSkipPastEnd() throws Throwable {</span>
+<span class="fc" id="L512">        final InputStream ins = new ByteArrayInputStream(StringUtils.getBytesIso8859_1(ENCODED_FOO));</span>
+<span class="fc" id="L513">        try (final Base32InputStream b32stream = new Base32InputStream(ins)) {</span>
+            // due to CODEC-130, skip now skips correctly decoded characters rather than encoded
+<span class="fc" id="L515">            assertEquals(3, b32stream.skip(10));</span>
+            // End of stream reached
+<span class="fc" id="L517">            assertEquals(-1, b32stream.read());</span>
+<span class="fc" id="L518">            assertEquals(-1, b32stream.read());</span>
+        }
+<span class="fc" id="L520">}</span>
+
+    /**
+     * Tests skipping to the end of a stream.
+     *
+     * @throws Throwable
+     */
+    @Test
+<span class="pc bnc" id="L528" title="All 4 branches missed.">    public void testSkipToEnd() throws Throwable {</span>
+<span class="fc" id="L529">        final InputStream ins = new ByteArrayInputStream(StringUtils.getBytesIso8859_1(ENCODED_FOO));</span>
+<span class="fc" id="L530">        try (final Base32InputStream b32stream = new Base32InputStream(ins)) {</span>
+            // due to CODEC-130, skip now skips correctly decoded characters rather than encoded
+<span class="fc" id="L532">            assertEquals(3, b32stream.skip(3));</span>
+            // End of stream reached
+<span class="fc" id="L534">            assertEquals(-1, b32stream.read());</span>
+<span class="fc" id="L535">            assertEquals(-1, b32stream.read());</span>
+        }
+<span class="fc" id="L537">    }</span>
+
+    /**
+     * Tests if negative arguments to skip are handled correctly.
+     *
+     * @throws Throwable
+     */
+    @Test(expected=IllegalArgumentException.class)
+<span class="pc bpc" id="L545" title="4 of 6 branches missed.">    public void testSkipWrongArgument() throws Throwable {</span>
+<span class="fc" id="L546">        final InputStream ins = new ByteArrayInputStream(StringUtils.getBytesIso8859_1(ENCODED_FOO));</span>
+<span class="fc" id="L547">        try (final Base32InputStream b32stream = new Base32InputStream(ins)) {</span>
+<span class="nc" id="L548">            b32stream.skip(-10);</span>
+        }
+<span class="nc" id="L550">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

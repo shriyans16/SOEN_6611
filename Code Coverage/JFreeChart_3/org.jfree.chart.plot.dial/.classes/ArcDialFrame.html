@@ -1,0 +1,604 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ArcDialFrame</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot.dial</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ArcDialFrame (org.jfree.chart.plot.dial)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ArcDialFrame</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    56%
+  </span>
+  <span class="absValue">
+    (14/ 25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63%
+  </span>
+  <span class="absValue">
+    (80/ 127)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------
+<i>28</i>&nbsp; * ArcDialFrame.java
+<i>29</i>&nbsp; * -----------------
+<i>30</i>&nbsp; * (C) Copyright 2006-2013, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 03-Nov-2006 : Version 1 (DG);
+<i>38</i>&nbsp; * 08-Mar-2007 : Fix in hashCode() (DG);
+<i>39</i>&nbsp; * 17-Oct-2007 : Updated equals() (DG);
+<i>40</i>&nbsp; * 24-Oct-2007 : Added argument checks and API docs, and renamed
+<i>41</i>&nbsp; *               StandardDialFrame --&gt; ArcDialFrame (DG);
+<i>42</i>&nbsp; *
+<i>43</i>&nbsp; */
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;package org.jfree.chart.plot.dial;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;import java.awt.BasicStroke;
+<i>48</i>&nbsp;import java.awt.Color;
+<i>49</i>&nbsp;import java.awt.Graphics2D;
+<i>50</i>&nbsp;import java.awt.Paint;
+<i>51</i>&nbsp;import java.awt.Shape;
+<i>52</i>&nbsp;import java.awt.Stroke;
+<i>53</i>&nbsp;import java.awt.geom.Arc2D;
+<i>54</i>&nbsp;import java.awt.geom.Area;
+<i>55</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>56</i>&nbsp;import java.awt.geom.Point2D;
+<i>57</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>58</i>&nbsp;import java.io.IOException;
+<i>59</i>&nbsp;import java.io.ObjectInputStream;
+<i>60</i>&nbsp;import java.io.ObjectOutputStream;
+<i>61</i>&nbsp;import java.io.Serializable;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;import org.jfree.chart.HashUtilities;
+<i>64</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>65</i>&nbsp;import org.jfree.io.SerialUtilities;
+<i>66</i>&nbsp;import org.jfree.util.PaintUtilities;
+<i>67</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;/**
+<i>70</i>&nbsp; * A standard frame for the {@link DialPlot} class.
+<i>71</i>&nbsp; *
+<i>72</i>&nbsp; * @since 1.0.7
+<i>73</i>&nbsp; */
+<i>74</i>&nbsp;public class ArcDialFrame extends AbstractDialLayer implements DialFrame,
+<i>75</i>&nbsp;        Cloneable, PublicCloneable, Serializable {
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /** For serialization. */
+<i>78</i>&nbsp;    static final long serialVersionUID = -4089176959553523499L;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * The color used for the front of the panel.  This field is transient
+<i>82</i>&nbsp;     * because it requires special handling for serialization.
+<i>83</i>&nbsp;     */
+<i>84</i>&nbsp;    private transient Paint backgroundPaint;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * The color used for the border around the window. This field is transient
+<i>88</i>&nbsp;     * because it requires special handling for serialization.
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    private transient Paint foregroundPaint;
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    /**
+<i>93</i>&nbsp;     * The stroke for drawing the frame outline.  This field is transient
+<i>94</i>&nbsp;     * because it requires special handling for serialization.
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    private transient Stroke stroke;
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * The start angle.
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    private double startAngle;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * The end angle.
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    private double extent;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /** The inner radius, relative to the framing rectangle. */
+<i>109</i>&nbsp;    private double innerRadius;
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /** The outer radius, relative to the framing rectangle. */
+<i>112</i>&nbsp;    private double outerRadius;
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    /**
+<i>115</i>&nbsp;     * Creates a new instance of &lt;code&gt;ArcDialFrame&lt;/code&gt; that spans
+<i>116</i>&nbsp;     * 180 degrees.
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    public ArcDialFrame() {
+<b class="fc"><i>119</i>&nbsp;        this(0, 180);</b>
+<b class="fc"><i>120</i>&nbsp;    }</b>
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Creates a new instance of &lt;code&gt;ArcDialFrame&lt;/code&gt; that spans
+<i>124</i>&nbsp;     * the arc specified.
+<i>125</i>&nbsp;     *
+<i>126</i>&nbsp;     * @param startAngle  the startAngle (in degrees).
+<i>127</i>&nbsp;     * @param extent  the extent of the arc (in degrees, counter-clockwise).
+<i>128</i>&nbsp;     */
+<b class="fc"><i>129</i>&nbsp;    public ArcDialFrame(double startAngle, double extent) {</b>
+<b class="fc"><i>130</i>&nbsp;        this.backgroundPaint = Color.gray;</b>
+<b class="fc"><i>131</i>&nbsp;        this.foregroundPaint = new Color(100, 100, 150);</b>
+<b class="fc"><i>132</i>&nbsp;        this.stroke = new BasicStroke(2.0f);</b>
+<b class="fc"><i>133</i>&nbsp;        this.innerRadius = 0.25;</b>
+<b class="fc"><i>134</i>&nbsp;        this.outerRadius = 0.75;</b>
+<b class="fc"><i>135</i>&nbsp;        this.startAngle = startAngle;</b>
+<b class="fc"><i>136</i>&nbsp;        this.extent = extent;</b>
+<b class="fc"><i>137</i>&nbsp;    }</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /**
+<i>140</i>&nbsp;     * Returns the background paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>141</i>&nbsp;     *
+<i>142</i>&nbsp;     * @return The background paint.
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @see #setBackgroundPaint(Paint)
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public Paint getBackgroundPaint() {
+<b class="nc"><i>147</i>&nbsp;        return this.backgroundPaint;</b>
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    /**
+<i>151</i>&nbsp;     * Sets the background paint and sends a {@link DialLayerChangeEvent} to
+<i>152</i>&nbsp;     * all registered listeners.
+<i>153</i>&nbsp;     *
+<i>154</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>155</i>&nbsp;     *
+<i>156</i>&nbsp;     * @see #getBackgroundPaint()
+<i>157</i>&nbsp;     */
+<i>158</i>&nbsp;    public void setBackgroundPaint(Paint paint) {
+<b class="fc"><i>159</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>160</i>&nbsp;        this.backgroundPaint = paint;</b>
+<b class="fc"><i>161</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>162</i>&nbsp;    }</b>
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * Returns the foreground paint.
+<i>166</i>&nbsp;     *
+<i>167</i>&nbsp;     * @return The foreground paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>168</i>&nbsp;     *
+<i>169</i>&nbsp;     * @see #setForegroundPaint(Paint)
+<i>170</i>&nbsp;     */
+<i>171</i>&nbsp;    public Paint getForegroundPaint() {
+<b class="nc"><i>172</i>&nbsp;        return this.foregroundPaint;</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Sets the foreground paint and sends a {@link DialLayerChangeEvent} to
+<i>177</i>&nbsp;     * all registered listeners.
+<i>178</i>&nbsp;     *
+<i>179</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>180</i>&nbsp;     *
+<i>181</i>&nbsp;     * @see #getForegroundPaint()
+<i>182</i>&nbsp;     */
+<i>183</i>&nbsp;    public void setForegroundPaint(Paint paint) {
+<b class="fc"><i>184</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>185</i>&nbsp;        this.foregroundPaint = paint;</b>
+<b class="fc"><i>186</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>187</i>&nbsp;    }</b>
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    /**
+<i>190</i>&nbsp;     * Returns the stroke.
+<i>191</i>&nbsp;     *
+<i>192</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>193</i>&nbsp;     *
+<i>194</i>&nbsp;     * @see #setStroke(Stroke)
+<i>195</i>&nbsp;     */
+<i>196</i>&nbsp;    public Stroke getStroke() {
+<b class="nc"><i>197</i>&nbsp;        return this.stroke;</b>
+<i>198</i>&nbsp;    }
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /**
+<i>201</i>&nbsp;     * Sets the stroke and sends a {@link DialLayerChangeEvent} to
+<i>202</i>&nbsp;     * all registered listeners.
+<i>203</i>&nbsp;     *
+<i>204</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>205</i>&nbsp;     *
+<i>206</i>&nbsp;     * @see #getStroke()
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    public void setStroke(Stroke stroke) {
+<b class="fc"><i>209</i>&nbsp;        ParamChecks.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="fc"><i>210</i>&nbsp;        this.stroke = stroke;</b>
+<b class="fc"><i>211</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>212</i>&nbsp;    }</b>
+<i>213</i>&nbsp;
+<i>214</i>&nbsp;    /**
+<i>215</i>&nbsp;     * Returns the inner radius, relative to the framing rectangle.
+<i>216</i>&nbsp;     *
+<i>217</i>&nbsp;     * @return The inner radius.
+<i>218</i>&nbsp;     *
+<i>219</i>&nbsp;     * @see #setInnerRadius(double)
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;    public double getInnerRadius() {
+<b class="nc"><i>222</i>&nbsp;        return this.innerRadius;</b>
+<i>223</i>&nbsp;    }
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;    /**
+<i>226</i>&nbsp;     * Sets the inner radius and sends a {@link DialLayerChangeEvent} to
+<i>227</i>&nbsp;     * all registered listeners.
+<i>228</i>&nbsp;     *
+<i>229</i>&nbsp;     * @param radius  the inner radius.
+<i>230</i>&nbsp;     *
+<i>231</i>&nbsp;     * @see #getInnerRadius()
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    public void setInnerRadius(double radius) {
+<b class="fc"><i>234</i>&nbsp;        if (radius &lt; 0.0) {</b>
+<b class="nc"><i>235</i>&nbsp;            throw new IllegalArgumentException(&quot;Negative &#39;radius&#39; argument.&quot;);</b>
+<i>236</i>&nbsp;        }
+<b class="fc"><i>237</i>&nbsp;        this.innerRadius = radius;</b>
+<b class="fc"><i>238</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>239</i>&nbsp;    }</b>
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Returns the outer radius, relative to the framing rectangle.
+<i>243</i>&nbsp;     *
+<i>244</i>&nbsp;     * @return The outer radius.
+<i>245</i>&nbsp;     *
+<i>246</i>&nbsp;     * @see #setOuterRadius(double)
+<i>247</i>&nbsp;     */
+<i>248</i>&nbsp;    public double getOuterRadius() {
+<b class="nc"><i>249</i>&nbsp;        return this.outerRadius;</b>
+<i>250</i>&nbsp;    }
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    /**
+<i>253</i>&nbsp;     * Sets the outer radius and sends a {@link DialLayerChangeEvent} to
+<i>254</i>&nbsp;     * all registered listeners.
+<i>255</i>&nbsp;     *
+<i>256</i>&nbsp;     * @param radius  the outer radius.
+<i>257</i>&nbsp;     *
+<i>258</i>&nbsp;     * @see #getOuterRadius()
+<i>259</i>&nbsp;     */
+<i>260</i>&nbsp;    public void setOuterRadius(double radius) {
+<b class="fc"><i>261</i>&nbsp;        if (radius &lt; 0.0) {</b>
+<b class="nc"><i>262</i>&nbsp;            throw new IllegalArgumentException(&quot;Negative &#39;radius&#39; argument.&quot;);</b>
+<i>263</i>&nbsp;        }
+<b class="fc"><i>264</i>&nbsp;        this.outerRadius = radius;</b>
+<b class="fc"><i>265</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>266</i>&nbsp;    }</b>
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    /**
+<i>269</i>&nbsp;     * Returns the start angle.
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @return The start angle.
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @see #setStartAngle(double)
+<i>274</i>&nbsp;     */
+<i>275</i>&nbsp;    public double getStartAngle() {
+<b class="nc"><i>276</i>&nbsp;        return this.startAngle;</b>
+<i>277</i>&nbsp;    }
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    /**
+<i>280</i>&nbsp;     * Sets the start angle and sends a {@link DialLayerChangeEvent} to
+<i>281</i>&nbsp;     * all registered listeners.
+<i>282</i>&nbsp;     *
+<i>283</i>&nbsp;     * @param angle  the angle.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @see #getStartAngle()
+<i>286</i>&nbsp;     */
+<i>287</i>&nbsp;    public void setStartAngle(double angle) {
+<b class="fc"><i>288</i>&nbsp;        this.startAngle = angle;</b>
+<b class="fc"><i>289</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>290</i>&nbsp;    }</b>
+<i>291</i>&nbsp;
+<i>292</i>&nbsp;    /**
+<i>293</i>&nbsp;     * Returns the extent.
+<i>294</i>&nbsp;     *
+<i>295</i>&nbsp;     * @return The extent.
+<i>296</i>&nbsp;     *
+<i>297</i>&nbsp;     * @see #setExtent(double)
+<i>298</i>&nbsp;     */
+<i>299</i>&nbsp;    public double getExtent() {
+<b class="nc"><i>300</i>&nbsp;        return this.extent;</b>
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    /**
+<i>304</i>&nbsp;     * Sets the extent and sends a {@link DialLayerChangeEvent} to
+<i>305</i>&nbsp;     * all registered listeners.
+<i>306</i>&nbsp;     *
+<i>307</i>&nbsp;     * @param extent  the extent.
+<i>308</i>&nbsp;     *
+<i>309</i>&nbsp;     * @see #getExtent()
+<i>310</i>&nbsp;     */
+<i>311</i>&nbsp;    public void setExtent(double extent) {
+<b class="fc"><i>312</i>&nbsp;        this.extent = extent;</b>
+<b class="fc"><i>313</i>&nbsp;        notifyListeners(new DialLayerChangeEvent(this));</b>
+<b class="fc"><i>314</i>&nbsp;    }</b>
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;    /**
+<i>317</i>&nbsp;     * Returns the shape for the window for this dial.  Some dial layers will
+<i>318</i>&nbsp;     * request that their drawing be clipped within this window.
+<i>319</i>&nbsp;     *
+<i>320</i>&nbsp;     * @param frame  the reference frame (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>321</i>&nbsp;     *
+<i>322</i>&nbsp;     * @return The shape of the dial&#39;s window.
+<i>323</i>&nbsp;     */
+<i>324</i>&nbsp;    @Override
+<i>325</i>&nbsp;    public Shape getWindow(Rectangle2D frame) {
+<i>326</i>&nbsp;
+<b class="nc"><i>327</i>&nbsp;        Rectangle2D innerFrame = DialPlot.rectangleByRadius(frame,</b>
+<i>328</i>&nbsp;                this.innerRadius, this.innerRadius);
+<b class="nc"><i>329</i>&nbsp;        Rectangle2D outerFrame = DialPlot.rectangleByRadius(frame,</b>
+<i>330</i>&nbsp;                this.outerRadius, this.outerRadius);
+<b class="nc"><i>331</i>&nbsp;        Arc2D inner = new Arc2D.Double(innerFrame, this.startAngle,</b>
+<i>332</i>&nbsp;                this.extent, Arc2D.OPEN);
+<b class="nc"><i>333</i>&nbsp;        Arc2D outer = new Arc2D.Double(outerFrame, this.startAngle</b>
+<i>334</i>&nbsp;                + this.extent, -this.extent, Arc2D.OPEN);
+<b class="nc"><i>335</i>&nbsp;        GeneralPath p = new GeneralPath();</b>
+<b class="nc"><i>336</i>&nbsp;        Point2D point1 = inner.getStartPoint();</b>
+<b class="nc"><i>337</i>&nbsp;        p.moveTo((float) point1.getX(), (float) point1.getY());</b>
+<b class="nc"><i>338</i>&nbsp;        p.append(inner, true);</b>
+<b class="nc"><i>339</i>&nbsp;        p.append(outer, true);</b>
+<b class="nc"><i>340</i>&nbsp;        p.closePath();</b>
+<b class="nc"><i>341</i>&nbsp;        return p;</b>
+<i>342</i>&nbsp;
+<i>343</i>&nbsp;    }
+<i>344</i>&nbsp;
+<i>345</i>&nbsp;    /**
+<i>346</i>&nbsp;     * Returns the outer window.
+<i>347</i>&nbsp;     *
+<i>348</i>&nbsp;     * @param frame  the frame.
+<i>349</i>&nbsp;     *
+<i>350</i>&nbsp;     * @return The outer window.
+<i>351</i>&nbsp;     */
+<i>352</i>&nbsp;    protected Shape getOuterWindow(Rectangle2D frame) {
+<b class="nc"><i>353</i>&nbsp;        double radiusMargin = 0.02;</b>
+<b class="nc"><i>354</i>&nbsp;        double angleMargin = 1.5;</b>
+<b class="nc"><i>355</i>&nbsp;        Rectangle2D innerFrame = DialPlot.rectangleByRadius(frame,</b>
+<i>356</i>&nbsp;                this.innerRadius - radiusMargin, this.innerRadius
+<i>357</i>&nbsp;                - radiusMargin);
+<b class="nc"><i>358</i>&nbsp;        Rectangle2D outerFrame = DialPlot.rectangleByRadius(frame,</b>
+<i>359</i>&nbsp;                this.outerRadius + radiusMargin, this.outerRadius
+<i>360</i>&nbsp;                + radiusMargin);
+<b class="nc"><i>361</i>&nbsp;        Arc2D inner = new Arc2D.Double(innerFrame, this.startAngle</b>
+<i>362</i>&nbsp;                - angleMargin, this.extent + 2 * angleMargin, Arc2D.OPEN);
+<b class="nc"><i>363</i>&nbsp;        Arc2D outer = new Arc2D.Double(outerFrame, this.startAngle</b>
+<i>364</i>&nbsp;                + angleMargin + this.extent, -this.extent - 2 * angleMargin,
+<i>365</i>&nbsp;                Arc2D.OPEN);
+<b class="nc"><i>366</i>&nbsp;        GeneralPath p = new GeneralPath();</b>
+<b class="nc"><i>367</i>&nbsp;        Point2D point1 = inner.getStartPoint();</b>
+<b class="nc"><i>368</i>&nbsp;        p.moveTo((float) point1.getX(), (float) point1.getY());</b>
+<b class="nc"><i>369</i>&nbsp;        p.append(inner, true);</b>
+<b class="nc"><i>370</i>&nbsp;        p.append(outer, true);</b>
+<b class="nc"><i>371</i>&nbsp;        p.closePath();</b>
+<b class="nc"><i>372</i>&nbsp;        return p;</b>
+<i>373</i>&nbsp;    }
+<i>374</i>&nbsp;
+<i>375</i>&nbsp;    /**
+<i>376</i>&nbsp;     * Draws the frame.
+<i>377</i>&nbsp;     *
+<i>378</i>&nbsp;     * @param g2  the graphics target.
+<i>379</i>&nbsp;     * @param plot  the plot.
+<i>380</i>&nbsp;     * @param frame  the dial&#39;s reference frame.
+<i>381</i>&nbsp;     * @param view  the dial&#39;s view rectangle.
+<i>382</i>&nbsp;     */
+<i>383</i>&nbsp;    @Override
+<i>384</i>&nbsp;    public void draw(Graphics2D g2, DialPlot plot, Rectangle2D frame,
+<i>385</i>&nbsp;            Rectangle2D view) {
+<i>386</i>&nbsp;
+<b class="nc"><i>387</i>&nbsp;        Shape window = getWindow(frame);</b>
+<b class="nc"><i>388</i>&nbsp;        Shape outerWindow = getOuterWindow(frame);</b>
+<i>389</i>&nbsp;
+<b class="nc"><i>390</i>&nbsp;        Area area1 = new Area(outerWindow);</b>
+<b class="nc"><i>391</i>&nbsp;        Area area2 = new Area(window);</b>
+<b class="nc"><i>392</i>&nbsp;        area1.subtract(area2);</b>
+<b class="nc"><i>393</i>&nbsp;        g2.setPaint(Color.lightGray);</b>
+<b class="nc"><i>394</i>&nbsp;        g2.fill(area1);</b>
+<i>395</i>&nbsp;
+<b class="nc"><i>396</i>&nbsp;        g2.setStroke(this.stroke);</b>
+<b class="nc"><i>397</i>&nbsp;        g2.setPaint(this.foregroundPaint);</b>
+<b class="nc"><i>398</i>&nbsp;        g2.draw(window);</b>
+<b class="nc"><i>399</i>&nbsp;        g2.draw(outerWindow);</b>
+<i>400</i>&nbsp;
+<b class="nc"><i>401</i>&nbsp;    }</b>
+<i>402</i>&nbsp;
+<i>403</i>&nbsp;    /**
+<i>404</i>&nbsp;     * Returns &lt;code&gt;false&lt;/code&gt; to indicate that this dial layer is not
+<i>405</i>&nbsp;     * clipped to the dial window.
+<i>406</i>&nbsp;     *
+<i>407</i>&nbsp;     * @return &lt;code&gt;false&lt;/code&gt;.
+<i>408</i>&nbsp;     */
+<i>409</i>&nbsp;    @Override
+<i>410</i>&nbsp;    public boolean isClippedToWindow() {
+<b class="nc"><i>411</i>&nbsp;        return false;</b>
+<i>412</i>&nbsp;    }
+<i>413</i>&nbsp;
+<i>414</i>&nbsp;    /**
+<i>415</i>&nbsp;     * Tests this instance for equality with an arbitrary object.
+<i>416</i>&nbsp;     *
+<i>417</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>418</i>&nbsp;     *
+<i>419</i>&nbsp;     * @return A boolean.
+<i>420</i>&nbsp;     */
+<i>421</i>&nbsp;    @Override
+<i>422</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>423</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>424</i>&nbsp;            return true;</b>
+<i>425</i>&nbsp;        }
+<b class="fc"><i>426</i>&nbsp;        if (!(obj instanceof ArcDialFrame)) {</b>
+<b class="nc"><i>427</i>&nbsp;            return false;</b>
+<i>428</i>&nbsp;        }
+<b class="fc"><i>429</i>&nbsp;        ArcDialFrame that = (ArcDialFrame) obj;</b>
+<b class="fc"><i>430</i>&nbsp;        if (!PaintUtilities.equal(this.backgroundPaint, that.backgroundPaint)) {</b>
+<b class="fc"><i>431</i>&nbsp;            return false;</b>
+<i>432</i>&nbsp;        }
+<b class="fc"><i>433</i>&nbsp;        if (!PaintUtilities.equal(this.foregroundPaint, that.foregroundPaint)) {</b>
+<b class="fc"><i>434</i>&nbsp;            return false;</b>
+<i>435</i>&nbsp;        }
+<b class="fc"><i>436</i>&nbsp;        if (this.startAngle != that.startAngle) {</b>
+<b class="fc"><i>437</i>&nbsp;            return false;</b>
+<i>438</i>&nbsp;        }
+<b class="fc"><i>439</i>&nbsp;        if (this.extent != that.extent) {</b>
+<b class="fc"><i>440</i>&nbsp;            return false;</b>
+<i>441</i>&nbsp;        }
+<b class="fc"><i>442</i>&nbsp;        if (this.innerRadius != that.innerRadius) {</b>
+<b class="fc"><i>443</i>&nbsp;            return false;</b>
+<i>444</i>&nbsp;        }
+<b class="fc"><i>445</i>&nbsp;        if (this.outerRadius != that.outerRadius) {</b>
+<b class="fc"><i>446</i>&nbsp;            return false;</b>
+<i>447</i>&nbsp;        }
+<b class="fc"><i>448</i>&nbsp;        if (!this.stroke.equals(that.stroke)) {</b>
+<b class="fc"><i>449</i>&nbsp;            return false;</b>
+<i>450</i>&nbsp;        }
+<b class="fc"><i>451</i>&nbsp;        return super.equals(obj);</b>
+<i>452</i>&nbsp;    }
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;    /**
+<i>455</i>&nbsp;     * Returns a hash code for this instance.
+<i>456</i>&nbsp;     *
+<i>457</i>&nbsp;     * @return The hash code.
+<i>458</i>&nbsp;     */
+<i>459</i>&nbsp;    @Override
+<i>460</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>461</i>&nbsp;        int result = 193;</b>
+<b class="fc"><i>462</i>&nbsp;        long temp = Double.doubleToLongBits(this.startAngle);</b>
+<b class="fc"><i>463</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>464</i>&nbsp;        temp = Double.doubleToLongBits(this.extent);</b>
+<b class="fc"><i>465</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>466</i>&nbsp;        temp = Double.doubleToLongBits(this.innerRadius);</b>
+<b class="fc"><i>467</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>468</i>&nbsp;        temp = Double.doubleToLongBits(this.outerRadius);</b>
+<b class="fc"><i>469</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>470</i>&nbsp;        result = 37 * result + HashUtilities.hashCodeForPaint(</b>
+<i>471</i>&nbsp;                this.backgroundPaint);
+<b class="fc"><i>472</i>&nbsp;        result = 37 * result + HashUtilities.hashCodeForPaint(</b>
+<i>473</i>&nbsp;                this.foregroundPaint);
+<b class="fc"><i>474</i>&nbsp;        result = 37 * result + this.stroke.hashCode();</b>
+<b class="fc"><i>475</i>&nbsp;        return result;</b>
+<i>476</i>&nbsp;    }
+<i>477</i>&nbsp;
+<i>478</i>&nbsp;    /**
+<i>479</i>&nbsp;     * Returns a clone of this instance.
+<i>480</i>&nbsp;     *
+<i>481</i>&nbsp;     * @return A clone.
+<i>482</i>&nbsp;     *
+<i>483</i>&nbsp;     * @throws CloneNotSupportedException if any attribute of this instance
+<i>484</i>&nbsp;     *     cannot be cloned.
+<i>485</i>&nbsp;     */
+<i>486</i>&nbsp;    @Override
+<i>487</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>488</i>&nbsp;        return super.clone();</b>
+<i>489</i>&nbsp;    }
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;    /**
+<i>492</i>&nbsp;     * Provides serialization support.
+<i>493</i>&nbsp;     *
+<i>494</i>&nbsp;     * @param stream  the output stream.
+<i>495</i>&nbsp;     *
+<i>496</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>497</i>&nbsp;     */
+<i>498</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>499</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>500</i>&nbsp;        SerialUtilities.writePaint(this.backgroundPaint, stream);</b>
+<b class="fc"><i>501</i>&nbsp;        SerialUtilities.writePaint(this.foregroundPaint, stream);</b>
+<b class="fc"><i>502</i>&nbsp;        SerialUtilities.writeStroke(this.stroke, stream);</b>
+<b class="fc"><i>503</i>&nbsp;    }</b>
+<i>504</i>&nbsp;
+<i>505</i>&nbsp;    /**
+<i>506</i>&nbsp;     * Provides serialization support.
+<i>507</i>&nbsp;     *
+<i>508</i>&nbsp;     * @param stream  the input stream.
+<i>509</i>&nbsp;     *
+<i>510</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>511</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>512</i>&nbsp;     */
+<i>513</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>514</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>515</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>516</i>&nbsp;        this.backgroundPaint = SerialUtilities.readPaint(stream);</b>
+<b class="fc"><i>517</i>&nbsp;        this.foregroundPaint = SerialUtilities.readPaint(stream);</b>
+<b class="fc"><i>518</i>&nbsp;        this.stroke = SerialUtilities.readStroke(stream);</b>
+<b class="fc"><i>519</i>&nbsp;    }</b>
+<i>520</i>&nbsp;
+<i>521</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

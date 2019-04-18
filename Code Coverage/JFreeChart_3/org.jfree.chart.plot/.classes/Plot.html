@@ -1,0 +1,1628 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Plot</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Plot (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Plot</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.2%
+  </span>
+  <span class="absValue">
+    (47/ 66)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68.9%
+  </span>
+  <span class="absValue">
+    (246/ 357)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------
+<i>28</i>&nbsp; * Plot.java
+<i>29</i>&nbsp; * ---------
+<i>30</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Sylvain Vieujot;
+<i>34</i>&nbsp; *                   Jeremy Bowman;
+<i>35</i>&nbsp; *                   Andreas Schneider;
+<i>36</i>&nbsp; *                   Gideon Krause;
+<i>37</i>&nbsp; *                   Nicolas Brodu;
+<i>38</i>&nbsp; *                   Michal Krause;
+<i>39</i>&nbsp; *                   Richard West, Advanced Micro Devices, Inc.;
+<i>40</i>&nbsp; *                   Peter Kolb - patches 2603321, 2809117;
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; * Changes
+<i>43</i>&nbsp; * -------
+<i>44</i>&nbsp; * 21-Jun-2001 : Removed redundant JFreeChart parameter from constructors (DG);
+<i>45</i>&nbsp; * 18-Sep-2001 : Updated header info and fixed DOS encoding problem (DG);
+<i>46</i>&nbsp; * 19-Oct-2001 : Moved series paint and stroke methods from JFreeChart
+<i>47</i>&nbsp; *               class (DG);
+<i>48</i>&nbsp; * 23-Oct-2001 : Created renderer for LinePlot class (DG);
+<i>49</i>&nbsp; * 07-Nov-2001 : Changed type names for ChartChangeEvent (DG);
+<i>50</i>&nbsp; *               Tidied up some Javadoc comments (DG);
+<i>51</i>&nbsp; * 13-Nov-2001 : Changes to allow for null axes on plots such as PiePlot (DG);
+<i>52</i>&nbsp; *               Added plot/axis compatibility checks (DG);
+<i>53</i>&nbsp; * 12-Dec-2001 : Changed constructors to protected, and removed unnecessary
+<i>54</i>&nbsp; *               &#39;throws&#39; clauses (DG);
+<i>55</i>&nbsp; * 13-Dec-2001 : Added tooltips (DG);
+<i>56</i>&nbsp; * 22-Jan-2002 : Added handleClick() method, as part of implementation for
+<i>57</i>&nbsp; *               crosshairs (DG);
+<i>58</i>&nbsp; *               Moved tooltips reference into ChartInfo class (DG);
+<i>59</i>&nbsp; * 23-Jan-2002 : Added test for null axes in chartChanged() method, thanks
+<i>60</i>&nbsp; *               to Barry Evans for the bug report (number 506979 on
+<i>61</i>&nbsp; *               SourceForge) (DG);
+<i>62</i>&nbsp; *               Added a zoom() method (DG);
+<i>63</i>&nbsp; * 05-Feb-2002 : Updated setBackgroundPaint(), setOutlineStroke() and
+<i>64</i>&nbsp; *               setOutlinePaint() to better handle null values, as suggested
+<i>65</i>&nbsp; *               by Sylvain Vieujot (DG);
+<i>66</i>&nbsp; * 06-Feb-2002 : Added background image, plus alpha transparency for background
+<i>67</i>&nbsp; *               and foreground (DG);
+<i>68</i>&nbsp; * 06-Mar-2002 : Added AxisConstants interface (DG);
+<i>69</i>&nbsp; * 26-Mar-2002 : Changed zoom method from empty to abstract (DG);
+<i>70</i>&nbsp; * 23-Apr-2002 : Moved dataset from JFreeChart class (DG);
+<i>71</i>&nbsp; * 11-May-2002 : Added ShapeFactory interface for getShape() methods,
+<i>72</i>&nbsp; *               contributed by Jeremy Bowman (DG);
+<i>73</i>&nbsp; * 28-May-2002 : Fixed bug in setSeriesPaint(int, Paint) for subplots (AS);
+<i>74</i>&nbsp; * 25-Jun-2002 : Removed redundant imports (DG);
+<i>75</i>&nbsp; * 30-Jul-2002 : Added &#39;no data&#39; message for charts with null or empty
+<i>76</i>&nbsp; *               datasets (DG);
+<i>77</i>&nbsp; * 21-Aug-2002 : Added code to extend series array if necessary (refer to
+<i>78</i>&nbsp; *               SourceForge bug id 594547 for details) (DG);
+<i>79</i>&nbsp; * 17-Sep-2002 : Fixed bug in getSeriesOutlineStroke() method, reported by
+<i>80</i>&nbsp; *               Andreas Schroeder (DG);
+<i>81</i>&nbsp; * 23-Sep-2002 : Added getLegendItems() abstract method (DG);
+<i>82</i>&nbsp; * 24-Sep-2002 : Removed firstSeriesIndex, subplots now use their own paint
+<i>83</i>&nbsp; *               settings, there is a new mechanism for the legend to collect
+<i>84</i>&nbsp; *               the legend items (DG);
+<i>85</i>&nbsp; * 27-Sep-2002 : Added dataset group (DG);
+<i>86</i>&nbsp; * 14-Oct-2002 : Moved listener storage into EventListenerList.  Changed some
+<i>87</i>&nbsp; *               abstract methods to empty implementations (DG);
+<i>88</i>&nbsp; * 28-Oct-2002 : Added a getBackgroundImage() method (DG);
+<i>89</i>&nbsp; * 21-Nov-2002 : Added a plot index for identifying subplots in combined and
+<i>90</i>&nbsp; *               overlaid charts (DG);
+<i>91</i>&nbsp; * 22-Nov-2002 : Changed all attributes from &#39;protected&#39; to &#39;private&#39;.  Added
+<i>92</i>&nbsp; *               dataAreaRatio attribute from David M O&#39;Donnell&#39;s code (DG);
+<i>93</i>&nbsp; * 09-Jan-2003 : Integrated fix for plot border contributed by Gideon
+<i>94</i>&nbsp; *               Krause (DG);
+<i>95</i>&nbsp; * 17-Jan-2003 : Moved to com.jrefinery.chart.plot (DG);
+<i>96</i>&nbsp; * 23-Jan-2003 : Removed one constructor (DG);
+<i>97</i>&nbsp; * 26-Mar-2003 : Implemented Serializable (DG);
+<i>98</i>&nbsp; * 14-Jul-2003 : Moved the dataset and secondaryDataset attributes to the
+<i>99</i>&nbsp; *               CategoryPlot and XYPlot classes (DG);
+<i>100</i>&nbsp; * 21-Jul-2003 : Moved DrawingSupplier from CategoryPlot and XYPlot up to this
+<i>101</i>&nbsp; *               class (DG);
+<i>102</i>&nbsp; * 20-Aug-2003 : Implemented Cloneable (DG);
+<i>103</i>&nbsp; * 11-Sep-2003 : Listeners and clone (NB);
+<i>104</i>&nbsp; * 29-Oct-2003 : Added workaround for font alignment in PDF output (DG);
+<i>105</i>&nbsp; * 03-Dec-2003 : Modified draw method to accept anchor (DG);
+<i>106</i>&nbsp; * 12-Mar-2004 : Fixed clipping bug in drawNoDataMessage() method (DG);
+<i>107</i>&nbsp; * 07-Apr-2004 : Modified string bounds calculation (DG);
+<i>108</i>&nbsp; * 04-Nov-2004 : Added default shapes for legend items (DG);
+<i>109</i>&nbsp; * 25-Nov-2004 : Some changes to the clone() method implementation (DG);
+<i>110</i>&nbsp; * 23-Feb-2005 : Implemented new LegendItemSource interface (and also
+<i>111</i>&nbsp; *               PublicCloneable) (DG);
+<i>112</i>&nbsp; * 21-Apr-2005 : Replaced Insets with RectangleInsets (DG);
+<i>113</i>&nbsp; * 05-May-2005 : Removed unused draw() method (DG);
+<i>114</i>&nbsp; * 06-Jun-2005 : Fixed bugs in equals() method (DG);
+<i>115</i>&nbsp; * 01-Sep-2005 : Moved dataAreaRatio from here to ContourPlot (DG);
+<i>116</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>117</i>&nbsp; * 30-Jun-2006 : Added background image alpha - see bug report 1514904 (DG);
+<i>118</i>&nbsp; * 05-Sep-2006 : Implemented the MarkerChangeListener interface (DG);
+<i>119</i>&nbsp; * 11-Jan-2007 : Added some argument checks, event notifications, and many
+<i>120</i>&nbsp; *               API doc updates (DG);
+<i>121</i>&nbsp; * 03-Apr-2007 : Made drawBackgroundImage() public (DG);
+<i>122</i>&nbsp; * 07-Jun-2007 : Added new fillBackground() method to handle GradientPaint
+<i>123</i>&nbsp; *               taking into account orientation (DG);
+<i>124</i>&nbsp; * 25-Mar-2008 : Added fireChangeEvent() method - see patch 1914411 (DG);
+<i>125</i>&nbsp; * 15-Aug-2008 : Added setDrawingSupplier() method with notify flag (DG);
+<i>126</i>&nbsp; * 13-Jan-2009 : Added notify flag (DG);
+<i>127</i>&nbsp; * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
+<i>128</i>&nbsp; * 24-Jun-2009 : Implemented AnnotationChangeListener (see patch 2809117 by
+<i>129</i>&nbsp; *               PK) (DG);
+<i>130</i>&nbsp; * 13-Jul-2009 : Plot background image should be clipped if necessary (DG);
+<i>131</i>&nbsp; * 02-Jul-2013 : Use ParamChecks (DG);
+<i>132</i>&nbsp; * 29-Jul-2014 : Add hint to normalise stroke for plot border (DG);
+<i>133</i>&nbsp; * 
+<i>134</i>&nbsp; */
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;package org.jfree.chart.plot;
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;import java.awt.AlphaComposite;
+<i>139</i>&nbsp;import java.awt.BasicStroke;
+<i>140</i>&nbsp;import java.awt.Color;
+<i>141</i>&nbsp;import java.awt.Composite;
+<i>142</i>&nbsp;import java.awt.Font;
+<i>143</i>&nbsp;import java.awt.GradientPaint;
+<i>144</i>&nbsp;import java.awt.Graphics2D;
+<i>145</i>&nbsp;import java.awt.Image;
+<i>146</i>&nbsp;import java.awt.Paint;
+<i>147</i>&nbsp;import java.awt.RenderingHints;
+<i>148</i>&nbsp;import java.awt.Shape;
+<i>149</i>&nbsp;import java.awt.Stroke;
+<i>150</i>&nbsp;import java.awt.geom.Ellipse2D;
+<i>151</i>&nbsp;import java.awt.geom.Point2D;
+<i>152</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>153</i>&nbsp;import java.io.IOException;
+<i>154</i>&nbsp;import java.io.ObjectInputStream;
+<i>155</i>&nbsp;import java.io.ObjectOutputStream;
+<i>156</i>&nbsp;import java.io.Serializable;
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;import javax.swing.event.EventListenerList;
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;import org.jfree.chart.JFreeChart;
+<i>161</i>&nbsp;import org.jfree.chart.LegendItemCollection;
+<i>162</i>&nbsp;import org.jfree.chart.LegendItemSource;
+<i>163</i>&nbsp;import org.jfree.chart.annotations.Annotation;
+<i>164</i>&nbsp;import org.jfree.chart.axis.AxisLocation;
+<i>165</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>166</i>&nbsp;import org.jfree.chart.entity.PlotEntity;
+<i>167</i>&nbsp;import org.jfree.chart.event.AnnotationChangeEvent;
+<i>168</i>&nbsp;import org.jfree.chart.event.AnnotationChangeListener;
+<i>169</i>&nbsp;import org.jfree.chart.event.AxisChangeEvent;
+<i>170</i>&nbsp;import org.jfree.chart.event.AxisChangeListener;
+<i>171</i>&nbsp;import org.jfree.chart.event.ChartChangeEventType;
+<i>172</i>&nbsp;import org.jfree.chart.event.MarkerChangeEvent;
+<i>173</i>&nbsp;import org.jfree.chart.event.MarkerChangeListener;
+<i>174</i>&nbsp;import org.jfree.chart.event.PlotChangeEvent;
+<i>175</i>&nbsp;import org.jfree.chart.event.PlotChangeListener;
+<i>176</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>177</i>&nbsp;import org.jfree.data.general.DatasetChangeEvent;
+<i>178</i>&nbsp;import org.jfree.data.general.DatasetChangeListener;
+<i>179</i>&nbsp;import org.jfree.data.general.DatasetGroup;
+<i>180</i>&nbsp;import org.jfree.io.SerialUtilities;
+<i>181</i>&nbsp;import org.jfree.text.G2TextMeasurer;
+<i>182</i>&nbsp;import org.jfree.text.TextBlock;
+<i>183</i>&nbsp;import org.jfree.text.TextBlockAnchor;
+<i>184</i>&nbsp;import org.jfree.text.TextUtilities;
+<i>185</i>&nbsp;import org.jfree.ui.Align;
+<i>186</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>187</i>&nbsp;import org.jfree.ui.RectangleInsets;
+<i>188</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>189</i>&nbsp;import org.jfree.util.PaintUtilities;
+<i>190</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;/**
+<i>193</i>&nbsp; * The base class for all plots in JFreeChart.  The {@link JFreeChart} class
+<i>194</i>&nbsp; * delegates the drawing of axes and data to the plot.  This base class
+<i>195</i>&nbsp; * provides facilities common to most plot types.
+<i>196</i>&nbsp; */
+<i>197</i>&nbsp;public abstract class Plot implements AxisChangeListener,
+<i>198</i>&nbsp;        DatasetChangeListener, AnnotationChangeListener, MarkerChangeListener,
+<i>199</i>&nbsp;        LegendItemSource, PublicCloneable, Cloneable, Serializable {
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    /** For serialization. */
+<i>202</i>&nbsp;    private static final long serialVersionUID = -8831571430103671324L;
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /** Useful constant representing zero. */
+<b class="fc"><i>205</i>&nbsp;    public static final Number ZERO = new Integer(0);</b>
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    /** The default insets. */
+<b class="fc"><i>208</i>&nbsp;    public static final RectangleInsets DEFAULT_INSETS</b>
+<i>209</i>&nbsp;            = new RectangleInsets(4.0, 8.0, 4.0, 8.0);
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    /** The default outline stroke. */
+<b class="fc"><i>212</i>&nbsp;    public static final Stroke DEFAULT_OUTLINE_STROKE = new BasicStroke(0.5f,</b>
+<i>213</i>&nbsp;            BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    /** The default outline color. */
+<b class="fc"><i>216</i>&nbsp;    public static final Paint DEFAULT_OUTLINE_PAINT = Color.gray;</b>
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    /** The default foreground alpha transparency. */
+<i>219</i>&nbsp;    public static final float DEFAULT_FOREGROUND_ALPHA = 1.0f;
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    /** The default background alpha transparency. */
+<i>222</i>&nbsp;    public static final float DEFAULT_BACKGROUND_ALPHA = 1.0f;
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;    /** The default background color. */
+<b class="fc"><i>225</i>&nbsp;    public static final Paint DEFAULT_BACKGROUND_PAINT = Color.white;</b>
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;    /** The minimum width at which the plot should be drawn. */
+<i>228</i>&nbsp;    public static final int MINIMUM_WIDTH_TO_DRAW = 10;
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;    /** The minimum height at which the plot should be drawn. */
+<i>231</i>&nbsp;    public static final int MINIMUM_HEIGHT_TO_DRAW = 10;
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    /** A default box shape for legend items. */
+<b class="fc"><i>234</i>&nbsp;    public static final Shape DEFAULT_LEGEND_ITEM_BOX</b>
+<i>235</i>&nbsp;            = new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0);
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;    /** A default circle shape for legend items. */
+<b class="fc"><i>238</i>&nbsp;    public static final Shape DEFAULT_LEGEND_ITEM_CIRCLE</b>
+<i>239</i>&nbsp;            = new Ellipse2D.Double(-4.0, -4.0, 8.0, 8.0);
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /** The parent plot (&lt;code&gt;null&lt;/code&gt; if this is the root plot). */
+<i>242</i>&nbsp;    private Plot parent;
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /** The dataset group (to be used for thread synchronisation). */
+<i>245</i>&nbsp;    private DatasetGroup datasetGroup;
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /** The message to display if no data is available. */
+<i>248</i>&nbsp;    private String noDataMessage;
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /** The font used to display the &#39;no data&#39; message. */
+<i>251</i>&nbsp;    private Font noDataMessageFont;
+<i>252</i>&nbsp;
+<i>253</i>&nbsp;    /** The paint used to draw the &#39;no data&#39; message. */
+<i>254</i>&nbsp;    private transient Paint noDataMessagePaint;
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    /** Amount of blank space around the plot area. */
+<i>257</i>&nbsp;    private RectangleInsets insets;
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * A flag that controls whether or not the plot outline is drawn.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @since 1.0.6
+<i>263</i>&nbsp;     */
+<i>264</i>&nbsp;    private boolean outlineVisible;
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;    /** The Stroke used to draw an outline around the plot. */
+<i>267</i>&nbsp;    private transient Stroke outlineStroke;
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    /** The Paint used to draw an outline around the plot. */
+<i>270</i>&nbsp;    private transient Paint outlinePaint;
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    /** An optional color used to fill the plot background. */
+<i>273</i>&nbsp;    private transient Paint backgroundPaint;
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    /** An optional image for the plot background. */
+<i>276</i>&nbsp;    private transient Image backgroundImage;  // not currently serialized
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    /** The alignment for the background image. */
+<b class="fc"><i>279</i>&nbsp;    private int backgroundImageAlignment = Align.FIT;</b>
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /** The alpha value used to draw the background image. */
+<b class="fc"><i>282</i>&nbsp;    private float backgroundImageAlpha = 0.5f;</b>
+<i>283</i>&nbsp;
+<i>284</i>&nbsp;    /** The alpha-transparency for the plot. */
+<i>285</i>&nbsp;    private float foregroundAlpha;
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;    /** The alpha transparency for the background paint. */
+<i>288</i>&nbsp;    private float backgroundAlpha;
+<i>289</i>&nbsp;
+<i>290</i>&nbsp;    /** The drawing supplier. */
+<i>291</i>&nbsp;    private DrawingSupplier drawingSupplier;
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /** Storage for registered change listeners. */
+<i>294</i>&nbsp;    private transient EventListenerList listenerList;
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;    /**
+<i>297</i>&nbsp;     * A flag that controls whether or not the plot will notify listeners
+<i>298</i>&nbsp;     * of changes (defaults to true, but sometimes it is useful to disable
+<i>299</i>&nbsp;     * this).
+<i>300</i>&nbsp;     *
+<i>301</i>&nbsp;     * @since 1.0.13
+<i>302</i>&nbsp;     */
+<i>303</i>&nbsp;    private boolean notify;
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    /**
+<i>306</i>&nbsp;     * Creates a new plot.
+<i>307</i>&nbsp;     */
+<b class="fc"><i>308</i>&nbsp;    protected Plot() {</b>
+<i>309</i>&nbsp;
+<b class="fc"><i>310</i>&nbsp;        this.parent = null;</b>
+<b class="fc"><i>311</i>&nbsp;        this.insets = DEFAULT_INSETS;</b>
+<b class="fc"><i>312</i>&nbsp;        this.backgroundPaint = DEFAULT_BACKGROUND_PAINT;</b>
+<b class="fc"><i>313</i>&nbsp;        this.backgroundAlpha = DEFAULT_BACKGROUND_ALPHA;</b>
+<b class="fc"><i>314</i>&nbsp;        this.backgroundImage = null;</b>
+<b class="fc"><i>315</i>&nbsp;        this.outlineVisible = true;</b>
+<b class="fc"><i>316</i>&nbsp;        this.outlineStroke = DEFAULT_OUTLINE_STROKE;</b>
+<b class="fc"><i>317</i>&nbsp;        this.outlinePaint = DEFAULT_OUTLINE_PAINT;</b>
+<b class="fc"><i>318</i>&nbsp;        this.foregroundAlpha = DEFAULT_FOREGROUND_ALPHA;</b>
+<i>319</i>&nbsp;
+<b class="fc"><i>320</i>&nbsp;        this.noDataMessage = null;</b>
+<b class="fc"><i>321</i>&nbsp;        this.noDataMessageFont = new Font(&quot;SansSerif&quot;, Font.PLAIN, 12);</b>
+<b class="fc"><i>322</i>&nbsp;        this.noDataMessagePaint = Color.black;</b>
+<i>323</i>&nbsp;
+<b class="fc"><i>324</i>&nbsp;        this.drawingSupplier = new DefaultDrawingSupplier();</b>
+<i>325</i>&nbsp;
+<b class="fc"><i>326</i>&nbsp;        this.notify = true;</b>
+<b class="fc"><i>327</i>&nbsp;        this.listenerList = new EventListenerList();</b>
+<i>328</i>&nbsp;
+<b class="fc"><i>329</i>&nbsp;    }</b>
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    /**
+<i>332</i>&nbsp;     * Returns the dataset group for the plot (not currently used).
+<i>333</i>&nbsp;     *
+<i>334</i>&nbsp;     * @return The dataset group.
+<i>335</i>&nbsp;     *
+<i>336</i>&nbsp;     * @see #setDatasetGroup(DatasetGroup)
+<i>337</i>&nbsp;     */
+<i>338</i>&nbsp;    public DatasetGroup getDatasetGroup() {
+<b class="nc"><i>339</i>&nbsp;        return this.datasetGroup;</b>
+<i>340</i>&nbsp;    }
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;    /**
+<i>343</i>&nbsp;     * Sets the dataset group (not currently used).
+<i>344</i>&nbsp;     *
+<i>345</i>&nbsp;     * @param group  the dataset group (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>346</i>&nbsp;     *
+<i>347</i>&nbsp;     * @see #getDatasetGroup()
+<i>348</i>&nbsp;     */
+<i>349</i>&nbsp;    protected void setDatasetGroup(DatasetGroup group) {
+<b class="fc"><i>350</i>&nbsp;        this.datasetGroup = group;</b>
+<b class="fc"><i>351</i>&nbsp;    }</b>
+<i>352</i>&nbsp;
+<i>353</i>&nbsp;    /**
+<i>354</i>&nbsp;     * Returns the string that is displayed when the dataset is empty or
+<i>355</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;.
+<i>356</i>&nbsp;     *
+<i>357</i>&nbsp;     * @return The &#39;no data&#39; message (&lt;code&gt;null&lt;/code&gt; possible).
+<i>358</i>&nbsp;     *
+<i>359</i>&nbsp;     * @see #setNoDataMessage(String)
+<i>360</i>&nbsp;     * @see #getNoDataMessageFont()
+<i>361</i>&nbsp;     * @see #getNoDataMessagePaint()
+<i>362</i>&nbsp;     */
+<i>363</i>&nbsp;    public String getNoDataMessage() {
+<b class="nc"><i>364</i>&nbsp;        return this.noDataMessage;</b>
+<i>365</i>&nbsp;    }
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;    /**
+<i>368</i>&nbsp;     * Sets the message that is displayed when the dataset is empty or
+<i>369</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;, and sends a {@link PlotChangeEvent} to all registered
+<i>370</i>&nbsp;     * listeners.
+<i>371</i>&nbsp;     *
+<i>372</i>&nbsp;     * @param message  the message (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>373</i>&nbsp;     *
+<i>374</i>&nbsp;     * @see #getNoDataMessage()
+<i>375</i>&nbsp;     */
+<i>376</i>&nbsp;    public void setNoDataMessage(String message) {
+<b class="fc"><i>377</i>&nbsp;        this.noDataMessage = message;</b>
+<b class="fc"><i>378</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>379</i>&nbsp;    }</b>
+<i>380</i>&nbsp;
+<i>381</i>&nbsp;    /**
+<i>382</i>&nbsp;     * Returns the font used to display the &#39;no data&#39; message.
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @return The font (never &lt;code&gt;null&lt;/code&gt;).
+<i>385</i>&nbsp;     *
+<i>386</i>&nbsp;     * @see #setNoDataMessageFont(Font)
+<i>387</i>&nbsp;     * @see #getNoDataMessage()
+<i>388</i>&nbsp;     */
+<i>389</i>&nbsp;    public Font getNoDataMessageFont() {
+<b class="nc"><i>390</i>&nbsp;        return this.noDataMessageFont;</b>
+<i>391</i>&nbsp;    }
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    /**
+<i>394</i>&nbsp;     * Sets the font used to display the &#39;no data&#39; message and sends a
+<i>395</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>396</i>&nbsp;     *
+<i>397</i>&nbsp;     * @param font  the font (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>398</i>&nbsp;     *
+<i>399</i>&nbsp;     * @see #getNoDataMessageFont()
+<i>400</i>&nbsp;     */
+<i>401</i>&nbsp;    public void setNoDataMessageFont(Font font) {
+<b class="fc"><i>402</i>&nbsp;        ParamChecks.nullNotPermitted(font, &quot;font&quot;);</b>
+<b class="fc"><i>403</i>&nbsp;        this.noDataMessageFont = font;</b>
+<b class="fc"><i>404</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>405</i>&nbsp;    }</b>
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;    /**
+<i>408</i>&nbsp;     * Returns the paint used to display the &#39;no data&#39; message.
+<i>409</i>&nbsp;     *
+<i>410</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>411</i>&nbsp;     *
+<i>412</i>&nbsp;     * @see #setNoDataMessagePaint(Paint)
+<i>413</i>&nbsp;     * @see #getNoDataMessage()
+<i>414</i>&nbsp;     */
+<i>415</i>&nbsp;    public Paint getNoDataMessagePaint() {
+<b class="nc"><i>416</i>&nbsp;        return this.noDataMessagePaint;</b>
+<i>417</i>&nbsp;    }
+<i>418</i>&nbsp;
+<i>419</i>&nbsp;    /**
+<i>420</i>&nbsp;     * Sets the paint used to display the &#39;no data&#39; message and sends a
+<i>421</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>422</i>&nbsp;     *
+<i>423</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>424</i>&nbsp;     *
+<i>425</i>&nbsp;     * @see #getNoDataMessagePaint()
+<i>426</i>&nbsp;     */
+<i>427</i>&nbsp;    public void setNoDataMessagePaint(Paint paint) {
+<b class="fc"><i>428</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>429</i>&nbsp;        this.noDataMessagePaint = paint;</b>
+<b class="fc"><i>430</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>431</i>&nbsp;    }</b>
+<i>432</i>&nbsp;
+<i>433</i>&nbsp;    /**
+<i>434</i>&nbsp;     * Returns a short string describing the plot type.
+<i>435</i>&nbsp;     * &lt;P&gt;
+<i>436</i>&nbsp;     * Note: this gets used in the chart property editing user interface,
+<i>437</i>&nbsp;     * but there needs to be a better mechanism for identifying the plot type.
+<i>438</i>&nbsp;     *
+<i>439</i>&nbsp;     * @return A short string describing the plot type (never
+<i>440</i>&nbsp;     *     &lt;code&gt;null&lt;/code&gt;).
+<i>441</i>&nbsp;     */
+<i>442</i>&nbsp;    public abstract String getPlotType();
+<i>443</i>&nbsp;
+<i>444</i>&nbsp;    /**
+<i>445</i>&nbsp;     * Returns the parent plot (or &lt;code&gt;null&lt;/code&gt; if this plot is not part
+<i>446</i>&nbsp;     * of a combined plot).
+<i>447</i>&nbsp;     *
+<i>448</i>&nbsp;     * @return The parent plot.
+<i>449</i>&nbsp;     *
+<i>450</i>&nbsp;     * @see #setParent(Plot)
+<i>451</i>&nbsp;     * @see #getRootPlot()
+<i>452</i>&nbsp;     */
+<i>453</i>&nbsp;    public Plot getParent() {
+<b class="fc"><i>454</i>&nbsp;        return this.parent;</b>
+<i>455</i>&nbsp;    }
+<i>456</i>&nbsp;
+<i>457</i>&nbsp;    /**
+<i>458</i>&nbsp;     * Sets the parent plot.  This method is intended for internal use, you
+<i>459</i>&nbsp;     * shouldn&#39;t need to call it directly.
+<i>460</i>&nbsp;     *
+<i>461</i>&nbsp;     * @param parent  the parent plot (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>462</i>&nbsp;     *
+<i>463</i>&nbsp;     * @see #getParent()
+<i>464</i>&nbsp;     */
+<i>465</i>&nbsp;    public void setParent(Plot parent) {
+<b class="fc"><i>466</i>&nbsp;        this.parent = parent;</b>
+<b class="fc"><i>467</i>&nbsp;    }</b>
+<i>468</i>&nbsp;
+<i>469</i>&nbsp;    /**
+<i>470</i>&nbsp;     * Returns the root plot.
+<i>471</i>&nbsp;     *
+<i>472</i>&nbsp;     * @return The root plot.
+<i>473</i>&nbsp;     *
+<i>474</i>&nbsp;     * @see #getParent()
+<i>475</i>&nbsp;     */
+<i>476</i>&nbsp;    public Plot getRootPlot() {
+<i>477</i>&nbsp;
+<b class="nc"><i>478</i>&nbsp;        Plot p = getParent();</b>
+<b class="nc"><i>479</i>&nbsp;        if (p == null) {</b>
+<b class="nc"><i>480</i>&nbsp;            return this;</b>
+<i>481</i>&nbsp;        }
+<b class="nc"><i>482</i>&nbsp;        return p.getRootPlot();</b>
+<i>483</i>&nbsp;
+<i>484</i>&nbsp;    }
+<i>485</i>&nbsp;
+<i>486</i>&nbsp;    /**
+<i>487</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if this plot is part of a combined plot
+<i>488</i>&nbsp;     * structure (that is, {@link #getParent()} returns a non-&lt;code&gt;null&lt;/code&gt;
+<i>489</i>&nbsp;     * value), and &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>490</i>&nbsp;     *
+<i>491</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if this plot is part of a combined plot
+<i>492</i>&nbsp;     *         structure.
+<i>493</i>&nbsp;     *
+<i>494</i>&nbsp;     * @see #getParent()
+<i>495</i>&nbsp;     */
+<i>496</i>&nbsp;    public boolean isSubplot() {
+<b class="nc"><i>497</i>&nbsp;        return (getParent() != null);</b>
+<i>498</i>&nbsp;    }
+<i>499</i>&nbsp;
+<i>500</i>&nbsp;    /**
+<i>501</i>&nbsp;     * Returns the insets for the plot area.
+<i>502</i>&nbsp;     *
+<i>503</i>&nbsp;     * @return The insets (never &lt;code&gt;null&lt;/code&gt;).
+<i>504</i>&nbsp;     *
+<i>505</i>&nbsp;     * @see #setInsets(RectangleInsets)
+<i>506</i>&nbsp;     */
+<i>507</i>&nbsp;    public RectangleInsets getInsets() {
+<b class="fc"><i>508</i>&nbsp;        return this.insets;</b>
+<i>509</i>&nbsp;    }
+<i>510</i>&nbsp;
+<i>511</i>&nbsp;    /**
+<i>512</i>&nbsp;     * Sets the insets for the plot and sends a {@link PlotChangeEvent} to
+<i>513</i>&nbsp;     * all registered listeners.
+<i>514</i>&nbsp;     *
+<i>515</i>&nbsp;     * @param insets  the new insets (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>516</i>&nbsp;     *
+<i>517</i>&nbsp;     * @see #getInsets()
+<i>518</i>&nbsp;     * @see #setInsets(RectangleInsets, boolean)
+<i>519</i>&nbsp;     */
+<i>520</i>&nbsp;    public void setInsets(RectangleInsets insets) {
+<b class="fc"><i>521</i>&nbsp;        setInsets(insets, true);</b>
+<b class="fc"><i>522</i>&nbsp;    }</b>
+<i>523</i>&nbsp;
+<i>524</i>&nbsp;    /**
+<i>525</i>&nbsp;     * Sets the insets for the plot and, if requested,  and sends a
+<i>526</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>527</i>&nbsp;     *
+<i>528</i>&nbsp;     * @param insets  the new insets (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>529</i>&nbsp;     * @param notify  a flag that controls whether the registered listeners are
+<i>530</i>&nbsp;     *                notified.
+<i>531</i>&nbsp;     *
+<i>532</i>&nbsp;     * @see #getInsets()
+<i>533</i>&nbsp;     * @see #setInsets(RectangleInsets)
+<i>534</i>&nbsp;     */
+<i>535</i>&nbsp;    public void setInsets(RectangleInsets insets, boolean notify) {
+<b class="fc"><i>536</i>&nbsp;        ParamChecks.nullNotPermitted(insets, &quot;insets&quot;);</b>
+<b class="fc"><i>537</i>&nbsp;        if (!this.insets.equals(insets)) {</b>
+<b class="fc"><i>538</i>&nbsp;            this.insets = insets;</b>
+<b class="fc"><i>539</i>&nbsp;            if (notify) {</b>
+<b class="fc"><i>540</i>&nbsp;                fireChangeEvent();</b>
+<i>541</i>&nbsp;            }
+<i>542</i>&nbsp;        }
+<i>543</i>&nbsp;
+<b class="fc"><i>544</i>&nbsp;    }</b>
+<i>545</i>&nbsp;
+<i>546</i>&nbsp;    /**
+<i>547</i>&nbsp;     * Returns the background color of the plot area.
+<i>548</i>&nbsp;     *
+<i>549</i>&nbsp;     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>550</i>&nbsp;     *
+<i>551</i>&nbsp;     * @see #setBackgroundPaint(Paint)
+<i>552</i>&nbsp;     */
+<i>553</i>&nbsp;    public Paint getBackgroundPaint() {
+<b class="fc"><i>554</i>&nbsp;        return this.backgroundPaint;</b>
+<i>555</i>&nbsp;    }
+<i>556</i>&nbsp;
+<i>557</i>&nbsp;    /**
+<i>558</i>&nbsp;     * Sets the background color of the plot area and sends a
+<i>559</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>560</i>&nbsp;     *
+<i>561</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>562</i>&nbsp;     *
+<i>563</i>&nbsp;     * @see #getBackgroundPaint()
+<i>564</i>&nbsp;     */
+<i>565</i>&nbsp;    public void setBackgroundPaint(Paint paint) {
+<i>566</i>&nbsp;
+<b class="fc"><i>567</i>&nbsp;        if (paint == null) {</b>
+<b class="nc"><i>568</i>&nbsp;            if (this.backgroundPaint != null) {</b>
+<b class="nc"><i>569</i>&nbsp;                this.backgroundPaint = null;</b>
+<b class="nc"><i>570</i>&nbsp;                fireChangeEvent();</b>
+<i>571</i>&nbsp;            }
+<i>572</i>&nbsp;        }
+<i>573</i>&nbsp;        else {
+<b class="fc"><i>574</i>&nbsp;            if (this.backgroundPaint != null) {</b>
+<b class="fc"><i>575</i>&nbsp;                if (this.backgroundPaint.equals(paint)) {</b>
+<b class="nc"><i>576</i>&nbsp;                    return;  // nothing to do</b>
+<i>577</i>&nbsp;                }
+<i>578</i>&nbsp;            }
+<b class="fc"><i>579</i>&nbsp;            this.backgroundPaint = paint;</b>
+<b class="fc"><i>580</i>&nbsp;            fireChangeEvent();</b>
+<i>581</i>&nbsp;        }
+<i>582</i>&nbsp;
+<b class="fc"><i>583</i>&nbsp;    }</b>
+<i>584</i>&nbsp;
+<i>585</i>&nbsp;    /**
+<i>586</i>&nbsp;     * Returns the alpha transparency of the plot area background.
+<i>587</i>&nbsp;     *
+<i>588</i>&nbsp;     * @return The alpha transparency.
+<i>589</i>&nbsp;     *
+<i>590</i>&nbsp;     * @see #setBackgroundAlpha(float)
+<i>591</i>&nbsp;     */
+<i>592</i>&nbsp;    public float getBackgroundAlpha() {
+<b class="nc"><i>593</i>&nbsp;        return this.backgroundAlpha;</b>
+<i>594</i>&nbsp;    }
+<i>595</i>&nbsp;
+<i>596</i>&nbsp;    /**
+<i>597</i>&nbsp;     * Sets the alpha transparency of the plot area background, and notifies
+<i>598</i>&nbsp;     * registered listeners that the plot has been modified.
+<i>599</i>&nbsp;     *
+<i>600</i>&nbsp;     * @param alpha the new alpha value (in the range 0.0f to 1.0f).
+<i>601</i>&nbsp;     *
+<i>602</i>&nbsp;     * @see #getBackgroundAlpha()
+<i>603</i>&nbsp;     */
+<i>604</i>&nbsp;    public void setBackgroundAlpha(float alpha) {
+<b class="fc"><i>605</i>&nbsp;        if (this.backgroundAlpha != alpha) {</b>
+<b class="fc"><i>606</i>&nbsp;            this.backgroundAlpha = alpha;</b>
+<b class="fc"><i>607</i>&nbsp;            fireChangeEvent();</b>
+<i>608</i>&nbsp;        }
+<b class="fc"><i>609</i>&nbsp;    }</b>
+<i>610</i>&nbsp;
+<i>611</i>&nbsp;    /**
+<i>612</i>&nbsp;     * Returns the drawing supplier for the plot.
+<i>613</i>&nbsp;     *
+<i>614</i>&nbsp;     * @return The drawing supplier (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>615</i>&nbsp;     *
+<i>616</i>&nbsp;     * @see #setDrawingSupplier(DrawingSupplier)
+<i>617</i>&nbsp;     */
+<i>618</i>&nbsp;    public DrawingSupplier getDrawingSupplier() {
+<i>619</i>&nbsp;        DrawingSupplier result;
+<b class="fc"><i>620</i>&nbsp;        Plot p = getParent();</b>
+<b class="fc"><i>621</i>&nbsp;        if (p != null) {</b>
+<b class="fc"><i>622</i>&nbsp;            result = p.getDrawingSupplier();</b>
+<i>623</i>&nbsp;        }
+<i>624</i>&nbsp;        else {
+<b class="fc"><i>625</i>&nbsp;            result = this.drawingSupplier;</b>
+<i>626</i>&nbsp;        }
+<b class="fc"><i>627</i>&nbsp;        return result;</b>
+<i>628</i>&nbsp;    }
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;    /**
+<i>631</i>&nbsp;     * Sets the drawing supplier for the plot and sends a
+<i>632</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.  The drawing
+<i>633</i>&nbsp;     * supplier is responsible for supplying a limitless (possibly repeating)
+<i>634</i>&nbsp;     * sequence of &lt;code&gt;Paint&lt;/code&gt;, &lt;code&gt;Stroke&lt;/code&gt; and
+<i>635</i>&nbsp;     * &lt;code&gt;Shape&lt;/code&gt; objects that the plot&#39;s renderer(s) can use to
+<i>636</i>&nbsp;     * populate its (their) tables.
+<i>637</i>&nbsp;     *
+<i>638</i>&nbsp;     * @param supplier  the new supplier.
+<i>639</i>&nbsp;     *
+<i>640</i>&nbsp;     * @see #getDrawingSupplier()
+<i>641</i>&nbsp;     */
+<i>642</i>&nbsp;    public void setDrawingSupplier(DrawingSupplier supplier) {
+<b class="fc"><i>643</i>&nbsp;        this.drawingSupplier = supplier;</b>
+<b class="fc"><i>644</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>645</i>&nbsp;    }</b>
+<i>646</i>&nbsp;
+<i>647</i>&nbsp;    /**
+<i>648</i>&nbsp;     * Sets the drawing supplier for the plot and, if requested, sends a
+<i>649</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.  The drawing
+<i>650</i>&nbsp;     * supplier is responsible for supplying a limitless (possibly repeating)
+<i>651</i>&nbsp;     * sequence of &lt;code&gt;Paint&lt;/code&gt;, &lt;code&gt;Stroke&lt;/code&gt; and
+<i>652</i>&nbsp;     * &lt;code&gt;Shape&lt;/code&gt; objects that the plot&#39;s renderer(s) can use to
+<i>653</i>&nbsp;     * populate its (their) tables.
+<i>654</i>&nbsp;     *
+<i>655</i>&nbsp;     * @param supplier  the new supplier.
+<i>656</i>&nbsp;     * @param notify  notify listeners?
+<i>657</i>&nbsp;     *
+<i>658</i>&nbsp;     * @see #getDrawingSupplier()
+<i>659</i>&nbsp;     *
+<i>660</i>&nbsp;     * @since 1.0.11
+<i>661</i>&nbsp;     */
+<i>662</i>&nbsp;    public void setDrawingSupplier(DrawingSupplier supplier, boolean notify) {
+<b class="nc"><i>663</i>&nbsp;        this.drawingSupplier = supplier;</b>
+<b class="nc"><i>664</i>&nbsp;        if (notify) {</b>
+<b class="nc"><i>665</i>&nbsp;            fireChangeEvent();</b>
+<i>666</i>&nbsp;        }
+<b class="nc"><i>667</i>&nbsp;    }</b>
+<i>668</i>&nbsp;
+<i>669</i>&nbsp;    /**
+<i>670</i>&nbsp;     * Returns the background image that is used to fill the plot&#39;s background
+<i>671</i>&nbsp;     * area.
+<i>672</i>&nbsp;     *
+<i>673</i>&nbsp;     * @return The image (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>674</i>&nbsp;     *
+<i>675</i>&nbsp;     * @see #setBackgroundImage(Image)
+<i>676</i>&nbsp;     */
+<i>677</i>&nbsp;    public Image getBackgroundImage() {
+<b class="nc"><i>678</i>&nbsp;        return this.backgroundImage;</b>
+<i>679</i>&nbsp;    }
+<i>680</i>&nbsp;
+<i>681</i>&nbsp;    /**
+<i>682</i>&nbsp;     * Sets the background image for the plot and sends a
+<i>683</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>684</i>&nbsp;     *
+<i>685</i>&nbsp;     * @param image  the image (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>686</i>&nbsp;     *
+<i>687</i>&nbsp;     * @see #getBackgroundImage()
+<i>688</i>&nbsp;     */
+<i>689</i>&nbsp;    public void setBackgroundImage(Image image) {
+<b class="fc"><i>690</i>&nbsp;        this.backgroundImage = image;</b>
+<b class="fc"><i>691</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>692</i>&nbsp;    }</b>
+<i>693</i>&nbsp;
+<i>694</i>&nbsp;    /**
+<i>695</i>&nbsp;     * Returns the background image alignment. Alignment constants are defined
+<i>696</i>&nbsp;     * in the &lt;code&gt;org.jfree.ui.Align&lt;/code&gt; class in the JCommon class
+<i>697</i>&nbsp;     * library.
+<i>698</i>&nbsp;     *
+<i>699</i>&nbsp;     * @return The alignment.
+<i>700</i>&nbsp;     *
+<i>701</i>&nbsp;     * @see #setBackgroundImageAlignment(int)
+<i>702</i>&nbsp;     */
+<i>703</i>&nbsp;    public int getBackgroundImageAlignment() {
+<b class="nc"><i>704</i>&nbsp;        return this.backgroundImageAlignment;</b>
+<i>705</i>&nbsp;    }
+<i>706</i>&nbsp;
+<i>707</i>&nbsp;    /**
+<i>708</i>&nbsp;     * Sets the alignment for the background image and sends a
+<i>709</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.  Alignment options
+<i>710</i>&nbsp;     * are defined by the {@link org.jfree.ui.Align} class in the JCommon
+<i>711</i>&nbsp;     * class library.
+<i>712</i>&nbsp;     *
+<i>713</i>&nbsp;     * @param alignment  the alignment.
+<i>714</i>&nbsp;     *
+<i>715</i>&nbsp;     * @see #getBackgroundImageAlignment()
+<i>716</i>&nbsp;     */
+<i>717</i>&nbsp;    public void setBackgroundImageAlignment(int alignment) {
+<b class="fc"><i>718</i>&nbsp;        if (this.backgroundImageAlignment != alignment) {</b>
+<b class="fc"><i>719</i>&nbsp;            this.backgroundImageAlignment = alignment;</b>
+<b class="fc"><i>720</i>&nbsp;            fireChangeEvent();</b>
+<i>721</i>&nbsp;        }
+<b class="fc"><i>722</i>&nbsp;    }</b>
+<i>723</i>&nbsp;
+<i>724</i>&nbsp;    /**
+<i>725</i>&nbsp;     * Returns the alpha transparency used to draw the background image.  This
+<i>726</i>&nbsp;     * is a value in the range 0.0f to 1.0f, where 0.0f is fully transparent
+<i>727</i>&nbsp;     * and 1.0f is fully opaque.
+<i>728</i>&nbsp;     *
+<i>729</i>&nbsp;     * @return The alpha transparency.
+<i>730</i>&nbsp;     *
+<i>731</i>&nbsp;     * @see #setBackgroundImageAlpha(float)
+<i>732</i>&nbsp;     */
+<i>733</i>&nbsp;    public float getBackgroundImageAlpha() {
+<b class="nc"><i>734</i>&nbsp;        return this.backgroundImageAlpha;</b>
+<i>735</i>&nbsp;    }
+<i>736</i>&nbsp;
+<i>737</i>&nbsp;    /**
+<i>738</i>&nbsp;     * Sets the alpha transparency used when drawing the background image.
+<i>739</i>&nbsp;     *
+<i>740</i>&nbsp;     * @param alpha  the alpha transparency (in the range 0.0f to 1.0f, where
+<i>741</i>&nbsp;     *     0.0f is fully transparent, and 1.0f is fully opaque).
+<i>742</i>&nbsp;     *
+<i>743</i>&nbsp;     * @throws IllegalArgumentException if &lt;code&gt;alpha&lt;/code&gt; is not within
+<i>744</i>&nbsp;     *     the specified range.
+<i>745</i>&nbsp;     *
+<i>746</i>&nbsp;     * @see #getBackgroundImageAlpha()
+<i>747</i>&nbsp;     */
+<i>748</i>&nbsp;    public void setBackgroundImageAlpha(float alpha) {
+<b class="fc"><i>749</i>&nbsp;        if (alpha &lt; 0.0f || alpha &gt; 1.0f) {</b>
+<b class="nc"><i>750</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>751</i>&nbsp;                    &quot;The &#39;alpha&#39; value must be in the range 0.0f to 1.0f.&quot;);
+<i>752</i>&nbsp;        }
+<b class="fc"><i>753</i>&nbsp;        if (this.backgroundImageAlpha != alpha) {</b>
+<b class="fc"><i>754</i>&nbsp;            this.backgroundImageAlpha = alpha;</b>
+<b class="fc"><i>755</i>&nbsp;            fireChangeEvent();</b>
+<i>756</i>&nbsp;        }
+<b class="fc"><i>757</i>&nbsp;    }</b>
+<i>758</i>&nbsp;
+<i>759</i>&nbsp;    /**
+<i>760</i>&nbsp;     * Returns the flag that controls whether or not the plot outline is
+<i>761</i>&nbsp;     * drawn.  The default value is &lt;code&gt;true&lt;/code&gt;.  Note that for
+<i>762</i>&nbsp;     * historical reasons, the plot&#39;s outline paint and stroke can take on
+<i>763</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt; values, in which case the outline will not be drawn
+<i>764</i>&nbsp;     * even if this flag is set to &lt;code&gt;true&lt;/code&gt;.
+<i>765</i>&nbsp;     *
+<i>766</i>&nbsp;     * @return The outline visibility flag.
+<i>767</i>&nbsp;     *
+<i>768</i>&nbsp;     * @since 1.0.6
+<i>769</i>&nbsp;     *
+<i>770</i>&nbsp;     * @see #setOutlineVisible(boolean)
+<i>771</i>&nbsp;     */
+<i>772</i>&nbsp;    public boolean isOutlineVisible() {
+<b class="fc"><i>773</i>&nbsp;        return this.outlineVisible;</b>
+<i>774</i>&nbsp;    }
+<i>775</i>&nbsp;
+<i>776</i>&nbsp;    /**
+<i>777</i>&nbsp;     * Sets the flag that controls whether or not the plot&#39;s outline is
+<i>778</i>&nbsp;     * drawn, and sends a {@link PlotChangeEvent} to all registered listeners.
+<i>779</i>&nbsp;     *
+<i>780</i>&nbsp;     * @param visible  the new flag value.
+<i>781</i>&nbsp;     *
+<i>782</i>&nbsp;     * @since 1.0.6
+<i>783</i>&nbsp;     *
+<i>784</i>&nbsp;     * @see #isOutlineVisible()
+<i>785</i>&nbsp;     */
+<i>786</i>&nbsp;    public void setOutlineVisible(boolean visible) {
+<b class="fc"><i>787</i>&nbsp;        this.outlineVisible = visible;</b>
+<b class="fc"><i>788</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>789</i>&nbsp;    }</b>
+<i>790</i>&nbsp;
+<i>791</i>&nbsp;    /**
+<i>792</i>&nbsp;     * Returns the stroke used to outline the plot area.
+<i>793</i>&nbsp;     *
+<i>794</i>&nbsp;     * @return The stroke (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>795</i>&nbsp;     *
+<i>796</i>&nbsp;     * @see #setOutlineStroke(Stroke)
+<i>797</i>&nbsp;     */
+<i>798</i>&nbsp;    public Stroke getOutlineStroke() {
+<b class="nc"><i>799</i>&nbsp;        return this.outlineStroke;</b>
+<i>800</i>&nbsp;    }
+<i>801</i>&nbsp;
+<i>802</i>&nbsp;    /**
+<i>803</i>&nbsp;     * Sets the stroke used to outline the plot area and sends a
+<i>804</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners. If you set this
+<i>805</i>&nbsp;     * attribute to &lt;code&gt;null&lt;/code&gt;, no outline will be drawn.
+<i>806</i>&nbsp;     *
+<i>807</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>808</i>&nbsp;     *
+<i>809</i>&nbsp;     * @see #getOutlineStroke()
+<i>810</i>&nbsp;     */
+<i>811</i>&nbsp;    public void setOutlineStroke(Stroke stroke) {
+<b class="fc"><i>812</i>&nbsp;        if (stroke == null) {</b>
+<b class="nc"><i>813</i>&nbsp;            if (this.outlineStroke != null) {</b>
+<b class="nc"><i>814</i>&nbsp;                this.outlineStroke = null;</b>
+<b class="nc"><i>815</i>&nbsp;                fireChangeEvent();</b>
+<i>816</i>&nbsp;            }
+<i>817</i>&nbsp;        }
+<i>818</i>&nbsp;        else {
+<b class="fc"><i>819</i>&nbsp;            if (this.outlineStroke != null) {</b>
+<b class="fc"><i>820</i>&nbsp;                if (this.outlineStroke.equals(stroke)) {</b>
+<b class="nc"><i>821</i>&nbsp;                    return;  // nothing to do</b>
+<i>822</i>&nbsp;                }
+<i>823</i>&nbsp;            }
+<b class="fc"><i>824</i>&nbsp;            this.outlineStroke = stroke;</b>
+<b class="fc"><i>825</i>&nbsp;            fireChangeEvent();</b>
+<i>826</i>&nbsp;        }
+<b class="fc"><i>827</i>&nbsp;    }</b>
+<i>828</i>&nbsp;
+<i>829</i>&nbsp;    /**
+<i>830</i>&nbsp;     * Returns the color used to draw the outline of the plot area.
+<i>831</i>&nbsp;     *
+<i>832</i>&nbsp;     * @return The color (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>833</i>&nbsp;     *
+<i>834</i>&nbsp;     * @see #setOutlinePaint(Paint)
+<i>835</i>&nbsp;     */
+<i>836</i>&nbsp;    public Paint getOutlinePaint() {
+<b class="nc"><i>837</i>&nbsp;        return this.outlinePaint;</b>
+<i>838</i>&nbsp;    }
+<i>839</i>&nbsp;
+<i>840</i>&nbsp;    /**
+<i>841</i>&nbsp;     * Sets the paint used to draw the outline of the plot area and sends a
+<i>842</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.  If you set this
+<i>843</i>&nbsp;     * attribute to &lt;code&gt;null&lt;/code&gt;, no outline will be drawn.
+<i>844</i>&nbsp;     *
+<i>845</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>846</i>&nbsp;     *
+<i>847</i>&nbsp;     * @see #getOutlinePaint()
+<i>848</i>&nbsp;     */
+<i>849</i>&nbsp;    public void setOutlinePaint(Paint paint) {
+<b class="fc"><i>850</i>&nbsp;        if (paint == null) {</b>
+<b class="nc"><i>851</i>&nbsp;            if (this.outlinePaint != null) {</b>
+<b class="nc"><i>852</i>&nbsp;                this.outlinePaint = null;</b>
+<b class="nc"><i>853</i>&nbsp;                fireChangeEvent();</b>
+<i>854</i>&nbsp;            }
+<i>855</i>&nbsp;        }
+<i>856</i>&nbsp;        else {
+<b class="fc"><i>857</i>&nbsp;            if (this.outlinePaint != null) {</b>
+<b class="fc"><i>858</i>&nbsp;                if (this.outlinePaint.equals(paint)) {</b>
+<b class="nc"><i>859</i>&nbsp;                    return;  // nothing to do</b>
+<i>860</i>&nbsp;                }
+<i>861</i>&nbsp;            }
+<b class="fc"><i>862</i>&nbsp;            this.outlinePaint = paint;</b>
+<b class="fc"><i>863</i>&nbsp;            fireChangeEvent();</b>
+<i>864</i>&nbsp;        }
+<b class="fc"><i>865</i>&nbsp;    }</b>
+<i>866</i>&nbsp;
+<i>867</i>&nbsp;    /**
+<i>868</i>&nbsp;     * Returns the alpha-transparency for the plot foreground.
+<i>869</i>&nbsp;     *
+<i>870</i>&nbsp;     * @return The alpha-transparency.
+<i>871</i>&nbsp;     *
+<i>872</i>&nbsp;     * @see #setForegroundAlpha(float)
+<i>873</i>&nbsp;     */
+<i>874</i>&nbsp;    public float getForegroundAlpha() {
+<b class="fc"><i>875</i>&nbsp;        return this.foregroundAlpha;</b>
+<i>876</i>&nbsp;    }
+<i>877</i>&nbsp;
+<i>878</i>&nbsp;    /**
+<i>879</i>&nbsp;     * Sets the alpha-transparency for the plot and sends a
+<i>880</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>881</i>&nbsp;     *
+<i>882</i>&nbsp;     * @param alpha  the new alpha transparency.
+<i>883</i>&nbsp;     *
+<i>884</i>&nbsp;     * @see #getForegroundAlpha()
+<i>885</i>&nbsp;     */
+<i>886</i>&nbsp;    public void setForegroundAlpha(float alpha) {
+<b class="fc"><i>887</i>&nbsp;        if (this.foregroundAlpha != alpha) {</b>
+<b class="fc"><i>888</i>&nbsp;            this.foregroundAlpha = alpha;</b>
+<b class="fc"><i>889</i>&nbsp;            fireChangeEvent();</b>
+<i>890</i>&nbsp;        }
+<b class="fc"><i>891</i>&nbsp;    }</b>
+<i>892</i>&nbsp;
+<i>893</i>&nbsp;    /**
+<i>894</i>&nbsp;     * Returns the legend items for the plot.  By default, this method returns
+<i>895</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;.  Subclasses should override to return a
+<i>896</i>&nbsp;     * {@link LegendItemCollection}.
+<i>897</i>&nbsp;     *
+<i>898</i>&nbsp;     * @return The legend items for the plot (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>899</i>&nbsp;     */
+<i>900</i>&nbsp;    @Override
+<i>901</i>&nbsp;    public LegendItemCollection getLegendItems() {
+<b class="fc"><i>902</i>&nbsp;        return null;</b>
+<i>903</i>&nbsp;    }
+<i>904</i>&nbsp;
+<i>905</i>&nbsp;    /**
+<i>906</i>&nbsp;     * Returns a flag that controls whether or not change events are sent to
+<i>907</i>&nbsp;     * registered listeners.
+<i>908</i>&nbsp;     *
+<i>909</i>&nbsp;     * @return A boolean.
+<i>910</i>&nbsp;     *
+<i>911</i>&nbsp;     * @see #setNotify(boolean)
+<i>912</i>&nbsp;     *
+<i>913</i>&nbsp;     * @since 1.0.13
+<i>914</i>&nbsp;     */
+<i>915</i>&nbsp;    public boolean isNotify() {
+<b class="fc"><i>916</i>&nbsp;        return this.notify;</b>
+<i>917</i>&nbsp;    }
+<i>918</i>&nbsp;
+<i>919</i>&nbsp;    /**
+<i>920</i>&nbsp;     * Sets a flag that controls whether or not listeners receive
+<i>921</i>&nbsp;     * {@link PlotChangeEvent} notifications.
+<i>922</i>&nbsp;     *
+<i>923</i>&nbsp;     * @param notify  a boolean.
+<i>924</i>&nbsp;     *
+<i>925</i>&nbsp;     * @see #isNotify()
+<i>926</i>&nbsp;     *
+<i>927</i>&nbsp;     * @since 1.0.13
+<i>928</i>&nbsp;     */
+<i>929</i>&nbsp;    public void setNotify(boolean notify) {
+<b class="fc"><i>930</i>&nbsp;        this.notify = notify;</b>
+<i>931</i>&nbsp;        // if the flag is being set to true, there may be queued up changes...
+<b class="fc"><i>932</i>&nbsp;        if (notify) {</b>
+<b class="fc"><i>933</i>&nbsp;            notifyListeners(new PlotChangeEvent(this));</b>
+<i>934</i>&nbsp;        }
+<b class="fc"><i>935</i>&nbsp;    }</b>
+<i>936</i>&nbsp;
+<i>937</i>&nbsp;    /**
+<i>938</i>&nbsp;     * Registers an object for notification of changes to the plot.
+<i>939</i>&nbsp;     *
+<i>940</i>&nbsp;     * @param listener  the object to be registered.
+<i>941</i>&nbsp;     *
+<i>942</i>&nbsp;     * @see #removeChangeListener(PlotChangeListener)
+<i>943</i>&nbsp;     */
+<i>944</i>&nbsp;    public void addChangeListener(PlotChangeListener listener) {
+<b class="fc"><i>945</i>&nbsp;        this.listenerList.add(PlotChangeListener.class, listener);</b>
+<b class="fc"><i>946</i>&nbsp;    }</b>
+<i>947</i>&nbsp;
+<i>948</i>&nbsp;    /**
+<i>949</i>&nbsp;     * Unregisters an object for notification of changes to the plot.
+<i>950</i>&nbsp;     *
+<i>951</i>&nbsp;     * @param listener  the object to be unregistered.
+<i>952</i>&nbsp;     *
+<i>953</i>&nbsp;     * @see #addChangeListener(PlotChangeListener)
+<i>954</i>&nbsp;     */
+<i>955</i>&nbsp;    public void removeChangeListener(PlotChangeListener listener) {
+<b class="fc"><i>956</i>&nbsp;        this.listenerList.remove(PlotChangeListener.class, listener);</b>
+<b class="fc"><i>957</i>&nbsp;    }</b>
+<i>958</i>&nbsp;
+<i>959</i>&nbsp;    /**
+<i>960</i>&nbsp;     * Notifies all registered listeners that the plot has been modified.
+<i>961</i>&nbsp;     *
+<i>962</i>&nbsp;     * @param event  information about the change event.
+<i>963</i>&nbsp;     */
+<i>964</i>&nbsp;    public void notifyListeners(PlotChangeEvent event) {
+<i>965</i>&nbsp;        // if the &#39;notify&#39; flag has been switched to false, we don&#39;t notify
+<i>966</i>&nbsp;        // the listeners
+<b class="fc"><i>967</i>&nbsp;        if (!this.notify) {</b>
+<b class="fc"><i>968</i>&nbsp;            return;</b>
+<i>969</i>&nbsp;        }
+<b class="fc"><i>970</i>&nbsp;        Object[] listeners = this.listenerList.getListenerList();</b>
+<b class="fc"><i>971</i>&nbsp;        for (int i = listeners.length - 2; i &gt;= 0; i -= 2) {</b>
+<b class="fc"><i>972</i>&nbsp;            if (listeners[i] == PlotChangeListener.class) {</b>
+<b class="fc"><i>973</i>&nbsp;                ((PlotChangeListener) listeners[i + 1]).plotChanged(event);</b>
+<i>974</i>&nbsp;            }
+<i>975</i>&nbsp;        }
+<b class="fc"><i>976</i>&nbsp;    }</b>
+<i>977</i>&nbsp;
+<i>978</i>&nbsp;    /**
+<i>979</i>&nbsp;     * Sends a {@link PlotChangeEvent} to all registered listeners.
+<i>980</i>&nbsp;     *
+<i>981</i>&nbsp;     * @since 1.0.10
+<i>982</i>&nbsp;     */
+<i>983</i>&nbsp;    protected void fireChangeEvent() {
+<b class="fc"><i>984</i>&nbsp;        notifyListeners(new PlotChangeEvent(this));</b>
+<b class="fc"><i>985</i>&nbsp;    }</b>
+<i>986</i>&nbsp;
+<i>987</i>&nbsp;    /**
+<i>988</i>&nbsp;     * Draws the plot within the specified area.  The anchor is a point on the
+<i>989</i>&nbsp;     * chart that is specified externally (for instance, it may be the last
+<i>990</i>&nbsp;     * point of the last mouse click performed by the user) - plots can use or
+<i>991</i>&nbsp;     * ignore this value as they see fit.
+<i>992</i>&nbsp;     * &lt;br&gt;&lt;br&gt;
+<i>993</i>&nbsp;     * Subclasses need to provide an implementation of this method, obviously.
+<i>994</i>&nbsp;     *
+<i>995</i>&nbsp;     * @param g2  the graphics device.
+<i>996</i>&nbsp;     * @param area  the plot area.
+<i>997</i>&nbsp;     * @param anchor  the anchor point (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>998</i>&nbsp;     * @param parentState  the parent state (if any).
+<i>999</i>&nbsp;     * @param info  carries back plot rendering info.
+<i>1000</i>&nbsp;     */
+<i>1001</i>&nbsp;    public abstract void draw(Graphics2D g2,
+<i>1002</i>&nbsp;                              Rectangle2D area,
+<i>1003</i>&nbsp;                              Point2D anchor,
+<i>1004</i>&nbsp;                              PlotState parentState,
+<i>1005</i>&nbsp;                              PlotRenderingInfo info);
+<i>1006</i>&nbsp;
+<i>1007</i>&nbsp;    /**
+<i>1008</i>&nbsp;     * Draws the plot background (the background color and/or image).
+<i>1009</i>&nbsp;     * &lt;P&gt;
+<i>1010</i>&nbsp;     * This method will be called during the chart drawing process and is
+<i>1011</i>&nbsp;     * declared public so that it can be accessed by the renderers used by
+<i>1012</i>&nbsp;     * certain subclasses.  You shouldn&#39;t need to call this method directly.
+<i>1013</i>&nbsp;     *
+<i>1014</i>&nbsp;     * @param g2  the graphics device.
+<i>1015</i>&nbsp;     * @param area  the area within which the plot should be drawn.
+<i>1016</i>&nbsp;     */
+<i>1017</i>&nbsp;    public void drawBackground(Graphics2D g2, Rectangle2D area) {
+<i>1018</i>&nbsp;        // some subclasses override this method completely, so don&#39;t put
+<i>1019</i>&nbsp;        // anything here that *must* be done
+<b class="fc"><i>1020</i>&nbsp;        fillBackground(g2, area);</b>
+<b class="fc"><i>1021</i>&nbsp;        drawBackgroundImage(g2, area);</b>
+<b class="fc"><i>1022</i>&nbsp;    }</b>
+<i>1023</i>&nbsp;
+<i>1024</i>&nbsp;    /**
+<i>1025</i>&nbsp;     * Fills the specified area with the background paint.
+<i>1026</i>&nbsp;     *
+<i>1027</i>&nbsp;     * @param g2  the graphics device.
+<i>1028</i>&nbsp;     * @param area  the area.
+<i>1029</i>&nbsp;     *
+<i>1030</i>&nbsp;     * @see #getBackgroundPaint()
+<i>1031</i>&nbsp;     * @see #getBackgroundAlpha()
+<i>1032</i>&nbsp;     * @see #fillBackground(Graphics2D, Rectangle2D, PlotOrientation)
+<i>1033</i>&nbsp;     */
+<i>1034</i>&nbsp;    protected void fillBackground(Graphics2D g2, Rectangle2D area) {
+<b class="fc"><i>1035</i>&nbsp;        fillBackground(g2, area, PlotOrientation.VERTICAL);</b>
+<b class="fc"><i>1036</i>&nbsp;    }</b>
+<i>1037</i>&nbsp;
+<i>1038</i>&nbsp;    /**
+<i>1039</i>&nbsp;     * Fills the specified area with the background paint.  If the background
+<i>1040</i>&nbsp;     * paint is an instance of &lt;code&gt;GradientPaint&lt;/code&gt;, the gradient will
+<i>1041</i>&nbsp;     * run in the direction suggested by the plot&#39;s orientation.
+<i>1042</i>&nbsp;     *
+<i>1043</i>&nbsp;     * @param g2  the graphics target.
+<i>1044</i>&nbsp;     * @param area  the plot area.
+<i>1045</i>&nbsp;     * @param orientation  the plot orientation (&lt;code&gt;null&lt;/code&gt; not
+<i>1046</i>&nbsp;     *         permitted).
+<i>1047</i>&nbsp;     *
+<i>1048</i>&nbsp;     * @since 1.0.6
+<i>1049</i>&nbsp;     */
+<i>1050</i>&nbsp;    protected void fillBackground(Graphics2D g2, Rectangle2D area,
+<i>1051</i>&nbsp;            PlotOrientation orientation) {
+<b class="fc"><i>1052</i>&nbsp;        ParamChecks.nullNotPermitted(orientation, &quot;orientation&quot;);</b>
+<b class="fc"><i>1053</i>&nbsp;        if (this.backgroundPaint == null) {</b>
+<b class="nc"><i>1054</i>&nbsp;            return;</b>
+<i>1055</i>&nbsp;        }
+<b class="fc"><i>1056</i>&nbsp;        Paint p = this.backgroundPaint;</b>
+<b class="fc"><i>1057</i>&nbsp;        if (p instanceof GradientPaint) {</b>
+<b class="nc"><i>1058</i>&nbsp;            GradientPaint gp = (GradientPaint) p;</b>
+<b class="nc"><i>1059</i>&nbsp;            if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1060</i>&nbsp;                p = new GradientPaint((float) area.getCenterX(),</b>
+<b class="nc"><i>1061</i>&nbsp;                        (float) area.getMaxY(), gp.getColor1(),</b>
+<b class="nc"><i>1062</i>&nbsp;                        (float) area.getCenterX(), (float) area.getMinY(),</b>
+<b class="nc"><i>1063</i>&nbsp;                        gp.getColor2());</b>
+<i>1064</i>&nbsp;            }
+<b class="nc"><i>1065</i>&nbsp;            else if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1066</i>&nbsp;                p = new GradientPaint((float) area.getMinX(),</b>
+<b class="nc"><i>1067</i>&nbsp;                        (float) area.getCenterY(), gp.getColor1(),</b>
+<b class="nc"><i>1068</i>&nbsp;                        (float) area.getMaxX(), (float) area.getCenterY(),</b>
+<b class="nc"><i>1069</i>&nbsp;                        gp.getColor2());</b>
+<i>1070</i>&nbsp;            }
+<i>1071</i>&nbsp;        }
+<b class="fc"><i>1072</i>&nbsp;        Composite originalComposite = g2.getComposite();</b>
+<b class="fc"><i>1073</i>&nbsp;        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,</b>
+<i>1074</i>&nbsp;                this.backgroundAlpha));
+<b class="fc"><i>1075</i>&nbsp;        g2.setPaint(p);</b>
+<b class="fc"><i>1076</i>&nbsp;        g2.fill(area);</b>
+<b class="fc"><i>1077</i>&nbsp;        g2.setComposite(originalComposite);</b>
+<b class="fc"><i>1078</i>&nbsp;    }</b>
+<i>1079</i>&nbsp;
+<i>1080</i>&nbsp;    /**
+<i>1081</i>&nbsp;     * Draws the background image (if there is one) aligned within the
+<i>1082</i>&nbsp;     * specified area.
+<i>1083</i>&nbsp;     *
+<i>1084</i>&nbsp;     * @param g2  the graphics device.
+<i>1085</i>&nbsp;     * @param area  the area.
+<i>1086</i>&nbsp;     *
+<i>1087</i>&nbsp;     * @see #getBackgroundImage()
+<i>1088</i>&nbsp;     * @see #getBackgroundImageAlignment()
+<i>1089</i>&nbsp;     * @see #getBackgroundImageAlpha()
+<i>1090</i>&nbsp;     */
+<i>1091</i>&nbsp;    public void drawBackgroundImage(Graphics2D g2, Rectangle2D area) {
+<b class="fc"><i>1092</i>&nbsp;        if (this.backgroundImage == null) {</b>
+<b class="fc"><i>1093</i>&nbsp;            return;  // nothing to do</b>
+<i>1094</i>&nbsp;        }
+<b class="nc"><i>1095</i>&nbsp;        Composite savedComposite = g2.getComposite();</b>
+<b class="nc"><i>1096</i>&nbsp;        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,</b>
+<i>1097</i>&nbsp;                this.backgroundImageAlpha));
+<b class="nc"><i>1098</i>&nbsp;        Rectangle2D dest = new Rectangle2D.Double(0.0, 0.0,</b>
+<b class="nc"><i>1099</i>&nbsp;                this.backgroundImage.getWidth(null),</b>
+<b class="nc"><i>1100</i>&nbsp;                this.backgroundImage.getHeight(null));</b>
+<b class="nc"><i>1101</i>&nbsp;        Align.align(dest, area, this.backgroundImageAlignment);</b>
+<b class="nc"><i>1102</i>&nbsp;        Shape savedClip = g2.getClip();</b>
+<b class="nc"><i>1103</i>&nbsp;        g2.clip(area);</b>
+<b class="nc"><i>1104</i>&nbsp;        g2.drawImage(this.backgroundImage, (int) dest.getX(),</b>
+<b class="nc"><i>1105</i>&nbsp;                (int) dest.getY(), (int) dest.getWidth() + 1,</b>
+<b class="nc"><i>1106</i>&nbsp;                (int) dest.getHeight() + 1, null);</b>
+<b class="nc"><i>1107</i>&nbsp;        g2.setClip(savedClip);</b>
+<b class="nc"><i>1108</i>&nbsp;        g2.setComposite(savedComposite);</b>
+<b class="nc"><i>1109</i>&nbsp;    }</b>
+<i>1110</i>&nbsp;
+<i>1111</i>&nbsp;    /**
+<i>1112</i>&nbsp;     * Draws the plot outline.  This method will be called during the chart
+<i>1113</i>&nbsp;     * drawing process and is declared public so that it can be accessed by the
+<i>1114</i>&nbsp;     * renderers used by certain subclasses. You shouldn&#39;t need to call this
+<i>1115</i>&nbsp;     * method directly.
+<i>1116</i>&nbsp;     *
+<i>1117</i>&nbsp;     * @param g2  the graphics device.
+<i>1118</i>&nbsp;     * @param area  the area within which the plot should be drawn.
+<i>1119</i>&nbsp;     */
+<i>1120</i>&nbsp;    public void drawOutline(Graphics2D g2, Rectangle2D area) {
+<b class="fc"><i>1121</i>&nbsp;        if (!this.outlineVisible) {</b>
+<b class="nc"><i>1122</i>&nbsp;            return;</b>
+<i>1123</i>&nbsp;        }
+<b class="fc"><i>1124</i>&nbsp;        if ((this.outlineStroke != null) &amp;&amp; (this.outlinePaint != null)) {</b>
+<b class="fc"><i>1125</i>&nbsp;            g2.setStroke(this.outlineStroke);</b>
+<b class="fc"><i>1126</i>&nbsp;            g2.setPaint(this.outlinePaint);</b>
+<b class="fc"><i>1127</i>&nbsp;            Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="fc"><i>1128</i>&nbsp;            g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);</b>
+<b class="fc"><i>1129</i>&nbsp;            g2.draw(area);</b>
+<b class="fc"><i>1130</i>&nbsp;            g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);</b>
+<i>1131</i>&nbsp;        }
+<b class="fc"><i>1132</i>&nbsp;    }</b>
+<i>1133</i>&nbsp;
+<i>1134</i>&nbsp;    /**
+<i>1135</i>&nbsp;     * Draws a message to state that there is no data to plot.
+<i>1136</i>&nbsp;     *
+<i>1137</i>&nbsp;     * @param g2  the graphics device.
+<i>1138</i>&nbsp;     * @param area  the area within which the plot should be drawn.
+<i>1139</i>&nbsp;     */
+<i>1140</i>&nbsp;    protected void drawNoDataMessage(Graphics2D g2, Rectangle2D area) {
+<b class="fc"><i>1141</i>&nbsp;        Shape savedClip = g2.getClip();</b>
+<b class="fc"><i>1142</i>&nbsp;        g2.clip(area);</b>
+<b class="fc"><i>1143</i>&nbsp;        String message = this.noDataMessage;</b>
+<b class="fc"><i>1144</i>&nbsp;        if (message != null) {</b>
+<b class="nc"><i>1145</i>&nbsp;            g2.setFont(this.noDataMessageFont);</b>
+<b class="nc"><i>1146</i>&nbsp;            g2.setPaint(this.noDataMessagePaint);</b>
+<b class="nc"><i>1147</i>&nbsp;            TextBlock block = TextUtilities.createTextBlock(</b>
+<i>1148</i>&nbsp;                    this.noDataMessage, this.noDataMessageFont,
+<b class="nc"><i>1149</i>&nbsp;                    this.noDataMessagePaint, 0.9f * (float) area.getWidth(),</b>
+<i>1150</i>&nbsp;                    new G2TextMeasurer(g2));
+<b class="nc"><i>1151</i>&nbsp;            block.draw(g2, (float) area.getCenterX(),</b>
+<b class="nc"><i>1152</i>&nbsp;                    (float) area.getCenterY(), TextBlockAnchor.CENTER);</b>
+<i>1153</i>&nbsp;        }
+<b class="fc"><i>1154</i>&nbsp;        g2.setClip(savedClip);</b>
+<b class="fc"><i>1155</i>&nbsp;    }</b>
+<i>1156</i>&nbsp;
+<i>1157</i>&nbsp;    /**
+<i>1158</i>&nbsp;     * Creates a plot entity that contains a reference to the plot and the
+<i>1159</i>&nbsp;     * data area as shape.
+<i>1160</i>&nbsp;     *
+<i>1161</i>&nbsp;     * @param dataArea  the data area used as hot spot for the entity.
+<i>1162</i>&nbsp;     * @param plotState  the plot rendering info containing a reference to the
+<i>1163</i>&nbsp;     *     EntityCollection.
+<i>1164</i>&nbsp;     * @param toolTip  the tool tip (defined in the respective Plot
+<i>1165</i>&nbsp;     *     subclass) (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1166</i>&nbsp;     * @param urlText  the url (defined in the respective Plot subclass)
+<i>1167</i>&nbsp;     *     (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1168</i>&nbsp;     *
+<i>1169</i>&nbsp;     *  @since 1.0.13
+<i>1170</i>&nbsp;     */
+<i>1171</i>&nbsp;    protected void createAndAddEntity(Rectangle2D dataArea,
+<i>1172</i>&nbsp;            PlotRenderingInfo plotState, String toolTip, String urlText) {
+<b class="fc"><i>1173</i>&nbsp;        if (plotState != null &amp;&amp; plotState.getOwner() != null) {</b>
+<b class="fc"><i>1174</i>&nbsp;            EntityCollection e = plotState.getOwner().getEntityCollection();</b>
+<b class="fc"><i>1175</i>&nbsp;            if (e != null) {</b>
+<b class="fc"><i>1176</i>&nbsp;                e.add(new PlotEntity(dataArea, this, toolTip, urlText));</b>
+<i>1177</i>&nbsp;            }
+<i>1178</i>&nbsp;        }
+<b class="fc"><i>1179</i>&nbsp;    }</b>
+<i>1180</i>&nbsp;
+<i>1181</i>&nbsp;    /**
+<i>1182</i>&nbsp;     * Handles a &#39;click&#39; on the plot.  Since the plot does not maintain any
+<i>1183</i>&nbsp;     * information about where it has been drawn, the plot rendering info is
+<i>1184</i>&nbsp;     * supplied as an argument so that the plot dimensions can be determined.
+<i>1185</i>&nbsp;     *
+<i>1186</i>&nbsp;     * @param x  the x coordinate (in Java2D space).
+<i>1187</i>&nbsp;     * @param y  the y coordinate (in Java2D space).
+<i>1188</i>&nbsp;     * @param info  an object containing information about the dimensions of
+<i>1189</i>&nbsp;     *              the plot.
+<i>1190</i>&nbsp;     */
+<i>1191</i>&nbsp;    public void handleClick(int x, int y, PlotRenderingInfo info) {
+<i>1192</i>&nbsp;        // provides a &#39;no action&#39; default
+<b class="nc"><i>1193</i>&nbsp;    }</b>
+<i>1194</i>&nbsp;
+<i>1195</i>&nbsp;    /**
+<i>1196</i>&nbsp;     * Performs a zoom on the plot.  Subclasses should override if zooming is
+<i>1197</i>&nbsp;     * appropriate for the type of plot.
+<i>1198</i>&nbsp;     *
+<i>1199</i>&nbsp;     * @param percent  the zoom percentage.
+<i>1200</i>&nbsp;     */
+<i>1201</i>&nbsp;    public void zoom(double percent) {
+<i>1202</i>&nbsp;        // do nothing by default.
+<b class="nc"><i>1203</i>&nbsp;    }</b>
+<i>1204</i>&nbsp;
+<i>1205</i>&nbsp;    /**
+<i>1206</i>&nbsp;     * Receives notification of a change to an {@link Annotation} added to
+<i>1207</i>&nbsp;     * this plot.
+<i>1208</i>&nbsp;     *
+<i>1209</i>&nbsp;     * @param event  information about the event (not used here).
+<i>1210</i>&nbsp;     *
+<i>1211</i>&nbsp;     * @since 1.0.14
+<i>1212</i>&nbsp;     */
+<i>1213</i>&nbsp;    @Override
+<i>1214</i>&nbsp;    public void annotationChanged(AnnotationChangeEvent event) {
+<b class="nc"><i>1215</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>1216</i>&nbsp;    }</b>
+<i>1217</i>&nbsp;
+<i>1218</i>&nbsp;    /**
+<i>1219</i>&nbsp;     * Receives notification of a change to one of the plot&#39;s axes.
+<i>1220</i>&nbsp;     *
+<i>1221</i>&nbsp;     * @param event  information about the event (not used here).
+<i>1222</i>&nbsp;     */
+<i>1223</i>&nbsp;    @Override
+<i>1224</i>&nbsp;    public void axisChanged(AxisChangeEvent event) {
+<b class="fc"><i>1225</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>1226</i>&nbsp;    }</b>
+<i>1227</i>&nbsp;
+<i>1228</i>&nbsp;    /**
+<i>1229</i>&nbsp;     * Receives notification of a change to the plot&#39;s dataset.
+<i>1230</i>&nbsp;     * &lt;P&gt;
+<i>1231</i>&nbsp;     * The plot reacts by passing on a plot change event to all registered
+<i>1232</i>&nbsp;     * listeners.
+<i>1233</i>&nbsp;     *
+<i>1234</i>&nbsp;     * @param event  information about the event (not used here).
+<i>1235</i>&nbsp;     */
+<i>1236</i>&nbsp;    @Override
+<i>1237</i>&nbsp;    public void datasetChanged(DatasetChangeEvent event) {
+<b class="fc"><i>1238</i>&nbsp;        PlotChangeEvent newEvent = new PlotChangeEvent(this);</b>
+<b class="fc"><i>1239</i>&nbsp;        newEvent.setType(ChartChangeEventType.DATASET_UPDATED);</b>
+<b class="fc"><i>1240</i>&nbsp;        notifyListeners(newEvent);</b>
+<b class="fc"><i>1241</i>&nbsp;    }</b>
+<i>1242</i>&nbsp;
+<i>1243</i>&nbsp;    /**
+<i>1244</i>&nbsp;     * Receives notification of a change to a marker that is assigned to the
+<i>1245</i>&nbsp;     * plot.
+<i>1246</i>&nbsp;     *
+<i>1247</i>&nbsp;     * @param event  the event.
+<i>1248</i>&nbsp;     *
+<i>1249</i>&nbsp;     * @since 1.0.3
+<i>1250</i>&nbsp;     */
+<i>1251</i>&nbsp;    @Override
+<i>1252</i>&nbsp;    public void markerChanged(MarkerChangeEvent event) {
+<b class="nc"><i>1253</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>1254</i>&nbsp;    }</b>
+<i>1255</i>&nbsp;
+<i>1256</i>&nbsp;    /**
+<i>1257</i>&nbsp;     * Adjusts the supplied x-value.
+<i>1258</i>&nbsp;     *
+<i>1259</i>&nbsp;     * @param x  the x-value.
+<i>1260</i>&nbsp;     * @param w1  width 1.
+<i>1261</i>&nbsp;     * @param w2  width 2.
+<i>1262</i>&nbsp;     * @param edge  the edge (left or right).
+<i>1263</i>&nbsp;     *
+<i>1264</i>&nbsp;     * @return The adjusted x-value.
+<i>1265</i>&nbsp;     */
+<i>1266</i>&nbsp;    protected double getRectX(double x, double w1, double w2,
+<i>1267</i>&nbsp;                              RectangleEdge edge) {
+<i>1268</i>&nbsp;
+<b class="nc"><i>1269</i>&nbsp;        double result = x;</b>
+<b class="nc"><i>1270</i>&nbsp;        if (edge == RectangleEdge.LEFT) {</b>
+<b class="nc"><i>1271</i>&nbsp;            result = result + w1;</b>
+<i>1272</i>&nbsp;        }
+<b class="nc"><i>1273</i>&nbsp;        else if (edge == RectangleEdge.RIGHT) {</b>
+<b class="nc"><i>1274</i>&nbsp;            result = result + w2;</b>
+<i>1275</i>&nbsp;        }
+<b class="nc"><i>1276</i>&nbsp;        return result;</b>
+<i>1277</i>&nbsp;
+<i>1278</i>&nbsp;    }
+<i>1279</i>&nbsp;
+<i>1280</i>&nbsp;    /**
+<i>1281</i>&nbsp;     * Adjusts the supplied y-value.
+<i>1282</i>&nbsp;     *
+<i>1283</i>&nbsp;     * @param y  the x-value.
+<i>1284</i>&nbsp;     * @param h1  height 1.
+<i>1285</i>&nbsp;     * @param h2  height 2.
+<i>1286</i>&nbsp;     * @param edge  the edge (top or bottom).
+<i>1287</i>&nbsp;     *
+<i>1288</i>&nbsp;     * @return The adjusted y-value.
+<i>1289</i>&nbsp;     */
+<i>1290</i>&nbsp;    protected double getRectY(double y, double h1, double h2,
+<i>1291</i>&nbsp;                              RectangleEdge edge) {
+<i>1292</i>&nbsp;
+<b class="nc"><i>1293</i>&nbsp;        double result = y;</b>
+<b class="nc"><i>1294</i>&nbsp;        if (edge == RectangleEdge.TOP) {</b>
+<b class="nc"><i>1295</i>&nbsp;            result = result + h1;</b>
+<i>1296</i>&nbsp;        }
+<b class="nc"><i>1297</i>&nbsp;        else if (edge == RectangleEdge.BOTTOM) {</b>
+<b class="nc"><i>1298</i>&nbsp;            result = result + h2;</b>
+<i>1299</i>&nbsp;        }
+<b class="nc"><i>1300</i>&nbsp;        return result;</b>
+<i>1301</i>&nbsp;
+<i>1302</i>&nbsp;    }
+<i>1303</i>&nbsp;
+<i>1304</i>&nbsp;    /**
+<i>1305</i>&nbsp;     * Tests this plot for equality with another object.
+<i>1306</i>&nbsp;     *
+<i>1307</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1308</i>&nbsp;     *
+<i>1309</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>1310</i>&nbsp;     */
+<i>1311</i>&nbsp;    @Override
+<i>1312</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1313</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>1314</i>&nbsp;            return true;</b>
+<i>1315</i>&nbsp;        }
+<b class="fc"><i>1316</i>&nbsp;        if (!(obj instanceof Plot)) {</b>
+<b class="nc"><i>1317</i>&nbsp;            return false;</b>
+<i>1318</i>&nbsp;        }
+<b class="fc"><i>1319</i>&nbsp;        Plot that = (Plot) obj;</b>
+<b class="fc"><i>1320</i>&nbsp;        if (!ObjectUtilities.equal(this.noDataMessage, that.noDataMessage)) {</b>
+<b class="fc"><i>1321</i>&nbsp;            return false;</b>
+<i>1322</i>&nbsp;        }
+<b class="fc"><i>1323</i>&nbsp;        if (!ObjectUtilities.equal(</b>
+<i>1324</i>&nbsp;            this.noDataMessageFont, that.noDataMessageFont
+<i>1325</i>&nbsp;        )) {
+<b class="fc"><i>1326</i>&nbsp;            return false;</b>
+<i>1327</i>&nbsp;        }
+<b class="fc"><i>1328</i>&nbsp;        if (!PaintUtilities.equal(this.noDataMessagePaint,</b>
+<i>1329</i>&nbsp;                that.noDataMessagePaint)) {
+<b class="fc"><i>1330</i>&nbsp;            return false;</b>
+<i>1331</i>&nbsp;        }
+<b class="fc"><i>1332</i>&nbsp;        if (!ObjectUtilities.equal(this.insets, that.insets)) {</b>
+<b class="fc"><i>1333</i>&nbsp;            return false;</b>
+<i>1334</i>&nbsp;        }
+<b class="fc"><i>1335</i>&nbsp;        if (this.outlineVisible != that.outlineVisible) {</b>
+<b class="fc"><i>1336</i>&nbsp;            return false;</b>
+<i>1337</i>&nbsp;        }
+<b class="fc"><i>1338</i>&nbsp;        if (!ObjectUtilities.equal(this.outlineStroke, that.outlineStroke)) {</b>
+<b class="fc"><i>1339</i>&nbsp;            return false;</b>
+<i>1340</i>&nbsp;        }
+<b class="fc"><i>1341</i>&nbsp;        if (!PaintUtilities.equal(this.outlinePaint, that.outlinePaint)) {</b>
+<b class="fc"><i>1342</i>&nbsp;            return false;</b>
+<i>1343</i>&nbsp;        }
+<b class="fc"><i>1344</i>&nbsp;        if (!PaintUtilities.equal(this.backgroundPaint, that.backgroundPaint)) {</b>
+<b class="fc"><i>1345</i>&nbsp;            return false;</b>
+<i>1346</i>&nbsp;        }
+<b class="fc"><i>1347</i>&nbsp;        if (!ObjectUtilities.equal(this.backgroundImage,</b>
+<i>1348</i>&nbsp;                that.backgroundImage)) {
+<b class="fc"><i>1349</i>&nbsp;            return false;</b>
+<i>1350</i>&nbsp;        }
+<b class="fc"><i>1351</i>&nbsp;        if (this.backgroundImageAlignment != that.backgroundImageAlignment) {</b>
+<b class="fc"><i>1352</i>&nbsp;            return false;</b>
+<i>1353</i>&nbsp;        }
+<b class="fc"><i>1354</i>&nbsp;        if (this.backgroundImageAlpha != that.backgroundImageAlpha) {</b>
+<b class="fc"><i>1355</i>&nbsp;            return false;</b>
+<i>1356</i>&nbsp;        }
+<b class="fc"><i>1357</i>&nbsp;        if (this.foregroundAlpha != that.foregroundAlpha) {</b>
+<b class="fc"><i>1358</i>&nbsp;            return false;</b>
+<i>1359</i>&nbsp;        }
+<b class="fc"><i>1360</i>&nbsp;        if (this.backgroundAlpha != that.backgroundAlpha) {</b>
+<b class="fc"><i>1361</i>&nbsp;            return false;</b>
+<i>1362</i>&nbsp;        }
+<b class="fc"><i>1363</i>&nbsp;        if (!this.drawingSupplier.equals(that.drawingSupplier)) {</b>
+<b class="fc"><i>1364</i>&nbsp;            return false;</b>
+<i>1365</i>&nbsp;        }
+<b class="fc"><i>1366</i>&nbsp;        if (this.notify != that.notify) {</b>
+<b class="nc"><i>1367</i>&nbsp;            return false;</b>
+<i>1368</i>&nbsp;        }
+<b class="fc"><i>1369</i>&nbsp;        return true;</b>
+<i>1370</i>&nbsp;    }
+<i>1371</i>&nbsp;
+<i>1372</i>&nbsp;    /**
+<i>1373</i>&nbsp;     * Creates a clone of the plot.
+<i>1374</i>&nbsp;     *
+<i>1375</i>&nbsp;     * @return A clone.
+<i>1376</i>&nbsp;     *
+<i>1377</i>&nbsp;     * @throws CloneNotSupportedException if some component of the plot does not
+<i>1378</i>&nbsp;     *         support cloning.
+<i>1379</i>&nbsp;     */
+<i>1380</i>&nbsp;    @Override
+<i>1381</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<i>1382</i>&nbsp;
+<b class="fc"><i>1383</i>&nbsp;        Plot clone = (Plot) super.clone();</b>
+<i>1384</i>&nbsp;        // private Plot parent &lt;-- don&#39;t clone the parent plot, but take care
+<i>1385</i>&nbsp;        // childs in combined plots instead
+<b class="fc"><i>1386</i>&nbsp;        if (this.datasetGroup != null) {</b>
+<b class="nc"><i>1387</i>&nbsp;            clone.datasetGroup</b>
+<b class="nc"><i>1388</i>&nbsp;                = (DatasetGroup) ObjectUtilities.clone(this.datasetGroup);</b>
+<i>1389</i>&nbsp;        }
+<b class="fc"><i>1390</i>&nbsp;        clone.drawingSupplier</b>
+<b class="fc"><i>1391</i>&nbsp;            = (DrawingSupplier) ObjectUtilities.clone(this.drawingSupplier);</b>
+<b class="fc"><i>1392</i>&nbsp;        clone.listenerList = new EventListenerList();</b>
+<b class="fc"><i>1393</i>&nbsp;        return clone;</b>
+<i>1394</i>&nbsp;
+<i>1395</i>&nbsp;    }
+<i>1396</i>&nbsp;
+<i>1397</i>&nbsp;    /**
+<i>1398</i>&nbsp;     * Provides serialization support.
+<i>1399</i>&nbsp;     *
+<i>1400</i>&nbsp;     * @param stream  the output stream.
+<i>1401</i>&nbsp;     *
+<i>1402</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1403</i>&nbsp;     */
+<i>1404</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>1405</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>1406</i>&nbsp;        SerialUtilities.writePaint(this.noDataMessagePaint, stream);</b>
+<b class="fc"><i>1407</i>&nbsp;        SerialUtilities.writeStroke(this.outlineStroke, stream);</b>
+<b class="fc"><i>1408</i>&nbsp;        SerialUtilities.writePaint(this.outlinePaint, stream);</b>
+<i>1409</i>&nbsp;        // backgroundImage
+<b class="fc"><i>1410</i>&nbsp;        SerialUtilities.writePaint(this.backgroundPaint, stream);</b>
+<b class="fc"><i>1411</i>&nbsp;    }</b>
+<i>1412</i>&nbsp;
+<i>1413</i>&nbsp;    /**
+<i>1414</i>&nbsp;     * Provides serialization support.
+<i>1415</i>&nbsp;     *
+<i>1416</i>&nbsp;     * @param stream  the input stream.
+<i>1417</i>&nbsp;     *
+<i>1418</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1419</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>1420</i>&nbsp;     */
+<i>1421</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>1422</i>&nbsp;        throws IOException, ClassNotFoundException {
+<b class="fc"><i>1423</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>1424</i>&nbsp;        this.noDataMessagePaint = SerialUtilities.readPaint(stream);</b>
+<b class="fc"><i>1425</i>&nbsp;        this.outlineStroke = SerialUtilities.readStroke(stream);</b>
+<b class="fc"><i>1426</i>&nbsp;        this.outlinePaint = SerialUtilities.readPaint(stream);</b>
+<i>1427</i>&nbsp;        // backgroundImage
+<b class="fc"><i>1428</i>&nbsp;        this.backgroundPaint = SerialUtilities.readPaint(stream);</b>
+<i>1429</i>&nbsp;
+<b class="fc"><i>1430</i>&nbsp;        this.listenerList = new EventListenerList();</b>
+<i>1431</i>&nbsp;
+<b class="fc"><i>1432</i>&nbsp;    }</b>
+<i>1433</i>&nbsp;
+<i>1434</i>&nbsp;    /**
+<i>1435</i>&nbsp;     * Resolves a domain axis location for a given plot orientation.
+<i>1436</i>&nbsp;     *
+<i>1437</i>&nbsp;     * @param location  the location (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1438</i>&nbsp;     * @param orientation  the orientation (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1439</i>&nbsp;     *
+<i>1440</i>&nbsp;     * @return The edge (never &lt;code&gt;null&lt;/code&gt;).
+<i>1441</i>&nbsp;     */
+<i>1442</i>&nbsp;    public static RectangleEdge resolveDomainAxisLocation(
+<i>1443</i>&nbsp;            AxisLocation location, PlotOrientation orientation) {
+<i>1444</i>&nbsp;
+<b class="fc"><i>1445</i>&nbsp;        ParamChecks.nullNotPermitted(location, &quot;location&quot;);</b>
+<b class="fc"><i>1446</i>&nbsp;        ParamChecks.nullNotPermitted(orientation, &quot;orientation&quot;);</b>
+<i>1447</i>&nbsp;
+<b class="fc"><i>1448</i>&nbsp;        RectangleEdge result = null;</b>
+<b class="fc"><i>1449</i>&nbsp;        if (location == AxisLocation.TOP_OR_RIGHT) {</b>
+<b class="nc"><i>1450</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1451</i>&nbsp;                result = RectangleEdge.RIGHT;</b>
+<i>1452</i>&nbsp;            }
+<b class="nc"><i>1453</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1454</i>&nbsp;                result = RectangleEdge.TOP;</b>
+<i>1455</i>&nbsp;            }
+<i>1456</i>&nbsp;        }
+<b class="fc"><i>1457</i>&nbsp;        else if (location == AxisLocation.TOP_OR_LEFT) {</b>
+<b class="nc"><i>1458</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1459</i>&nbsp;                result = RectangleEdge.LEFT;</b>
+<i>1460</i>&nbsp;            }
+<b class="nc"><i>1461</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1462</i>&nbsp;                result = RectangleEdge.TOP;</b>
+<i>1463</i>&nbsp;            }
+<i>1464</i>&nbsp;        }
+<b class="fc"><i>1465</i>&nbsp;        else if (location == AxisLocation.BOTTOM_OR_RIGHT) {</b>
+<b class="nc"><i>1466</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1467</i>&nbsp;                result = RectangleEdge.RIGHT;</b>
+<i>1468</i>&nbsp;            }
+<b class="nc"><i>1469</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1470</i>&nbsp;                result = RectangleEdge.BOTTOM;</b>
+<i>1471</i>&nbsp;            }
+<i>1472</i>&nbsp;        }
+<b class="fc"><i>1473</i>&nbsp;        else if (location == AxisLocation.BOTTOM_OR_LEFT) {</b>
+<b class="fc"><i>1474</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="fc"><i>1475</i>&nbsp;                result = RectangleEdge.LEFT;</b>
+<i>1476</i>&nbsp;            }
+<b class="fc"><i>1477</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1478</i>&nbsp;                result = RectangleEdge.BOTTOM;</b>
+<i>1479</i>&nbsp;            }
+<i>1480</i>&nbsp;        }
+<i>1481</i>&nbsp;        // the above should cover all the options...
+<b class="fc"><i>1482</i>&nbsp;        if (result == null) {</b>
+<b class="nc"><i>1483</i>&nbsp;            throw new IllegalStateException(&quot;resolveDomainAxisLocation()&quot;);</b>
+<i>1484</i>&nbsp;        }
+<b class="fc"><i>1485</i>&nbsp;        return result;</b>
+<i>1486</i>&nbsp;
+<i>1487</i>&nbsp;    }
+<i>1488</i>&nbsp;
+<i>1489</i>&nbsp;    /**
+<i>1490</i>&nbsp;     * Resolves a range axis location for a given plot orientation.
+<i>1491</i>&nbsp;     *
+<i>1492</i>&nbsp;     * @param location  the location (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1493</i>&nbsp;     * @param orientation  the orientation (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1494</i>&nbsp;     *
+<i>1495</i>&nbsp;     * @return The edge (never &lt;code&gt;null&lt;/code&gt;).
+<i>1496</i>&nbsp;     */
+<i>1497</i>&nbsp;    public static RectangleEdge resolveRangeAxisLocation(
+<i>1498</i>&nbsp;            AxisLocation location, PlotOrientation orientation) {
+<i>1499</i>&nbsp;
+<b class="fc"><i>1500</i>&nbsp;        ParamChecks.nullNotPermitted(location, &quot;location&quot;);</b>
+<b class="fc"><i>1501</i>&nbsp;        ParamChecks.nullNotPermitted(orientation, &quot;orientation&quot;);</b>
+<i>1502</i>&nbsp;
+<b class="fc"><i>1503</i>&nbsp;        RectangleEdge result = null;</b>
+<b class="fc"><i>1504</i>&nbsp;        if (location == AxisLocation.TOP_OR_RIGHT) {</b>
+<b class="nc"><i>1505</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1506</i>&nbsp;                result = RectangleEdge.TOP;</b>
+<i>1507</i>&nbsp;            }
+<b class="nc"><i>1508</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1509</i>&nbsp;                result = RectangleEdge.RIGHT;</b>
+<i>1510</i>&nbsp;            }
+<i>1511</i>&nbsp;        }
+<b class="fc"><i>1512</i>&nbsp;        else if (location == AxisLocation.TOP_OR_LEFT) {</b>
+<b class="fc"><i>1513</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="fc"><i>1514</i>&nbsp;                result = RectangleEdge.TOP;</b>
+<i>1515</i>&nbsp;            }
+<b class="fc"><i>1516</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1517</i>&nbsp;                result = RectangleEdge.LEFT;</b>
+<i>1518</i>&nbsp;            }
+<i>1519</i>&nbsp;        }
+<b class="fc"><i>1520</i>&nbsp;        else if (location == AxisLocation.BOTTOM_OR_RIGHT) {</b>
+<b class="nc"><i>1521</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1522</i>&nbsp;                result = RectangleEdge.BOTTOM;</b>
+<i>1523</i>&nbsp;            }
+<b class="nc"><i>1524</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1525</i>&nbsp;                result = RectangleEdge.RIGHT;</b>
+<i>1526</i>&nbsp;            }
+<i>1527</i>&nbsp;        }
+<b class="fc"><i>1528</i>&nbsp;        else if (location == AxisLocation.BOTTOM_OR_LEFT) {</b>
+<b class="fc"><i>1529</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1530</i>&nbsp;                result = RectangleEdge.BOTTOM;</b>
+<i>1531</i>&nbsp;            }
+<b class="fc"><i>1532</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1533</i>&nbsp;                result = RectangleEdge.LEFT;</b>
+<i>1534</i>&nbsp;            }
+<i>1535</i>&nbsp;        }
+<i>1536</i>&nbsp;
+<i>1537</i>&nbsp;        // the above should cover all the options...
+<b class="fc"><i>1538</i>&nbsp;        if (result == null) {</b>
+<b class="nc"><i>1539</i>&nbsp;            throw new IllegalStateException(&quot;resolveRangeAxisLocation()&quot;);</b>
+<i>1540</i>&nbsp;        }
+<b class="fc"><i>1541</i>&nbsp;        return result;</b>
+<i>1542</i>&nbsp;
+<i>1543</i>&nbsp;    }
+<i>1544</i>&nbsp;
+<i>1545</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

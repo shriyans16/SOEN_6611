@@ -1,0 +1,461 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: RegularTimePeriod</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.time</a> ]
+</div>
+
+<h1>Coverage Summary for Class: RegularTimePeriod (org.jfree.data.time)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RegularTimePeriod</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (32/ 48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ----------------------
+<i>28</i>&nbsp; * RegularTimePeriod.java
+<i>29</i>&nbsp; * ----------------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2014, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 11-Oct-2001 : Version 1 (DG);
+<i>38</i>&nbsp; * 26-Feb-2002 : Changed getStart(), getMiddle() and getEnd() methods to
+<i>39</i>&nbsp; *               evaluate with reference to a particular time zone (DG);
+<i>40</i>&nbsp; * 29-May-2002 : Implemented MonthConstants interface, so that these constants
+<i>41</i>&nbsp; *               are conveniently available (DG);
+<i>42</i>&nbsp; * 10-Sep-2002 : Added getSerialIndex() method (DG);
+<i>43</i>&nbsp; * 10-Jan-2003 : Renamed TimePeriod --&gt; RegularTimePeriod (DG);
+<i>44</i>&nbsp; * 13-Mar-2003 : Moved to com.jrefinery.data.time package (DG);
+<i>45</i>&nbsp; * 29-Apr-2004 : Changed getMiddleMillisecond() methods to fix bug 943985 (DG);
+<i>46</i>&nbsp; * 25-Nov-2004 : Added utility methods (DG);
+<i>47</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>48</i>&nbsp; * 06-Oct-2006 : Deprecated the WORKING_CALENDAR field and several methods,
+<i>49</i>&nbsp; *               added new peg() method (DG);
+<i>50</i>&nbsp; * 16-Sep-2008 : Deprecated DEFAULT_TIME_ZONE (DG);
+<i>51</i>&nbsp; * 23-Feb-2014 : Added getMillisecond() method (DG);
+<i>52</i>&nbsp; * 
+<i>53</i>&nbsp; */
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;package org.jfree.data.time;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;import java.lang.reflect.Constructor;
+<i>58</i>&nbsp;import java.util.Calendar;
+<i>59</i>&nbsp;import java.util.Date;
+<i>60</i>&nbsp;import java.util.TimeZone;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;import org.jfree.date.MonthConstants;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;/**
+<i>65</i>&nbsp; * An abstract class representing a unit of time.  Convenient methods are
+<i>66</i>&nbsp; * provided for calculating the next and previous time periods.  Conversion
+<i>67</i>&nbsp; * methods are defined that return the first and last milliseconds of the time
+<i>68</i>&nbsp; * period.  The results from these methods are timezone dependent.
+<i>69</i>&nbsp; * &lt;P&gt;
+<i>70</i>&nbsp; * This class is immutable, and all subclasses should be immutable also.
+<i>71</i>&nbsp; */
+<b class="fc"><i>72</i>&nbsp;public abstract class RegularTimePeriod implements TimePeriod, Comparable,</b>
+<i>73</i>&nbsp;        MonthConstants {
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Creates a time period that includes the specified millisecond, assuming
+<i>77</i>&nbsp;     * the given time zone.
+<i>78</i>&nbsp;     *
+<i>79</i>&nbsp;     * @param c  the time period class.
+<i>80</i>&nbsp;     * @param millisecond  the time.
+<i>81</i>&nbsp;     * @param zone  the time zone.
+<i>82</i>&nbsp;     *
+<i>83</i>&nbsp;     * @return The time period.
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    public static RegularTimePeriod createInstance(Class c, Date millisecond,
+<i>86</i>&nbsp;            TimeZone zone) {
+<b class="fc"><i>87</i>&nbsp;        RegularTimePeriod result = null;</b>
+<i>88</i>&nbsp;        try {
+<b class="fc"><i>89</i>&nbsp;            Constructor constructor = c.getDeclaredConstructor(</b>
+<i>90</i>&nbsp;                    new Class[] {Date.class, TimeZone.class});
+<b class="fc"><i>91</i>&nbsp;            result = (RegularTimePeriod) constructor.newInstance(</b>
+<i>92</i>&nbsp;                    new Object[] {millisecond, zone});
+<i>93</i>&nbsp;        }
+<b class="nc"><i>94</i>&nbsp;        catch (Exception e) {</b>
+<i>95</i>&nbsp;            // do nothing, so null is returned
+<b class="fc"><i>96</i>&nbsp;        }</b>
+<b class="fc"><i>97</i>&nbsp;        return result;</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Returns a subclass of {@link RegularTimePeriod} that is smaller than
+<i>102</i>&nbsp;     * the specified class.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @param c  a subclass of {@link RegularTimePeriod}.
+<i>105</i>&nbsp;     *
+<i>106</i>&nbsp;     * @return A class.
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    public static Class downsize(Class c) {
+<b class="fc"><i>109</i>&nbsp;        if (c.equals(Year.class)) {</b>
+<b class="fc"><i>110</i>&nbsp;            return Quarter.class;</b>
+<i>111</i>&nbsp;        }
+<b class="fc"><i>112</i>&nbsp;        else if (c.equals(Quarter.class)) {</b>
+<b class="nc"><i>113</i>&nbsp;            return Month.class;</b>
+<i>114</i>&nbsp;        }
+<b class="fc"><i>115</i>&nbsp;        else if (c.equals(Month.class)) {</b>
+<b class="nc"><i>116</i>&nbsp;            return Day.class;</b>
+<i>117</i>&nbsp;        }
+<b class="fc"><i>118</i>&nbsp;        else if (c.equals(Day.class)) {</b>
+<b class="fc"><i>119</i>&nbsp;            return Hour.class;</b>
+<i>120</i>&nbsp;        }
+<b class="nc"><i>121</i>&nbsp;        else if (c.equals(Hour.class)) {</b>
+<b class="nc"><i>122</i>&nbsp;            return Minute.class;</b>
+<i>123</i>&nbsp;        }
+<b class="nc"><i>124</i>&nbsp;        else if (c.equals(Minute.class)) {</b>
+<b class="nc"><i>125</i>&nbsp;            return Second.class;</b>
+<i>126</i>&nbsp;        }
+<b class="nc"><i>127</i>&nbsp;        else if (c.equals(Second.class)) {</b>
+<b class="nc"><i>128</i>&nbsp;            return Millisecond.class;</b>
+<i>129</i>&nbsp;        }
+<i>130</i>&nbsp;        else {
+<b class="nc"><i>131</i>&nbsp;            return Millisecond.class;</b>
+<i>132</i>&nbsp;        }
+<i>133</i>&nbsp;    }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Returns the time period preceding this one, or &lt;code&gt;null&lt;/code&gt; if some
+<i>137</i>&nbsp;     * lower limit has been reached.
+<i>138</i>&nbsp;     *
+<i>139</i>&nbsp;     * @return The previous time period (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    public abstract RegularTimePeriod previous();
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * Returns the time period following this one, or &lt;code&gt;null&lt;/code&gt; if some
+<i>145</i>&nbsp;     * limit has been reached.
+<i>146</i>&nbsp;     *
+<i>147</i>&nbsp;     * @return The next time period (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>148</i>&nbsp;     */
+<i>149</i>&nbsp;    public abstract RegularTimePeriod next();
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /**
+<i>152</i>&nbsp;     * Returns a serial index number for the time unit.
+<i>153</i>&nbsp;     *
+<i>154</i>&nbsp;     * @return The serial index number.
+<i>155</i>&nbsp;     */
+<i>156</i>&nbsp;    public abstract long getSerialIndex();
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    //////////////////////////////////////////////////////////////////////////
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * The default time zone.
+<i>162</i>&nbsp;     *
+<i>163</i>&nbsp;     * @deprecated As of 1.0.11, we discourage the use of this field - use
+<i>164</i>&nbsp;     *     {@link TimeZone#getDefault()} instead.
+<i>165</i>&nbsp;     */
+<b class="fc"><i>166</i>&nbsp;    public static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getDefault();</b>
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * A working calendar (recycle to avoid unnecessary object creation).
+<i>170</i>&nbsp;     *
+<i>171</i>&nbsp;     * @deprecated This was a bad idea, don&#39;t use it!
+<i>172</i>&nbsp;     */
+<b class="fc"><i>173</i>&nbsp;    public static final Calendar WORKING_CALENDAR = Calendar.getInstance(</b>
+<i>174</i>&nbsp;            DEFAULT_TIME_ZONE);
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * Recalculates the start date/time and end date/time for this time period
+<i>178</i>&nbsp;     * relative to the supplied calendar (which incorporates a time zone).
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @since 1.0.3
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    public abstract void peg(Calendar calendar);
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * Returns the date/time that marks the start of the time period.  This
+<i>188</i>&nbsp;     * method returns a new &lt;code&gt;Date&lt;/code&gt; instance every time it is called.
+<i>189</i>&nbsp;     *
+<i>190</i>&nbsp;     * @return The start date/time.
+<i>191</i>&nbsp;     *
+<i>192</i>&nbsp;     * @see #getFirstMillisecond()
+<i>193</i>&nbsp;     */
+<i>194</i>&nbsp;    @Override
+<i>195</i>&nbsp;    public Date getStart() {
+<b class="fc"><i>196</i>&nbsp;        return new Date(getFirstMillisecond());</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Returns the date/time that marks the end of the time period.  This
+<i>201</i>&nbsp;     * method returns a new &lt;code&gt;Date&lt;/code&gt; instance every time it is called.
+<i>202</i>&nbsp;     *
+<i>203</i>&nbsp;     * @return The end date/time.
+<i>204</i>&nbsp;     *
+<i>205</i>&nbsp;     * @see #getLastMillisecond()
+<i>206</i>&nbsp;     */
+<i>207</i>&nbsp;    @Override
+<i>208</i>&nbsp;    public Date getEnd() {
+<b class="fc"><i>209</i>&nbsp;        return new Date(getLastMillisecond());</b>
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /**
+<i>213</i>&nbsp;     * Returns the first millisecond of the time period.  This will be
+<i>214</i>&nbsp;     * determined relative to the time zone specified in the constructor, or
+<i>215</i>&nbsp;     * in the calendar instance passed in the most recent call to the
+<i>216</i>&nbsp;     * {@link #peg(Calendar)} method.
+<i>217</i>&nbsp;     *
+<i>218</i>&nbsp;     * @return The first millisecond of the time period.
+<i>219</i>&nbsp;     *
+<i>220</i>&nbsp;     * @see #getLastMillisecond()
+<i>221</i>&nbsp;     */
+<i>222</i>&nbsp;    public abstract long getFirstMillisecond();
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;    /**
+<i>225</i>&nbsp;     * Returns the first millisecond of the time period, evaluated within a
+<i>226</i>&nbsp;     * specific time zone.
+<i>227</i>&nbsp;     *
+<i>228</i>&nbsp;     * @param zone  the time zone (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>229</i>&nbsp;     *
+<i>230</i>&nbsp;     * @return The first millisecond of the time period.
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @deprecated As of 1.0.3, you should avoid using this method (it creates
+<i>233</i>&nbsp;     *     a new Calendar instance every time it is called).  You are advised
+<i>234</i>&nbsp;     *     to call {@link #getFirstMillisecond(Calendar)} instead.
+<i>235</i>&nbsp;     *
+<i>236</i>&nbsp;     * @see #getLastMillisecond(TimeZone)
+<i>237</i>&nbsp;     */
+<i>238</i>&nbsp;    public long getFirstMillisecond(TimeZone zone) {
+<b class="fc"><i>239</i>&nbsp;        Calendar calendar = Calendar.getInstance(zone);</b>
+<b class="fc"><i>240</i>&nbsp;        return getFirstMillisecond(calendar);</b>
+<i>241</i>&nbsp;    }
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;    /**
+<i>244</i>&nbsp;     * Returns the first millisecond of the time period, evaluated using the
+<i>245</i>&nbsp;     * supplied calendar (which incorporates a timezone).
+<i>246</i>&nbsp;     *
+<i>247</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @return The first millisecond of the time period.
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @throws NullPointerException if {@code calendar} is {@code null}.
+<i>252</i>&nbsp;     *
+<i>253</i>&nbsp;     * @see #getLastMillisecond(Calendar)
+<i>254</i>&nbsp;     */
+<i>255</i>&nbsp;    public abstract long getFirstMillisecond(Calendar calendar);
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Returns the last millisecond of the time period.  This will be
+<i>259</i>&nbsp;     * determined relative to the time zone specified in the constructor, or
+<i>260</i>&nbsp;     * in the calendar instance passed in the most recent call to the
+<i>261</i>&nbsp;     * {@link #peg(Calendar)} method.
+<i>262</i>&nbsp;     *
+<i>263</i>&nbsp;     * @return The last millisecond of the time period.
+<i>264</i>&nbsp;     *
+<i>265</i>&nbsp;     * @see #getFirstMillisecond()
+<i>266</i>&nbsp;     */
+<i>267</i>&nbsp;    public abstract long getLastMillisecond();
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    /**
+<i>270</i>&nbsp;     * Returns the last millisecond of the time period, evaluated within a
+<i>271</i>&nbsp;     * specific time zone.
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @param zone  the time zone (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @return The last millisecond of the time period.
+<i>276</i>&nbsp;     *
+<i>277</i>&nbsp;     * @deprecated As of 1.0.3, you should avoid using this method (it creates
+<i>278</i>&nbsp;     *     a new Calendar instance every time it is called).  You are advised
+<i>279</i>&nbsp;     *     to call {@link #getLastMillisecond(Calendar)} instead.
+<i>280</i>&nbsp;     *
+<i>281</i>&nbsp;     * @see #getFirstMillisecond(TimeZone)
+<i>282</i>&nbsp;     */
+<i>283</i>&nbsp;    public long getLastMillisecond(TimeZone zone) {
+<b class="fc"><i>284</i>&nbsp;        Calendar calendar = Calendar.getInstance(zone);</b>
+<b class="fc"><i>285</i>&nbsp;        return getLastMillisecond(calendar);</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    /**
+<i>289</i>&nbsp;     * Returns the last millisecond of the time period, evaluated using the
+<i>290</i>&nbsp;     * supplied calendar (which incorporates a timezone).
+<i>291</i>&nbsp;     *
+<i>292</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>293</i>&nbsp;     *
+<i>294</i>&nbsp;     * @return The last millisecond of the time period.
+<i>295</i>&nbsp;     *
+<i>296</i>&nbsp;     * @see #getFirstMillisecond(Calendar)
+<i>297</i>&nbsp;     */
+<i>298</i>&nbsp;    public abstract long getLastMillisecond(Calendar calendar);
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;    /**
+<i>301</i>&nbsp;     * Returns the millisecond closest to the middle of the time period.
+<i>302</i>&nbsp;     *
+<i>303</i>&nbsp;     * @return The middle millisecond.
+<i>304</i>&nbsp;     */
+<i>305</i>&nbsp;    public long getMiddleMillisecond() {
+<b class="fc"><i>306</i>&nbsp;        long m1 = getFirstMillisecond();</b>
+<b class="fc"><i>307</i>&nbsp;        long m2 = getLastMillisecond();</b>
+<b class="fc"><i>308</i>&nbsp;        return m1 + (m2 - m1) / 2;</b>
+<i>309</i>&nbsp;    }
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;    /**
+<i>312</i>&nbsp;     * Returns the millisecond closest to the middle of the time period,
+<i>313</i>&nbsp;     * evaluated within a specific time zone.
+<i>314</i>&nbsp;     *
+<i>315</i>&nbsp;     * @param zone  the time zone (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>316</i>&nbsp;     *
+<i>317</i>&nbsp;     * @return The middle millisecond.
+<i>318</i>&nbsp;     *
+<i>319</i>&nbsp;     * @deprecated As of 1.0.3, you should avoid using this method (it creates
+<i>320</i>&nbsp;     *     a new Calendar instance every time it is called).  You are advised
+<i>321</i>&nbsp;     *     to call {@link #getMiddleMillisecond(Calendar)} instead.
+<i>322</i>&nbsp;     */
+<i>323</i>&nbsp;    public long getMiddleMillisecond(TimeZone zone) {
+<b class="nc"><i>324</i>&nbsp;        Calendar calendar = Calendar.getInstance(zone);</b>
+<b class="nc"><i>325</i>&nbsp;        long m1 = getFirstMillisecond(calendar);</b>
+<b class="nc"><i>326</i>&nbsp;        long m2 = getLastMillisecond(calendar);</b>
+<b class="nc"><i>327</i>&nbsp;        return m1 + (m2 - m1) / 2;</b>
+<i>328</i>&nbsp;    }
+<i>329</i>&nbsp;
+<i>330</i>&nbsp;    /**
+<i>331</i>&nbsp;     * Returns the millisecond closest to the middle of the time period,
+<i>332</i>&nbsp;     * evaluated using the supplied calendar (which incorporates a timezone).
+<i>333</i>&nbsp;     *
+<i>334</i>&nbsp;     * @param calendar  the calendar.
+<i>335</i>&nbsp;     *
+<i>336</i>&nbsp;     * @return The middle millisecond.
+<i>337</i>&nbsp;     */
+<i>338</i>&nbsp;    public long getMiddleMillisecond(Calendar calendar) {
+<b class="fc"><i>339</i>&nbsp;        long m1 = getFirstMillisecond(calendar);</b>
+<b class="fc"><i>340</i>&nbsp;        long m2 = getLastMillisecond(calendar);</b>
+<b class="fc"><i>341</i>&nbsp;        return m1 + (m2 - m1) / 2;</b>
+<i>342</i>&nbsp;    }
+<i>343</i>&nbsp;
+<i>344</i>&nbsp;    /**
+<i>345</i>&nbsp;     * Returns the millisecond (relative to the epoch) corresponding to the 
+<i>346</i>&nbsp;     * specified &lt;code&gt;anchor&lt;/code&gt; using the supplied &lt;code&gt;calendar&lt;/code&gt; 
+<i>347</i>&nbsp;     * (which incorporates a time zone).
+<i>348</i>&nbsp;     * 
+<i>349</i>&nbsp;     * @param anchor  the anchor (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>350</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>351</i>&nbsp;     * 
+<i>352</i>&nbsp;     * @return Milliseconds since the epoch.
+<i>353</i>&nbsp;     * 
+<i>354</i>&nbsp;     * @since 1.0.18
+<i>355</i>&nbsp;     */
+<i>356</i>&nbsp;    public long getMillisecond(TimePeriodAnchor anchor, Calendar calendar) {
+<b class="fc"><i>357</i>&nbsp;        if (anchor.equals(TimePeriodAnchor.START)) {</b>
+<b class="fc"><i>358</i>&nbsp;            return getFirstMillisecond(calendar);</b>
+<b class="fc"><i>359</i>&nbsp;        } else if (anchor.equals(TimePeriodAnchor.MIDDLE)) {</b>
+<b class="fc"><i>360</i>&nbsp;            return getMiddleMillisecond(calendar);</b>
+<b class="fc"><i>361</i>&nbsp;        } else if (anchor.equals(TimePeriodAnchor.END)) {</b>
+<b class="fc"><i>362</i>&nbsp;            return getLastMillisecond(calendar);</b>
+<i>363</i>&nbsp;        } else {
+<b class="nc"><i>364</i>&nbsp;            throw new IllegalStateException(&quot;Unrecognised anchor: &quot; + anchor);</b>
+<i>365</i>&nbsp;        }
+<i>366</i>&nbsp;    }
+<i>367</i>&nbsp;    
+<i>368</i>&nbsp;    /**
+<i>369</i>&nbsp;     * Returns a string representation of the time period.
+<i>370</i>&nbsp;     *
+<i>371</i>&nbsp;     * @return The string.
+<i>372</i>&nbsp;     */
+<i>373</i>&nbsp;    @Override
+<i>374</i>&nbsp;    public String toString() {
+<b class="nc"><i>375</i>&nbsp;        return String.valueOf(getStart());</b>
+<i>376</i>&nbsp;    }
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

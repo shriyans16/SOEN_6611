@@ -1,0 +1,1240 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LegendItem</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LegendItem (org.jfree.chart)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LegendItem</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.8%
+  </span>
+  <span class="absValue">
+    (48/ 58)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.2%
+  </span>
+  <span class="absValue">
+    (198/ 227)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------
+<i>28</i>&nbsp; * LegendItem.java
+<i>29</i>&nbsp; * ---------------
+<i>30</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Andrzej Porebski;
+<i>34</i>&nbsp; *                   David Li;
+<i>35</i>&nbsp; *                   Wolfgang Irler;
+<i>36</i>&nbsp; *                   Luke Quinane;
+<i>37</i>&nbsp; *
+<i>38</i>&nbsp; * Changes (from 2-Oct-2002)
+<i>39</i>&nbsp; * -------------------------
+<i>40</i>&nbsp; * 02-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+<i>41</i>&nbsp; * 17-Jan-2003 : Dropped outlineStroke attribute (DG);
+<i>42</i>&nbsp; * 08-Oct-2003 : Applied patch for displaying series line style, contributed by
+<i>43</i>&nbsp; *               Luke Quinane (DG);
+<i>44</i>&nbsp; * 21-Jan-2004 : Added the shapeFilled flag (DG);
+<i>45</i>&nbsp; * 04-Jun-2004 : Added equals() method, implemented Serializable (DG);
+<i>46</i>&nbsp; * 25-Nov-2004 : Changes required by new LegendTitle implementation (DG);
+<i>47</i>&nbsp; * 11-Jan-2005 : Removed deprecated code in preparation for the 1.0.0
+<i>48</i>&nbsp; *               release (DG);
+<i>49</i>&nbsp; * 20-Apr-2005 : Added tooltip and URL text (DG);
+<i>50</i>&nbsp; * 28-Nov-2005 : Separated constructors for AttributedString labels (DG);
+<i>51</i>&nbsp; * 10-Dec-2005 : Fixed serialization bug (1377239) (DG);
+<i>52</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>53</i>&nbsp; * 20-Jul-2006 : Added dataset and series index fields (DG);
+<i>54</i>&nbsp; * 13-Dec-2006 : Added fillPaintTransformer attribute (DG);
+<i>55</i>&nbsp; * 18-May-2007 : Added dataset and seriesKey fields (DG);
+<i>56</i>&nbsp; * 03-Aug-2007 : Fixed null pointer exception (DG);
+<i>57</i>&nbsp; * 23-Apr-2008 : Added new constructor and implemented Cloneable (DG);
+<i>58</i>&nbsp; * 17-Jun-2008 : Added optional labelFont and labelPaint attributes (DG);
+<i>59</i>&nbsp; * 15-Oct-2008 : Added new constructor (DG);
+<i>60</i>&nbsp; * 28-Apr-2009 : Added various setter methods (DG);
+<i>61</i>&nbsp; * 01-Jul-2013 : Use ParamChecks class (DG);
+<i>62</i>&nbsp; *
+<i>63</i>&nbsp; */
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;package org.jfree.chart;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;import java.awt.BasicStroke;
+<i>68</i>&nbsp;import java.awt.Color;
+<i>69</i>&nbsp;import java.awt.Font;
+<i>70</i>&nbsp;import java.awt.Paint;
+<i>71</i>&nbsp;import java.awt.Shape;
+<i>72</i>&nbsp;import java.awt.Stroke;
+<i>73</i>&nbsp;import java.awt.geom.Line2D;
+<i>74</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>75</i>&nbsp;import java.io.IOException;
+<i>76</i>&nbsp;import java.io.ObjectInputStream;
+<i>77</i>&nbsp;import java.io.ObjectOutputStream;
+<i>78</i>&nbsp;import java.io.Serializable;
+<i>79</i>&nbsp;import java.text.AttributedString;
+<i>80</i>&nbsp;import java.text.CharacterIterator;
+<i>81</i>&nbsp;import org.jfree.chart.text.AttributedStringUtils;
+<i>82</i>&nbsp;import org.jfree.chart.ui.GradientPaintTransformer;
+<i>83</i>&nbsp;import org.jfree.chart.ui.StandardGradientPaintTransformer;
+<i>84</i>&nbsp;import org.jfree.chart.util.ObjectUtils;
+<i>85</i>&nbsp;import org.jfree.chart.util.PaintUtils;
+<i>86</i>&nbsp;import org.jfree.chart.util.Args;
+<i>87</i>&nbsp;import org.jfree.chart.util.PublicCloneable;
+<i>88</i>&nbsp;import org.jfree.chart.util.SerialUtils;
+<i>89</i>&nbsp;import org.jfree.chart.util.ShapeUtils;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;import org.jfree.data.general.Dataset;
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;/**
+<i>94</i>&nbsp; * A temporary storage object for recording the properties of a legend item,
+<i>95</i>&nbsp; * without any consideration for layout issues.
+<i>96</i>&nbsp; */
+<i>97</i>&nbsp;public class LegendItem implements Cloneable, Serializable {
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /** For serialization. */
+<i>100</i>&nbsp;    private static final long serialVersionUID = -797214582948827144L;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * The dataset.
+<i>104</i>&nbsp;     *
+<i>105</i>&nbsp;     * @since 1.0.6
+<i>106</i>&nbsp;     */
+<i>107</i>&nbsp;    private Dataset dataset;
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    /**
+<i>110</i>&nbsp;     * The series key.
+<i>111</i>&nbsp;     *
+<i>112</i>&nbsp;     * @since 1.0.6
+<i>113</i>&nbsp;     */
+<i>114</i>&nbsp;    private Comparable seriesKey;
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /** The dataset index. */
+<i>117</i>&nbsp;    private int datasetIndex;
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /** The series index. */
+<i>120</i>&nbsp;    private int series;
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /** The label. */
+<i>123</i>&nbsp;    private String label;
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * The label font ({@code null} is permitted).
+<i>127</i>&nbsp;     *
+<i>128</i>&nbsp;     * @since 1.0.11
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    private Font labelFont;
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * The label paint ({@code null} is permitted).
+<i>134</i>&nbsp;     *
+<i>135</i>&nbsp;     * @since 1.0.11
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    private transient Paint labelPaint;
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /** The attributed label (if null, fall back to the regular label). */
+<i>140</i>&nbsp;    private transient AttributedString attributedLabel;
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * The description (not currently used - could be displayed as a tool tip).
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    private String description;
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /** The tool tip text. */
+<i>148</i>&nbsp;    private String toolTipText;
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    /** The url text. */
+<i>151</i>&nbsp;    private String urlText;
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /** A flag that controls whether or not the shape is visible. */
+<i>154</i>&nbsp;    private boolean shapeVisible;
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    /** The shape. */
+<i>157</i>&nbsp;    private transient Shape shape;
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /** A flag that controls whether or not the shape is filled. */
+<i>160</i>&nbsp;    private boolean shapeFilled;
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    /** The paint. */
+<i>163</i>&nbsp;    private transient Paint fillPaint;
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * A gradient paint transformer.
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @since 1.0.4
+<i>169</i>&nbsp;     */
+<i>170</i>&nbsp;    private GradientPaintTransformer fillPaintTransformer;
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    /** A flag that controls whether or not the shape outline is visible. */
+<i>173</i>&nbsp;    private boolean shapeOutlineVisible;
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /** The outline paint. */
+<i>176</i>&nbsp;    private transient Paint outlinePaint;
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    /** The outline stroke. */
+<i>179</i>&nbsp;    private transient Stroke outlineStroke;
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /** A flag that controls whether or not the line is visible. */
+<i>182</i>&nbsp;    private boolean lineVisible;
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /** The line. */
+<i>185</i>&nbsp;    private transient Shape line;
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    /** The stroke. */
+<i>188</i>&nbsp;    private transient Stroke lineStroke;
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;    /** The line paint. */
+<i>191</i>&nbsp;    private transient Paint linePaint;
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    /**
+<i>194</i>&nbsp;     * The shape must be non-null for a LegendItem - if no shape is required,
+<i>195</i>&nbsp;     * use this.
+<i>196</i>&nbsp;     */
+<b class="fc"><i>197</i>&nbsp;    private static final Shape UNUSED_SHAPE = new Line2D.Float();</b>
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * The stroke must be non-null for a LegendItem - if no stroke is required,
+<i>201</i>&nbsp;     * use this.
+<i>202</i>&nbsp;     */
+<b class="fc"><i>203</i>&nbsp;    private static final Stroke UNUSED_STROKE = new BasicStroke(0.0f);</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    /**
+<i>206</i>&nbsp;     * Creates a legend item with the specified label.  The remaining
+<i>207</i>&nbsp;     * attributes take default values.
+<i>208</i>&nbsp;     *
+<i>209</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>210</i>&nbsp;     *
+<i>211</i>&nbsp;     * @since 1.0.10
+<i>212</i>&nbsp;     */
+<i>213</i>&nbsp;    public LegendItem(String label) {
+<b class="fc"><i>214</i>&nbsp;        this(label, Color.BLACK);</b>
+<b class="fc"><i>215</i>&nbsp;    }</b>
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    /**
+<i>218</i>&nbsp;     * Creates a legend item with the specified label and fill paint.  The
+<i>219</i>&nbsp;     * remaining attributes take default values.
+<i>220</i>&nbsp;     *
+<i>221</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>222</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>223</i>&nbsp;     *
+<i>224</i>&nbsp;     * @since 1.0.12
+<i>225</i>&nbsp;     */
+<i>226</i>&nbsp;    public LegendItem(String label, Paint paint) {
+<b class="fc"><i>227</i>&nbsp;        this(label, null, null, null, new Rectangle2D.Double(-4.0, -4.0, 8.0,</b>
+<i>228</i>&nbsp;                8.0), paint);
+<b class="fc"><i>229</i>&nbsp;    }</b>
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;    /**
+<i>232</i>&nbsp;     * Creates a legend item with a filled shape.  The shape is not outlined,
+<i>233</i>&nbsp;     * and no line is visible.
+<i>234</i>&nbsp;     *
+<i>235</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>236</i>&nbsp;     * @param description  the description ({@code null} permitted).
+<i>237</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>238</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>239</i>&nbsp;     * @param shape  the shape ({@code null} not permitted).
+<i>240</i>&nbsp;     * @param fillPaint  the paint used to fill the shape ({@code null}
+<i>241</i>&nbsp;     *                   not permitted).
+<i>242</i>&nbsp;     */
+<i>243</i>&nbsp;    public LegendItem(String label, String description,
+<i>244</i>&nbsp;                      String toolTipText, String urlText,
+<i>245</i>&nbsp;                      Shape shape, Paint fillPaint) {
+<i>246</i>&nbsp;
+<b class="fc"><i>247</i>&nbsp;        this(label, description, toolTipText, urlText,</b>
+<i>248</i>&nbsp;                /* shape visible = */ true, shape,
+<i>249</i>&nbsp;                /* shape filled = */ true, fillPaint,
+<i>250</i>&nbsp;                /* shape outlined */ false, Color.BLACK, UNUSED_STROKE,
+<i>251</i>&nbsp;                /* line visible */ false, UNUSED_SHAPE, UNUSED_STROKE,
+<i>252</i>&nbsp;                Color.BLACK);
+<i>253</i>&nbsp;
+<b class="fc"><i>254</i>&nbsp;    }</b>
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    /**
+<i>257</i>&nbsp;     * Creates a legend item with a filled and outlined shape.
+<i>258</i>&nbsp;     *
+<i>259</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>260</i>&nbsp;     * @param description  the description ({@code null} permitted).
+<i>261</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>262</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>263</i>&nbsp;     * @param shape  the shape ({@code null} not permitted).
+<i>264</i>&nbsp;     * @param fillPaint  the paint used to fill the shape ({@code null}
+<i>265</i>&nbsp;     *                   not permitted).
+<i>266</i>&nbsp;     * @param outlineStroke  the outline stroke ({@code null} not
+<i>267</i>&nbsp;     *                       permitted).
+<i>268</i>&nbsp;     * @param outlinePaint  the outline paint ({@code null} not
+<i>269</i>&nbsp;     *                      permitted).
+<i>270</i>&nbsp;     */
+<i>271</i>&nbsp;    public LegendItem(String label, String description, String toolTipText, 
+<i>272</i>&nbsp;            String urlText, Shape shape, Paint fillPaint, Stroke outlineStroke, 
+<i>273</i>&nbsp;            Paint outlinePaint) {
+<i>274</i>&nbsp;
+<b class="fc"><i>275</i>&nbsp;        this(label, description, toolTipText, urlText,</b>
+<i>276</i>&nbsp;                /* shape visible = */ true, shape,
+<i>277</i>&nbsp;                /* shape filled = */ true, fillPaint,
+<i>278</i>&nbsp;                /* shape outlined = */ true, outlinePaint, outlineStroke,
+<i>279</i>&nbsp;                /* line visible */ false, UNUSED_SHAPE, UNUSED_STROKE,
+<i>280</i>&nbsp;                Color.BLACK);
+<i>281</i>&nbsp;
+<b class="fc"><i>282</i>&nbsp;    }</b>
+<i>283</i>&nbsp;
+<i>284</i>&nbsp;    /**
+<i>285</i>&nbsp;     * Creates a legend item using a line.
+<i>286</i>&nbsp;     *
+<i>287</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>288</i>&nbsp;     * @param description  the description ({@code null} permitted).
+<i>289</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>290</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>291</i>&nbsp;     * @param line  the line ({@code null} not permitted).
+<i>292</i>&nbsp;     * @param lineStroke  the line stroke ({@code null} not permitted).
+<i>293</i>&nbsp;     * @param linePaint  the line paint ({@code null} not permitted).
+<i>294</i>&nbsp;     */
+<i>295</i>&nbsp;    public LegendItem(String label, String description, String toolTipText, 
+<i>296</i>&nbsp;            String urlText, Shape line, Stroke lineStroke, Paint linePaint) {
+<i>297</i>&nbsp;
+<b class="fc"><i>298</i>&nbsp;        this(label, description, toolTipText, urlText,</b>
+<i>299</i>&nbsp;                /* shape visible = */ false, UNUSED_SHAPE,
+<i>300</i>&nbsp;                /* shape filled = */ false, Color.BLACK,
+<i>301</i>&nbsp;                /* shape outlined = */ false, Color.BLACK, UNUSED_STROKE,
+<i>302</i>&nbsp;                /* line visible = */ true, line, lineStroke, linePaint);
+<b class="fc"><i>303</i>&nbsp;    }</b>
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    /**
+<i>306</i>&nbsp;     * Creates a new legend item.
+<i>307</i>&nbsp;     *
+<i>308</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>309</i>&nbsp;     * @param description  the description (not currently used,
+<i>310</i>&nbsp;     *        {@code null} permitted).
+<i>311</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>312</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>313</i>&nbsp;     * @param shapeVisible  a flag that controls whether or not the shape is
+<i>314</i>&nbsp;     *                      displayed.
+<i>315</i>&nbsp;     * @param shape  the shape ({@code null} permitted).
+<i>316</i>&nbsp;     * @param shapeFilled  a flag that controls whether or not the shape is
+<i>317</i>&nbsp;     *                     filled.
+<i>318</i>&nbsp;     * @param fillPaint  the fill paint ({@code null} not permitted).
+<i>319</i>&nbsp;     * @param shapeOutlineVisible  a flag that controls whether or not the
+<i>320</i>&nbsp;     *                             shape is outlined.
+<i>321</i>&nbsp;     * @param outlinePaint  the outline paint ({@code null} not permitted).
+<i>322</i>&nbsp;     * @param outlineStroke  the outline stroke ({@code null} not
+<i>323</i>&nbsp;     *                       permitted).
+<i>324</i>&nbsp;     * @param lineVisible  a flag that controls whether or not the line is
+<i>325</i>&nbsp;     *                     visible.
+<i>326</i>&nbsp;     * @param line  the line.
+<i>327</i>&nbsp;     * @param lineStroke  the stroke ({@code null} not permitted).
+<i>328</i>&nbsp;     * @param linePaint  the line paint ({@code null} not permitted).
+<i>329</i>&nbsp;     */
+<i>330</i>&nbsp;    public LegendItem(String label, String description,
+<i>331</i>&nbsp;                      String toolTipText, String urlText,
+<i>332</i>&nbsp;                      boolean shapeVisible, Shape shape,
+<i>333</i>&nbsp;                      boolean shapeFilled, Paint fillPaint,
+<i>334</i>&nbsp;                      boolean shapeOutlineVisible, Paint outlinePaint,
+<i>335</i>&nbsp;                      Stroke outlineStroke,
+<i>336</i>&nbsp;                      boolean lineVisible, Shape line,
+<b class="fc"><i>337</i>&nbsp;                      Stroke lineStroke, Paint linePaint) {</b>
+<i>338</i>&nbsp;
+<b class="fc"><i>339</i>&nbsp;        Args.nullNotPermitted(label, &quot;label&quot;);</b>
+<b class="fc"><i>340</i>&nbsp;        Args.nullNotPermitted(fillPaint, &quot;fillPaint&quot;);</b>
+<b class="fc"><i>341</i>&nbsp;        Args.nullNotPermitted(lineStroke, &quot;lineStroke&quot;);</b>
+<b class="fc"><i>342</i>&nbsp;        Args.nullNotPermitted(outlinePaint, &quot;outlinePaint&quot;);</b>
+<b class="fc"><i>343</i>&nbsp;        Args.nullNotPermitted(outlineStroke, &quot;outlineStroke&quot;);</b>
+<b class="fc"><i>344</i>&nbsp;        this.label = label;</b>
+<b class="fc"><i>345</i>&nbsp;        this.labelPaint = null;</b>
+<b class="fc"><i>346</i>&nbsp;        this.attributedLabel = null;</b>
+<b class="fc"><i>347</i>&nbsp;        this.description = description;</b>
+<b class="fc"><i>348</i>&nbsp;        this.shapeVisible = shapeVisible;</b>
+<b class="fc"><i>349</i>&nbsp;        this.shape = shape;</b>
+<b class="fc"><i>350</i>&nbsp;        this.shapeFilled = shapeFilled;</b>
+<b class="fc"><i>351</i>&nbsp;        this.fillPaint = fillPaint;</b>
+<b class="fc"><i>352</i>&nbsp;        this.fillPaintTransformer = new StandardGradientPaintTransformer();</b>
+<b class="fc"><i>353</i>&nbsp;        this.shapeOutlineVisible = shapeOutlineVisible;</b>
+<b class="fc"><i>354</i>&nbsp;        this.outlinePaint = outlinePaint;</b>
+<b class="fc"><i>355</i>&nbsp;        this.outlineStroke = outlineStroke;</b>
+<b class="fc"><i>356</i>&nbsp;        this.lineVisible = lineVisible;</b>
+<b class="fc"><i>357</i>&nbsp;        this.line = line;</b>
+<b class="fc"><i>358</i>&nbsp;        this.lineStroke = lineStroke;</b>
+<b class="fc"><i>359</i>&nbsp;        this.linePaint = linePaint;</b>
+<b class="fc"><i>360</i>&nbsp;        this.toolTipText = toolTipText;</b>
+<b class="fc"><i>361</i>&nbsp;        this.urlText = urlText;</b>
+<b class="fc"><i>362</i>&nbsp;    }</b>
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;    /**
+<i>365</i>&nbsp;     * Creates a legend item with a filled shape.  The shape is not outlined,
+<i>366</i>&nbsp;     * and no line is visible.
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>369</i>&nbsp;     * @param description  the description ({@code null} permitted).
+<i>370</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>371</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>372</i>&nbsp;     * @param shape  the shape ({@code null} not permitted).
+<i>373</i>&nbsp;     * @param fillPaint  the paint used to fill the shape ({@code null}
+<i>374</i>&nbsp;     *                   not permitted).
+<i>375</i>&nbsp;     */
+<i>376</i>&nbsp;    public LegendItem(AttributedString label, String description,
+<i>377</i>&nbsp;                      String toolTipText, String urlText,
+<i>378</i>&nbsp;                      Shape shape, Paint fillPaint) {
+<i>379</i>&nbsp;
+<b class="fc"><i>380</i>&nbsp;        this(label, description, toolTipText, urlText,</b>
+<i>381</i>&nbsp;                /* shape visible = */ true, shape,
+<i>382</i>&nbsp;                /* shape filled = */ true, fillPaint,
+<i>383</i>&nbsp;                /* shape outlined = */ false, Color.BLACK, UNUSED_STROKE,
+<i>384</i>&nbsp;                /* line visible = */ false, UNUSED_SHAPE, UNUSED_STROKE,
+<i>385</i>&nbsp;                Color.BLACK);
+<i>386</i>&nbsp;
+<b class="fc"><i>387</i>&nbsp;    }</b>
+<i>388</i>&nbsp;
+<i>389</i>&nbsp;    /**
+<i>390</i>&nbsp;     * Creates a legend item with a filled and outlined shape.
+<i>391</i>&nbsp;     *
+<i>392</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>393</i>&nbsp;     * @param description  the description ({@code null} permitted).
+<i>394</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>395</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>396</i>&nbsp;     * @param shape  the shape ({@code null} not permitted).
+<i>397</i>&nbsp;     * @param fillPaint  the paint used to fill the shape ({@code null}
+<i>398</i>&nbsp;     *                   not permitted).
+<i>399</i>&nbsp;     * @param outlineStroke  the outline stroke ({@code null} not
+<i>400</i>&nbsp;     *                       permitted).
+<i>401</i>&nbsp;     * @param outlinePaint  the outline paint ({@code null} not
+<i>402</i>&nbsp;     *                      permitted).
+<i>403</i>&nbsp;     */
+<i>404</i>&nbsp;    public LegendItem(AttributedString label, String description,
+<i>405</i>&nbsp;                      String toolTipText, String urlText,
+<i>406</i>&nbsp;                      Shape shape, Paint fillPaint,
+<i>407</i>&nbsp;                      Stroke outlineStroke, Paint outlinePaint) {
+<i>408</i>&nbsp;
+<b class="nc"><i>409</i>&nbsp;        this(label, description, toolTipText, urlText,</b>
+<i>410</i>&nbsp;                /* shape visible = */ true, shape,
+<i>411</i>&nbsp;                /* shape filled = */ true, fillPaint,
+<i>412</i>&nbsp;                /* shape outlined = */ true, outlinePaint, outlineStroke,
+<i>413</i>&nbsp;                /* line visible = */ false, UNUSED_SHAPE, UNUSED_STROKE,
+<i>414</i>&nbsp;                Color.BLACK);
+<b class="nc"><i>415</i>&nbsp;    }</b>
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    /**
+<i>418</i>&nbsp;     * Creates a legend item using a line.
+<i>419</i>&nbsp;     *
+<i>420</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>421</i>&nbsp;     * @param description  the description ({@code null} permitted).
+<i>422</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>423</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>424</i>&nbsp;     * @param line  the line ({@code null} not permitted).
+<i>425</i>&nbsp;     * @param lineStroke  the line stroke ({@code null} not permitted).
+<i>426</i>&nbsp;     * @param linePaint  the line paint ({@code null} not permitted).
+<i>427</i>&nbsp;     */
+<i>428</i>&nbsp;    public LegendItem(AttributedString label, String description,
+<i>429</i>&nbsp;                      String toolTipText, String urlText,
+<i>430</i>&nbsp;                      Shape line, Stroke lineStroke, Paint linePaint) {
+<i>431</i>&nbsp;
+<b class="nc"><i>432</i>&nbsp;        this(label, description, toolTipText, urlText,</b>
+<i>433</i>&nbsp;                /* shape visible = */ false, UNUSED_SHAPE,
+<i>434</i>&nbsp;                /* shape filled = */ false, Color.BLACK,
+<i>435</i>&nbsp;                /* shape outlined = */ false, Color.BLACK, UNUSED_STROKE,
+<i>436</i>&nbsp;                /* line visible = */ true, line, lineStroke, linePaint);
+<b class="nc"><i>437</i>&nbsp;    }</b>
+<i>438</i>&nbsp;
+<i>439</i>&nbsp;    /**
+<i>440</i>&nbsp;     * Creates a new legend item.
+<i>441</i>&nbsp;     *
+<i>442</i>&nbsp;     * @param label  the label ({@code null} not permitted).
+<i>443</i>&nbsp;     * @param description  the description (not currently used,
+<i>444</i>&nbsp;     *        {@code null} permitted).
+<i>445</i>&nbsp;     * @param toolTipText  the tool tip text ({@code null} permitted).
+<i>446</i>&nbsp;     * @param urlText  the URL text ({@code null} permitted).
+<i>447</i>&nbsp;     * @param shapeVisible  a flag that controls whether or not the shape is
+<i>448</i>&nbsp;     *                      displayed.
+<i>449</i>&nbsp;     * @param shape  the shape ({@code null} permitted).
+<i>450</i>&nbsp;     * @param shapeFilled  a flag that controls whether or not the shape is
+<i>451</i>&nbsp;     *                     filled.
+<i>452</i>&nbsp;     * @param fillPaint  the fill paint ({@code null} not permitted).
+<i>453</i>&nbsp;     * @param shapeOutlineVisible  a flag that controls whether or not the
+<i>454</i>&nbsp;     *                             shape is outlined.
+<i>455</i>&nbsp;     * @param outlinePaint  the outline paint ({@code null} not permitted).
+<i>456</i>&nbsp;     * @param outlineStroke  the outline stroke ({@code null} not
+<i>457</i>&nbsp;     *                       permitted).
+<i>458</i>&nbsp;     * @param lineVisible  a flag that controls whether or not the line is
+<i>459</i>&nbsp;     *                     visible.
+<i>460</i>&nbsp;     * @param line  the line ({@code null} not permitted).
+<i>461</i>&nbsp;     * @param lineStroke  the stroke ({@code null} not permitted).
+<i>462</i>&nbsp;     * @param linePaint  the line paint ({@code null} not permitted).
+<i>463</i>&nbsp;     */
+<i>464</i>&nbsp;    public LegendItem(AttributedString label, String description,
+<i>465</i>&nbsp;                      String toolTipText, String urlText,
+<i>466</i>&nbsp;                      boolean shapeVisible, Shape shape,
+<i>467</i>&nbsp;                      boolean shapeFilled, Paint fillPaint,
+<i>468</i>&nbsp;                      boolean shapeOutlineVisible, Paint outlinePaint,
+<i>469</i>&nbsp;                      Stroke outlineStroke,
+<i>470</i>&nbsp;                      boolean lineVisible, Shape line, Stroke lineStroke,
+<b class="fc"><i>471</i>&nbsp;                      Paint linePaint) {</b>
+<i>472</i>&nbsp;
+<b class="fc"><i>473</i>&nbsp;        Args.nullNotPermitted(label, &quot;label&quot;);</b>
+<b class="fc"><i>474</i>&nbsp;        Args.nullNotPermitted(fillPaint, &quot;fillPaint&quot;);</b>
+<b class="fc"><i>475</i>&nbsp;        Args.nullNotPermitted(lineStroke, &quot;lineStroke&quot;);</b>
+<b class="fc"><i>476</i>&nbsp;        Args.nullNotPermitted(line, &quot;line&quot;);</b>
+<b class="fc"><i>477</i>&nbsp;        Args.nullNotPermitted(linePaint, &quot;linePaint&quot;);</b>
+<b class="fc"><i>478</i>&nbsp;        Args.nullNotPermitted(outlinePaint, &quot;outlinePaint&quot;);</b>
+<b class="fc"><i>479</i>&nbsp;        Args.nullNotPermitted(outlineStroke, &quot;outlineStroke&quot;);</b>
+<b class="fc"><i>480</i>&nbsp;        this.label = characterIteratorToString(label.getIterator());</b>
+<b class="fc"><i>481</i>&nbsp;        this.attributedLabel = label;</b>
+<b class="fc"><i>482</i>&nbsp;        this.description = description;</b>
+<b class="fc"><i>483</i>&nbsp;        this.shapeVisible = shapeVisible;</b>
+<b class="fc"><i>484</i>&nbsp;        this.shape = shape;</b>
+<b class="fc"><i>485</i>&nbsp;        this.shapeFilled = shapeFilled;</b>
+<b class="fc"><i>486</i>&nbsp;        this.fillPaint = fillPaint;</b>
+<b class="fc"><i>487</i>&nbsp;        this.fillPaintTransformer = new StandardGradientPaintTransformer();</b>
+<b class="fc"><i>488</i>&nbsp;        this.shapeOutlineVisible = shapeOutlineVisible;</b>
+<b class="fc"><i>489</i>&nbsp;        this.outlinePaint = outlinePaint;</b>
+<b class="fc"><i>490</i>&nbsp;        this.outlineStroke = outlineStroke;</b>
+<b class="fc"><i>491</i>&nbsp;        this.lineVisible = lineVisible;</b>
+<b class="fc"><i>492</i>&nbsp;        this.line = line;</b>
+<b class="fc"><i>493</i>&nbsp;        this.lineStroke = lineStroke;</b>
+<b class="fc"><i>494</i>&nbsp;        this.linePaint = linePaint;</b>
+<b class="fc"><i>495</i>&nbsp;        this.toolTipText = toolTipText;</b>
+<b class="fc"><i>496</i>&nbsp;        this.urlText = urlText;</b>
+<b class="fc"><i>497</i>&nbsp;    }</b>
+<i>498</i>&nbsp;
+<i>499</i>&nbsp;    /**
+<i>500</i>&nbsp;     * Returns a string containing the characters from the given iterator.
+<i>501</i>&nbsp;     *
+<i>502</i>&nbsp;     * @param iterator  the iterator ({@code null} not permitted).
+<i>503</i>&nbsp;     *
+<i>504</i>&nbsp;     * @return A string.
+<i>505</i>&nbsp;     */
+<i>506</i>&nbsp;    private String characterIteratorToString(CharacterIterator iterator) {
+<b class="fc"><i>507</i>&nbsp;        int endIndex = iterator.getEndIndex();</b>
+<b class="fc"><i>508</i>&nbsp;        int beginIndex = iterator.getBeginIndex();</b>
+<b class="fc"><i>509</i>&nbsp;        int count = endIndex - beginIndex;</b>
+<b class="fc"><i>510</i>&nbsp;        if (count &lt;= 0) {</b>
+<b class="nc"><i>511</i>&nbsp;            return &quot;&quot;;</b>
+<i>512</i>&nbsp;        }
+<b class="fc"><i>513</i>&nbsp;        char[] chars = new char[count];</b>
+<b class="fc"><i>514</i>&nbsp;        int i = 0;</b>
+<b class="fc"><i>515</i>&nbsp;        char c = iterator.first();</b>
+<b class="fc"><i>516</i>&nbsp;        while (c != CharacterIterator.DONE) {</b>
+<b class="fc"><i>517</i>&nbsp;            chars[i] = c;</b>
+<b class="fc"><i>518</i>&nbsp;            i++;</b>
+<b class="fc"><i>519</i>&nbsp;            c = iterator.next();</b>
+<i>520</i>&nbsp;        }
+<b class="fc"><i>521</i>&nbsp;        return new String(chars);</b>
+<i>522</i>&nbsp;    }
+<i>523</i>&nbsp;
+<i>524</i>&nbsp;    /**
+<i>525</i>&nbsp;     * Returns the dataset.
+<i>526</i>&nbsp;     *
+<i>527</i>&nbsp;     * @return The dataset.
+<i>528</i>&nbsp;     *
+<i>529</i>&nbsp;     * @since 1.0.6
+<i>530</i>&nbsp;     *
+<i>531</i>&nbsp;     * @see #setDatasetIndex(int)
+<i>532</i>&nbsp;     */
+<i>533</i>&nbsp;    public Dataset getDataset() {
+<b class="fc"><i>534</i>&nbsp;        return this.dataset;</b>
+<i>535</i>&nbsp;    }
+<i>536</i>&nbsp;
+<i>537</i>&nbsp;    /**
+<i>538</i>&nbsp;     * Sets the dataset.
+<i>539</i>&nbsp;     *
+<i>540</i>&nbsp;     * @param dataset  the dataset.
+<i>541</i>&nbsp;     *
+<i>542</i>&nbsp;     * @since 1.0.6
+<i>543</i>&nbsp;     */
+<i>544</i>&nbsp;    public void setDataset(Dataset dataset) {
+<b class="fc"><i>545</i>&nbsp;        this.dataset = dataset;</b>
+<b class="fc"><i>546</i>&nbsp;    }</b>
+<i>547</i>&nbsp;
+<i>548</i>&nbsp;    /**
+<i>549</i>&nbsp;     * Returns the dataset index for this legend item.
+<i>550</i>&nbsp;     *
+<i>551</i>&nbsp;     * @return The dataset index.
+<i>552</i>&nbsp;     *
+<i>553</i>&nbsp;     * @since 1.0.2
+<i>554</i>&nbsp;     *
+<i>555</i>&nbsp;     * @see #setDatasetIndex(int)
+<i>556</i>&nbsp;     * @see #getDataset()
+<i>557</i>&nbsp;     */
+<i>558</i>&nbsp;    public int getDatasetIndex() {
+<b class="fc"><i>559</i>&nbsp;        return this.datasetIndex;</b>
+<i>560</i>&nbsp;    }
+<i>561</i>&nbsp;
+<i>562</i>&nbsp;    /**
+<i>563</i>&nbsp;     * Sets the dataset index for this legend item.
+<i>564</i>&nbsp;     *
+<i>565</i>&nbsp;     * @param index  the index.
+<i>566</i>&nbsp;     *
+<i>567</i>&nbsp;     * @since 1.0.2
+<i>568</i>&nbsp;     *
+<i>569</i>&nbsp;     * @see #getDatasetIndex()
+<i>570</i>&nbsp;     */
+<i>571</i>&nbsp;    public void setDatasetIndex(int index) {
+<b class="fc"><i>572</i>&nbsp;        this.datasetIndex = index;</b>
+<b class="fc"><i>573</i>&nbsp;    }</b>
+<i>574</i>&nbsp;
+<i>575</i>&nbsp;    /**
+<i>576</i>&nbsp;     * Returns the series key.
+<i>577</i>&nbsp;     *
+<i>578</i>&nbsp;     * @return The series key.
+<i>579</i>&nbsp;     *
+<i>580</i>&nbsp;     * @since 1.0.6
+<i>581</i>&nbsp;     *
+<i>582</i>&nbsp;     * @see #setSeriesKey(Comparable)
+<i>583</i>&nbsp;     */
+<i>584</i>&nbsp;    public Comparable getSeriesKey() {
+<b class="fc"><i>585</i>&nbsp;        return this.seriesKey;</b>
+<i>586</i>&nbsp;    }
+<i>587</i>&nbsp;
+<i>588</i>&nbsp;    /**
+<i>589</i>&nbsp;     * Sets the series key.
+<i>590</i>&nbsp;     *
+<i>591</i>&nbsp;     * @param key  the series key.
+<i>592</i>&nbsp;     *
+<i>593</i>&nbsp;     * @since 1.0.6
+<i>594</i>&nbsp;     */
+<i>595</i>&nbsp;    public void setSeriesKey(Comparable key) {
+<b class="fc"><i>596</i>&nbsp;        this.seriesKey = key;</b>
+<b class="fc"><i>597</i>&nbsp;    }</b>
+<i>598</i>&nbsp;
+<i>599</i>&nbsp;    /**
+<i>600</i>&nbsp;     * Returns the series index for this legend item.
+<i>601</i>&nbsp;     *
+<i>602</i>&nbsp;     * @return The series index.
+<i>603</i>&nbsp;     *
+<i>604</i>&nbsp;     * @since 1.0.2
+<i>605</i>&nbsp;     */
+<i>606</i>&nbsp;    public int getSeriesIndex() {
+<b class="fc"><i>607</i>&nbsp;        return this.series;</b>
+<i>608</i>&nbsp;    }
+<i>609</i>&nbsp;
+<i>610</i>&nbsp;    /**
+<i>611</i>&nbsp;     * Sets the series index for this legend item.
+<i>612</i>&nbsp;     *
+<i>613</i>&nbsp;     * @param index  the index.
+<i>614</i>&nbsp;     *
+<i>615</i>&nbsp;     * @since 1.0.2
+<i>616</i>&nbsp;     */
+<i>617</i>&nbsp;    public void setSeriesIndex(int index) {
+<b class="fc"><i>618</i>&nbsp;        this.series = index;</b>
+<b class="fc"><i>619</i>&nbsp;    }</b>
+<i>620</i>&nbsp;
+<i>621</i>&nbsp;    /**
+<i>622</i>&nbsp;     * Returns the label.
+<i>623</i>&nbsp;     *
+<i>624</i>&nbsp;     * @return The label (never {@code null}).
+<i>625</i>&nbsp;     */
+<i>626</i>&nbsp;    public String getLabel() {
+<b class="fc"><i>627</i>&nbsp;        return this.label;</b>
+<i>628</i>&nbsp;    }
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;    /**
+<i>631</i>&nbsp;     * Returns the label font.
+<i>632</i>&nbsp;     *
+<i>633</i>&nbsp;     * @return The label font (possibly {@code null}).
+<i>634</i>&nbsp;     *
+<i>635</i>&nbsp;     * @since 1.0.11
+<i>636</i>&nbsp;     */
+<i>637</i>&nbsp;    public Font getLabelFont() {
+<b class="fc"><i>638</i>&nbsp;        return this.labelFont;</b>
+<i>639</i>&nbsp;    }
+<i>640</i>&nbsp;
+<i>641</i>&nbsp;    /**
+<i>642</i>&nbsp;     * Sets the label font.
+<i>643</i>&nbsp;     *
+<i>644</i>&nbsp;     * @param font  the font ({@code null} permitted).
+<i>645</i>&nbsp;     *
+<i>646</i>&nbsp;     * @since 1.0.11
+<i>647</i>&nbsp;     */
+<i>648</i>&nbsp;    public void setLabelFont(Font font) {
+<b class="fc"><i>649</i>&nbsp;        this.labelFont = font;</b>
+<b class="fc"><i>650</i>&nbsp;    }</b>
+<i>651</i>&nbsp;
+<i>652</i>&nbsp;    /**
+<i>653</i>&nbsp;     * Returns the paint used to draw the label.
+<i>654</i>&nbsp;     *
+<i>655</i>&nbsp;     * @return The paint (possibly {@code null}).
+<i>656</i>&nbsp;     *
+<i>657</i>&nbsp;     * @since 1.0.11
+<i>658</i>&nbsp;     */
+<i>659</i>&nbsp;    public Paint getLabelPaint() {
+<b class="fc"><i>660</i>&nbsp;        return this.labelPaint;</b>
+<i>661</i>&nbsp;    }
+<i>662</i>&nbsp;
+<i>663</i>&nbsp;    /**
+<i>664</i>&nbsp;     * Sets the paint used to draw the label.
+<i>665</i>&nbsp;     *
+<i>666</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>667</i>&nbsp;     *
+<i>668</i>&nbsp;     * @since 1.0.11
+<i>669</i>&nbsp;     */
+<i>670</i>&nbsp;    public void setLabelPaint(Paint paint) {
+<b class="fc"><i>671</i>&nbsp;        this.labelPaint = paint;</b>
+<b class="fc"><i>672</i>&nbsp;    }</b>
+<i>673</i>&nbsp;
+<i>674</i>&nbsp;    /**
+<i>675</i>&nbsp;     * Returns the attributed label.
+<i>676</i>&nbsp;     *
+<i>677</i>&nbsp;     * @return The attributed label (possibly {@code null}).
+<i>678</i>&nbsp;     */
+<i>679</i>&nbsp;    public AttributedString getAttributedLabel() {
+<b class="nc"><i>680</i>&nbsp;        return this.attributedLabel;</b>
+<i>681</i>&nbsp;    }
+<i>682</i>&nbsp;
+<i>683</i>&nbsp;    /**
+<i>684</i>&nbsp;     * Returns the description for the legend item.
+<i>685</i>&nbsp;     *
+<i>686</i>&nbsp;     * @return The description (possibly {@code null}).
+<i>687</i>&nbsp;     *
+<i>688</i>&nbsp;     * @see #setDescription(java.lang.String) 
+<i>689</i>&nbsp;     */
+<i>690</i>&nbsp;    public String getDescription() {
+<b class="nc"><i>691</i>&nbsp;        return this.description;</b>
+<i>692</i>&nbsp;    }
+<i>693</i>&nbsp;
+<i>694</i>&nbsp;    /**
+<i>695</i>&nbsp;     * Sets the description for this legend item.
+<i>696</i>&nbsp;     *
+<i>697</i>&nbsp;     * @param text  the description ({@code null} permitted).
+<i>698</i>&nbsp;     *
+<i>699</i>&nbsp;     * @see #getDescription()
+<i>700</i>&nbsp;     * @since 1.0.14
+<i>701</i>&nbsp;     */
+<i>702</i>&nbsp;    public void setDescription(String text) {
+<b class="nc"><i>703</i>&nbsp;        this.description = text;</b>
+<b class="nc"><i>704</i>&nbsp;    }</b>
+<i>705</i>&nbsp;
+<i>706</i>&nbsp;    /**
+<i>707</i>&nbsp;     * Returns the tool tip text.
+<i>708</i>&nbsp;     *
+<i>709</i>&nbsp;     * @return The tool tip text (possibly {@code null}).
+<i>710</i>&nbsp;     *
+<i>711</i>&nbsp;     * @see #setToolTipText(java.lang.String) 
+<i>712</i>&nbsp;     */
+<i>713</i>&nbsp;    public String getToolTipText() {
+<b class="fc"><i>714</i>&nbsp;        return this.toolTipText;</b>
+<i>715</i>&nbsp;    }
+<i>716</i>&nbsp;
+<i>717</i>&nbsp;    /**
+<i>718</i>&nbsp;     * Sets the tool tip text for this legend item.
+<i>719</i>&nbsp;     *
+<i>720</i>&nbsp;     * @param text  the text ({@code null} permitted).
+<i>721</i>&nbsp;     *
+<i>722</i>&nbsp;     * @see #getToolTipText()
+<i>723</i>&nbsp;     * @since 1.0.14
+<i>724</i>&nbsp;     */
+<i>725</i>&nbsp;    public void setToolTipText(String text) {
+<b class="fc"><i>726</i>&nbsp;        this.toolTipText = text;</b>
+<b class="fc"><i>727</i>&nbsp;    }</b>
+<i>728</i>&nbsp;
+<i>729</i>&nbsp;    /**
+<i>730</i>&nbsp;     * Returns the URL text.
+<i>731</i>&nbsp;     *
+<i>732</i>&nbsp;     * @return The URL text (possibly {@code null}).
+<i>733</i>&nbsp;     *
+<i>734</i>&nbsp;     * @see #setURLText(java.lang.String) 
+<i>735</i>&nbsp;     */
+<i>736</i>&nbsp;    public String getURLText() {
+<b class="fc"><i>737</i>&nbsp;        return this.urlText;</b>
+<i>738</i>&nbsp;    }
+<i>739</i>&nbsp;
+<i>740</i>&nbsp;    /**
+<i>741</i>&nbsp;     * Sets the URL text.
+<i>742</i>&nbsp;     *
+<i>743</i>&nbsp;     * @param text  the text ({@code null} permitted).
+<i>744</i>&nbsp;     *
+<i>745</i>&nbsp;     * @see #getURLText()
+<i>746</i>&nbsp;     *
+<i>747</i>&nbsp;     * @since 1.0.14
+<i>748</i>&nbsp;     */
+<i>749</i>&nbsp;    public void setURLText(String text) {
+<b class="fc"><i>750</i>&nbsp;        this.urlText = text;</b>
+<b class="fc"><i>751</i>&nbsp;    }</b>
+<i>752</i>&nbsp;
+<i>753</i>&nbsp;    /**
+<i>754</i>&nbsp;     * Returns a flag that indicates whether or not the shape is visible.
+<i>755</i>&nbsp;     *
+<i>756</i>&nbsp;     * @return A boolean.
+<i>757</i>&nbsp;     *
+<i>758</i>&nbsp;     * @see #setShapeVisible(boolean)
+<i>759</i>&nbsp;     */
+<i>760</i>&nbsp;    public boolean isShapeVisible() {
+<b class="fc"><i>761</i>&nbsp;        return this.shapeVisible;</b>
+<i>762</i>&nbsp;    }
+<i>763</i>&nbsp;
+<i>764</i>&nbsp;    /**
+<i>765</i>&nbsp;     * Sets the flag that controls whether or not the shape is visible.
+<i>766</i>&nbsp;     *
+<i>767</i>&nbsp;     * @param visible  the new flag value.
+<i>768</i>&nbsp;     *
+<i>769</i>&nbsp;     * @see #isShapeVisible()
+<i>770</i>&nbsp;     * @see #isLineVisible()
+<i>771</i>&nbsp;     *
+<i>772</i>&nbsp;     * @since 1.0.14
+<i>773</i>&nbsp;     */
+<i>774</i>&nbsp;    public void setShapeVisible(boolean visible) {
+<b class="nc"><i>775</i>&nbsp;        this.shapeVisible = visible;</b>
+<b class="nc"><i>776</i>&nbsp;    }</b>
+<i>777</i>&nbsp;
+<i>778</i>&nbsp;    /**
+<i>779</i>&nbsp;     * Returns the shape used to label the series represented by this legend
+<i>780</i>&nbsp;     * item.
+<i>781</i>&nbsp;     *
+<i>782</i>&nbsp;     * @return The shape (never {@code null}).
+<i>783</i>&nbsp;     *
+<i>784</i>&nbsp;     * @see #setShape(java.awt.Shape) 
+<i>785</i>&nbsp;     */
+<i>786</i>&nbsp;    public Shape getShape() {
+<b class="fc"><i>787</i>&nbsp;        return this.shape;</b>
+<i>788</i>&nbsp;    }
+<i>789</i>&nbsp;
+<i>790</i>&nbsp;    /**
+<i>791</i>&nbsp;     * Sets the shape for the legend item.
+<i>792</i>&nbsp;     *
+<i>793</i>&nbsp;     * @param shape  the shape ({@code null} not permitted).
+<i>794</i>&nbsp;     *
+<i>795</i>&nbsp;     * @see #getShape()
+<i>796</i>&nbsp;     * @since 1.0.14
+<i>797</i>&nbsp;     */
+<i>798</i>&nbsp;    public void setShape(Shape shape) {
+<b class="nc"><i>799</i>&nbsp;        Args.nullNotPermitted(shape, &quot;shape&quot;);</b>
+<b class="nc"><i>800</i>&nbsp;        this.shape = shape;</b>
+<b class="nc"><i>801</i>&nbsp;    }</b>
+<i>802</i>&nbsp;
+<i>803</i>&nbsp;    /**
+<i>804</i>&nbsp;     * Returns a flag that controls whether or not the shape is filled.
+<i>805</i>&nbsp;     *
+<i>806</i>&nbsp;     * @return A boolean.
+<i>807</i>&nbsp;     */
+<i>808</i>&nbsp;    public boolean isShapeFilled() {
+<b class="fc"><i>809</i>&nbsp;        return this.shapeFilled;</b>
+<i>810</i>&nbsp;    }
+<i>811</i>&nbsp;
+<i>812</i>&nbsp;    /**
+<i>813</i>&nbsp;     * Returns the fill paint.
+<i>814</i>&nbsp;     *
+<i>815</i>&nbsp;     * @return The fill paint (never {@code null}).
+<i>816</i>&nbsp;     */
+<i>817</i>&nbsp;    public Paint getFillPaint() {
+<b class="fc"><i>818</i>&nbsp;        return this.fillPaint;</b>
+<i>819</i>&nbsp;    }
+<i>820</i>&nbsp;
+<i>821</i>&nbsp;    /**
+<i>822</i>&nbsp;     * Sets the fill paint.
+<i>823</i>&nbsp;     *
+<i>824</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>825</i>&nbsp;     *
+<i>826</i>&nbsp;     * @since 1.0.11
+<i>827</i>&nbsp;     */
+<i>828</i>&nbsp;    public void setFillPaint(Paint paint) {
+<b class="fc"><i>829</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>830</i>&nbsp;        this.fillPaint = paint;</b>
+<b class="fc"><i>831</i>&nbsp;    }</b>
+<i>832</i>&nbsp;
+<i>833</i>&nbsp;    /**
+<i>834</i>&nbsp;     * Returns the flag that controls whether or not the shape outline
+<i>835</i>&nbsp;     * is visible.
+<i>836</i>&nbsp;     *
+<i>837</i>&nbsp;     * @return A boolean.
+<i>838</i>&nbsp;     */
+<i>839</i>&nbsp;    public boolean isShapeOutlineVisible() {
+<b class="fc"><i>840</i>&nbsp;        return this.shapeOutlineVisible;</b>
+<i>841</i>&nbsp;    }
+<i>842</i>&nbsp;
+<i>843</i>&nbsp;    /**
+<i>844</i>&nbsp;     * Returns the line stroke for the series.
+<i>845</i>&nbsp;     *
+<i>846</i>&nbsp;     * @return The stroke (never {@code null}).
+<i>847</i>&nbsp;     */
+<i>848</i>&nbsp;    public Stroke getLineStroke() {
+<b class="fc"><i>849</i>&nbsp;        return this.lineStroke;</b>
+<i>850</i>&nbsp;    }
+<i>851</i>&nbsp;    
+<i>852</i>&nbsp;    /**
+<i>853</i>&nbsp;     * Sets the line stroke.
+<i>854</i>&nbsp;     * 
+<i>855</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>856</i>&nbsp;     * 
+<i>857</i>&nbsp;     * @since 1.0.18
+<i>858</i>&nbsp;     */
+<i>859</i>&nbsp;    public void setLineStroke(Stroke stroke) {
+<b class="nc"><i>860</i>&nbsp;        Args.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="nc"><i>861</i>&nbsp;        this.lineStroke = stroke;</b>
+<b class="nc"><i>862</i>&nbsp;    }</b>
+<i>863</i>&nbsp;
+<i>864</i>&nbsp;    /**
+<i>865</i>&nbsp;     * Returns the paint used for lines.
+<i>866</i>&nbsp;     *
+<i>867</i>&nbsp;     * @return The paint (never {@code null}).
+<i>868</i>&nbsp;     */
+<i>869</i>&nbsp;    public Paint getLinePaint() {
+<b class="fc"><i>870</i>&nbsp;        return this.linePaint;</b>
+<i>871</i>&nbsp;    }
+<i>872</i>&nbsp;
+<i>873</i>&nbsp;    /**
+<i>874</i>&nbsp;     * Sets the line paint.
+<i>875</i>&nbsp;     *
+<i>876</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>877</i>&nbsp;     *
+<i>878</i>&nbsp;     * @since 1.0.11
+<i>879</i>&nbsp;     */
+<i>880</i>&nbsp;    public void setLinePaint(Paint paint) {
+<b class="fc"><i>881</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>882</i>&nbsp;        this.linePaint = paint;</b>
+<b class="fc"><i>883</i>&nbsp;    }</b>
+<i>884</i>&nbsp;
+<i>885</i>&nbsp;    /**
+<i>886</i>&nbsp;     * Returns the outline paint.
+<i>887</i>&nbsp;     *
+<i>888</i>&nbsp;     * @return The outline paint (never {@code null}).
+<i>889</i>&nbsp;     */
+<i>890</i>&nbsp;    public Paint getOutlinePaint() {
+<b class="fc"><i>891</i>&nbsp;        return this.outlinePaint;</b>
+<i>892</i>&nbsp;    }
+<i>893</i>&nbsp;
+<i>894</i>&nbsp;    /**
+<i>895</i>&nbsp;     * Sets the outline paint.
+<i>896</i>&nbsp;     *
+<i>897</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>898</i>&nbsp;     *
+<i>899</i>&nbsp;     * @since 1.0.11
+<i>900</i>&nbsp;     */
+<i>901</i>&nbsp;    public void setOutlinePaint(Paint paint) {
+<b class="fc"><i>902</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>903</i>&nbsp;        this.outlinePaint = paint;</b>
+<b class="fc"><i>904</i>&nbsp;    }</b>
+<i>905</i>&nbsp;
+<i>906</i>&nbsp;    /**
+<i>907</i>&nbsp;     * Returns the outline stroke.
+<i>908</i>&nbsp;     *
+<i>909</i>&nbsp;     * @return The outline stroke (never {@code null}).
+<i>910</i>&nbsp;     *
+<i>911</i>&nbsp;     * @see #setOutlineStroke(java.awt.Stroke) 
+<i>912</i>&nbsp;     */
+<i>913</i>&nbsp;    public Stroke getOutlineStroke() {
+<b class="fc"><i>914</i>&nbsp;        return this.outlineStroke;</b>
+<i>915</i>&nbsp;    }
+<i>916</i>&nbsp;
+<i>917</i>&nbsp;    /**
+<i>918</i>&nbsp;     * Sets the outline stroke.
+<i>919</i>&nbsp;     *
+<i>920</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>921</i>&nbsp;     *
+<i>922</i>&nbsp;     * @see #getOutlineStroke()
+<i>923</i>&nbsp;     *
+<i>924</i>&nbsp;     * @since 1.0.14
+<i>925</i>&nbsp;     */
+<i>926</i>&nbsp;    public void setOutlineStroke(Stroke stroke) {
+<b class="fc"><i>927</i>&nbsp;        Args.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="fc"><i>928</i>&nbsp;        this.outlineStroke = stroke;</b>
+<b class="fc"><i>929</i>&nbsp;    }</b>
+<i>930</i>&nbsp;
+<i>931</i>&nbsp;    /**
+<i>932</i>&nbsp;     * Returns a flag that indicates whether or not the line is visible.
+<i>933</i>&nbsp;     *
+<i>934</i>&nbsp;     * @return A boolean.
+<i>935</i>&nbsp;     *
+<i>936</i>&nbsp;     * @see #setLineVisible(boolean) 
+<i>937</i>&nbsp;     */
+<i>938</i>&nbsp;    public boolean isLineVisible() {
+<b class="fc"><i>939</i>&nbsp;        return this.lineVisible;</b>
+<i>940</i>&nbsp;    }
+<i>941</i>&nbsp;
+<i>942</i>&nbsp;    /**
+<i>943</i>&nbsp;     * Sets the flag that controls whether or not the line shape is visible for
+<i>944</i>&nbsp;     * this legend item.
+<i>945</i>&nbsp;     *
+<i>946</i>&nbsp;     * @param visible  the new flag value.
+<i>947</i>&nbsp;     *
+<i>948</i>&nbsp;     * @see #isLineVisible()
+<i>949</i>&nbsp;     * @since 1.0.14
+<i>950</i>&nbsp;     */
+<i>951</i>&nbsp;    public void setLineVisible(boolean visible) {
+<b class="nc"><i>952</i>&nbsp;        this.lineVisible = visible;</b>
+<b class="nc"><i>953</i>&nbsp;    }</b>
+<i>954</i>&nbsp;
+<i>955</i>&nbsp;    /**
+<i>956</i>&nbsp;     * Returns the line.
+<i>957</i>&nbsp;     *
+<i>958</i>&nbsp;     * @return The line (never {@code null}).
+<i>959</i>&nbsp;     *
+<i>960</i>&nbsp;     * @see #setLine(java.awt.Shape)
+<i>961</i>&nbsp;     * @see #isLineVisible() 
+<i>962</i>&nbsp;     */
+<i>963</i>&nbsp;    public Shape getLine() {
+<b class="fc"><i>964</i>&nbsp;        return this.line;</b>
+<i>965</i>&nbsp;    }
+<i>966</i>&nbsp;
+<i>967</i>&nbsp;    /**
+<i>968</i>&nbsp;     * Sets the line.
+<i>969</i>&nbsp;     *
+<i>970</i>&nbsp;     * @param line  the line ({@code null} not permitted).
+<i>971</i>&nbsp;     *
+<i>972</i>&nbsp;     * @see #getLine()
+<i>973</i>&nbsp;     * @since 1.0.14
+<i>974</i>&nbsp;     */
+<i>975</i>&nbsp;    public void setLine(Shape line) {
+<b class="nc"><i>976</i>&nbsp;        Args.nullNotPermitted(line, &quot;line&quot;);</b>
+<b class="nc"><i>977</i>&nbsp;        this.line = line;</b>
+<b class="nc"><i>978</i>&nbsp;    }</b>
+<i>979</i>&nbsp;
+<i>980</i>&nbsp;    /**
+<i>981</i>&nbsp;     * Returns the transformer used when the fill paint is an instance of
+<i>982</i>&nbsp;     * {@code GradientPaint}.
+<i>983</i>&nbsp;     *
+<i>984</i>&nbsp;     * @return The transformer (never {@code null}).
+<i>985</i>&nbsp;     *
+<i>986</i>&nbsp;     * @since 1.0.4
+<i>987</i>&nbsp;     *
+<i>988</i>&nbsp;     * @see #setFillPaintTransformer(GradientPaintTransformer)
+<i>989</i>&nbsp;     */
+<i>990</i>&nbsp;    public GradientPaintTransformer getFillPaintTransformer() {
+<b class="fc"><i>991</i>&nbsp;        return this.fillPaintTransformer;</b>
+<i>992</i>&nbsp;    }
+<i>993</i>&nbsp;
+<i>994</i>&nbsp;    /**
+<i>995</i>&nbsp;     * Sets the transformer used when the fill paint is an instance of
+<i>996</i>&nbsp;     * {@code GradientPaint}.
+<i>997</i>&nbsp;     *
+<i>998</i>&nbsp;     * @param transformer  the transformer ({@code null} not permitted).
+<i>999</i>&nbsp;     *
+<i>1000</i>&nbsp;     * @since 1.0.4
+<i>1001</i>&nbsp;     *
+<i>1002</i>&nbsp;     * @see #getFillPaintTransformer()
+<i>1003</i>&nbsp;     */
+<i>1004</i>&nbsp;    public void setFillPaintTransformer(GradientPaintTransformer transformer) {
+<b class="fc"><i>1005</i>&nbsp;        Args.nullNotPermitted(transformer, &quot;transformer&quot;);</b>
+<b class="fc"><i>1006</i>&nbsp;        this.fillPaintTransformer = transformer;</b>
+<b class="fc"><i>1007</i>&nbsp;    }</b>
+<i>1008</i>&nbsp;
+<i>1009</i>&nbsp;    /**
+<i>1010</i>&nbsp;     * Tests this item for equality with an arbitrary object.
+<i>1011</i>&nbsp;     *
+<i>1012</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>1013</i>&nbsp;     *
+<i>1014</i>&nbsp;     * @return A boolean.
+<i>1015</i>&nbsp;     */
+<i>1016</i>&nbsp;    @Override
+<i>1017</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1018</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>1019</i>&nbsp;            return true;</b>
+<i>1020</i>&nbsp;        }
+<b class="fc"><i>1021</i>&nbsp;        if (!(obj instanceof LegendItem)) {</b>
+<b class="nc"><i>1022</i>&nbsp;            return false;</b>
+<i>1023</i>&nbsp;        }
+<b class="fc"><i>1024</i>&nbsp;        LegendItem that = (LegendItem) obj;</b>
+<b class="fc"><i>1025</i>&nbsp;        if (this.datasetIndex != that.datasetIndex) {</b>
+<b class="nc"><i>1026</i>&nbsp;            return false;</b>
+<i>1027</i>&nbsp;        }
+<b class="fc"><i>1028</i>&nbsp;        if (this.series != that.series) {</b>
+<b class="nc"><i>1029</i>&nbsp;            return false;</b>
+<i>1030</i>&nbsp;        }
+<b class="fc"><i>1031</i>&nbsp;        if (!this.label.equals(that.label)) {</b>
+<b class="fc"><i>1032</i>&nbsp;            return false;</b>
+<i>1033</i>&nbsp;        }
+<b class="fc"><i>1034</i>&nbsp;        if (!AttributedStringUtils.equal(this.attributedLabel,</b>
+<i>1035</i>&nbsp;                that.attributedLabel)) {
+<b class="nc"><i>1036</i>&nbsp;            return false;</b>
+<i>1037</i>&nbsp;        }
+<b class="fc"><i>1038</i>&nbsp;        if (!ObjectUtils.equal(this.description, that.description)) {</b>
+<b class="fc"><i>1039</i>&nbsp;            return false;</b>
+<i>1040</i>&nbsp;        }
+<b class="fc"><i>1041</i>&nbsp;        if (this.shapeVisible != that.shapeVisible) {</b>
+<b class="fc"><i>1042</i>&nbsp;            return false;</b>
+<i>1043</i>&nbsp;        }
+<b class="fc"><i>1044</i>&nbsp;        if (!ShapeUtils.equal(this.shape, that.shape)) {</b>
+<b class="fc"><i>1045</i>&nbsp;            return false;</b>
+<i>1046</i>&nbsp;        }
+<b class="fc"><i>1047</i>&nbsp;        if (this.shapeFilled != that.shapeFilled) {</b>
+<b class="fc"><i>1048</i>&nbsp;            return false;</b>
+<i>1049</i>&nbsp;        }
+<b class="fc"><i>1050</i>&nbsp;        if (!PaintUtils.equal(this.fillPaint, that.fillPaint)) {</b>
+<b class="fc"><i>1051</i>&nbsp;            return false;</b>
+<i>1052</i>&nbsp;        }
+<b class="fc"><i>1053</i>&nbsp;        if (!ObjectUtils.equal(this.fillPaintTransformer,</b>
+<i>1054</i>&nbsp;                that.fillPaintTransformer)) {
+<b class="fc"><i>1055</i>&nbsp;            return false;</b>
+<i>1056</i>&nbsp;        }
+<b class="fc"><i>1057</i>&nbsp;        if (this.shapeOutlineVisible != that.shapeOutlineVisible) {</b>
+<b class="fc"><i>1058</i>&nbsp;            return false;</b>
+<i>1059</i>&nbsp;        }
+<b class="fc"><i>1060</i>&nbsp;        if (!this.outlineStroke.equals(that.outlineStroke)) {</b>
+<b class="fc"><i>1061</i>&nbsp;            return false;</b>
+<i>1062</i>&nbsp;        }
+<b class="fc"><i>1063</i>&nbsp;        if (!PaintUtils.equal(this.outlinePaint, that.outlinePaint)) {</b>
+<b class="fc"><i>1064</i>&nbsp;            return false;</b>
+<i>1065</i>&nbsp;        }
+<b class="fc"><i>1066</i>&nbsp;        if (!this.lineVisible == that.lineVisible) {</b>
+<b class="fc"><i>1067</i>&nbsp;            return false;</b>
+<i>1068</i>&nbsp;        }
+<b class="fc"><i>1069</i>&nbsp;        if (!ShapeUtils.equal(this.line, that.line)) {</b>
+<b class="fc"><i>1070</i>&nbsp;            return false;</b>
+<i>1071</i>&nbsp;        }
+<b class="fc"><i>1072</i>&nbsp;        if (!this.lineStroke.equals(that.lineStroke)) {</b>
+<b class="fc"><i>1073</i>&nbsp;            return false;</b>
+<i>1074</i>&nbsp;        }
+<b class="fc"><i>1075</i>&nbsp;        if (!PaintUtils.equal(this.linePaint, that.linePaint)) {</b>
+<b class="fc"><i>1076</i>&nbsp;            return false;</b>
+<i>1077</i>&nbsp;        }
+<b class="fc"><i>1078</i>&nbsp;        if (!ObjectUtils.equal(this.labelFont, that.labelFont)) {</b>
+<b class="fc"><i>1079</i>&nbsp;            return false;</b>
+<i>1080</i>&nbsp;        }
+<b class="fc"><i>1081</i>&nbsp;        if (!PaintUtils.equal(this.labelPaint, that.labelPaint)) {</b>
+<b class="fc"><i>1082</i>&nbsp;            return false;</b>
+<i>1083</i>&nbsp;        }
+<b class="fc"><i>1084</i>&nbsp;        return true;</b>
+<i>1085</i>&nbsp;    }
+<i>1086</i>&nbsp;
+<i>1087</i>&nbsp;    /**
+<i>1088</i>&nbsp;     * Returns an independent copy of this object (except that the clone will
+<i>1089</i>&nbsp;     * still reference the same dataset as the original {@code LegendItem}).
+<i>1090</i>&nbsp;     *
+<i>1091</i>&nbsp;     * @return A clone.
+<i>1092</i>&nbsp;     *
+<i>1093</i>&nbsp;     * @throws CloneNotSupportedException if the legend item cannot be cloned.
+<i>1094</i>&nbsp;     *
+<i>1095</i>&nbsp;     * @since 1.0.10
+<i>1096</i>&nbsp;     */
+<i>1097</i>&nbsp;    @Override
+<i>1098</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>1099</i>&nbsp;        LegendItem clone = (LegendItem) super.clone();</b>
+<b class="fc"><i>1100</i>&nbsp;        if (this.seriesKey instanceof PublicCloneable) {</b>
+<b class="nc"><i>1101</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.seriesKey;</b>
+<b class="nc"><i>1102</i>&nbsp;            clone.seriesKey = (Comparable) pc.clone();</b>
+<i>1103</i>&nbsp;        }
+<i>1104</i>&nbsp;        // FIXME: Clone the attributed string if it is not null
+<b class="fc"><i>1105</i>&nbsp;        clone.shape = ShapeUtils.clone(this.shape);</b>
+<b class="fc"><i>1106</i>&nbsp;        if (this.fillPaintTransformer instanceof PublicCloneable) {</b>
+<b class="fc"><i>1107</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.fillPaintTransformer;</b>
+<b class="fc"><i>1108</i>&nbsp;            clone.fillPaintTransformer = (GradientPaintTransformer) pc.clone();</b>
+<i>1109</i>&nbsp;
+<i>1110</i>&nbsp;        }
+<b class="fc"><i>1111</i>&nbsp;        clone.line = ShapeUtils.clone(this.line);</b>
+<b class="fc"><i>1112</i>&nbsp;        return clone;</b>
+<i>1113</i>&nbsp;    }
+<i>1114</i>&nbsp;
+<i>1115</i>&nbsp;    /**
+<i>1116</i>&nbsp;     * Provides serialization support.
+<i>1117</i>&nbsp;     *
+<i>1118</i>&nbsp;     * @param stream  the output stream ({@code null} not permitted).
+<i>1119</i>&nbsp;     *
+<i>1120</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1121</i>&nbsp;     */
+<i>1122</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>1123</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>1124</i>&nbsp;        SerialUtils.writeAttributedString(this.attributedLabel, stream);</b>
+<b class="fc"><i>1125</i>&nbsp;        SerialUtils.writeShape(this.shape, stream);</b>
+<b class="fc"><i>1126</i>&nbsp;        SerialUtils.writePaint(this.fillPaint, stream);</b>
+<b class="fc"><i>1127</i>&nbsp;        SerialUtils.writeStroke(this.outlineStroke, stream);</b>
+<b class="fc"><i>1128</i>&nbsp;        SerialUtils.writePaint(this.outlinePaint, stream);</b>
+<b class="fc"><i>1129</i>&nbsp;        SerialUtils.writeShape(this.line, stream);</b>
+<b class="fc"><i>1130</i>&nbsp;        SerialUtils.writeStroke(this.lineStroke, stream);</b>
+<b class="fc"><i>1131</i>&nbsp;        SerialUtils.writePaint(this.linePaint, stream);</b>
+<b class="fc"><i>1132</i>&nbsp;        SerialUtils.writePaint(this.labelPaint, stream);</b>
+<b class="fc"><i>1133</i>&nbsp;    }</b>
+<i>1134</i>&nbsp;
+<i>1135</i>&nbsp;    /**
+<i>1136</i>&nbsp;     * Provides serialization support.
+<i>1137</i>&nbsp;     *
+<i>1138</i>&nbsp;     * @param stream  the input stream ({@code null} not permitted).
+<i>1139</i>&nbsp;     *
+<i>1140</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1141</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>1142</i>&nbsp;     */
+<i>1143</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>1144</i>&nbsp;        throws IOException, ClassNotFoundException {
+<b class="fc"><i>1145</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>1146</i>&nbsp;        this.attributedLabel = SerialUtils.readAttributedString(stream);</b>
+<b class="fc"><i>1147</i>&nbsp;        this.shape = SerialUtils.readShape(stream);</b>
+<b class="fc"><i>1148</i>&nbsp;        this.fillPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>1149</i>&nbsp;        this.outlineStroke = SerialUtils.readStroke(stream);</b>
+<b class="fc"><i>1150</i>&nbsp;        this.outlinePaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>1151</i>&nbsp;        this.line = SerialUtils.readShape(stream);</b>
+<b class="fc"><i>1152</i>&nbsp;        this.lineStroke = SerialUtils.readStroke(stream);</b>
+<b class="fc"><i>1153</i>&nbsp;        this.linePaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>1154</i>&nbsp;        this.labelPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>1155</i>&nbsp;    }</b>
+<i>1156</i>&nbsp;
+<i>1157</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:56</div>
+</div>
+</body>
+</html>

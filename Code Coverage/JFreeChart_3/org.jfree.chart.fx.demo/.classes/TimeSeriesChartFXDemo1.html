@@ -1,0 +1,530 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TimeSeriesChartFXDemo1</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.fx.demo</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TimeSeriesChartFXDemo1 (org.jfree.chart.fx.demo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TimeSeriesChartFXDemo1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 331)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================
+<i>2</i>&nbsp; * TimeSeriesChartFXDemo1.java
+<i>3</i>&nbsp; * ===========================
+<i>4</i>&nbsp; * 
+<i>5</i>&nbsp; * Copyright (c) 2014, Object Refinery Limited.
+<i>6</i>&nbsp; * All rights reserved.
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; * http://www.jfree.org/jfreechart/index.html
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; * Redistribution and use in source and binary forms, with or without
+<i>11</i>&nbsp; * modification, are permitted provided that the following conditions are met:
+<i>12</i>&nbsp; *   - Redistributions of source code must retain the above copyright
+<i>13</i>&nbsp; *     notice, this list of conditions and the following disclaimer.
+<i>14</i>&nbsp; *   - Redistributions in binary form must reproduce the above copyright
+<i>15</i>&nbsp; *     notice, this list of conditions and the following disclaimer in the
+<i>16</i>&nbsp; *     documentation and/or other materials provided with the distribution.
+<i>17</i>&nbsp; *   - Neither the name of the Object Refinery Limited nor the
+<i>18</i>&nbsp; *     names of its contributors may be used to endorse or promote products
+<i>19</i>&nbsp; *     derived from this software without specific prior written permission.
+<i>20</i>&nbsp; *
+<i>21</i>&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+<i>22</i>&nbsp; * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+<i>23</i>&nbsp; * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+<i>24</i>&nbsp; * ARE DISCLAIMED. IN NO EVENT SHALL OBJECT REFINERY LIMITED BE LIABLE FOR ANY
+<i>25</i>&nbsp; * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+<i>26</i>&nbsp; * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+<i>27</i>&nbsp; * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+<i>28</i>&nbsp; * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<i>29</i>&nbsp; * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+<i>30</i>&nbsp; * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<i>31</i>&nbsp; * 
+<i>32</i>&nbsp; */
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;package org.jfree.chart.fx.demo;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;import static javafx.application.Application.launch;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;import java.awt.BasicStroke;
+<i>39</i>&nbsp;import java.awt.Color;
+<i>40</i>&nbsp;import java.awt.Font;
+<i>41</i>&nbsp;import javafx.application.Application;
+<i>42</i>&nbsp;import javafx.scene.Scene;
+<i>43</i>&nbsp;import javafx.stage.Stage;
+<i>44</i>&nbsp;import org.jfree.chart.ChartFactory;
+<i>45</i>&nbsp;import org.jfree.chart.JFreeChart;
+<i>46</i>&nbsp;import org.jfree.chart.block.BlockBorder;
+<i>47</i>&nbsp;import org.jfree.chart.fx.ChartViewer;
+<i>48</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>49</i>&nbsp;import org.jfree.chart.renderer.xy.XYItemRenderer;
+<i>50</i>&nbsp;import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+<i>51</i>&nbsp;import org.jfree.chart.title.TextTitle;
+<i>52</i>&nbsp;import org.jfree.data.time.Month;
+<i>53</i>&nbsp;import org.jfree.data.time.TimeSeries;
+<i>54</i>&nbsp;import org.jfree.data.time.TimeSeriesCollection;
+<i>55</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>56</i>&nbsp;import org.jfree.ui.HorizontalAlignment;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;/**
+<i>59</i>&nbsp; * A demo showing the display of JFreeChart within a JavaFX application.
+<i>60</i>&nbsp; * 
+<i>61</i>&nbsp; * The ChartCanvas code is based on: 
+<i>62</i>&nbsp; * http://dlemmermann.wordpress.com/2014/04/10/javafx-tip-1-resizable-canvas/
+<i>63</i>&nbsp; * 
+<i>64</i>&nbsp; */
+<b class="nc"><i>65</i>&nbsp;public class TimeSeriesChartFXDemo1 extends Application {</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Creates a chart.
+<i>69</i>&nbsp;     *
+<i>70</i>&nbsp;     * @param dataset  a dataset.
+<i>71</i>&nbsp;     *
+<i>72</i>&nbsp;     * @return A chart.
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    private static JFreeChart createChart(XYDataset dataset) {
+<i>75</i>&nbsp;
+<b class="nc"><i>76</i>&nbsp;        JFreeChart chart = ChartFactory.createTimeSeriesChart(</b>
+<i>77</i>&nbsp;            &quot;International Coffee Organisation : Coffee Prices&quot;,    // title
+<i>78</i>&nbsp;            null,             // x-axis label
+<i>79</i>&nbsp;            &quot;US cents/lb&quot;,      // y-axis label
+<i>80</i>&nbsp;            dataset);
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        String fontName = &quot;Palatino&quot;;</b>
+<b class="nc"><i>83</i>&nbsp;        chart.getTitle().setFont(new Font(fontName, Font.BOLD, 18));</b>
+<b class="nc"><i>84</i>&nbsp;        chart.addSubtitle(new TextTitle(&quot;Source: http://www.ico.org/historical/2010-19/PDF/HIST-PRICES.pdf&quot;, </b>
+<i>85</i>&nbsp;                new Font(fontName, Font.PLAIN, 14)));
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;        XYPlot plot = (XYPlot) chart.getPlot();</b>
+<b class="nc"><i>88</i>&nbsp;        plot.setDomainPannable(true);</b>
+<b class="nc"><i>89</i>&nbsp;        plot.setRangePannable(true);</b>
+<b class="nc"><i>90</i>&nbsp;        plot.setDomainCrosshairVisible(true);</b>
+<b class="nc"><i>91</i>&nbsp;        plot.setRangeCrosshairVisible(true);</b>
+<b class="nc"><i>92</i>&nbsp;        plot.getDomainAxis().setLowerMargin(0.0);</b>
+<b class="nc"><i>93</i>&nbsp;        plot.getDomainAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));</b>
+<b class="nc"><i>94</i>&nbsp;        plot.getDomainAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));</b>
+<b class="nc"><i>95</i>&nbsp;        plot.getRangeAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));</b>
+<b class="nc"><i>96</i>&nbsp;        plot.getRangeAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));</b>
+<b class="nc"><i>97</i>&nbsp;        chart.getLegend().setItemFont(new Font(fontName, Font.PLAIN, 14));</b>
+<b class="nc"><i>98</i>&nbsp;        chart.getLegend().setFrame(BlockBorder.NONE);</b>
+<b class="nc"><i>99</i>&nbsp;        chart.getLegend().setHorizontalAlignment(HorizontalAlignment.CENTER);</b>
+<b class="nc"><i>100</i>&nbsp;        XYItemRenderer r = plot.getRenderer();</b>
+<b class="nc"><i>101</i>&nbsp;        if (r instanceof XYLineAndShapeRenderer) {</b>
+<b class="nc"><i>102</i>&nbsp;            XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;</b>
+<b class="nc"><i>103</i>&nbsp;            renderer.setBaseShapesVisible(false);</b>
+<b class="nc"><i>104</i>&nbsp;            renderer.setDrawSeriesLineAsPath(true);</b>
+<i>105</i>&nbsp;            // set the default stroke for all series
+<b class="nc"><i>106</i>&nbsp;            renderer.setAutoPopulateSeriesStroke(false);</b>
+<b class="nc"><i>107</i>&nbsp;            renderer.setBaseStroke(new BasicStroke(3.0f, BasicStroke.CAP_ROUND, </b>
+<i>108</i>&nbsp;                    BasicStroke.JOIN_BEVEL), false);
+<b class="nc"><i>109</i>&nbsp;            renderer.setSeriesPaint(0, Color.RED);</b>
+<b class="nc"><i>110</i>&nbsp;            renderer.setSeriesPaint(1, new Color(24, 123, 58));</b>
+<b class="nc"><i>111</i>&nbsp;            renderer.setSeriesPaint(2, new Color(149, 201, 136));</b>
+<b class="nc"><i>112</i>&nbsp;            renderer.setSeriesPaint(3, new Color(1, 62, 29));</b>
+<b class="nc"><i>113</i>&nbsp;            renderer.setSeriesPaint(4, new Color(81, 176, 86));</b>
+<b class="nc"><i>114</i>&nbsp;            renderer.setSeriesPaint(5, new Color(0, 55, 122));</b>
+<b class="nc"><i>115</i>&nbsp;            renderer.setSeriesPaint(6, new Color(0, 92, 165));</b>
+<i>116</i>&nbsp;        }
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;        return chart;</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    }
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Creates a dataset, consisting of two series of monthly data.
+<i>124</i>&nbsp;     *
+<i>125</i>&nbsp;     * @return the dataset.
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    private static XYDataset createDataset() {
+<i>128</i>&nbsp;
+<b class="nc"><i>129</i>&nbsp;        TimeSeries s1 = new TimeSeries(&quot;Indicator Price&quot;);</b>
+<b class="nc"><i>130</i>&nbsp;        s1.add(new Month(1, 2010), 126.80);</b>
+<b class="nc"><i>131</i>&nbsp;        s1.add(new Month(2, 2010), 123.37);</b>
+<b class="nc"><i>132</i>&nbsp;        s1.add(new Month(3, 2010), 125.30);</b>
+<b class="nc"><i>133</i>&nbsp;        s1.add(new Month(4, 2010), 126.89);</b>
+<b class="nc"><i>134</i>&nbsp;        s1.add(new Month(5, 2010), 128.10);</b>
+<b class="nc"><i>135</i>&nbsp;        s1.add(new Month(6, 2010), 142.20);</b>
+<b class="nc"><i>136</i>&nbsp;        s1.add(new Month(7, 2010), 153.41);</b>
+<b class="nc"><i>137</i>&nbsp;        s1.add(new Month(8, 2010), 157.46);</b>
+<b class="nc"><i>138</i>&nbsp;        s1.add(new Month(9, 2010), 163.61);</b>
+<b class="nc"><i>139</i>&nbsp;        s1.add(new Month(10, 2010), 161.56);</b>
+<b class="nc"><i>140</i>&nbsp;        s1.add(new Month(11, 2010), 173.90);</b>
+<b class="nc"><i>141</i>&nbsp;        s1.add(new Month(12, 2010), 184.26);</b>
+<b class="nc"><i>142</i>&nbsp;        s1.add(new Month(1, 2011), 197.35);</b>
+<b class="nc"><i>143</i>&nbsp;        s1.add(new Month(2, 2011), 216.03);</b>
+<b class="nc"><i>144</i>&nbsp;        s1.add(new Month(3, 2011), 224.33);</b>
+<b class="nc"><i>145</i>&nbsp;        s1.add(new Month(4, 2011), 231.24);</b>
+<b class="nc"><i>146</i>&nbsp;        s1.add(new Month(5, 2011), 227.97);</b>
+<b class="nc"><i>147</i>&nbsp;        s1.add(new Month(6, 2011), 215.58);</b>
+<b class="nc"><i>148</i>&nbsp;        s1.add(new Month(7, 2011), 210.36);</b>
+<b class="nc"><i>149</i>&nbsp;        s1.add(new Month(8, 2011), 212.19);</b>
+<b class="nc"><i>150</i>&nbsp;        s1.add(new Month(9, 2011), 213.04);</b>
+<b class="nc"><i>151</i>&nbsp;        s1.add(new Month(10, 2011), 193.90);</b>
+<b class="nc"><i>152</i>&nbsp;        s1.add(new Month(11, 2011), 193.66);</b>
+<b class="nc"><i>153</i>&nbsp;        s1.add(new Month(12, 2011), 189.02);</b>
+<b class="nc"><i>154</i>&nbsp;        s1.add(new Month(1, 2012), 188.90);</b>
+<b class="nc"><i>155</i>&nbsp;        s1.add(new Month(2, 2012), 182.29);</b>
+<b class="nc"><i>156</i>&nbsp;        s1.add(new Month(3, 2012), 167.77);</b>
+<b class="nc"><i>157</i>&nbsp;        s1.add(new Month(4, 2012), 160.46);</b>
+<b class="nc"><i>158</i>&nbsp;        s1.add(new Month(5, 2012), 157.68);</b>
+<b class="nc"><i>159</i>&nbsp;        s1.add(new Month(6, 2012), 145.31);</b>
+<b class="nc"><i>160</i>&nbsp;        s1.add(new Month(7, 2012), 159.07);</b>
+<b class="nc"><i>161</i>&nbsp;        s1.add(new Month(8, 2012), 148.50);</b>
+<b class="nc"><i>162</i>&nbsp;        s1.add(new Month(9, 2012), 151.28);</b>
+<b class="nc"><i>163</i>&nbsp;        s1.add(new Month(10, 2012), 147.12);</b>
+<b class="nc"><i>164</i>&nbsp;        s1.add(new Month(11, 2012), 136.35);</b>
+<b class="nc"><i>165</i>&nbsp;        s1.add(new Month(12, 2012), 131.31);</b>
+<b class="nc"><i>166</i>&nbsp;        s1.add(new Month(1, 2013), 135.38);</b>
+<b class="nc"><i>167</i>&nbsp;        s1.add(new Month(2, 2013), 131.51);</b>
+<b class="nc"><i>168</i>&nbsp;        s1.add(new Month(3, 2013), 131.38);</b>
+<i>169</i>&nbsp;
+<b class="nc"><i>170</i>&nbsp;        TimeSeries s2 = new TimeSeries(&quot;Columbian Milds&quot;);</b>
+<b class="nc"><i>171</i>&nbsp;        s2.add(new Month(1, 2010), 207.51);</b>
+<b class="nc"><i>172</i>&nbsp;        s2.add(new Month(2, 2010), 204.71);</b>
+<b class="nc"><i>173</i>&nbsp;        s2.add(new Month(3, 2010), 205.71);</b>
+<b class="nc"><i>174</i>&nbsp;        s2.add(new Month(4, 2010), 200.00);</b>
+<b class="nc"><i>175</i>&nbsp;        s2.add(new Month(5, 2010), 200.54);</b>
+<b class="nc"><i>176</i>&nbsp;        s2.add(new Month(6, 2010), 224.49);</b>
+<b class="nc"><i>177</i>&nbsp;        s2.add(new Month(7, 2010), 235.52);</b>
+<b class="nc"><i>178</i>&nbsp;        s2.add(new Month(8, 2010), 243.98);</b>
+<b class="nc"><i>179</i>&nbsp;        s2.add(new Month(9, 2010), 247.77);</b>
+<b class="nc"><i>180</i>&nbsp;        s2.add(new Month(10, 2010), 230.02);</b>
+<b class="nc"><i>181</i>&nbsp;        s2.add(new Month(11, 2010), 244.02);</b>
+<b class="nc"><i>182</i>&nbsp;        s2.add(new Month(12, 2010), 261.97);</b>
+<b class="nc"><i>183</i>&nbsp;        s2.add(new Month(1, 2011), 279.88);</b>
+<b class="nc"><i>184</i>&nbsp;        s2.add(new Month(2, 2011), 296.44);</b>
+<b class="nc"><i>185</i>&nbsp;        s2.add(new Month(3, 2011), 300.68);</b>
+<b class="nc"><i>186</i>&nbsp;        s2.add(new Month(4, 2011), 312.95);</b>
+<b class="nc"><i>187</i>&nbsp;        s2.add(new Month(5, 2011), 302.17);</b>
+<b class="nc"><i>188</i>&nbsp;        s2.add(new Month(6, 2011), 287.95);</b>
+<b class="nc"><i>189</i>&nbsp;        s2.add(new Month(7, 2011), 285.21);</b>
+<b class="nc"><i>190</i>&nbsp;        s2.add(new Month(8, 2011), 286.97);</b>
+<b class="nc"><i>191</i>&nbsp;        s2.add(new Month(9, 2011), 287.54);</b>
+<b class="nc"><i>192</i>&nbsp;        s2.add(new Month(10, 2011), 257.66);</b>
+<b class="nc"><i>193</i>&nbsp;        s2.add(new Month(11, 2011), 256.99);</b>
+<b class="nc"><i>194</i>&nbsp;        s2.add(new Month(12, 2011), 251.60);</b>
+<b class="nc"><i>195</i>&nbsp;        s2.add(new Month(1, 2012), 255.91);</b>
+<b class="nc"><i>196</i>&nbsp;        s2.add(new Month(2, 2012), 244.14);</b>
+<b class="nc"><i>197</i>&nbsp;        s2.add(new Month(3, 2012), 222.84);</b>
+<b class="nc"><i>198</i>&nbsp;        s2.add(new Month(4, 2012), 214.46);</b>
+<b class="nc"><i>199</i>&nbsp;        s2.add(new Month(5, 2012), 207.32);</b>
+<b class="nc"><i>200</i>&nbsp;        s2.add(new Month(6, 2012), 184.67);</b>
+<b class="nc"><i>201</i>&nbsp;        s2.add(new Month(7, 2012), 202.56);</b>
+<b class="nc"><i>202</i>&nbsp;        s2.add(new Month(8, 2012), 187.14);</b>
+<b class="nc"><i>203</i>&nbsp;        s2.add(new Month(9, 2012), 190.10);</b>
+<b class="nc"><i>204</i>&nbsp;        s2.add(new Month(10, 2012), 181.39);</b>
+<b class="nc"><i>205</i>&nbsp;        s2.add(new Month(11, 2012), 170.08);</b>
+<b class="nc"><i>206</i>&nbsp;        s2.add(new Month(12, 2012), 164.40);</b>
+<b class="nc"><i>207</i>&nbsp;        s2.add(new Month(1, 2013), 169.19);</b>
+<b class="nc"><i>208</i>&nbsp;        s2.add(new Month(2, 2013), 161.70);</b>
+<b class="nc"><i>209</i>&nbsp;        s2.add(new Month(3, 2013), 161.53);</b>
+<i>210</i>&nbsp;        
+<b class="nc"><i>211</i>&nbsp;        TimeSeries s3 = new TimeSeries(&quot;Other Milds&quot;);</b>
+<b class="nc"><i>212</i>&nbsp;        s3.add(new Month(1, 2010), 158.90);</b>
+<b class="nc"><i>213</i>&nbsp;        s3.add(new Month(2, 2010), 157.86);</b>
+<b class="nc"><i>214</i>&nbsp;        s3.add(new Month(3, 2010), 164.50);</b>
+<b class="nc"><i>215</i>&nbsp;        s3.add(new Month(4, 2010), 169.55);</b>
+<b class="nc"><i>216</i>&nbsp;        s3.add(new Month(5, 2010), 173.38);</b>
+<b class="nc"><i>217</i>&nbsp;        s3.add(new Month(6, 2010), 190.90);</b>
+<b class="nc"><i>218</i>&nbsp;        s3.add(new Month(7, 2010), 203.21);</b>
+<b class="nc"><i>219</i>&nbsp;        s3.add(new Month(8, 2010), 211.59);</b>
+<b class="nc"><i>220</i>&nbsp;        s3.add(new Month(9, 2010), 222.71);</b>
+<b class="nc"><i>221</i>&nbsp;        s3.add(new Month(10, 2010), 217.64);</b>
+<b class="nc"><i>222</i>&nbsp;        s3.add(new Month(11, 2010), 233.48);</b>
+<b class="nc"><i>223</i>&nbsp;        s3.add(new Month(12, 2010), 248.17);</b>
+<b class="nc"><i>224</i>&nbsp;        s3.add(new Month(1, 2011), 263.77);</b>
+<b class="nc"><i>225</i>&nbsp;        s3.add(new Month(2, 2011), 287.89);</b>
+<b class="nc"><i>226</i>&nbsp;        s3.add(new Month(3, 2011), 292.07);</b>
+<b class="nc"><i>227</i>&nbsp;        s3.add(new Month(4, 2011), 300.12);</b>
+<b class="nc"><i>228</i>&nbsp;        s3.add(new Month(5, 2011), 291.09);</b>
+<b class="nc"><i>229</i>&nbsp;        s3.add(new Month(6, 2011), 274.98);</b>
+<b class="nc"><i>230</i>&nbsp;        s3.add(new Month(7, 2011), 268.02);</b>
+<b class="nc"><i>231</i>&nbsp;        s3.add(new Month(8, 2011), 270.44);</b>
+<b class="nc"><i>232</i>&nbsp;        s3.add(new Month(9, 2011), 274.88);</b>
+<b class="nc"><i>233</i>&nbsp;        s3.add(new Month(10, 2011), 247.82);</b>
+<b class="nc"><i>234</i>&nbsp;        s3.add(new Month(11, 2011), 245.09);</b>
+<b class="nc"><i>235</i>&nbsp;        s3.add(new Month(12, 2011), 236.71);</b>
+<b class="nc"><i>236</i>&nbsp;        s3.add(new Month(1, 2012), 237.21);</b>
+<b class="nc"><i>237</i>&nbsp;        s3.add(new Month(2, 2012), 224.16);</b>
+<b class="nc"><i>238</i>&nbsp;        s3.add(new Month(3, 2012), 201.26);</b>
+<b class="nc"><i>239</i>&nbsp;        s3.add(new Month(4, 2012), 191.45);</b>
+<b class="nc"><i>240</i>&nbsp;        s3.add(new Month(5, 2012), 184.65);</b>
+<b class="nc"><i>241</i>&nbsp;        s3.add(new Month(6, 2012), 168.69);</b>
+<b class="nc"><i>242</i>&nbsp;        s3.add(new Month(7, 2012), 190.45);</b>
+<b class="nc"><i>243</i>&nbsp;        s3.add(new Month(8, 2012), 174.82);</b>
+<b class="nc"><i>244</i>&nbsp;        s3.add(new Month(9, 2012), 178.98);</b>
+<b class="nc"><i>245</i>&nbsp;        s3.add(new Month(10, 2012), 173.32);</b>
+<b class="nc"><i>246</i>&nbsp;        s3.add(new Month(11, 2012), 159.91);</b>
+<b class="nc"><i>247</i>&nbsp;        s3.add(new Month(12, 2012), 152.74);</b>
+<b class="nc"><i>248</i>&nbsp;        s3.add(new Month(1, 2013), 157.29);</b>
+<b class="nc"><i>249</i>&nbsp;        s3.add(new Month(2, 2013), 149.46);</b>
+<b class="nc"><i>250</i>&nbsp;        s3.add(new Month(3, 2013), 149.78);</b>
+<i>251</i>&nbsp;        
+<b class="nc"><i>252</i>&nbsp;        TimeSeries s4 = new TimeSeries(&quot;Brazilian Naturals&quot;);</b>
+<b class="nc"><i>253</i>&nbsp;        s4.add(new Month(1, 2010), 131.67);</b>
+<b class="nc"><i>254</i>&nbsp;        s4.add(new Month(2, 2010), 124.57);</b>
+<b class="nc"><i>255</i>&nbsp;        s4.add(new Month(3, 2010), 126.21);</b>
+<b class="nc"><i>256</i>&nbsp;        s4.add(new Month(4, 2010), 126.07);</b>
+<b class="nc"><i>257</i>&nbsp;        s4.add(new Month(5, 2010), 127.45);</b>
+<b class="nc"><i>258</i>&nbsp;        s4.add(new Month(6, 2010), 143.20);</b>
+<b class="nc"><i>259</i>&nbsp;        s4.add(new Month(7, 2010), 156.87);</b>
+<b class="nc"><i>260</i>&nbsp;        s4.add(new Month(8, 2010), 163.21);</b>
+<b class="nc"><i>261</i>&nbsp;        s4.add(new Month(9, 2010), 175.15);</b>
+<b class="nc"><i>262</i>&nbsp;        s4.add(new Month(10, 2010), 175.38);</b>
+<b class="nc"><i>263</i>&nbsp;        s4.add(new Month(11, 2010), 190.62);</b>
+<b class="nc"><i>264</i>&nbsp;        s4.add(new Month(12, 2010), 204.25);</b>
+<b class="nc"><i>265</i>&nbsp;        s4.add(new Month(1, 2011), 219.77);</b>
+<b class="nc"><i>266</i>&nbsp;        s4.add(new Month(2, 2011), 247.00);</b>
+<b class="nc"><i>267</i>&nbsp;        s4.add(new Month(3, 2011), 260.98);</b>
+<b class="nc"><i>268</i>&nbsp;        s4.add(new Month(4, 2011), 273.40);</b>
+<b class="nc"><i>269</i>&nbsp;        s4.add(new Month(5, 2011), 268.66);</b>
+<b class="nc"><i>270</i>&nbsp;        s4.add(new Month(6, 2011), 250.59);</b>
+<b class="nc"><i>271</i>&nbsp;        s4.add(new Month(7, 2011), 245.69);</b>
+<b class="nc"><i>272</i>&nbsp;        s4.add(new Month(8, 2011), 249.83);</b>
+<b class="nc"><i>273</i>&nbsp;        s4.add(new Month(9, 2011), 255.64);</b>
+<b class="nc"><i>274</i>&nbsp;        s4.add(new Month(10, 2011), 234.28);</b>
+<b class="nc"><i>275</i>&nbsp;        s4.add(new Month(11, 2011), 236.75);</b>
+<b class="nc"><i>276</i>&nbsp;        s4.add(new Month(12, 2011), 228.79);</b>
+<b class="nc"><i>277</i>&nbsp;        s4.add(new Month(1, 2012), 228.21);</b>
+<b class="nc"><i>278</i>&nbsp;        s4.add(new Month(2, 2012), 215.40);</b>
+<b class="nc"><i>279</i>&nbsp;        s4.add(new Month(3, 2012), 192.03);</b>
+<b class="nc"><i>280</i>&nbsp;        s4.add(new Month(4, 2012), 180.90);</b>
+<b class="nc"><i>281</i>&nbsp;        s4.add(new Month(5, 2012), 174.17);</b>
+<b class="nc"><i>282</i>&nbsp;        s4.add(new Month(6, 2012), 156.17);</b>
+<b class="nc"><i>283</i>&nbsp;        s4.add(new Month(7, 2012), 175.98);</b>
+<b class="nc"><i>284</i>&nbsp;        s4.add(new Month(8, 2012), 160.05);</b>
+<b class="nc"><i>285</i>&nbsp;        s4.add(new Month(9, 2012), 166.53);</b>
+<b class="nc"><i>286</i>&nbsp;        s4.add(new Month(10, 2012), 161.20);</b>
+<b class="nc"><i>287</i>&nbsp;        s4.add(new Month(11, 2012), 148.25);</b>
+<b class="nc"><i>288</i>&nbsp;        s4.add(new Month(12, 2012), 140.69);</b>
+<b class="nc"><i>289</i>&nbsp;        s4.add(new Month(1, 2013), 145.17);</b>
+<b class="nc"><i>290</i>&nbsp;        s4.add(new Month(2, 2013), 136.63);</b>
+<b class="nc"><i>291</i>&nbsp;        s4.add(new Month(3, 2013), 133.61);</b>
+<i>292</i>&nbsp;        
+<b class="nc"><i>293</i>&nbsp;        TimeSeries s5 = new TimeSeries(&quot;Robustas&quot;);</b>
+<b class="nc"><i>294</i>&nbsp;        s5.add(new Month(1, 2010), 69.92);</b>
+<b class="nc"><i>295</i>&nbsp;        s5.add(new Month(2, 2010), 67.88);</b>
+<b class="nc"><i>296</i>&nbsp;        s5.add(new Month(3, 2010), 67.25);</b>
+<b class="nc"><i>297</i>&nbsp;        s5.add(new Month(4, 2010), 71.59);</b>
+<b class="nc"><i>298</i>&nbsp;        s5.add(new Month(5, 2010), 70.70);</b>
+<b class="nc"><i>299</i>&nbsp;        s5.add(new Month(6, 2010), 76.92);</b>
+<b class="nc"><i>300</i>&nbsp;        s5.add(new Month(7, 2010), 85.27);</b>
+<b class="nc"><i>301</i>&nbsp;        s5.add(new Month(8, 2010), 82.68);</b>
+<b class="nc"><i>302</i>&nbsp;        s5.add(new Month(9, 2010), 81.28);</b>
+<b class="nc"><i>303</i>&nbsp;        s5.add(new Month(10, 2010), 85.27);</b>
+<b class="nc"><i>304</i>&nbsp;        s5.add(new Month(11, 2010), 92.04);</b>
+<b class="nc"><i>305</i>&nbsp;        s5.add(new Month(12, 2010), 94.09);</b>
+<b class="nc"><i>306</i>&nbsp;        s5.add(new Month(1, 2011), 101.09);</b>
+<b class="nc"><i>307</i>&nbsp;        s5.add(new Month(2, 2011), 109.35);</b>
+<b class="nc"><i>308</i>&nbsp;        s5.add(new Month(3, 2011), 118.13);</b>
+<b class="nc"><i>309</i>&nbsp;        s5.add(new Month(4, 2011), 117.37);</b>
+<b class="nc"><i>310</i>&nbsp;        s5.add(new Month(5, 2011), 121.98);</b>
+<b class="nc"><i>311</i>&nbsp;        s5.add(new Month(6, 2011), 117.95);</b>
+<b class="nc"><i>312</i>&nbsp;        s5.add(new Month(7, 2011), 112.73);</b>
+<b class="nc"><i>313</i>&nbsp;        s5.add(new Month(8, 2011), 112.07);</b>
+<b class="nc"><i>314</i>&nbsp;        s5.add(new Month(9, 2011), 106.06);</b>
+<b class="nc"><i>315</i>&nbsp;        s5.add(new Month(10, 2011), 98.10);</b>
+<b class="nc"><i>316</i>&nbsp;        s5.add(new Month(11, 2011), 97.24);</b>
+<b class="nc"><i>317</i>&nbsp;        s5.add(new Month(12, 2011), 98.41);</b>
+<b class="nc"><i>318</i>&nbsp;        s5.add(new Month(1, 2012), 96.72);</b>
+<b class="nc"><i>319</i>&nbsp;        s5.add(new Month(2, 2012), 101.93);</b>
+<b class="nc"><i>320</i>&nbsp;        s5.add(new Month(3, 2012), 103.57);</b>
+<b class="nc"><i>321</i>&nbsp;        s5.add(new Month(4, 2012), 101.80);</b>
+<b class="nc"><i>322</i>&nbsp;        s5.add(new Month(5, 2012), 106.88);</b>
+<b class="nc"><i>323</i>&nbsp;        s5.add(new Month(6, 2012), 105.70);</b>
+<b class="nc"><i>324</i>&nbsp;        s5.add(new Month(7, 2012), 107.06);</b>
+<b class="nc"><i>325</i>&nbsp;        s5.add(new Month(8, 2012), 106.52);</b>
+<b class="nc"><i>326</i>&nbsp;        s5.add(new Month(9, 2012), 104.95);</b>
+<b class="nc"><i>327</i>&nbsp;        s5.add(new Month(10, 2012), 104.47);</b>
+<b class="nc"><i>328</i>&nbsp;        s5.add(new Month(11, 2012), 97.67);</b>
+<b class="nc"><i>329</i>&nbsp;        s5.add(new Month(12, 2012), 96.59);</b>
+<b class="nc"><i>330</i>&nbsp;        s5.add(new Month(1, 2013), 99.69);</b>
+<b class="nc"><i>331</i>&nbsp;        s5.add(new Month(2, 2013), 104.03);</b>
+<b class="nc"><i>332</i>&nbsp;        s5.add(new Month(3, 2013), 106.26);</b>
+<i>333</i>&nbsp;       
+<b class="nc"><i>334</i>&nbsp;        TimeSeries s6 = new TimeSeries(&quot;Futures (London)&quot;);</b>
+<b class="nc"><i>335</i>&nbsp;        s6.add(new Month(1, 2010), 62.66);</b>
+<b class="nc"><i>336</i>&nbsp;        s6.add(new Month(2, 2010), 60.37);</b>
+<b class="nc"><i>337</i>&nbsp;        s6.add(new Month(3, 2010), 58.64);</b>
+<b class="nc"><i>338</i>&nbsp;        s6.add(new Month(4, 2010), 62.21);</b>
+<b class="nc"><i>339</i>&nbsp;        s6.add(new Month(5, 2010), 62.46);</b>
+<b class="nc"><i>340</i>&nbsp;        s6.add(new Month(6, 2010), 69.72);</b>
+<b class="nc"><i>341</i>&nbsp;        s6.add(new Month(7, 2010), 78.17);</b>
+<b class="nc"><i>342</i>&nbsp;        s6.add(new Month(8, 2010), 78.42);</b>
+<b class="nc"><i>343</i>&nbsp;        s6.add(new Month(9, 2010), 75.87);</b>
+<b class="nc"><i>344</i>&nbsp;        s6.add(new Month(10, 2010), 80.08);</b>
+<b class="nc"><i>345</i>&nbsp;        s6.add(new Month(11, 2010), 86.40);</b>
+<b class="nc"><i>346</i>&nbsp;        s6.add(new Month(12, 2010), 88.70);</b>
+<b class="nc"><i>347</i>&nbsp;        s6.add(new Month(1, 2011), 96.02);</b>
+<b class="nc"><i>348</i>&nbsp;        s6.add(new Month(2, 2011), 104.53);</b>
+<b class="nc"><i>349</i>&nbsp;        s6.add(new Month(3, 2011), 111.36);</b>
+<b class="nc"><i>350</i>&nbsp;        s6.add(new Month(4, 2011), 111.34);</b>
+<b class="nc"><i>351</i>&nbsp;        s6.add(new Month(5, 2011), 116.76);</b>
+<b class="nc"><i>352</i>&nbsp;        s6.add(new Month(6, 2011), 110.51);</b>
+<b class="nc"><i>353</i>&nbsp;        s6.add(new Month(7, 2011), 103.36);</b>
+<b class="nc"><i>354</i>&nbsp;        s6.add(new Month(8, 2011), 102.71);</b>
+<b class="nc"><i>355</i>&nbsp;        s6.add(new Month(9, 2011), 96.10);</b>
+<b class="nc"><i>356</i>&nbsp;        s6.add(new Month(10, 2011), 88.64);</b>
+<b class="nc"><i>357</i>&nbsp;        s6.add(new Month(11, 2011), 85.78);</b>
+<b class="nc"><i>358</i>&nbsp;        s6.add(new Month(12, 2011), 87.65);</b>
+<b class="nc"><i>359</i>&nbsp;        s6.add(new Month(1, 2012), 84.19);</b>
+<b class="nc"><i>360</i>&nbsp;        s6.add(new Month(2, 2012), 88.69);</b>
+<b class="nc"><i>361</i>&nbsp;        s6.add(new Month(3, 2012), 91.37);</b>
+<b class="nc"><i>362</i>&nbsp;        s6.add(new Month(4, 2012), 91.81);</b>
+<b class="nc"><i>363</i>&nbsp;        s6.add(new Month(5, 2012), 96.82);</b>
+<b class="nc"><i>364</i>&nbsp;        s6.add(new Month(6, 2012), 94.75);</b>
+<b class="nc"><i>365</i>&nbsp;        s6.add(new Month(7, 2012), 96.14);</b>
+<b class="nc"><i>366</i>&nbsp;        s6.add(new Month(8, 2012), 96.12);</b>
+<b class="nc"><i>367</i>&nbsp;        s6.add(new Month(9, 2012), 94.65);</b>
+<b class="nc"><i>368</i>&nbsp;        s6.add(new Month(10, 2012), 94.66);</b>
+<b class="nc"><i>369</i>&nbsp;        s6.add(new Month(11, 2012), 87.32);</b>
+<b class="nc"><i>370</i>&nbsp;        s6.add(new Month(12, 2012), 85.94);</b>
+<b class="nc"><i>371</i>&nbsp;        s6.add(new Month(1, 2013), 88.85);</b>
+<b class="nc"><i>372</i>&nbsp;        s6.add(new Month(2, 2013), 94.41);</b>
+<b class="nc"><i>373</i>&nbsp;        s6.add(new Month(3, 2013), 97.22);</b>
+<i>374</i>&nbsp;        
+<b class="nc"><i>375</i>&nbsp;        TimeSeries s7 = new TimeSeries(&quot;Futures (New York)&quot;);</b>
+<b class="nc"><i>376</i>&nbsp;        s7.add(new Month(1, 2010), 142.76);</b>
+<b class="nc"><i>377</i>&nbsp;        s7.add(new Month(2, 2010), 134.35);</b>
+<b class="nc"><i>378</i>&nbsp;        s7.add(new Month(3, 2010), 134.97);</b>
+<b class="nc"><i>379</i>&nbsp;        s7.add(new Month(4, 2010), 135.12);</b>
+<b class="nc"><i>380</i>&nbsp;        s7.add(new Month(5, 2010), 135.81);</b>
+<b class="nc"><i>381</i>&nbsp;        s7.add(new Month(6, 2010), 152.36);</b>
+<b class="nc"><i>382</i>&nbsp;        s7.add(new Month(7, 2010), 165.23);</b>
+<b class="nc"><i>383</i>&nbsp;        s7.add(new Month(8, 2010), 175.10);</b>
+<b class="nc"><i>384</i>&nbsp;        s7.add(new Month(9, 2010), 187.80);</b>
+<b class="nc"><i>385</i>&nbsp;        s7.add(new Month(10, 2010), 190.43);</b>
+<b class="nc"><i>386</i>&nbsp;        s7.add(new Month(11, 2010), 206.92);</b>
+<b class="nc"><i>387</i>&nbsp;        s7.add(new Month(12, 2010), 221.51);</b>
+<b class="nc"><i>388</i>&nbsp;        s7.add(new Month(1, 2011), 238.05);</b>
+<b class="nc"><i>389</i>&nbsp;        s7.add(new Month(2, 2011), 261.41);</b>
+<b class="nc"><i>390</i>&nbsp;        s7.add(new Month(3, 2011), 274.10);</b>
+<b class="nc"><i>391</i>&nbsp;        s7.add(new Month(4, 2011), 285.58);</b>
+<b class="nc"><i>392</i>&nbsp;        s7.add(new Month(5, 2011), 277.72);</b>
+<b class="nc"><i>393</i>&nbsp;        s7.add(new Month(6, 2011), 262.52);</b>
+<b class="nc"><i>394</i>&nbsp;        s7.add(new Month(7, 2011), 255.90);</b>
+<b class="nc"><i>395</i>&nbsp;        s7.add(new Month(8, 2011), 260.39);</b>
+<b class="nc"><i>396</i>&nbsp;        s7.add(new Month(9, 2011), 261.39);</b>
+<b class="nc"><i>397</i>&nbsp;        s7.add(new Month(10, 2011), 236.74);</b>
+<b class="nc"><i>398</i>&nbsp;        s7.add(new Month(11, 2011), 235.25);</b>
+<b class="nc"><i>399</i>&nbsp;        s7.add(new Month(12, 2011), 227.23);</b>
+<b class="nc"><i>400</i>&nbsp;        s7.add(new Month(1, 2012), 227.50);</b>
+<b class="nc"><i>401</i>&nbsp;        s7.add(new Month(2, 2012), 212.09);</b>
+<b class="nc"><i>402</i>&nbsp;        s7.add(new Month(3, 2012), 188.78);</b>
+<b class="nc"><i>403</i>&nbsp;        s7.add(new Month(4, 2012), 181.75);</b>
+<b class="nc"><i>404</i>&nbsp;        s7.add(new Month(5, 2012), 176.50);</b>
+<b class="nc"><i>405</i>&nbsp;        s7.add(new Month(6, 2012), 159.93);</b>
+<b class="nc"><i>406</i>&nbsp;        s7.add(new Month(7, 2012), 183.20);</b>
+<b class="nc"><i>407</i>&nbsp;        s7.add(new Month(8, 2012), 169.77);</b>
+<b class="nc"><i>408</i>&nbsp;        s7.add(new Month(9, 2012), 175.36);</b>
+<b class="nc"><i>409</i>&nbsp;        s7.add(new Month(10, 2012), 170.43);</b>
+<b class="nc"><i>410</i>&nbsp;        s7.add(new Month(11, 2012), 155.72);</b>
+<b class="nc"><i>411</i>&nbsp;        s7.add(new Month(12, 2012), 149.58);</b>
+<b class="nc"><i>412</i>&nbsp;        s7.add(new Month(1, 2013), 154.28);</b>
+<b class="nc"><i>413</i>&nbsp;        s7.add(new Month(2, 2013), 144.89);</b>
+<b class="nc"><i>414</i>&nbsp;        s7.add(new Month(3, 2013), 141.43);</b>
+<i>415</i>&nbsp;       
+<b class="nc"><i>416</i>&nbsp;        TimeSeriesCollection dataset = new TimeSeriesCollection();</b>
+<b class="nc"><i>417</i>&nbsp;        dataset.addSeries(s1);</b>
+<b class="nc"><i>418</i>&nbsp;        dataset.addSeries(s2);</b>
+<b class="nc"><i>419</i>&nbsp;        dataset.addSeries(s3);        </b>
+<b class="nc"><i>420</i>&nbsp;        dataset.addSeries(s4);</b>
+<b class="nc"><i>421</i>&nbsp;        dataset.addSeries(s5);</b>
+<b class="nc"><i>422</i>&nbsp;        dataset.addSeries(s6);</b>
+<b class="nc"><i>423</i>&nbsp;        dataset.addSeries(s7);</b>
+<b class="nc"><i>424</i>&nbsp;        return dataset;</b>
+<i>425</i>&nbsp;    }
+<i>426</i>&nbsp;
+<i>427</i>&nbsp;    @Override 
+<i>428</i>&nbsp;    public void start(Stage stage) throws Exception {
+<b class="nc"><i>429</i>&nbsp;        XYDataset dataset = createDataset();</b>
+<b class="nc"><i>430</i>&nbsp;        JFreeChart chart = createChart(dataset); </b>
+<b class="nc"><i>431</i>&nbsp;        ChartViewer viewer = new ChartViewer(chart);  </b>
+<i>432</i>&nbsp;        
+<b class="nc"><i>433</i>&nbsp;        stage.setScene(new Scene(viewer)); </b>
+<b class="nc"><i>434</i>&nbsp;        stage.setTitle(&quot;JFreeChart: TimeSeriesFXDemo1.java&quot;); </b>
+<b class="nc"><i>435</i>&nbsp;        stage.setWidth(700);</b>
+<b class="nc"><i>436</i>&nbsp;        stage.setHeight(390);</b>
+<b class="nc"><i>437</i>&nbsp;        stage.show();</b>
+<i>438</i>&nbsp;    }
+<i>439</i>&nbsp;    
+<i>440</i>&nbsp;    /**
+<i>441</i>&nbsp;     * @param args the command line arguments
+<i>442</i>&nbsp;     */
+<i>443</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>444</i>&nbsp;        launch(args);</b>
+<i>445</i>&nbsp;    }
+<i>446</i>&nbsp;  
+<i>447</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

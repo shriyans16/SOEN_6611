@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Args</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Args (org.jfree.chart.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Args</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------
+<i>28</i>&nbsp; * Args.java
+<i>29</i>&nbsp; * ---------
+<i>30</i>&nbsp; * (C) Copyright 2011-2017, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; */
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;package org.jfree.chart.util;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;/**
+<i>39</i>&nbsp; * A utility class for checking method arguments.
+<i>40</i>&nbsp; */
+<b class="nc"><i>41</i>&nbsp;public class Args {</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /**
+<i>44</i>&nbsp;     * Throws an {@code IllegalArgumentException} if the supplied 
+<i>45</i>&nbsp;     * {@code param} is {@code null}.
+<i>46</i>&nbsp;     *
+<i>47</i>&nbsp;     * @param param  the parameter to check ({@code null} permitted).
+<i>48</i>&nbsp;     * @param name  the name of the parameter (to use in the exception message
+<i>49</i>&nbsp;     *     if {@code param} is {@code null}).
+<i>50</i>&nbsp;     *
+<i>51</i>&nbsp;     * @throws IllegalArgumentException  if {@code param} is 
+<i>52</i>&nbsp;     *     {@code null}.
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public static void nullNotPermitted(Object param, String name) {
+<b class="fc"><i>55</i>&nbsp;        if (param == null) {</b>
+<b class="fc"><i>56</i>&nbsp;            throw new IllegalArgumentException(&quot;Null &#39;&quot; + name + &quot;&#39; argument.&quot;);</b>
+<i>57</i>&nbsp;        }
+<b class="fc"><i>58</i>&nbsp;    }</b>
+<i>59</i>&nbsp;    
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Throws an {@code IllegalArgumentException} if {@code value} is negative.
+<i>62</i>&nbsp;     * 
+<i>63</i>&nbsp;     * @param value  the value.
+<i>64</i>&nbsp;     * @param name  the parameter name (for use in the exception message).
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    public static void requireNonNegative(int value, String name) {
+<b class="fc"><i>67</i>&nbsp;        if (value &lt; 0) {</b>
+<b class="fc"><i>68</i>&nbsp;            throw new IllegalArgumentException(&quot;Require &#39;&quot; + name + &quot;&#39; (&quot; </b>
+<i>69</i>&nbsp;                    + value + &quot;) to be non-negative.&quot;);
+<i>70</i>&nbsp;        }
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;    
+<i>73</i>&nbsp;    /**
+<i>74</i>&nbsp;     * Checks that the value falls within the specified range and, if it does
+<i>75</i>&nbsp;     * not, throws an {@code IllegalArgumentException}.
+<i>76</i>&nbsp;     * 
+<i>77</i>&nbsp;     * @param value  the value.
+<i>78</i>&nbsp;     * @param name  the parameter name.
+<i>79</i>&nbsp;     * @param lowerBound  the lower bound of the permitted range.
+<i>80</i>&nbsp;     * @param upperBound  the upper bound fo the permitted range.
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public static void requireInRange(int value, String name, 
+<i>83</i>&nbsp;            int lowerBound, int upperBound) {
+<b class="fc"><i>84</i>&nbsp;        if (value &lt; lowerBound) {</b>
+<b class="nc"><i>85</i>&nbsp;            throw new IllegalArgumentException(&quot;Require &#39;&quot; + name + &quot;&#39; (&quot; </b>
+<i>86</i>&nbsp;                    + value + &quot;) to be in the range &quot; + lowerBound + &quot; to &quot; 
+<i>87</i>&nbsp;                    + upperBound);
+<i>88</i>&nbsp;        }
+<b class="fc"><i>89</i>&nbsp;    }</b>
+<i>90</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

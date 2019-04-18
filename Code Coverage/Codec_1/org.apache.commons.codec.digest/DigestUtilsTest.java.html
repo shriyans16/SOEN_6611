@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DigestUtilsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">DigestUtilsTest.java</span></div><h1>DigestUtilsTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.digest;
+
+import static org.apache.commons.codec.binary.StringUtils.getBytesUtf8;
+import static org.junit.Assert.assertEquals;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.util.Random;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * Tests DigestUtils methods.
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L45" title="3 of 4 branches missed.">public class DigestUtilsTest {</span>
+
+<span class="fc" id="L47">    private final byte[] testData = new byte[1024 * 1024];</span>
+
+    private File testFile;
+
+<span class="fc" id="L51">    private void assumeJava8() {</span>
+<span class="fc" id="L52">        Assume.assumeTrue(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8));</span>
+<span class="fc" id="L53">    }</span>
+
+<span class="fc" id="L55">    private void assumeJava9() {</span>
+<span class="nc" id="L56">        Assume.assumeTrue(SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_9));</span>
+<span class="nc" id="L57">    }</span>
+
+<span class="nc" id="L59">    byte[] getTestData() {</span>
+<span class="nc" id="L60">        return testData;</span>
+    }
+
+<span class="nc" id="L63">    File getTestFile() {</span>
+<span class="nc" id="L64">        return testFile;</span>
+    }
+
+    @Before
+<span class="fc" id="L68">    public void setUp() throws Exception {</span>
+<span class="fc" id="L69">        new Random().nextBytes(testData);</span>
+<span class="fc" id="L70">        testFile = File.createTempFile(DigestUtilsTest.class.getName(), &quot;.dat&quot;);</span>
+<span class="fc" id="L71">        try (final FileOutputStream fos = new FileOutputStream(testFile)) {</span>
+<span class="fc" id="L72">            fos.write(testData);</span>
+        }
+<span class="fc" id="L74">    }</span>
+
+    @After
+<span class="fc" id="L77">    public void tearDown() {</span>
+<span class="pc bpc" id="L78" title="7 of 10 branches missed.">        if (!testFile.delete()) {</span>
+<span class="nc" id="L79">            testFile.deleteOnExit();</span>
+        }
+<span class="fc" id="L81">    }</span>
+
+    @Test(expected=IllegalArgumentException.class)
+<span class="pc bpc" id="L84" title="4 of 6 branches missed.">    public void testInternalNoSuchAlgorithmException() {</span>
+<span class="nc" id="L85">        DigestUtils.getDigest(&quot;Bogus Bogus&quot;);</span>
+<span class="nc" id="L86">    }</span>
+
+    @Test
+<span class="pc bnc" id="L89" title="All 4 branches missed.">    public void testMd2Hex() throws IOException {</span>
+        // Examples from RFC 1319
+<span class="fc" id="L91">        assertEquals(&quot;8350e5a3e24c153df2275c9f80692773&quot;, DigestUtils.md2Hex(&quot;&quot;));</span>
+
+<span class="fc" id="L93">        assertEquals(&quot;32ec01ec4a6dac72c0ab96fb34c0b5d1&quot;, DigestUtils.md2Hex(&quot;a&quot;));</span>
+
+<span class="fc" id="L95">        assertEquals(&quot;da853b0d3f88d99b30283a69e6ded6bb&quot;, DigestUtils.md2Hex(&quot;abc&quot;));</span>
+
+<span class="fc" id="L97">        assertEquals(&quot;ab4f496bfb2a530b219ff33031fe06b0&quot;, DigestUtils.md2Hex(&quot;message digest&quot;));</span>
+
+<span class="fc" id="L99">        assertEquals(&quot;4e8ddff3650292ab5a4108c3aa47940b&quot;, DigestUtils.md2Hex(&quot;abcdefghijklmnopqrstuvwxyz&quot;));</span>
+
+<span class="fc" id="L101">        assertEquals(</span>
+            &quot;da33def2a42df13975352846c30338cd&quot;,
+<span class="fc" id="L103">            DigestUtils.md2Hex(&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot; + &quot;abcdefghijklmnopqrstuvwxyz&quot; + &quot;0123456789&quot;));</span>
+
+<span class="fc" id="L105">        assertEquals(</span>
+            &quot;d5976f79d83d3a0dc9806c3c66f3efd8&quot;,
+<span class="fc" id="L107">            DigestUtils.md2Hex(&quot;1234567890123456789012345678901234567890&quot; + &quot;1234567890123456789012345678901234567890&quot;));</span>
+
+<span class="fc" id="L109">        assertEquals(DigestUtils.md2Hex(testData),</span>
+<span class="fc" id="L110">                DigestUtils.md2Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L111">}</span>
+
+    /**
+     * An MD2 hash converted to hex should always be 32 characters.
+     */
+    @Test
+<span class="pc bnc" id="L117" title="All 4 branches missed.">    public void testMd2HexLength() {</span>
+<span class="fc" id="L118">        String hashMe = &quot;this is some string that is longer than 32 characters&quot;;</span>
+<span class="fc" id="L119">        String hash = DigestUtils.md2Hex(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L120">        assertEquals(32, hash.length());</span>
+
+<span class="fc" id="L122">        hashMe = &quot;length &lt; 32&quot;;</span>
+<span class="fc" id="L123">        hash = DigestUtils.md2Hex(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L124">        assertEquals(32, hash.length());</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * An MD2 hash should always be a 16 element byte[].
+     */
+    @Test
+<span class="pc bnc" id="L131" title="All 4 branches missed.">    public void testMd2Length() {</span>
+<span class="fc" id="L132">        String hashMe = &quot;this is some string that is longer than 16 characters&quot;;</span>
+<span class="fc" id="L133">        byte[] hash = DigestUtils.md2(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L134">        assertEquals(16, hash.length);</span>
+
+<span class="fc" id="L136">        hashMe = &quot;length &lt; 16&quot;;</span>
+<span class="fc" id="L137">        hash = DigestUtils.md2(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L138">        assertEquals(16, hash.length);</span>
+<span class="fc" id="L139">    }</span>
+
+    @Test
+<span class="pc bnc" id="L142" title="All 4 branches missed.">    public void testMd5Hex() throws IOException {</span>
+        // Examples from RFC 1321
+<span class="fc" id="L144">        assertEquals(&quot;d41d8cd98f00b204e9800998ecf8427e&quot;, DigestUtils.md5Hex(&quot;&quot;));</span>
+
+<span class="fc" id="L146">        assertEquals(&quot;0cc175b9c0f1b6a831c399e269772661&quot;, DigestUtils.md5Hex(&quot;a&quot;));</span>
+
+<span class="fc" id="L148">        assertEquals(&quot;900150983cd24fb0d6963f7d28e17f72&quot;, DigestUtils.md5Hex(&quot;abc&quot;));</span>
+
+<span class="fc" id="L150">        assertEquals(&quot;f96b697d7cb7938d525a2f31aaf161d0&quot;, DigestUtils.md5Hex(&quot;message digest&quot;));</span>
+
+<span class="fc" id="L152">        assertEquals(&quot;c3fcd3d76192e4007dfb496cca67e13b&quot;, DigestUtils.md5Hex(&quot;abcdefghijklmnopqrstuvwxyz&quot;));</span>
+
+<span class="fc" id="L154">        assertEquals(</span>
+            &quot;d174ab98d277d9f5a5611c2c9f419d9f&quot;,
+<span class="fc" id="L156">            DigestUtils.md5Hex(&quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot; + &quot;abcdefghijklmnopqrstuvwxyz&quot; + &quot;0123456789&quot;));</span>
+
+<span class="fc" id="L158">        assertEquals(</span>
+            &quot;57edf4a22be3c955ac49da2e2107b67a&quot;,
+<span class="fc" id="L160">            DigestUtils.md5Hex(&quot;1234567890123456789012345678901234567890&quot; + &quot;1234567890123456789012345678901234567890&quot;));</span>
+
+<span class="fc" id="L162">        assertEquals(DigestUtils.md5Hex(testData),</span>
+<span class="fc" id="L163">                DigestUtils.md5Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L164">}</span>
+
+    /**
+     * An MD5 hash converted to hex should always be 32 characters.
+     */
+    @Test
+<span class="pc bnc" id="L170" title="All 4 branches missed.">    public void testMd5HexLengthForBytes() {</span>
+<span class="fc" id="L171">        String hashMe = &quot;this is some string that is longer than 32 characters&quot;;</span>
+<span class="fc" id="L172">        String hash = DigestUtils.md5Hex(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L173">        assertEquals(32, hash.length());</span>
+
+<span class="fc" id="L175">        hashMe = &quot;length &lt; 32&quot;;</span>
+<span class="fc" id="L176">        hash = DigestUtils.md5Hex(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L177">        assertEquals(32, hash.length());</span>
+<span class="fc" id="L178">    }</span>
+
+    /**
+     * An MD5 hash should always be a 16 element byte[].
+     */
+    @Test
+<span class="pc bnc" id="L184" title="All 4 branches missed.">    public void testMd5LengthForBytes() {</span>
+<span class="fc" id="L185">        String hashMe = &quot;this is some string that is longer than 16 characters&quot;;</span>
+<span class="fc" id="L186">        byte[] hash = DigestUtils.md5(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L187">        assertEquals(16, hash.length);</span>
+
+<span class="fc" id="L189">        hashMe = &quot;length &lt; 16&quot;;</span>
+<span class="fc" id="L190">        hash = DigestUtils.md5(getBytesUtf8(hashMe));</span>
+<span class="fc" id="L191">        assertEquals(16, hash.length);</span>
+<span class="fc" id="L192">    }</span>
+
+    @Test
+<span class="pc bnc" id="L195" title="All 4 branches missed.">    public void testSha1Hex() throws IOException {</span>
+        // Examples from FIPS 180-1
+<span class="fc" id="L197">        assertEquals(&quot;a9993e364706816aba3e25717850c26c9cd0d89d&quot;, DigestUtils.sha1Hex(&quot;abc&quot;));</span>
+
+<span class="fc" id="L199">        assertEquals(&quot;a9993e364706816aba3e25717850c26c9cd0d89d&quot;, DigestUtils.sha1Hex(getBytesUtf8(&quot;abc&quot;)));</span>
+
+<span class="fc" id="L201">        assertEquals(</span>
+            &quot;84983e441c3bd26ebaae4aa1f95129e5e54670f1&quot;,
+<span class="fc" id="L203">            DigestUtils.sha1Hex(&quot;abcdbcdecdefdefgefghfghighij&quot; + &quot;hijkijkljklmklmnlmnomnopnopq&quot;));</span>
+<span class="fc" id="L204">        assertEquals(DigestUtils.sha1Hex(testData),</span>
+<span class="fc" id="L205">                DigestUtils.sha1Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L206">    }</span>
+
+    @Test
+<span class="pc bnc" id="L209" title="All 4 branches missed.">    public void testSha1UpdateWithByteArray(){</span>
+<span class="fc" id="L210">        final String d1 = &quot;C'est un homme qui rentre dans un café, et plouf&quot;;</span>
+<span class="fc" id="L211">        final String d2 = &quot;C'est un homme, c'est qu'une tête, on lui offre un cadeau: 'oh... encore un chapeau!'&quot;;</span>
+
+<span class="fc" id="L213">        MessageDigest messageDigest = DigestUtils.getSha1Digest();</span>
+<span class="fc" id="L214">        messageDigest.update(d1.getBytes());</span>
+<span class="fc" id="L215">        messageDigest.update(d2.getBytes());</span>
+<span class="fc" id="L216">        final String expectedResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L218">        messageDigest = DigestUtils.getSha1Digest();</span>
+<span class="fc" id="L219">        DigestUtils.updateDigest(messageDigest, d1.getBytes());</span>
+<span class="fc" id="L220">        DigestUtils.updateDigest(messageDigest, d2.getBytes());</span>
+<span class="fc" id="L221">        final String actualResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L223">        assertEquals(expectedResult, actualResult);</span>
+<span class="fc" id="L224">    }</span>
+
+    @Test
+<span class="pc bnc" id="L227" title="All 4 branches missed.">    public void testSha1UpdateWithByteBuffer(){</span>
+<span class="fc" id="L228">        final String d1 = &quot;C'est un homme qui rentre dans un café, et plouf&quot;;</span>
+<span class="fc" id="L229">        final String d2 = &quot;C'est un homme, c'est qu'une tête, on lui offre un cadeau: 'oh... encore un chapeau!'&quot;;</span>
+
+<span class="fc" id="L231">        MessageDigest messageDigest = DigestUtils.getSha1Digest();</span>
+<span class="fc" id="L232">        messageDigest.update(d1.getBytes());</span>
+<span class="fc" id="L233">        messageDigest.update(d2.getBytes());</span>
+<span class="fc" id="L234">        final String expectedResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L236">        messageDigest = DigestUtils.getSha1Digest();</span>
+<span class="fc" id="L237">        DigestUtils.updateDigest(messageDigest, ByteBuffer.wrap(d1.getBytes()));</span>
+<span class="fc" id="L238">        DigestUtils.updateDigest(messageDigest, ByteBuffer.wrap(d2.getBytes()));</span>
+<span class="fc" id="L239">        final String actualResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L241">        assertEquals(expectedResult, actualResult);</span>
+<span class="fc" id="L242">    }</span>
+
+    @Test
+<span class="pc bnc" id="L245" title="All 4 branches missed.">    public void testSha1UpdateWithString(){</span>
+<span class="fc" id="L246">        final String d1 = &quot;C'est un homme qui rentre dans un café, et plouf&quot;;</span>
+<span class="fc" id="L247">        final String d2 = &quot;C'est un homme, c'est qu'une tête, on lui offre un cadeau: 'oh... encore un chapeau!'&quot;;</span>
+
+<span class="fc" id="L249">        MessageDigest messageDigest = DigestUtils.getSha1Digest();</span>
+<span class="fc" id="L250">        messageDigest.update(StringUtils.getBytesUtf8(d1));</span>
+<span class="fc" id="L251">        messageDigest.update(StringUtils.getBytesUtf8(d2));</span>
+<span class="fc" id="L252">        final String expectedResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L254">        messageDigest = DigestUtils.getSha1Digest();</span>
+<span class="fc" id="L255">        DigestUtils.updateDigest(messageDigest, d1);</span>
+<span class="fc" id="L256">        DigestUtils.updateDigest(messageDigest, d2);</span>
+<span class="fc" id="L257">        final String actualResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L259">        assertEquals(expectedResult, actualResult);</span>
+<span class="fc" id="L260">    }</span>
+
+    @Test
+<span class="pc bnc" id="L263" title="All 4 branches missed.">    public void testSha224() {</span>
+<span class="fc" id="L264">        assumeJava8();</span>
+<span class="fc" id="L265">        assertEquals(&quot;d14a028c2a3a2bc9476102bb288234c415a2b01f828ea62ac5b3e42f&quot;,</span>
+<span class="fc" id="L266">                new DigestUtils(MessageDigestAlgorithms.SHA_224).digestAsHex((&quot;&quot;)));</span>
+<span class="fc" id="L267">        assertEquals(&quot;730e109bd7a8a32b1cb9d9a09aa2325d2430587ddbc0c38bad911525&quot;,</span>
+<span class="fc" id="L268">                new DigestUtils(MessageDigestAlgorithms.SHA_224).digestAsHex(&quot;The quick brown fox jumps over the lazy dog&quot;));</span>
+
+        // Examples from FIPS 180-4?
+<span class="fc" id="L271">    }</span>
+
+    @Test
+<span class="pc bnc" id="L274" title="All 4 branches missed.">    public void testSha256() throws IOException {</span>
+    // Examples from FIPS 180-2
+<span class="fc" id="L276">    assertEquals(&quot;ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad&quot;,</span>
+<span class="fc" id="L277">             DigestUtils.sha256Hex(&quot;abc&quot;));</span>
+<span class="fc" id="L278">    assertEquals(&quot;ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad&quot;,</span>
+<span class="fc" id="L279">             DigestUtils.sha256Hex(getBytesUtf8(&quot;abc&quot;)));</span>
+<span class="fc" id="L280">    assertEquals(&quot;248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1&quot;,</span>
+<span class="fc" id="L281">             DigestUtils.sha256Hex(&quot;abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq&quot;));</span>
+
+<span class="fc" id="L283">    assertEquals(DigestUtils.sha256Hex(testData),</span>
+<span class="fc" id="L284">            DigestUtils.sha256Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L285">    }</span>
+
+    @Test
+<span class="pc bnc" id="L288" title="All 4 branches missed.">    public void testSha384() throws IOException {</span>
+    // Examples from FIPS 180-2
+<span class="fc" id="L290">    assertEquals(&quot;cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed&quot; +</span>
+             &quot;8086072ba1e7cc2358baeca134c825a7&quot;,
+<span class="fc" id="L292">             DigestUtils.sha384Hex(&quot;abc&quot;));</span>
+<span class="fc" id="L293">    assertEquals(&quot;cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed&quot; +</span>
+             &quot;8086072ba1e7cc2358baeca134c825a7&quot;,
+<span class="fc" id="L295">             DigestUtils.sha384Hex(getBytesUtf8(&quot;abc&quot;)));</span>
+<span class="fc" id="L296">    assertEquals(&quot;09330c33f71147e83d192fc782cd1b4753111b173b3b05d22fa08086e3b0f712&quot; +</span>
+            &quot;fcc7c71a557e2db966c3e9fa91746039&quot;,
+<span class="fc" id="L298">             DigestUtils.sha384Hex(&quot;abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmn&quot; +</span>
+                       &quot;hijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu&quot;));
+<span class="fc" id="L300">    assertEquals(DigestUtils.sha384Hex(testData),</span>
+<span class="fc" id="L301">            DigestUtils.sha384Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L302">    }</span>
+
+    @Test
+<span class="pc bnc" id="L305" title="All 4 branches missed.">    public void testSha512() {</span>
+    // Examples from FIPS 180-2
+<span class="fc" id="L307">    assertEquals(&quot;ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a&quot; +</span>
+            &quot;2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f&quot;,
+<span class="fc" id="L309">             DigestUtils.sha512Hex(&quot;abc&quot;));</span>
+<span class="fc" id="L310">    assertEquals(&quot;ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a&quot; +</span>
+             &quot;2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f&quot;,
+<span class="fc" id="L312">             DigestUtils.sha512Hex(getBytesUtf8(&quot;abc&quot;)));</span>
+<span class="fc" id="L313">    assertEquals(&quot;8e959b75dae313da8cf4f72814fc143f8f7779c6eb9f7fa17299aeadb6889018&quot; +</span>
+             &quot;501d289e4900f7e4331b99dec4b5433ac7d329eeb6dd26545e96e55b874be909&quot;,
+<span class="fc" id="L315">             DigestUtils.sha512Hex(&quot;abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmn&quot; +</span>
+                       &quot;hijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu&quot;));
+<span class="fc" id="L317">    }</span>
+    
+    @Test
+<span class="pc bpc" id="L320" title="2 of 4 branches missed.">    public void testSha3_224() {</span>
+<span class="nc" id="L321">        assumeJava9();</span>
+        // Examples from https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-values
+        //
+        // https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-224_Msg0.pdf
+<span class="nc" id="L325">        assertEquals(</span>
+                &quot;6b4e03423667dbb73b6e15454f0eb1abd4597f9a1b078e3f5b5a6bc7&quot;,
+<span class="nc" id="L327">                DigestUtils.sha3_224Hex(&quot;&quot;));</span>
+<span class="nc" id="L328">    }</span>
+    
+    @Test
+<span class="pc bpc" id="L331" title="2 of 4 branches missed.">    public void testSha3_256() {</span>
+<span class="nc" id="L332">        assumeJava9();</span>
+        // Examples from https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-values
+        //
+        // https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-256_Msg0.pdf
+<span class="nc" id="L336">        assertEquals(</span>
+                &quot;a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a&quot;,
+<span class="nc" id="L338">                DigestUtils.sha3_256Hex(&quot;&quot;));</span>
+<span class="nc" id="L339">    }</span>
+    
+    @Test
+<span class="pc bpc" id="L342" title="2 of 4 branches missed.">    public void testSha3_384() {</span>
+<span class="nc" id="L343">        assumeJava9();</span>
+        // Examples from https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-values
+        //
+        // https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-384_Msg0.pdf
+<span class="nc" id="L347">        assertEquals(</span>
+                &quot;0c63a75b845e4f7d01107d852e4c2485c51a50aaaa94fc61995e71bbee983a2ac3713831264adb47fb6bd1e058d5f004&quot;,
+<span class="nc" id="L349">                DigestUtils.sha3_384Hex(&quot;&quot;));</span>
+<span class="nc" id="L350">    }</span>
+    
+    @Test
+<span class="pc bpc" id="L353" title="2 of 4 branches missed.">    public void testSha3_512() {</span>
+<span class="nc" id="L354">        assumeJava9();</span>
+        // Examples from https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines/example-values
+        //
+        // https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/SHA3-512_Msg0.pdf
+<span class="nc" id="L358">        assertEquals(</span>
+                &quot;a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a615b2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26&quot;,
+<span class="nc" id="L360">                DigestUtils.sha3_512Hex(&quot;&quot;));</span>
+<span class="nc" id="L361">    }</span>
+    
+    @Test
+<span class="pc bnc" id="L364" title="All 4 branches missed.">    public void testSha256HexInputStream() throws IOException {</span>
+<span class="fc" id="L365">        assertEquals(DigestUtils.sha256Hex(testData),</span>
+<span class="fc" id="L366">                DigestUtils.sha256Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L367">    }</span>
+
+    @Test
+<span class="pc bnc" id="L370" title="All 4 branches missed.">    public void testSha384HexInputStream() throws IOException {</span>
+<span class="fc" id="L371">        assertEquals(DigestUtils.sha384Hex(testData),</span>
+<span class="fc" id="L372">                DigestUtils.sha384Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L373">    }</span>
+
+    @Test
+<span class="pc bnc" id="L376" title="All 4 branches missed.">    public void testSha512HexInputStream() throws IOException {</span>
+<span class="fc" id="L377">        assertEquals(DigestUtils.sha512Hex(testData),</span>
+<span class="fc" id="L378">                DigestUtils.sha512Hex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L379">    }</span>
+
+    @Test
+<span class="pc bpc" id="L382" title="2 of 4 branches missed.">    public void testSha3_224HexInputStream() throws IOException {</span>
+<span class="nc" id="L383">        assumeJava9();</span>
+<span class="nc" id="L384">        assertEquals(DigestUtils.sha3_224Hex(testData),</span>
+<span class="nc" id="L385">                DigestUtils.sha3_224Hex(new ByteArrayInputStream(testData)));</span>
+<span class="nc" id="L386">    }</span>
+
+    @Test
+<span class="pc bpc" id="L389" title="2 of 4 branches missed.">    public void testSha3_256HexInputStream() throws IOException {</span>
+<span class="nc" id="L390">        assumeJava9();</span>
+<span class="nc" id="L391">        assertEquals(DigestUtils.sha3_256Hex(testData),</span>
+<span class="nc" id="L392">                DigestUtils.sha3_256Hex(new ByteArrayInputStream(testData)));</span>
+<span class="nc" id="L393">    }</span>
+
+    @Test
+<span class="pc bpc" id="L396" title="2 of 4 branches missed.">    public void testSha3_384HexInputStream() throws IOException {</span>
+<span class="nc" id="L397">        assumeJava9();</span>
+<span class="nc" id="L398">        assertEquals(DigestUtils.sha3_384Hex(testData),</span>
+<span class="nc" id="L399">                DigestUtils.sha3_384Hex(new ByteArrayInputStream(testData)));</span>
+<span class="nc" id="L400">    }</span>
+
+    @Test
+<span class="pc bpc" id="L403" title="2 of 4 branches missed.">    public void testSha3_512HexInputStream() throws IOException {</span>
+<span class="nc" id="L404">        assumeJava9();</span>
+<span class="nc" id="L405">        assertEquals(DigestUtils.sha3_512Hex(testData),</span>
+<span class="nc" id="L406">                DigestUtils.sha3_512Hex(new ByteArrayInputStream(testData)));</span>
+<span class="nc" id="L407">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // deliberate tests of deprecated code
+    @Test
+<span class="pc bnc" id="L411" title="All 4 branches missed.">    public void testShaHex() throws IOException {</span>
+        // Examples from FIPS 180-1
+<span class="fc" id="L413">        assertEquals(&quot;a9993e364706816aba3e25717850c26c9cd0d89d&quot;, DigestUtils.shaHex(&quot;abc&quot;));</span>
+
+<span class="fc" id="L415">        assertEquals(&quot;a9993e364706816aba3e25717850c26c9cd0d89d&quot;, DigestUtils.shaHex(getBytesUtf8(&quot;abc&quot;)));</span>
+
+<span class="fc" id="L417">        assertEquals(</span>
+            &quot;84983e441c3bd26ebaae4aa1f95129e5e54670f1&quot;,
+<span class="fc" id="L419">            DigestUtils.shaHex(&quot;abcdbcdecdefdefgefghfghighij&quot; + &quot;hijkijkljklmklmnlmnomnopnopq&quot;));</span>
+<span class="fc" id="L420">        assertEquals(DigestUtils.shaHex(testData),</span>
+<span class="fc" id="L421">                DigestUtils.shaHex(new ByteArrayInputStream(testData)));</span>
+<span class="fc" id="L422">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // deliberate tests of deprecated code
+    @Test
+<span class="pc bnc" id="L426" title="All 4 branches missed.">    public void testShaUpdateWithByteArray(){</span>
+<span class="fc" id="L427">        final String d1 = &quot;C'est un homme qui rentre dans un café, et plouf&quot;;</span>
+<span class="fc" id="L428">        final String d2 = &quot;C'est un homme, c'est qu'une tête, on lui offre un cadeau: 'oh... encore un chapeau!'&quot;;</span>
+
+<span class="fc" id="L430">        MessageDigest messageDigest = DigestUtils.getShaDigest();</span>
+<span class="fc" id="L431">        messageDigest.update(d1.getBytes());</span>
+<span class="fc" id="L432">        messageDigest.update(d2.getBytes());</span>
+<span class="fc" id="L433">        final String expectedResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L435">        messageDigest = DigestUtils.getShaDigest();</span>
+<span class="fc" id="L436">        DigestUtils.updateDigest(messageDigest, d1.getBytes());</span>
+<span class="fc" id="L437">        DigestUtils.updateDigest(messageDigest, d2.getBytes());</span>
+<span class="fc" id="L438">        final String actualResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L440">        assertEquals(expectedResult, actualResult);</span>
+<span class="fc" id="L441">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // deliberate tests of deprecated code
+    @Test
+<span class="pc bnc" id="L445" title="All 4 branches missed.">    public void testShaUpdateWithString(){</span>
+<span class="fc" id="L446">        final String d1 = &quot;C'est un homme qui rentre dans un café, et plouf&quot;;</span>
+<span class="fc" id="L447">        final String d2 = &quot;C'est un homme, c'est qu'une tête, on lui offre un cadeau: 'oh... encore un chapeau!'&quot;;</span>
+
+<span class="fc" id="L449">        MessageDigest messageDigest = DigestUtils.getShaDigest();</span>
+<span class="fc" id="L450">        messageDigest.update(StringUtils.getBytesUtf8(d1));</span>
+<span class="fc" id="L451">        messageDigest.update(StringUtils.getBytesUtf8(d2));</span>
+<span class="fc" id="L452">        final String expectedResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L454">        messageDigest = DigestUtils.getShaDigest();</span>
+<span class="fc" id="L455">        DigestUtils.updateDigest(messageDigest, d1);</span>
+<span class="fc" id="L456">        DigestUtils.updateDigest(messageDigest, d2);</span>
+<span class="fc" id="L457">        final String actualResult = Hex.encodeHexString(messageDigest.digest());</span>
+
+<span class="fc" id="L459">        assertEquals(expectedResult, actualResult);</span>
+<span class="fc" id="L460">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

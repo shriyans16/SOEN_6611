@@ -1,0 +1,1136 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DoubleMetaphone</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DoubleMetaphone (org.apache.commons.codec.language)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoubleMetaphone</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (39/ 39)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.6%
+  </span>
+  <span class="absValue">
+    (477/ 484)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DoubleMetaphone$__CLR4_1_22sj2sjjulvhrwz</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">DoubleMetaphone$DoubleMetaphoneResult</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (48/ 48)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (52/ 52)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.7%
+  </span>
+  <span class="absValue">
+    (526/ 533)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.language;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.apache.commons.codec.EncoderException;
+<i>21</i>&nbsp;import org.apache.commons.codec.StringEncoder;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Encodes a string into a double metaphone value. This Implementation is based on the algorithm by &lt;CITE&gt;Lawrence
+<i>25</i>&nbsp; * Philips&lt;/CITE&gt;.
+<i>26</i>&nbsp; * &lt;p&gt;
+<i>27</i>&nbsp; * This class is conditionally thread-safe. The instance field {@link #maxCodeLen} is mutable
+<i>28</i>&nbsp; * {@link #setMaxCodeLen(int)} but is not volatile, and accesses are not synchronized. If an instance of the class is
+<i>29</i>&nbsp; * shared between threads, the caller needs to ensure that suitable synchronization is used to ensure safe publication
+<i>30</i>&nbsp; * of the value between threads, and must not invoke {@link #setMaxCodeLen(int)} after initial setup.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * @see &lt;a href=&quot;http://drdobbs.com/184401251?pgno=2&quot;&gt;Original Article&lt;/a&gt;
+<i>33</i>&nbsp; * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Metaphone&quot;&gt;http://en.wikipedia.org/wiki/Metaphone&lt;/a&gt;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * @version $Id$
+<i>36</i>&nbsp; */
+<b class="fc"><i>37</i>&nbsp;public class DoubleMetaphone implements StringEncoder {</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * &quot;Vowels&quot; to test for
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    private static final String VOWELS = &quot;AEIOUY&quot;;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * Prefixes when present which are not pronounced
+<i>46</i>&nbsp;     */
+<b class="fc"><i>47</i>&nbsp;    private static final String[] SILENT_START =</b>
+<i>48</i>&nbsp;        { &quot;GN&quot;, &quot;KN&quot;, &quot;PN&quot;, &quot;WR&quot;, &quot;PS&quot; };
+<b class="fc"><i>49</i>&nbsp;    private static final String[] L_R_N_M_B_H_F_V_W_SPACE =</b>
+<i>50</i>&nbsp;        { &quot;L&quot;, &quot;R&quot;, &quot;N&quot;, &quot;M&quot;, &quot;B&quot;, &quot;H&quot;, &quot;F&quot;, &quot;V&quot;, &quot;W&quot;, &quot; &quot; };
+<b class="fc"><i>51</i>&nbsp;    private static final String[] ES_EP_EB_EL_EY_IB_IL_IN_IE_EI_ER =</b>
+<i>52</i>&nbsp;        { &quot;ES&quot;, &quot;EP&quot;, &quot;EB&quot;, &quot;EL&quot;, &quot;EY&quot;, &quot;IB&quot;, &quot;IL&quot;, &quot;IN&quot;, &quot;IE&quot;, &quot;EI&quot;, &quot;ER&quot; };
+<b class="fc"><i>53</i>&nbsp;    private static final String[] L_T_K_S_N_M_B_Z =</b>
+<i>54</i>&nbsp;        { &quot;L&quot;, &quot;T&quot;, &quot;K&quot;, &quot;S&quot;, &quot;N&quot;, &quot;M&quot;, &quot;B&quot;, &quot;Z&quot; };
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Maximum length of an encoding, default is 4
+<i>58</i>&nbsp;     */
+<b class="fc"><i>59</i>&nbsp;    private int maxCodeLen = 4;</b>
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Creates an instance of this DoubleMetaphone encoder
+<i>63</i>&nbsp;     */
+<i>64</i>&nbsp;    public DoubleMetaphone() {
+<b class="fc"><i>65</i>&nbsp;        super();</b>
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Encode a value with Double Metaphone.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param value String to encode
+<i>72</i>&nbsp;     * @return an encoded string
+<i>73</i>&nbsp;     */
+<b class="fc"><i>74</i>&nbsp;    public String doubleMetaphone(final String value) {</b>
+<b class="fc"><i>75</i>&nbsp;        return doubleMetaphone(value, false);</b>
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * Encode a value with Double Metaphone, optionally using the alternate encoding.
+<i>80</i>&nbsp;     *
+<i>81</i>&nbsp;     * @param value String to encode
+<i>82</i>&nbsp;     * @param alternate use alternate encode
+<i>83</i>&nbsp;     * @return an encoded string
+<i>84</i>&nbsp;     */
+<b class="fc"><i>85</i>&nbsp;    public String doubleMetaphone(String value, final boolean alternate) {</b>
+<b class="fc"><i>86</i>&nbsp;        value = cleanInput(value);</b>
+<b class="fc"><i>87</i>&nbsp;        if (value == null) {</b>
+<b class="fc"><i>88</i>&nbsp;            return null;</b>
+<i>89</i>&nbsp;        }
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;        final boolean slavoGermanic = isSlavoGermanic(value);</b>
+<b class="fc"><i>92</i>&nbsp;        int index = isSilentStart(value) ? 1 : 0;</b>
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;        final DoubleMetaphoneResult result = new DoubleMetaphoneResult(this.getMaxCodeLen());</b>
+<i>95</i>&nbsp;
+<b class="fc"><i>96</i>&nbsp;        while (!result.isComplete() &amp;&amp; index &lt;= value.length() - 1) {</b>
+<b class="fc"><i>97</i>&nbsp;            switch (value.charAt(index)) {</b>
+<b class="fc"><i>98</i>&nbsp;            case &#39;A&#39;:</b>
+<b class="fc"><i>99</i>&nbsp;            case &#39;E&#39;:</b>
+<b class="fc"><i>100</i>&nbsp;            case &#39;I&#39;:</b>
+<b class="fc"><i>101</i>&nbsp;            case &#39;O&#39;:</b>
+<b class="fc"><i>102</i>&nbsp;            case &#39;U&#39;:</b>
+<b class="fc"><i>103</i>&nbsp;            case &#39;Y&#39;:</b>
+<b class="fc"><i>104</i>&nbsp;                index = handleAEIOUY(result, index);</b>
+<b class="fc"><i>105</i>&nbsp;                break;</b>
+<b class="fc"><i>106</i>&nbsp;            case &#39;B&#39;:</b>
+<b class="fc"><i>107</i>&nbsp;                result.append(&#39;P&#39;);</b>
+<b class="fc"><i>108</i>&nbsp;                index = charAt(value, index + 1) == &#39;B&#39; ? index + 2 : index + 1;</b>
+<b class="fc"><i>109</i>&nbsp;                break;</b>
+<b class="fc"><i>110</i>&nbsp;            case &#39;\u00C7&#39;:</b>
+<i>111</i>&nbsp;                // A C with a Cedilla
+<b class="fc"><i>112</i>&nbsp;                result.append(&#39;S&#39;);</b>
+<b class="fc"><i>113</i>&nbsp;                index++;</b>
+<b class="fc"><i>114</i>&nbsp;                break;</b>
+<b class="fc"><i>115</i>&nbsp;            case &#39;C&#39;:</b>
+<b class="fc"><i>116</i>&nbsp;                index = handleC(value, result, index);</b>
+<b class="fc"><i>117</i>&nbsp;                break;</b>
+<b class="fc"><i>118</i>&nbsp;            case &#39;D&#39;:</b>
+<b class="fc"><i>119</i>&nbsp;                index = handleD(value, result, index);</b>
+<b class="fc"><i>120</i>&nbsp;                break;</b>
+<b class="fc"><i>121</i>&nbsp;            case &#39;F&#39;:</b>
+<b class="fc"><i>122</i>&nbsp;                result.append(&#39;F&#39;);</b>
+<b class="fc"><i>123</i>&nbsp;                index = charAt(value, index + 1) == &#39;F&#39; ? index + 2 : index + 1;</b>
+<b class="fc"><i>124</i>&nbsp;                break;</b>
+<b class="fc"><i>125</i>&nbsp;            case &#39;G&#39;:</b>
+<b class="fc"><i>126</i>&nbsp;                index = handleG(value, result, index, slavoGermanic);</b>
+<b class="fc"><i>127</i>&nbsp;                break;</b>
+<b class="fc"><i>128</i>&nbsp;            case &#39;H&#39;:</b>
+<b class="fc"><i>129</i>&nbsp;                index = handleH(value, result, index);</b>
+<b class="fc"><i>130</i>&nbsp;                break;</b>
+<b class="fc"><i>131</i>&nbsp;            case &#39;J&#39;:</b>
+<b class="fc"><i>132</i>&nbsp;                index = handleJ(value, result, index, slavoGermanic);</b>
+<b class="fc"><i>133</i>&nbsp;                break;</b>
+<b class="fc"><i>134</i>&nbsp;            case &#39;K&#39;:</b>
+<b class="fc"><i>135</i>&nbsp;                result.append(&#39;K&#39;);</b>
+<b class="fc"><i>136</i>&nbsp;                index = charAt(value, index + 1) == &#39;K&#39; ? index + 2 : index + 1;</b>
+<b class="fc"><i>137</i>&nbsp;                break;</b>
+<b class="fc"><i>138</i>&nbsp;            case &#39;L&#39;:</b>
+<b class="fc"><i>139</i>&nbsp;                index = handleL(value, result, index);</b>
+<b class="fc"><i>140</i>&nbsp;                break;</b>
+<b class="fc"><i>141</i>&nbsp;            case &#39;M&#39;:</b>
+<b class="fc"><i>142</i>&nbsp;                result.append(&#39;M&#39;);</b>
+<b class="fc"><i>143</i>&nbsp;                index = conditionM0(value, index) ? index + 2 : index + 1;</b>
+<b class="fc"><i>144</i>&nbsp;                break;</b>
+<b class="fc"><i>145</i>&nbsp;            case &#39;N&#39;:</b>
+<b class="fc"><i>146</i>&nbsp;                result.append(&#39;N&#39;);</b>
+<b class="fc"><i>147</i>&nbsp;                index = charAt(value, index + 1) == &#39;N&#39; ? index + 2 : index + 1;</b>
+<b class="fc"><i>148</i>&nbsp;                break;</b>
+<b class="fc"><i>149</i>&nbsp;            case &#39;\u00D1&#39;:</b>
+<i>150</i>&nbsp;                // N with a tilde (spanish ene)
+<b class="fc"><i>151</i>&nbsp;                result.append(&#39;N&#39;);</b>
+<b class="fc"><i>152</i>&nbsp;                index++;</b>
+<b class="fc"><i>153</i>&nbsp;                break;</b>
+<b class="fc"><i>154</i>&nbsp;            case &#39;P&#39;:</b>
+<b class="fc"><i>155</i>&nbsp;                index = handleP(value, result, index);</b>
+<b class="fc"><i>156</i>&nbsp;                break;</b>
+<b class="fc"><i>157</i>&nbsp;            case &#39;Q&#39;:</b>
+<b class="fc"><i>158</i>&nbsp;                result.append(&#39;K&#39;);</b>
+<b class="fc"><i>159</i>&nbsp;                index = charAt(value, index + 1) == &#39;Q&#39; ? index + 2 : index + 1;</b>
+<b class="fc"><i>160</i>&nbsp;                break;</b>
+<b class="fc"><i>161</i>&nbsp;            case &#39;R&#39;:</b>
+<b class="fc"><i>162</i>&nbsp;                index = handleR(value, result, index, slavoGermanic);</b>
+<b class="fc"><i>163</i>&nbsp;                break;</b>
+<b class="fc"><i>164</i>&nbsp;            case &#39;S&#39;:</b>
+<b class="fc"><i>165</i>&nbsp;                index = handleS(value, result, index, slavoGermanic);</b>
+<b class="fc"><i>166</i>&nbsp;                break;</b>
+<b class="fc"><i>167</i>&nbsp;            case &#39;T&#39;:</b>
+<b class="fc"><i>168</i>&nbsp;                index = handleT(value, result, index);</b>
+<b class="fc"><i>169</i>&nbsp;                break;</b>
+<b class="fc"><i>170</i>&nbsp;            case &#39;V&#39;:</b>
+<b class="fc"><i>171</i>&nbsp;                result.append(&#39;F&#39;);</b>
+<b class="fc"><i>172</i>&nbsp;                index = charAt(value, index + 1) == &#39;V&#39; ? index + 2 : index + 1;</b>
+<b class="fc"><i>173</i>&nbsp;                break;</b>
+<b class="fc"><i>174</i>&nbsp;            case &#39;W&#39;:</b>
+<b class="fc"><i>175</i>&nbsp;                index = handleW(value, result, index);</b>
+<b class="fc"><i>176</i>&nbsp;                break;</b>
+<b class="fc"><i>177</i>&nbsp;            case &#39;X&#39;:</b>
+<b class="fc"><i>178</i>&nbsp;                index = handleX(value, result, index);</b>
+<b class="fc"><i>179</i>&nbsp;                break;</b>
+<b class="fc"><i>180</i>&nbsp;            case &#39;Z&#39;:</b>
+<b class="fc"><i>181</i>&nbsp;                index = handleZ(value, result, index, slavoGermanic);</b>
+<b class="fc"><i>182</i>&nbsp;                break;</b>
+<b class="fc"><i>183</i>&nbsp;            default:</b>
+<b class="fc"><i>184</i>&nbsp;                index++;</b>
+<b class="fc"><i>185</i>&nbsp;                break;</b>
+<i>186</i>&nbsp;            }
+<b class="fc"><i>187</i>&nbsp;        }</b>
+<i>188</i>&nbsp;
+<b class="fc"><i>189</i>&nbsp;        return alternate ? result.getAlternate() : result.getPrimary();</b>
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * Encode the value using DoubleMetaphone.  It will only work if
+<i>194</i>&nbsp;     * &lt;code&gt;obj&lt;/code&gt; is a &lt;code&gt;String&lt;/code&gt; (like &lt;code&gt;Metaphone&lt;/code&gt;).
+<i>195</i>&nbsp;     *
+<i>196</i>&nbsp;     * @param obj Object to encode (should be of type String)
+<i>197</i>&nbsp;     * @return An encoded Object (will be of type String)
+<i>198</i>&nbsp;     * @throws EncoderException encode parameter is not of type String
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    @Override
+<b class="fc"><i>201</i>&nbsp;    public Object encode(final Object obj) throws EncoderException {</b>
+<b class="fc"><i>202</i>&nbsp;        if (!(obj instanceof String)) {</b>
+<b class="fc"><i>203</i>&nbsp;            throw new EncoderException(&quot;DoubleMetaphone encode parameter is not of type String&quot;);</b>
+<i>204</i>&nbsp;        }
+<b class="fc"><i>205</i>&nbsp;        return doubleMetaphone((String) obj);</b>
+<i>206</i>&nbsp;    }
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Encode the value using DoubleMetaphone.
+<i>210</i>&nbsp;     *
+<i>211</i>&nbsp;     * @param value String to encode
+<i>212</i>&nbsp;     * @return An encoded String
+<i>213</i>&nbsp;     */
+<i>214</i>&nbsp;    @Override
+<b class="fc"><i>215</i>&nbsp;    public String encode(final String value) {</b>
+<b class="fc"><i>216</i>&nbsp;        return doubleMetaphone(value);</b>
+<i>217</i>&nbsp;    }
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    /**
+<i>220</i>&nbsp;     * Check if the Double Metaphone values of two &lt;code&gt;String&lt;/code&gt; values
+<i>221</i>&nbsp;     * are equal.
+<i>222</i>&nbsp;     *
+<i>223</i>&nbsp;     * @param value1 The left-hand side of the encoded {@link String#equals(Object)}.
+<i>224</i>&nbsp;     * @param value2 The right-hand side of the encoded {@link String#equals(Object)}.
+<i>225</i>&nbsp;     * @return {@code true} if the encoded &lt;code&gt;String&lt;/code&gt;s are equal;
+<i>226</i>&nbsp;     *          {@code false} otherwise.
+<i>227</i>&nbsp;     * @see #isDoubleMetaphoneEqual(String,String,boolean)
+<i>228</i>&nbsp;     */
+<b class="fc"><i>229</i>&nbsp;    public boolean isDoubleMetaphoneEqual(final String value1, final String value2) {</b>
+<b class="fc"><i>230</i>&nbsp;        return isDoubleMetaphoneEqual(value1, value2, false);</b>
+<i>231</i>&nbsp;    }
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    /**
+<i>234</i>&nbsp;     * Check if the Double Metaphone values of two &lt;code&gt;String&lt;/code&gt; values
+<i>235</i>&nbsp;     * are equal, optionally using the alternate value.
+<i>236</i>&nbsp;     *
+<i>237</i>&nbsp;     * @param value1 The left-hand side of the encoded {@link String#equals(Object)}.
+<i>238</i>&nbsp;     * @param value2 The right-hand side of the encoded {@link String#equals(Object)}.
+<i>239</i>&nbsp;     * @param alternate use the alternate value if {@code true}.
+<i>240</i>&nbsp;     * @return {@code true} if the encoded &lt;code&gt;String&lt;/code&gt;s are equal;
+<i>241</i>&nbsp;     *          {@code false} otherwise.
+<i>242</i>&nbsp;     */
+<b class="fc"><i>243</i>&nbsp;    public boolean isDoubleMetaphoneEqual(final String value1, final String value2, final boolean alternate) {</b>
+<b class="fc"><i>244</i>&nbsp;        return doubleMetaphone(value1, alternate).equals(doubleMetaphone(value2, alternate));</b>
+<i>245</i>&nbsp;    }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /**
+<i>248</i>&nbsp;     * Returns the maxCodeLen.
+<i>249</i>&nbsp;     * @return int
+<i>250</i>&nbsp;     */
+<b class="fc"><i>251</i>&nbsp;    public int getMaxCodeLen() {</b>
+<b class="fc"><i>252</i>&nbsp;        return this.maxCodeLen;</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;    /**
+<i>256</i>&nbsp;     * Sets the maxCodeLen.
+<i>257</i>&nbsp;     * @param maxCodeLen The maxCodeLen to set
+<i>258</i>&nbsp;     */
+<b class="fc"><i>259</i>&nbsp;    public void setMaxCodeLen(final int maxCodeLen) {</b>
+<b class="fc"><i>260</i>&nbsp;        this.maxCodeLen = maxCodeLen;</b>
+<b class="fc"><i>261</i>&nbsp;    }</b>
+<i>262</i>&nbsp;
+<i>263</i>&nbsp;    //-- BEGIN HANDLERS --//
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    /**
+<i>266</i>&nbsp;     * Handles &#39;A&#39;, &#39;E&#39;, &#39;I&#39;, &#39;O&#39;, &#39;U&#39;, and &#39;Y&#39; cases.
+<i>267</i>&nbsp;     */
+<b class="fc"><i>268</i>&nbsp;    private int handleAEIOUY(final DoubleMetaphoneResult result, final int index) {</b>
+<b class="fc"><i>269</i>&nbsp;        if (index == 0) {</b>
+<b class="fc"><i>270</i>&nbsp;            result.append(&#39;A&#39;);</b>
+<i>271</i>&nbsp;        }
+<b class="fc"><i>272</i>&nbsp;        return index + 1;</b>
+<i>273</i>&nbsp;    }
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    /**
+<i>276</i>&nbsp;     * Handles &#39;C&#39; cases.
+<i>277</i>&nbsp;     */
+<b class="fc"><i>278</i>&nbsp;    private int handleC(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>279</i>&nbsp;        if (conditionC0(value, index)) {  // very confusing, moved out</b>
+<b class="fc"><i>280</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>281</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>282</i>&nbsp;        } else if (index == 0 &amp;&amp; contains(value, index, 6, &quot;CAESAR&quot;)) {</b>
+<b class="fc"><i>283</i>&nbsp;            result.append(&#39;S&#39;);</b>
+<b class="fc"><i>284</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>285</i>&nbsp;        } else if (contains(value, index, 2, &quot;CH&quot;)) {</b>
+<b class="fc"><i>286</i>&nbsp;            index = handleCH(value, result, index);</b>
+<b class="fc"><i>287</i>&nbsp;        } else if (contains(value, index, 2, &quot;CZ&quot;) &amp;&amp;</b>
+<b class="fc"><i>288</i>&nbsp;                   !contains(value, index - 2, 4, &quot;WICZ&quot;)) {</b>
+<i>289</i>&nbsp;            //-- &quot;Czerny&quot; --//
+<b class="fc"><i>290</i>&nbsp;            result.append(&#39;S&#39;, &#39;X&#39;);</b>
+<b class="fc"><i>291</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>292</i>&nbsp;        } else if (contains(value, index + 1, 3, &quot;CIA&quot;)) {</b>
+<i>293</i>&nbsp;            //-- &quot;focaccia&quot; --//
+<b class="fc"><i>294</i>&nbsp;            result.append(&#39;X&#39;);</b>
+<b class="fc"><i>295</i>&nbsp;            index += 3;</b>
+<b class="fc"><i>296</i>&nbsp;        } else if (contains(value, index, 2, &quot;CC&quot;) &amp;&amp;</b>
+<b class="fc"><i>297</i>&nbsp;                   !(index == 1 &amp;&amp; charAt(value, 0) == &#39;M&#39;)) {</b>
+<i>298</i>&nbsp;            //-- double &quot;cc&quot; but not &quot;McClelland&quot; --//
+<b class="fc"><i>299</i>&nbsp;            return handleCC(value, result, index);</b>
+<b class="fc"><i>300</i>&nbsp;        } else if (contains(value, index, 2, &quot;CK&quot;, &quot;CG&quot;, &quot;CQ&quot;)) {</b>
+<b class="fc"><i>301</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>302</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>303</i>&nbsp;        } else if (contains(value, index, 2, &quot;CI&quot;, &quot;CE&quot;, &quot;CY&quot;)) {</b>
+<i>304</i>&nbsp;            //-- Italian vs. English --//
+<b class="fc"><i>305</i>&nbsp;            if (contains(value, index, 3, &quot;CIO&quot;, &quot;CIE&quot;, &quot;CIA&quot;)) {</b>
+<b class="fc"><i>306</i>&nbsp;                result.append(&#39;S&#39;, &#39;X&#39;);</b>
+<i>307</i>&nbsp;            } else {
+<b class="fc"><i>308</i>&nbsp;                result.append(&#39;S&#39;);</b>
+<i>309</i>&nbsp;            }
+<b class="fc"><i>310</i>&nbsp;            index += 2;</b>
+<i>311</i>&nbsp;        } else {
+<b class="fc"><i>312</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>313</i>&nbsp;            if (contains(value, index + 1, 2, &quot; C&quot;, &quot; Q&quot;, &quot; G&quot;)) {</b>
+<i>314</i>&nbsp;                //-- Mac Caffrey, Mac Gregor --//
+<b class="fc"><i>315</i>&nbsp;                index += 3;</b>
+<b class="fc"><i>316</i>&nbsp;            } else if (contains(value, index + 1, 1, &quot;C&quot;, &quot;K&quot;, &quot;Q&quot;) &amp;&amp;</b>
+<b class="fc"><i>317</i>&nbsp;                       !contains(value, index + 1, 2, &quot;CE&quot;, &quot;CI&quot;)) {</b>
+<b class="fc"><i>318</i>&nbsp;                index += 2;</b>
+<i>319</i>&nbsp;            } else {
+<b class="fc"><i>320</i>&nbsp;                index++;</b>
+<i>321</i>&nbsp;            }
+<i>322</i>&nbsp;        }
+<i>323</i>&nbsp;
+<b class="fc"><i>324</i>&nbsp;        return index;</b>
+<i>325</i>&nbsp;    }
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    /**
+<i>328</i>&nbsp;     * Handles &#39;CC&#39; cases.
+<i>329</i>&nbsp;     */
+<b class="fc"><i>330</i>&nbsp;    private int handleCC(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>331</i>&nbsp;        if (contains(value, index + 2, 1, &quot;I&quot;, &quot;E&quot;, &quot;H&quot;) &amp;&amp;</b>
+<b class="fc"><i>332</i>&nbsp;            !contains(value, index + 2, 2, &quot;HU&quot;)) {</b>
+<i>333</i>&nbsp;            //-- &quot;bellocchio&quot; but not &quot;bacchus&quot; --//
+<b class="fc"><i>334</i>&nbsp;            if ((index == 1 &amp;&amp; charAt(value, index - 1) == &#39;A&#39;) ||</b>
+<b class="fc"><i>335</i>&nbsp;                contains(value, index - 1, 5, &quot;UCCEE&quot;, &quot;UCCES&quot;)) {</b>
+<i>336</i>&nbsp;                //-- &quot;accident&quot;, &quot;accede&quot;, &quot;succeed&quot; --//
+<b class="fc"><i>337</i>&nbsp;                result.append(&quot;KS&quot;);</b>
+<i>338</i>&nbsp;            } else {
+<i>339</i>&nbsp;                //-- &quot;bacci&quot;, &quot;bertucci&quot;, other Italian --//
+<b class="fc"><i>340</i>&nbsp;                result.append(&#39;X&#39;);</b>
+<i>341</i>&nbsp;            }
+<b class="fc"><i>342</i>&nbsp;            index += 3;</b>
+<i>343</i>&nbsp;        } else {    // Pierce&#39;s rule
+<b class="fc"><i>344</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>345</i>&nbsp;            index += 2;</b>
+<i>346</i>&nbsp;        }
+<i>347</i>&nbsp;
+<b class="fc"><i>348</i>&nbsp;        return index;</b>
+<i>349</i>&nbsp;    }
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;    /**
+<i>352</i>&nbsp;     * Handles &#39;CH&#39; cases.
+<i>353</i>&nbsp;     */
+<b class="fc"><i>354</i>&nbsp;    private int handleCH(final String value, final DoubleMetaphoneResult result, final int index) {</b>
+<b class="fc"><i>355</i>&nbsp;        if (index &gt; 0 &amp;&amp; contains(value, index, 4, &quot;CHAE&quot;)) {   // Michael</b>
+<b class="nc"><i>356</i>&nbsp;            result.append(&#39;K&#39;, &#39;X&#39;);</b>
+<b class="nc"><i>357</i>&nbsp;            return index + 2;</b>
+<b class="fc"><i>358</i>&nbsp;        } else if (conditionCH0(value, index)) {</b>
+<i>359</i>&nbsp;            //-- Greek roots (&quot;chemistry&quot;, &quot;chorus&quot;, etc.) --//
+<b class="fc"><i>360</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>361</i>&nbsp;            return index + 2;</b>
+<b class="fc"><i>362</i>&nbsp;        } else if (conditionCH1(value, index)) {</b>
+<i>363</i>&nbsp;            //-- Germanic, Greek, or otherwise &#39;ch&#39; for &#39;kh&#39; sound --//
+<b class="fc"><i>364</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>365</i>&nbsp;            return index + 2;</b>
+<i>366</i>&nbsp;        } else {
+<b class="fc"><i>367</i>&nbsp;            if (index &gt; 0) {</b>
+<b class="fc"><i>368</i>&nbsp;                if (contains(value, 0, 2, &quot;MC&quot;)) {</b>
+<b class="fc"><i>369</i>&nbsp;                    result.append(&#39;K&#39;);</b>
+<i>370</i>&nbsp;                } else {
+<b class="fc"><i>371</i>&nbsp;                    result.append(&#39;X&#39;, &#39;K&#39;);</b>
+<i>372</i>&nbsp;                }
+<i>373</i>&nbsp;            } else {
+<b class="fc"><i>374</i>&nbsp;                result.append(&#39;X&#39;);</b>
+<i>375</i>&nbsp;            }
+<b class="fc"><i>376</i>&nbsp;            return index + 2;</b>
+<i>377</i>&nbsp;        }
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    /**
+<i>381</i>&nbsp;     * Handles &#39;D&#39; cases.
+<i>382</i>&nbsp;     */
+<b class="fc"><i>383</i>&nbsp;    private int handleD(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>384</i>&nbsp;        if (contains(value, index, 2, &quot;DG&quot;)) {</b>
+<i>385</i>&nbsp;            //-- &quot;Edge&quot; --//
+<b class="fc"><i>386</i>&nbsp;            if (contains(value, index + 2, 1, &quot;I&quot;, &quot;E&quot;, &quot;Y&quot;)) {</b>
+<b class="fc"><i>387</i>&nbsp;                result.append(&#39;J&#39;);</b>
+<b class="fc"><i>388</i>&nbsp;                index += 3;</b>
+<i>389</i>&nbsp;                //-- &quot;Edgar&quot; --//
+<i>390</i>&nbsp;            } else {
+<b class="fc"><i>391</i>&nbsp;                result.append(&quot;TK&quot;);</b>
+<b class="fc"><i>392</i>&nbsp;                index += 2;</b>
+<i>393</i>&nbsp;            }
+<b class="fc"><i>394</i>&nbsp;        } else if (contains(value, index, 2, &quot;DT&quot;, &quot;DD&quot;)) {</b>
+<b class="fc"><i>395</i>&nbsp;            result.append(&#39;T&#39;);</b>
+<b class="fc"><i>396</i>&nbsp;            index += 2;</b>
+<i>397</i>&nbsp;        } else {
+<b class="fc"><i>398</i>&nbsp;            result.append(&#39;T&#39;);</b>
+<b class="fc"><i>399</i>&nbsp;            index++;</b>
+<i>400</i>&nbsp;        }
+<b class="fc"><i>401</i>&nbsp;        return index;</b>
+<i>402</i>&nbsp;    }
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;    /**
+<i>405</i>&nbsp;     * Handles &#39;G&#39; cases.
+<i>406</i>&nbsp;     */
+<i>407</i>&nbsp;    private int handleG(final String value, final DoubleMetaphoneResult result, int index,
+<b class="fc"><i>408</i>&nbsp;                        final boolean slavoGermanic) {</b>
+<b class="fc"><i>409</i>&nbsp;        if (charAt(value, index + 1) == &#39;H&#39;) {</b>
+<b class="fc"><i>410</i>&nbsp;            index = handleGH(value, result, index);</b>
+<b class="fc"><i>411</i>&nbsp;        } else if (charAt(value, index + 1) == &#39;N&#39;) {</b>
+<b class="fc"><i>412</i>&nbsp;            if (index == 1 &amp;&amp; isVowel(charAt(value, 0)) &amp;&amp; !slavoGermanic) {</b>
+<b class="nc"><i>413</i>&nbsp;                result.append(&quot;KN&quot;, &quot;N&quot;);</b>
+<b class="fc"><i>414</i>&nbsp;            } else if (!contains(value, index + 2, 2, &quot;EY&quot;) &amp;&amp;</b>
+<b class="fc"><i>415</i>&nbsp;                       charAt(value, index + 1) != &#39;Y&#39; &amp;&amp; !slavoGermanic) {</b>
+<b class="fc"><i>416</i>&nbsp;                result.append(&quot;N&quot;, &quot;KN&quot;);</b>
+<i>417</i>&nbsp;            } else {
+<b class="fc"><i>418</i>&nbsp;                result.append(&quot;KN&quot;);</b>
+<i>419</i>&nbsp;            }
+<b class="fc"><i>420</i>&nbsp;            index = index + 2;</b>
+<b class="fc"><i>421</i>&nbsp;        } else if (contains(value, index + 1, 2, &quot;LI&quot;) &amp;&amp; !slavoGermanic) {</b>
+<b class="fc"><i>422</i>&nbsp;            result.append(&quot;KL&quot;, &quot;L&quot;);</b>
+<b class="fc"><i>423</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>424</i>&nbsp;        } else if (index == 0 &amp;&amp;</b>
+<b class="fc"><i>425</i>&nbsp;                   (charAt(value, index + 1) == &#39;Y&#39; ||</b>
+<b class="fc"><i>426</i>&nbsp;                    contains(value, index + 1, 2, ES_EP_EB_EL_EY_IB_IL_IN_IE_EI_ER))) {</b>
+<i>427</i>&nbsp;            //-- -ges-, -gep-, -gel-, -gie- at beginning --//
+<b class="fc"><i>428</i>&nbsp;            result.append(&#39;K&#39;, &#39;J&#39;);</b>
+<b class="fc"><i>429</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>430</i>&nbsp;        } else if ((contains(value, index + 1, 2, &quot;ER&quot;) ||</b>
+<b class="fc"><i>431</i>&nbsp;                    charAt(value, index + 1) == &#39;Y&#39;) &amp;&amp;</b>
+<b class="fc"><i>432</i>&nbsp;                   !contains(value, 0, 6, &quot;DANGER&quot;, &quot;RANGER&quot;, &quot;MANGER&quot;) &amp;&amp;</b>
+<b class="fc"><i>433</i>&nbsp;                   !contains(value, index - 1, 1, &quot;E&quot;, &quot;I&quot;) &amp;&amp;</b>
+<b class="fc"><i>434</i>&nbsp;                   !contains(value, index - 1, 3, &quot;RGY&quot;, &quot;OGY&quot;)) {</b>
+<i>435</i>&nbsp;            //-- -ger-, -gy- --//
+<b class="fc"><i>436</i>&nbsp;            result.append(&#39;K&#39;, &#39;J&#39;);</b>
+<b class="fc"><i>437</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>438</i>&nbsp;        } else if (contains(value, index + 1, 1, &quot;E&quot;, &quot;I&quot;, &quot;Y&quot;) ||</b>
+<b class="fc"><i>439</i>&nbsp;                   contains(value, index - 1, 4, &quot;AGGI&quot;, &quot;OGGI&quot;)) {</b>
+<i>440</i>&nbsp;            //-- Italian &quot;biaggi&quot; --//
+<b class="fc"><i>441</i>&nbsp;            if (contains(value, 0 ,4, &quot;VAN &quot;, &quot;VON &quot;) ||</b>
+<b class="fc"><i>442</i>&nbsp;                contains(value, 0, 3, &quot;SCH&quot;) ||</b>
+<b class="fc"><i>443</i>&nbsp;                contains(value, index + 1, 2, &quot;ET&quot;)) {</b>
+<i>444</i>&nbsp;                //-- obvious germanic --//
+<b class="fc"><i>445</i>&nbsp;                result.append(&#39;K&#39;);</b>
+<b class="fc"><i>446</i>&nbsp;            } else if (contains(value, index + 1, 3, &quot;IER&quot;)) {</b>
+<b class="fc"><i>447</i>&nbsp;                result.append(&#39;J&#39;);</b>
+<i>448</i>&nbsp;            } else {
+<b class="fc"><i>449</i>&nbsp;                result.append(&#39;J&#39;, &#39;K&#39;);</b>
+<i>450</i>&nbsp;            }
+<b class="fc"><i>451</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>452</i>&nbsp;        } else if (charAt(value, index + 1) == &#39;G&#39;) {</b>
+<b class="fc"><i>453</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>454</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<i>455</i>&nbsp;        } else {
+<b class="fc"><i>456</i>&nbsp;            index++;</b>
+<b class="fc"><i>457</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<i>458</i>&nbsp;        }
+<b class="fc"><i>459</i>&nbsp;        return index;</b>
+<i>460</i>&nbsp;    }
+<i>461</i>&nbsp;
+<i>462</i>&nbsp;    /**
+<i>463</i>&nbsp;     * Handles &#39;GH&#39; cases.
+<i>464</i>&nbsp;     */
+<b class="fc"><i>465</i>&nbsp;    private int handleGH(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>466</i>&nbsp;        if (index &gt; 0 &amp;&amp; !isVowel(charAt(value, index - 1))) {</b>
+<b class="fc"><i>467</i>&nbsp;            result.append(&#39;K&#39;);</b>
+<b class="fc"><i>468</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>469</i>&nbsp;        } else if (index == 0) {</b>
+<b class="fc"><i>470</i>&nbsp;            if (charAt(value, index + 2) == &#39;I&#39;) {</b>
+<b class="fc"><i>471</i>&nbsp;                result.append(&#39;J&#39;);</b>
+<i>472</i>&nbsp;            } else {
+<b class="fc"><i>473</i>&nbsp;                result.append(&#39;K&#39;);</b>
+<i>474</i>&nbsp;            }
+<b class="fc"><i>475</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>476</i>&nbsp;        } else if ((index &gt; 1 &amp;&amp; contains(value, index - 2, 1, &quot;B&quot;, &quot;H&quot;, &quot;D&quot;)) ||</b>
+<b class="fc"><i>477</i>&nbsp;                   (index &gt; 2 &amp;&amp; contains(value, index - 3, 1, &quot;B&quot;, &quot;H&quot;, &quot;D&quot;)) ||</b>
+<b class="fc"><i>478</i>&nbsp;                   (index &gt; 3 &amp;&amp; contains(value, index - 4, 1, &quot;B&quot;, &quot;H&quot;))) {</b>
+<i>479</i>&nbsp;            //-- Parker&#39;s rule (with some further refinements) - &quot;hugh&quot;
+<b class="fc"><i>480</i>&nbsp;            index += 2;</b>
+<i>481</i>&nbsp;        } else {
+<b class="fc"><i>482</i>&nbsp;            if (index &gt; 2 &amp;&amp; charAt(value, index - 1) == &#39;U&#39; &amp;&amp;</b>
+<b class="fc"><i>483</i>&nbsp;                contains(value, index - 3, 1, &quot;C&quot;, &quot;G&quot;, &quot;L&quot;, &quot;R&quot;, &quot;T&quot;)) {</b>
+<i>484</i>&nbsp;                //-- &quot;laugh&quot;, &quot;McLaughlin&quot;, &quot;cough&quot;, &quot;gough&quot;, &quot;rough&quot;, &quot;tough&quot;
+<b class="fc"><i>485</i>&nbsp;                result.append(&#39;F&#39;);</b>
+<b class="fc"><i>486</i>&nbsp;            } else if (index &gt; 0 &amp;&amp; charAt(value, index - 1) != &#39;I&#39;) {</b>
+<b class="fc"><i>487</i>&nbsp;                result.append(&#39;K&#39;);</b>
+<i>488</i>&nbsp;            }
+<b class="fc"><i>489</i>&nbsp;            index += 2;</b>
+<i>490</i>&nbsp;        }
+<b class="fc"><i>491</i>&nbsp;        return index;</b>
+<i>492</i>&nbsp;    }
+<i>493</i>&nbsp;
+<i>494</i>&nbsp;    /**
+<i>495</i>&nbsp;     * Handles &#39;H&#39; cases.
+<i>496</i>&nbsp;     */
+<b class="fc"><i>497</i>&nbsp;    private int handleH(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<i>498</i>&nbsp;        //-- only keep if first &amp; before vowel or between 2 vowels --//
+<b class="fc"><i>499</i>&nbsp;        if ((index == 0 || isVowel(charAt(value, index - 1))) &amp;&amp;</b>
+<b class="fc"><i>500</i>&nbsp;            isVowel(charAt(value, index + 1))) {</b>
+<b class="fc"><i>501</i>&nbsp;            result.append(&#39;H&#39;);</b>
+<b class="fc"><i>502</i>&nbsp;            index += 2;</b>
+<i>503</i>&nbsp;            //-- also takes car of &quot;HH&quot; --//
+<i>504</i>&nbsp;        } else {
+<b class="fc"><i>505</i>&nbsp;            index++;</b>
+<i>506</i>&nbsp;        }
+<b class="fc"><i>507</i>&nbsp;        return index;</b>
+<i>508</i>&nbsp;    }
+<i>509</i>&nbsp;
+<i>510</i>&nbsp;    /**
+<i>511</i>&nbsp;     * Handles &#39;J&#39; cases.
+<i>512</i>&nbsp;     */
+<i>513</i>&nbsp;    private int handleJ(final String value, final DoubleMetaphoneResult result, int index,
+<b class="fc"><i>514</i>&nbsp;                        final boolean slavoGermanic) {</b>
+<b class="fc"><i>515</i>&nbsp;        if (contains(value, index, 4, &quot;JOSE&quot;) || contains(value, 0, 4, &quot;SAN &quot;)) {</b>
+<i>516</i>&nbsp;                //-- obvious Spanish, &quot;Jose&quot;, &quot;San Jacinto&quot; --//
+<b class="fc"><i>517</i>&nbsp;                if ((index == 0 &amp;&amp; (charAt(value, index + 4) == &#39; &#39;) ||</b>
+<b class="fc"><i>518</i>&nbsp;                     value.length() == 4) || contains(value, 0, 4, &quot;SAN &quot;)) {</b>
+<b class="fc"><i>519</i>&nbsp;                    result.append(&#39;H&#39;);</b>
+<i>520</i>&nbsp;                } else {
+<b class="fc"><i>521</i>&nbsp;                    result.append(&#39;J&#39;, &#39;H&#39;);</b>
+<i>522</i>&nbsp;                }
+<b class="fc"><i>523</i>&nbsp;                index++;</b>
+<i>524</i>&nbsp;            } else {
+<b class="fc"><i>525</i>&nbsp;                if (index == 0 &amp;&amp; !contains(value, index, 4, &quot;JOSE&quot;)) {</b>
+<b class="fc"><i>526</i>&nbsp;                    result.append(&#39;J&#39;, &#39;A&#39;);</b>
+<b class="fc"><i>527</i>&nbsp;                } else if (isVowel(charAt(value, index - 1)) &amp;&amp; !slavoGermanic &amp;&amp;</b>
+<b class="fc"><i>528</i>&nbsp;                           (charAt(value, index + 1) == &#39;A&#39; || charAt(value, index + 1) == &#39;O&#39;)) {</b>
+<b class="fc"><i>529</i>&nbsp;                    result.append(&#39;J&#39;, &#39;H&#39;);</b>
+<b class="fc"><i>530</i>&nbsp;                } else if (index == value.length() - 1) {</b>
+<b class="nc"><i>531</i>&nbsp;                    result.append(&#39;J&#39;, &#39; &#39;);</b>
+<b class="fc"><i>532</i>&nbsp;                } else if (!contains(value, index + 1, 1, L_T_K_S_N_M_B_Z) &amp;&amp;</b>
+<b class="fc"><i>533</i>&nbsp;                           !contains(value, index - 1, 1, &quot;S&quot;, &quot;K&quot;, &quot;L&quot;)) {</b>
+<b class="fc"><i>534</i>&nbsp;                    result.append(&#39;J&#39;);</b>
+<i>535</i>&nbsp;                }
+<i>536</i>&nbsp;
+<b class="fc"><i>537</i>&nbsp;                if (charAt(value, index + 1) == &#39;J&#39;) {</b>
+<b class="nc"><i>538</i>&nbsp;                    index += 2;</b>
+<i>539</i>&nbsp;                } else {
+<b class="fc"><i>540</i>&nbsp;                    index++;</b>
+<i>541</i>&nbsp;                }
+<i>542</i>&nbsp;            }
+<b class="fc"><i>543</i>&nbsp;        return index;</b>
+<i>544</i>&nbsp;    }
+<i>545</i>&nbsp;
+<i>546</i>&nbsp;    /**
+<i>547</i>&nbsp;     * Handles &#39;L&#39; cases.
+<i>548</i>&nbsp;     */
+<b class="fc"><i>549</i>&nbsp;    private int handleL(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>550</i>&nbsp;        if (charAt(value, index + 1) == &#39;L&#39;) {</b>
+<b class="fc"><i>551</i>&nbsp;            if (conditionL0(value, index)) {</b>
+<b class="fc"><i>552</i>&nbsp;                result.appendPrimary(&#39;L&#39;);</b>
+<i>553</i>&nbsp;            } else {
+<b class="fc"><i>554</i>&nbsp;                result.append(&#39;L&#39;);</b>
+<i>555</i>&nbsp;            }
+<b class="fc"><i>556</i>&nbsp;            index += 2;</b>
+<i>557</i>&nbsp;        } else {
+<b class="fc"><i>558</i>&nbsp;            index++;</b>
+<b class="fc"><i>559</i>&nbsp;            result.append(&#39;L&#39;);</b>
+<i>560</i>&nbsp;        }
+<b class="fc"><i>561</i>&nbsp;        return index;</b>
+<i>562</i>&nbsp;    }
+<i>563</i>&nbsp;
+<i>564</i>&nbsp;    /**
+<i>565</i>&nbsp;     * Handles &#39;P&#39; cases.
+<i>566</i>&nbsp;     */
+<b class="fc"><i>567</i>&nbsp;    private int handleP(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>568</i>&nbsp;        if (charAt(value, index + 1) == &#39;H&#39;) {</b>
+<b class="fc"><i>569</i>&nbsp;            result.append(&#39;F&#39;);</b>
+<b class="fc"><i>570</i>&nbsp;            index += 2;</b>
+<i>571</i>&nbsp;        } else {
+<b class="fc"><i>572</i>&nbsp;            result.append(&#39;P&#39;);</b>
+<b class="fc"><i>573</i>&nbsp;            index = contains(value, index + 1, 1, &quot;P&quot;, &quot;B&quot;) ? index + 2 : index + 1;</b>
+<i>574</i>&nbsp;        }
+<b class="fc"><i>575</i>&nbsp;        return index;</b>
+<i>576</i>&nbsp;    }
+<i>577</i>&nbsp;
+<i>578</i>&nbsp;    /**
+<i>579</i>&nbsp;     * Handles &#39;R&#39; cases.
+<i>580</i>&nbsp;     */
+<i>581</i>&nbsp;    private int handleR(final String value, final DoubleMetaphoneResult result, final int index,
+<b class="fc"><i>582</i>&nbsp;                        final boolean slavoGermanic) {</b>
+<b class="fc"><i>583</i>&nbsp;        if (index == value.length() - 1 &amp;&amp; !slavoGermanic &amp;&amp;</b>
+<b class="fc"><i>584</i>&nbsp;            contains(value, index - 2, 2, &quot;IE&quot;) &amp;&amp;</b>
+<b class="fc"><i>585</i>&nbsp;            !contains(value, index - 4, 2, &quot;ME&quot;, &quot;MA&quot;)) {</b>
+<b class="fc"><i>586</i>&nbsp;            result.appendAlternate(&#39;R&#39;);</b>
+<i>587</i>&nbsp;        } else {
+<b class="fc"><i>588</i>&nbsp;            result.append(&#39;R&#39;);</b>
+<i>589</i>&nbsp;        }
+<b class="fc"><i>590</i>&nbsp;        return charAt(value, index + 1) == &#39;R&#39; ? index + 2 : index + 1;</b>
+<i>591</i>&nbsp;    }
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;    /**
+<i>594</i>&nbsp;     * Handles &#39;S&#39; cases.
+<i>595</i>&nbsp;     */
+<i>596</i>&nbsp;    private int handleS(final String value, final DoubleMetaphoneResult result, int index,
+<b class="fc"><i>597</i>&nbsp;                        final boolean slavoGermanic) {</b>
+<b class="fc"><i>598</i>&nbsp;        if (contains(value, index - 1, 3, &quot;ISL&quot;, &quot;YSL&quot;)) {</b>
+<i>599</i>&nbsp;            //-- special cases &quot;island&quot;, &quot;isle&quot;, &quot;carlisle&quot;, &quot;carlysle&quot; --//
+<b class="fc"><i>600</i>&nbsp;            index++;</b>
+<b class="fc"><i>601</i>&nbsp;        } else if (index == 0 &amp;&amp; contains(value, index, 5, &quot;SUGAR&quot;)) {</b>
+<i>602</i>&nbsp;            //-- special case &quot;sugar-&quot; --//
+<b class="fc"><i>603</i>&nbsp;            result.append(&#39;X&#39;, &#39;S&#39;);</b>
+<b class="fc"><i>604</i>&nbsp;            index++;</b>
+<b class="fc"><i>605</i>&nbsp;        } else if (contains(value, index, 2, &quot;SH&quot;)) {</b>
+<b class="fc"><i>606</i>&nbsp;            if (contains(value, index + 1, 4, &quot;HEIM&quot;, &quot;HOEK&quot;, &quot;HOLM&quot;, &quot;HOLZ&quot;)) {</b>
+<i>607</i>&nbsp;                //-- germanic --//
+<b class="fc"><i>608</i>&nbsp;                result.append(&#39;S&#39;);</b>
+<i>609</i>&nbsp;            } else {
+<b class="fc"><i>610</i>&nbsp;                result.append(&#39;X&#39;);</b>
+<i>611</i>&nbsp;            }
+<b class="fc"><i>612</i>&nbsp;            index += 2;</b>
+<b class="fc"><i>613</i>&nbsp;        } else if (contains(value, index, 3, &quot;SIO&quot;, &quot;SIA&quot;) || contains(value, index, 4, &quot;SIAN&quot;)) {</b>
+<i>614</i>&nbsp;            //-- Italian and Armenian --//
+<b class="fc"><i>615</i>&nbsp;            if (slavoGermanic) {</b>
+<b class="nc"><i>616</i>&nbsp;                result.append(&#39;S&#39;);</b>
+<i>617</i>&nbsp;            } else {
+<b class="fc"><i>618</i>&nbsp;                result.append(&#39;S&#39;, &#39;X&#39;);</b>
+<i>619</i>&nbsp;            }
+<b class="fc"><i>620</i>&nbsp;            index += 3;</b>
+<b class="fc"><i>621</i>&nbsp;        } else if ((index == 0 &amp;&amp; contains(value, index + 1, 1, &quot;M&quot;, &quot;N&quot;, &quot;L&quot;, &quot;W&quot;)) ||</b>
+<b class="fc"><i>622</i>&nbsp;                   contains(value, index + 1, 1, &quot;Z&quot;)) {</b>
+<i>623</i>&nbsp;            //-- german &amp; anglicisations, e.g. &quot;smith&quot; match &quot;schmidt&quot; //
+<i>624</i>&nbsp;            // &quot;snider&quot; match &quot;schneider&quot; --//
+<i>625</i>&nbsp;            //-- also, -sz- in slavic language although in hungarian it //
+<i>626</i>&nbsp;            //   is pronounced &quot;s&quot; --//
+<b class="fc"><i>627</i>&nbsp;            result.append(&#39;S&#39;, &#39;X&#39;);</b>
+<b class="fc"><i>628</i>&nbsp;            index = contains(value, index + 1, 1, &quot;Z&quot;) ? index + 2 : index + 1;</b>
+<b class="fc"><i>629</i>&nbsp;        } else if (contains(value, index, 2, &quot;SC&quot;)) {</b>
+<b class="fc"><i>630</i>&nbsp;            index = handleSC(value, result, index);</b>
+<i>631</i>&nbsp;        } else {
+<b class="fc"><i>632</i>&nbsp;            if (index == value.length() - 1 &amp;&amp; contains(value, index - 2, 2, &quot;AI&quot;, &quot;OI&quot;)) {</b>
+<i>633</i>&nbsp;                //-- french e.g. &quot;resnais&quot;, &quot;artois&quot; --//
+<b class="fc"><i>634</i>&nbsp;                result.appendAlternate(&#39;S&#39;);</b>
+<i>635</i>&nbsp;            } else {
+<b class="fc"><i>636</i>&nbsp;                result.append(&#39;S&#39;);</b>
+<i>637</i>&nbsp;            }
+<b class="fc"><i>638</i>&nbsp;            index = contains(value, index + 1, 1, &quot;S&quot;, &quot;Z&quot;) ? index + 2 : index + 1;</b>
+<i>639</i>&nbsp;        }
+<b class="fc"><i>640</i>&nbsp;        return index;</b>
+<i>641</i>&nbsp;    }
+<i>642</i>&nbsp;
+<i>643</i>&nbsp;    /**
+<i>644</i>&nbsp;     * Handles &#39;SC&#39; cases.
+<i>645</i>&nbsp;     */
+<b class="fc"><i>646</i>&nbsp;    private int handleSC(final String value, final DoubleMetaphoneResult result, final int index) {</b>
+<b class="fc"><i>647</i>&nbsp;        if (charAt(value, index + 2) == &#39;H&#39;) {</b>
+<i>648</i>&nbsp;            //-- Schlesinger&#39;s rule --//
+<b class="fc"><i>649</i>&nbsp;            if (contains(value, index + 3, 2, &quot;OO&quot;, &quot;ER&quot;, &quot;EN&quot;, &quot;UY&quot;, &quot;ED&quot;, &quot;EM&quot;)) {</b>
+<i>650</i>&nbsp;                //-- Dutch origin, e.g. &quot;school&quot;, &quot;schooner&quot; --//
+<b class="fc"><i>651</i>&nbsp;                if (contains(value, index + 3, 2, &quot;ER&quot;, &quot;EN&quot;)) {</b>
+<i>652</i>&nbsp;                    //-- &quot;schermerhorn&quot;, &quot;schenker&quot; --//
+<b class="fc"><i>653</i>&nbsp;                    result.append(&quot;X&quot;, &quot;SK&quot;);</b>
+<i>654</i>&nbsp;                } else {
+<b class="fc"><i>655</i>&nbsp;                    result.append(&quot;SK&quot;);</b>
+<i>656</i>&nbsp;                }
+<i>657</i>&nbsp;            } else {
+<b class="fc"><i>658</i>&nbsp;                if (index == 0 &amp;&amp; !isVowel(charAt(value, 3)) &amp;&amp; charAt(value, 3) != &#39;W&#39;) {</b>
+<b class="fc"><i>659</i>&nbsp;                    result.append(&#39;X&#39;, &#39;S&#39;);</b>
+<i>660</i>&nbsp;                } else {
+<b class="fc"><i>661</i>&nbsp;                    result.append(&#39;X&#39;);</b>
+<i>662</i>&nbsp;                }
+<i>663</i>&nbsp;            }
+<b class="fc"><i>664</i>&nbsp;        } else if (contains(value, index + 2, 1, &quot;I&quot;, &quot;E&quot;, &quot;Y&quot;)) {</b>
+<b class="fc"><i>665</i>&nbsp;            result.append(&#39;S&#39;);</b>
+<i>666</i>&nbsp;        } else {
+<b class="fc"><i>667</i>&nbsp;            result.append(&quot;SK&quot;);</b>
+<i>668</i>&nbsp;        }
+<b class="fc"><i>669</i>&nbsp;        return index + 3;</b>
+<i>670</i>&nbsp;    }
+<i>671</i>&nbsp;
+<i>672</i>&nbsp;    /**
+<i>673</i>&nbsp;     * Handles &#39;T&#39; cases.
+<i>674</i>&nbsp;     */
+<b class="fc"><i>675</i>&nbsp;    private int handleT(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>676</i>&nbsp;        if (contains(value, index, 4, &quot;TION&quot;)) {</b>
+<b class="fc"><i>677</i>&nbsp;            result.append(&#39;X&#39;);</b>
+<b class="fc"><i>678</i>&nbsp;            index += 3;</b>
+<b class="fc"><i>679</i>&nbsp;        } else if (contains(value, index, 3, &quot;TIA&quot;, &quot;TCH&quot;)) {</b>
+<b class="fc"><i>680</i>&nbsp;            result.append(&#39;X&#39;);</b>
+<b class="fc"><i>681</i>&nbsp;            index += 3;</b>
+<b class="fc"><i>682</i>&nbsp;        } else if (contains(value, index, 2, &quot;TH&quot;) || contains(value, index, 3, &quot;TTH&quot;)) {</b>
+<b class="fc"><i>683</i>&nbsp;            if (contains(value, index + 2, 2, &quot;OM&quot;, &quot;AM&quot;) ||</b>
+<i>684</i>&nbsp;                //-- special case &quot;thomas&quot;, &quot;thames&quot; or germanic --//
+<b class="fc"><i>685</i>&nbsp;                contains(value, 0, 4, &quot;VAN &quot;, &quot;VON &quot;) ||</b>
+<b class="fc"><i>686</i>&nbsp;                contains(value, 0, 3, &quot;SCH&quot;)) {</b>
+<b class="fc"><i>687</i>&nbsp;                result.append(&#39;T&#39;);</b>
+<i>688</i>&nbsp;            } else {
+<b class="fc"><i>689</i>&nbsp;                result.append(&#39;0&#39;, &#39;T&#39;);</b>
+<i>690</i>&nbsp;            }
+<b class="fc"><i>691</i>&nbsp;            index += 2;</b>
+<i>692</i>&nbsp;        } else {
+<b class="fc"><i>693</i>&nbsp;            result.append(&#39;T&#39;);</b>
+<b class="fc"><i>694</i>&nbsp;            index = contains(value, index + 1, 1, &quot;T&quot;, &quot;D&quot;) ? index + 2 : index + 1;</b>
+<i>695</i>&nbsp;        }
+<b class="fc"><i>696</i>&nbsp;        return index;</b>
+<i>697</i>&nbsp;    }
+<i>698</i>&nbsp;
+<i>699</i>&nbsp;    /**
+<i>700</i>&nbsp;     * Handles &#39;W&#39; cases.
+<i>701</i>&nbsp;     */
+<b class="fc"><i>702</i>&nbsp;    private int handleW(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>703</i>&nbsp;        if (contains(value, index, 2, &quot;WR&quot;)) {</b>
+<i>704</i>&nbsp;            //-- can also be in middle of word --//
+<b class="fc"><i>705</i>&nbsp;            result.append(&#39;R&#39;);</b>
+<b class="fc"><i>706</i>&nbsp;            index += 2;</b>
+<i>707</i>&nbsp;        } else {
+<b class="fc"><i>708</i>&nbsp;            if (index == 0 &amp;&amp; (isVowel(charAt(value, index + 1)) ||</b>
+<b class="fc"><i>709</i>&nbsp;                               contains(value, index, 2, &quot;WH&quot;))) {</b>
+<b class="fc"><i>710</i>&nbsp;                if (isVowel(charAt(value, index + 1))) {</b>
+<i>711</i>&nbsp;                    //-- Wasserman should match Vasserman --//
+<b class="fc"><i>712</i>&nbsp;                    result.append(&#39;A&#39;, &#39;F&#39;);</b>
+<i>713</i>&nbsp;                } else {
+<i>714</i>&nbsp;                    //-- need Uomo to match Womo --//
+<b class="fc"><i>715</i>&nbsp;                    result.append(&#39;A&#39;);</b>
+<i>716</i>&nbsp;                }
+<b class="fc"><i>717</i>&nbsp;                index++;</b>
+<b class="fc"><i>718</i>&nbsp;            } else if ((index == value.length() - 1 &amp;&amp; isVowel(charAt(value, index - 1))) ||</b>
+<b class="fc"><i>719</i>&nbsp;                       contains(value, index - 1, 5, &quot;EWSKI&quot;, &quot;EWSKY&quot;, &quot;OWSKI&quot;, &quot;OWSKY&quot;) ||</b>
+<b class="fc"><i>720</i>&nbsp;                       contains(value, 0, 3, &quot;SCH&quot;)) {</b>
+<i>721</i>&nbsp;                //-- Arnow should match Arnoff --//
+<b class="fc"><i>722</i>&nbsp;                result.appendAlternate(&#39;F&#39;);</b>
+<b class="fc"><i>723</i>&nbsp;                index++;</b>
+<b class="fc"><i>724</i>&nbsp;            } else if (contains(value, index, 4, &quot;WICZ&quot;, &quot;WITZ&quot;)) {</b>
+<i>725</i>&nbsp;                //-- Polish e.g. &quot;filipowicz&quot; --//
+<b class="fc"><i>726</i>&nbsp;                result.append(&quot;TS&quot;, &quot;FX&quot;);</b>
+<b class="fc"><i>727</i>&nbsp;                index += 4;</b>
+<i>728</i>&nbsp;            } else {
+<b class="fc"><i>729</i>&nbsp;                index++;</b>
+<i>730</i>&nbsp;            }
+<i>731</i>&nbsp;        }
+<b class="fc"><i>732</i>&nbsp;        return index;</b>
+<i>733</i>&nbsp;    }
+<i>734</i>&nbsp;
+<i>735</i>&nbsp;    /**
+<i>736</i>&nbsp;     * Handles &#39;X&#39; cases.
+<i>737</i>&nbsp;     */
+<b class="fc"><i>738</i>&nbsp;    private int handleX(final String value, final DoubleMetaphoneResult result, int index) {</b>
+<b class="fc"><i>739</i>&nbsp;        if (index == 0) {</b>
+<b class="fc"><i>740</i>&nbsp;            result.append(&#39;S&#39;);</b>
+<b class="fc"><i>741</i>&nbsp;            index++;</b>
+<i>742</i>&nbsp;        } else {
+<b class="fc"><i>743</i>&nbsp;            if (!((index == value.length() - 1) &amp;&amp;</b>
+<b class="fc"><i>744</i>&nbsp;                  (contains(value, index - 3, 3, &quot;IAU&quot;, &quot;EAU&quot;) ||</b>
+<b class="fc"><i>745</i>&nbsp;                   contains(value, index - 2, 2, &quot;AU&quot;, &quot;OU&quot;)))) {</b>
+<i>746</i>&nbsp;                //-- French e.g. breaux --//
+<b class="fc"><i>747</i>&nbsp;                result.append(&quot;KS&quot;);</b>
+<i>748</i>&nbsp;            }
+<b class="fc"><i>749</i>&nbsp;            index = contains(value, index + 1, 1, &quot;C&quot;, &quot;X&quot;) ? index + 2 : index + 1;</b>
+<i>750</i>&nbsp;        }
+<b class="fc"><i>751</i>&nbsp;        return index;</b>
+<i>752</i>&nbsp;    }
+<i>753</i>&nbsp;
+<i>754</i>&nbsp;    /**
+<i>755</i>&nbsp;     * Handles &#39;Z&#39; cases.
+<i>756</i>&nbsp;     */
+<i>757</i>&nbsp;    private int handleZ(final String value, final DoubleMetaphoneResult result, int index,
+<b class="fc"><i>758</i>&nbsp;                        final boolean slavoGermanic) {</b>
+<b class="fc"><i>759</i>&nbsp;        if (charAt(value, index + 1) == &#39;H&#39;) {</b>
+<i>760</i>&nbsp;            //-- Chinese pinyin e.g. &quot;zhao&quot; or Angelina &quot;Zhang&quot; --//
+<b class="fc"><i>761</i>&nbsp;            result.append(&#39;J&#39;);</b>
+<b class="fc"><i>762</i>&nbsp;            index += 2;</b>
+<i>763</i>&nbsp;        } else {
+<b class="fc"><i>764</i>&nbsp;            if (contains(value, index + 1, 2, &quot;ZO&quot;, &quot;ZI&quot;, &quot;ZA&quot;) ||</b>
+<b class="fc"><i>765</i>&nbsp;                (slavoGermanic &amp;&amp; (index &gt; 0 &amp;&amp; charAt(value, index - 1) != &#39;T&#39;))) {</b>
+<b class="fc"><i>766</i>&nbsp;                result.append(&quot;S&quot;, &quot;TS&quot;);</b>
+<i>767</i>&nbsp;            } else {
+<b class="fc"><i>768</i>&nbsp;                result.append(&#39;S&#39;);</b>
+<i>769</i>&nbsp;            }
+<b class="fc"><i>770</i>&nbsp;            index = charAt(value, index + 1) == &#39;Z&#39; ? index + 2 : index + 1;</b>
+<i>771</i>&nbsp;        }
+<b class="fc"><i>772</i>&nbsp;        return index;</b>
+<i>773</i>&nbsp;    }
+<i>774</i>&nbsp;
+<i>775</i>&nbsp;    //-- BEGIN CONDITIONS --//
+<i>776</i>&nbsp;
+<i>777</i>&nbsp;    /**
+<i>778</i>&nbsp;     * Complex condition 0 for &#39;C&#39;.
+<i>779</i>&nbsp;     */
+<b class="fc"><i>780</i>&nbsp;    private boolean conditionC0(final String value, final int index) {</b>
+<b class="fc"><i>781</i>&nbsp;        if (contains(value, index, 4, &quot;CHIA&quot;)) {</b>
+<b class="fc"><i>782</i>&nbsp;            return true;</b>
+<b class="fc"><i>783</i>&nbsp;        } else if (index &lt;= 1) {</b>
+<b class="fc"><i>784</i>&nbsp;            return false;</b>
+<b class="fc"><i>785</i>&nbsp;        } else if (isVowel(charAt(value, index - 2))) {</b>
+<b class="fc"><i>786</i>&nbsp;            return false;</b>
+<b class="fc"><i>787</i>&nbsp;        } else if (!contains(value, index - 1, 3, &quot;ACH&quot;)) {</b>
+<b class="fc"><i>788</i>&nbsp;            return false;</b>
+<i>789</i>&nbsp;        } else {
+<b class="fc"><i>790</i>&nbsp;            final char c = charAt(value, index + 2);</b>
+<b class="fc"><i>791</i>&nbsp;            return (c != &#39;I&#39; &amp;&amp; c != &#39;E&#39;) ||</b>
+<b class="fc"><i>792</i>&nbsp;                    contains(value, index - 2, 6, &quot;BACHER&quot;, &quot;MACHER&quot;);</b>
+<i>793</i>&nbsp;        }
+<i>794</i>&nbsp;    }
+<i>795</i>&nbsp;
+<i>796</i>&nbsp;    /**
+<i>797</i>&nbsp;     * Complex condition 0 for &#39;CH&#39;.
+<i>798</i>&nbsp;     */
+<b class="fc"><i>799</i>&nbsp;    private boolean conditionCH0(final String value, final int index) {</b>
+<b class="fc"><i>800</i>&nbsp;        if (index != 0) {</b>
+<b class="fc"><i>801</i>&nbsp;            return false;</b>
+<b class="fc"><i>802</i>&nbsp;        } else if (!contains(value, index + 1, 5, &quot;HARAC&quot;, &quot;HARIS&quot;) &amp;&amp;</b>
+<b class="fc"><i>803</i>&nbsp;                   !contains(value, index + 1, 3, &quot;HOR&quot;, &quot;HYM&quot;, &quot;HIA&quot;, &quot;HEM&quot;)) {</b>
+<b class="fc"><i>804</i>&nbsp;            return false;</b>
+<b class="fc"><i>805</i>&nbsp;        } else if (contains(value, 0, 5, &quot;CHORE&quot;)) {</b>
+<b class="nc"><i>806</i>&nbsp;            return false;</b>
+<i>807</i>&nbsp;        } else {
+<b class="fc"><i>808</i>&nbsp;            return true;</b>
+<i>809</i>&nbsp;        }
+<i>810</i>&nbsp;    }
+<i>811</i>&nbsp;
+<i>812</i>&nbsp;    /**
+<i>813</i>&nbsp;     * Complex condition 1 for &#39;CH&#39;.
+<i>814</i>&nbsp;     */
+<b class="fc"><i>815</i>&nbsp;    private boolean conditionCH1(final String value, final int index) {</b>
+<b class="fc"><i>816</i>&nbsp;        return ((contains(value, 0, 4, &quot;VAN &quot;, &quot;VON &quot;) || contains(value, 0, 3, &quot;SCH&quot;)) ||</b>
+<b class="fc"><i>817</i>&nbsp;                contains(value, index - 2, 6, &quot;ORCHES&quot;, &quot;ARCHIT&quot;, &quot;ORCHID&quot;) ||</b>
+<b class="fc"><i>818</i>&nbsp;                contains(value, index + 2, 1, &quot;T&quot;, &quot;S&quot;) ||</b>
+<b class="fc"><i>819</i>&nbsp;                ((contains(value, index - 1, 1, &quot;A&quot;, &quot;O&quot;, &quot;U&quot;, &quot;E&quot;) || index == 0) &amp;&amp;</b>
+<b class="fc"><i>820</i>&nbsp;                 (contains(value, index + 2, 1, L_R_N_M_B_H_F_V_W_SPACE) || index + 1 == value.length() - 1)));</b>
+<i>821</i>&nbsp;    }
+<i>822</i>&nbsp;
+<i>823</i>&nbsp;    /**
+<i>824</i>&nbsp;     * Complex condition 0 for &#39;L&#39;.
+<i>825</i>&nbsp;     */
+<b class="fc"><i>826</i>&nbsp;    private boolean conditionL0(final String value, final int index) {</b>
+<b class="fc"><i>827</i>&nbsp;        if (index == value.length() - 3 &amp;&amp;</b>
+<b class="fc"><i>828</i>&nbsp;            contains(value, index - 1, 4, &quot;ILLO&quot;, &quot;ILLA&quot;, &quot;ALLE&quot;)) {</b>
+<b class="fc"><i>829</i>&nbsp;            return true;</b>
+<b class="fc"><i>830</i>&nbsp;        } else if ((contains(value, value.length() - 2, 2, &quot;AS&quot;, &quot;OS&quot;) ||</b>
+<b class="fc"><i>831</i>&nbsp;                    contains(value, value.length() - 1, 1, &quot;A&quot;, &quot;O&quot;)) &amp;&amp;</b>
+<b class="fc"><i>832</i>&nbsp;                   contains(value, index - 1, 4, &quot;ALLE&quot;)) {</b>
+<b class="fc"><i>833</i>&nbsp;            return true;</b>
+<i>834</i>&nbsp;        } else {
+<b class="fc"><i>835</i>&nbsp;            return false;</b>
+<i>836</i>&nbsp;        }
+<i>837</i>&nbsp;    }
+<i>838</i>&nbsp;
+<i>839</i>&nbsp;    /**
+<i>840</i>&nbsp;     * Complex condition 0 for &#39;M&#39;.
+<i>841</i>&nbsp;     */
+<b class="fc"><i>842</i>&nbsp;    private boolean conditionM0(final String value, final int index) {</b>
+<b class="fc"><i>843</i>&nbsp;        if (charAt(value, index + 1) == &#39;M&#39;) {</b>
+<b class="fc"><i>844</i>&nbsp;            return true;</b>
+<i>845</i>&nbsp;        }
+<b class="fc"><i>846</i>&nbsp;        return contains(value, index - 1, 3, &quot;UMB&quot;) &amp;&amp;</b>
+<b class="fc"><i>847</i>&nbsp;               ((index + 1) == value.length() - 1 || contains(value, index + 2, 2, &quot;ER&quot;));</b>
+<i>848</i>&nbsp;    }
+<i>849</i>&nbsp;
+<i>850</i>&nbsp;    //-- BEGIN HELPER FUNCTIONS --//
+<i>851</i>&nbsp;
+<i>852</i>&nbsp;    /**
+<i>853</i>&nbsp;     * Determines whether or not a value is of slavo-germanic origin. A value is
+<i>854</i>&nbsp;     * of slavo-germanic origin if it contians any of &#39;W&#39;, &#39;K&#39;, &#39;CZ&#39;, or &#39;WITZ&#39;.
+<i>855</i>&nbsp;     */
+<b class="fc"><i>856</i>&nbsp;    private boolean isSlavoGermanic(final String value) {</b>
+<b class="fc"><i>857</i>&nbsp;        return value.indexOf(&#39;W&#39;) &gt; -1 || value.indexOf(&#39;K&#39;) &gt; -1 ||</b>
+<b class="fc"><i>858</i>&nbsp;            value.indexOf(&quot;CZ&quot;) &gt; -1 || value.indexOf(&quot;WITZ&quot;) &gt; -1;</b>
+<i>859</i>&nbsp;    }
+<i>860</i>&nbsp;
+<i>861</i>&nbsp;    /**
+<i>862</i>&nbsp;     * Determines whether or not a character is a vowel or not
+<i>863</i>&nbsp;     */
+<b class="fc"><i>864</i>&nbsp;    private boolean isVowel(final char ch) {</b>
+<b class="fc"><i>865</i>&nbsp;        return VOWELS.indexOf(ch) != -1;</b>
+<i>866</i>&nbsp;    }
+<i>867</i>&nbsp;
+<i>868</i>&nbsp;    /**
+<i>869</i>&nbsp;     * Determines whether or not the value starts with a silent letter.  It will
+<i>870</i>&nbsp;     * return {@code true} if the value starts with any of &#39;GN&#39;, &#39;KN&#39;,
+<i>871</i>&nbsp;     * &#39;PN&#39;, &#39;WR&#39; or &#39;PS&#39;.
+<i>872</i>&nbsp;     */
+<b class="fc"><i>873</i>&nbsp;    private boolean isSilentStart(final String value) {</b>
+<b class="fc"><i>874</i>&nbsp;        boolean result = false;</b>
+<b class="fc"><i>875</i>&nbsp;        for (final String element : SILENT_START) {</b>
+<b class="fc"><i>876</i>&nbsp;            if (value.startsWith(element)) {</b>
+<b class="fc"><i>877</i>&nbsp;                result = true;</b>
+<b class="fc"><i>878</i>&nbsp;                break;</b>
+<i>879</i>&nbsp;            }
+<i>880</i>&nbsp;        }
+<b class="fc"><i>881</i>&nbsp;        return result;</b>
+<i>882</i>&nbsp;    }
+<i>883</i>&nbsp;
+<i>884</i>&nbsp;    /**
+<i>885</i>&nbsp;     * Cleans the input.
+<i>886</i>&nbsp;     */
+<b class="fc"><i>887</i>&nbsp;    private String cleanInput(String input) {</b>
+<b class="fc"><i>888</i>&nbsp;        if (input == null) {</b>
+<b class="fc"><i>889</i>&nbsp;            return null;</b>
+<i>890</i>&nbsp;        }
+<b class="fc"><i>891</i>&nbsp;        input = input.trim();</b>
+<b class="fc"><i>892</i>&nbsp;        if (input.length() == 0) {</b>
+<b class="fc"><i>893</i>&nbsp;            return null;</b>
+<i>894</i>&nbsp;        }
+<b class="fc"><i>895</i>&nbsp;        return input.toUpperCase(java.util.Locale.ENGLISH);</b>
+<i>896</i>&nbsp;    }
+<i>897</i>&nbsp;
+<i>898</i>&nbsp;    /**
+<i>899</i>&nbsp;     * Gets the character at index &lt;code&gt;index&lt;/code&gt; if available, otherwise
+<i>900</i>&nbsp;     * it returns &lt;code&gt;Character.MIN_VALUE&lt;/code&gt; so that there is some sort
+<i>901</i>&nbsp;     * of a default.
+<i>902</i>&nbsp;     */
+<b class="fc"><i>903</i>&nbsp;    protected char charAt(final String value, final int index) {</b>
+<b class="fc"><i>904</i>&nbsp;        if (index &lt; 0 || index &gt;= value.length()) {</b>
+<b class="fc"><i>905</i>&nbsp;            return Character.MIN_VALUE;</b>
+<i>906</i>&nbsp;        }
+<b class="fc"><i>907</i>&nbsp;        return value.charAt(index);</b>
+<i>908</i>&nbsp;    }
+<i>909</i>&nbsp;
+<i>910</i>&nbsp;    /**
+<i>911</i>&nbsp;     * Determines whether &lt;code&gt;value&lt;/code&gt; contains any of the criteria starting at index &lt;code&gt;start&lt;/code&gt; and
+<i>912</i>&nbsp;     * matching up to length &lt;code&gt;length&lt;/code&gt;.
+<i>913</i>&nbsp;     */
+<i>914</i>&nbsp;    protected static boolean contains(final String value, final int start, final int length,
+<b class="fc"><i>915</i>&nbsp;                                      final String... criteria) {</b>
+<b class="fc"><i>916</i>&nbsp;        boolean result = false;</b>
+<b class="fc"><i>917</i>&nbsp;        if (start &gt;= 0 &amp;&amp; start + length &lt;= value.length()) {</b>
+<b class="fc"><i>918</i>&nbsp;            final String target = value.substring(start, start + length);</b>
+<i>919</i>&nbsp;
+<b class="fc"><i>920</i>&nbsp;            for (final String element : criteria) {</b>
+<b class="fc"><i>921</i>&nbsp;                if (target.equals(element)) {</b>
+<b class="fc"><i>922</i>&nbsp;                    result = true;</b>
+<b class="fc"><i>923</i>&nbsp;                    break;</b>
+<i>924</i>&nbsp;                }
+<i>925</i>&nbsp;            }
+<i>926</i>&nbsp;        }
+<b class="fc"><i>927</i>&nbsp;        return result;</b>
+<i>928</i>&nbsp;    }
+<i>929</i>&nbsp;
+<i>930</i>&nbsp;    //-- BEGIN INNER CLASSES --//
+<i>931</i>&nbsp;
+<i>932</i>&nbsp;    /**
+<i>933</i>&nbsp;     * Inner class for storing results, since there is the optional alternate encoding.
+<i>934</i>&nbsp;     */
+<i>935</i>&nbsp;    public class DoubleMetaphoneResult {
+<i>936</i>&nbsp;
+<b class="fc"><i>937</i>&nbsp;        private final StringBuilder primary = new StringBuilder(getMaxCodeLen());</b>
+<b class="fc"><i>938</i>&nbsp;        private final StringBuilder alternate = new StringBuilder(getMaxCodeLen());</b>
+<i>939</i>&nbsp;        private final int maxLength;
+<i>940</i>&nbsp;
+<b class="fc"><i>941</i>&nbsp;        public DoubleMetaphoneResult(final int maxLength) {</b>
+<b class="fc"><i>942</i>&nbsp;            this.maxLength = maxLength;</b>
+<b class="fc"><i>943</i>&nbsp;        }</b>
+<i>944</i>&nbsp;
+<b class="fc"><i>945</i>&nbsp;        public void append(final char value) {</b>
+<b class="fc"><i>946</i>&nbsp;            appendPrimary(value);</b>
+<b class="fc"><i>947</i>&nbsp;            appendAlternate(value);</b>
+<b class="fc"><i>948</i>&nbsp;        }</b>
+<i>949</i>&nbsp;
+<b class="fc"><i>950</i>&nbsp;        public void append(final char primary, final char alternate) {</b>
+<b class="fc"><i>951</i>&nbsp;            appendPrimary(primary);</b>
+<b class="fc"><i>952</i>&nbsp;            appendAlternate(alternate);</b>
+<b class="fc"><i>953</i>&nbsp;        }</b>
+<i>954</i>&nbsp;
+<b class="fc"><i>955</i>&nbsp;        public void appendPrimary(final char value) {</b>
+<b class="fc"><i>956</i>&nbsp;            if (this.primary.length() &lt; this.maxLength) {</b>
+<b class="fc"><i>957</i>&nbsp;                this.primary.append(value);</b>
+<i>958</i>&nbsp;            }
+<b class="fc"><i>959</i>&nbsp;        }</b>
+<i>960</i>&nbsp;
+<b class="fc"><i>961</i>&nbsp;        public void appendAlternate(final char value) {</b>
+<b class="fc"><i>962</i>&nbsp;            if (this.alternate.length() &lt; this.maxLength) {</b>
+<b class="fc"><i>963</i>&nbsp;                this.alternate.append(value);</b>
+<i>964</i>&nbsp;            }
+<b class="fc"><i>965</i>&nbsp;        }</b>
+<i>966</i>&nbsp;
+<b class="fc"><i>967</i>&nbsp;        public void append(final String value) {</b>
+<b class="fc"><i>968</i>&nbsp;            appendPrimary(value);</b>
+<b class="fc"><i>969</i>&nbsp;            appendAlternate(value);</b>
+<b class="fc"><i>970</i>&nbsp;        }</b>
+<i>971</i>&nbsp;
+<b class="fc"><i>972</i>&nbsp;        public void append(final String primary, final String alternate) {</b>
+<b class="fc"><i>973</i>&nbsp;            appendPrimary(primary);</b>
+<b class="fc"><i>974</i>&nbsp;            appendAlternate(alternate);</b>
+<b class="fc"><i>975</i>&nbsp;        }</b>
+<i>976</i>&nbsp;
+<b class="fc"><i>977</i>&nbsp;        public void appendPrimary(final String value) {</b>
+<b class="fc"><i>978</i>&nbsp;            final int addChars = this.maxLength - this.primary.length();</b>
+<b class="fc"><i>979</i>&nbsp;            if (value.length() &lt;= addChars) {</b>
+<b class="fc"><i>980</i>&nbsp;                this.primary.append(value);</b>
+<i>981</i>&nbsp;            } else {
+<b class="fc"><i>982</i>&nbsp;                this.primary.append(value.substring(0, addChars));</b>
+<i>983</i>&nbsp;            }
+<b class="fc"><i>984</i>&nbsp;        }</b>
+<i>985</i>&nbsp;
+<b class="fc"><i>986</i>&nbsp;        public void appendAlternate(final String value) {</b>
+<b class="fc"><i>987</i>&nbsp;            final int addChars = this.maxLength - this.alternate.length();</b>
+<b class="fc"><i>988</i>&nbsp;            if (value.length() &lt;= addChars) {</b>
+<b class="fc"><i>989</i>&nbsp;                this.alternate.append(value);</b>
+<i>990</i>&nbsp;            } else {
+<b class="fc"><i>991</i>&nbsp;                this.alternate.append(value.substring(0, addChars));</b>
+<i>992</i>&nbsp;            }
+<b class="fc"><i>993</i>&nbsp;        }</b>
+<i>994</i>&nbsp;
+<b class="fc"><i>995</i>&nbsp;        public String getPrimary() {</b>
+<b class="fc"><i>996</i>&nbsp;            return this.primary.toString();</b>
+<i>997</i>&nbsp;        }
+<i>998</i>&nbsp;
+<b class="fc"><i>999</i>&nbsp;        public String getAlternate() {</b>
+<b class="fc"><i>1000</i>&nbsp;            return this.alternate.toString();</b>
+<i>1001</i>&nbsp;        }
+<i>1002</i>&nbsp;
+<b class="fc"><i>1003</i>&nbsp;        public boolean isComplete() {</b>
+<b class="fc"><i>1004</i>&nbsp;            return this.primary.length() &gt;= this.maxLength &amp;&amp;</b>
+<b class="fc"><i>1005</i>&nbsp;                   this.alternate.length() &gt;= this.maxLength;</b>
+<i>1006</i>&nbsp;        }
+<i>1007</i>&nbsp;    }
+<i>1008</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 20:07</div>
+</div>
+</body>
+</html>

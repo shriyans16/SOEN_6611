@@ -1,0 +1,499 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DeviationRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DeviationRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DeviationRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.8%
+  </span>
+  <span class="absValue">
+    (16/ 85)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DeviationRenderer$State</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    30.8%
+  </span>
+  <span class="absValue">
+    (4/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    18%
+  </span>
+  <span class="absValue">
+    (16/ 89)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ----------------------
+<i>28</i>&nbsp; * DeviationRenderer.java
+<i>29</i>&nbsp; * ----------------------
+<i>30</i>&nbsp; * (C) Copyright 2007-2014, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 21-Feb-2007 : Version 1 (DG);
+<i>38</i>&nbsp; * 04-May-2007 : Set processVisibleItemsOnly flag to false (DG);
+<i>39</i>&nbsp; * 11-Apr-2008 : New override for findRangeBounds() (DG);
+<i>40</i>&nbsp; * 27-Mar-2009 : Updated findRangeBounds() to call new inherited method (DG);
+<i>41</i>&nbsp; * 01-Jul-2012 : Provide initial size for GeneralPath in drawItem(), as 
+<i>42</i>&nbsp; *               suggested by Milan Ramaiya in bug 3521736 (DG);
+<i>43</i>&nbsp; * 
+<i>44</i>&nbsp; */
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;import java.awt.AlphaComposite;
+<i>49</i>&nbsp;import java.awt.Composite;
+<i>50</i>&nbsp;import java.awt.Graphics2D;
+<i>51</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>52</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>53</i>&nbsp;import java.util.List;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>56</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>57</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>58</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>59</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>60</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>61</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>62</i>&nbsp;import org.jfree.data.Range;
+<i>63</i>&nbsp;import org.jfree.data.xy.IntervalXYDataset;
+<i>64</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>65</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;/**
+<i>68</i>&nbsp; * A specialised subclass of the {@link XYLineAndShapeRenderer} that requires
+<i>69</i>&nbsp; * an {@link IntervalXYDataset} and represents the y-interval by shading an
+<i>70</i>&nbsp; * area behind the y-values on the chart.
+<i>71</i>&nbsp; * The example shown here is generated by the
+<i>72</i>&nbsp; * &lt;code&gt;DeviationRendererDemo1.java&lt;/code&gt; program included in the
+<i>73</i>&nbsp; * JFreeChart demo collection:
+<i>74</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>75</i>&nbsp; * &lt;img src=&quot;../../../../../images/DeviationRendererSample.png&quot;
+<i>76</i>&nbsp; * alt=&quot;DeviationRendererSample.png&quot;&gt;
+<i>77</i>&nbsp; *
+<i>78</i>&nbsp; * @since 1.0.5
+<i>79</i>&nbsp; */
+<i>80</i>&nbsp;public class DeviationRenderer extends XYLineAndShapeRenderer {
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * A state object that is passed to each call to &lt;code&gt;drawItem&lt;/code&gt;.
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    public static class State extends XYLineAndShapeRenderer.State {
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;        /**
+<i>88</i>&nbsp;         * A list of coordinates for the upper y-values in the current series
+<i>89</i>&nbsp;         * (after translation into Java2D space).
+<i>90</i>&nbsp;         */
+<i>91</i>&nbsp;        public List upperCoordinates;
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;        /**
+<i>94</i>&nbsp;         * A list of coordinates for the lower y-values in the current series
+<i>95</i>&nbsp;         * (after translation into Java2D space).
+<i>96</i>&nbsp;         */
+<i>97</i>&nbsp;        public List lowerCoordinates;
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;        /**
+<i>100</i>&nbsp;         * Creates a new state instance.
+<i>101</i>&nbsp;         *
+<i>102</i>&nbsp;         * @param info  the plot rendering info.
+<i>103</i>&nbsp;         */
+<i>104</i>&nbsp;        public State(PlotRenderingInfo info) {
+<b class="nc"><i>105</i>&nbsp;            super(info);</b>
+<b class="nc"><i>106</i>&nbsp;            this.lowerCoordinates = new java.util.ArrayList();</b>
+<b class="nc"><i>107</i>&nbsp;            this.upperCoordinates = new java.util.ArrayList();</b>
+<b class="nc"><i>108</i>&nbsp;        }</b>
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /** The alpha transparency for the interval shading. */
+<i>113</i>&nbsp;    private float alpha;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * Creates a new renderer that displays lines and shapes for the data
+<i>117</i>&nbsp;     * items, as well as the shaded area for the y-interval.
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    public DeviationRenderer() {
+<b class="fc"><i>120</i>&nbsp;        this(true, true);</b>
+<b class="fc"><i>121</i>&nbsp;    }</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * Creates a new renderer.
+<i>125</i>&nbsp;     *
+<i>126</i>&nbsp;     * @param lines  show lines between data items?
+<i>127</i>&nbsp;     * @param shapes  show a shape for each data item?
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    public DeviationRenderer(boolean lines, boolean shapes) {
+<b class="fc"><i>130</i>&nbsp;        super(lines, shapes);</b>
+<b class="fc"><i>131</i>&nbsp;        super.setDrawSeriesLineAsPath(true);</b>
+<b class="fc"><i>132</i>&nbsp;        this.alpha = 0.5f;</b>
+<b class="fc"><i>133</i>&nbsp;    }</b>
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Returns the alpha transparency for the background shading.
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @return The alpha transparency.
+<i>139</i>&nbsp;     *
+<i>140</i>&nbsp;     * @see #setAlpha(float)
+<i>141</i>&nbsp;     */
+<i>142</i>&nbsp;    public float getAlpha() {
+<b class="nc"><i>143</i>&nbsp;        return this.alpha;</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Sets the alpha transparency for the background shading, and sends a
+<i>148</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @param alpha   the alpha (in the range 0.0f to 1.0f).
+<i>151</i>&nbsp;     *
+<i>152</i>&nbsp;     * @see #getAlpha()
+<i>153</i>&nbsp;     */
+<i>154</i>&nbsp;    public void setAlpha(float alpha) {
+<b class="fc"><i>155</i>&nbsp;        if (alpha &lt; 0.0f || alpha &gt; 1.0f) {</b>
+<b class="nc"><i>156</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>157</i>&nbsp;                    &quot;Requires &#39;alpha&#39; in the range 0.0 to 1.0.&quot;);
+<i>158</i>&nbsp;        }
+<b class="fc"><i>159</i>&nbsp;        this.alpha = alpha;</b>
+<b class="fc"><i>160</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>161</i>&nbsp;    }</b>
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    /**
+<i>164</i>&nbsp;     * This method is overridden so that this flag cannot be changed---it is
+<i>165</i>&nbsp;     * set to &lt;code&gt;true&lt;/code&gt; for this renderer.
+<i>166</i>&nbsp;     *
+<i>167</i>&nbsp;     * @param flag  ignored.
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    @Override
+<i>170</i>&nbsp;    public void setDrawSeriesLineAsPath(boolean flag) {
+<i>171</i>&nbsp;        // ignore
+<b class="nc"><i>172</i>&nbsp;    }</b>
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    /**
+<i>175</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>176</i>&nbsp;     * items from the specified dataset.
+<i>177</i>&nbsp;     *
+<i>178</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>181</i>&nbsp;     *         or empty).
+<i>182</i>&nbsp;     */
+<i>183</i>&nbsp;    @Override
+<i>184</i>&nbsp;    public Range findRangeBounds(XYDataset dataset) {
+<b class="nc"><i>185</i>&nbsp;        return findRangeBounds(dataset, true);</b>
+<i>186</i>&nbsp;    }
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * Initialises and returns a state object that can be passed to each
+<i>190</i>&nbsp;     * invocation of the {@link #drawItem} method.
+<i>191</i>&nbsp;     *
+<i>192</i>&nbsp;     * @param g2  the graphics target.
+<i>193</i>&nbsp;     * @param dataArea  the data area.
+<i>194</i>&nbsp;     * @param plot  the plot.
+<i>195</i>&nbsp;     * @param dataset  the dataset.
+<i>196</i>&nbsp;     * @param info  the plot rendering info.
+<i>197</i>&nbsp;     *
+<i>198</i>&nbsp;     * @return A newly initialised state object.
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    @Override
+<i>201</i>&nbsp;    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
+<i>202</i>&nbsp;            XYPlot plot, XYDataset dataset, PlotRenderingInfo info) {
+<b class="nc"><i>203</i>&nbsp;        State state = new State(info);</b>
+<b class="nc"><i>204</i>&nbsp;        state.seriesPath = new GeneralPath();</b>
+<b class="nc"><i>205</i>&nbsp;        state.setProcessVisibleItemsOnly(false);</b>
+<b class="nc"><i>206</i>&nbsp;        return state;</b>
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * Returns the number of passes (through the dataset) used by this
+<i>211</i>&nbsp;     * renderer.
+<i>212</i>&nbsp;     *
+<i>213</i>&nbsp;     * @return &lt;code&gt;3&lt;/code&gt;.
+<i>214</i>&nbsp;     */
+<i>215</i>&nbsp;    @Override
+<i>216</i>&nbsp;    public int getPassCount() {
+<b class="nc"><i>217</i>&nbsp;        return 3;</b>
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if this is the pass where the shapes are
+<i>222</i>&nbsp;     * drawn.
+<i>223</i>&nbsp;     *
+<i>224</i>&nbsp;     * @param pass  the pass index.
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @return A boolean.
+<i>227</i>&nbsp;     *
+<i>228</i>&nbsp;     * @see #isLinePass(int)
+<i>229</i>&nbsp;     */
+<i>230</i>&nbsp;    @Override
+<i>231</i>&nbsp;    protected boolean isItemPass(int pass) {
+<b class="nc"><i>232</i>&nbsp;        return (pass == 2);</b>
+<i>233</i>&nbsp;    }
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;    /**
+<i>236</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if this is the pass where the lines are
+<i>237</i>&nbsp;     * drawn.
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @param pass  the pass index.
+<i>240</i>&nbsp;     *
+<i>241</i>&nbsp;     * @return A boolean.
+<i>242</i>&nbsp;     *
+<i>243</i>&nbsp;     * @see #isItemPass(int)
+<i>244</i>&nbsp;     */
+<i>245</i>&nbsp;    @Override
+<i>246</i>&nbsp;    protected boolean isLinePass(int pass) {
+<b class="nc"><i>247</i>&nbsp;        return (pass == 1);</b>
+<i>248</i>&nbsp;    }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * Draws the visual representation of a single data item.
+<i>252</i>&nbsp;     *
+<i>253</i>&nbsp;     * @param g2  the graphics device.
+<i>254</i>&nbsp;     * @param state  the renderer state.
+<i>255</i>&nbsp;     * @param dataArea  the area within which the data is being drawn.
+<i>256</i>&nbsp;     * @param info  collects information about the drawing.
+<i>257</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>258</i>&nbsp;     *              information etc).
+<i>259</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>260</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>261</i>&nbsp;     * @param dataset  the dataset.
+<i>262</i>&nbsp;     * @param series  the series index (zero-based).
+<i>263</i>&nbsp;     * @param item  the item index (zero-based).
+<i>264</i>&nbsp;     * @param crosshairState  crosshair information for the plot
+<i>265</i>&nbsp;     *                        (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>266</i>&nbsp;     * @param pass  the pass index.
+<i>267</i>&nbsp;     */
+<i>268</i>&nbsp;    @Override
+<i>269</i>&nbsp;    public void drawItem(Graphics2D g2, XYItemRendererState state,
+<i>270</i>&nbsp;            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
+<i>271</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
+<i>272</i>&nbsp;            int series, int item, CrosshairState crosshairState, int pass) {
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;        // do nothing if item is not visible
+<b class="nc"><i>275</i>&nbsp;        if (!getItemVisible(series, item)) {</b>
+<b class="nc"><i>276</i>&nbsp;            return;</b>
+<i>277</i>&nbsp;        }
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;        // first pass draws the shading
+<b class="nc"><i>280</i>&nbsp;        if (pass == 0) {</b>
+<b class="nc"><i>281</i>&nbsp;            IntervalXYDataset intervalDataset = (IntervalXYDataset) dataset;</b>
+<b class="nc"><i>282</i>&nbsp;            State drState = (State) state;</b>
+<i>283</i>&nbsp;
+<b class="nc"><i>284</i>&nbsp;            double x = intervalDataset.getXValue(series, item);</b>
+<b class="nc"><i>285</i>&nbsp;            double yLow = intervalDataset.getStartYValue(series, item);</b>
+<b class="nc"><i>286</i>&nbsp;            double yHigh  = intervalDataset.getEndYValue(series, item);</b>
+<i>287</i>&nbsp;
+<b class="nc"><i>288</i>&nbsp;            RectangleEdge xAxisLocation = plot.getDomainAxisEdge();</b>
+<b class="nc"><i>289</i>&nbsp;            RectangleEdge yAxisLocation = plot.getRangeAxisEdge();</b>
+<i>290</i>&nbsp;
+<b class="nc"><i>291</i>&nbsp;            double xx = domainAxis.valueToJava2D(x, dataArea, xAxisLocation);</b>
+<b class="nc"><i>292</i>&nbsp;            double yyLow = rangeAxis.valueToJava2D(yLow, dataArea,</b>
+<i>293</i>&nbsp;                    yAxisLocation);
+<b class="nc"><i>294</i>&nbsp;            double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea,</b>
+<i>295</i>&nbsp;                    yAxisLocation);
+<i>296</i>&nbsp;
+<b class="nc"><i>297</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>298</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>299</i>&nbsp;                drState.lowerCoordinates.add(new double[] {yyLow, xx});</b>
+<b class="nc"><i>300</i>&nbsp;                drState.upperCoordinates.add(new double[] {yyHigh, xx});</b>
+<i>301</i>&nbsp;            }
+<b class="nc"><i>302</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>303</i>&nbsp;                drState.lowerCoordinates.add(new double[] {xx, yyLow});</b>
+<b class="nc"><i>304</i>&nbsp;                drState.upperCoordinates.add(new double[] {xx, yyHigh});</b>
+<i>305</i>&nbsp;            }
+<i>306</i>&nbsp;
+<b class="nc"><i>307</i>&nbsp;            if (item == (dataset.getItemCount(series) - 1)) {</b>
+<i>308</i>&nbsp;                // last item in series, draw the lot...
+<i>309</i>&nbsp;                // set up the alpha-transparency...
+<b class="nc"><i>310</i>&nbsp;                Composite originalComposite = g2.getComposite();</b>
+<b class="nc"><i>311</i>&nbsp;                g2.setComposite(AlphaComposite.getInstance(</b>
+<i>312</i>&nbsp;                        AlphaComposite.SRC_OVER, this.alpha));
+<b class="nc"><i>313</i>&nbsp;                g2.setPaint(getItemFillPaint(series, item));</b>
+<b class="nc"><i>314</i>&nbsp;                GeneralPath area = new GeneralPath(GeneralPath.WIND_NON_ZERO,</b>
+<b class="nc"><i>315</i>&nbsp;                        drState.lowerCoordinates.size() </b>
+<b class="nc"><i>316</i>&nbsp;                        + drState.upperCoordinates.size());</b>
+<b class="nc"><i>317</i>&nbsp;                double[] coords = (double[]) drState.lowerCoordinates.get(0);</b>
+<b class="nc"><i>318</i>&nbsp;                area.moveTo((float) coords[0], (float) coords[1]);</b>
+<b class="nc"><i>319</i>&nbsp;                for (int i = 1; i &lt; drState.lowerCoordinates.size(); i++) {</b>
+<b class="nc"><i>320</i>&nbsp;                    coords = (double[]) drState.lowerCoordinates.get(i);</b>
+<b class="nc"><i>321</i>&nbsp;                    area.lineTo((float) coords[0], (float) coords[1]);</b>
+<i>322</i>&nbsp;                }
+<b class="nc"><i>323</i>&nbsp;                int count = drState.upperCoordinates.size();</b>
+<b class="nc"><i>324</i>&nbsp;                coords = (double[]) drState.upperCoordinates.get(count - 1);</b>
+<b class="nc"><i>325</i>&nbsp;                area.lineTo((float) coords[0], (float) coords[1]);</b>
+<b class="nc"><i>326</i>&nbsp;                for (int i = count - 2; i &gt;= 0; i--) {</b>
+<b class="nc"><i>327</i>&nbsp;                    coords = (double[]) drState.upperCoordinates.get(i);</b>
+<b class="nc"><i>328</i>&nbsp;                    area.lineTo((float) coords[0], (float) coords[1]);</b>
+<i>329</i>&nbsp;                }
+<b class="nc"><i>330</i>&nbsp;                area.closePath();</b>
+<b class="nc"><i>331</i>&nbsp;                g2.fill(area);</b>
+<b class="nc"><i>332</i>&nbsp;                g2.setComposite(originalComposite);</b>
+<i>333</i>&nbsp;
+<b class="nc"><i>334</i>&nbsp;                drState.lowerCoordinates.clear();</b>
+<b class="nc"><i>335</i>&nbsp;                drState.upperCoordinates.clear();</b>
+<i>336</i>&nbsp;            }
+<i>337</i>&nbsp;        }
+<b class="nc"><i>338</i>&nbsp;        if (isLinePass(pass)) {</b>
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;            // the following code handles the line for the y-values...it&#39;s
+<i>341</i>&nbsp;            // all done by code in the super class
+<b class="nc"><i>342</i>&nbsp;            if (item == 0) {</b>
+<b class="nc"><i>343</i>&nbsp;                State s = (State) state;</b>
+<b class="nc"><i>344</i>&nbsp;                s.seriesPath.reset();</b>
+<b class="nc"><i>345</i>&nbsp;                s.setLastPointGood(false);</b>
+<i>346</i>&nbsp;            }
+<i>347</i>&nbsp;
+<b class="nc"><i>348</i>&nbsp;            if (getItemLineVisible(series, item)) {</b>
+<b class="nc"><i>349</i>&nbsp;                drawPrimaryLineAsPath(state, g2, plot, dataset, pass,</b>
+<i>350</i>&nbsp;                        series, item, domainAxis, rangeAxis, dataArea);
+<i>351</i>&nbsp;            }
+<i>352</i>&nbsp;        }
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;        // second pass adds shapes where the items are ..
+<b class="nc"><i>355</i>&nbsp;        else if (isItemPass(pass)) {</b>
+<i>356</i>&nbsp;
+<i>357</i>&nbsp;            // setup for collecting optional entity info...
+<b class="nc"><i>358</i>&nbsp;            EntityCollection entities = null;</b>
+<b class="nc"><i>359</i>&nbsp;            if (info != null) {</b>
+<b class="nc"><i>360</i>&nbsp;                entities = info.getOwner().getEntityCollection();</b>
+<i>361</i>&nbsp;            }
+<i>362</i>&nbsp;
+<b class="nc"><i>363</i>&nbsp;            drawSecondaryPass(g2, plot, dataset, pass, series, item,</b>
+<i>364</i>&nbsp;                    domainAxis, dataArea, rangeAxis, crosshairState, entities);
+<i>365</i>&nbsp;        }
+<b class="nc"><i>366</i>&nbsp;    }</b>
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;    /**
+<i>369</i>&nbsp;     * Tests this renderer for equality with an arbitrary object.
+<i>370</i>&nbsp;     *
+<i>371</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>372</i>&nbsp;     *
+<i>373</i>&nbsp;     * @return A boolean.
+<i>374</i>&nbsp;     */
+<i>375</i>&nbsp;    @Override
+<i>376</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>377</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>378</i>&nbsp;            return true;</b>
+<i>379</i>&nbsp;        }
+<b class="fc"><i>380</i>&nbsp;        if (!(obj instanceof DeviationRenderer)) {</b>
+<b class="nc"><i>381</i>&nbsp;            return false;</b>
+<i>382</i>&nbsp;        }
+<b class="fc"><i>383</i>&nbsp;        DeviationRenderer that = (DeviationRenderer) obj;</b>
+<b class="fc"><i>384</i>&nbsp;        if (this.alpha != that.alpha) {</b>
+<b class="fc"><i>385</i>&nbsp;            return false;</b>
+<i>386</i>&nbsp;        }
+<b class="fc"><i>387</i>&nbsp;        return super.equals(obj);</b>
+<i>388</i>&nbsp;    }
+<i>389</i>&nbsp;
+<i>390</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

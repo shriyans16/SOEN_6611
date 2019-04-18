@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CharEncodingTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec</a> &gt; <span class="el_source">CharEncodingTest.java</span></div><h1>CharEncodingTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Sanity checks for {@link CharEncoding}.
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L28" title="3 of 4 branches missed.">public class CharEncodingTest {</span>
+
+    /**
+     * We could make the constructor private in the future, it's a matter a style.
+     */
+    @Test
+<span class="pc bnc" id="L34" title="All 4 branches missed.">    public void testConstructor() {</span>
+<span class="fc" id="L35">        new CharEncoding();</span>
+<span class="fc" id="L36">    }</span>
+
+    @Test
+<span class="pc bnc" id="L39" title="All 4 branches missed.">    public void testIso8859_1() {</span>
+<span class="fc" id="L40">        Assert.assertEquals(&quot;ISO-8859-1&quot;, CharEncoding.ISO_8859_1);</span>
+<span class="fc" id="L41">    }</span>
+
+    @Test
+<span class="pc bnc" id="L44" title="All 4 branches missed.">    public void testUsAscii() {</span>
+<span class="fc" id="L45">        Assert.assertEquals(&quot;US-ASCII&quot;, CharEncoding.US_ASCII);</span>
+<span class="fc" id="L46">    }</span>
+
+    @Test
+<span class="pc bnc" id="L49" title="All 4 branches missed.">    public void testUtf16() {</span>
+<span class="fc" id="L50">        Assert.assertEquals(&quot;UTF-16&quot;, CharEncoding.UTF_16);</span>
+<span class="fc" id="L51">    }</span>
+
+    @Test
+<span class="pc bnc" id="L54" title="All 4 branches missed.">    public void testUtf16Be() {</span>
+<span class="fc" id="L55">        Assert.assertEquals(&quot;UTF-16BE&quot;, CharEncoding.UTF_16BE);</span>
+<span class="fc" id="L56">    }</span>
+
+    @Test
+<span class="pc bnc" id="L59" title="All 4 branches missed.">    public void testUtf16Le() {</span>
+<span class="fc" id="L60">        Assert.assertEquals(&quot;UTF-16LE&quot;, CharEncoding.UTF_16LE);</span>
+<span class="fc" id="L61">    }</span>
+
+    @Test
+<span class="pc bnc" id="L64" title="All 4 branches missed.">    public void testUtf8() {</span>
+<span class="fc" id="L65">        Assert.assertEquals(&quot;UTF-8&quot;, CharEncoding.UTF_8);</span>
+<span class="fc" id="L66">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

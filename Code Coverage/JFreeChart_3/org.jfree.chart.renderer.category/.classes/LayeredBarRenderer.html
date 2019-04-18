@@ -1,0 +1,548 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: LayeredBarRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: LayeredBarRenderer (org.jfree.chart.renderer.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LayeredBarRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.4%
+  </span>
+  <span class="absValue">
+    (70/ 165)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------------
+<i>28</i>&nbsp; * LayeredBarRenderer.java
+<i>29</i>&nbsp; * -----------------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2014, by Arnaud Lelievre and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Arnaud Lelievre (for Garden);
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *                   Zoheb Borbora;
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * Changes
+<i>37</i>&nbsp; * -------
+<i>38</i>&nbsp; * 28-Aug-2003 : Version 1 (AL);
+<i>39</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>40</i>&nbsp; * 07-Oct-2003 : Added renderer state (DG);
+<i>41</i>&nbsp; * 21-Oct-2003 : Bar width moved to renderer state (DG);
+<i>42</i>&nbsp; * 05-Nov-2004 : Modified drawItem() signature (DG);
+<i>43</i>&nbsp; * 20-Apr-2005 : Renamed CategoryLabelGenerator
+<i>44</i>&nbsp; *               --&gt; CategoryItemLabelGenerator (DG);
+<i>45</i>&nbsp; * 17-Nov-2005 : Added support for gradient paint (DG);
+<i>46</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>47</i>&nbsp; * 18-Aug-2006 : Fixed the bar width calculation to respect the maximum bar
+<i>48</i>&nbsp; *               width setting (thanks to Zoheb Borbora) (DG);
+<i>49</i>&nbsp; * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+<i>50</i>&nbsp; * 19-May-2009 : Fixed FindBugs warnings, patch by Michal Wozniak (DG);
+<i>51</i>&nbsp; *
+<i>52</i>&nbsp; */
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;package org.jfree.chart.renderer.category;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;import java.awt.GradientPaint;
+<i>57</i>&nbsp;import java.awt.Graphics2D;
+<i>58</i>&nbsp;import java.awt.Paint;
+<i>59</i>&nbsp;import java.awt.Stroke;
+<i>60</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>61</i>&nbsp;import java.io.Serializable;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;import org.jfree.chart.axis.CategoryAxis;
+<i>64</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>65</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>66</i>&nbsp;import org.jfree.chart.labels.CategoryItemLabelGenerator;
+<i>67</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>68</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>69</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>70</i>&nbsp;import org.jfree.ui.GradientPaintTransformer;
+<i>71</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>72</i>&nbsp;import org.jfree.util.ObjectList;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;/**
+<i>75</i>&nbsp; * A {@link CategoryItemRenderer} that represents data using bars which are
+<i>76</i>&nbsp; * superimposed.  The example shown here is generated by the
+<i>77</i>&nbsp; * &lt;code&gt;LayeredBarChartDemo1.java&lt;/code&gt; program included in the JFreeChart
+<i>78</i>&nbsp; * Demo Collection:
+<i>79</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>80</i>&nbsp; * &lt;img src=&quot;../../../../../images/LayeredBarRendererSample.png&quot;
+<i>81</i>&nbsp; * alt=&quot;LayeredBarRendererSample.png&quot;&gt;
+<i>82</i>&nbsp; */
+<i>83</i>&nbsp;public class LayeredBarRenderer extends BarRenderer implements Serializable {
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /** For serialization. */
+<i>86</i>&nbsp;    private static final long serialVersionUID = -8716572894780469487L;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /** A list of the width of each series bar. */
+<i>89</i>&nbsp;    protected ObjectList seriesBarWidthList;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * Default constructor.
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public LayeredBarRenderer() {
+<b class="fc"><i>95</i>&nbsp;        super();</b>
+<b class="fc"><i>96</i>&nbsp;        this.seriesBarWidthList = new ObjectList();</b>
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Returns the bar width for a series, or &lt;code&gt;Double.NaN&lt;/code&gt; if no
+<i>101</i>&nbsp;     * width has been set.
+<i>102</i>&nbsp;     *
+<i>103</i>&nbsp;     * @param series  the series index (zero based).
+<i>104</i>&nbsp;     *
+<i>105</i>&nbsp;     * @return The width for the series (1.0=100%, it is the maximum).
+<i>106</i>&nbsp;     */
+<i>107</i>&nbsp;    public double getSeriesBarWidth(int series) {
+<b class="fc"><i>108</i>&nbsp;        double result = Double.NaN;</b>
+<b class="fc"><i>109</i>&nbsp;        Number n = (Number) this.seriesBarWidthList.get(series);</b>
+<b class="fc"><i>110</i>&nbsp;        if (n != null) {</b>
+<b class="nc"><i>111</i>&nbsp;            result = n.doubleValue();</b>
+<i>112</i>&nbsp;        }
+<b class="fc"><i>113</i>&nbsp;        return result;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Sets the width of the bars of a series.
+<i>118</i>&nbsp;     *
+<i>119</i>&nbsp;     * @param series  the series index (zero based).
+<i>120</i>&nbsp;     * @param width  the width of the series bar in percentage (1.0=100%, it is
+<i>121</i>&nbsp;     *               the maximum).
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    public void setSeriesBarWidth(int series, double width) {
+<b class="nc"><i>124</i>&nbsp;        this.seriesBarWidthList.set(series, new Double(width));</b>
+<b class="nc"><i>125</i>&nbsp;    }</b>
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /**
+<i>128</i>&nbsp;     * Calculates the bar width and stores it in the renderer state.
+<i>129</i>&nbsp;     *
+<i>130</i>&nbsp;     * @param plot  the plot.
+<i>131</i>&nbsp;     * @param dataArea  the data area.
+<i>132</i>&nbsp;     * @param rendererIndex  the renderer index.
+<i>133</i>&nbsp;     * @param state  the renderer state.
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    @Override
+<i>136</i>&nbsp;    protected void calculateBarWidth(CategoryPlot plot, Rectangle2D dataArea,
+<i>137</i>&nbsp;            int rendererIndex, CategoryItemRendererState state) {
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;        // calculate the bar width - this calculation differs from the
+<i>140</i>&nbsp;        // BarRenderer calculation because the bars are layered on top of one
+<i>141</i>&nbsp;        // another, so there is effectively only one bar per category for
+<i>142</i>&nbsp;        // the purpose of the bar width calculation
+<b class="fc"><i>143</i>&nbsp;        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);</b>
+<b class="fc"><i>144</i>&nbsp;        CategoryDataset dataset = plot.getDataset(rendererIndex);</b>
+<b class="fc"><i>145</i>&nbsp;        if (dataset != null) {</b>
+<b class="fc"><i>146</i>&nbsp;            int columns = dataset.getColumnCount();</b>
+<b class="fc"><i>147</i>&nbsp;            int rows = dataset.getRowCount();</b>
+<b class="fc"><i>148</i>&nbsp;            double space = 0.0;</b>
+<b class="fc"><i>149</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>150</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>151</i>&nbsp;                space = dataArea.getHeight();</b>
+<i>152</i>&nbsp;            }
+<b class="fc"><i>153</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>154</i>&nbsp;                space = dataArea.getWidth();</b>
+<i>155</i>&nbsp;            }
+<b class="fc"><i>156</i>&nbsp;            double maxWidth = space * getMaximumBarWidth();</b>
+<b class="fc"><i>157</i>&nbsp;            double categoryMargin = 0.0;</b>
+<b class="fc"><i>158</i>&nbsp;            if (columns &gt; 1) {</b>
+<b class="nc"><i>159</i>&nbsp;                categoryMargin = domainAxis.getCategoryMargin();</b>
+<i>160</i>&nbsp;            }
+<b class="fc"><i>161</i>&nbsp;            double used = space * (1 - domainAxis.getLowerMargin()</b>
+<b class="fc"><i>162</i>&nbsp;                - domainAxis.getUpperMargin() - categoryMargin);</b>
+<b class="fc"><i>163</i>&nbsp;            if ((rows * columns) &gt; 0) {</b>
+<b class="fc"><i>164</i>&nbsp;                state.setBarWidth(Math.min(used / (dataset.getColumnCount()),</b>
+<i>165</i>&nbsp;                        maxWidth));
+<i>166</i>&nbsp;            }
+<i>167</i>&nbsp;            else {
+<b class="nc"><i>168</i>&nbsp;                state.setBarWidth(Math.min(used, maxWidth));</b>
+<i>169</i>&nbsp;            }
+<i>170</i>&nbsp;        }
+<b class="fc"><i>171</i>&nbsp;    }</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /**
+<i>174</i>&nbsp;     * Draws the bar for one item in the dataset.
+<i>175</i>&nbsp;     *
+<i>176</i>&nbsp;     * @param g2  the graphics device.
+<i>177</i>&nbsp;     * @param state  the renderer state.
+<i>178</i>&nbsp;     * @param dataArea  the plot area.
+<i>179</i>&nbsp;     * @param plot  the plot.
+<i>180</i>&nbsp;     * @param domainAxis  the domain (category) axis.
+<i>181</i>&nbsp;     * @param rangeAxis  the range (value) axis.
+<i>182</i>&nbsp;     * @param data  the data.
+<i>183</i>&nbsp;     * @param row  the row index (zero-based).
+<i>184</i>&nbsp;     * @param column  the column index (zero-based).
+<i>185</i>&nbsp;     * @param pass  the pass index.
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    @Override
+<i>188</i>&nbsp;    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+<i>189</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>190</i>&nbsp;            ValueAxis rangeAxis, CategoryDataset data, int row, int column,
+<i>191</i>&nbsp;            int pass) {
+<i>192</i>&nbsp;
+<b class="fc"><i>193</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>194</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>195</i>&nbsp;            drawHorizontalItem(g2, state, dataArea, plot, domainAxis,</b>
+<i>196</i>&nbsp;                    rangeAxis, data, row, column);
+<i>197</i>&nbsp;        }
+<b class="fc"><i>198</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>199</i>&nbsp;            drawVerticalItem(g2, state, dataArea, plot, domainAxis, rangeAxis,</b>
+<i>200</i>&nbsp;                    data, row, column);
+<i>201</i>&nbsp;        }
+<i>202</i>&nbsp;
+<b class="fc"><i>203</i>&nbsp;    }</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    /**
+<i>206</i>&nbsp;     * Draws the bar for a single (series, category) data item.
+<i>207</i>&nbsp;     *
+<i>208</i>&nbsp;     * @param g2  the graphics device.
+<i>209</i>&nbsp;     * @param state  the renderer state.
+<i>210</i>&nbsp;     * @param dataArea  the data area.
+<i>211</i>&nbsp;     * @param plot  the plot.
+<i>212</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>213</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>214</i>&nbsp;     * @param dataset  the dataset.
+<i>215</i>&nbsp;     * @param row  the row index (zero-based).
+<i>216</i>&nbsp;     * @param column  the column index (zero-based).
+<i>217</i>&nbsp;     */
+<i>218</i>&nbsp;    protected void drawHorizontalItem(Graphics2D g2,
+<i>219</i>&nbsp;                                      CategoryItemRendererState state,
+<i>220</i>&nbsp;                                      Rectangle2D dataArea,
+<i>221</i>&nbsp;                                      CategoryPlot plot,
+<i>222</i>&nbsp;                                      CategoryAxis domainAxis,
+<i>223</i>&nbsp;                                      ValueAxis rangeAxis,
+<i>224</i>&nbsp;                                      CategoryDataset dataset,
+<i>225</i>&nbsp;                                      int row,
+<i>226</i>&nbsp;                                      int column) {
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;        // nothing is drawn for null values...
+<b class="nc"><i>229</i>&nbsp;        Number dataValue = dataset.getValue(row, column);</b>
+<b class="nc"><i>230</i>&nbsp;        if (dataValue == null) {</b>
+<b class="nc"><i>231</i>&nbsp;            return;</b>
+<i>232</i>&nbsp;        }
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;        // X
+<b class="nc"><i>235</i>&nbsp;        double value = dataValue.doubleValue();</b>
+<b class="nc"><i>236</i>&nbsp;        double base = 0.0;</b>
+<b class="nc"><i>237</i>&nbsp;        double lclip = getLowerClip();</b>
+<b class="nc"><i>238</i>&nbsp;        double uclip = getUpperClip();</b>
+<b class="nc"><i>239</i>&nbsp;        if (uclip &lt;= 0.0) {  // cases 1, 2, 3 and 4</b>
+<b class="nc"><i>240</i>&nbsp;            if (value &gt;= uclip) {</b>
+<b class="nc"><i>241</i>&nbsp;                return; // bar is not visible</b>
+<i>242</i>&nbsp;            }
+<b class="nc"><i>243</i>&nbsp;            base = uclip;</b>
+<b class="nc"><i>244</i>&nbsp;            if (value &lt;= lclip) {</b>
+<b class="nc"><i>245</i>&nbsp;                value = lclip;</b>
+<i>246</i>&nbsp;            }
+<i>247</i>&nbsp;        }
+<b class="nc"><i>248</i>&nbsp;        else if (lclip &lt;= 0.0) { // cases 5, 6, 7 and 8</b>
+<b class="nc"><i>249</i>&nbsp;            if (value &gt;= uclip) {</b>
+<b class="nc"><i>250</i>&nbsp;                value = uclip;</b>
+<i>251</i>&nbsp;            }
+<i>252</i>&nbsp;            else {
+<b class="nc"><i>253</i>&nbsp;                if (value &lt;= lclip) {</b>
+<b class="nc"><i>254</i>&nbsp;                    value = lclip;</b>
+<i>255</i>&nbsp;                }
+<i>256</i>&nbsp;            }
+<i>257</i>&nbsp;        }
+<i>258</i>&nbsp;        else { // cases 9, 10, 11 and 12
+<b class="nc"><i>259</i>&nbsp;            if (value &lt;= lclip) {</b>
+<b class="nc"><i>260</i>&nbsp;                return; // bar is not visible</b>
+<i>261</i>&nbsp;            }
+<b class="nc"><i>262</i>&nbsp;            base = lclip;</b>
+<b class="nc"><i>263</i>&nbsp;            if (value &gt;= uclip) {</b>
+<b class="nc"><i>264</i>&nbsp;                value = uclip;</b>
+<i>265</i>&nbsp;            }
+<i>266</i>&nbsp;        }
+<i>267</i>&nbsp;
+<b class="nc"><i>268</i>&nbsp;        RectangleEdge edge = plot.getRangeAxisEdge();</b>
+<b class="nc"><i>269</i>&nbsp;        double transX1 = rangeAxis.valueToJava2D(base, dataArea, edge);</b>
+<b class="nc"><i>270</i>&nbsp;        double transX2 = rangeAxis.valueToJava2D(value, dataArea, edge);</b>
+<b class="nc"><i>271</i>&nbsp;        double rectX = Math.min(transX1, transX2);</b>
+<b class="nc"><i>272</i>&nbsp;        double rectWidth = Math.abs(transX2 - transX1);</b>
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;        // Y
+<b class="nc"><i>275</i>&nbsp;        double rectY = domainAxis.getCategoryMiddle(column, getColumnCount(),</b>
+<b class="nc"><i>276</i>&nbsp;                dataArea, plot.getDomainAxisEdge()) - state.getBarWidth() / 2.0;</b>
+<i>277</i>&nbsp;
+<b class="nc"><i>278</i>&nbsp;        int seriesCount = getRowCount();</b>
+<i>279</i>&nbsp;
+<i>280</i>&nbsp;        // draw the bar...
+<b class="nc"><i>281</i>&nbsp;        double shift = 0.0;</b>
+<i>282</i>&nbsp;        double rectHeight;
+<b class="nc"><i>283</i>&nbsp;        double widthFactor = 1.0;</b>
+<b class="nc"><i>284</i>&nbsp;        double seriesBarWidth = getSeriesBarWidth(row);</b>
+<b class="nc"><i>285</i>&nbsp;        if (!Double.isNaN(seriesBarWidth)) {</b>
+<b class="nc"><i>286</i>&nbsp;            widthFactor = seriesBarWidth;</b>
+<i>287</i>&nbsp;        }
+<b class="nc"><i>288</i>&nbsp;        rectHeight = widthFactor * state.getBarWidth();</b>
+<b class="nc"><i>289</i>&nbsp;        rectY = rectY + (1 - widthFactor) * state.getBarWidth() / 2.0;</b>
+<b class="nc"><i>290</i>&nbsp;        if (seriesCount &gt; 1) {</b>
+<b class="nc"><i>291</i>&nbsp;            shift = rectHeight * 0.20 / (seriesCount - 1);</b>
+<i>292</i>&nbsp;        }
+<i>293</i>&nbsp;
+<b class="nc"><i>294</i>&nbsp;        Rectangle2D bar = new Rectangle2D.Double(rectX,</b>
+<i>295</i>&nbsp;                (rectY + ((seriesCount - 1 - row) * shift)), rectWidth,
+<i>296</i>&nbsp;                (rectHeight - (seriesCount - 1 - row) * shift * 2));
+<i>297</i>&nbsp;
+<b class="nc"><i>298</i>&nbsp;        Paint itemPaint = getItemPaint(row, column);</b>
+<b class="nc"><i>299</i>&nbsp;        GradientPaintTransformer t = getGradientPaintTransformer();</b>
+<b class="nc"><i>300</i>&nbsp;        if (t != null &amp;&amp; itemPaint instanceof GradientPaint) {</b>
+<b class="nc"><i>301</i>&nbsp;            itemPaint = t.transform((GradientPaint) itemPaint, bar);</b>
+<i>302</i>&nbsp;        }
+<b class="nc"><i>303</i>&nbsp;        g2.setPaint(itemPaint);</b>
+<b class="nc"><i>304</i>&nbsp;        g2.fill(bar);</b>
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;        // draw the outline...
+<b class="nc"><i>307</i>&nbsp;        if (isDrawBarOutline()</b>
+<b class="nc"><i>308</i>&nbsp;                &amp;&amp; state.getBarWidth() &gt; BAR_OUTLINE_WIDTH_THRESHOLD) {</b>
+<b class="nc"><i>309</i>&nbsp;            Stroke stroke = getItemOutlineStroke(row, column);</b>
+<b class="nc"><i>310</i>&nbsp;            Paint paint = getItemOutlinePaint(row, column);</b>
+<b class="nc"><i>311</i>&nbsp;            if (stroke != null &amp;&amp; paint != null) {</b>
+<b class="nc"><i>312</i>&nbsp;                g2.setStroke(stroke);</b>
+<b class="nc"><i>313</i>&nbsp;                g2.setPaint(paint);</b>
+<b class="nc"><i>314</i>&nbsp;                g2.draw(bar);</b>
+<i>315</i>&nbsp;            }
+<i>316</i>&nbsp;        }
+<i>317</i>&nbsp;
+<b class="nc"><i>318</i>&nbsp;        CategoryItemLabelGenerator generator</b>
+<b class="nc"><i>319</i>&nbsp;            = getItemLabelGenerator(row, column);</b>
+<b class="nc"><i>320</i>&nbsp;        if (generator != null &amp;&amp; isItemLabelVisible(row, column)) {</b>
+<b class="nc"><i>321</i>&nbsp;            drawItemLabel(g2, dataset, row, column, plot, generator, bar,</b>
+<i>322</i>&nbsp;                    (transX1 &gt; transX2));
+<i>323</i>&nbsp;        }
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;        // collect entity and tool tip information...
+<b class="nc"><i>326</i>&nbsp;        EntityCollection entities = state.getEntityCollection();</b>
+<b class="nc"><i>327</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>328</i>&nbsp;            addItemEntity(entities, dataset, row, column, bar);</b>
+<i>329</i>&nbsp;        }
+<b class="nc"><i>330</i>&nbsp;    }</b>
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;    /**
+<i>333</i>&nbsp;     * Draws the bar for a single (series, category) data item.
+<i>334</i>&nbsp;     *
+<i>335</i>&nbsp;     * @param g2  the graphics device.
+<i>336</i>&nbsp;     * @param state  the renderer state.
+<i>337</i>&nbsp;     * @param dataArea  the data area.
+<i>338</i>&nbsp;     * @param plot  the plot.
+<i>339</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>340</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>341</i>&nbsp;     * @param dataset  the dataset.
+<i>342</i>&nbsp;     * @param row  the row index (zero-based).
+<i>343</i>&nbsp;     * @param column  the column index (zero-based).
+<i>344</i>&nbsp;     */
+<i>345</i>&nbsp;    protected void drawVerticalItem(Graphics2D g2,
+<i>346</i>&nbsp;                                    CategoryItemRendererState state,
+<i>347</i>&nbsp;                                    Rectangle2D dataArea,
+<i>348</i>&nbsp;                                    CategoryPlot plot,
+<i>349</i>&nbsp;                                    CategoryAxis domainAxis,
+<i>350</i>&nbsp;                                    ValueAxis rangeAxis,
+<i>351</i>&nbsp;                                    CategoryDataset dataset,
+<i>352</i>&nbsp;                                    int row,
+<i>353</i>&nbsp;                                    int column) {
+<i>354</i>&nbsp;
+<i>355</i>&nbsp;        // nothing is drawn for null values...
+<b class="fc"><i>356</i>&nbsp;        Number dataValue = dataset.getValue(row, column);</b>
+<b class="fc"><i>357</i>&nbsp;        if (dataValue == null) {</b>
+<b class="nc"><i>358</i>&nbsp;            return;</b>
+<i>359</i>&nbsp;        }
+<i>360</i>&nbsp;
+<i>361</i>&nbsp;        // BAR X
+<b class="fc"><i>362</i>&nbsp;        double rectX = domainAxis.getCategoryMiddle(column, getColumnCount(),</b>
+<b class="fc"><i>363</i>&nbsp;                dataArea, plot.getDomainAxisEdge()) - state.getBarWidth() / 2.0;</b>
+<i>364</i>&nbsp;
+<b class="fc"><i>365</i>&nbsp;        int seriesCount = getRowCount();</b>
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;        // BAR Y
+<b class="fc"><i>368</i>&nbsp;        double value = dataValue.doubleValue();</b>
+<b class="fc"><i>369</i>&nbsp;        double base = 0.0;</b>
+<b class="fc"><i>370</i>&nbsp;        double lclip = getLowerClip();</b>
+<b class="fc"><i>371</i>&nbsp;        double uclip = getUpperClip();</b>
+<i>372</i>&nbsp;
+<b class="fc"><i>373</i>&nbsp;        if (uclip &lt;= 0.0) {  // cases 1, 2, 3 and 4</b>
+<b class="nc"><i>374</i>&nbsp;            if (value &gt;= uclip) {</b>
+<b class="nc"><i>375</i>&nbsp;                return; // bar is not visible</b>
+<i>376</i>&nbsp;            }
+<b class="nc"><i>377</i>&nbsp;            base = uclip;</b>
+<b class="nc"><i>378</i>&nbsp;            if (value &lt;= lclip) {</b>
+<b class="nc"><i>379</i>&nbsp;                value = lclip;</b>
+<i>380</i>&nbsp;            }
+<i>381</i>&nbsp;        }
+<b class="fc"><i>382</i>&nbsp;        else if (lclip &lt;= 0.0) { // cases 5, 6, 7 and 8</b>
+<b class="fc"><i>383</i>&nbsp;            if (value &gt;= uclip) {</b>
+<b class="nc"><i>384</i>&nbsp;                value = uclip;</b>
+<i>385</i>&nbsp;            }
+<i>386</i>&nbsp;            else {
+<b class="fc"><i>387</i>&nbsp;                if (value &lt;= lclip) {</b>
+<b class="nc"><i>388</i>&nbsp;                    value = lclip;</b>
+<i>389</i>&nbsp;                }
+<i>390</i>&nbsp;            }
+<i>391</i>&nbsp;        }
+<i>392</i>&nbsp;        else { // cases 9, 10, 11 and 12
+<b class="nc"><i>393</i>&nbsp;            if (value &lt;= lclip) {</b>
+<b class="nc"><i>394</i>&nbsp;                return; // bar is not visible</b>
+<i>395</i>&nbsp;            }
+<b class="nc"><i>396</i>&nbsp;            base = getLowerClip();</b>
+<b class="nc"><i>397</i>&nbsp;            if (value &gt;= uclip) {</b>
+<b class="nc"><i>398</i>&nbsp;               value = uclip;</b>
+<i>399</i>&nbsp;            }
+<i>400</i>&nbsp;        }
+<i>401</i>&nbsp;
+<b class="fc"><i>402</i>&nbsp;        RectangleEdge edge = plot.getRangeAxisEdge();</b>
+<b class="fc"><i>403</i>&nbsp;        double transY1 = rangeAxis.valueToJava2D(base, dataArea, edge);</b>
+<b class="fc"><i>404</i>&nbsp;        double transY2 = rangeAxis.valueToJava2D(value, dataArea, edge);</b>
+<b class="fc"><i>405</i>&nbsp;        double rectY = Math.min(transY2, transY1);</b>
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;        double rectWidth;
+<b class="fc"><i>408</i>&nbsp;        double rectHeight = Math.abs(transY2 - transY1);</b>
+<i>409</i>&nbsp;
+<i>410</i>&nbsp;        // draw the bar...
+<b class="fc"><i>411</i>&nbsp;        double shift = 0.0;</b>
+<b class="fc"><i>412</i>&nbsp;        double widthFactor = 1.0;</b>
+<b class="fc"><i>413</i>&nbsp;        double seriesBarWidth = getSeriesBarWidth(row);</b>
+<b class="fc"><i>414</i>&nbsp;        if (!Double.isNaN(seriesBarWidth)) {</b>
+<b class="nc"><i>415</i>&nbsp;            widthFactor = seriesBarWidth;</b>
+<i>416</i>&nbsp;        }
+<b class="fc"><i>417</i>&nbsp;        rectWidth = widthFactor * state.getBarWidth();</b>
+<b class="fc"><i>418</i>&nbsp;        rectX = rectX + (1 - widthFactor) * state.getBarWidth() / 2.0;</b>
+<b class="fc"><i>419</i>&nbsp;        if (seriesCount &gt; 1) {</b>
+<i>420</i>&nbsp;            // needs to be improved !!!
+<b class="nc"><i>421</i>&nbsp;            shift = rectWidth * 0.20 / (seriesCount - 1);</b>
+<i>422</i>&nbsp;        }
+<i>423</i>&nbsp;
+<b class="fc"><i>424</i>&nbsp;        Rectangle2D bar = new Rectangle2D.Double(</b>
+<i>425</i>&nbsp;            (rectX + ((seriesCount - 1 - row) * shift)), rectY,
+<i>426</i>&nbsp;            (rectWidth - (seriesCount - 1 - row) * shift * 2), rectHeight);
+<b class="fc"><i>427</i>&nbsp;        Paint itemPaint = getItemPaint(row, column);</b>
+<b class="fc"><i>428</i>&nbsp;        GradientPaintTransformer t = getGradientPaintTransformer();</b>
+<b class="fc"><i>429</i>&nbsp;        if (t != null &amp;&amp; itemPaint instanceof GradientPaint) {</b>
+<b class="nc"><i>430</i>&nbsp;            itemPaint = t.transform((GradientPaint) itemPaint, bar);</b>
+<i>431</i>&nbsp;        }
+<b class="fc"><i>432</i>&nbsp;        g2.setPaint(itemPaint);</b>
+<b class="fc"><i>433</i>&nbsp;        g2.fill(bar);</b>
+<i>434</i>&nbsp;
+<i>435</i>&nbsp;        // draw the outline...
+<b class="fc"><i>436</i>&nbsp;        if (isDrawBarOutline()</b>
+<b class="nc"><i>437</i>&nbsp;                &amp;&amp; state.getBarWidth() &gt; BAR_OUTLINE_WIDTH_THRESHOLD) {</b>
+<b class="nc"><i>438</i>&nbsp;            Stroke stroke = getItemOutlineStroke(row, column);</b>
+<b class="nc"><i>439</i>&nbsp;            Paint paint = getItemOutlinePaint(row, column);</b>
+<b class="nc"><i>440</i>&nbsp;            if (stroke != null &amp;&amp; paint != null) {</b>
+<b class="nc"><i>441</i>&nbsp;                g2.setStroke(stroke);</b>
+<b class="nc"><i>442</i>&nbsp;                g2.setPaint(paint);</b>
+<b class="nc"><i>443</i>&nbsp;                g2.draw(bar);</b>
+<i>444</i>&nbsp;            }
+<i>445</i>&nbsp;        }
+<i>446</i>&nbsp;
+<i>447</i>&nbsp;        // draw the item labels if there are any...
+<b class="fc"><i>448</i>&nbsp;        double transX1 = rangeAxis.valueToJava2D(base, dataArea, edge);</b>
+<b class="fc"><i>449</i>&nbsp;        double transX2 = rangeAxis.valueToJava2D(value, dataArea, edge);</b>
+<i>450</i>&nbsp;
+<b class="fc"><i>451</i>&nbsp;        CategoryItemLabelGenerator generator</b>
+<b class="fc"><i>452</i>&nbsp;            = getItemLabelGenerator(row, column);</b>
+<b class="fc"><i>453</i>&nbsp;        if (generator != null &amp;&amp; isItemLabelVisible(row, column)) {</b>
+<b class="nc"><i>454</i>&nbsp;            drawItemLabel(g2, dataset, row, column, plot, generator, bar,</b>
+<i>455</i>&nbsp;                    (transX1 &gt; transX2));
+<i>456</i>&nbsp;        }
+<i>457</i>&nbsp;
+<i>458</i>&nbsp;        // collect entity and tool tip information...
+<b class="fc"><i>459</i>&nbsp;        EntityCollection entities = state.getEntityCollection();</b>
+<b class="fc"><i>460</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>461</i>&nbsp;            addItemEntity(entities, dataset, row, column, bar);</b>
+<i>462</i>&nbsp;        }
+<b class="fc"><i>463</i>&nbsp;    }</b>
+<i>464</i>&nbsp;
+<i>465</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

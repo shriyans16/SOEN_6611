@@ -1,0 +1,923 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BarRenderer3D</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BarRenderer3D (org.jfree.chart.renderer.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BarRenderer3D</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.9%
+  </span>
+  <span class="absValue">
+    (7/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.2%
+  </span>
+  <span class="absValue">
+    (32/ 347)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ------------------
+<i>28</i>&nbsp; * BarRenderer3D.java
+<i>29</i>&nbsp; * ------------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2014, by Serge V. Grachov and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Serge V. Grachov;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *                   Tin Luu;
+<i>35</i>&nbsp; *                   Milo Simpson;
+<i>36</i>&nbsp; *                   Richard Atkinson;
+<i>37</i>&nbsp; *                   Rich Unger;
+<i>38</i>&nbsp; *                   Christian W. Zuckschwerdt;
+<i>39</i>&nbsp; *                   DaveLaw (dave ATT davelaw DOTT de) - patch 3204823;
+<i>40</i>&nbsp; *
+<i>41</i>&nbsp; * Changes
+<i>42</i>&nbsp; * -------
+<i>43</i>&nbsp; * 31-Oct-2001 : First version, contributed by Serge V. Grachov (DG);
+<i>44</i>&nbsp; * 15-Nov-2001 : Modified to allow for null data values (DG);
+<i>45</i>&nbsp; * 13-Dec-2001 : Added tooltips (DG);
+<i>46</i>&nbsp; * 16-Jan-2002 : Added fix for single category or single series datasets,
+<i>47</i>&nbsp; *               pointed out by Taoufik Romdhane (DG);
+<i>48</i>&nbsp; * 24-May-2002 : Incorporated tooltips into chart entities (DG);
+<i>49</i>&nbsp; * 11-Jun-2002 : Added check for (permitted) null info object, bug and fix
+<i>50</i>&nbsp; *               reported by David Basten.  Also updated Javadocs. (DG);
+<i>51</i>&nbsp; * 19-Jun-2002 : Added code to draw labels on bars (TL);
+<i>52</i>&nbsp; * 26-Jun-2002 : Added bar clipping to avoid PRExceptions (DG);
+<i>53</i>&nbsp; * 05-Aug-2002 : Small modification to drawCategoryItem method to support URLs
+<i>54</i>&nbsp; *               for HTML image maps (RA);
+<i>55</i>&nbsp; * 06-Aug-2002 : Value labels now use number formatter, thanks to Milo
+<i>56</i>&nbsp; *               Simpson (DG);
+<i>57</i>&nbsp; * 08-Aug-2002 : Applied fixed in bug id 592218 (DG);
+<i>58</i>&nbsp; * 20-Sep-2002 : Added fix for categoryPaint by Rich Unger, and fixed errors
+<i>59</i>&nbsp; *               reported by Checkstyle (DG);
+<i>60</i>&nbsp; * 24-Oct-2002 : Amendments for changes in CategoryDataset interface and
+<i>61</i>&nbsp; *               CategoryToolTipGenerator interface (DG);
+<i>62</i>&nbsp; * 05-Nov-2002 : Replaced references to CategoryDataset with TableDataset (DG);
+<i>63</i>&nbsp; * 06-Nov-2002 : Moved to the com.jrefinery.chart.renderer package (DG);
+<i>64</i>&nbsp; * 28-Jan-2003 : Added an attribute to control the shading of the left and
+<i>65</i>&nbsp; *               bottom walls in the plot background (DG);
+<i>66</i>&nbsp; * 25-Mar-2003 : Implemented Serializable (DG);
+<i>67</i>&nbsp; * 10-Apr-2003 : Removed category paint usage (DG);
+<i>68</i>&nbsp; * 13-May-2003 : Renamed VerticalBarRenderer3D --&gt; BarRenderer3D and merged with
+<i>69</i>&nbsp; *               HorizontalBarRenderer3D (DG);
+<i>70</i>&nbsp; * 30-Jul-2003 : Modified entity constructor (CZ);
+<i>71</i>&nbsp; * 19-Aug-2003 : Implemented Cloneable and PublicCloneable (DG);
+<i>72</i>&nbsp; * 07-Oct-2003 : Added renderer state (DG);
+<i>73</i>&nbsp; * 08-Oct-2003 : Removed clipping (replaced with flag in CategoryPlot to
+<i>74</i>&nbsp; *               control order in which the data items are processed) (DG);
+<i>75</i>&nbsp; * 20-Oct-2003 : Fixed bug (outline stroke not being used for bar
+<i>76</i>&nbsp; *               outlines) (DG);
+<i>77</i>&nbsp; * 21-Oct-2003 : Bar width moved into CategoryItemRendererState (DG);
+<i>78</i>&nbsp; * 24-Nov-2003 : Fixed bug 846324 (item labels not showing) (DG);
+<i>79</i>&nbsp; * 27-Nov-2003 : Added code to respect maxBarWidth setting (DG);
+<i>80</i>&nbsp; * 02-Feb-2004 : Fixed bug where &#39;drawBarOutline&#39; flag is not respected (DG);
+<i>81</i>&nbsp; * 10-Feb-2004 : Small change to drawItem() method to make cut-and-paste
+<i>82</i>&nbsp; *               overriding easier (DG);
+<i>83</i>&nbsp; * 04-Oct-2004 : Fixed bug with item label positioning when plot alignment is
+<i>84</i>&nbsp; *               horizontal (DG);
+<i>85</i>&nbsp; * 05-Nov-2004 : Modified drawItem() signature (DG);
+<i>86</i>&nbsp; * 20-Apr-2005 : Renamed CategoryLabelGenerator
+<i>87</i>&nbsp; *               --&gt; CategoryItemLabelGenerator (DG);
+<i>88</i>&nbsp; * 25-Apr-2005 : Override initialise() method to fix bug 1189642 (DG);
+<i>89</i>&nbsp; * 09-Jun-2005 : Use addEntityItem from super class (DG);
+<i>90</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>91</i>&nbsp; * 07-Dec-2006 : Implemented equals() override (DG);
+<i>92</i>&nbsp; * 17-Jan-2007 : Fixed bug in drawDomainGridline() method (DG);
+<i>93</i>&nbsp; * 03-Apr-2007 : Fixed bugs in drawBackground() method (DG);
+<i>94</i>&nbsp; * 16-Oct-2007 : Fixed bug in range marker drawing (DG);
+<i>95</i>&nbsp; * 19-Mar-2009 : Override for drawRangeLine() method (DG);
+<i>96</i>&nbsp; * 11-Jun-2012 : Utilise new PaintAlpha class - patch 3204823 from DaveLaw (DG);
+<i>97</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>98</i>&nbsp; * 11-Mar-2014 : Check visible series (DG);
+<i>99</i>&nbsp; * 
+<i>100</i>&nbsp; */
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;package org.jfree.chart.renderer.category;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;import java.awt.AlphaComposite;
+<i>105</i>&nbsp;import java.awt.Color;
+<i>106</i>&nbsp;import java.awt.Composite;
+<i>107</i>&nbsp;import java.awt.Font;
+<i>108</i>&nbsp;import java.awt.Graphics2D;
+<i>109</i>&nbsp;import java.awt.Image;
+<i>110</i>&nbsp;import java.awt.Paint;
+<i>111</i>&nbsp;import java.awt.Stroke;
+<i>112</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>113</i>&nbsp;import java.awt.geom.Line2D;
+<i>114</i>&nbsp;import java.awt.geom.Point2D;
+<i>115</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>116</i>&nbsp;import java.io.IOException;
+<i>117</i>&nbsp;import java.io.ObjectInputStream;
+<i>118</i>&nbsp;import java.io.ObjectOutputStream;
+<i>119</i>&nbsp;import java.io.Serializable;
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;import org.jfree.chart.Effect3D;
+<i>122</i>&nbsp;import org.jfree.chart.axis.CategoryAxis;
+<i>123</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>124</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>125</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>126</i>&nbsp;import org.jfree.chart.labels.CategoryItemLabelGenerator;
+<i>127</i>&nbsp;import org.jfree.chart.labels.ItemLabelAnchor;
+<i>128</i>&nbsp;import org.jfree.chart.labels.ItemLabelPosition;
+<i>129</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>130</i>&nbsp;import org.jfree.chart.plot.Marker;
+<i>131</i>&nbsp;import org.jfree.chart.plot.Plot;
+<i>132</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>133</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>134</i>&nbsp;import org.jfree.chart.plot.ValueMarker;
+<i>135</i>&nbsp;import org.jfree.chart.util.PaintAlpha;
+<i>136</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>137</i>&nbsp;import org.jfree.data.Range;
+<i>138</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>139</i>&nbsp;import org.jfree.io.SerialUtilities;
+<i>140</i>&nbsp;import org.jfree.text.TextUtilities;
+<i>141</i>&nbsp;import org.jfree.ui.LengthAdjustmentType;
+<i>142</i>&nbsp;import org.jfree.ui.RectangleAnchor;
+<i>143</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>144</i>&nbsp;import org.jfree.ui.TextAnchor;
+<i>145</i>&nbsp;import org.jfree.util.PaintUtilities;
+<i>146</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;/**
+<i>149</i>&nbsp; * A renderer for bars with a 3D effect, for use with the
+<i>150</i>&nbsp; * {@link CategoryPlot} class.  The example shown here is generated
+<i>151</i>&nbsp; * by the &lt;code&gt;BarChart3DDemo1.java&lt;/code&gt; program included in the JFreeChart
+<i>152</i>&nbsp; * Demo Collection:
+<i>153</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>154</i>&nbsp; * &lt;img src=&quot;../../../../../images/BarRenderer3DSample.png&quot;
+<i>155</i>&nbsp; * alt=&quot;BarRenderer3DSample.png&quot;&gt;
+<i>156</i>&nbsp; */
+<i>157</i>&nbsp;public class BarRenderer3D extends BarRenderer
+<i>158</i>&nbsp;        implements Effect3D, Cloneable, PublicCloneable, Serializable {
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /** For serialization. */
+<i>161</i>&nbsp;    private static final long serialVersionUID = 7686976503536003636L;
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    /** The default x-offset for the 3D effect. */
+<i>164</i>&nbsp;    public static final double DEFAULT_X_OFFSET = 12.0;
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;    /** The default y-offset for the 3D effect. */
+<i>167</i>&nbsp;    public static final double DEFAULT_Y_OFFSET = 8.0;
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    /** The default wall paint. */
+<b class="fc"><i>170</i>&nbsp;    public static final Paint DEFAULT_WALL_PAINT = new Color(0xDD, 0xDD, 0xDD);</b>
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    /** The size of x-offset for the 3D effect. */
+<i>173</i>&nbsp;    private double xOffset;
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /** The size of y-offset for the 3D effect. */
+<i>176</i>&nbsp;    private double yOffset;
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    /** The paint used to shade the left and lower 3D wall. */
+<i>179</i>&nbsp;    private transient Paint wallPaint;
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /**
+<i>182</i>&nbsp;     * Default constructor, creates a renderer with a default &#39;3D effect&#39;.
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    public BarRenderer3D() {
+<b class="fc"><i>185</i>&nbsp;        this(DEFAULT_X_OFFSET, DEFAULT_Y_OFFSET);</b>
+<b class="fc"><i>186</i>&nbsp;    }</b>
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * Constructs a new renderer with the specified &#39;3D effect&#39;.
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @param xOffset  the x-offset for the 3D effect.
+<i>192</i>&nbsp;     * @param yOffset  the y-offset for the 3D effect.
+<i>193</i>&nbsp;     */
+<i>194</i>&nbsp;    public BarRenderer3D(double xOffset, double yOffset) {
+<i>195</i>&nbsp;
+<b class="fc"><i>196</i>&nbsp;        super();</b>
+<b class="fc"><i>197</i>&nbsp;        this.xOffset = xOffset;</b>
+<b class="fc"><i>198</i>&nbsp;        this.yOffset = yOffset;</b>
+<b class="fc"><i>199</i>&nbsp;        this.wallPaint = DEFAULT_WALL_PAINT;</b>
+<i>200</i>&nbsp;        // set the default item label positions
+<b class="fc"><i>201</i>&nbsp;        ItemLabelPosition p1 = new ItemLabelPosition(ItemLabelAnchor.INSIDE12,</b>
+<i>202</i>&nbsp;                TextAnchor.TOP_CENTER);
+<b class="fc"><i>203</i>&nbsp;        setBasePositiveItemLabelPosition(p1);</b>
+<b class="fc"><i>204</i>&nbsp;        ItemLabelPosition p2 = new ItemLabelPosition(ItemLabelAnchor.INSIDE12,</b>
+<i>205</i>&nbsp;                TextAnchor.TOP_CENTER);
+<b class="fc"><i>206</i>&nbsp;        setBaseNegativeItemLabelPosition(p2);</b>
+<i>207</i>&nbsp;
+<b class="fc"><i>208</i>&nbsp;    }</b>
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    /**
+<i>211</i>&nbsp;     * Returns the x-offset for the 3D effect.
+<i>212</i>&nbsp;     *
+<i>213</i>&nbsp;     * @return The 3D effect.
+<i>214</i>&nbsp;     *
+<i>215</i>&nbsp;     * @see #getYOffset()
+<i>216</i>&nbsp;     */
+<i>217</i>&nbsp;    @Override
+<i>218</i>&nbsp;    public double getXOffset() {
+<b class="nc"><i>219</i>&nbsp;        return this.xOffset;</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * Returns the y-offset for the 3D effect.
+<i>224</i>&nbsp;     *
+<i>225</i>&nbsp;     * @return The 3D effect.
+<i>226</i>&nbsp;     */
+<i>227</i>&nbsp;    @Override
+<i>228</i>&nbsp;    public double getYOffset() {
+<b class="nc"><i>229</i>&nbsp;        return this.yOffset;</b>
+<i>230</i>&nbsp;    }
+<i>231</i>&nbsp;
+<i>232</i>&nbsp;    /**
+<i>233</i>&nbsp;     * Returns the paint used to highlight the left and bottom wall in the plot
+<i>234</i>&nbsp;     * background.
+<i>235</i>&nbsp;     *
+<i>236</i>&nbsp;     * @return The paint.
+<i>237</i>&nbsp;     *
+<i>238</i>&nbsp;     * @see #setWallPaint(Paint)
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    public Paint getWallPaint() {
+<b class="nc"><i>241</i>&nbsp;        return this.wallPaint;</b>
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /**
+<i>245</i>&nbsp;     * Sets the paint used to hightlight the left and bottom walls in the plot
+<i>246</i>&nbsp;     * background, and sends a {@link RendererChangeEvent} to all registered
+<i>247</i>&nbsp;     * listeners.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @see #getWallPaint()
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    public void setWallPaint(Paint paint) {
+<b class="fc"><i>254</i>&nbsp;        ParamChecks.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>255</i>&nbsp;        this.wallPaint = paint;</b>
+<b class="fc"><i>256</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>257</i>&nbsp;    }</b>
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    /**
+<i>261</i>&nbsp;     * Initialises the renderer and returns a state object that will be passed
+<i>262</i>&nbsp;     * to subsequent calls to the drawItem method.  This method gets called
+<i>263</i>&nbsp;     * once at the start of the process of drawing a chart.
+<i>264</i>&nbsp;     *
+<i>265</i>&nbsp;     * @param g2  the graphics device.
+<i>266</i>&nbsp;     * @param dataArea  the area in which the data is to be plotted.
+<i>267</i>&nbsp;     * @param plot  the plot.
+<i>268</i>&nbsp;     * @param rendererIndex  the renderer index.
+<i>269</i>&nbsp;     * @param info  collects chart rendering information for return to caller.
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @return The renderer state.
+<i>272</i>&nbsp;     */
+<i>273</i>&nbsp;    @Override
+<i>274</i>&nbsp;    public CategoryItemRendererState initialise(Graphics2D g2, 
+<i>275</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,
+<i>276</i>&nbsp;            PlotRenderingInfo info) {
+<i>277</i>&nbsp;
+<b class="nc"><i>278</i>&nbsp;        Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX(),</b>
+<b class="nc"><i>279</i>&nbsp;                dataArea.getY() + getYOffset(), dataArea.getWidth()</b>
+<b class="nc"><i>280</i>&nbsp;                - getXOffset(), dataArea.getHeight() - getYOffset());</b>
+<b class="nc"><i>281</i>&nbsp;        CategoryItemRendererState state = super.initialise(g2, adjusted, plot,</b>
+<i>282</i>&nbsp;                rendererIndex, info);
+<b class="nc"><i>283</i>&nbsp;        return state;</b>
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;    }
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;    /**
+<i>288</i>&nbsp;     * Draws the background for the plot.
+<i>289</i>&nbsp;     *
+<i>290</i>&nbsp;     * @param g2  the graphics device.
+<i>291</i>&nbsp;     * @param plot  the plot.
+<i>292</i>&nbsp;     * @param dataArea  the area inside the axes.
+<i>293</i>&nbsp;     */
+<i>294</i>&nbsp;    @Override
+<i>295</i>&nbsp;    public void drawBackground(Graphics2D g2, CategoryPlot plot,
+<i>296</i>&nbsp;            Rectangle2D dataArea) {
+<i>297</i>&nbsp;
+<b class="nc"><i>298</i>&nbsp;        float x0 = (float) dataArea.getX();</b>
+<b class="nc"><i>299</i>&nbsp;        float x1 = x0 + (float) Math.abs(this.xOffset);</b>
+<b class="nc"><i>300</i>&nbsp;        float x3 = (float) dataArea.getMaxX();</b>
+<b class="nc"><i>301</i>&nbsp;        float x2 = x3 - (float) Math.abs(this.xOffset);</b>
+<i>302</i>&nbsp;
+<b class="nc"><i>303</i>&nbsp;        float y0 = (float) dataArea.getMaxY();</b>
+<b class="nc"><i>304</i>&nbsp;        float y1 = y0 - (float) Math.abs(this.yOffset);</b>
+<b class="nc"><i>305</i>&nbsp;        float y3 = (float) dataArea.getMinY();</b>
+<b class="nc"><i>306</i>&nbsp;        float y2 = y3 + (float) Math.abs(this.yOffset);</b>
+<i>307</i>&nbsp;
+<b class="nc"><i>308</i>&nbsp;        GeneralPath clip = new GeneralPath();</b>
+<b class="nc"><i>309</i>&nbsp;        clip.moveTo(x0, y0);</b>
+<b class="nc"><i>310</i>&nbsp;        clip.lineTo(x0, y2);</b>
+<b class="nc"><i>311</i>&nbsp;        clip.lineTo(x1, y3);</b>
+<b class="nc"><i>312</i>&nbsp;        clip.lineTo(x3, y3);</b>
+<b class="nc"><i>313</i>&nbsp;        clip.lineTo(x3, y1);</b>
+<b class="nc"><i>314</i>&nbsp;        clip.lineTo(x2, y0);</b>
+<b class="nc"><i>315</i>&nbsp;        clip.closePath();</b>
+<i>316</i>&nbsp;
+<b class="nc"><i>317</i>&nbsp;        Composite originalComposite = g2.getComposite();</b>
+<b class="nc"><i>318</i>&nbsp;        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,</b>
+<b class="nc"><i>319</i>&nbsp;                plot.getBackgroundAlpha()));</b>
+<i>320</i>&nbsp;
+<i>321</i>&nbsp;        // fill background...
+<b class="nc"><i>322</i>&nbsp;        Paint backgroundPaint = plot.getBackgroundPaint();</b>
+<b class="nc"><i>323</i>&nbsp;        if (backgroundPaint != null) {</b>
+<b class="nc"><i>324</i>&nbsp;            g2.setPaint(backgroundPaint);</b>
+<b class="nc"><i>325</i>&nbsp;            g2.fill(clip);</b>
+<i>326</i>&nbsp;        }
+<i>327</i>&nbsp;
+<b class="nc"><i>328</i>&nbsp;        GeneralPath leftWall = new GeneralPath();</b>
+<b class="nc"><i>329</i>&nbsp;        leftWall.moveTo(x0, y0);</b>
+<b class="nc"><i>330</i>&nbsp;        leftWall.lineTo(x0, y2);</b>
+<b class="nc"><i>331</i>&nbsp;        leftWall.lineTo(x1, y3);</b>
+<b class="nc"><i>332</i>&nbsp;        leftWall.lineTo(x1, y1);</b>
+<b class="nc"><i>333</i>&nbsp;        leftWall.closePath();</b>
+<b class="nc"><i>334</i>&nbsp;        g2.setPaint(getWallPaint());</b>
+<b class="nc"><i>335</i>&nbsp;        g2.fill(leftWall);</b>
+<i>336</i>&nbsp;
+<b class="nc"><i>337</i>&nbsp;        GeneralPath bottomWall = new GeneralPath();</b>
+<b class="nc"><i>338</i>&nbsp;        bottomWall.moveTo(x0, y0);</b>
+<b class="nc"><i>339</i>&nbsp;        bottomWall.lineTo(x1, y1);</b>
+<b class="nc"><i>340</i>&nbsp;        bottomWall.lineTo(x3, y1);</b>
+<b class="nc"><i>341</i>&nbsp;        bottomWall.lineTo(x2, y0);</b>
+<b class="nc"><i>342</i>&nbsp;        bottomWall.closePath();</b>
+<b class="nc"><i>343</i>&nbsp;        g2.setPaint(getWallPaint());</b>
+<b class="nc"><i>344</i>&nbsp;        g2.fill(bottomWall);</b>
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;        // highlight the background corners...
+<b class="nc"><i>347</i>&nbsp;        g2.setPaint(Color.lightGray);</b>
+<b class="nc"><i>348</i>&nbsp;        Line2D corner = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>349</i>&nbsp;        g2.draw(corner);</b>
+<b class="nc"><i>350</i>&nbsp;        corner.setLine(x1, y1, x1, y3);</b>
+<b class="nc"><i>351</i>&nbsp;        g2.draw(corner);</b>
+<b class="nc"><i>352</i>&nbsp;        corner.setLine(x1, y1, x3, y1);</b>
+<b class="nc"><i>353</i>&nbsp;        g2.draw(corner);</b>
+<i>354</i>&nbsp;
+<i>355</i>&nbsp;        // draw background image, if there is one...
+<b class="nc"><i>356</i>&nbsp;        Image backgroundImage = plot.getBackgroundImage();</b>
+<b class="nc"><i>357</i>&nbsp;        if (backgroundImage != null) {</b>
+<b class="nc"><i>358</i>&nbsp;            Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX()</b>
+<b class="nc"><i>359</i>&nbsp;                    + getXOffset(), dataArea.getY(),</b>
+<b class="nc"><i>360</i>&nbsp;                    dataArea.getWidth() - getXOffset(),</b>
+<b class="nc"><i>361</i>&nbsp;                    dataArea.getHeight() - getYOffset());</b>
+<b class="nc"><i>362</i>&nbsp;            plot.drawBackgroundImage(g2, adjusted);</b>
+<i>363</i>&nbsp;        }
+<i>364</i>&nbsp;
+<b class="nc"><i>365</i>&nbsp;        g2.setComposite(originalComposite);</b>
+<i>366</i>&nbsp;
+<b class="nc"><i>367</i>&nbsp;    }</b>
+<i>368</i>&nbsp;
+<i>369</i>&nbsp;    /**
+<i>370</i>&nbsp;     * Draws the outline for the plot.
+<i>371</i>&nbsp;     *
+<i>372</i>&nbsp;     * @param g2  the graphics device.
+<i>373</i>&nbsp;     * @param plot  the plot.
+<i>374</i>&nbsp;     * @param dataArea  the area inside the axes.
+<i>375</i>&nbsp;     */
+<i>376</i>&nbsp;    @Override
+<i>377</i>&nbsp;    public void drawOutline(Graphics2D g2, CategoryPlot plot,
+<i>378</i>&nbsp;                            Rectangle2D dataArea) {
+<i>379</i>&nbsp;
+<b class="nc"><i>380</i>&nbsp;        float x0 = (float) dataArea.getX();</b>
+<b class="nc"><i>381</i>&nbsp;        float x1 = x0 + (float) Math.abs(this.xOffset);</b>
+<b class="nc"><i>382</i>&nbsp;        float x3 = (float) dataArea.getMaxX();</b>
+<b class="nc"><i>383</i>&nbsp;        float x2 = x3 - (float) Math.abs(this.xOffset);</b>
+<i>384</i>&nbsp;
+<b class="nc"><i>385</i>&nbsp;        float y0 = (float) dataArea.getMaxY();</b>
+<b class="nc"><i>386</i>&nbsp;        float y1 = y0 - (float) Math.abs(this.yOffset);</b>
+<b class="nc"><i>387</i>&nbsp;        float y3 = (float) dataArea.getMinY();</b>
+<b class="nc"><i>388</i>&nbsp;        float y2 = y3 + (float) Math.abs(this.yOffset);</b>
+<i>389</i>&nbsp;
+<b class="nc"><i>390</i>&nbsp;        GeneralPath clip = new GeneralPath();</b>
+<b class="nc"><i>391</i>&nbsp;        clip.moveTo(x0, y0);</b>
+<b class="nc"><i>392</i>&nbsp;        clip.lineTo(x0, y2);</b>
+<b class="nc"><i>393</i>&nbsp;        clip.lineTo(x1, y3);</b>
+<b class="nc"><i>394</i>&nbsp;        clip.lineTo(x3, y3);</b>
+<b class="nc"><i>395</i>&nbsp;        clip.lineTo(x3, y1);</b>
+<b class="nc"><i>396</i>&nbsp;        clip.lineTo(x2, y0);</b>
+<b class="nc"><i>397</i>&nbsp;        clip.closePath();</b>
+<i>398</i>&nbsp;
+<i>399</i>&nbsp;        // put an outline around the data area...
+<b class="nc"><i>400</i>&nbsp;        Stroke outlineStroke = plot.getOutlineStroke();</b>
+<b class="nc"><i>401</i>&nbsp;        Paint outlinePaint = plot.getOutlinePaint();</b>
+<b class="nc"><i>402</i>&nbsp;        if ((outlineStroke != null) &amp;&amp; (outlinePaint != null)) {</b>
+<b class="nc"><i>403</i>&nbsp;            g2.setStroke(outlineStroke);</b>
+<b class="nc"><i>404</i>&nbsp;            g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>405</i>&nbsp;            g2.draw(clip);</b>
+<i>406</i>&nbsp;        }
+<i>407</i>&nbsp;
+<b class="nc"><i>408</i>&nbsp;    }</b>
+<i>409</i>&nbsp;
+<i>410</i>&nbsp;    /**
+<i>411</i>&nbsp;     * Draws a grid line against the domain axis.
+<i>412</i>&nbsp;     *
+<i>413</i>&nbsp;     * @param g2  the graphics device.
+<i>414</i>&nbsp;     * @param plot  the plot.
+<i>415</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any
+<i>416</i>&nbsp;     *                  3D effect).
+<i>417</i>&nbsp;     * @param value  the Java2D value at which the grid line should be drawn.
+<i>418</i>&nbsp;     *
+<i>419</i>&nbsp;     */
+<i>420</i>&nbsp;    @Override
+<i>421</i>&nbsp;    public void drawDomainGridline(Graphics2D g2, CategoryPlot plot,
+<i>422</i>&nbsp;            Rectangle2D dataArea, double value) {
+<i>423</i>&nbsp;
+<b class="nc"><i>424</i>&nbsp;        Line2D line1 = null;</b>
+<b class="nc"><i>425</i>&nbsp;        Line2D line2 = null;</b>
+<b class="nc"><i>426</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>427</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>428</i>&nbsp;            double y0 = value;</b>
+<b class="nc"><i>429</i>&nbsp;            double y1 = value - getYOffset();</b>
+<b class="nc"><i>430</i>&nbsp;            double x0 = dataArea.getMinX();</b>
+<b class="nc"><i>431</i>&nbsp;            double x1 = x0 + getXOffset();</b>
+<b class="nc"><i>432</i>&nbsp;            double x2 = dataArea.getMaxX();</b>
+<b class="nc"><i>433</i>&nbsp;            line1 = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>434</i>&nbsp;            line2 = new Line2D.Double(x1, y1, x2, y1);</b>
+<b class="nc"><i>435</i>&nbsp;        }</b>
+<b class="nc"><i>436</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>437</i>&nbsp;            double x0 = value;</b>
+<b class="nc"><i>438</i>&nbsp;            double x1 = value + getXOffset();</b>
+<b class="nc"><i>439</i>&nbsp;            double y0 = dataArea.getMaxY();</b>
+<b class="nc"><i>440</i>&nbsp;            double y1 = y0 - getYOffset();</b>
+<b class="nc"><i>441</i>&nbsp;            double y2 = dataArea.getMinY();</b>
+<b class="nc"><i>442</i>&nbsp;            line1 = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>443</i>&nbsp;            line2 = new Line2D.Double(x1, y1, x1, y2);</b>
+<i>444</i>&nbsp;        }
+<b class="nc"><i>445</i>&nbsp;        Paint paint = plot.getDomainGridlinePaint();</b>
+<b class="nc"><i>446</i>&nbsp;        Stroke stroke = plot.getDomainGridlineStroke();</b>
+<b class="nc"><i>447</i>&nbsp;        g2.setPaint(paint != null ? paint : Plot.DEFAULT_OUTLINE_PAINT);</b>
+<b class="nc"><i>448</i>&nbsp;        g2.setStroke(stroke != null ? stroke : Plot.DEFAULT_OUTLINE_STROKE);</b>
+<b class="nc"><i>449</i>&nbsp;        g2.draw(line1);</b>
+<b class="nc"><i>450</i>&nbsp;        g2.draw(line2);</b>
+<i>451</i>&nbsp;
+<b class="nc"><i>452</i>&nbsp;    }</b>
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;    /**
+<i>455</i>&nbsp;     * Draws a grid line against the range axis.
+<i>456</i>&nbsp;     *
+<i>457</i>&nbsp;     * @param g2  the graphics device.
+<i>458</i>&nbsp;     * @param plot  the plot.
+<i>459</i>&nbsp;     * @param axis  the value axis.
+<i>460</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any
+<i>461</i>&nbsp;     *                  3D effect).
+<i>462</i>&nbsp;     * @param value  the value at which the grid line should be drawn.
+<i>463</i>&nbsp;     *
+<i>464</i>&nbsp;     */
+<i>465</i>&nbsp;    @Override
+<i>466</i>&nbsp;    public void drawRangeGridline(Graphics2D g2, CategoryPlot plot,
+<i>467</i>&nbsp;            ValueAxis axis, Rectangle2D dataArea, double value) {
+<i>468</i>&nbsp;
+<b class="nc"><i>469</i>&nbsp;        Range range = axis.getRange();</b>
+<i>470</i>&nbsp;
+<b class="nc"><i>471</i>&nbsp;        if (!range.contains(value)) {</b>
+<b class="nc"><i>472</i>&nbsp;            return;</b>
+<i>473</i>&nbsp;        }
+<i>474</i>&nbsp;
+<b class="nc"><i>475</i>&nbsp;        Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX(),</b>
+<b class="nc"><i>476</i>&nbsp;                dataArea.getY() + getYOffset(), dataArea.getWidth()</b>
+<b class="nc"><i>477</i>&nbsp;                - getXOffset(), dataArea.getHeight() - getYOffset());</b>
+<i>478</i>&nbsp;
+<b class="nc"><i>479</i>&nbsp;        Line2D line1 = null;</b>
+<b class="nc"><i>480</i>&nbsp;        Line2D line2 = null;</b>
+<b class="nc"><i>481</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>482</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>483</i>&nbsp;            double x0 = axis.valueToJava2D(value, adjusted,</b>
+<b class="nc"><i>484</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>485</i>&nbsp;            double x1 = x0 + getXOffset();</b>
+<b class="nc"><i>486</i>&nbsp;            double y0 = dataArea.getMaxY();</b>
+<b class="nc"><i>487</i>&nbsp;            double y1 = y0 - getYOffset();</b>
+<b class="nc"><i>488</i>&nbsp;            double y2 = dataArea.getMinY();</b>
+<b class="nc"><i>489</i>&nbsp;            line1 = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>490</i>&nbsp;            line2 = new Line2D.Double(x1, y1, x1, y2);</b>
+<b class="nc"><i>491</i>&nbsp;        }</b>
+<b class="nc"><i>492</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>493</i>&nbsp;            double y0 = axis.valueToJava2D(value, adjusted,</b>
+<b class="nc"><i>494</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>495</i>&nbsp;            double y1 = y0 - getYOffset();</b>
+<b class="nc"><i>496</i>&nbsp;            double x0 = dataArea.getMinX();</b>
+<b class="nc"><i>497</i>&nbsp;            double x1 = x0 + getXOffset();</b>
+<b class="nc"><i>498</i>&nbsp;            double x2 = dataArea.getMaxX();</b>
+<b class="nc"><i>499</i>&nbsp;            line1 = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>500</i>&nbsp;            line2 = new Line2D.Double(x1, y1, x2, y1);</b>
+<i>501</i>&nbsp;        }
+<b class="nc"><i>502</i>&nbsp;        Paint paint = plot.getRangeGridlinePaint();</b>
+<b class="nc"><i>503</i>&nbsp;        Stroke stroke = plot.getRangeGridlineStroke();</b>
+<b class="nc"><i>504</i>&nbsp;        g2.setPaint(paint != null ? paint : Plot.DEFAULT_OUTLINE_PAINT);</b>
+<b class="nc"><i>505</i>&nbsp;        g2.setStroke(stroke != null ? stroke : Plot.DEFAULT_OUTLINE_STROKE);</b>
+<b class="nc"><i>506</i>&nbsp;        g2.draw(line1);</b>
+<b class="nc"><i>507</i>&nbsp;        g2.draw(line2);</b>
+<i>508</i>&nbsp;
+<b class="nc"><i>509</i>&nbsp;    }</b>
+<i>510</i>&nbsp;
+<i>511</i>&nbsp;    /**
+<i>512</i>&nbsp;     * Draws a line perpendicular to the range axis.
+<i>513</i>&nbsp;     *
+<i>514</i>&nbsp;     * @param g2  the graphics device.
+<i>515</i>&nbsp;     * @param plot  the plot.
+<i>516</i>&nbsp;     * @param axis  the value axis.
+<i>517</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any 3D
+<i>518</i>&nbsp;     *                  effect).
+<i>519</i>&nbsp;     * @param value  the value at which the grid line should be drawn.
+<i>520</i>&nbsp;     * @param paint  the paint.
+<i>521</i>&nbsp;     * @param stroke  the stroke.
+<i>522</i>&nbsp;     *
+<i>523</i>&nbsp;     * @see #drawRangeGridline
+<i>524</i>&nbsp;     *
+<i>525</i>&nbsp;     * @since 1.0.13
+<i>526</i>&nbsp;     */
+<i>527</i>&nbsp;    @Override
+<i>528</i>&nbsp;    public void drawRangeLine(Graphics2D g2, CategoryPlot plot, ValueAxis axis,
+<i>529</i>&nbsp;            Rectangle2D dataArea, double value, Paint paint, Stroke stroke) {
+<i>530</i>&nbsp;
+<b class="nc"><i>531</i>&nbsp;        Range range = axis.getRange();</b>
+<b class="nc"><i>532</i>&nbsp;        if (!range.contains(value)) {</b>
+<b class="nc"><i>533</i>&nbsp;            return;</b>
+<i>534</i>&nbsp;        }
+<i>535</i>&nbsp;
+<b class="nc"><i>536</i>&nbsp;        Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX(),</b>
+<b class="nc"><i>537</i>&nbsp;                dataArea.getY() + getYOffset(), dataArea.getWidth()</b>
+<b class="nc"><i>538</i>&nbsp;                - getXOffset(), dataArea.getHeight() - getYOffset());</b>
+<i>539</i>&nbsp;
+<b class="nc"><i>540</i>&nbsp;        Line2D line1 = null;</b>
+<b class="nc"><i>541</i>&nbsp;        Line2D line2 = null;</b>
+<b class="nc"><i>542</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>543</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>544</i>&nbsp;            double x0 = axis.valueToJava2D(value, adjusted,</b>
+<b class="nc"><i>545</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>546</i>&nbsp;            double x1 = x0 + getXOffset();</b>
+<b class="nc"><i>547</i>&nbsp;            double y0 = dataArea.getMaxY();</b>
+<b class="nc"><i>548</i>&nbsp;            double y1 = y0 - getYOffset();</b>
+<b class="nc"><i>549</i>&nbsp;            double y2 = dataArea.getMinY();</b>
+<b class="nc"><i>550</i>&nbsp;            line1 = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>551</i>&nbsp;            line2 = new Line2D.Double(x1, y1, x1, y2);</b>
+<b class="nc"><i>552</i>&nbsp;        }</b>
+<b class="nc"><i>553</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>554</i>&nbsp;            double y0 = axis.valueToJava2D(value, adjusted,</b>
+<b class="nc"><i>555</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>556</i>&nbsp;            double y1 = y0 - getYOffset();</b>
+<b class="nc"><i>557</i>&nbsp;            double x0 = dataArea.getMinX();</b>
+<b class="nc"><i>558</i>&nbsp;            double x1 = x0 + getXOffset();</b>
+<b class="nc"><i>559</i>&nbsp;            double x2 = dataArea.getMaxX();</b>
+<b class="nc"><i>560</i>&nbsp;            line1 = new Line2D.Double(x0, y0, x1, y1);</b>
+<b class="nc"><i>561</i>&nbsp;            line2 = new Line2D.Double(x1, y1, x2, y1);</b>
+<i>562</i>&nbsp;        }
+<b class="nc"><i>563</i>&nbsp;        g2.setPaint(paint);</b>
+<b class="nc"><i>564</i>&nbsp;        g2.setStroke(stroke);</b>
+<b class="nc"><i>565</i>&nbsp;        g2.draw(line1);</b>
+<b class="nc"><i>566</i>&nbsp;        g2.draw(line2);</b>
+<i>567</i>&nbsp;
+<b class="nc"><i>568</i>&nbsp;    }</b>
+<i>569</i>&nbsp;
+<i>570</i>&nbsp;    /**
+<i>571</i>&nbsp;     * Draws a range marker.
+<i>572</i>&nbsp;     *
+<i>573</i>&nbsp;     * @param g2  the graphics device.
+<i>574</i>&nbsp;     * @param plot  the plot.
+<i>575</i>&nbsp;     * @param axis  the value axis.
+<i>576</i>&nbsp;     * @param marker  the marker.
+<i>577</i>&nbsp;     * @param dataArea  the area for plotting data (not including 3D effect).
+<i>578</i>&nbsp;     */
+<i>579</i>&nbsp;    @Override
+<i>580</i>&nbsp;    public void drawRangeMarker(Graphics2D g2, CategoryPlot plot, 
+<i>581</i>&nbsp;            ValueAxis axis, Marker marker, Rectangle2D dataArea) {
+<i>582</i>&nbsp;
+<i>583</i>&nbsp;
+<b class="nc"><i>584</i>&nbsp;        Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX(),</b>
+<b class="nc"><i>585</i>&nbsp;                dataArea.getY() + getYOffset(), dataArea.getWidth()</b>
+<b class="nc"><i>586</i>&nbsp;                - getXOffset(), dataArea.getHeight() - getYOffset());</b>
+<b class="nc"><i>587</i>&nbsp;        if (marker instanceof ValueMarker) {</b>
+<b class="nc"><i>588</i>&nbsp;            ValueMarker vm = (ValueMarker) marker;</b>
+<b class="nc"><i>589</i>&nbsp;            double value = vm.getValue();</b>
+<b class="nc"><i>590</i>&nbsp;            Range range = axis.getRange();</b>
+<b class="nc"><i>591</i>&nbsp;            if (!range.contains(value)) {</b>
+<b class="nc"><i>592</i>&nbsp;                return;</b>
+<i>593</i>&nbsp;            }
+<i>594</i>&nbsp;
+<b class="nc"><i>595</i>&nbsp;            GeneralPath path = null;</b>
+<b class="nc"><i>596</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>597</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>598</i>&nbsp;                float x = (float) axis.valueToJava2D(value, adjusted,</b>
+<b class="nc"><i>599</i>&nbsp;                        plot.getRangeAxisEdge());</b>
+<b class="nc"><i>600</i>&nbsp;                float y = (float) adjusted.getMaxY();</b>
+<b class="nc"><i>601</i>&nbsp;                path = new GeneralPath();</b>
+<b class="nc"><i>602</i>&nbsp;                path.moveTo(x, y);</b>
+<b class="nc"><i>603</i>&nbsp;                path.lineTo((float) (x + getXOffset()),</b>
+<b class="nc"><i>604</i>&nbsp;                        y - (float) getYOffset());</b>
+<b class="nc"><i>605</i>&nbsp;                path.lineTo((float) (x + getXOffset()),</b>
+<b class="nc"><i>606</i>&nbsp;                        (float) (adjusted.getMinY() - getYOffset()));</b>
+<b class="nc"><i>607</i>&nbsp;                path.lineTo(x, (float) adjusted.getMinY());</b>
+<b class="nc"><i>608</i>&nbsp;                path.closePath();</b>
+<b class="nc"><i>609</i>&nbsp;            }</b>
+<b class="nc"><i>610</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>611</i>&nbsp;                float y = (float) axis.valueToJava2D(value, adjusted,</b>
+<b class="nc"><i>612</i>&nbsp;                        plot.getRangeAxisEdge());</b>
+<b class="nc"><i>613</i>&nbsp;                float x = (float) dataArea.getX();</b>
+<b class="nc"><i>614</i>&nbsp;                path = new GeneralPath();</b>
+<b class="nc"><i>615</i>&nbsp;                path.moveTo(x, y);</b>
+<b class="nc"><i>616</i>&nbsp;                path.lineTo(x + (float) this.xOffset, y - (float) this.yOffset);</b>
+<b class="nc"><i>617</i>&nbsp;                path.lineTo((float) (adjusted.getMaxX() + this.xOffset),</b>
+<i>618</i>&nbsp;                        y - (float) this.yOffset);
+<b class="nc"><i>619</i>&nbsp;                path.lineTo((float) (adjusted.getMaxX()), y);</b>
+<b class="nc"><i>620</i>&nbsp;                path.closePath();</b>
+<b class="nc"><i>621</i>&nbsp;            } else {</b>
+<b class="nc"><i>622</i>&nbsp;                throw new IllegalStateException();</b>
+<i>623</i>&nbsp;            }
+<b class="nc"><i>624</i>&nbsp;            g2.setPaint(marker.getPaint());</b>
+<b class="nc"><i>625</i>&nbsp;            g2.fill(path);</b>
+<b class="nc"><i>626</i>&nbsp;            g2.setPaint(marker.getOutlinePaint());</b>
+<b class="nc"><i>627</i>&nbsp;            g2.draw(path);</b>
+<i>628</i>&nbsp;
+<b class="nc"><i>629</i>&nbsp;            String label = marker.getLabel();</b>
+<b class="nc"><i>630</i>&nbsp;            RectangleAnchor anchor = marker.getLabelAnchor();</b>
+<b class="nc"><i>631</i>&nbsp;            if (label != null) {</b>
+<b class="nc"><i>632</i>&nbsp;                Font labelFont = marker.getLabelFont();</b>
+<b class="nc"><i>633</i>&nbsp;                g2.setFont(labelFont);</b>
+<b class="nc"><i>634</i>&nbsp;                g2.setPaint(marker.getLabelPaint());</b>
+<b class="nc"><i>635</i>&nbsp;                Point2D coordinates = calculateRangeMarkerTextAnchorPoint(</b>
+<b class="nc"><i>636</i>&nbsp;                        g2, orientation, dataArea, path.getBounds2D(),</b>
+<b class="nc"><i>637</i>&nbsp;                        marker.getLabelOffset(), LengthAdjustmentType.EXPAND,</b>
+<i>638</i>&nbsp;                        anchor);
+<b class="nc"><i>639</i>&nbsp;                TextUtilities.drawAlignedString(label, g2,</b>
+<b class="nc"><i>640</i>&nbsp;                        (float) coordinates.getX(), (float) coordinates.getY(),</b>
+<b class="nc"><i>641</i>&nbsp;                        marker.getLabelTextAnchor());</b>
+<i>642</i>&nbsp;            }
+<i>643</i>&nbsp;
+<b class="nc"><i>644</i>&nbsp;        }</b>
+<i>645</i>&nbsp;        else {
+<b class="nc"><i>646</i>&nbsp;            super.drawRangeMarker(g2, plot, axis, marker, adjusted);</b>
+<i>647</i>&nbsp;            // TODO: draw the interval marker with a 3D effect
+<i>648</i>&nbsp;        }
+<b class="nc"><i>649</i>&nbsp;    }</b>
+<i>650</i>&nbsp;
+<i>651</i>&nbsp;    /**
+<i>652</i>&nbsp;     * Draws a 3D bar to represent one data item.
+<i>653</i>&nbsp;     *
+<i>654</i>&nbsp;     * @param g2  the graphics device.
+<i>655</i>&nbsp;     * @param state  the renderer state.
+<i>656</i>&nbsp;     * @param dataArea  the area for plotting the data.
+<i>657</i>&nbsp;     * @param plot  the plot.
+<i>658</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>659</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>660</i>&nbsp;     * @param dataset  the dataset.
+<i>661</i>&nbsp;     * @param row  the row index (zero-based).
+<i>662</i>&nbsp;     * @param column  the column index (zero-based).
+<i>663</i>&nbsp;     * @param pass  the pass index.
+<i>664</i>&nbsp;     */
+<i>665</i>&nbsp;    @Override
+<i>666</i>&nbsp;    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+<i>667</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>668</i>&nbsp;            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+<i>669</i>&nbsp;            int pass) {
+<i>670</i>&nbsp;
+<i>671</i>&nbsp;        // nothing is drawn if the row index is not included in the list with
+<i>672</i>&nbsp;        // the indices of the visible rows...
+<b class="nc"><i>673</i>&nbsp;        int visibleRow = state.getVisibleSeriesIndex(row);</b>
+<b class="nc"><i>674</i>&nbsp;        if (visibleRow &lt; 0) {</b>
+<b class="nc"><i>675</i>&nbsp;            return;</b>
+<i>676</i>&nbsp;        }
+<i>677</i>&nbsp;
+<i>678</i>&nbsp;        // check the value we are plotting...
+<b class="nc"><i>679</i>&nbsp;        Number dataValue = dataset.getValue(row, column);</b>
+<b class="nc"><i>680</i>&nbsp;        if (dataValue == null) {</b>
+<b class="nc"><i>681</i>&nbsp;            return;</b>
+<i>682</i>&nbsp;        }
+<i>683</i>&nbsp;
+<b class="nc"><i>684</i>&nbsp;        double value = dataValue.doubleValue();</b>
+<i>685</i>&nbsp;
+<b class="nc"><i>686</i>&nbsp;        Rectangle2D adjusted = new Rectangle2D.Double(dataArea.getX(),</b>
+<b class="nc"><i>687</i>&nbsp;                dataArea.getY() + getYOffset(),</b>
+<b class="nc"><i>688</i>&nbsp;                dataArea.getWidth() - getXOffset(),</b>
+<b class="nc"><i>689</i>&nbsp;                dataArea.getHeight() - getYOffset());</b>
+<i>690</i>&nbsp;
+<b class="nc"><i>691</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<i>692</i>&nbsp;
+<b class="nc"><i>693</i>&nbsp;        double barW0 = calculateBarW0(plot, orientation, adjusted, domainAxis,</b>
+<i>694</i>&nbsp;                state, visibleRow, column);
+<b class="nc"><i>695</i>&nbsp;        double[] barL0L1 = calculateBarL0L1(value);</b>
+<b class="nc"><i>696</i>&nbsp;        if (barL0L1 == null) {</b>
+<b class="nc"><i>697</i>&nbsp;            return;  // the bar is not visible</b>
+<i>698</i>&nbsp;        }
+<i>699</i>&nbsp;
+<b class="nc"><i>700</i>&nbsp;        RectangleEdge edge = plot.getRangeAxisEdge();</b>
+<b class="nc"><i>701</i>&nbsp;        double transL0 = rangeAxis.valueToJava2D(barL0L1[0], adjusted, edge);</b>
+<b class="nc"><i>702</i>&nbsp;        double transL1 = rangeAxis.valueToJava2D(barL0L1[1], adjusted, edge);</b>
+<b class="nc"><i>703</i>&nbsp;        double barL0 = Math.min(transL0, transL1);</b>
+<b class="nc"><i>704</i>&nbsp;        double barLength = Math.abs(transL1 - transL0);</b>
+<i>705</i>&nbsp;
+<i>706</i>&nbsp;        // draw the bar...
+<i>707</i>&nbsp;        Rectangle2D bar;
+<b class="nc"><i>708</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>709</i>&nbsp;            bar = new Rectangle2D.Double(barL0, barW0, barLength,</b>
+<b class="nc"><i>710</i>&nbsp;                    state.getBarWidth());</b>
+<i>711</i>&nbsp;        }
+<i>712</i>&nbsp;        else {
+<b class="nc"><i>713</i>&nbsp;            bar = new Rectangle2D.Double(barW0, barL0, state.getBarWidth(),</b>
+<i>714</i>&nbsp;                    barLength);
+<i>715</i>&nbsp;        }
+<b class="nc"><i>716</i>&nbsp;        Paint itemPaint = getItemPaint(row, column);</b>
+<b class="nc"><i>717</i>&nbsp;        g2.setPaint(itemPaint);</b>
+<b class="nc"><i>718</i>&nbsp;        g2.fill(bar);</b>
+<i>719</i>&nbsp;
+<b class="nc"><i>720</i>&nbsp;        double x0 = bar.getMinX();</b>
+<b class="nc"><i>721</i>&nbsp;        double x1 = x0 + getXOffset();</b>
+<b class="nc"><i>722</i>&nbsp;        double x2 = bar.getMaxX();</b>
+<b class="nc"><i>723</i>&nbsp;        double x3 = x2 + getXOffset();</b>
+<i>724</i>&nbsp;
+<b class="nc"><i>725</i>&nbsp;        double y0 = bar.getMinY() - getYOffset();</b>
+<b class="nc"><i>726</i>&nbsp;        double y1 = bar.getMinY();</b>
+<b class="nc"><i>727</i>&nbsp;        double y2 = bar.getMaxY() - getYOffset();</b>
+<b class="nc"><i>728</i>&nbsp;        double y3 = bar.getMaxY();</b>
+<i>729</i>&nbsp;
+<b class="nc"><i>730</i>&nbsp;        GeneralPath bar3dRight = null;</b>
+<i>731</i>&nbsp;        GeneralPath bar3dTop;
+<b class="nc"><i>732</i>&nbsp;        if (barLength &gt; 0.0) {</b>
+<b class="nc"><i>733</i>&nbsp;            bar3dRight = new GeneralPath();</b>
+<b class="nc"><i>734</i>&nbsp;            bar3dRight.moveTo((float) x2, (float) y3);</b>
+<b class="nc"><i>735</i>&nbsp;            bar3dRight.lineTo((float) x2, (float) y1);</b>
+<b class="nc"><i>736</i>&nbsp;            bar3dRight.lineTo((float) x3, (float) y0);</b>
+<b class="nc"><i>737</i>&nbsp;            bar3dRight.lineTo((float) x3, (float) y2);</b>
+<b class="nc"><i>738</i>&nbsp;            bar3dRight.closePath();</b>
+<i>739</i>&nbsp;
+<b class="nc"><i>740</i>&nbsp;            g2.setPaint(PaintAlpha.darker(itemPaint));</b>
+<b class="nc"><i>741</i>&nbsp;            g2.fill(bar3dRight);</b>
+<i>742</i>&nbsp;        }
+<i>743</i>&nbsp;
+<b class="nc"><i>744</i>&nbsp;        bar3dTop = new GeneralPath();</b>
+<b class="nc"><i>745</i>&nbsp;        bar3dTop.moveTo((float) x0, (float) y1);</b>
+<b class="nc"><i>746</i>&nbsp;        bar3dTop.lineTo((float) x1, (float) y0);</b>
+<b class="nc"><i>747</i>&nbsp;        bar3dTop.lineTo((float) x3, (float) y0);</b>
+<b class="nc"><i>748</i>&nbsp;        bar3dTop.lineTo((float) x2, (float) y1);</b>
+<b class="nc"><i>749</i>&nbsp;        bar3dTop.closePath();</b>
+<b class="nc"><i>750</i>&nbsp;        g2.fill(bar3dTop);</b>
+<i>751</i>&nbsp;
+<b class="nc"><i>752</i>&nbsp;        if (isDrawBarOutline()</b>
+<b class="nc"><i>753</i>&nbsp;                &amp;&amp; state.getBarWidth() &gt; BAR_OUTLINE_WIDTH_THRESHOLD) {</b>
+<b class="nc"><i>754</i>&nbsp;            g2.setStroke(getItemOutlineStroke(row, column));</b>
+<b class="nc"><i>755</i>&nbsp;            g2.setPaint(getItemOutlinePaint(row, column));</b>
+<b class="nc"><i>756</i>&nbsp;            g2.draw(bar);</b>
+<b class="nc"><i>757</i>&nbsp;            if (bar3dRight != null) {</b>
+<b class="nc"><i>758</i>&nbsp;                g2.draw(bar3dRight);</b>
+<i>759</i>&nbsp;            }
+<b class="nc"><i>760</i>&nbsp;            g2.draw(bar3dTop);</b>
+<i>761</i>&nbsp;        }
+<i>762</i>&nbsp;
+<b class="nc"><i>763</i>&nbsp;        CategoryItemLabelGenerator generator</b>
+<b class="nc"><i>764</i>&nbsp;            = getItemLabelGenerator(row, column);</b>
+<b class="nc"><i>765</i>&nbsp;        if (generator != null &amp;&amp; isItemLabelVisible(row, column)) {</b>
+<b class="nc"><i>766</i>&nbsp;            drawItemLabel(g2, dataset, row, column, plot, generator, bar,</b>
+<i>767</i>&nbsp;                    (value &lt; 0.0));
+<i>768</i>&nbsp;        }
+<i>769</i>&nbsp;
+<i>770</i>&nbsp;        // add an item entity, if this information is being collected
+<b class="nc"><i>771</i>&nbsp;        EntityCollection entities = state.getEntityCollection();</b>
+<b class="nc"><i>772</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>773</i>&nbsp;            GeneralPath barOutline = new GeneralPath();</b>
+<b class="nc"><i>774</i>&nbsp;            barOutline.moveTo((float) x0, (float) y3);</b>
+<b class="nc"><i>775</i>&nbsp;            barOutline.lineTo((float) x0, (float) y1);</b>
+<b class="nc"><i>776</i>&nbsp;            barOutline.lineTo((float) x1, (float) y0);</b>
+<b class="nc"><i>777</i>&nbsp;            barOutline.lineTo((float) x3, (float) y0);</b>
+<b class="nc"><i>778</i>&nbsp;            barOutline.lineTo((float) x3, (float) y2);</b>
+<b class="nc"><i>779</i>&nbsp;            barOutline.lineTo((float) x2, (float) y3);</b>
+<b class="nc"><i>780</i>&nbsp;            barOutline.closePath();</b>
+<b class="nc"><i>781</i>&nbsp;            addItemEntity(entities, dataset, row, column, barOutline);</b>
+<i>782</i>&nbsp;        }
+<i>783</i>&nbsp;
+<b class="nc"><i>784</i>&nbsp;    }</b>
+<i>785</i>&nbsp;
+<i>786</i>&nbsp;    /**
+<i>787</i>&nbsp;     * Tests this renderer for equality with an arbitrary object.
+<i>788</i>&nbsp;     *
+<i>789</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>790</i>&nbsp;     *
+<i>791</i>&nbsp;     * @return A boolean.
+<i>792</i>&nbsp;     */
+<i>793</i>&nbsp;    @Override
+<i>794</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>795</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>796</i>&nbsp;            return true;</b>
+<i>797</i>&nbsp;        }
+<b class="fc"><i>798</i>&nbsp;        if (!(obj instanceof BarRenderer3D)) {</b>
+<b class="nc"><i>799</i>&nbsp;            return false;</b>
+<i>800</i>&nbsp;        }
+<b class="fc"><i>801</i>&nbsp;        BarRenderer3D that = (BarRenderer3D) obj;</b>
+<b class="fc"><i>802</i>&nbsp;        if (this.xOffset != that.xOffset) {</b>
+<b class="fc"><i>803</i>&nbsp;            return false;</b>
+<i>804</i>&nbsp;        }
+<b class="fc"><i>805</i>&nbsp;        if (this.yOffset != that.yOffset) {</b>
+<b class="fc"><i>806</i>&nbsp;            return false;</b>
+<i>807</i>&nbsp;        }
+<b class="fc"><i>808</i>&nbsp;        if (!PaintUtilities.equal(this.wallPaint, that.wallPaint)) {</b>
+<b class="fc"><i>809</i>&nbsp;            return false;</b>
+<i>810</i>&nbsp;        }
+<b class="fc"><i>811</i>&nbsp;        return super.equals(obj);</b>
+<i>812</i>&nbsp;    }
+<i>813</i>&nbsp;
+<i>814</i>&nbsp;    /**
+<i>815</i>&nbsp;     * Provides serialization support.
+<i>816</i>&nbsp;     *
+<i>817</i>&nbsp;     * @param stream  the output stream.
+<i>818</i>&nbsp;     *
+<i>819</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>820</i>&nbsp;     */
+<i>821</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>822</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>823</i>&nbsp;        SerialUtilities.writePaint(this.wallPaint, stream);</b>
+<b class="fc"><i>824</i>&nbsp;    }</b>
+<i>825</i>&nbsp;
+<i>826</i>&nbsp;    /**
+<i>827</i>&nbsp;     * Provides serialization support.
+<i>828</i>&nbsp;     *
+<i>829</i>&nbsp;     * @param stream  the input stream.
+<i>830</i>&nbsp;     *
+<i>831</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>832</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>833</i>&nbsp;     */
+<i>834</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>835</i>&nbsp;        throws IOException, ClassNotFoundException {
+<b class="fc"><i>836</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>837</i>&nbsp;        this.wallPaint = SerialUtilities.readPaint(stream);</b>
+<b class="fc"><i>838</i>&nbsp;    }</b>
+<i>839</i>&nbsp;
+<i>840</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

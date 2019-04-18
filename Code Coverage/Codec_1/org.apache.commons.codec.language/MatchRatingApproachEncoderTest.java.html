@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatchRatingApproachEncoderTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">MatchRatingApproachEncoderTest.java</span></div><h1>MatchRatingApproachEncoderTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Test;
+
+/**
+ * Series of tests for the Match Rating Approach algorithm.
+ *
+ * General naming nomenclature for the test is of the form:
+ * GeneralMetadataOnTheTestArea_ActualTestValues_ExpectedResult
+ *
+ * An unusual value is indicated by the term &quot;corner case&quot;
+ */
+<span class="pc bpc" id="L35" title="3 of 4 branches missed.">public class MatchRatingApproachEncoderTest extends StringEncoderAbstractTest&lt;MatchRatingApproachEncoder&gt; {</span>
+
+    // ********** BEGIN REGION - TEST SUPPORT METHODS
+
+    @Test
+<span class="pc bnc" id="L40" title="All 4 branches missed.">    public final void testAccentRemoval_AllLower_SuccessfullyRemoved() {</span>
+<span class="fc" id="L41">        assertEquals(&quot;aeiou&quot;, this.getStringEncoder().removeAccents(&quot;áéíóú&quot;));</span>
+<span class="fc" id="L42">    }</span>
+
+    @Test
+<span class="pc bnc" id="L45" title="All 4 branches missed.">    public final void testAccentRemoval_WithSpaces_SuccessfullyRemovedAndSpacesInvariant() {</span>
+<span class="fc" id="L46">        assertEquals(&quot;ae io  u&quot;, this.getStringEncoder().removeAccents(&quot;áé íó  ú&quot;));</span>
+<span class="fc" id="L47">    }</span>
+
+    @Test
+<span class="pc bnc" id="L50" title="All 4 branches missed.">    public final void testAccentRemoval_UpperandLower_SuccessfullyRemovedAndCaseInvariant() {</span>
+<span class="fc" id="L51">        assertEquals(&quot;AeiOuu&quot;, this.getStringEncoder().removeAccents(&quot;ÁeíÓuu&quot;));</span>
+<span class="fc" id="L52">    }</span>
+
+    @Test
+<span class="pc bnc" id="L55" title="All 4 branches missed.">    public final void testAccentRemoval_MixedWithUnusualChars_SuccessfullyRemovedAndUnusualcharactersInvariant() {</span>
+<span class="fc" id="L56">        assertEquals(&quot;A-e'i.,o&amp;u&quot;, this.getStringEncoder().removeAccents(&quot;Á-e'í.,ó&amp;ú&quot;));</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+<span class="pc bnc" id="L60" title="All 4 branches missed.">    public final void testAccentRemoval_GerSpanFrenMix_SuccessfullyRemoved() {</span>
+<span class="fc" id="L61">        assertEquals(&quot;aeoußAEOUnNa&quot;, this.getStringEncoder().removeAccents(&quot;äëöüßÄËÖÜñÑà&quot;));</span>
+<span class="fc" id="L62">    }</span>
+
+    @Test
+<span class="pc bnc" id="L65" title="All 4 branches missed.">    public final void testAccentRemoval_ComprehensiveAccentMix_AllSuccessfullyRemoved() {</span>
+<span class="fc" id="L66">        assertEquals(&quot;E,E,E,E,U,U,I,I,A,A,O,e,e,e,e,u,u,i,i,a,a,o,c&quot;,</span>
+<span class="fc" id="L67">                this.getStringEncoder().removeAccents(&quot;È,É,Ê,Ë,Û,Ù,Ï,Î,À,Â,Ô,è,é,ê,ë,û,ù,ï,î,à,â,ô,ç&quot;));</span>
+<span class="fc" id="L68">    }</span>
+
+    @Test
+<span class="pc bnc" id="L71" title="All 4 branches missed.">    public final void testAccentRemovalNormalString_NoChange() {</span>
+<span class="fc" id="L72">        assertEquals(&quot;Colorless green ideas sleep furiously&quot;, this.getStringEncoder().removeAccents(&quot;Colorless green ideas sleep furiously&quot;));</span>
+<span class="fc" id="L73">    }</span>
+
+    @Test
+<span class="pc bnc" id="L76" title="All 4 branches missed.">    public final void testAccentRemoval_NINO_NoChange() {</span>
+<span class="fc" id="L77">        assertEquals(&quot;&quot;, this.getStringEncoder().removeAccents(&quot;&quot;));</span>
+<span class="fc" id="L78">    }</span>
+
+    @Test
+<span class="pc bnc" id="L81" title="All 4 branches missed.">    public final void testAccentRemoval_NullValue_ReturnNullSuccessfully() {</span>
+<span class="fc" id="L82">        assertEquals(null, this.getStringEncoder().removeAccents(null));</span>
+<span class="fc" id="L83">    }</span>
+
+    @Test
+<span class="pc bnc" id="L86" title="All 4 branches missed.">    public final void testRemoveSingleDoubleConsonants_BUBLE_RemovedSuccessfully() {</span>
+<span class="fc" id="L87">        assertEquals(&quot;BUBLE&quot;, this.getStringEncoder().removeDoubleConsonants(&quot;BUBBLE&quot;));</span>
+<span class="fc" id="L88">    }</span>
+
+    @Test
+<span class="pc bnc" id="L91" title="All 4 branches missed.">    public final void testRemoveDoubleConsonants_MISSISSIPPI_RemovedSuccessfully() {</span>
+<span class="fc" id="L92">        assertEquals(&quot;MISISIPI&quot;, this.getStringEncoder().removeDoubleConsonants(&quot;MISSISSIPPI&quot;));</span>
+<span class="fc" id="L93">    }</span>
+
+    @Test
+<span class="pc bnc" id="L96" title="All 4 branches missed.">    public final void testRemoveDoubleDoubleVowel_BEETLE_NotRemoved() {</span>
+<span class="fc" id="L97">        assertEquals(&quot;BEETLE&quot;, this.getStringEncoder().removeDoubleConsonants(&quot;BEETLE&quot;));</span>
+<span class="fc" id="L98">    }</span>
+
+    @Test
+<span class="pc bnc" id="L101" title="All 4 branches missed.">    public final void testIsVowel_CapitalA_ReturnsTrue() {</span>
+<span class="fc" id="L102">        assertTrue(this.getStringEncoder().isVowel(&quot;A&quot;));</span>
+<span class="fc" id="L103">    }</span>
+
+    @Test
+<span class="pc bnc" id="L106" title="All 4 branches missed.">    public final void testIsVowel_SmallD_ReturnsFalse() {</span>
+<span class="fc" id="L107">        assertFalse(this.getStringEncoder().isVowel(&quot;d&quot;));</span>
+<span class="fc" id="L108">    }</span>
+
+    @Test
+<span class="pc bnc" id="L111" title="All 4 branches missed.">    public final void testRemoveVowel_ALESSANDRA_Returns_ALSSNDR() {</span>
+<span class="fc" id="L112">        assertEquals(&quot;ALSSNDR&quot;, this.getStringEncoder().removeVowels(&quot;ALESSANDRA&quot;));</span>
+<span class="fc" id="L113">    }</span>
+
+    @Test
+<span class="pc bnc" id="L116" title="All 4 branches missed.">    public final void testRemoveVowel__AIDAN_Returns_ADN() {</span>
+<span class="fc" id="L117">        assertEquals(&quot;ADN&quot;, this.getStringEncoder().removeVowels(&quot;AIDAN&quot;));</span>
+<span class="fc" id="L118">    }</span>
+
+    @Test
+<span class="pc bnc" id="L121" title="All 4 branches missed.">    public final void testRemoveVowel__DECLAN_Returns_DCLN() {</span>
+<span class="fc" id="L122">        assertEquals(&quot;DCLN&quot;, this.getStringEncoder().removeVowels(&quot;DECLAN&quot;));</span>
+<span class="fc" id="L123">    }</span>
+
+    @Test
+<span class="pc bnc" id="L126" title="All 4 branches missed.">    public final void testGetFirstLast3__ALEXANDER_Returns_Aleder() {</span>
+<span class="fc" id="L127">        assertEquals(&quot;Aleder&quot;, this.getStringEncoder().getFirst3Last3(&quot;Alexzander&quot;));</span>
+<span class="fc" id="L128">    }</span>
+
+    @Test
+<span class="pc bnc" id="L131" title="All 4 branches missed.">    public final void testGetFirstLast3_PETE_Returns_PETE() {</span>
+<span class="fc" id="L132">        assertEquals(&quot;PETE&quot;, this.getStringEncoder().getFirst3Last3(&quot;PETE&quot;));</span>
+<span class="fc" id="L133">    }</span>
+
+    @Test
+<span class="pc bnc" id="L136" title="All 4 branches missed.">    public final void testleftTorightThenRightToLeft_ALEXANDER_ALEXANDRA_Returns4() {</span>
+<span class="fc" id="L137">        assertEquals(4, this.getStringEncoder().leftToRightThenRightToLeftProcessing(&quot;ALEXANDER&quot;, &quot;ALEXANDRA&quot;));</span>
+<span class="fc" id="L138">    }</span>
+
+    @Test
+<span class="pc bnc" id="L141" title="All 4 branches missed.">    public final void testleftTorightThenRightToLeft_EINSTEIN_MICHAELA_Returns0() {</span>
+<span class="fc" id="L142">        assertEquals(0, this.getStringEncoder().leftToRightThenRightToLeftProcessing(&quot;EINSTEIN&quot;, &quot;MICHAELA&quot;));</span>
+<span class="fc" id="L143">    }</span>
+
+    @Test
+<span class="pc bnc" id="L146" title="All 4 branches missed.">    public final void testGetMinRating_7_Return4_Successfully() {</span>
+<span class="fc" id="L147">        assertEquals(4, this.getStringEncoder().getMinRating(7));</span>
+<span class="fc" id="L148">    }</span>
+
+    @Test
+<span class="pc bnc" id="L151" title="All 4 branches missed.">    public final void testGetMinRating_1_Returns5_Successfully() {</span>
+<span class="fc" id="L152">        assertEquals(5, this.getStringEncoder().getMinRating(1));</span>
+<span class="fc" id="L153">    }</span>
+
+    @Test
+<span class="pc bnc" id="L156" title="All 4 branches missed.">    public final void testGetMinRating_2_Returns5_Successfully() {</span>
+<span class="fc" id="L157">        assertEquals(5, this.getStringEncoder().getMinRating(2));</span>
+<span class="fc" id="L158">    }</span>
+
+    @Test
+<span class="pc bnc" id="L161" title="All 4 branches missed.">    public final void testgetMinRating_5_Returns4_Successfully(){</span>
+<span class="fc" id="L162">        assertEquals(4, this.getStringEncoder().getMinRating(5));</span>
+<span class="fc" id="L163">    }</span>
+
+    @Test
+<span class="pc bnc" id="L166" title="All 4 branches missed.">    public final void testgetMinRating_5_Returns4_Successfully2(){</span>
+<span class="fc" id="L167">        assertEquals(4, this.getStringEncoder().getMinRating(5));</span>
+<span class="fc" id="L168">    }</span>
+
+    @Test
+<span class="pc bnc" id="L171" title="All 4 branches missed.">    public final void testgetMinRating_6_Returns4_Successfully(){</span>
+<span class="fc" id="L172">        assertEquals(4, this.getStringEncoder().getMinRating(6));</span>
+<span class="fc" id="L173">    }</span>
+
+    @Test
+<span class="pc bnc" id="L176" title="All 4 branches missed.">    public final void testgetMinRating_7_Returns4_Successfully(){</span>
+<span class="fc" id="L177">        assertEquals(4, this.getStringEncoder().getMinRating(7));</span>
+<span class="fc" id="L178">    }</span>
+
+    @Test
+<span class="pc bnc" id="L181" title="All 4 branches missed.">    public final void testgetMinRating_8_Returns3_Successfully(){</span>
+<span class="fc" id="L182">        assertEquals(3, this.getStringEncoder().getMinRating(8));</span>
+<span class="fc" id="L183">    }</span>
+
+    @Test
+<span class="pc bnc" id="L186" title="All 4 branches missed.">    public final void testgetMinRating_10_Returns3_Successfully(){</span>
+<span class="fc" id="L187">        assertEquals(3, this.getStringEncoder().getMinRating(10));</span>
+<span class="fc" id="L188">    }</span>
+
+    @Test
+<span class="pc bnc" id="L191" title="All 4 branches missed.">    public final void testgetMinRating_11_Returns_3_Successfully(){</span>
+<span class="fc" id="L192">        assertEquals(3, this.getStringEncoder().getMinRating(11));</span>
+<span class="fc" id="L193">    }</span>
+
+    @Test
+<span class="pc bnc" id="L196" title="All 4 branches missed.">    public final void testGetMinRating_13_Returns_1_Successfully() {</span>
+<span class="fc" id="L197">        assertEquals(1, this.getStringEncoder().getMinRating(13));</span>
+<span class="fc" id="L198">    }</span>
+
+    @Test
+<span class="pc bnc" id="L201" title="All 4 branches missed.">    public final void testcleanName_SuccessfullyClean() {</span>
+<span class="fc" id="L202">        assertEquals(&quot;THISISATEST&quot;, this.getStringEncoder().cleanName(&quot;This-ís   a t.,es &amp;t&quot;));</span>
+<span class="fc" id="L203">    }</span>
+
+    @Test
+<span class="pc bnc" id="L206" title="All 4 branches missed.">    public final void testisVowel_SingleVowel_ReturnsTrue() {</span>
+<span class="fc" id="L207">        assertTrue(this.getStringEncoder().isVowel((&quot;I&quot;)));</span>
+<span class="fc" id="L208">    }</span>
+
+    @Test
+<span class="pc bnc" id="L211" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_SecondNameNothing_ReturnsFalse() {</span>
+<span class="fc" id="L212">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;test&quot;, &quot;&quot;));</span>
+<span class="fc" id="L213">    }</span>
+
+    @Test
+<span class="pc bnc" id="L216" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_FirstNameNothing_ReturnsFalse() {</span>
+<span class="fc" id="L217">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;&quot;, &quot;test&quot;));</span>
+<span class="fc" id="L218">    }</span>
+
+    @Test
+<span class="pc bnc" id="L221" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_SecondNameJustSpace_ReturnsFalse() {</span>
+<span class="fc" id="L222">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;test&quot;, &quot; &quot;));</span>
+<span class="fc" id="L223">    }</span>
+
+    @Test
+<span class="pc bnc" id="L226" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_FirstNameJustSpace_ReturnsFalse() {</span>
+<span class="fc" id="L227">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot; &quot;, &quot;test&quot;));</span>
+<span class="fc" id="L228">    }</span>
+
+    @Test
+<span class="pc bnc" id="L231" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_SecondNameNull_ReturnsFalse() {</span>
+<span class="fc" id="L232">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;test&quot;, null));</span>
+<span class="fc" id="L233">    }</span>
+
+    @Test
+<span class="pc bnc" id="L236" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_FirstNameNull_ReturnsFalse() {</span>
+<span class="fc" id="L237">        assertFalse(this.getStringEncoder().isEncodeEquals(null, &quot;test&quot;));</span>
+<span class="fc" id="L238">    }</span>
+
+    @Test
+<span class="pc bnc" id="L241" title="All 4 branches missed.">    public final void testisEncodeEquals_CornerCase_FirstNameJust1Letter_ReturnsFalse() {</span>
+<span class="fc" id="L242">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;t&quot;, &quot;test&quot;));</span>
+<span class="fc" id="L243">    }</span>
+
+    @Test
+<span class="pc bnc" id="L246" title="All 4 branches missed.">    public final void testisEncodeEqualsSecondNameJust1Letter_ReturnsFalse() {</span>
+<span class="fc" id="L247">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;test&quot;, &quot;t&quot;));</span>
+<span class="fc" id="L248">    }</span>
+
+    // ***** END REGION - TEST SUPPORT METHODS
+
+    // ***** BEGIN REGION - TEST GET MRA ENCODING
+
+    @Test
+<span class="pc bnc" id="L255" title="All 4 branches missed.">    public final void testGetEncoding_HARPER_HRPR() {</span>
+<span class="fc" id="L256">        assertEquals(&quot;HRPR&quot;, this.getStringEncoder().encode(&quot;HARPER&quot;));</span>
+<span class="fc" id="L257">    }</span>
+
+    @Test
+<span class="pc bnc" id="L260" title="All 4 branches missed.">    public final void testGetEncoding_SMITH_to_SMTH() {</span>
+<span class="fc" id="L261">        assertEquals(&quot;SMTH&quot;, this.getStringEncoder().encode(&quot;Smith&quot;));</span>
+<span class="fc" id="L262">    }</span>
+
+    @Test
+<span class="pc bnc" id="L265" title="All 4 branches missed.">    public final void testGetEncoding_SMYTH_to_SMYTH() {</span>
+<span class="fc" id="L266">        assertEquals(&quot;SMYTH&quot;, this.getStringEncoder().encode(&quot;Smyth&quot;));</span>
+<span class="fc" id="L267">    }</span>
+
+    @Test
+<span class="pc bnc" id="L270" title="All 4 branches missed.">    public final void testGetEncoding_Space_to_Nothing() {</span>
+<span class="fc" id="L271">        assertEquals(&quot;&quot;, this.getStringEncoder().encode(&quot; &quot;));</span>
+<span class="fc" id="L272">    }</span>
+
+    @Test
+<span class="pc bnc" id="L275" title="All 4 branches missed.">    public final void testGetEncoding_NoSpace_to_Nothing() {</span>
+<span class="fc" id="L276">        assertEquals(&quot;&quot;, this.getStringEncoder().encode(&quot;&quot;));</span>
+<span class="fc" id="L277">    }</span>
+
+    @Test
+<span class="pc bnc" id="L280" title="All 4 branches missed.">    public final void testGetEncoding_Null_to_Nothing() {</span>
+<span class="fc" id="L281">        assertEquals(&quot;&quot;, this.getStringEncoder().encode(null));</span>
+<span class="fc" id="L282">    }</span>
+
+    @Test
+<span class="pc bnc" id="L285" title="All 4 branches missed.">    public final void testGetEncoding_One_Letter_to_Nothing() {</span>
+<span class="fc" id="L286">        assertEquals(&quot;&quot;, this.getStringEncoder().encode(&quot;E&quot;));</span>
+<span class="fc" id="L287">    }</span>
+
+    @Test
+<span class="pc bnc" id="L290" title="All 4 branches missed.">    public final void testCompareNameNullSpace_ReturnsFalseSuccessfully() {</span>
+<span class="fc" id="L291">        assertFalse(getStringEncoder().isEncodeEquals(null, &quot; &quot;));</span>
+<span class="fc" id="L292">    }</span>
+
+    @Test
+<span class="pc bnc" id="L295" title="All 4 branches missed.">    public final void testCompareNameSameNames_ReturnsFalseSuccessfully() {</span>
+<span class="fc" id="L296">        assertTrue(getStringEncoder().isEncodeEquals(&quot;John&quot;, &quot;John&quot;));</span>
+<span class="fc" id="L297">    }</span>
+
+    // ***** END REGION - TEST GET MRA ENCODING
+
+    // ***** BEGIN REGION - TEST GET MRA COMPARISONS
+
+    @Test
+<span class="pc bnc" id="L304" title="All 4 branches missed.">    public final void testCompare_SMITH_SMYTH_SuccessfullyMatched() {</span>
+<span class="fc" id="L305">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;smith&quot;, &quot;smyth&quot;));</span>
+<span class="fc" id="L306">    }</span>
+
+    @Test
+<span class="pc bnc" id="L309" title="All 4 branches missed.">    public final void testCompare_BURNS_BOURNE_SuccessfullyMatched() {</span>
+<span class="fc" id="L310">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Burns&quot;, &quot;Bourne&quot;));</span>
+<span class="fc" id="L311">    }</span>
+
+    @Test
+<span class="pc bnc" id="L314" title="All 4 branches missed.">    public final void testCompare_ShortNames_AL_ED_WorksButNoMatch() {</span>
+<span class="fc" id="L315">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Al&quot;, &quot;Ed&quot;));</span>
+<span class="fc" id="L316">    }</span>
+
+    @Test
+<span class="pc bnc" id="L319" title="All 4 branches missed.">    public final void testCompare_CATHERINE_KATHRYN_SuccessfullyMatched() {</span>
+<span class="fc" id="L320">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Catherine&quot;, &quot;Kathryn&quot;));</span>
+<span class="fc" id="L321">    }</span>
+
+    @Test
+<span class="pc bnc" id="L324" title="All 4 branches missed.">    public final void testCompare_BRIAN_BRYAN_SuccessfullyMatched() {</span>
+<span class="fc" id="L325">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Brian&quot;, &quot;Bryan&quot;));</span>
+<span class="fc" id="L326">    }</span>
+
+    @Test
+<span class="pc bnc" id="L329" title="All 4 branches missed.">    public final void testCompare_SEAN_SHAUN_SuccessfullyMatched() {</span>
+<span class="fc" id="L330">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Séan&quot;, &quot;Shaun&quot;));</span>
+<span class="fc" id="L331">    }</span>
+
+    @Test
+<span class="pc bnc" id="L334" title="All 4 branches missed.">    public final void testCompare_COLM_COLIN_WithAccentsAndSymbolsAndSpaces_SuccessfullyMatched() {</span>
+<span class="fc" id="L335">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Cólm.   &quot;, &quot;C-olín&quot;));</span>
+<span class="fc" id="L336">    }</span>
+
+    @Test
+<span class="pc bnc" id="L339" title="All 4 branches missed.">    public final void testCompare_STEPHEN_STEVEN_SuccessfullyMatched() {</span>
+<span class="fc" id="L340">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Stephen&quot;, &quot;Steven&quot;));</span>
+<span class="fc" id="L341">    }</span>
+
+    @Test
+<span class="pc bnc" id="L344" title="All 4 branches missed.">    public final void testCompare_STEVEN_STEFAN_SuccessfullyMatched() {</span>
+<span class="fc" id="L345">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Steven&quot;, &quot;Stefan&quot;));</span>
+<span class="fc" id="L346">    }</span>
+
+    @Test
+<span class="pc bnc" id="L349" title="All 4 branches missed.">    public final void testCompare_STEPHEN_STEFAN_SuccessfullyMatched() {</span>
+<span class="fc" id="L350">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Stephen&quot;, &quot;Stefan&quot;));</span>
+<span class="fc" id="L351">    }</span>
+
+    @Test
+<span class="pc bnc" id="L354" title="All 4 branches missed.">    public final void testCompare_SAM_SAMUEL_SuccessfullyMatched() {</span>
+<span class="fc" id="L355">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Sam&quot;, &quot;Samuel&quot;));</span>
+<span class="fc" id="L356">    }</span>
+
+    @Test
+<span class="pc bnc" id="L359" title="All 4 branches missed.">    public final void testCompare_MICKY_MICHAEL_SuccessfullyMatched() {</span>
+<span class="fc" id="L360">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Micky&quot;, &quot;Michael&quot;));</span>
+<span class="fc" id="L361">    }</span>
+
+    @Test
+<span class="pc bnc" id="L364" title="All 4 branches missed.">    public final void testCompare_OONA_OONAGH_SuccessfullyMatched() {</span>
+<span class="fc" id="L365">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Oona&quot;, &quot;Oonagh&quot;));</span>
+<span class="fc" id="L366">    }</span>
+
+    @Test
+<span class="pc bnc" id="L369" title="All 4 branches missed.">    public final void testCompare_SOPHIE_SOFIA_SuccessfullyMatched() {</span>
+<span class="fc" id="L370">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Sophie&quot;, &quot;Sofia&quot;));</span>
+<span class="fc" id="L371">    }</span>
+
+    @Test
+<span class="pc bnc" id="L374" title="All 4 branches missed.">    public final void testCompare_FRANCISZEK_FRANCES_SuccessfullyMatched() {</span>
+<span class="fc" id="L375">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Franciszek&quot;, &quot;Frances&quot;));</span>
+<span class="fc" id="L376">    }</span>
+
+    @Test
+<span class="pc bnc" id="L379" title="All 4 branches missed.">    public final void testCompare_TOMASZ_TOM_SuccessfullyMatched() {</span>
+<span class="fc" id="L380">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Tomasz&quot;, &quot;tom&quot;));</span>
+<span class="fc" id="L381">    }</span>
+
+    @Test
+<span class="pc bnc" id="L384" title="All 4 branches missed.">    public final void testCompare_SmallInput_CARK_Kl_SuccessfullyMatched() {</span>
+<span class="fc" id="L385">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Kl&quot;, &quot;Karl&quot;));</span>
+<span class="fc" id="L386">    }</span>
+
+    @Test
+<span class="pc bnc" id="L389" title="All 4 branches missed.">    public final void testCompareNameToSingleLetter_KARL_C_DoesNotMatch() {</span>
+<span class="fc" id="L390">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Karl&quot;, &quot;C&quot;));</span>
+<span class="fc" id="L391">    }</span>
+
+    @Test
+<span class="pc bnc" id="L394" title="All 4 branches missed.">    public final void testCompare_ZACH_ZAKARIA_SuccessfullyMatched() {</span>
+<span class="fc" id="L395">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Zach&quot;, &quot;Zacharia&quot;));</span>
+<span class="fc" id="L396">    }</span>
+
+    @Test
+<span class="pc bnc" id="L399" title="All 4 branches missed.">    public final void testCompare_KARL_ALESSANDRO_DoesNotMatch() {</span>
+<span class="fc" id="L400">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Karl&quot;, &quot;Alessandro&quot;));</span>
+<span class="fc" id="L401">    }</span>
+
+    @Test
+<span class="pc bnc" id="L404" title="All 4 branches missed.">    public final void testCompare_Forenames_UNA_OONAGH_ShouldSuccessfullyMatchButDoesNot() {</span>
+<span class="fc" id="L405">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Úna&quot;, &quot;Oonagh&quot;)); // Disappointing</span>
+<span class="fc" id="L406">    }</span>
+
+    // ***** Begin Region - Test Get Encoding - Surnames
+
+    @Test
+<span class="pc bnc" id="L411" title="All 4 branches missed.">    public final void testCompare_Surname_OSULLIVAN_OSUILLEABHAIN_SuccessfulMatch() {</span>
+<span class="fc" id="L412">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;O'Sullivan&quot;, &quot;Ó ' Súilleabháin&quot;));</span>
+<span class="fc" id="L413">    }</span>
+
+    @Test
+<span class="pc bnc" id="L416" title="All 4 branches missed.">    public final void testCompare_LongSurnames_MORIARTY_OMUIRCHEARTAIGH_DoesNotSuccessfulMatch() {</span>
+<span class="fc" id="L417">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Moriarty&quot;, &quot;OMuircheartaigh&quot;));</span>
+<span class="fc" id="L418">    }</span>
+
+    @Test
+<span class="pc bnc" id="L421" title="All 4 branches missed.">    public final void testCompare_LongSurnames_OMUIRCHEARTAIGH_OMIREADHAIGH_SuccessfulMatch() {</span>
+<span class="fc" id="L422">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;o'muireadhaigh&quot;, &quot;Ó 'Muircheartaigh &quot;));</span>
+<span class="fc" id="L423">    }</span>
+
+    @Test
+<span class="pc bnc" id="L426" title="All 4 branches missed.">    public final void testCompare_Surname_COOPERFLYNN_SUPERLYN_SuccessfullyMatched() {</span>
+<span class="fc" id="L427">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Cooper-Flynn&quot;, &quot;Super-Lyn&quot;));</span>
+<span class="fc" id="L428">    }</span>
+
+    @Test
+<span class="pc bnc" id="L431" title="All 4 branches missed.">    public final void testCompare_Surname_HAILEY_HALLEY_SuccessfullyMatched() {</span>
+<span class="fc" id="L432">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Hailey&quot;, &quot;Halley&quot;));</span>
+<span class="fc" id="L433">    }</span>
+
+    // **** BEGIN YIDDISH/SLAVIC SECTION ****
+
+    @Test
+<span class="pc bnc" id="L438" title="All 4 branches missed.">    public final void testCompare_Surname_AUERBACH_UHRBACH_SuccessfullyMatched() {</span>
+<span class="fc" id="L439">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Auerbach&quot;, &quot;Uhrbach&quot;));</span>
+<span class="fc" id="L440">    }</span>
+
+    @Test
+<span class="pc bnc" id="L443" title="All 4 branches missed.">    public final void testCompare_Surname_MOSKOWITZ_MOSKOVITZ_SuccessfullyMatched() {</span>
+<span class="fc" id="L444">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Moskowitz&quot;, &quot;Moskovitz&quot;));</span>
+<span class="fc" id="L445">    }</span>
+
+    @Test
+<span class="pc bnc" id="L448" title="All 4 branches missed.">    public final void testCompare_Surname_LIPSHITZ_LIPPSZYC_SuccessfullyMatched() {</span>
+<span class="fc" id="L449">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;LIPSHITZ&quot;, &quot;LIPPSZYC&quot;));</span>
+<span class="fc" id="L450">    }</span>
+
+    @Test
+<span class="pc bnc" id="L453" title="All 4 branches missed.">    public final void testCompare_Surname_LEWINSKY_LEVINSKI_SuccessfullyMatched() {</span>
+<span class="fc" id="L454">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;LEWINSKY&quot;, &quot;LEVINSKI&quot;));</span>
+<span class="fc" id="L455">    }</span>
+
+    @Test
+<span class="pc bnc" id="L458" title="All 4 branches missed.">    public final void testCompare_Surname_SZLAMAWICZ_SHLAMOVITZ_SuccessfullyMatched() {</span>
+<span class="fc" id="L459">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;SZLAMAWICZ&quot;, &quot;SHLAMOVITZ&quot;));</span>
+<span class="fc" id="L460">    }</span>
+
+    @Test
+<span class="pc bnc" id="L463" title="All 4 branches missed.">    public final void testCompare_Surname_ROSOCHOWACIEC_ROSOKHOVATSETS_SuccessfullyMatched() {</span>
+<span class="fc" id="L464">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;R o s o ch o w a c ie c&quot;, &quot; R o s o k ho v a ts e ts&quot;));</span>
+<span class="fc" id="L465">    }</span>
+
+    @Test
+<span class="pc bnc" id="L468" title="All 4 branches missed.">    public final void testCompare_Surname_PRZEMYSL_PSHEMESHIL_SuccessfullyMatched() {</span>
+<span class="fc" id="L469">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot; P rz e m y s l&quot;, &quot; P sh e m e sh i l&quot;));</span>
+<span class="fc" id="L470">    }</span>
+
+    // **** END YIDDISH/SLAVIC SECTION ****
+
+    @Test
+<span class="pc bnc" id="L475" title="All 4 branches missed.">    public final void testCompare_PETERSON_PETERS_SuccessfullyMatched() {</span>
+<span class="fc" id="L476">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Peterson&quot;, &quot;Peters&quot;));</span>
+<span class="fc" id="L477">    }</span>
+
+    @Test
+<span class="pc bnc" id="L480" title="All 4 branches missed.">    public final void testCompare_MCGOWAN_MCGEOGHEGAN_SuccessfullyMatched() {</span>
+<span class="fc" id="L481">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;McGowan&quot;, &quot;Mc Geoghegan&quot;));</span>
+<span class="fc" id="L482">    }</span>
+
+    @Test
+<span class="pc bnc" id="L485" title="All 4 branches missed.">    public final void testCompare_SurnamesCornerCase_MURPHY_Space_NoMatch() {</span>
+<span class="fc" id="L486">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Murphy&quot;, &quot; &quot;));</span>
+<span class="fc" id="L487">    }</span>
+
+    @Test
+<span class="pc bnc" id="L490" title="All 4 branches missed.">    public final void testCompare_SurnamesCornerCase_MURPHY_NoSpace_NoMatch() {</span>
+<span class="fc" id="L491">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Murphy&quot;, &quot;&quot;));</span>
+<span class="fc" id="L492">    }</span>
+
+    @Test
+<span class="pc bnc" id="L495" title="All 4 branches missed.">    public final void testCompare_SurnameCornerCase_Nulls_NoMatch() {</span>
+<span class="fc" id="L496">        assertFalse(this.getStringEncoder().isEncodeEquals(null, null));</span>
+<span class="fc" id="L497">    }</span>
+
+    @Test
+<span class="pc bnc" id="L500" title="All 4 branches missed.">    public final void testCompare_Surnames_MURPHY_LYNCH_NoMatchExpected() {</span>
+<span class="fc" id="L501">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Murphy&quot;, &quot;Lynch&quot;));</span>
+<span class="fc" id="L502">    }</span>
+
+    @Test
+<span class="pc bnc" id="L505" title="All 4 branches missed.">    public final void testCompare_Forenames_SEAN_JOHN_MatchExpected() {</span>
+<span class="fc" id="L506">        assertTrue(this.getStringEncoder().isEncodeEquals(&quot;Sean&quot;, &quot;John&quot;));</span>
+<span class="fc" id="L507">    }</span>
+
+    @Test
+<span class="pc bnc" id="L510" title="All 4 branches missed.">    public final void testCompare_Forenames_SEAN_PETE_NoMatchExpected() {</span>
+<span class="fc" id="L511">        assertFalse(this.getStringEncoder().isEncodeEquals(&quot;Sean&quot;, &quot;Pete&quot;));</span>
+<span class="fc" id="L512">    }</span>
+
+    @Override
+<span class="fc" id="L515">    protected MatchRatingApproachEncoder createStringEncoder() {</span>
+<span class="fc" id="L516">        return new MatchRatingApproachEncoder();</span>
+    }
+
+    // ***** END REGION - TEST GET MRA COMPARISONS
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

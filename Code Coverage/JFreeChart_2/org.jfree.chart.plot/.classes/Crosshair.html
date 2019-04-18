@@ -1,0 +1,819 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Crosshair</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Crosshair (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Crosshair</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57.5%
+  </span>
+  <span class="absValue">
+    (23/ 40)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.8%
+  </span>
+  <span class="absValue">
+    (159/ 179)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2018, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------
+<i>28</i>&nbsp; * Crosshair.java
+<i>29</i>&nbsp; * --------------
+<i>30</i>&nbsp; * (C) Copyright 2009-2018, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;package org.jfree.chart.plot;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;import java.awt.BasicStroke;
+<i>40</i>&nbsp;import java.awt.Color;
+<i>41</i>&nbsp;import java.awt.Font;
+<i>42</i>&nbsp;import java.awt.Paint;
+<i>43</i>&nbsp;import java.awt.Stroke;
+<i>44</i>&nbsp;import java.beans.PropertyChangeListener;
+<i>45</i>&nbsp;import java.beans.PropertyChangeSupport;
+<i>46</i>&nbsp;import java.io.IOException;
+<i>47</i>&nbsp;import java.io.ObjectInputStream;
+<i>48</i>&nbsp;import java.io.ObjectOutputStream;
+<i>49</i>&nbsp;import java.io.Serializable;
+<i>50</i>&nbsp;import org.jfree.chart.HashUtils;
+<i>51</i>&nbsp;import org.jfree.chart.labels.CrosshairLabelGenerator;
+<i>52</i>&nbsp;import org.jfree.chart.labels.StandardCrosshairLabelGenerator;
+<i>53</i>&nbsp;import org.jfree.chart.panel.CrosshairOverlay;
+<i>54</i>&nbsp;import org.jfree.chart.ui.RectangleAnchor;
+<i>55</i>&nbsp;import org.jfree.chart.util.PaintUtils;
+<i>56</i>&nbsp;import org.jfree.chart.util.Args;
+<i>57</i>&nbsp;import org.jfree.chart.util.PublicCloneable;
+<i>58</i>&nbsp;import org.jfree.chart.util.SerialUtils;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;/**
+<i>61</i>&nbsp; * A {@code Crosshair} represents a value on a chart and is usually displayed
+<i>62</i>&nbsp; * as a line perpendicular to the x or y-axis (and sometimes including a label
+<i>63</i>&nbsp; * that shows the crosshair value as text).  Instances of this class are used
+<i>64</i>&nbsp; * to store the cross hair value plus the visual characteristics of the line
+<i>65</i>&nbsp; * that will be rendered once the instance is added to a 
+<i>66</i>&nbsp; * {@link CrosshairOverlay} (or {@code CrosshairOverlaydFX} if you are using 
+<i>67</i>&nbsp; * the JavaFX extensions for JFreeChart).
+<i>68</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>69</i>&nbsp; * Crosshairs support a property change mechanism which is used by JFreeChart
+<i>70</i>&nbsp; * to automatically repaint the overlay whenever a crosshair attribute is 
+<i>71</i>&nbsp; * updated.
+<i>72</i>&nbsp; *
+<i>73</i>&nbsp; * @since 1.0.13
+<i>74</i>&nbsp; */
+<i>75</i>&nbsp;public class Crosshair implements Cloneable, PublicCloneable, Serializable {
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /** Flag controlling visibility. */
+<i>78</i>&nbsp;    private boolean visible;
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /** The crosshair value. */
+<i>81</i>&nbsp;    private double value;
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /** The paint for the crosshair line. */
+<i>84</i>&nbsp;    private transient Paint paint;
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /** The stroke for the crosshair line. */
+<i>87</i>&nbsp;    private transient Stroke stroke;
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * A flag that controls whether or not the crosshair has a label
+<i>91</i>&nbsp;     * visible.
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    private boolean labelVisible;
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * The label anchor.
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    private RectangleAnchor labelAnchor;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /** A label generator. */
+<i>101</i>&nbsp;    private CrosshairLabelGenerator labelGenerator;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * The x-offset in Java2D units.
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    private double labelXOffset;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * The y-offset in Java2D units.
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    private double labelYOffset;
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /**
+<i>114</i>&nbsp;     * The label font.
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    private Font labelFont;
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    /**
+<i>119</i>&nbsp;     * The label paint.
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    private transient Paint labelPaint;
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * The label background paint.
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    private transient Paint labelBackgroundPaint;
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /** A flag that controls the visibility of the label outline. */
+<i>129</i>&nbsp;    private boolean labelOutlineVisible;
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /** The label outline stroke. */
+<i>132</i>&nbsp;    private transient Stroke labelOutlineStroke;
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /** The label outline paint. */
+<i>135</i>&nbsp;    private transient Paint labelOutlinePaint;
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /** Property change support. */
+<i>138</i>&nbsp;    private transient PropertyChangeSupport pcs;
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    /**
+<i>141</i>&nbsp;     * Creates a new crosshair with value 0.0.
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    public Crosshair() {
+<b class="nc"><i>144</i>&nbsp;        this(0.0);</b>
+<b class="nc"><i>145</i>&nbsp;    }</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Creates a new crosshair with the specified value.
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @param value  the value.
+<i>151</i>&nbsp;     */
+<i>152</i>&nbsp;    public Crosshair(double value) {
+<b class="fc"><i>153</i>&nbsp;       this(value, Color.BLACK, new BasicStroke(1.0f));</b>
+<b class="fc"><i>154</i>&nbsp;    }</b>
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    /**
+<i>157</i>&nbsp;     * Creates a new crosshair value with the specified value and line style.
+<i>158</i>&nbsp;     *
+<i>159</i>&nbsp;     * @param value  the value.
+<i>160</i>&nbsp;     * @param paint  the line paint ({@code null} not permitted).
+<i>161</i>&nbsp;     * @param stroke  the line stroke ({@code null} not permitted).
+<i>162</i>&nbsp;     */
+<b class="fc"><i>163</i>&nbsp;    public Crosshair(double value, Paint paint, Stroke stroke) {</b>
+<b class="fc"><i>164</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>165</i>&nbsp;        Args.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="fc"><i>166</i>&nbsp;        this.visible = true;</b>
+<b class="fc"><i>167</i>&nbsp;        this.value = value;</b>
+<b class="fc"><i>168</i>&nbsp;        this.paint = paint;</b>
+<b class="fc"><i>169</i>&nbsp;        this.stroke = stroke;</b>
+<b class="fc"><i>170</i>&nbsp;        this.labelVisible = false;</b>
+<b class="fc"><i>171</i>&nbsp;        this.labelGenerator = new StandardCrosshairLabelGenerator();</b>
+<b class="fc"><i>172</i>&nbsp;        this.labelAnchor = RectangleAnchor.BOTTOM_LEFT;</b>
+<b class="fc"><i>173</i>&nbsp;        this.labelXOffset = 3.0;</b>
+<b class="fc"><i>174</i>&nbsp;        this.labelYOffset = 3.0;</b>
+<b class="fc"><i>175</i>&nbsp;        this.labelFont = new Font(&quot;Tahoma&quot;, Font.PLAIN, 12);</b>
+<b class="fc"><i>176</i>&nbsp;        this.labelPaint = Color.BLACK;</b>
+<b class="fc"><i>177</i>&nbsp;        this.labelBackgroundPaint = new Color(0, 0, 255, 63);</b>
+<b class="fc"><i>178</i>&nbsp;        this.labelOutlineVisible = true;</b>
+<b class="fc"><i>179</i>&nbsp;        this.labelOutlinePaint = Color.BLACK;</b>
+<b class="fc"><i>180</i>&nbsp;        this.labelOutlineStroke = new BasicStroke(0.5f);</b>
+<b class="fc"><i>181</i>&nbsp;        this.pcs = new PropertyChangeSupport(this);</b>
+<b class="fc"><i>182</i>&nbsp;    }</b>
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;    /**
+<i>185</i>&nbsp;     * Returns the flag that indicates whether or not the crosshair is
+<i>186</i>&nbsp;     * currently visible.
+<i>187</i>&nbsp;     *
+<i>188</i>&nbsp;     * @return A boolean.
+<i>189</i>&nbsp;     *
+<i>190</i>&nbsp;     * @see #setVisible(boolean)
+<i>191</i>&nbsp;     */
+<i>192</i>&nbsp;    public boolean isVisible() {
+<b class="nc"><i>193</i>&nbsp;        return this.visible;</b>
+<i>194</i>&nbsp;    }
+<i>195</i>&nbsp;
+<i>196</i>&nbsp;    /**
+<i>197</i>&nbsp;     * Sets the flag that controls the visibility of the crosshair and sends
+<i>198</i>&nbsp;     * a proerty change event (with the name &#39;visible&#39;) to all registered
+<i>199</i>&nbsp;     * listeners.
+<i>200</i>&nbsp;     *
+<i>201</i>&nbsp;     * @param visible  the new flag value.
+<i>202</i>&nbsp;     *
+<i>203</i>&nbsp;     * @see #isVisible()
+<i>204</i>&nbsp;     */
+<i>205</i>&nbsp;    public void setVisible(boolean visible) {
+<b class="fc"><i>206</i>&nbsp;        boolean old = this.visible;</b>
+<b class="fc"><i>207</i>&nbsp;        this.visible = visible;</b>
+<b class="fc"><i>208</i>&nbsp;        this.pcs.firePropertyChange(&quot;visible&quot;, old, visible);</b>
+<b class="fc"><i>209</i>&nbsp;    }</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    /**
+<i>212</i>&nbsp;     * Returns the crosshair value.
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @return The crosshair value.
+<i>215</i>&nbsp;     *
+<i>216</i>&nbsp;     * @see #setValue(double)
+<i>217</i>&nbsp;     */
+<i>218</i>&nbsp;    public double getValue() {
+<b class="nc"><i>219</i>&nbsp;        return this.value;</b>
+<i>220</i>&nbsp;    }
+<i>221</i>&nbsp;
+<i>222</i>&nbsp;    /**
+<i>223</i>&nbsp;     * Sets the crosshair value and sends a property change event with the name
+<i>224</i>&nbsp;     * &#39;value&#39; to all registered listeners.
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @param value  the value.
+<i>227</i>&nbsp;     *
+<i>228</i>&nbsp;     * @see #getValue()
+<i>229</i>&nbsp;     */
+<i>230</i>&nbsp;    public void setValue(double value) {
+<b class="fc"><i>231</i>&nbsp;        Double oldValue = new Double(this.value);</b>
+<b class="fc"><i>232</i>&nbsp;        this.value = value;</b>
+<b class="fc"><i>233</i>&nbsp;        this.pcs.firePropertyChange(&quot;value&quot;, oldValue, new Double(value));</b>
+<b class="fc"><i>234</i>&nbsp;    }</b>
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /**
+<i>237</i>&nbsp;     * Returns the paint for the crosshair line.
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @return The paint (never {@code null}).
+<i>240</i>&nbsp;     *
+<i>241</i>&nbsp;     * @see #setPaint(java.awt.Paint)
+<i>242</i>&nbsp;     */
+<i>243</i>&nbsp;    public Paint getPaint() {
+<b class="nc"><i>244</i>&nbsp;        return this.paint;</b>
+<i>245</i>&nbsp;    }
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /**
+<i>248</i>&nbsp;     * Sets the paint for the crosshair line and sends a property change event
+<i>249</i>&nbsp;     * with the name &quot;paint&quot; to all registered listeners.
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>252</i>&nbsp;     *
+<i>253</i>&nbsp;     * @see #getPaint()
+<i>254</i>&nbsp;     */
+<i>255</i>&nbsp;    public void setPaint(Paint paint) {
+<b class="fc"><i>256</i>&nbsp;        Paint old = this.paint;</b>
+<b class="fc"><i>257</i>&nbsp;        this.paint = paint;</b>
+<b class="fc"><i>258</i>&nbsp;        this.pcs.firePropertyChange(&quot;paint&quot;, old, paint);</b>
+<b class="fc"><i>259</i>&nbsp;    }</b>
+<i>260</i>&nbsp;
+<i>261</i>&nbsp;    /**
+<i>262</i>&nbsp;     * Returns the stroke for the crosshair line.
+<i>263</i>&nbsp;     *
+<i>264</i>&nbsp;     * @return The stroke (never {@code null}).
+<i>265</i>&nbsp;     *
+<i>266</i>&nbsp;     * @see #setStroke(java.awt.Stroke)
+<i>267</i>&nbsp;     */
+<i>268</i>&nbsp;    public Stroke getStroke() {
+<b class="nc"><i>269</i>&nbsp;        return this.stroke;</b>
+<i>270</i>&nbsp;    }
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    /**
+<i>273</i>&nbsp;     * Sets the stroke for the crosshair line and sends a property change event
+<i>274</i>&nbsp;     * with the name &quot;stroke&quot; to all registered listeners.
+<i>275</i>&nbsp;     *
+<i>276</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>277</i>&nbsp;     *
+<i>278</i>&nbsp;     * @see #getStroke()
+<i>279</i>&nbsp;     */
+<i>280</i>&nbsp;    public void setStroke(Stroke stroke) {
+<b class="fc"><i>281</i>&nbsp;        Stroke old = this.stroke;</b>
+<b class="fc"><i>282</i>&nbsp;        this.stroke = stroke;</b>
+<b class="fc"><i>283</i>&nbsp;        this.pcs.firePropertyChange(&quot;stroke&quot;, old, stroke);</b>
+<b class="fc"><i>284</i>&nbsp;    }</b>
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;    /**
+<i>287</i>&nbsp;     * Returns the flag that controls whether or not a label is drawn for
+<i>288</i>&nbsp;     * this crosshair.
+<i>289</i>&nbsp;     *
+<i>290</i>&nbsp;     * @return A boolean.
+<i>291</i>&nbsp;     *
+<i>292</i>&nbsp;     * @see #setLabelVisible(boolean)
+<i>293</i>&nbsp;     */
+<i>294</i>&nbsp;    public boolean isLabelVisible() {
+<b class="nc"><i>295</i>&nbsp;        return this.labelVisible;</b>
+<i>296</i>&nbsp;    }
+<i>297</i>&nbsp;
+<i>298</i>&nbsp;    /**
+<i>299</i>&nbsp;     * Sets the flag that controls whether or not a label is drawn for the
+<i>300</i>&nbsp;     * crosshair and sends a property change event (with the name
+<i>301</i>&nbsp;     * &#39;labelVisible&#39;) to all registered listeners.
+<i>302</i>&nbsp;     *
+<i>303</i>&nbsp;     * @param visible  the new flag value.
+<i>304</i>&nbsp;     *
+<i>305</i>&nbsp;     * @see #isLabelVisible()
+<i>306</i>&nbsp;     */
+<i>307</i>&nbsp;    public void setLabelVisible(boolean visible) {
+<b class="fc"><i>308</i>&nbsp;        boolean old = this.labelVisible;</b>
+<b class="fc"><i>309</i>&nbsp;        this.labelVisible = visible;</b>
+<b class="fc"><i>310</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelVisible&quot;, old, visible);</b>
+<b class="fc"><i>311</i>&nbsp;    }</b>
+<i>312</i>&nbsp;
+<i>313</i>&nbsp;    /**
+<i>314</i>&nbsp;     * Returns the crosshair label generator.
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @return The label crosshair generator (never {@code null}).
+<i>317</i>&nbsp;     *
+<i>318</i>&nbsp;     * @see #setLabelGenerator(org.jfree.chart.labels.CrosshairLabelGenerator)
+<i>319</i>&nbsp;     */
+<i>320</i>&nbsp;    public CrosshairLabelGenerator getLabelGenerator() {
+<b class="nc"><i>321</i>&nbsp;        return this.labelGenerator;</b>
+<i>322</i>&nbsp;    }
+<i>323</i>&nbsp;
+<i>324</i>&nbsp;    /**
+<i>325</i>&nbsp;     * Sets the crosshair label generator and sends a property change event
+<i>326</i>&nbsp;     * (with the name &#39;labelGenerator&#39;) to all registered listeners.
+<i>327</i>&nbsp;     *
+<i>328</i>&nbsp;     * @param generator  the new generator ({@code null} not permitted).
+<i>329</i>&nbsp;     *
+<i>330</i>&nbsp;     * @see #getLabelGenerator()
+<i>331</i>&nbsp;     */
+<i>332</i>&nbsp;    public void setLabelGenerator(CrosshairLabelGenerator generator) {
+<b class="fc"><i>333</i>&nbsp;        Args.nullNotPermitted(generator, &quot;generator&quot;);</b>
+<b class="fc"><i>334</i>&nbsp;        CrosshairLabelGenerator old = this.labelGenerator;</b>
+<b class="fc"><i>335</i>&nbsp;        this.labelGenerator = generator;</b>
+<b class="fc"><i>336</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelGenerator&quot;, old, generator);</b>
+<b class="fc"><i>337</i>&nbsp;    }</b>
+<i>338</i>&nbsp;
+<i>339</i>&nbsp;    /**
+<i>340</i>&nbsp;     * Returns the label anchor point.
+<i>341</i>&nbsp;     *
+<i>342</i>&nbsp;     * @return the label anchor point (never {@code null}.
+<i>343</i>&nbsp;     *
+<i>344</i>&nbsp;     * @see #setLabelAnchor(org.jfree.chart.ui.RectangleAnchor)
+<i>345</i>&nbsp;     */
+<i>346</i>&nbsp;    public RectangleAnchor getLabelAnchor() {
+<b class="nc"><i>347</i>&nbsp;        return this.labelAnchor;</b>
+<i>348</i>&nbsp;    }
+<i>349</i>&nbsp;
+<i>350</i>&nbsp;    /**
+<i>351</i>&nbsp;     * Sets the label anchor point and sends a property change event (with the
+<i>352</i>&nbsp;     * name &#39;labelAnchor&#39;) to all registered listeners.
+<i>353</i>&nbsp;     *
+<i>354</i>&nbsp;     * @param anchor  the anchor ({@code null} not permitted).
+<i>355</i>&nbsp;     *
+<i>356</i>&nbsp;     * @see #getLabelAnchor()
+<i>357</i>&nbsp;     */
+<i>358</i>&nbsp;    public void setLabelAnchor(RectangleAnchor anchor) {
+<b class="fc"><i>359</i>&nbsp;        RectangleAnchor old = this.labelAnchor;</b>
+<b class="fc"><i>360</i>&nbsp;        this.labelAnchor = anchor;</b>
+<b class="fc"><i>361</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelAnchor&quot;, old, anchor);</b>
+<b class="fc"><i>362</i>&nbsp;    }</b>
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;    /**
+<i>365</i>&nbsp;     * Returns the x-offset for the label (in Java2D units).
+<i>366</i>&nbsp;     *
+<i>367</i>&nbsp;     * @return The x-offset.
+<i>368</i>&nbsp;     *
+<i>369</i>&nbsp;     * @see #setLabelXOffset(double)
+<i>370</i>&nbsp;     */
+<i>371</i>&nbsp;    public double getLabelXOffset() {
+<b class="nc"><i>372</i>&nbsp;        return this.labelXOffset;</b>
+<i>373</i>&nbsp;    }
+<i>374</i>&nbsp;
+<i>375</i>&nbsp;    /**
+<i>376</i>&nbsp;     * Sets the x-offset and sends a property change event (with the name
+<i>377</i>&nbsp;     * &#39;labelXOffset&#39;) to all registered listeners.
+<i>378</i>&nbsp;     *
+<i>379</i>&nbsp;     * @param offset  the new offset.
+<i>380</i>&nbsp;     *
+<i>381</i>&nbsp;     * @see #getLabelXOffset()
+<i>382</i>&nbsp;     */
+<i>383</i>&nbsp;    public void setLabelXOffset(double offset) {
+<b class="fc"><i>384</i>&nbsp;        Double old = this.labelXOffset;</b>
+<b class="fc"><i>385</i>&nbsp;        this.labelXOffset = offset;</b>
+<b class="fc"><i>386</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelXOffset&quot;, old, offset);</b>
+<b class="fc"><i>387</i>&nbsp;    }</b>
+<i>388</i>&nbsp;
+<i>389</i>&nbsp;    /**
+<i>390</i>&nbsp;     * Returns the y-offset for the label (in Java2D units).
+<i>391</i>&nbsp;     *
+<i>392</i>&nbsp;     * @return The y-offset.
+<i>393</i>&nbsp;     *
+<i>394</i>&nbsp;     * @see #setLabelYOffset(double)
+<i>395</i>&nbsp;     */
+<i>396</i>&nbsp;    public double getLabelYOffset() {
+<b class="nc"><i>397</i>&nbsp;        return this.labelYOffset;</b>
+<i>398</i>&nbsp;    }
+<i>399</i>&nbsp;
+<i>400</i>&nbsp;    /**
+<i>401</i>&nbsp;     * Sets the y-offset and sends a property change event (with the name
+<i>402</i>&nbsp;     * &#39;labelYOffset&#39;) to all registered listeners.
+<i>403</i>&nbsp;     *
+<i>404</i>&nbsp;     * @param offset  the new offset.
+<i>405</i>&nbsp;     *
+<i>406</i>&nbsp;     * @see #getLabelYOffset()
+<i>407</i>&nbsp;     */
+<i>408</i>&nbsp;    public void setLabelYOffset(double offset) {
+<b class="fc"><i>409</i>&nbsp;        Double old = this.labelYOffset;</b>
+<b class="fc"><i>410</i>&nbsp;        this.labelYOffset = offset;</b>
+<b class="fc"><i>411</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelYOffset&quot;, old, offset);</b>
+<b class="fc"><i>412</i>&nbsp;    }</b>
+<i>413</i>&nbsp;
+<i>414</i>&nbsp;    /**
+<i>415</i>&nbsp;     * Returns the label font.
+<i>416</i>&nbsp;     *
+<i>417</i>&nbsp;     * @return The label font (never {@code null}).
+<i>418</i>&nbsp;     *
+<i>419</i>&nbsp;     * @see #setLabelFont(java.awt.Font)
+<i>420</i>&nbsp;     */
+<i>421</i>&nbsp;    public Font getLabelFont() {
+<b class="nc"><i>422</i>&nbsp;        return this.labelFont;</b>
+<i>423</i>&nbsp;    }
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;    /**
+<i>426</i>&nbsp;     * Sets the label font and sends a property change event (with the name
+<i>427</i>&nbsp;     * &#39;labelFont&#39;) to all registered listeners.
+<i>428</i>&nbsp;     *
+<i>429</i>&nbsp;     * @param font  the font ({@code null} not permitted).
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @see #getLabelFont()
+<i>432</i>&nbsp;     */
+<i>433</i>&nbsp;    public void setLabelFont(Font font) {
+<b class="fc"><i>434</i>&nbsp;        Args.nullNotPermitted(font, &quot;font&quot;);</b>
+<b class="fc"><i>435</i>&nbsp;        Font old = this.labelFont;</b>
+<b class="fc"><i>436</i>&nbsp;        this.labelFont = font;</b>
+<b class="fc"><i>437</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelFont&quot;, old, font);</b>
+<b class="fc"><i>438</i>&nbsp;    }</b>
+<i>439</i>&nbsp;
+<i>440</i>&nbsp;    /**
+<i>441</i>&nbsp;     * Returns the label paint.  The default value is {@code Color.BLACK}.
+<i>442</i>&nbsp;     *
+<i>443</i>&nbsp;     * @return The label paint (never {@code null}).
+<i>444</i>&nbsp;     *
+<i>445</i>&nbsp;     * @see #setLabelPaint
+<i>446</i>&nbsp;     */
+<i>447</i>&nbsp;    public Paint getLabelPaint() {
+<b class="nc"><i>448</i>&nbsp;        return this.labelPaint;</b>
+<i>449</i>&nbsp;    }
+<i>450</i>&nbsp;
+<i>451</i>&nbsp;    /**
+<i>452</i>&nbsp;     * Sets the label paint and sends a property change event (with the name
+<i>453</i>&nbsp;     * &#39;labelPaint&#39;) to all registered listeners.
+<i>454</i>&nbsp;     *
+<i>455</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>456</i>&nbsp;     *
+<i>457</i>&nbsp;     * @see #getLabelPaint()
+<i>458</i>&nbsp;     */
+<i>459</i>&nbsp;    public void setLabelPaint(Paint paint) {
+<b class="fc"><i>460</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>461</i>&nbsp;        Paint old = this.labelPaint;</b>
+<b class="fc"><i>462</i>&nbsp;        this.labelPaint = paint;</b>
+<b class="fc"><i>463</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelPaint&quot;, old, paint);</b>
+<b class="fc"><i>464</i>&nbsp;    }</b>
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;    /**
+<i>467</i>&nbsp;     * Returns the label background paint.
+<i>468</i>&nbsp;     *
+<i>469</i>&nbsp;     * @return The label background paint (possibly {@code null}).
+<i>470</i>&nbsp;     *
+<i>471</i>&nbsp;     * @see #setLabelBackgroundPaint(java.awt.Paint)
+<i>472</i>&nbsp;     */
+<i>473</i>&nbsp;    public Paint getLabelBackgroundPaint() {
+<b class="nc"><i>474</i>&nbsp;        return this.labelBackgroundPaint;</b>
+<i>475</i>&nbsp;    }
+<i>476</i>&nbsp;
+<i>477</i>&nbsp;    /**
+<i>478</i>&nbsp;     * Sets the label background paint and sends a property change event with
+<i>479</i>&nbsp;     * the name &#39;labelBackgroundPaint&#39;) to all registered listeners.
+<i>480</i>&nbsp;     *
+<i>481</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>482</i>&nbsp;     *
+<i>483</i>&nbsp;     * @see #getLabelBackgroundPaint()
+<i>484</i>&nbsp;     */
+<i>485</i>&nbsp;    public void setLabelBackgroundPaint(Paint paint) {
+<b class="fc"><i>486</i>&nbsp;        Paint old = this.labelBackgroundPaint;</b>
+<b class="fc"><i>487</i>&nbsp;        this.labelBackgroundPaint = paint;</b>
+<b class="fc"><i>488</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelBackgroundPaint&quot;, old, paint);</b>
+<b class="fc"><i>489</i>&nbsp;    }</b>
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;    /**
+<i>492</i>&nbsp;     * Returns the flag that controls the visibility of the label outline.
+<i>493</i>&nbsp;     * The default value is {@code true}.
+<i>494</i>&nbsp;     *
+<i>495</i>&nbsp;     * @return A boolean.
+<i>496</i>&nbsp;     *
+<i>497</i>&nbsp;     * @see #setLabelOutlineVisible(boolean)
+<i>498</i>&nbsp;     */
+<i>499</i>&nbsp;    public boolean isLabelOutlineVisible() {
+<b class="nc"><i>500</i>&nbsp;        return this.labelOutlineVisible;</b>
+<i>501</i>&nbsp;    }
+<i>502</i>&nbsp;
+<i>503</i>&nbsp;    /**
+<i>504</i>&nbsp;     * Sets the flag that controls the visibility of the label outlines and
+<i>505</i>&nbsp;     * sends a property change event (with the name &quot;labelOutlineVisible&quot;) to
+<i>506</i>&nbsp;     * all registered listeners.
+<i>507</i>&nbsp;     *
+<i>508</i>&nbsp;     * @param visible  the new flag value.
+<i>509</i>&nbsp;     *
+<i>510</i>&nbsp;     * @see #isLabelOutlineVisible()
+<i>511</i>&nbsp;     */
+<i>512</i>&nbsp;    public void setLabelOutlineVisible(boolean visible) {
+<b class="fc"><i>513</i>&nbsp;        boolean old = this.labelOutlineVisible;</b>
+<b class="fc"><i>514</i>&nbsp;        this.labelOutlineVisible = visible;</b>
+<b class="fc"><i>515</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelOutlineVisible&quot;, old, visible);</b>
+<b class="fc"><i>516</i>&nbsp;    }</b>
+<i>517</i>&nbsp;
+<i>518</i>&nbsp;    /**
+<i>519</i>&nbsp;     * Returns the label outline paint.
+<i>520</i>&nbsp;     *
+<i>521</i>&nbsp;     * @return The label outline paint (never {@code null}).
+<i>522</i>&nbsp;     *
+<i>523</i>&nbsp;     * @see #setLabelOutlinePaint(java.awt.Paint)
+<i>524</i>&nbsp;     */
+<i>525</i>&nbsp;    public Paint getLabelOutlinePaint() {
+<b class="nc"><i>526</i>&nbsp;        return this.labelOutlinePaint;</b>
+<i>527</i>&nbsp;    }
+<i>528</i>&nbsp;
+<i>529</i>&nbsp;    /**
+<i>530</i>&nbsp;     * Sets the label outline paint and sends a property change event (with the
+<i>531</i>&nbsp;     * name &quot;labelOutlinePaint&quot;) to all registered listeners.
+<i>532</i>&nbsp;     *
+<i>533</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>534</i>&nbsp;     *
+<i>535</i>&nbsp;     * @see #getLabelOutlinePaint()
+<i>536</i>&nbsp;     */
+<i>537</i>&nbsp;    public void setLabelOutlinePaint(Paint paint) {
+<b class="fc"><i>538</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>539</i>&nbsp;        Paint old = this.labelOutlinePaint;</b>
+<b class="fc"><i>540</i>&nbsp;        this.labelOutlinePaint = paint;</b>
+<b class="fc"><i>541</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelOutlinePaint&quot;, old, paint);</b>
+<b class="fc"><i>542</i>&nbsp;    }</b>
+<i>543</i>&nbsp;
+<i>544</i>&nbsp;    /**
+<i>545</i>&nbsp;     * Returns the label outline stroke. The default value is 
+<i>546</i>&nbsp;     * {@code BasicStroke(0.5)}.
+<i>547</i>&nbsp;     *
+<i>548</i>&nbsp;     * @return The label outline stroke (never {@code null}).
+<i>549</i>&nbsp;     *
+<i>550</i>&nbsp;     * @see #setLabelOutlineStroke(java.awt.Stroke)
+<i>551</i>&nbsp;     */
+<i>552</i>&nbsp;    public Stroke getLabelOutlineStroke() {
+<b class="nc"><i>553</i>&nbsp;        return this.labelOutlineStroke;</b>
+<i>554</i>&nbsp;    }
+<i>555</i>&nbsp;
+<i>556</i>&nbsp;    /**
+<i>557</i>&nbsp;     * Sets the label outline stroke and sends a property change event (with
+<i>558</i>&nbsp;     * the name &#39;labelOutlineStroke&#39;) to all registered listeners.
+<i>559</i>&nbsp;     *
+<i>560</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>561</i>&nbsp;     *
+<i>562</i>&nbsp;     * @see #getLabelOutlineStroke()
+<i>563</i>&nbsp;     */
+<i>564</i>&nbsp;    public void setLabelOutlineStroke(Stroke stroke) {
+<b class="fc"><i>565</i>&nbsp;        Args.nullNotPermitted(stroke, &quot;stroke&quot;);</b>
+<b class="fc"><i>566</i>&nbsp;        Stroke old = this.labelOutlineStroke;</b>
+<b class="fc"><i>567</i>&nbsp;        this.labelOutlineStroke = stroke;</b>
+<b class="fc"><i>568</i>&nbsp;        this.pcs.firePropertyChange(&quot;labelOutlineStroke&quot;, old, stroke);</b>
+<b class="fc"><i>569</i>&nbsp;    }</b>
+<i>570</i>&nbsp;
+<i>571</i>&nbsp;    /**
+<i>572</i>&nbsp;     * Tests this crosshair for equality with an arbitrary object.
+<i>573</i>&nbsp;     *
+<i>574</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>575</i>&nbsp;     *
+<i>576</i>&nbsp;     * @return A boolean.
+<i>577</i>&nbsp;     */
+<i>578</i>&nbsp;    @Override
+<i>579</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>580</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>581</i>&nbsp;            return true;</b>
+<i>582</i>&nbsp;        }
+<b class="fc"><i>583</i>&nbsp;        if (!(obj instanceof Crosshair)) {</b>
+<b class="nc"><i>584</i>&nbsp;            return false;</b>
+<i>585</i>&nbsp;        }
+<b class="fc"><i>586</i>&nbsp;        Crosshair that = (Crosshair) obj;</b>
+<b class="fc"><i>587</i>&nbsp;        if (this.visible != that.visible) {</b>
+<b class="fc"><i>588</i>&nbsp;            return false;</b>
+<i>589</i>&nbsp;        }
+<b class="fc"><i>590</i>&nbsp;        if (this.value != that.value) {</b>
+<b class="fc"><i>591</i>&nbsp;            return false;</b>
+<i>592</i>&nbsp;        }
+<b class="fc"><i>593</i>&nbsp;        if (!PaintUtils.equal(this.paint, that.paint)) {</b>
+<b class="fc"><i>594</i>&nbsp;            return false;</b>
+<i>595</i>&nbsp;        }
+<b class="fc"><i>596</i>&nbsp;        if (!this.stroke.equals(that.stroke)) {</b>
+<b class="fc"><i>597</i>&nbsp;            return false;</b>
+<i>598</i>&nbsp;        }
+<b class="fc"><i>599</i>&nbsp;        if (this.labelVisible != that.labelVisible) {</b>
+<b class="fc"><i>600</i>&nbsp;            return false;</b>
+<i>601</i>&nbsp;        }
+<b class="fc"><i>602</i>&nbsp;        if (!this.labelGenerator.equals(that.labelGenerator)) {</b>
+<b class="fc"><i>603</i>&nbsp;            return false;</b>
+<i>604</i>&nbsp;        }
+<b class="fc"><i>605</i>&nbsp;        if (!this.labelAnchor.equals(that.labelAnchor)) {</b>
+<b class="fc"><i>606</i>&nbsp;            return false;</b>
+<i>607</i>&nbsp;        }
+<b class="fc"><i>608</i>&nbsp;        if (this.labelXOffset != that.labelXOffset) {</b>
+<b class="fc"><i>609</i>&nbsp;            return false;</b>
+<i>610</i>&nbsp;        }
+<b class="fc"><i>611</i>&nbsp;        if (this.labelYOffset != that.labelYOffset) {</b>
+<b class="fc"><i>612</i>&nbsp;            return false;</b>
+<i>613</i>&nbsp;        }
+<b class="fc"><i>614</i>&nbsp;        if (!this.labelFont.equals(that.labelFont)) {</b>
+<b class="fc"><i>615</i>&nbsp;            return false;</b>
+<i>616</i>&nbsp;        }
+<b class="fc"><i>617</i>&nbsp;        if (!PaintUtils.equal(this.labelPaint, that.labelPaint)) {</b>
+<b class="fc"><i>618</i>&nbsp;            return false;</b>
+<i>619</i>&nbsp;        }
+<b class="fc"><i>620</i>&nbsp;        if (!PaintUtils.equal(this.labelBackgroundPaint,</b>
+<i>621</i>&nbsp;                that.labelBackgroundPaint)) {
+<b class="fc"><i>622</i>&nbsp;            return false;</b>
+<i>623</i>&nbsp;        }
+<b class="fc"><i>624</i>&nbsp;        if (this.labelOutlineVisible != that.labelOutlineVisible) {</b>
+<b class="fc"><i>625</i>&nbsp;            return false;</b>
+<i>626</i>&nbsp;        }
+<b class="fc"><i>627</i>&nbsp;        if (!PaintUtils.equal(this.labelOutlinePaint,</b>
+<i>628</i>&nbsp;                that.labelOutlinePaint)) {
+<b class="fc"><i>629</i>&nbsp;            return false;</b>
+<i>630</i>&nbsp;        }
+<b class="fc"><i>631</i>&nbsp;        if (!this.labelOutlineStroke.equals(that.labelOutlineStroke)) {</b>
+<b class="fc"><i>632</i>&nbsp;            return false;</b>
+<i>633</i>&nbsp;        }
+<b class="fc"><i>634</i>&nbsp;        return true;  // can&#39;t find any difference</b>
+<i>635</i>&nbsp;    }
+<i>636</i>&nbsp;
+<i>637</i>&nbsp;    /**
+<i>638</i>&nbsp;     * Returns a hash code for this instance.
+<i>639</i>&nbsp;     *
+<i>640</i>&nbsp;     * @return A hash code.
+<i>641</i>&nbsp;     */
+<i>642</i>&nbsp;    @Override
+<i>643</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>644</i>&nbsp;        int hash = 7;</b>
+<b class="fc"><i>645</i>&nbsp;        hash = HashUtils.hashCode(hash, this.visible);</b>
+<b class="fc"><i>646</i>&nbsp;        hash = HashUtils.hashCode(hash, this.value);</b>
+<b class="fc"><i>647</i>&nbsp;        hash = HashUtils.hashCode(hash, this.paint);</b>
+<b class="fc"><i>648</i>&nbsp;        hash = HashUtils.hashCode(hash, this.stroke);</b>
+<b class="fc"><i>649</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelVisible);</b>
+<b class="fc"><i>650</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelAnchor);</b>
+<b class="fc"><i>651</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelGenerator);</b>
+<b class="fc"><i>652</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelXOffset);</b>
+<b class="fc"><i>653</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelYOffset);</b>
+<b class="fc"><i>654</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelFont);</b>
+<b class="fc"><i>655</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelPaint);</b>
+<b class="fc"><i>656</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelBackgroundPaint);</b>
+<b class="fc"><i>657</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelOutlineVisible);</b>
+<b class="fc"><i>658</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelOutlineStroke);</b>
+<b class="fc"><i>659</i>&nbsp;        hash = HashUtils.hashCode(hash, this.labelOutlinePaint);</b>
+<b class="fc"><i>660</i>&nbsp;        return hash;</b>
+<i>661</i>&nbsp;    }
+<i>662</i>&nbsp;
+<i>663</i>&nbsp;    /**
+<i>664</i>&nbsp;     * Returns an independent copy of this instance.
+<i>665</i>&nbsp;     *
+<i>666</i>&nbsp;     * @return An independent copy of this instance.
+<i>667</i>&nbsp;     *
+<i>668</i>&nbsp;     * @throws java.lang.CloneNotSupportedException if there is a problem with
+<i>669</i>&nbsp;     *         cloning.
+<i>670</i>&nbsp;     */
+<i>671</i>&nbsp;    @Override
+<i>672</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<i>673</i>&nbsp;        // FIXME: clone generator
+<b class="fc"><i>674</i>&nbsp;        return super.clone();</b>
+<i>675</i>&nbsp;    }
+<i>676</i>&nbsp;
+<i>677</i>&nbsp;    /**
+<i>678</i>&nbsp;     * Adds a property change listener.
+<i>679</i>&nbsp;     *
+<i>680</i>&nbsp;     * @param l  the listener.
+<i>681</i>&nbsp;     *
+<i>682</i>&nbsp;     * @see #removePropertyChangeListener(java.beans.PropertyChangeListener)
+<i>683</i>&nbsp;     */
+<i>684</i>&nbsp;    public void addPropertyChangeListener(PropertyChangeListener l) {
+<b class="fc"><i>685</i>&nbsp;        this.pcs.addPropertyChangeListener(l);</b>
+<b class="fc"><i>686</i>&nbsp;    }</b>
+<i>687</i>&nbsp;
+<i>688</i>&nbsp;    /**
+<i>689</i>&nbsp;     * Removes a property change listener.
+<i>690</i>&nbsp;     *
+<i>691</i>&nbsp;     * @param l  the listener.
+<i>692</i>&nbsp;     *
+<i>693</i>&nbsp;     * @see #addPropertyChangeListener(java.beans.PropertyChangeListener) 
+<i>694</i>&nbsp;     */
+<i>695</i>&nbsp;    public void removePropertyChangeListener(PropertyChangeListener l) {
+<b class="nc"><i>696</i>&nbsp;        this.pcs.removePropertyChangeListener(l);</b>
+<b class="nc"><i>697</i>&nbsp;    }</b>
+<i>698</i>&nbsp;
+<i>699</i>&nbsp;    /**
+<i>700</i>&nbsp;     * Provides serialization support.
+<i>701</i>&nbsp;     *
+<i>702</i>&nbsp;     * @param stream  the output stream.
+<i>703</i>&nbsp;     *
+<i>704</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>705</i>&nbsp;     */
+<i>706</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>707</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>708</i>&nbsp;        SerialUtils.writePaint(this.paint, stream);</b>
+<b class="fc"><i>709</i>&nbsp;        SerialUtils.writeStroke(this.stroke, stream);</b>
+<b class="fc"><i>710</i>&nbsp;        SerialUtils.writePaint(this.labelPaint, stream);</b>
+<b class="fc"><i>711</i>&nbsp;        SerialUtils.writePaint(this.labelBackgroundPaint, stream);</b>
+<b class="fc"><i>712</i>&nbsp;        SerialUtils.writeStroke(this.labelOutlineStroke, stream);</b>
+<b class="fc"><i>713</i>&nbsp;        SerialUtils.writePaint(this.labelOutlinePaint, stream);</b>
+<b class="fc"><i>714</i>&nbsp;    }</b>
+<i>715</i>&nbsp;
+<i>716</i>&nbsp;    /**
+<i>717</i>&nbsp;     * Provides serialization support.
+<i>718</i>&nbsp;     *
+<i>719</i>&nbsp;     * @param stream  the input stream.
+<i>720</i>&nbsp;     *
+<i>721</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>722</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>723</i>&nbsp;     */
+<i>724</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>725</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>726</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>727</i>&nbsp;        this.paint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>728</i>&nbsp;        this.stroke = SerialUtils.readStroke(stream);</b>
+<b class="fc"><i>729</i>&nbsp;        this.labelPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>730</i>&nbsp;        this.labelBackgroundPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>731</i>&nbsp;        this.labelOutlineStroke = SerialUtils.readStroke(stream);</b>
+<b class="fc"><i>732</i>&nbsp;        this.labelOutlinePaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>733</i>&nbsp;        this.pcs = new PropertyChangeSupport(this);</b>
+<b class="fc"><i>734</i>&nbsp;    }</b>
+<i>735</i>&nbsp;
+<i>736</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:56</div>
+</div>
+</body>
+</html>

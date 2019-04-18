@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PhoneticEngineRegressionTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language.bm</a> &gt; <span class="el_source">PhoneticEngineRegressionTest.java</span></div><h1>PhoneticEngineRegressionTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language.bm;
+
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.junit.Test;
+
+/**
+ * Tests PhoneticEngine and Languages.LanguageSet in ways very similar to code found in solr-3.6.0.
+ *
+ * @since 1.7
+ */
+<span class="pc bpc" id="L34" title="3 of 4 branches missed.">public class PhoneticEngineRegressionTest {</span>
+
+    @Test
+<span class="pc bnc" id="L37" title="All 4 branches missed.">    public void testSolrGENERIC() {</span>
+<span class="fc" id="L38">        Map&lt;String, String&gt; args;</span>
+
+        // concat is true, ruleType is EXACT
+<span class="fc" id="L41">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L42">        args.put(&quot;nameType&quot;, &quot;GENERIC&quot;);</span>
+<span class="fc" id="L43">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L44">        args.put(&quot;ruleType&quot;, &quot;EXACT&quot;);</span>
+<span class="fc" id="L45">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;anZelo|andZelo|angelo|anhelo|anjelo|anxelo&quot;);</span>
+<span class="fc" id="L46">        assertEquals(encode(args, true, &quot;D'Angelo&quot;), &quot;(anZelo|andZelo|angelo|anhelo|anjelo|anxelo)-(danZelo|dandZelo|dangelo|danhelo|danjelo|danxelo)&quot;);</span>
+<span class="fc" id="L47">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L48">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;andZelo|angelo|anxelo&quot;);</span>
+<span class="fc" id="L49">        assertEquals(encode(args, true, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is false, ruleType is EXACT
+<span class="fc" id="L52">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L53">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L54">        args.put(&quot;ruleType&quot;, &quot;EXACT&quot;);</span>
+<span class="fc" id="L55">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;anZelo|andZelo|angelo|anhelo|anjelo|anxelo&quot;);</span>
+<span class="fc" id="L56">        assertEquals(encode(args, false, &quot;D'Angelo&quot;), &quot;(anZelo|andZelo|angelo|anhelo|anjelo|anxelo)-(danZelo|dandZelo|dangelo|danhelo|danjelo|danxelo)&quot;);</span>
+<span class="fc" id="L57">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L58">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;andZelo|angelo|anxelo&quot;);</span>
+<span class="fc" id="L59">        assertEquals(encode(args, false, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is true, ruleType is APPROX
+<span class="fc" id="L62">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L63">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L64">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+<span class="fc" id="L65">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L66">        assertEquals(encode(args, true, &quot;D'Angelo&quot;), &quot;(YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo)-(dYngYlo|dYngilo|dagilo|dangYlo|dangilo|daniilo|danilo|danxilo|danzilo|dogilo|dongYlo|dongilo|doniilo|donilo|donxilo|donzilo)&quot;);</span>
+<span class="fc" id="L67">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L68">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;angilo|anxilo|anzilo|ongilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L69">        assertEquals(encode(args, true, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is false, ruleType is APPROX
+<span class="fc" id="L72">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L73">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L74">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+<span class="fc" id="L75">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L76">        assertEquals(encode(args, false, &quot;D'Angelo&quot;), &quot;(YngYlo|Yngilo|agilo|angYlo|angilo|aniilo|anilo|anxilo|anzilo|ogilo|ongYlo|ongilo|oniilo|onilo|onxilo|onzilo)-(dYngYlo|dYngilo|dagilo|dangYlo|dangilo|daniilo|danilo|danxilo|danzilo|dogilo|dongYlo|dongilo|doniilo|donilo|donxilo|donzilo)&quot;);</span>
+<span class="fc" id="L77">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L78">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;angilo|anxilo|anzilo|ongilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L79">        assertEquals(encode(args, false, &quot;1234&quot;), &quot;&quot;);</span>
+<span class="fc" id="L80">    }</span>
+
+    @Test
+<span class="pc bnc" id="L83" title="All 4 branches missed.">    public void testSolrASHKENAZI() {</span>
+<span class="fc" id="L84">        Map&lt;String, String&gt; args;</span>
+
+        // concat is true, ruleType is EXACT
+<span class="fc" id="L87">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L88">        args.put(&quot;nameType&quot;, &quot;ASHKENAZI&quot;);</span>
+<span class="fc" id="L89">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|angYlo|angilo|anilo|anxilo|anzilo|ongYlo|ongilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L90">        args.put(&quot;ruleType&quot;, &quot;EXACT&quot;);</span>
+<span class="fc" id="L91">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;andZelo|angelo|anhelo|anxelo&quot;);</span>
+<span class="fc" id="L92">        assertEquals(encode(args, true, &quot;D'Angelo&quot;), &quot;dandZelo|dangelo|danhelo|danxelo&quot;);</span>
+<span class="fc" id="L93">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L94">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;angelo|anxelo&quot;);</span>
+<span class="fc" id="L95">        assertEquals(encode(args, true, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is false, ruleType is EXACT
+<span class="fc" id="L98">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L99">        args.put(&quot;nameType&quot;, &quot;ASHKENAZI&quot;);</span>
+<span class="fc" id="L100">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|angYlo|angilo|anilo|anxilo|anzilo|ongYlo|ongilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L101">        args.put(&quot;ruleType&quot;, &quot;EXACT&quot;);</span>
+<span class="fc" id="L102">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;andZelo|angelo|anhelo|anxelo&quot;);</span>
+<span class="fc" id="L103">        assertEquals(encode(args, false, &quot;D'Angelo&quot;), &quot;dandZelo|dangelo|danhelo|danxelo&quot;);</span>
+<span class="fc" id="L104">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L105">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;angelo|anxelo&quot;);</span>
+<span class="fc" id="L106">        assertEquals(encode(args, false, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is true, ruleType is APPROX
+<span class="fc" id="L109">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L110">        args.put(&quot;nameType&quot;, &quot;ASHKENAZI&quot;);</span>
+<span class="fc" id="L111">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|angYlo|angilo|anilo|anxilo|anzilo|ongYlo|ongilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L112">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+<span class="fc" id="L113">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|angYlo|angilo|anilo|anxilo|anzilo|ongYlo|ongilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L114">        assertEquals(encode(args, true, &quot;D'Angelo&quot;), &quot;dYngYlo|dYngilo|dangYlo|dangilo|danilo|danxilo|danzilo|dongYlo|dongilo|donilo|donxilo|donzilo&quot;);</span>
+<span class="fc" id="L115">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L116">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;angilo|anxilo|ongilo|onxilo&quot;);</span>
+<span class="fc" id="L117">        assertEquals(encode(args, true, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is false, ruleType is APPROX
+<span class="fc" id="L120">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L121">        args.put(&quot;nameType&quot;, &quot;ASHKENAZI&quot;);</span>
+<span class="fc" id="L122">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|angYlo|angilo|anilo|anxilo|anzilo|ongYlo|ongilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L123">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+<span class="fc" id="L124">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;YngYlo|Yngilo|angYlo|angilo|anilo|anxilo|anzilo|ongYlo|ongilo|onilo|onxilo|onzilo&quot;);</span>
+<span class="fc" id="L125">        assertEquals(encode(args, false, &quot;D'Angelo&quot;), &quot;dYngYlo|dYngilo|dangYlo|dangilo|danilo|danxilo|danzilo|dongYlo|dongilo|donilo|donxilo|donzilo&quot;);</span>
+<span class="fc" id="L126">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L127">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;angilo|anxilo|ongilo|onxilo&quot;);</span>
+<span class="fc" id="L128">        assertEquals(encode(args, false, &quot;1234&quot;), &quot;&quot;);</span>
+<span class="fc" id="L129">    }</span>
+
+    @Test
+<span class="pc bnc" id="L132" title="All 4 branches missed.">    public void testSolrSEPHARDIC() {</span>
+<span class="fc" id="L133">        Map&lt;String, String&gt; args;</span>
+
+        // concat is true, ruleType is EXACT
+<span class="fc" id="L136">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L137">        args.put(&quot;nameType&quot;, &quot;SEPHARDIC&quot;);</span>
+<span class="fc" id="L138">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L139">        args.put(&quot;ruleType&quot;, &quot;EXACT&quot;);</span>
+<span class="fc" id="L140">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;anZelo|andZelo|anxelo&quot;);</span>
+<span class="fc" id="L141">        assertEquals(encode(args, true, &quot;D'Angelo&quot;), &quot;anZelo|andZelo|anxelo&quot;);</span>
+<span class="fc" id="L142">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L143">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;andZelo|anxelo&quot;);</span>
+<span class="fc" id="L144">        assertEquals(encode(args, true, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is false, ruleType is EXACT
+<span class="fc" id="L147">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L148">        args.put(&quot;nameType&quot;, &quot;SEPHARDIC&quot;);</span>
+<span class="fc" id="L149">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L150">        args.put(&quot;ruleType&quot;, &quot;EXACT&quot;);</span>
+<span class="fc" id="L151">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;anZelo|andZelo|anxelo&quot;);</span>
+<span class="fc" id="L152">        assertEquals(encode(args, false, &quot;D'Angelo&quot;), &quot;danZelo|dandZelo|danxelo&quot;);</span>
+<span class="fc" id="L153">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L154">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;andZelo|anxelo&quot;);</span>
+<span class="fc" id="L155">        assertEquals(encode(args, false, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is true, ruleType is APPROX
+<span class="fc" id="L158">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L159">        args.put(&quot;nameType&quot;, &quot;SEPHARDIC&quot;);</span>
+<span class="fc" id="L160">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L161">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+<span class="fc" id="L162">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L163">        assertEquals(encode(args, true, &quot;D'Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L164">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L165">        assertEquals(encode(args, true, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L166">        assertEquals(encode(args, true, &quot;1234&quot;), &quot;&quot;);</span>
+
+        // concat is false, ruleType is APPROX
+<span class="fc" id="L169">        args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L170">        args.put(&quot;nameType&quot;, &quot;SEPHARDIC&quot;);</span>
+<span class="fc" id="L171">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L172">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+<span class="fc" id="L173">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L174">        assertEquals(encode(args, false, &quot;D'Angelo&quot;), &quot;danhila|danhilu|danzila|danzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L175">        args.put(&quot;languageSet&quot;, &quot;italian,greek,spanish&quot;);</span>
+<span class="fc" id="L176">        assertEquals(encode(args, false, &quot;Angelo&quot;), &quot;anhila|anhilu|anzila|anzilu|nhila|nhilu|nzila|nzilu&quot;);</span>
+<span class="fc" id="L177">        assertEquals(encode(args, false, &quot;1234&quot;), &quot;&quot;);</span>
+<span class="fc" id="L178">    }</span>
+
+    @Test
+<span class="pc bnc" id="L181" title="All 4 branches missed.">    public void testCompatibilityWithOriginalVersion() {</span>
+        // see CODEC-187
+        // comparison: http://stevemorse.org/census/soundex.html
+
+<span class="fc" id="L185">        final Map&lt;String, String&gt; args = new TreeMap&lt;&gt;();</span>
+<span class="fc" id="L186">        args.put(&quot;nameType&quot;, &quot;GENERIC&quot;);</span>
+<span class="fc" id="L187">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+
+<span class="fc" id="L189">        assertEquals(encode(args, true, &quot;abram&quot;), &quot;Ybram|Ybrom|abram|abran|abrom|abron|avram|avrom|obram|obran|obrom|obron|ovram|ovrom&quot;);</span>
+<span class="fc" id="L190">        assertEquals(encode(args, true, &quot;Bendzin&quot;), &quot;bndzn|bntsn|bnzn|vndzn|vntsn&quot;);</span>
+
+<span class="fc" id="L192">        args.put(&quot;nameType&quot;, &quot;ASHKENAZI&quot;);</span>
+<span class="fc" id="L193">        args.put(&quot;ruleType&quot;, &quot;APPROX&quot;);</span>
+
+<span class="fc" id="L195">        assertEquals(encode(args, true, &quot;abram&quot;), &quot;Ybram|Ybrom|abram|abrom|avram|avrom|imbram|imbrom|obram|obrom|ombram|ombrom|ovram|ovrom&quot;);</span>
+<span class="fc" id="L196">        assertEquals(encode(args, true, &quot;Halpern&quot;), &quot;YlpYrn|Ylpirn|alpYrn|alpirn|olpYrn|olpirn|xalpirn|xolpirn&quot;);</span>
+
+<span class="fc" id="L198">    }</span>
+
+    /**
+     * This code is similar in style to code found in Solr:
+     * solr/core/src/java/org/apache/solr/analysis/BeiderMorseFilterFactory.java
+     *
+     * Making a JUnit test out of it to protect Solr from possible future
+     * regressions in Commons-Codec.
+     */
+<span class="fc" id="L207">    private static String encode(final Map&lt;String, String&gt; args, final boolean concat, final String input) {</span>
+<span class="fc" id="L208">        Languages.LanguageSet languageSet;</span>
+<span class="fc" id="L209">        PhoneticEngine engine;</span>
+
+        // PhoneticEngine = NameType + RuleType + concat
+        // we use common-codec's defaults: GENERIC + APPROX + true
+<span class="fc" id="L213">        final String nameTypeArg = args.get(&quot;nameType&quot;);</span>
+<span class="pc bpc" id="L214" title="4 of 10 branches missed.">        final NameType nameType = (nameTypeArg == null) ? NameType.GENERIC : NameType.valueOf(nameTypeArg);</span>
+
+<span class="fc" id="L216">        final String ruleTypeArg = args.get(&quot;ruleType&quot;);</span>
+<span class="pc bpc" id="L217" title="4 of 10 branches missed.">        final RuleType ruleType = (ruleTypeArg == null) ? RuleType.APPROX : RuleType.valueOf(ruleTypeArg);</span>
+
+<span class="fc" id="L219">        engine = new PhoneticEngine(nameType, ruleType, concat);</span>
+
+        // LanguageSet: defaults to automagic, otherwise a comma-separated list.
+<span class="fc" id="L222">        final String languageSetArg = args.get(&quot;languageSet&quot;);</span>
+<span class="pc bpc" id="L223" title="5 of 12 branches missed.">        if (languageSetArg == null || languageSetArg.equals(&quot;auto&quot;)) {</span>
+<span class="fc" id="L224">            languageSet = null;</span>
+        } else {
+<span class="fc" id="L226">            languageSet = Languages.LanguageSet.from(new HashSet&lt;&gt;(Arrays.asList(languageSetArg.split(&quot;,&quot;))));</span>
+        }
+
+        /*
+            org/apache/lucene/analysis/phonetic/BeiderMorseFilter.java (lines 96-98) does this:
+
+            encoded = (languages == null)
+                ? engine.encode(termAtt.toString())
+                : engine.encode(termAtt.toString(), languages);
+
+            Hence our approach, below:
+        */
+<span class="pc bpc" id="L238" title="4 of 10 branches missed.">        if (languageSet == null) {</span>
+<span class="fc" id="L239">            return engine.encode(input);</span>
+        }
+<span class="fc" id="L241">        return engine.encode(input, languageSet);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

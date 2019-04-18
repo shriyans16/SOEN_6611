@@ -1,0 +1,2028 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractXYItemRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractXYItemRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractXYItemRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.4%
+  </span>
+  <span class="absValue">
+    (38/ 59)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    43%
+  </span>
+  <span class="absValue">
+    (276/ 642)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------------------
+<i>28</i>&nbsp; * AbstractXYItemRenderer.java
+<i>29</i>&nbsp; * ---------------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2014, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Richard Atkinson;
+<i>34</i>&nbsp; *                   Focus Computer Services Limited;
+<i>35</i>&nbsp; *                   Tim Bardzil;
+<i>36</i>&nbsp; *                   Sergei Ivanov;
+<i>37</i>&nbsp; *                   Peter Kolb (patch 2809117);
+<i>38</i>&nbsp; *                   Martin Krauskopf;
+<i>39</i>&nbsp; *
+<i>40</i>&nbsp; * Changes:
+<i>41</i>&nbsp; * --------
+<i>42</i>&nbsp; * 15-Mar-2002 : Version 1 (DG);
+<i>43</i>&nbsp; * 09-Apr-2002 : Added a getToolTipGenerator() method reflecting the change in
+<i>44</i>&nbsp; *               the XYItemRenderer interface (DG);
+<i>45</i>&nbsp; * 05-Aug-2002 : Added a urlGenerator member variable to support HTML image
+<i>46</i>&nbsp; *               maps (RA);
+<i>47</i>&nbsp; * 20-Aug-2002 : Added property change events for the tooltip and URL
+<i>48</i>&nbsp; *               generators (DG);
+<i>49</i>&nbsp; * 22-Aug-2002 : Moved property change support into AbstractRenderer class (DG);
+<i>50</i>&nbsp; * 23-Sep-2002 : Fixed errors reported by Checkstyle tool (DG);
+<i>51</i>&nbsp; * 18-Nov-2002 : Added methods for drawing grid lines (DG);
+<i>52</i>&nbsp; * 17-Jan-2003 : Moved plot classes into a separate package (DG);
+<i>53</i>&nbsp; * 25-Mar-2003 : Implemented Serializable (DG);
+<i>54</i>&nbsp; * 01-May-2003 : Modified initialise() return type and drawItem() method
+<i>55</i>&nbsp; *               signature (DG);
+<i>56</i>&nbsp; * 15-May-2003 : Modified to take into account the plot orientation (DG);
+<i>57</i>&nbsp; * 21-May-2003 : Added labels to markers (DG);
+<i>58</i>&nbsp; * 05-Jun-2003 : Added domain and range grid bands (sponsored by Focus Computer
+<i>59</i>&nbsp; *               Services Ltd) (DG);
+<i>60</i>&nbsp; * 27-Jul-2003 : Added getRangeType() to support stacked XY area charts (RA);
+<i>61</i>&nbsp; * 31-Jul-2003 : Deprecated all but the default constructor (DG);
+<i>62</i>&nbsp; * 13-Aug-2003 : Implemented Cloneable (DG);
+<i>63</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>64</i>&nbsp; * 29-Oct-2003 : Added workaround for font alignment in PDF output (DG);
+<i>65</i>&nbsp; * 05-Nov-2003 : Fixed marker rendering bug (833623) (DG);
+<i>66</i>&nbsp; * 11-Feb-2004 : Updated labelling for markers (DG);
+<i>67</i>&nbsp; * 25-Feb-2004 : Added updateCrosshairValues() method.  Moved deprecated code
+<i>68</i>&nbsp; *               to bottom of source file (DG);
+<i>69</i>&nbsp; * 16-Apr-2004 : Added support for IntervalMarker in drawRangeMarker() method
+<i>70</i>&nbsp; *               - thanks to Tim Bardzil (DG);
+<i>71</i>&nbsp; * 05-May-2004 : Fixed bug (948310) where interval markers extend beyond axis
+<i>72</i>&nbsp; *               range (DG);
+<i>73</i>&nbsp; * 03-Jun-2004 : Fixed more bugs in drawing interval markers (DG);
+<i>74</i>&nbsp; * 26-Aug-2004 : Added the addEntity() method (DG);
+<i>75</i>&nbsp; * 29-Sep-2004 : Added annotation support (with layers) (DG);
+<i>76</i>&nbsp; * 30-Sep-2004 : Moved drawRotatedString() from RefineryUtilities --&gt;
+<i>77</i>&nbsp; *               TextUtilities (DG);
+<i>78</i>&nbsp; * 06-Oct-2004 : Added findDomainBounds() method and renamed
+<i>79</i>&nbsp; *               getRangeExtent() --&gt; findRangeBounds() (DG);
+<i>80</i>&nbsp; * 07-Jan-2005 : Removed deprecated code (DG);
+<i>81</i>&nbsp; * 27-Jan-2005 : Modified getLegendItem() to omit hidden series (DG);
+<i>82</i>&nbsp; * 24-Feb-2005 : Added getLegendItems() method (DG);
+<i>83</i>&nbsp; * 08-Mar-2005 : Fixed positioning of marker labels (DG);
+<i>84</i>&nbsp; * 20-Apr-2005 : Renamed XYLabelGenerator --&gt; XYItemLabelGenerator and
+<i>85</i>&nbsp; *               added generators for legend labels, tooltips and URLs (DG);
+<i>86</i>&nbsp; * 01-Jun-2005 : Handle one dimension of the marker label adjustment
+<i>87</i>&nbsp; *               automatically (DG);
+<i>88</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>89</i>&nbsp; * 20-Jul-2006 : Set dataset and series indices in LegendItem (DG);
+<i>90</i>&nbsp; * 24-Oct-2006 : Respect alpha setting in markers (see patch 1567843 by Sergei
+<i>91</i>&nbsp; *               Ivanov) (DG);
+<i>92</i>&nbsp; * 24-Oct-2006 : Added code to draw outlines for interval markers (DG);
+<i>93</i>&nbsp; * 24-Nov-2006 : Fixed cloning for legend item generators (DG);
+<i>94</i>&nbsp; * 06-Feb-2007 : Added new updateCrosshairValues() method that takes into
+<i>95</i>&nbsp; *               account multiple axis plots (see bug 1086307) (DG);
+<i>96</i>&nbsp; * 20-Feb-2007 : Fixed equals() method implementation (DG);
+<i>97</i>&nbsp; * 01-Mar-2007 : Fixed interval marker drawing (patch 1670686 thanks to
+<i>98</i>&nbsp; *               Sergei Ivanov) (DG);
+<i>99</i>&nbsp; * 22-Mar-2007 : Modified the tool tip generator look up (DG);
+<i>100</i>&nbsp; * 23-Mar-2007 : Added drawDomainLine() method (DG);
+<i>101</i>&nbsp; * 20-Apr-2007 : Updated getLegendItem() for renderer change, and deprecated
+<i>102</i>&nbsp; *               itemLabelGenerator and toolTipGenerator override fields (DG);
+<i>103</i>&nbsp; * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+<i>104</i>&nbsp; * 12-Nov-2007 : Fixed domain and range band drawing methods (DG);
+<i>105</i>&nbsp; * 07-Apr-2008 : Minor API doc update (DG);
+<i>106</i>&nbsp; * 14-May-2008 : Updated addEntity() method to take plot orientation into
+<i>107</i>&nbsp; *               account when the incoming area is null (DG);
+<i>108</i>&nbsp; * 02-Jun-2008 : Added isPointInRect() method (DG);
+<i>109</i>&nbsp; * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
+<i>110</i>&nbsp; * 09-Mar-2009 : Added getAnnotations() method (DG);
+<i>111</i>&nbsp; * 27-Mar-2009 : Added new findDomainBounds() and findRangeBounds() methods to
+<i>112</i>&nbsp; *               take account of hidden series (DG);
+<i>113</i>&nbsp; * 01-Apr-2009 : Moved defaultEntityRadius up to superclass (DG);
+<i>114</i>&nbsp; * 28-Apr-2009 : Updated getLegendItem() method to observe new
+<i>115</i>&nbsp; *               &#39;treatLegendShapeAsLine&#39; flag (DG);
+<i>116</i>&nbsp; * 24-Jun-2009 : Added support for annotation events - see patch 2809117
+<i>117</i>&nbsp; *               by PK (DG);
+<i>118</i>&nbsp; * 01-Sep-2009 : Bug 2840132 - set renderer index when drawing
+<i>119</i>&nbsp; *               annotations (DG);
+<i>120</i>&nbsp; * 06-Oct-2011 : Add utility methods to work with 1.4 API in GeneralPath (MK)
+<i>121</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>122</i>&nbsp; * 11-Jan-2014 : Fix error in fillDomainGridBand method (DG);
+<i>123</i>&nbsp; * 07-Apr-2014 : Don&#39;t use ObjectList anymore (DG);
+<i>124</i>&nbsp; * 29-Jul-2014 : Add rendering hint to normalise domain and range lines (DG);
+<i>125</i>&nbsp; * 
+<i>126</i>&nbsp; */
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;import java.awt.AlphaComposite;
+<i>131</i>&nbsp;import java.awt.Composite;
+<i>132</i>&nbsp;import java.awt.Font;
+<i>133</i>&nbsp;import java.awt.GradientPaint;
+<i>134</i>&nbsp;import java.awt.Graphics2D;
+<i>135</i>&nbsp;import java.awt.Paint;
+<i>136</i>&nbsp;import java.awt.RenderingHints;
+<i>137</i>&nbsp;import java.awt.Shape;
+<i>138</i>&nbsp;import java.awt.Stroke;
+<i>139</i>&nbsp;import java.awt.geom.Ellipse2D;
+<i>140</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>141</i>&nbsp;import java.awt.geom.Line2D;
+<i>142</i>&nbsp;import java.awt.geom.Point2D;
+<i>143</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>144</i>&nbsp;import java.io.Serializable;
+<i>145</i>&nbsp;import java.util.ArrayList;
+<i>146</i>&nbsp;import java.util.Collection;
+<i>147</i>&nbsp;import java.util.HashMap;
+<i>148</i>&nbsp;import java.util.Iterator;
+<i>149</i>&nbsp;import java.util.List;
+<i>150</i>&nbsp;import java.util.Map;
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;import org.jfree.chart.LegendItem;
+<i>153</i>&nbsp;import org.jfree.chart.LegendItemCollection;
+<i>154</i>&nbsp;import org.jfree.chart.annotations.Annotation;
+<i>155</i>&nbsp;import org.jfree.chart.annotations.XYAnnotation;
+<i>156</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>157</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>158</i>&nbsp;import org.jfree.chart.entity.XYItemEntity;
+<i>159</i>&nbsp;import org.jfree.chart.event.AnnotationChangeEvent;
+<i>160</i>&nbsp;import org.jfree.chart.event.AnnotationChangeListener;
+<i>161</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>162</i>&nbsp;import org.jfree.chart.labels.ItemLabelPosition;
+<i>163</i>&nbsp;import org.jfree.chart.labels.StandardXYSeriesLabelGenerator;
+<i>164</i>&nbsp;import org.jfree.chart.labels.XYItemLabelGenerator;
+<i>165</i>&nbsp;import org.jfree.chart.labels.XYSeriesLabelGenerator;
+<i>166</i>&nbsp;import org.jfree.chart.labels.XYToolTipGenerator;
+<i>167</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>168</i>&nbsp;import org.jfree.chart.plot.DrawingSupplier;
+<i>169</i>&nbsp;import org.jfree.chart.plot.IntervalMarker;
+<i>170</i>&nbsp;import org.jfree.chart.plot.Marker;
+<i>171</i>&nbsp;import org.jfree.chart.plot.Plot;
+<i>172</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>173</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>174</i>&nbsp;import org.jfree.chart.plot.ValueMarker;
+<i>175</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>176</i>&nbsp;import org.jfree.chart.renderer.AbstractRenderer;
+<i>177</i>&nbsp;import org.jfree.chart.urls.XYURLGenerator;
+<i>178</i>&nbsp;import org.jfree.chart.util.CloneUtils;
+<i>179</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>180</i>&nbsp;import org.jfree.data.Range;
+<i>181</i>&nbsp;import org.jfree.data.general.DatasetUtilities;
+<i>182</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>183</i>&nbsp;import org.jfree.text.TextUtilities;
+<i>184</i>&nbsp;import org.jfree.ui.GradientPaintTransformer;
+<i>185</i>&nbsp;import org.jfree.ui.Layer;
+<i>186</i>&nbsp;import org.jfree.ui.LengthAdjustmentType;
+<i>187</i>&nbsp;import org.jfree.ui.RectangleAnchor;
+<i>188</i>&nbsp;import org.jfree.ui.RectangleInsets;
+<i>189</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>190</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;/**
+<i>193</i>&nbsp; * A base class that can be used to create new {@link XYItemRenderer}
+<i>194</i>&nbsp; * implementations.
+<i>195</i>&nbsp; */
+<i>196</i>&nbsp;public abstract class AbstractXYItemRenderer extends AbstractRenderer
+<i>197</i>&nbsp;        implements XYItemRenderer, AnnotationChangeListener,
+<i>198</i>&nbsp;        Cloneable, Serializable {
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /** For serialization. */
+<i>201</i>&nbsp;    private static final long serialVersionUID = 8019124836026607990L;
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /** The plot. */
+<i>204</i>&nbsp;    private XYPlot plot;
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /** A list of item label generators (one per series). */
+<i>207</i>&nbsp;    private Map&lt;Integer, XYItemLabelGenerator&gt; itemLabelGeneratorMap;
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    /** The base item label generator. */
+<i>210</i>&nbsp;    private XYItemLabelGenerator baseItemLabelGenerator;
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /** A list of tool tip generators (one per series). */
+<i>213</i>&nbsp;    private Map&lt;Integer, XYToolTipGenerator&gt; toolTipGeneratorMap;
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    /** The base tool tip generator. */
+<i>216</i>&nbsp;    private XYToolTipGenerator baseToolTipGenerator;
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    /** The URL text generator. */
+<i>219</i>&nbsp;    private XYURLGenerator urlGenerator;
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    /**
+<i>222</i>&nbsp;     * Annotations to be drawn in the background layer (&#39;underneath&#39; the data
+<i>223</i>&nbsp;     * items).
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    private List backgroundAnnotations;
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;    /**
+<i>228</i>&nbsp;     * Annotations to be drawn in the foreground layer (&#39;on top&#39; of the data
+<i>229</i>&nbsp;     * items).
+<i>230</i>&nbsp;     */
+<i>231</i>&nbsp;    private List foregroundAnnotations;
+<i>232</i>&nbsp;
+<i>233</i>&nbsp;    /** The legend item label generator. */
+<i>234</i>&nbsp;    private XYSeriesLabelGenerator legendItemLabelGenerator;
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /** The legend item tool tip generator. */
+<i>237</i>&nbsp;    private XYSeriesLabelGenerator legendItemToolTipGenerator;
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;    /** The legend item URL generator. */
+<i>240</i>&nbsp;    private XYSeriesLabelGenerator legendItemURLGenerator;
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    /**
+<i>243</i>&nbsp;     * Creates a renderer where the tooltip generator and the URL generator are
+<i>244</i>&nbsp;     * both &lt;code&gt;null&lt;/code&gt;.
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    protected AbstractXYItemRenderer() {
+<b class="fc"><i>247</i>&nbsp;        super();</b>
+<b class="fc"><i>248</i>&nbsp;        this.itemLabelGenerator = null;</b>
+<b class="fc"><i>249</i>&nbsp;        this.itemLabelGeneratorMap </b>
+<i>250</i>&nbsp;                = new HashMap&lt;Integer, XYItemLabelGenerator&gt;();
+<b class="fc"><i>251</i>&nbsp;        this.toolTipGenerator = null;</b>
+<b class="fc"><i>252</i>&nbsp;        this.toolTipGeneratorMap = new HashMap&lt;Integer, XYToolTipGenerator&gt;();</b>
+<b class="fc"><i>253</i>&nbsp;        this.urlGenerator = null;</b>
+<b class="fc"><i>254</i>&nbsp;        this.backgroundAnnotations = new java.util.ArrayList();</b>
+<b class="fc"><i>255</i>&nbsp;        this.foregroundAnnotations = new java.util.ArrayList();</b>
+<b class="fc"><i>256</i>&nbsp;        this.legendItemLabelGenerator = new StandardXYSeriesLabelGenerator(</b>
+<i>257</i>&nbsp;                &quot;{0}&quot;);
+<b class="fc"><i>258</i>&nbsp;    }</b>
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    /**
+<i>261</i>&nbsp;     * Returns the number of passes through the data that the renderer requires
+<i>262</i>&nbsp;     * in order to draw the chart.  Most charts will require a single pass, but
+<i>263</i>&nbsp;     * some require two passes.
+<i>264</i>&nbsp;     *
+<i>265</i>&nbsp;     * @return The pass count.
+<i>266</i>&nbsp;     */
+<i>267</i>&nbsp;    @Override
+<i>268</i>&nbsp;    public int getPassCount() {
+<b class="fc"><i>269</i>&nbsp;        return 1;</b>
+<i>270</i>&nbsp;    }
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    /**
+<i>273</i>&nbsp;     * Returns the plot that the renderer is assigned to.
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @return The plot (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>276</i>&nbsp;     */
+<i>277</i>&nbsp;    @Override
+<i>278</i>&nbsp;    public XYPlot getPlot() {
+<b class="fc"><i>279</i>&nbsp;        return this.plot;</b>
+<i>280</i>&nbsp;    }
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    /**
+<i>283</i>&nbsp;     * Sets the plot that the renderer is assigned to.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @param plot  the plot (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>286</i>&nbsp;     */
+<i>287</i>&nbsp;    @Override
+<i>288</i>&nbsp;    public void setPlot(XYPlot plot) {
+<b class="fc"><i>289</i>&nbsp;        this.plot = plot;</b>
+<b class="fc"><i>290</i>&nbsp;    }</b>
+<i>291</i>&nbsp;
+<i>292</i>&nbsp;    /**
+<i>293</i>&nbsp;     * Initialises the renderer and returns a state object that should be
+<i>294</i>&nbsp;     * passed to all subsequent calls to the drawItem() method.
+<i>295</i>&nbsp;     * &lt;P&gt;
+<i>296</i>&nbsp;     * This method will be called before the first item is rendered, giving the
+<i>297</i>&nbsp;     * renderer an opportunity to initialise any state information it wants to
+<i>298</i>&nbsp;     * maintain.  The renderer can do nothing if it chooses.
+<i>299</i>&nbsp;     *
+<i>300</i>&nbsp;     * @param g2  the graphics device.
+<i>301</i>&nbsp;     * @param dataArea  the area inside the axes.
+<i>302</i>&nbsp;     * @param plot  the plot.
+<i>303</i>&nbsp;     * @param data  the data.
+<i>304</i>&nbsp;     * @param info  an optional info collection object to return data back to
+<i>305</i>&nbsp;     *              the caller.
+<i>306</i>&nbsp;     *
+<i>307</i>&nbsp;     * @return The renderer state (never &lt;code&gt;null&lt;/code&gt;).
+<i>308</i>&nbsp;     */
+<i>309</i>&nbsp;    @Override
+<i>310</i>&nbsp;    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
+<i>311</i>&nbsp;            XYPlot plot, XYDataset data, PlotRenderingInfo info) {
+<b class="fc"><i>312</i>&nbsp;        return new XYItemRendererState(info);</b>
+<i>313</i>&nbsp;    }
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    // ITEM LABEL GENERATOR
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    /**
+<i>318</i>&nbsp;     * Returns the label generator for a data item.  This implementation simply
+<i>319</i>&nbsp;     * passes control to the {@link #getSeriesItemLabelGenerator(int)} method.
+<i>320</i>&nbsp;     * If, for some reason, you want a different generator for individual
+<i>321</i>&nbsp;     * items, you can override this method.
+<i>322</i>&nbsp;     *
+<i>323</i>&nbsp;     * @param series  the series index (zero based).
+<i>324</i>&nbsp;     * @param item  the item index (zero based).
+<i>325</i>&nbsp;     *
+<i>326</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>327</i>&nbsp;     */
+<i>328</i>&nbsp;    @Override
+<i>329</i>&nbsp;    public XYItemLabelGenerator getItemLabelGenerator(int series, int item) {
+<i>330</i>&nbsp;        // return the generator for ALL series, if there is one...
+<b class="nc"><i>331</i>&nbsp;        if (this.itemLabelGenerator != null) {</b>
+<b class="nc"><i>332</i>&nbsp;            return this.itemLabelGenerator;</b>
+<i>333</i>&nbsp;        }
+<i>334</i>&nbsp;
+<i>335</i>&nbsp;        // otherwise look up the generator table
+<b class="nc"><i>336</i>&nbsp;        XYItemLabelGenerator generator</b>
+<b class="nc"><i>337</i>&nbsp;            = (XYItemLabelGenerator) this.itemLabelGeneratorMap.get(series);</b>
+<b class="nc"><i>338</i>&nbsp;        if (generator == null) {</b>
+<b class="nc"><i>339</i>&nbsp;            generator = this.baseItemLabelGenerator;</b>
+<i>340</i>&nbsp;        }
+<b class="nc"><i>341</i>&nbsp;        return generator;</b>
+<i>342</i>&nbsp;    }
+<i>343</i>&nbsp;
+<i>344</i>&nbsp;    /**
+<i>345</i>&nbsp;     * Returns the item label generator for a series.
+<i>346</i>&nbsp;     *
+<i>347</i>&nbsp;     * @param series  the series index (zero based).
+<i>348</i>&nbsp;     *
+<i>349</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>350</i>&nbsp;     */
+<i>351</i>&nbsp;    @Override
+<i>352</i>&nbsp;    public XYItemLabelGenerator getSeriesItemLabelGenerator(int series) {
+<b class="nc"><i>353</i>&nbsp;        return this.itemLabelGeneratorMap.get(series);</b>
+<i>354</i>&nbsp;    }
+<i>355</i>&nbsp;
+<i>356</i>&nbsp;    /**
+<i>357</i>&nbsp;     * Sets the item label generator for a series and sends a
+<i>358</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>359</i>&nbsp;     *
+<i>360</i>&nbsp;     * @param series  the series index (zero based).
+<i>361</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>362</i>&nbsp;     */
+<i>363</i>&nbsp;    @Override
+<i>364</i>&nbsp;    public void setSeriesItemLabelGenerator(int series,
+<i>365</i>&nbsp;            XYItemLabelGenerator generator) {
+<b class="fc"><i>366</i>&nbsp;        this.itemLabelGeneratorMap.put(series, generator);</b>
+<b class="fc"><i>367</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>368</i>&nbsp;    }</b>
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;    /**
+<i>371</i>&nbsp;     * Returns the base item label generator.
+<i>372</i>&nbsp;     *
+<i>373</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>374</i>&nbsp;     */
+<i>375</i>&nbsp;    @Override
+<i>376</i>&nbsp;    public XYItemLabelGenerator getBaseItemLabelGenerator() {
+<b class="nc"><i>377</i>&nbsp;        return this.baseItemLabelGenerator;</b>
+<i>378</i>&nbsp;    }
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    /**
+<i>381</i>&nbsp;     * Sets the base item label generator and sends a
+<i>382</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>385</i>&nbsp;     */
+<i>386</i>&nbsp;    @Override
+<i>387</i>&nbsp;    public void setBaseItemLabelGenerator(XYItemLabelGenerator generator) {
+<b class="fc"><i>388</i>&nbsp;        this.baseItemLabelGenerator = generator;</b>
+<b class="fc"><i>389</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>390</i>&nbsp;    }</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    // TOOL TIP GENERATOR
+<i>393</i>&nbsp;
+<i>394</i>&nbsp;    /**
+<i>395</i>&nbsp;     * Returns the tool tip generator for a data item.  If, for some reason,
+<i>396</i>&nbsp;     * you want a different generator for individual items, you can override
+<i>397</i>&nbsp;     * this method.
+<i>398</i>&nbsp;     *
+<i>399</i>&nbsp;     * @param series  the series index (zero based).
+<i>400</i>&nbsp;     * @param item  the item index (zero based).
+<i>401</i>&nbsp;     *
+<i>402</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>403</i>&nbsp;     */
+<i>404</i>&nbsp;    @Override
+<i>405</i>&nbsp;    public XYToolTipGenerator getToolTipGenerator(int series, int item) {
+<i>406</i>&nbsp;        // return the generator for ALL series, if there is one...
+<b class="fc"><i>407</i>&nbsp;        if (this.toolTipGenerator != null) {</b>
+<b class="nc"><i>408</i>&nbsp;            return this.toolTipGenerator;</b>
+<i>409</i>&nbsp;        }
+<i>410</i>&nbsp;
+<i>411</i>&nbsp;        // otherwise look up the generator table
+<b class="fc"><i>412</i>&nbsp;        XYToolTipGenerator generator</b>
+<b class="fc"><i>413</i>&nbsp;                = (XYToolTipGenerator) this.toolTipGeneratorMap.get(series);</b>
+<b class="fc"><i>414</i>&nbsp;        if (generator == null) {</b>
+<b class="nc"><i>415</i>&nbsp;            generator = this.baseToolTipGenerator;</b>
+<i>416</i>&nbsp;        }
+<b class="fc"><i>417</i>&nbsp;        return generator;</b>
+<i>418</i>&nbsp;    }
+<i>419</i>&nbsp;
+<i>420</i>&nbsp;    /**
+<i>421</i>&nbsp;     * Returns the tool tip generator for a series.
+<i>422</i>&nbsp;     *
+<i>423</i>&nbsp;     * @param series  the series index (zero based).
+<i>424</i>&nbsp;     *
+<i>425</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>426</i>&nbsp;     */
+<i>427</i>&nbsp;    @Override
+<i>428</i>&nbsp;    public XYToolTipGenerator getSeriesToolTipGenerator(int series) {
+<b class="nc"><i>429</i>&nbsp;        return this.toolTipGeneratorMap.get(series);</b>
+<i>430</i>&nbsp;    }
+<i>431</i>&nbsp;
+<i>432</i>&nbsp;    /**
+<i>433</i>&nbsp;     * Sets the tool tip generator for a series and sends a
+<i>434</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>435</i>&nbsp;     *
+<i>436</i>&nbsp;     * @param series  the series index (zero based).
+<i>437</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>438</i>&nbsp;     */
+<i>439</i>&nbsp;    @Override
+<i>440</i>&nbsp;    public void setSeriesToolTipGenerator(int series,
+<i>441</i>&nbsp;            XYToolTipGenerator generator) {
+<b class="fc"><i>442</i>&nbsp;        this.toolTipGeneratorMap.put(series, generator);</b>
+<b class="fc"><i>443</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>444</i>&nbsp;    }</b>
+<i>445</i>&nbsp;
+<i>446</i>&nbsp;    /**
+<i>447</i>&nbsp;     * Returns the base tool tip generator.
+<i>448</i>&nbsp;     *
+<i>449</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>450</i>&nbsp;     *
+<i>451</i>&nbsp;     * @see #setBaseToolTipGenerator(XYToolTipGenerator)
+<i>452</i>&nbsp;     */
+<i>453</i>&nbsp;    @Override
+<i>454</i>&nbsp;    public XYToolTipGenerator getBaseToolTipGenerator() {
+<b class="nc"><i>455</i>&nbsp;        return this.baseToolTipGenerator;</b>
+<i>456</i>&nbsp;    }
+<i>457</i>&nbsp;
+<i>458</i>&nbsp;    /**
+<i>459</i>&nbsp;     * Sets the base tool tip generator and sends a {@link RendererChangeEvent}
+<i>460</i>&nbsp;     * to all registered listeners.
+<i>461</i>&nbsp;     *
+<i>462</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>463</i>&nbsp;     *
+<i>464</i>&nbsp;     * @see #getBaseToolTipGenerator()
+<i>465</i>&nbsp;     */
+<i>466</i>&nbsp;    @Override
+<i>467</i>&nbsp;    public void setBaseToolTipGenerator(XYToolTipGenerator generator) {
+<b class="fc"><i>468</i>&nbsp;        this.baseToolTipGenerator = generator;</b>
+<b class="fc"><i>469</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>470</i>&nbsp;    }</b>
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;    // URL GENERATOR
+<i>473</i>&nbsp;
+<i>474</i>&nbsp;    /**
+<i>475</i>&nbsp;     * Returns the URL generator for HTML image maps.
+<i>476</i>&nbsp;     *
+<i>477</i>&nbsp;     * @return The URL generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>478</i>&nbsp;     */
+<i>479</i>&nbsp;    @Override
+<i>480</i>&nbsp;    public XYURLGenerator getURLGenerator() {
+<b class="nc"><i>481</i>&nbsp;        return this.urlGenerator;</b>
+<i>482</i>&nbsp;    }
+<i>483</i>&nbsp;
+<i>484</i>&nbsp;    /**
+<i>485</i>&nbsp;     * Sets the URL generator for HTML image maps and sends a
+<i>486</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>487</i>&nbsp;     *
+<i>488</i>&nbsp;     * @param urlGenerator  the URL generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>489</i>&nbsp;     */
+<i>490</i>&nbsp;    @Override
+<i>491</i>&nbsp;    public void setURLGenerator(XYURLGenerator urlGenerator) {
+<b class="fc"><i>492</i>&nbsp;        this.urlGenerator = urlGenerator;</b>
+<b class="fc"><i>493</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>494</i>&nbsp;    }</b>
+<i>495</i>&nbsp;
+<i>496</i>&nbsp;    /**
+<i>497</i>&nbsp;     * Adds an annotation and sends a {@link RendererChangeEvent} to all
+<i>498</i>&nbsp;     * registered listeners.  The annotation is added to the foreground
+<i>499</i>&nbsp;     * layer.
+<i>500</i>&nbsp;     *
+<i>501</i>&nbsp;     * @param annotation  the annotation (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>502</i>&nbsp;     */
+<i>503</i>&nbsp;    @Override
+<i>504</i>&nbsp;    public void addAnnotation(XYAnnotation annotation) {
+<i>505</i>&nbsp;        // defer argument checking
+<b class="nc"><i>506</i>&nbsp;        addAnnotation(annotation, Layer.FOREGROUND);</b>
+<b class="nc"><i>507</i>&nbsp;    }</b>
+<i>508</i>&nbsp;
+<i>509</i>&nbsp;    /**
+<i>510</i>&nbsp;     * Adds an annotation to the specified layer and sends a
+<i>511</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>512</i>&nbsp;     *
+<i>513</i>&nbsp;     * @param annotation  the annotation (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>514</i>&nbsp;     * @param layer  the layer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>515</i>&nbsp;     */
+<i>516</i>&nbsp;    @Override
+<i>517</i>&nbsp;    public void addAnnotation(XYAnnotation annotation, Layer layer) {
+<b class="fc"><i>518</i>&nbsp;        ParamChecks.nullNotPermitted(annotation, &quot;annotation&quot;);</b>
+<b class="fc"><i>519</i>&nbsp;        if (layer.equals(Layer.FOREGROUND)) {</b>
+<b class="fc"><i>520</i>&nbsp;            this.foregroundAnnotations.add(annotation);</b>
+<b class="fc"><i>521</i>&nbsp;            annotation.addChangeListener(this);</b>
+<b class="fc"><i>522</i>&nbsp;            fireChangeEvent();</b>
+<i>523</i>&nbsp;        }
+<b class="fc"><i>524</i>&nbsp;        else if (layer.equals(Layer.BACKGROUND)) {</b>
+<b class="fc"><i>525</i>&nbsp;            this.backgroundAnnotations.add(annotation);</b>
+<b class="fc"><i>526</i>&nbsp;            annotation.addChangeListener(this);</b>
+<b class="fc"><i>527</i>&nbsp;            fireChangeEvent();</b>
+<i>528</i>&nbsp;        }
+<i>529</i>&nbsp;        else {
+<i>530</i>&nbsp;            // should never get here
+<b class="nc"><i>531</i>&nbsp;            throw new RuntimeException(&quot;Unknown layer.&quot;);</b>
+<i>532</i>&nbsp;        }
+<b class="fc"><i>533</i>&nbsp;    }</b>
+<i>534</i>&nbsp;    /**
+<i>535</i>&nbsp;     * Removes the specified annotation and sends a {@link RendererChangeEvent}
+<i>536</i>&nbsp;     * to all registered listeners.
+<i>537</i>&nbsp;     *
+<i>538</i>&nbsp;     * @param annotation  the annotation to remove (&lt;code&gt;null&lt;/code&gt; not
+<i>539</i>&nbsp;     *                    permitted).
+<i>540</i>&nbsp;     *
+<i>541</i>&nbsp;     * @return A boolean to indicate whether or not the annotation was
+<i>542</i>&nbsp;     *         successfully removed.
+<i>543</i>&nbsp;     */
+<i>544</i>&nbsp;    @Override
+<i>545</i>&nbsp;    public boolean removeAnnotation(XYAnnotation annotation) {
+<b class="nc"><i>546</i>&nbsp;        boolean removed = this.foregroundAnnotations.remove(annotation);</b>
+<b class="nc"><i>547</i>&nbsp;        removed = removed &amp; this.backgroundAnnotations.remove(annotation);</b>
+<b class="nc"><i>548</i>&nbsp;        annotation.removeChangeListener(this);</b>
+<b class="nc"><i>549</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>550</i>&nbsp;        return removed;</b>
+<i>551</i>&nbsp;    }
+<i>552</i>&nbsp;
+<i>553</i>&nbsp;    /**
+<i>554</i>&nbsp;     * Removes all annotations and sends a {@link RendererChangeEvent}
+<i>555</i>&nbsp;     * to all registered listeners.
+<i>556</i>&nbsp;     */
+<i>557</i>&nbsp;    @Override
+<i>558</i>&nbsp;    public void removeAnnotations() {
+<b class="nc"><i>559</i>&nbsp;        for(int i = 0; i &lt; this.foregroundAnnotations.size(); i++){</b>
+<b class="nc"><i>560</i>&nbsp;            XYAnnotation annotation </b>
+<b class="nc"><i>561</i>&nbsp;                    = (XYAnnotation) this.foregroundAnnotations.get(i);</b>
+<b class="nc"><i>562</i>&nbsp;            annotation.removeChangeListener(this);</b>
+<i>563</i>&nbsp;        }
+<b class="nc"><i>564</i>&nbsp;         for(int i = 0; i &lt; this.backgroundAnnotations.size(); i++){</b>
+<b class="nc"><i>565</i>&nbsp;            XYAnnotation annotation </b>
+<b class="nc"><i>566</i>&nbsp;                    = (XYAnnotation) this.backgroundAnnotations.get(i);</b>
+<b class="nc"><i>567</i>&nbsp;            annotation.removeChangeListener(this);</b>
+<i>568</i>&nbsp;        }
+<b class="nc"><i>569</i>&nbsp;        this.foregroundAnnotations.clear();</b>
+<b class="nc"><i>570</i>&nbsp;        this.backgroundAnnotations.clear();</b>
+<b class="nc"><i>571</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>572</i>&nbsp;    }</b>
+<i>573</i>&nbsp;
+<i>574</i>&nbsp;
+<i>575</i>&nbsp;    /**
+<i>576</i>&nbsp;     * Receives notification of a change to an {@link Annotation} added to
+<i>577</i>&nbsp;     * this renderer.
+<i>578</i>&nbsp;     *
+<i>579</i>&nbsp;     * @param event  information about the event (not used here).
+<i>580</i>&nbsp;     *
+<i>581</i>&nbsp;     * @since 1.0.14
+<i>582</i>&nbsp;     */
+<i>583</i>&nbsp;    @Override
+<i>584</i>&nbsp;    public void annotationChanged(AnnotationChangeEvent event) {
+<b class="nc"><i>585</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>586</i>&nbsp;    }</b>
+<i>587</i>&nbsp;
+<i>588</i>&nbsp;    /**
+<i>589</i>&nbsp;     * Returns a collection of the annotations that are assigned to the
+<i>590</i>&nbsp;     * renderer.
+<i>591</i>&nbsp;     *
+<i>592</i>&nbsp;     * @return A collection of annotations (possibly empty but never
+<i>593</i>&nbsp;     *     &lt;code&gt;null&lt;/code&gt;).
+<i>594</i>&nbsp;     * 
+<i>595</i>&nbsp;     * @since 1.0.13
+<i>596</i>&nbsp;     */
+<i>597</i>&nbsp;    public Collection getAnnotations() {
+<b class="fc"><i>598</i>&nbsp;        List result = new java.util.ArrayList(this.foregroundAnnotations);</b>
+<b class="fc"><i>599</i>&nbsp;        result.addAll(this.backgroundAnnotations);</b>
+<b class="fc"><i>600</i>&nbsp;        return result;</b>
+<i>601</i>&nbsp;    }
+<i>602</i>&nbsp;
+<i>603</i>&nbsp;    /**
+<i>604</i>&nbsp;     * Returns the legend item label generator.
+<i>605</i>&nbsp;     *
+<i>606</i>&nbsp;     * @return The label generator (never &lt;code&gt;null&lt;/code&gt;).
+<i>607</i>&nbsp;     *
+<i>608</i>&nbsp;     * @see #setLegendItemLabelGenerator(XYSeriesLabelGenerator)
+<i>609</i>&nbsp;     */
+<i>610</i>&nbsp;    @Override
+<i>611</i>&nbsp;    public XYSeriesLabelGenerator getLegendItemLabelGenerator() {
+<b class="fc"><i>612</i>&nbsp;        return this.legendItemLabelGenerator;</b>
+<i>613</i>&nbsp;    }
+<i>614</i>&nbsp;
+<i>615</i>&nbsp;    /**
+<i>616</i>&nbsp;     * Sets the legend item label generator and sends a
+<i>617</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>618</i>&nbsp;     *
+<i>619</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>620</i>&nbsp;     *
+<i>621</i>&nbsp;     * @see #getLegendItemLabelGenerator()
+<i>622</i>&nbsp;     */
+<i>623</i>&nbsp;    @Override
+<i>624</i>&nbsp;    public void setLegendItemLabelGenerator(XYSeriesLabelGenerator generator) {
+<b class="fc"><i>625</i>&nbsp;        ParamChecks.nullNotPermitted(generator, &quot;generator&quot;);</b>
+<b class="fc"><i>626</i>&nbsp;        this.legendItemLabelGenerator = generator;</b>
+<b class="fc"><i>627</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>628</i>&nbsp;    }</b>
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;    /**
+<i>631</i>&nbsp;     * Returns the legend item tool tip generator.
+<i>632</i>&nbsp;     *
+<i>633</i>&nbsp;     * @return The tool tip generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>634</i>&nbsp;     *
+<i>635</i>&nbsp;     * @see #setLegendItemToolTipGenerator(XYSeriesLabelGenerator)
+<i>636</i>&nbsp;     */
+<i>637</i>&nbsp;    public XYSeriesLabelGenerator getLegendItemToolTipGenerator() {
+<b class="fc"><i>638</i>&nbsp;        return this.legendItemToolTipGenerator;</b>
+<i>639</i>&nbsp;    }
+<i>640</i>&nbsp;
+<i>641</i>&nbsp;    /**
+<i>642</i>&nbsp;     * Sets the legend item tool tip generator and sends a
+<i>643</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>644</i>&nbsp;     *
+<i>645</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>646</i>&nbsp;     *
+<i>647</i>&nbsp;     * @see #getLegendItemToolTipGenerator()
+<i>648</i>&nbsp;     */
+<i>649</i>&nbsp;    public void setLegendItemToolTipGenerator(
+<i>650</i>&nbsp;            XYSeriesLabelGenerator generator) {
+<b class="fc"><i>651</i>&nbsp;        this.legendItemToolTipGenerator = generator;</b>
+<b class="fc"><i>652</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>653</i>&nbsp;    }</b>
+<i>654</i>&nbsp;
+<i>655</i>&nbsp;    /**
+<i>656</i>&nbsp;     * Returns the legend item URL generator.
+<i>657</i>&nbsp;     *
+<i>658</i>&nbsp;     * @return The URL generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>659</i>&nbsp;     *
+<i>660</i>&nbsp;     * @see #setLegendItemURLGenerator(XYSeriesLabelGenerator)
+<i>661</i>&nbsp;     */
+<i>662</i>&nbsp;    public XYSeriesLabelGenerator getLegendItemURLGenerator() {
+<b class="fc"><i>663</i>&nbsp;        return this.legendItemURLGenerator;</b>
+<i>664</i>&nbsp;    }
+<i>665</i>&nbsp;
+<i>666</i>&nbsp;    /**
+<i>667</i>&nbsp;     * Sets the legend item URL generator and sends a
+<i>668</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>669</i>&nbsp;     *
+<i>670</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>671</i>&nbsp;     *
+<i>672</i>&nbsp;     * @see #getLegendItemURLGenerator()
+<i>673</i>&nbsp;     */
+<i>674</i>&nbsp;    public void setLegendItemURLGenerator(XYSeriesLabelGenerator generator) {
+<b class="fc"><i>675</i>&nbsp;        this.legendItemURLGenerator = generator;</b>
+<b class="fc"><i>676</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>677</i>&nbsp;    }</b>
+<i>678</i>&nbsp;
+<i>679</i>&nbsp;    /**
+<i>680</i>&nbsp;     * Returns the lower and upper bounds (range) of the x-values in the
+<i>681</i>&nbsp;     * specified dataset.
+<i>682</i>&nbsp;     *
+<i>683</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>684</i>&nbsp;     *
+<i>685</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>686</i>&nbsp;     *         or empty).
+<i>687</i>&nbsp;     *
+<i>688</i>&nbsp;     * @see #findRangeBounds(XYDataset)
+<i>689</i>&nbsp;     */
+<i>690</i>&nbsp;    @Override
+<i>691</i>&nbsp;    public Range findDomainBounds(XYDataset dataset) {
+<b class="fc"><i>692</i>&nbsp;        return findDomainBounds(dataset, false);</b>
+<i>693</i>&nbsp;    }
+<i>694</i>&nbsp;
+<i>695</i>&nbsp;    /**
+<i>696</i>&nbsp;     * Returns the lower and upper bounds (range) of the x-values in the
+<i>697</i>&nbsp;     * specified dataset.
+<i>698</i>&nbsp;     *
+<i>699</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>700</i>&nbsp;     * @param includeInterval  include the interval (if any) for the dataset?
+<i>701</i>&nbsp;     *
+<i>702</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>703</i>&nbsp;     *         or empty).
+<i>704</i>&nbsp;     *
+<i>705</i>&nbsp;     * @since 1.0.13
+<i>706</i>&nbsp;     */
+<i>707</i>&nbsp;    protected Range findDomainBounds(XYDataset dataset,
+<i>708</i>&nbsp;            boolean includeInterval) {
+<b class="fc"><i>709</i>&nbsp;        if (dataset == null) {</b>
+<b class="fc"><i>710</i>&nbsp;            return null;</b>
+<i>711</i>&nbsp;        }
+<b class="fc"><i>712</i>&nbsp;        if (getDataBoundsIncludesVisibleSeriesOnly()) {</b>
+<b class="fc"><i>713</i>&nbsp;            List visibleSeriesKeys = new ArrayList();</b>
+<b class="fc"><i>714</i>&nbsp;            int seriesCount = dataset.getSeriesCount();</b>
+<b class="fc"><i>715</i>&nbsp;            for (int s = 0; s &lt; seriesCount; s++) {</b>
+<b class="fc"><i>716</i>&nbsp;                if (isSeriesVisible(s)) {</b>
+<b class="fc"><i>717</i>&nbsp;                    visibleSeriesKeys.add(dataset.getSeriesKey(s));</b>
+<i>718</i>&nbsp;                }
+<i>719</i>&nbsp;            }
+<b class="fc"><i>720</i>&nbsp;            return DatasetUtilities.findDomainBounds(dataset,</b>
+<i>721</i>&nbsp;                    visibleSeriesKeys, includeInterval);
+<i>722</i>&nbsp;        }
+<b class="nc"><i>723</i>&nbsp;        return DatasetUtilities.findDomainBounds(dataset, includeInterval);</b>
+<i>724</i>&nbsp;    }
+<i>725</i>&nbsp;
+<i>726</i>&nbsp;    /**
+<i>727</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>728</i>&nbsp;     * items from the specified dataset.
+<i>729</i>&nbsp;     *
+<i>730</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>731</i>&nbsp;     *
+<i>732</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>733</i>&nbsp;     *         or empty).
+<i>734</i>&nbsp;     *
+<i>735</i>&nbsp;     * @see #findDomainBounds(XYDataset)
+<i>736</i>&nbsp;     */
+<i>737</i>&nbsp;    @Override
+<i>738</i>&nbsp;    public Range findRangeBounds(XYDataset dataset) {
+<b class="fc"><i>739</i>&nbsp;        return findRangeBounds(dataset, false);</b>
+<i>740</i>&nbsp;    }
+<i>741</i>&nbsp;
+<i>742</i>&nbsp;    /**
+<i>743</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>744</i>&nbsp;     * items from the specified dataset.
+<i>745</i>&nbsp;     *
+<i>746</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>747</i>&nbsp;     * @param includeInterval  include the interval (if any) for the dataset?
+<i>748</i>&nbsp;     *
+<i>749</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>750</i>&nbsp;     *         or empty).
+<i>751</i>&nbsp;     *
+<i>752</i>&nbsp;     * @since 1.0.13
+<i>753</i>&nbsp;     */
+<i>754</i>&nbsp;    protected Range findRangeBounds(XYDataset dataset,
+<i>755</i>&nbsp;            boolean includeInterval) {
+<b class="fc"><i>756</i>&nbsp;        if (dataset == null) {</b>
+<b class="fc"><i>757</i>&nbsp;            return null;</b>
+<i>758</i>&nbsp;        }
+<b class="fc"><i>759</i>&nbsp;        if (getDataBoundsIncludesVisibleSeriesOnly()) {</b>
+<b class="fc"><i>760</i>&nbsp;            List visibleSeriesKeys = new ArrayList();</b>
+<b class="fc"><i>761</i>&nbsp;            int seriesCount = dataset.getSeriesCount();</b>
+<b class="fc"><i>762</i>&nbsp;            for (int s = 0; s &lt; seriesCount; s++) {</b>
+<b class="fc"><i>763</i>&nbsp;                if (isSeriesVisible(s)) {</b>
+<b class="fc"><i>764</i>&nbsp;                    visibleSeriesKeys.add(dataset.getSeriesKey(s));</b>
+<i>765</i>&nbsp;                }
+<i>766</i>&nbsp;            }
+<i>767</i>&nbsp;            // the bounds should be calculated using just the items within
+<i>768</i>&nbsp;            // the current range of the x-axis...if there is one
+<b class="fc"><i>769</i>&nbsp;            Range xRange = null;</b>
+<b class="fc"><i>770</i>&nbsp;            XYPlot p = getPlot();</b>
+<b class="fc"><i>771</i>&nbsp;            if (p != null) {</b>
+<b class="fc"><i>772</i>&nbsp;                ValueAxis xAxis = null;</b>
+<b class="fc"><i>773</i>&nbsp;                int index = p.getIndexOf(this);</b>
+<b class="fc"><i>774</i>&nbsp;                if (index &gt;= 0) {</b>
+<b class="fc"><i>775</i>&nbsp;                    xAxis = this.plot.getDomainAxisForDataset(index);</b>
+<i>776</i>&nbsp;                }
+<b class="fc"><i>777</i>&nbsp;                if (xAxis != null) {</b>
+<b class="fc"><i>778</i>&nbsp;                    xRange = xAxis.getRange();</b>
+<i>779</i>&nbsp;                }
+<i>780</i>&nbsp;            }
+<b class="fc"><i>781</i>&nbsp;            if (xRange == null) {</b>
+<b class="fc"><i>782</i>&nbsp;                xRange = new Range(Double.NEGATIVE_INFINITY,</b>
+<i>783</i>&nbsp;                        Double.POSITIVE_INFINITY);
+<i>784</i>&nbsp;            }
+<b class="fc"><i>785</i>&nbsp;            return DatasetUtilities.findRangeBounds(dataset,</b>
+<i>786</i>&nbsp;                    visibleSeriesKeys, xRange, includeInterval);
+<i>787</i>&nbsp;        }
+<b class="nc"><i>788</i>&nbsp;        return DatasetUtilities.findRangeBounds(dataset, includeInterval);</b>
+<i>789</i>&nbsp;    }
+<i>790</i>&nbsp;
+<i>791</i>&nbsp;    /**
+<i>792</i>&nbsp;     * Returns a (possibly empty) collection of legend items for the series
+<i>793</i>&nbsp;     * that this renderer is responsible for drawing.
+<i>794</i>&nbsp;     *
+<i>795</i>&nbsp;     * @return The legend item collection (never &lt;code&gt;null&lt;/code&gt;).
+<i>796</i>&nbsp;     */
+<i>797</i>&nbsp;    @Override
+<i>798</i>&nbsp;    public LegendItemCollection getLegendItems() {
+<b class="nc"><i>799</i>&nbsp;        if (this.plot == null) {</b>
+<b class="nc"><i>800</i>&nbsp;            return new LegendItemCollection();</b>
+<i>801</i>&nbsp;        }
+<b class="nc"><i>802</i>&nbsp;        LegendItemCollection result = new LegendItemCollection();</b>
+<b class="nc"><i>803</i>&nbsp;        int index = this.plot.getIndexOf(this);</b>
+<b class="nc"><i>804</i>&nbsp;        XYDataset dataset = this.plot.getDataset(index);</b>
+<b class="nc"><i>805</i>&nbsp;        if (dataset != null) {</b>
+<b class="nc"><i>806</i>&nbsp;            int seriesCount = dataset.getSeriesCount();</b>
+<b class="nc"><i>807</i>&nbsp;            for (int i = 0; i &lt; seriesCount; i++) {</b>
+<b class="nc"><i>808</i>&nbsp;                if (isSeriesVisibleInLegend(i)) {</b>
+<b class="nc"><i>809</i>&nbsp;                    LegendItem item = getLegendItem(index, i);</b>
+<b class="nc"><i>810</i>&nbsp;                    if (item != null) {</b>
+<b class="nc"><i>811</i>&nbsp;                        result.add(item);</b>
+<i>812</i>&nbsp;                    }
+<i>813</i>&nbsp;                }
+<i>814</i>&nbsp;            }
+<i>815</i>&nbsp;
+<i>816</i>&nbsp;        }
+<b class="nc"><i>817</i>&nbsp;        return result;</b>
+<i>818</i>&nbsp;    }
+<i>819</i>&nbsp;
+<i>820</i>&nbsp;    /**
+<i>821</i>&nbsp;     * Returns a default legend item for the specified series.  Subclasses
+<i>822</i>&nbsp;     * should override this method to generate customised items.
+<i>823</i>&nbsp;     *
+<i>824</i>&nbsp;     * @param datasetIndex  the dataset index (zero-based).
+<i>825</i>&nbsp;     * @param series  the series index (zero-based).
+<i>826</i>&nbsp;     *
+<i>827</i>&nbsp;     * @return A legend item for the series.
+<i>828</i>&nbsp;     */
+<i>829</i>&nbsp;    @Override
+<i>830</i>&nbsp;    public LegendItem getLegendItem(int datasetIndex, int series) {
+<b class="fc"><i>831</i>&nbsp;        XYPlot xyplot = getPlot();</b>
+<b class="fc"><i>832</i>&nbsp;        if (xyplot == null) {</b>
+<b class="nc"><i>833</i>&nbsp;            return null;</b>
+<i>834</i>&nbsp;        }
+<b class="fc"><i>835</i>&nbsp;        XYDataset dataset = xyplot.getDataset(datasetIndex);</b>
+<b class="fc"><i>836</i>&nbsp;        if (dataset == null) {</b>
+<b class="nc"><i>837</i>&nbsp;            return null;</b>
+<i>838</i>&nbsp;        }
+<b class="fc"><i>839</i>&nbsp;        String label = this.legendItemLabelGenerator.generateLabel(dataset,</b>
+<i>840</i>&nbsp;                series);
+<b class="fc"><i>841</i>&nbsp;        String description = label;</b>
+<b class="fc"><i>842</i>&nbsp;        String toolTipText = null;</b>
+<b class="fc"><i>843</i>&nbsp;        if (getLegendItemToolTipGenerator() != null) {</b>
+<b class="nc"><i>844</i>&nbsp;            toolTipText = getLegendItemToolTipGenerator().generateLabel(</b>
+<i>845</i>&nbsp;                    dataset, series);
+<i>846</i>&nbsp;        }
+<b class="fc"><i>847</i>&nbsp;        String urlText = null;</b>
+<b class="fc"><i>848</i>&nbsp;        if (getLegendItemURLGenerator() != null) {</b>
+<b class="nc"><i>849</i>&nbsp;            urlText = getLegendItemURLGenerator().generateLabel(dataset,</b>
+<i>850</i>&nbsp;                    series);
+<i>851</i>&nbsp;        }
+<b class="fc"><i>852</i>&nbsp;        Shape shape = lookupLegendShape(series);</b>
+<b class="fc"><i>853</i>&nbsp;        Paint paint = lookupSeriesPaint(series);</b>
+<b class="fc"><i>854</i>&nbsp;        LegendItem item = new LegendItem(label, paint);</b>
+<b class="fc"><i>855</i>&nbsp;        item.setToolTipText(toolTipText);</b>
+<b class="fc"><i>856</i>&nbsp;        item.setURLText(urlText);</b>
+<b class="fc"><i>857</i>&nbsp;        item.setLabelFont(lookupLegendTextFont(series));</b>
+<b class="fc"><i>858</i>&nbsp;        Paint labelPaint = lookupLegendTextPaint(series);</b>
+<b class="fc"><i>859</i>&nbsp;        if (labelPaint != null) {</b>
+<b class="nc"><i>860</i>&nbsp;            item.setLabelPaint(labelPaint);</b>
+<i>861</i>&nbsp;        }
+<b class="fc"><i>862</i>&nbsp;        item.setSeriesKey(dataset.getSeriesKey(series));</b>
+<b class="fc"><i>863</i>&nbsp;        item.setSeriesIndex(series);</b>
+<b class="fc"><i>864</i>&nbsp;        item.setDataset(dataset);</b>
+<b class="fc"><i>865</i>&nbsp;        item.setDatasetIndex(datasetIndex);</b>
+<i>866</i>&nbsp;
+<b class="fc"><i>867</i>&nbsp;        if (getTreatLegendShapeAsLine()) {</b>
+<b class="nc"><i>868</i>&nbsp;            item.setLineVisible(true);</b>
+<b class="nc"><i>869</i>&nbsp;            item.setLine(shape);</b>
+<b class="nc"><i>870</i>&nbsp;            item.setLinePaint(paint);</b>
+<b class="nc"><i>871</i>&nbsp;            item.setShapeVisible(false);</b>
+<i>872</i>&nbsp;        }
+<i>873</i>&nbsp;        else {
+<b class="fc"><i>874</i>&nbsp;            Paint outlinePaint = lookupSeriesOutlinePaint(series);</b>
+<b class="fc"><i>875</i>&nbsp;            Stroke outlineStroke = lookupSeriesOutlineStroke(series);</b>
+<b class="fc"><i>876</i>&nbsp;            item.setOutlinePaint(outlinePaint);</b>
+<b class="fc"><i>877</i>&nbsp;            item.setOutlineStroke(outlineStroke);</b>
+<i>878</i>&nbsp;        }
+<b class="fc"><i>879</i>&nbsp;        return item;</b>
+<i>880</i>&nbsp;    }
+<i>881</i>&nbsp;
+<i>882</i>&nbsp;    /**
+<i>883</i>&nbsp;     * Fills a band between two values on the axis.  This can be used to color
+<i>884</i>&nbsp;     * bands between the grid lines.
+<i>885</i>&nbsp;     *
+<i>886</i>&nbsp;     * @param g2  the graphics device.
+<i>887</i>&nbsp;     * @param plot  the plot.
+<i>888</i>&nbsp;     * @param axis  the domain axis.
+<i>889</i>&nbsp;     * @param dataArea  the data area.
+<i>890</i>&nbsp;     * @param start  the start value.
+<i>891</i>&nbsp;     * @param end  the end value.
+<i>892</i>&nbsp;     */
+<i>893</i>&nbsp;    @Override
+<i>894</i>&nbsp;    public void fillDomainGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>895</i>&nbsp;            Rectangle2D dataArea, double start, double end) {
+<i>896</i>&nbsp;
+<b class="nc"><i>897</i>&nbsp;        double x1 = axis.valueToJava2D(start, dataArea,</b>
+<b class="nc"><i>898</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<b class="nc"><i>899</i>&nbsp;        double x2 = axis.valueToJava2D(end, dataArea,</b>
+<b class="nc"><i>900</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<i>901</i>&nbsp;        Rectangle2D band;
+<b class="nc"><i>902</i>&nbsp;        if (plot.getOrientation() == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>903</i>&nbsp;            band = new Rectangle2D.Double(Math.min(x1, x2), dataArea.getMinY(),</b>
+<b class="nc"><i>904</i>&nbsp;                    Math.abs(x2 - x1), dataArea.getHeight());</b>
+<i>905</i>&nbsp;        }
+<i>906</i>&nbsp;        else {
+<b class="nc"><i>907</i>&nbsp;            band = new Rectangle2D.Double(dataArea.getMinX(), Math.min(x1, x2),</b>
+<b class="nc"><i>908</i>&nbsp;                    dataArea.getWidth(), Math.abs(x2 - x1));</b>
+<i>909</i>&nbsp;        }
+<b class="nc"><i>910</i>&nbsp;        Paint paint = plot.getDomainTickBandPaint();</b>
+<i>911</i>&nbsp;
+<b class="nc"><i>912</i>&nbsp;        if (paint != null) {</b>
+<b class="nc"><i>913</i>&nbsp;            g2.setPaint(paint);</b>
+<b class="nc"><i>914</i>&nbsp;            g2.fill(band);</b>
+<i>915</i>&nbsp;        }
+<i>916</i>&nbsp;
+<b class="nc"><i>917</i>&nbsp;    }</b>
+<i>918</i>&nbsp;
+<i>919</i>&nbsp;    /**
+<i>920</i>&nbsp;     * Fills a band between two values on the range axis.  This can be used to
+<i>921</i>&nbsp;     * color bands between the grid lines.
+<i>922</i>&nbsp;     *
+<i>923</i>&nbsp;     * @param g2  the graphics device.
+<i>924</i>&nbsp;     * @param plot  the plot.
+<i>925</i>&nbsp;     * @param axis  the range axis.
+<i>926</i>&nbsp;     * @param dataArea  the data area.
+<i>927</i>&nbsp;     * @param start  the start value.
+<i>928</i>&nbsp;     * @param end  the end value.
+<i>929</i>&nbsp;     */
+<i>930</i>&nbsp;    @Override
+<i>931</i>&nbsp;    public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>932</i>&nbsp;            Rectangle2D dataArea, double start, double end) {
+<i>933</i>&nbsp;
+<b class="nc"><i>934</i>&nbsp;        double y1 = axis.valueToJava2D(start, dataArea,</b>
+<b class="nc"><i>935</i>&nbsp;                plot.getRangeAxisEdge());</b>
+<b class="nc"><i>936</i>&nbsp;        double y2 = axis.valueToJava2D(end, dataArea, plot.getRangeAxisEdge());</b>
+<i>937</i>&nbsp;        Rectangle2D band;
+<b class="nc"><i>938</i>&nbsp;        if (plot.getOrientation() == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>939</i>&nbsp;            band = new Rectangle2D.Double(dataArea.getMinX(), Math.min(y1, y2),</b>
+<b class="nc"><i>940</i>&nbsp;                dataArea.getWidth(), Math.abs(y2 - y1));</b>
+<i>941</i>&nbsp;        }
+<i>942</i>&nbsp;        else {
+<b class="nc"><i>943</i>&nbsp;            band = new Rectangle2D.Double(Math.min(y1, y2), dataArea.getMinY(),</b>
+<b class="nc"><i>944</i>&nbsp;                    Math.abs(y2 - y1), dataArea.getHeight());</b>
+<i>945</i>&nbsp;        }
+<b class="nc"><i>946</i>&nbsp;        Paint paint = plot.getRangeTickBandPaint();</b>
+<i>947</i>&nbsp;
+<b class="nc"><i>948</i>&nbsp;        if (paint != null) {</b>
+<b class="nc"><i>949</i>&nbsp;            g2.setPaint(paint);</b>
+<b class="nc"><i>950</i>&nbsp;            g2.fill(band);</b>
+<i>951</i>&nbsp;        }
+<i>952</i>&nbsp;
+<b class="nc"><i>953</i>&nbsp;    }</b>
+<i>954</i>&nbsp;
+<i>955</i>&nbsp;    /**
+<i>956</i>&nbsp;     * Draws a grid line against the range axis.
+<i>957</i>&nbsp;     *
+<i>958</i>&nbsp;     * @param g2  the graphics device.
+<i>959</i>&nbsp;     * @param plot  the plot.
+<i>960</i>&nbsp;     * @param axis  the value axis.
+<i>961</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any
+<i>962</i>&nbsp;     *                  3D effect).
+<i>963</i>&nbsp;     * @param value  the value at which the grid line should be drawn.
+<i>964</i>&nbsp;     */
+<i>965</i>&nbsp;    @Override
+<i>966</i>&nbsp;    public void drawDomainGridLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>967</i>&nbsp;            Rectangle2D dataArea, double value) {
+<i>968</i>&nbsp;
+<b class="nc"><i>969</i>&nbsp;        Range range = axis.getRange();</b>
+<b class="nc"><i>970</i>&nbsp;        if (!range.contains(value)) {</b>
+<b class="nc"><i>971</i>&nbsp;            return;</b>
+<i>972</i>&nbsp;        }
+<i>973</i>&nbsp;
+<b class="nc"><i>974</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>975</i>&nbsp;        double v = axis.valueToJava2D(value, dataArea,</b>
+<b class="nc"><i>976</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<b class="nc"><i>977</i>&nbsp;        Line2D line = null;</b>
+<b class="nc"><i>978</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>979</i>&nbsp;            line = new Line2D.Double(dataArea.getMinX(), v,</b>
+<b class="nc"><i>980</i>&nbsp;                    dataArea.getMaxX(), v);</b>
+<i>981</i>&nbsp;        }
+<b class="nc"><i>982</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>983</i>&nbsp;            line = new Line2D.Double(v, dataArea.getMinY(), v,</b>
+<b class="nc"><i>984</i>&nbsp;                    dataArea.getMaxY());</b>
+<i>985</i>&nbsp;        }
+<i>986</i>&nbsp;
+<b class="nc"><i>987</i>&nbsp;        Paint paint = plot.getDomainGridlinePaint();</b>
+<b class="nc"><i>988</i>&nbsp;        Stroke stroke = plot.getDomainGridlineStroke();</b>
+<b class="nc"><i>989</i>&nbsp;        g2.setPaint(paint != null ? paint : Plot.DEFAULT_OUTLINE_PAINT);</b>
+<b class="nc"><i>990</i>&nbsp;        g2.setStroke(stroke != null ? stroke : Plot.DEFAULT_OUTLINE_STROKE);</b>
+<b class="nc"><i>991</i>&nbsp;        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="nc"><i>992</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, </b>
+<i>993</i>&nbsp;                RenderingHints.VALUE_STROKE_NORMALIZE);
+<b class="nc"><i>994</i>&nbsp;        g2.draw(line);</b>
+<b class="nc"><i>995</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);</b>
+<b class="nc"><i>996</i>&nbsp;    }</b>
+<i>997</i>&nbsp;
+<i>998</i>&nbsp;    /**
+<i>999</i>&nbsp;     * Draws a line perpendicular to the domain axis.
+<i>1000</i>&nbsp;     *
+<i>1001</i>&nbsp;     * @param g2  the graphics device.
+<i>1002</i>&nbsp;     * @param plot  the plot.
+<i>1003</i>&nbsp;     * @param axis  the value axis.
+<i>1004</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any 3D
+<i>1005</i>&nbsp;     *                  effect).
+<i>1006</i>&nbsp;     * @param value  the value at which the grid line should be drawn.
+<i>1007</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1008</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1009</i>&nbsp;     *
+<i>1010</i>&nbsp;     * @since 1.0.5
+<i>1011</i>&nbsp;     */
+<i>1012</i>&nbsp;    public void drawDomainLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1013</i>&nbsp;            Rectangle2D dataArea, double value, Paint paint, Stroke stroke) {
+<i>1014</i>&nbsp;
+<b class="fc"><i>1015</i>&nbsp;        Range range = axis.getRange();</b>
+<b class="fc"><i>1016</i>&nbsp;        if (!range.contains(value)) {</b>
+<b class="nc"><i>1017</i>&nbsp;            return;</b>
+<i>1018</i>&nbsp;        }
+<i>1019</i>&nbsp;
+<b class="fc"><i>1020</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>1021</i>&nbsp;        Line2D line = null;</b>
+<b class="fc"><i>1022</i>&nbsp;        double v = axis.valueToJava2D(value, dataArea, </b>
+<b class="fc"><i>1023</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<b class="fc"><i>1024</i>&nbsp;        if (orientation.isHorizontal()) {</b>
+<b class="nc"><i>1025</i>&nbsp;            line = new Line2D.Double(dataArea.getMinX(), v, dataArea.getMaxX(),</b>
+<i>1026</i>&nbsp;                    v);
+<b class="fc"><i>1027</i>&nbsp;        } else if (orientation.isVertical()) {</b>
+<b class="fc"><i>1028</i>&nbsp;            line = new Line2D.Double(v, dataArea.getMinY(), v,</b>
+<b class="fc"><i>1029</i>&nbsp;                    dataArea.getMaxY());</b>
+<i>1030</i>&nbsp;        }
+<i>1031</i>&nbsp;
+<b class="fc"><i>1032</i>&nbsp;        g2.setPaint(paint);</b>
+<b class="fc"><i>1033</i>&nbsp;        g2.setStroke(stroke);</b>
+<b class="fc"><i>1034</i>&nbsp;        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="fc"><i>1035</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, </b>
+<i>1036</i>&nbsp;                RenderingHints.VALUE_STROKE_NORMALIZE);
+<b class="fc"><i>1037</i>&nbsp;        g2.draw(line);</b>
+<b class="fc"><i>1038</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);</b>
+<b class="fc"><i>1039</i>&nbsp;    }</b>
+<i>1040</i>&nbsp;
+<i>1041</i>&nbsp;    /**
+<i>1042</i>&nbsp;     * Draws a line perpendicular to the range axis.
+<i>1043</i>&nbsp;     *
+<i>1044</i>&nbsp;     * @param g2  the graphics device.
+<i>1045</i>&nbsp;     * @param plot  the plot.
+<i>1046</i>&nbsp;     * @param axis  the value axis.
+<i>1047</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any 3D
+<i>1048</i>&nbsp;     *                  effect).
+<i>1049</i>&nbsp;     * @param value  the value at which the grid line should be drawn.
+<i>1050</i>&nbsp;     * @param paint  the paint.
+<i>1051</i>&nbsp;     * @param stroke  the stroke.
+<i>1052</i>&nbsp;     */
+<i>1053</i>&nbsp;    @Override
+<i>1054</i>&nbsp;    public void drawRangeLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1055</i>&nbsp;            Rectangle2D dataArea, double value, Paint paint, Stroke stroke) {
+<i>1056</i>&nbsp;
+<b class="fc"><i>1057</i>&nbsp;        Range range = axis.getRange();</b>
+<b class="fc"><i>1058</i>&nbsp;        if (!range.contains(value)) {</b>
+<b class="nc"><i>1059</i>&nbsp;            return;</b>
+<i>1060</i>&nbsp;        }
+<i>1061</i>&nbsp;
+<b class="fc"><i>1062</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>1063</i>&nbsp;        Line2D line = null;</b>
+<b class="fc"><i>1064</i>&nbsp;        double v = axis.valueToJava2D(value, dataArea, plot.getRangeAxisEdge());      </b>
+<b class="fc"><i>1065</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1066</i>&nbsp;            line = new Line2D.Double(v, dataArea.getMinY(), v,</b>
+<b class="nc"><i>1067</i>&nbsp;                    dataArea.getMaxY());</b>
+<b class="fc"><i>1068</i>&nbsp;        } else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1069</i>&nbsp;            line = new Line2D.Double(dataArea.getMinX(), v,</b>
+<b class="fc"><i>1070</i>&nbsp;                    dataArea.getMaxX(), v);</b>
+<i>1071</i>&nbsp;        }
+<i>1072</i>&nbsp;
+<b class="fc"><i>1073</i>&nbsp;        g2.setPaint(paint);</b>
+<b class="fc"><i>1074</i>&nbsp;        g2.setStroke(stroke);</b>
+<b class="fc"><i>1075</i>&nbsp;        Object saved = g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="fc"><i>1076</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, </b>
+<i>1077</i>&nbsp;                RenderingHints.VALUE_STROKE_NORMALIZE);
+<b class="fc"><i>1078</i>&nbsp;        g2.draw(line);</b>
+<b class="fc"><i>1079</i>&nbsp;        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, saved);</b>
+<b class="fc"><i>1080</i>&nbsp;    }</b>
+<i>1081</i>&nbsp;
+<i>1082</i>&nbsp;    /**
+<i>1083</i>&nbsp;     * Draws a vertical line on the chart to represent a &#39;range marker&#39;.
+<i>1084</i>&nbsp;     *
+<i>1085</i>&nbsp;     * @param g2  the graphics device.
+<i>1086</i>&nbsp;     * @param plot  the plot.
+<i>1087</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1088</i>&nbsp;     * @param marker  the marker line.
+<i>1089</i>&nbsp;     * @param dataArea  the axis data area.
+<i>1090</i>&nbsp;     */
+<i>1091</i>&nbsp;    @Override
+<i>1092</i>&nbsp;    public void drawDomainMarker(Graphics2D g2, XYPlot plot, 
+<i>1093</i>&nbsp;            ValueAxis domainAxis, Marker marker, Rectangle2D dataArea) {
+<i>1094</i>&nbsp;
+<b class="fc"><i>1095</i>&nbsp;        if (marker instanceof ValueMarker) {</b>
+<b class="fc"><i>1096</i>&nbsp;            ValueMarker vm = (ValueMarker) marker;</b>
+<b class="fc"><i>1097</i>&nbsp;            double value = vm.getValue();</b>
+<b class="fc"><i>1098</i>&nbsp;            Range range = domainAxis.getRange();</b>
+<b class="fc"><i>1099</i>&nbsp;            if (!range.contains(value)) {</b>
+<b class="nc"><i>1100</i>&nbsp;                return;</b>
+<i>1101</i>&nbsp;            }
+<i>1102</i>&nbsp;
+<b class="fc"><i>1103</i>&nbsp;            double v = domainAxis.valueToJava2D(value, dataArea,</b>
+<b class="fc"><i>1104</i>&nbsp;                    plot.getDomainAxisEdge());</b>
+<i>1105</i>&nbsp;
+<b class="fc"><i>1106</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>1107</i>&nbsp;            Line2D line = null;</b>
+<b class="fc"><i>1108</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1109</i>&nbsp;                line = new Line2D.Double(dataArea.getMinX(), v,</b>
+<b class="nc"><i>1110</i>&nbsp;                        dataArea.getMaxX(), v);</b>
+<i>1111</i>&nbsp;            }
+<b class="fc"><i>1112</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1113</i>&nbsp;                line = new Line2D.Double(v, dataArea.getMinY(), v,</b>
+<b class="fc"><i>1114</i>&nbsp;                        dataArea.getMaxY());</b>
+<i>1115</i>&nbsp;            } else {
+<b class="nc"><i>1116</i>&nbsp;                throw new IllegalStateException();</b>
+<i>1117</i>&nbsp;            }
+<i>1118</i>&nbsp;
+<b class="fc"><i>1119</i>&nbsp;            final Composite originalComposite = g2.getComposite();</b>
+<b class="fc"><i>1120</i>&nbsp;            g2.setComposite(AlphaComposite.getInstance(</b>
+<b class="fc"><i>1121</i>&nbsp;                    AlphaComposite.SRC_OVER, marker.getAlpha()));</b>
+<b class="fc"><i>1122</i>&nbsp;            g2.setPaint(marker.getPaint());</b>
+<b class="fc"><i>1123</i>&nbsp;            g2.setStroke(marker.getStroke());</b>
+<b class="fc"><i>1124</i>&nbsp;            g2.draw(line);</b>
+<i>1125</i>&nbsp;
+<b class="fc"><i>1126</i>&nbsp;            String label = marker.getLabel();</b>
+<b class="fc"><i>1127</i>&nbsp;            RectangleAnchor anchor = marker.getLabelAnchor();</b>
+<b class="fc"><i>1128</i>&nbsp;            if (label != null) {</b>
+<b class="nc"><i>1129</i>&nbsp;                Font labelFont = marker.getLabelFont();</b>
+<b class="nc"><i>1130</i>&nbsp;                g2.setFont(labelFont);</b>
+<b class="nc"><i>1131</i>&nbsp;                g2.setPaint(marker.getLabelPaint());</b>
+<b class="nc"><i>1132</i>&nbsp;                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(</b>
+<b class="nc"><i>1133</i>&nbsp;                        g2, orientation, dataArea, line.getBounds2D(),</b>
+<b class="nc"><i>1134</i>&nbsp;                        marker.getLabelOffset(),</b>
+<i>1135</i>&nbsp;                        LengthAdjustmentType.EXPAND, anchor);
+<b class="nc"><i>1136</i>&nbsp;                TextUtilities.drawAlignedString(label, g2,</b>
+<b class="nc"><i>1137</i>&nbsp;                        (float) coordinates.getX(), (float) coordinates.getY(),</b>
+<b class="nc"><i>1138</i>&nbsp;                        marker.getLabelTextAnchor());</b>
+<i>1139</i>&nbsp;            }
+<b class="fc"><i>1140</i>&nbsp;            g2.setComposite(originalComposite);</b>
+<b class="fc"><i>1141</i>&nbsp;        }</b>
+<b class="fc"><i>1142</i>&nbsp;        else if (marker instanceof IntervalMarker) {</b>
+<b class="fc"><i>1143</i>&nbsp;            IntervalMarker im = (IntervalMarker) marker;</b>
+<b class="fc"><i>1144</i>&nbsp;            double start = im.getStartValue();</b>
+<b class="fc"><i>1145</i>&nbsp;            double end = im.getEndValue();</b>
+<b class="fc"><i>1146</i>&nbsp;            Range range = domainAxis.getRange();</b>
+<b class="fc"><i>1147</i>&nbsp;            if (!(range.intersects(start, end))) {</b>
+<b class="fc"><i>1148</i>&nbsp;                return;</b>
+<i>1149</i>&nbsp;            }
+<i>1150</i>&nbsp;
+<b class="nc"><i>1151</i>&nbsp;            double start2d = domainAxis.valueToJava2D(start, dataArea,</b>
+<b class="nc"><i>1152</i>&nbsp;                    plot.getDomainAxisEdge());</b>
+<b class="nc"><i>1153</i>&nbsp;            double end2d = domainAxis.valueToJava2D(end, dataArea,</b>
+<b class="nc"><i>1154</i>&nbsp;                    plot.getDomainAxisEdge());</b>
+<b class="nc"><i>1155</i>&nbsp;            double low = Math.min(start2d, end2d);</b>
+<b class="nc"><i>1156</i>&nbsp;            double high = Math.max(start2d, end2d);</b>
+<i>1157</i>&nbsp;
+<b class="nc"><i>1158</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>1159</i>&nbsp;            Rectangle2D rect = null;</b>
+<b class="nc"><i>1160</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<i>1161</i>&nbsp;                // clip top and bottom bounds to data area
+<b class="nc"><i>1162</i>&nbsp;                low = Math.max(low, dataArea.getMinY());</b>
+<b class="nc"><i>1163</i>&nbsp;                high = Math.min(high, dataArea.getMaxY());</b>
+<b class="nc"><i>1164</i>&nbsp;                rect = new Rectangle2D.Double(dataArea.getMinX(),</b>
+<b class="nc"><i>1165</i>&nbsp;                        low, dataArea.getWidth(),</b>
+<i>1166</i>&nbsp;                        high - low);
+<i>1167</i>&nbsp;            }
+<b class="nc"><i>1168</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<i>1169</i>&nbsp;                // clip left and right bounds to data area
+<b class="nc"><i>1170</i>&nbsp;                low = Math.max(low, dataArea.getMinX());</b>
+<b class="nc"><i>1171</i>&nbsp;                high = Math.min(high, dataArea.getMaxX());</b>
+<b class="nc"><i>1172</i>&nbsp;                rect = new Rectangle2D.Double(low,</b>
+<b class="nc"><i>1173</i>&nbsp;                        dataArea.getMinY(), high - low,</b>
+<b class="nc"><i>1174</i>&nbsp;                        dataArea.getHeight());</b>
+<i>1175</i>&nbsp;            }
+<i>1176</i>&nbsp;
+<b class="nc"><i>1177</i>&nbsp;            final Composite originalComposite = g2.getComposite();</b>
+<b class="nc"><i>1178</i>&nbsp;            g2.setComposite(AlphaComposite.getInstance(</b>
+<b class="nc"><i>1179</i>&nbsp;                    AlphaComposite.SRC_OVER, marker.getAlpha()));</b>
+<b class="nc"><i>1180</i>&nbsp;            Paint p = marker.getPaint();</b>
+<b class="nc"><i>1181</i>&nbsp;            if (p instanceof GradientPaint) {</b>
+<b class="nc"><i>1182</i>&nbsp;                GradientPaint gp = (GradientPaint) p;</b>
+<b class="nc"><i>1183</i>&nbsp;                GradientPaintTransformer t = im.getGradientPaintTransformer();</b>
+<b class="nc"><i>1184</i>&nbsp;                if (t != null) {</b>
+<b class="nc"><i>1185</i>&nbsp;                    gp = t.transform(gp, rect);</b>
+<i>1186</i>&nbsp;                }
+<b class="nc"><i>1187</i>&nbsp;                g2.setPaint(gp);</b>
+<b class="nc"><i>1188</i>&nbsp;            }</b>
+<i>1189</i>&nbsp;            else {
+<b class="nc"><i>1190</i>&nbsp;                g2.setPaint(p);</b>
+<i>1191</i>&nbsp;            }
+<b class="nc"><i>1192</i>&nbsp;            g2.fill(rect);</b>
+<i>1193</i>&nbsp;
+<i>1194</i>&nbsp;            // now draw the outlines, if visible...
+<b class="nc"><i>1195</i>&nbsp;            if (im.getOutlinePaint() != null &amp;&amp; im.getOutlineStroke() != null) {</b>
+<b class="nc"><i>1196</i>&nbsp;                if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1197</i>&nbsp;                    Line2D line = new Line2D.Double();</b>
+<b class="nc"><i>1198</i>&nbsp;                    double y0 = dataArea.getMinY();</b>
+<b class="nc"><i>1199</i>&nbsp;                    double y1 = dataArea.getMaxY();</b>
+<b class="nc"><i>1200</i>&nbsp;                    g2.setPaint(im.getOutlinePaint());</b>
+<b class="nc"><i>1201</i>&nbsp;                    g2.setStroke(im.getOutlineStroke());</b>
+<b class="nc"><i>1202</i>&nbsp;                    if (range.contains(start)) {</b>
+<b class="nc"><i>1203</i>&nbsp;                        line.setLine(start2d, y0, start2d, y1);</b>
+<b class="nc"><i>1204</i>&nbsp;                        g2.draw(line);</b>
+<i>1205</i>&nbsp;                    }
+<b class="nc"><i>1206</i>&nbsp;                    if (range.contains(end)) {</b>
+<b class="nc"><i>1207</i>&nbsp;                        line.setLine(end2d, y0, end2d, y1);</b>
+<b class="nc"><i>1208</i>&nbsp;                        g2.draw(line);</b>
+<i>1209</i>&nbsp;                    }
+<b class="nc"><i>1210</i>&nbsp;                }</b>
+<i>1211</i>&nbsp;                else { // PlotOrientation.HORIZONTAL
+<b class="nc"><i>1212</i>&nbsp;                    Line2D line = new Line2D.Double();</b>
+<b class="nc"><i>1213</i>&nbsp;                    double x0 = dataArea.getMinX();</b>
+<b class="nc"><i>1214</i>&nbsp;                    double x1 = dataArea.getMaxX();</b>
+<b class="nc"><i>1215</i>&nbsp;                    g2.setPaint(im.getOutlinePaint());</b>
+<b class="nc"><i>1216</i>&nbsp;                    g2.setStroke(im.getOutlineStroke());</b>
+<b class="nc"><i>1217</i>&nbsp;                    if (range.contains(start)) {</b>
+<b class="nc"><i>1218</i>&nbsp;                        line.setLine(x0, start2d, x1, start2d);</b>
+<b class="nc"><i>1219</i>&nbsp;                        g2.draw(line);</b>
+<i>1220</i>&nbsp;                    }
+<b class="nc"><i>1221</i>&nbsp;                    if (range.contains(end)) {</b>
+<b class="nc"><i>1222</i>&nbsp;                        line.setLine(x0, end2d, x1, end2d);</b>
+<b class="nc"><i>1223</i>&nbsp;                        g2.draw(line);</b>
+<i>1224</i>&nbsp;                    }
+<i>1225</i>&nbsp;                }
+<i>1226</i>&nbsp;            }
+<i>1227</i>&nbsp;
+<b class="nc"><i>1228</i>&nbsp;            String label = marker.getLabel();</b>
+<b class="nc"><i>1229</i>&nbsp;            RectangleAnchor anchor = marker.getLabelAnchor();</b>
+<b class="nc"><i>1230</i>&nbsp;            if (label != null) {</b>
+<b class="nc"><i>1231</i>&nbsp;                Font labelFont = marker.getLabelFont();</b>
+<b class="nc"><i>1232</i>&nbsp;                g2.setFont(labelFont);</b>
+<b class="nc"><i>1233</i>&nbsp;                g2.setPaint(marker.getLabelPaint());</b>
+<b class="nc"><i>1234</i>&nbsp;                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(</b>
+<i>1235</i>&nbsp;                        g2, orientation, dataArea, rect,
+<b class="nc"><i>1236</i>&nbsp;                        marker.getLabelOffset(), marker.getLabelOffsetType(),</b>
+<i>1237</i>&nbsp;                        anchor);
+<b class="nc"><i>1238</i>&nbsp;                TextUtilities.drawAlignedString(label, g2,</b>
+<b class="nc"><i>1239</i>&nbsp;                        (float) coordinates.getX(), (float) coordinates.getY(),</b>
+<b class="nc"><i>1240</i>&nbsp;                        marker.getLabelTextAnchor());</b>
+<i>1241</i>&nbsp;            }
+<b class="nc"><i>1242</i>&nbsp;            g2.setComposite(originalComposite);</b>
+<i>1243</i>&nbsp;
+<i>1244</i>&nbsp;        }
+<i>1245</i>&nbsp;
+<b class="fc"><i>1246</i>&nbsp;    }</b>
+<i>1247</i>&nbsp;
+<i>1248</i>&nbsp;    /**
+<i>1249</i>&nbsp;     * Calculates the (x, y) coordinates for drawing a marker label.
+<i>1250</i>&nbsp;     *
+<i>1251</i>&nbsp;     * @param g2  the graphics device.
+<i>1252</i>&nbsp;     * @param orientation  the plot orientation.
+<i>1253</i>&nbsp;     * @param dataArea  the data area.
+<i>1254</i>&nbsp;     * @param markerArea  the rectangle surrounding the marker area.
+<i>1255</i>&nbsp;     * @param markerOffset  the marker label offset.
+<i>1256</i>&nbsp;     * @param labelOffsetType  the label offset type.
+<i>1257</i>&nbsp;     * @param anchor  the label anchor.
+<i>1258</i>&nbsp;     *
+<i>1259</i>&nbsp;     * @return The coordinates for drawing the marker label.
+<i>1260</i>&nbsp;     */
+<i>1261</i>&nbsp;    protected Point2D calculateDomainMarkerTextAnchorPoint(Graphics2D g2,
+<i>1262</i>&nbsp;            PlotOrientation orientation, Rectangle2D dataArea,
+<i>1263</i>&nbsp;            Rectangle2D markerArea, RectangleInsets markerOffset,
+<i>1264</i>&nbsp;            LengthAdjustmentType labelOffsetType, RectangleAnchor anchor) {
+<i>1265</i>&nbsp;
+<b class="nc"><i>1266</i>&nbsp;        Rectangle2D anchorRect = null;</b>
+<b class="nc"><i>1267</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1268</i>&nbsp;            anchorRect = markerOffset.createAdjustedRectangle(markerArea,</b>
+<i>1269</i>&nbsp;                    LengthAdjustmentType.CONTRACT, labelOffsetType);
+<i>1270</i>&nbsp;        }
+<b class="nc"><i>1271</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1272</i>&nbsp;            anchorRect = markerOffset.createAdjustedRectangle(markerArea,</b>
+<i>1273</i>&nbsp;                    labelOffsetType, LengthAdjustmentType.CONTRACT);
+<i>1274</i>&nbsp;        }
+<b class="nc"><i>1275</i>&nbsp;        return RectangleAnchor.coordinates(anchorRect, anchor);</b>
+<i>1276</i>&nbsp;
+<i>1277</i>&nbsp;    }
+<i>1278</i>&nbsp;
+<i>1279</i>&nbsp;    /**
+<i>1280</i>&nbsp;     * Draws a horizontal line across the chart to represent a &#39;range marker&#39;.
+<i>1281</i>&nbsp;     *
+<i>1282</i>&nbsp;     * @param g2  the graphics device.
+<i>1283</i>&nbsp;     * @param plot  the plot.
+<i>1284</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1285</i>&nbsp;     * @param marker  the marker line.
+<i>1286</i>&nbsp;     * @param dataArea  the axis data area.
+<i>1287</i>&nbsp;     */
+<i>1288</i>&nbsp;    @Override
+<i>1289</i>&nbsp;    public void drawRangeMarker(Graphics2D g2, XYPlot plot, ValueAxis rangeAxis,
+<i>1290</i>&nbsp;            Marker marker, Rectangle2D dataArea) {
+<i>1291</i>&nbsp;
+<b class="fc"><i>1292</i>&nbsp;        if (marker instanceof ValueMarker) {</b>
+<b class="fc"><i>1293</i>&nbsp;            ValueMarker vm = (ValueMarker) marker;</b>
+<b class="fc"><i>1294</i>&nbsp;            double value = vm.getValue();</b>
+<b class="fc"><i>1295</i>&nbsp;            Range range = rangeAxis.getRange();</b>
+<b class="fc"><i>1296</i>&nbsp;            if (!range.contains(value)) {</b>
+<b class="fc"><i>1297</i>&nbsp;                return;</b>
+<i>1298</i>&nbsp;            }
+<i>1299</i>&nbsp;
+<b class="nc"><i>1300</i>&nbsp;            double v = rangeAxis.valueToJava2D(value, dataArea,</b>
+<b class="nc"><i>1301</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>1302</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>1303</i>&nbsp;            Line2D line = null;</b>
+<b class="nc"><i>1304</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1305</i>&nbsp;                line = new Line2D.Double(v, dataArea.getMinY(), v,</b>
+<b class="nc"><i>1306</i>&nbsp;                        dataArea.getMaxY());</b>
+<i>1307</i>&nbsp;            }
+<b class="nc"><i>1308</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1309</i>&nbsp;                line = new Line2D.Double(dataArea.getMinX(), v,</b>
+<b class="nc"><i>1310</i>&nbsp;                        dataArea.getMaxX(), v);</b>
+<i>1311</i>&nbsp;            }
+<i>1312</i>&nbsp;            else {
+<b class="nc"><i>1313</i>&nbsp;                throw new IllegalStateException(&quot;Unknown orientation.&quot;);</b>
+<i>1314</i>&nbsp;            }
+<i>1315</i>&nbsp;
+<b class="nc"><i>1316</i>&nbsp;            final Composite originalComposite = g2.getComposite();</b>
+<b class="nc"><i>1317</i>&nbsp;            g2.setComposite(AlphaComposite.getInstance(</b>
+<b class="nc"><i>1318</i>&nbsp;                    AlphaComposite.SRC_OVER, marker.getAlpha()));</b>
+<b class="nc"><i>1319</i>&nbsp;            g2.setPaint(marker.getPaint());</b>
+<b class="nc"><i>1320</i>&nbsp;            g2.setStroke(marker.getStroke());</b>
+<b class="nc"><i>1321</i>&nbsp;            g2.draw(line);</b>
+<i>1322</i>&nbsp;
+<b class="nc"><i>1323</i>&nbsp;            String label = marker.getLabel();</b>
+<b class="nc"><i>1324</i>&nbsp;            RectangleAnchor anchor = marker.getLabelAnchor();</b>
+<b class="nc"><i>1325</i>&nbsp;            if (label != null) {</b>
+<b class="nc"><i>1326</i>&nbsp;                Font labelFont = marker.getLabelFont();</b>
+<b class="nc"><i>1327</i>&nbsp;                g2.setFont(labelFont);</b>
+<b class="nc"><i>1328</i>&nbsp;                g2.setPaint(marker.getLabelPaint());</b>
+<b class="nc"><i>1329</i>&nbsp;                Point2D coordinates = calculateRangeMarkerTextAnchorPoint(</b>
+<b class="nc"><i>1330</i>&nbsp;                        g2, orientation, dataArea, line.getBounds2D(),</b>
+<b class="nc"><i>1331</i>&nbsp;                        marker.getLabelOffset(),</b>
+<i>1332</i>&nbsp;                        LengthAdjustmentType.EXPAND, anchor);
+<b class="nc"><i>1333</i>&nbsp;                TextUtilities.drawAlignedString(label, g2,</b>
+<b class="nc"><i>1334</i>&nbsp;                        (float) coordinates.getX(), (float) coordinates.getY(),</b>
+<b class="nc"><i>1335</i>&nbsp;                        marker.getLabelTextAnchor());</b>
+<i>1336</i>&nbsp;            }
+<b class="nc"><i>1337</i>&nbsp;            g2.setComposite(originalComposite);</b>
+<b class="nc"><i>1338</i>&nbsp;        }</b>
+<b class="fc"><i>1339</i>&nbsp;        else if (marker instanceof IntervalMarker) {</b>
+<b class="fc"><i>1340</i>&nbsp;            IntervalMarker im = (IntervalMarker) marker;</b>
+<b class="fc"><i>1341</i>&nbsp;            double start = im.getStartValue();</b>
+<b class="fc"><i>1342</i>&nbsp;            double end = im.getEndValue();</b>
+<b class="fc"><i>1343</i>&nbsp;            Range range = rangeAxis.getRange();</b>
+<b class="fc"><i>1344</i>&nbsp;            if (!(range.intersects(start, end))) {</b>
+<b class="fc"><i>1345</i>&nbsp;                return;</b>
+<i>1346</i>&nbsp;            }
+<i>1347</i>&nbsp;
+<b class="nc"><i>1348</i>&nbsp;            double start2d = rangeAxis.valueToJava2D(start, dataArea,</b>
+<b class="nc"><i>1349</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>1350</i>&nbsp;            double end2d = rangeAxis.valueToJava2D(end, dataArea,</b>
+<b class="nc"><i>1351</i>&nbsp;                    plot.getRangeAxisEdge());</b>
+<b class="nc"><i>1352</i>&nbsp;            double low = Math.min(start2d, end2d);</b>
+<b class="nc"><i>1353</i>&nbsp;            double high = Math.max(start2d, end2d);</b>
+<i>1354</i>&nbsp;
+<b class="nc"><i>1355</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>1356</i>&nbsp;            Rectangle2D rect = null;</b>
+<b class="nc"><i>1357</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<i>1358</i>&nbsp;                // clip left and right bounds to data area
+<b class="nc"><i>1359</i>&nbsp;                low = Math.max(low, dataArea.getMinX());</b>
+<b class="nc"><i>1360</i>&nbsp;                high = Math.min(high, dataArea.getMaxX());</b>
+<b class="nc"><i>1361</i>&nbsp;                rect = new Rectangle2D.Double(low,</b>
+<b class="nc"><i>1362</i>&nbsp;                        dataArea.getMinY(), high - low,</b>
+<b class="nc"><i>1363</i>&nbsp;                        dataArea.getHeight());</b>
+<i>1364</i>&nbsp;            }
+<b class="nc"><i>1365</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<i>1366</i>&nbsp;                // clip top and bottom bounds to data area
+<b class="nc"><i>1367</i>&nbsp;                low = Math.max(low, dataArea.getMinY());</b>
+<b class="nc"><i>1368</i>&nbsp;                high = Math.min(high, dataArea.getMaxY());</b>
+<b class="nc"><i>1369</i>&nbsp;                rect = new Rectangle2D.Double(dataArea.getMinX(),</b>
+<b class="nc"><i>1370</i>&nbsp;                        low, dataArea.getWidth(),</b>
+<i>1371</i>&nbsp;                        high - low);
+<i>1372</i>&nbsp;            }
+<i>1373</i>&nbsp;
+<b class="nc"><i>1374</i>&nbsp;            final Composite originalComposite = g2.getComposite();</b>
+<b class="nc"><i>1375</i>&nbsp;            g2.setComposite(AlphaComposite.getInstance(</b>
+<b class="nc"><i>1376</i>&nbsp;                    AlphaComposite.SRC_OVER, marker.getAlpha()));</b>
+<b class="nc"><i>1377</i>&nbsp;            Paint p = marker.getPaint();</b>
+<b class="nc"><i>1378</i>&nbsp;            if (p instanceof GradientPaint) {</b>
+<b class="nc"><i>1379</i>&nbsp;                GradientPaint gp = (GradientPaint) p;</b>
+<b class="nc"><i>1380</i>&nbsp;                GradientPaintTransformer t = im.getGradientPaintTransformer();</b>
+<b class="nc"><i>1381</i>&nbsp;                if (t != null) {</b>
+<b class="nc"><i>1382</i>&nbsp;                    gp = t.transform(gp, rect);</b>
+<i>1383</i>&nbsp;                }
+<b class="nc"><i>1384</i>&nbsp;                g2.setPaint(gp);</b>
+<b class="nc"><i>1385</i>&nbsp;            }</b>
+<i>1386</i>&nbsp;            else {
+<b class="nc"><i>1387</i>&nbsp;                g2.setPaint(p);</b>
+<i>1388</i>&nbsp;            }
+<b class="nc"><i>1389</i>&nbsp;            g2.fill(rect);</b>
+<i>1390</i>&nbsp;
+<i>1391</i>&nbsp;            // now draw the outlines, if visible...
+<b class="nc"><i>1392</i>&nbsp;            if (im.getOutlinePaint() != null &amp;&amp; im.getOutlineStroke() != null) {</b>
+<b class="nc"><i>1393</i>&nbsp;                if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1394</i>&nbsp;                    Line2D line = new Line2D.Double();</b>
+<b class="nc"><i>1395</i>&nbsp;                    double x0 = dataArea.getMinX();</b>
+<b class="nc"><i>1396</i>&nbsp;                    double x1 = dataArea.getMaxX();</b>
+<b class="nc"><i>1397</i>&nbsp;                    g2.setPaint(im.getOutlinePaint());</b>
+<b class="nc"><i>1398</i>&nbsp;                    g2.setStroke(im.getOutlineStroke());</b>
+<b class="nc"><i>1399</i>&nbsp;                    if (range.contains(start)) {</b>
+<b class="nc"><i>1400</i>&nbsp;                        line.setLine(x0, start2d, x1, start2d);</b>
+<b class="nc"><i>1401</i>&nbsp;                        g2.draw(line);</b>
+<i>1402</i>&nbsp;                    }
+<b class="nc"><i>1403</i>&nbsp;                    if (range.contains(end)) {</b>
+<b class="nc"><i>1404</i>&nbsp;                        line.setLine(x0, end2d, x1, end2d);</b>
+<b class="nc"><i>1405</i>&nbsp;                        g2.draw(line);</b>
+<i>1406</i>&nbsp;                    }
+<b class="nc"><i>1407</i>&nbsp;                }</b>
+<i>1408</i>&nbsp;                else { // PlotOrientation.HORIZONTAL
+<b class="nc"><i>1409</i>&nbsp;                    Line2D line = new Line2D.Double();</b>
+<b class="nc"><i>1410</i>&nbsp;                    double y0 = dataArea.getMinY();</b>
+<b class="nc"><i>1411</i>&nbsp;                    double y1 = dataArea.getMaxY();</b>
+<b class="nc"><i>1412</i>&nbsp;                    g2.setPaint(im.getOutlinePaint());</b>
+<b class="nc"><i>1413</i>&nbsp;                    g2.setStroke(im.getOutlineStroke());</b>
+<b class="nc"><i>1414</i>&nbsp;                    if (range.contains(start)) {</b>
+<b class="nc"><i>1415</i>&nbsp;                        line.setLine(start2d, y0, start2d, y1);</b>
+<b class="nc"><i>1416</i>&nbsp;                        g2.draw(line);</b>
+<i>1417</i>&nbsp;                    }
+<b class="nc"><i>1418</i>&nbsp;                    if (range.contains(end)) {</b>
+<b class="nc"><i>1419</i>&nbsp;                        line.setLine(end2d, y0, end2d, y1);</b>
+<b class="nc"><i>1420</i>&nbsp;                        g2.draw(line);</b>
+<i>1421</i>&nbsp;                    }
+<i>1422</i>&nbsp;                }
+<i>1423</i>&nbsp;            }
+<i>1424</i>&nbsp;
+<b class="nc"><i>1425</i>&nbsp;            String label = marker.getLabel();</b>
+<b class="nc"><i>1426</i>&nbsp;            RectangleAnchor anchor = marker.getLabelAnchor();</b>
+<b class="nc"><i>1427</i>&nbsp;            if (label != null) {</b>
+<b class="nc"><i>1428</i>&nbsp;                Font labelFont = marker.getLabelFont();</b>
+<b class="nc"><i>1429</i>&nbsp;                g2.setFont(labelFont);</b>
+<b class="nc"><i>1430</i>&nbsp;                g2.setPaint(marker.getLabelPaint());</b>
+<b class="nc"><i>1431</i>&nbsp;                Point2D coordinates = calculateRangeMarkerTextAnchorPoint(</b>
+<i>1432</i>&nbsp;                        g2, orientation, dataArea, rect,
+<b class="nc"><i>1433</i>&nbsp;                        marker.getLabelOffset(), marker.getLabelOffsetType(),</b>
+<i>1434</i>&nbsp;                        anchor);
+<b class="nc"><i>1435</i>&nbsp;                TextUtilities.drawAlignedString(label, g2,</b>
+<b class="nc"><i>1436</i>&nbsp;                        (float) coordinates.getX(), (float) coordinates.getY(),</b>
+<b class="nc"><i>1437</i>&nbsp;                        marker.getLabelTextAnchor());</b>
+<i>1438</i>&nbsp;            }
+<b class="nc"><i>1439</i>&nbsp;            g2.setComposite(originalComposite);</b>
+<i>1440</i>&nbsp;        }
+<b class="nc"><i>1441</i>&nbsp;    }</b>
+<i>1442</i>&nbsp;
+<i>1443</i>&nbsp;    /**
+<i>1444</i>&nbsp;     * Calculates the (x, y) coordinates for drawing a marker label.
+<i>1445</i>&nbsp;     *
+<i>1446</i>&nbsp;     * @param g2  the graphics device.
+<i>1447</i>&nbsp;     * @param orientation  the plot orientation.
+<i>1448</i>&nbsp;     * @param dataArea  the data area.
+<i>1449</i>&nbsp;     * @param markerArea  the marker area.
+<i>1450</i>&nbsp;     * @param markerOffset  the marker offset.
+<i>1451</i>&nbsp;     * @param labelOffsetForRange  ??
+<i>1452</i>&nbsp;     * @param anchor  the label anchor.
+<i>1453</i>&nbsp;     *
+<i>1454</i>&nbsp;     * @return The coordinates for drawing the marker label.
+<i>1455</i>&nbsp;     */
+<i>1456</i>&nbsp;    private Point2D calculateRangeMarkerTextAnchorPoint(Graphics2D g2,
+<i>1457</i>&nbsp;           PlotOrientation orientation, Rectangle2D dataArea,
+<i>1458</i>&nbsp;           Rectangle2D markerArea, RectangleInsets markerOffset,
+<i>1459</i>&nbsp;           LengthAdjustmentType labelOffsetForRange, RectangleAnchor anchor) {
+<i>1460</i>&nbsp;
+<b class="nc"><i>1461</i>&nbsp;        Rectangle2D anchorRect = null;</b>
+<b class="nc"><i>1462</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1463</i>&nbsp;            anchorRect = markerOffset.createAdjustedRectangle(markerArea,</b>
+<i>1464</i>&nbsp;                    labelOffsetForRange, LengthAdjustmentType.CONTRACT);
+<i>1465</i>&nbsp;        }
+<b class="nc"><i>1466</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1467</i>&nbsp;            anchorRect = markerOffset.createAdjustedRectangle(markerArea,</b>
+<i>1468</i>&nbsp;                    LengthAdjustmentType.CONTRACT, labelOffsetForRange);
+<i>1469</i>&nbsp;        }
+<b class="nc"><i>1470</i>&nbsp;        return RectangleAnchor.coordinates(anchorRect, anchor);</b>
+<i>1471</i>&nbsp;
+<i>1472</i>&nbsp;    }
+<i>1473</i>&nbsp;
+<i>1474</i>&nbsp;    /**
+<i>1475</i>&nbsp;     * Returns a clone of the renderer.
+<i>1476</i>&nbsp;     *
+<i>1477</i>&nbsp;     * @return A clone.
+<i>1478</i>&nbsp;     *
+<i>1479</i>&nbsp;     * @throws CloneNotSupportedException if the renderer does not support
+<i>1480</i>&nbsp;     *         cloning.
+<i>1481</i>&nbsp;     */
+<i>1482</i>&nbsp;    @Override
+<i>1483</i>&nbsp;    protected Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>1484</i>&nbsp;        AbstractXYItemRenderer clone = (AbstractXYItemRenderer) super.clone();</b>
+<i>1485</i>&nbsp;        // &#39;plot&#39; : just retain reference, not a deep copy
+<i>1486</i>&nbsp;
+<b class="fc"><i>1487</i>&nbsp;        if (this.itemLabelGenerator != null</b>
+<i>1488</i>&nbsp;                &amp;&amp; this.itemLabelGenerator instanceof PublicCloneable) {
+<b class="nc"><i>1489</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.itemLabelGenerator;</b>
+<b class="nc"><i>1490</i>&nbsp;            clone.itemLabelGenerator = (XYItemLabelGenerator) pc.clone();</b>
+<i>1491</i>&nbsp;        }
+<b class="fc"><i>1492</i>&nbsp;        clone.itemLabelGeneratorMap = CloneUtils.cloneMapValues(</b>
+<i>1493</i>&nbsp;                this.itemLabelGeneratorMap);
+<b class="fc"><i>1494</i>&nbsp;        if (this.baseItemLabelGenerator != null</b>
+<i>1495</i>&nbsp;                &amp;&amp; this.baseItemLabelGenerator instanceof PublicCloneable) {
+<b class="nc"><i>1496</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.baseItemLabelGenerator;</b>
+<b class="nc"><i>1497</i>&nbsp;            clone.baseItemLabelGenerator = (XYItemLabelGenerator) pc.clone();</b>
+<i>1498</i>&nbsp;        }
+<i>1499</i>&nbsp;
+<b class="fc"><i>1500</i>&nbsp;        if (this.toolTipGenerator != null</b>
+<i>1501</i>&nbsp;                &amp;&amp; this.toolTipGenerator instanceof PublicCloneable) {
+<b class="nc"><i>1502</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.toolTipGenerator;</b>
+<b class="nc"><i>1503</i>&nbsp;            clone.toolTipGenerator = (XYToolTipGenerator) pc.clone();</b>
+<i>1504</i>&nbsp;        }
+<b class="fc"><i>1505</i>&nbsp;        clone.toolTipGeneratorMap = CloneUtils.cloneMapValues(</b>
+<i>1506</i>&nbsp;                this.toolTipGeneratorMap);
+<b class="fc"><i>1507</i>&nbsp;        if (this.baseToolTipGenerator != null</b>
+<i>1508</i>&nbsp;                &amp;&amp; this.baseToolTipGenerator instanceof PublicCloneable) {
+<b class="fc"><i>1509</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.baseToolTipGenerator;</b>
+<b class="fc"><i>1510</i>&nbsp;            clone.baseToolTipGenerator = (XYToolTipGenerator) pc.clone();</b>
+<i>1511</i>&nbsp;        }
+<i>1512</i>&nbsp;
+<b class="fc"><i>1513</i>&nbsp;        if (this.legendItemLabelGenerator instanceof PublicCloneable) {</b>
+<b class="fc"><i>1514</i>&nbsp;            clone.legendItemLabelGenerator = (XYSeriesLabelGenerator)</b>
+<b class="fc"><i>1515</i>&nbsp;                    ObjectUtilities.clone(this.legendItemLabelGenerator);</b>
+<i>1516</i>&nbsp;        }
+<b class="fc"><i>1517</i>&nbsp;        if (this.legendItemToolTipGenerator instanceof PublicCloneable) {</b>
+<b class="fc"><i>1518</i>&nbsp;            clone.legendItemToolTipGenerator = (XYSeriesLabelGenerator)</b>
+<b class="fc"><i>1519</i>&nbsp;                    ObjectUtilities.clone(this.legendItemToolTipGenerator);</b>
+<i>1520</i>&nbsp;        }
+<b class="fc"><i>1521</i>&nbsp;        if (this.legendItemURLGenerator instanceof PublicCloneable) {</b>
+<b class="fc"><i>1522</i>&nbsp;            clone.legendItemURLGenerator = (XYSeriesLabelGenerator)</b>
+<b class="fc"><i>1523</i>&nbsp;                    ObjectUtilities.clone(this.legendItemURLGenerator);</b>
+<i>1524</i>&nbsp;        }
+<i>1525</i>&nbsp;
+<b class="fc"><i>1526</i>&nbsp;        clone.foregroundAnnotations = (List) ObjectUtilities.deepClone(</b>
+<i>1527</i>&nbsp;                this.foregroundAnnotations);
+<b class="fc"><i>1528</i>&nbsp;        clone.backgroundAnnotations = (List) ObjectUtilities.deepClone(</b>
+<i>1529</i>&nbsp;                this.backgroundAnnotations);
+<i>1530</i>&nbsp;
+<b class="fc"><i>1531</i>&nbsp;        return clone;</b>
+<i>1532</i>&nbsp;    }
+<i>1533</i>&nbsp;
+<i>1534</i>&nbsp;    /**
+<i>1535</i>&nbsp;     * Tests this renderer for equality with another object.
+<i>1536</i>&nbsp;     *
+<i>1537</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1538</i>&nbsp;     *
+<i>1539</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>1540</i>&nbsp;     */
+<i>1541</i>&nbsp;    @Override
+<i>1542</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1543</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>1544</i>&nbsp;            return true;</b>
+<i>1545</i>&nbsp;        }
+<b class="fc"><i>1546</i>&nbsp;        if (!(obj instanceof AbstractXYItemRenderer)) {</b>
+<b class="nc"><i>1547</i>&nbsp;            return false;</b>
+<i>1548</i>&nbsp;        }
+<b class="fc"><i>1549</i>&nbsp;        AbstractXYItemRenderer that = (AbstractXYItemRenderer) obj;</b>
+<b class="fc"><i>1550</i>&nbsp;        if (!ObjectUtilities.equal(this.itemLabelGenerator,</b>
+<i>1551</i>&nbsp;                that.itemLabelGenerator)) {
+<b class="fc"><i>1552</i>&nbsp;            return false;</b>
+<i>1553</i>&nbsp;        }
+<b class="fc"><i>1554</i>&nbsp;        if (!this.itemLabelGeneratorMap.equals(that.itemLabelGeneratorMap)) {</b>
+<b class="fc"><i>1555</i>&nbsp;            return false;</b>
+<i>1556</i>&nbsp;        }
+<b class="fc"><i>1557</i>&nbsp;        if (!ObjectUtilities.equal(this.baseItemLabelGenerator,</b>
+<i>1558</i>&nbsp;                that.baseItemLabelGenerator)) {
+<b class="fc"><i>1559</i>&nbsp;            return false;</b>
+<i>1560</i>&nbsp;        }
+<b class="fc"><i>1561</i>&nbsp;        if (!ObjectUtilities.equal(this.toolTipGenerator,</b>
+<i>1562</i>&nbsp;                that.toolTipGenerator)) {
+<b class="fc"><i>1563</i>&nbsp;            return false;</b>
+<i>1564</i>&nbsp;        }
+<b class="fc"><i>1565</i>&nbsp;        if (!this.toolTipGeneratorMap.equals(that.toolTipGeneratorMap)) {</b>
+<b class="fc"><i>1566</i>&nbsp;            return false;</b>
+<i>1567</i>&nbsp;        }
+<b class="fc"><i>1568</i>&nbsp;        if (!ObjectUtilities.equal(this.baseToolTipGenerator,</b>
+<i>1569</i>&nbsp;                that.baseToolTipGenerator)) {
+<b class="fc"><i>1570</i>&nbsp;            return false;</b>
+<i>1571</i>&nbsp;        }
+<b class="fc"><i>1572</i>&nbsp;        if (!ObjectUtilities.equal(this.urlGenerator, that.urlGenerator)) {</b>
+<b class="fc"><i>1573</i>&nbsp;            return false;</b>
+<i>1574</i>&nbsp;        }
+<b class="fc"><i>1575</i>&nbsp;        if (!this.foregroundAnnotations.equals(that.foregroundAnnotations)) {</b>
+<b class="fc"><i>1576</i>&nbsp;            return false;</b>
+<i>1577</i>&nbsp;        }
+<b class="fc"><i>1578</i>&nbsp;        if (!this.backgroundAnnotations.equals(that.backgroundAnnotations)) {</b>
+<b class="fc"><i>1579</i>&nbsp;            return false;</b>
+<i>1580</i>&nbsp;        }
+<b class="fc"><i>1581</i>&nbsp;        if (!ObjectUtilities.equal(this.legendItemLabelGenerator,</b>
+<i>1582</i>&nbsp;                that.legendItemLabelGenerator)) {
+<b class="fc"><i>1583</i>&nbsp;            return false;</b>
+<i>1584</i>&nbsp;        }
+<b class="fc"><i>1585</i>&nbsp;        if (!ObjectUtilities.equal(this.legendItemToolTipGenerator,</b>
+<i>1586</i>&nbsp;                that.legendItemToolTipGenerator)) {
+<b class="fc"><i>1587</i>&nbsp;            return false;</b>
+<i>1588</i>&nbsp;        }
+<b class="fc"><i>1589</i>&nbsp;        if (!ObjectUtilities.equal(this.legendItemURLGenerator,</b>
+<i>1590</i>&nbsp;                that.legendItemURLGenerator)) {
+<b class="fc"><i>1591</i>&nbsp;            return false;</b>
+<i>1592</i>&nbsp;        }
+<b class="fc"><i>1593</i>&nbsp;        return super.equals(obj);</b>
+<i>1594</i>&nbsp;    }
+<i>1595</i>&nbsp;
+<i>1596</i>&nbsp;    /**
+<i>1597</i>&nbsp;     * Returns the drawing supplier from the plot.
+<i>1598</i>&nbsp;     *
+<i>1599</i>&nbsp;     * @return The drawing supplier (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1600</i>&nbsp;     */
+<i>1601</i>&nbsp;    @Override
+<i>1602</i>&nbsp;    public DrawingSupplier getDrawingSupplier() {
+<b class="fc"><i>1603</i>&nbsp;        DrawingSupplier result = null;</b>
+<b class="fc"><i>1604</i>&nbsp;        XYPlot p = getPlot();</b>
+<b class="fc"><i>1605</i>&nbsp;        if (p != null) {</b>
+<b class="fc"><i>1606</i>&nbsp;            result = p.getDrawingSupplier();</b>
+<i>1607</i>&nbsp;        }
+<b class="fc"><i>1608</i>&nbsp;        return result;</b>
+<i>1609</i>&nbsp;    }
+<i>1610</i>&nbsp;
+<i>1611</i>&nbsp;    /**
+<i>1612</i>&nbsp;     * Considers the current (x, y) coordinate and updates the crosshair point
+<i>1613</i>&nbsp;     * if it meets the criteria (usually means the (x, y) coordinate is the
+<i>1614</i>&nbsp;     * closest to the anchor point so far).
+<i>1615</i>&nbsp;     *
+<i>1616</i>&nbsp;     * @param crosshairState  the crosshair state (&lt;code&gt;null&lt;/code&gt; permitted,
+<i>1617</i>&nbsp;     *                        but the method does nothing in that case).
+<i>1618</i>&nbsp;     * @param x  the x-value (in data space).
+<i>1619</i>&nbsp;     * @param y  the y-value (in data space).
+<i>1620</i>&nbsp;     * @param domainAxisIndex  the index of the domain axis for the point.
+<i>1621</i>&nbsp;     * @param rangeAxisIndex  the index of the range axis for the point.
+<i>1622</i>&nbsp;     * @param transX  the x-value translated to Java2D space.
+<i>1623</i>&nbsp;     * @param transY  the y-value translated to Java2D space.
+<i>1624</i>&nbsp;     * @param orientation  the plot orientation (&lt;code&gt;null&lt;/code&gt; not
+<i>1625</i>&nbsp;     *                     permitted).
+<i>1626</i>&nbsp;     *
+<i>1627</i>&nbsp;     * @since 1.0.4
+<i>1628</i>&nbsp;     */
+<i>1629</i>&nbsp;    protected void updateCrosshairValues(CrosshairState crosshairState,
+<i>1630</i>&nbsp;            double x, double y, int domainAxisIndex, int rangeAxisIndex,
+<i>1631</i>&nbsp;            double transX, double transY, PlotOrientation orientation) {
+<i>1632</i>&nbsp;
+<b class="fc"><i>1633</i>&nbsp;        ParamChecks.nullNotPermitted(orientation, &quot;orientation&quot;);</b>
+<b class="fc"><i>1634</i>&nbsp;        if (crosshairState != null) {</b>
+<i>1635</i>&nbsp;            // do we need to update the crosshair values?
+<b class="fc"><i>1636</i>&nbsp;            if (this.plot.isDomainCrosshairLockedOnData()) {</b>
+<b class="fc"><i>1637</i>&nbsp;                if (this.plot.isRangeCrosshairLockedOnData()) {</b>
+<i>1638</i>&nbsp;                    // both axes
+<b class="fc"><i>1639</i>&nbsp;                    crosshairState.updateCrosshairPoint(x, y, domainAxisIndex,</b>
+<i>1640</i>&nbsp;                            rangeAxisIndex, transX, transY, orientation);
+<i>1641</i>&nbsp;                }
+<i>1642</i>&nbsp;                else {
+<i>1643</i>&nbsp;                    // just the domain axis...
+<b class="nc"><i>1644</i>&nbsp;                    crosshairState.updateCrosshairX(x, domainAxisIndex);</b>
+<i>1645</i>&nbsp;                }
+<i>1646</i>&nbsp;            }
+<i>1647</i>&nbsp;            else {
+<b class="nc"><i>1648</i>&nbsp;                if (this.plot.isRangeCrosshairLockedOnData()) {</b>
+<i>1649</i>&nbsp;                    // just the range axis...
+<b class="nc"><i>1650</i>&nbsp;                    crosshairState.updateCrosshairY(y, rangeAxisIndex);</b>
+<i>1651</i>&nbsp;                }
+<i>1652</i>&nbsp;            }
+<i>1653</i>&nbsp;        }
+<i>1654</i>&nbsp;
+<b class="fc"><i>1655</i>&nbsp;    }</b>
+<i>1656</i>&nbsp;
+<i>1657</i>&nbsp;    /**
+<i>1658</i>&nbsp;     * Draws an item label.
+<i>1659</i>&nbsp;     *
+<i>1660</i>&nbsp;     * @param g2  the graphics device.
+<i>1661</i>&nbsp;     * @param orientation  the orientation.
+<i>1662</i>&nbsp;     * @param dataset  the dataset.
+<i>1663</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1664</i>&nbsp;     * @param item  the item index (zero-based).
+<i>1665</i>&nbsp;     * @param x  the x coordinate (in Java2D space).
+<i>1666</i>&nbsp;     * @param y  the y coordinate (in Java2D space).
+<i>1667</i>&nbsp;     * @param negative  indicates a negative value (which affects the item
+<i>1668</i>&nbsp;     *                  label position).
+<i>1669</i>&nbsp;     */
+<i>1670</i>&nbsp;    protected void drawItemLabel(Graphics2D g2, PlotOrientation orientation,
+<i>1671</i>&nbsp;            XYDataset dataset, int series, int item, double x, double y,
+<i>1672</i>&nbsp;            boolean negative) {
+<i>1673</i>&nbsp;
+<b class="nc"><i>1674</i>&nbsp;        XYItemLabelGenerator generator = getItemLabelGenerator(series, item);</b>
+<b class="nc"><i>1675</i>&nbsp;        if (generator != null) {</b>
+<b class="nc"><i>1676</i>&nbsp;            Font labelFont = getItemLabelFont(series, item);</b>
+<b class="nc"><i>1677</i>&nbsp;            Paint paint = getItemLabelPaint(series, item);</b>
+<b class="nc"><i>1678</i>&nbsp;            g2.setFont(labelFont);</b>
+<b class="nc"><i>1679</i>&nbsp;            g2.setPaint(paint);</b>
+<b class="nc"><i>1680</i>&nbsp;            String label = generator.generateLabel(dataset, series, item);</b>
+<i>1681</i>&nbsp;
+<i>1682</i>&nbsp;            // get the label position..
+<i>1683</i>&nbsp;            ItemLabelPosition position;
+<b class="nc"><i>1684</i>&nbsp;            if (!negative) {</b>
+<b class="nc"><i>1685</i>&nbsp;                position = getPositiveItemLabelPosition(series, item);</b>
+<i>1686</i>&nbsp;            }
+<i>1687</i>&nbsp;            else {
+<b class="nc"><i>1688</i>&nbsp;                position = getNegativeItemLabelPosition(series, item);</b>
+<i>1689</i>&nbsp;            }
+<i>1690</i>&nbsp;
+<i>1691</i>&nbsp;            // work out the label anchor point...
+<b class="nc"><i>1692</i>&nbsp;            Point2D anchorPoint = calculateLabelAnchorPoint(</b>
+<b class="nc"><i>1693</i>&nbsp;                    position.getItemLabelAnchor(), x, y, orientation);</b>
+<b class="nc"><i>1694</i>&nbsp;            TextUtilities.drawRotatedString(label, g2,</b>
+<b class="nc"><i>1695</i>&nbsp;                    (float) anchorPoint.getX(), (float) anchorPoint.getY(),</b>
+<b class="nc"><i>1696</i>&nbsp;                    position.getTextAnchor(), position.getAngle(),</b>
+<b class="nc"><i>1697</i>&nbsp;                    position.getRotationAnchor());</b>
+<i>1698</i>&nbsp;        }
+<i>1699</i>&nbsp;
+<b class="nc"><i>1700</i>&nbsp;    }</b>
+<i>1701</i>&nbsp;
+<i>1702</i>&nbsp;    /**
+<i>1703</i>&nbsp;     * Draws all the annotations for the specified layer.
+<i>1704</i>&nbsp;     *
+<i>1705</i>&nbsp;     * @param g2  the graphics device.
+<i>1706</i>&nbsp;     * @param dataArea  the data area.
+<i>1707</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1708</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1709</i>&nbsp;     * @param layer  the layer.
+<i>1710</i>&nbsp;     * @param info  the plot rendering info.
+<i>1711</i>&nbsp;     */
+<i>1712</i>&nbsp;    @Override
+<i>1713</i>&nbsp;    public void drawAnnotations(Graphics2D g2, Rectangle2D dataArea,
+<i>1714</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, Layer layer,
+<i>1715</i>&nbsp;            PlotRenderingInfo info) {
+<i>1716</i>&nbsp;
+<b class="fc"><i>1717</i>&nbsp;        Iterator iterator = null;</b>
+<b class="fc"><i>1718</i>&nbsp;        if (layer.equals(Layer.FOREGROUND)) {</b>
+<b class="fc"><i>1719</i>&nbsp;            iterator = this.foregroundAnnotations.iterator();</b>
+<i>1720</i>&nbsp;        }
+<b class="fc"><i>1721</i>&nbsp;        else if (layer.equals(Layer.BACKGROUND)) {</b>
+<b class="fc"><i>1722</i>&nbsp;            iterator = this.backgroundAnnotations.iterator();</b>
+<i>1723</i>&nbsp;        }
+<i>1724</i>&nbsp;        else {
+<i>1725</i>&nbsp;            // should not get here
+<b class="nc"><i>1726</i>&nbsp;            throw new RuntimeException(&quot;Unknown layer.&quot;);</b>
+<i>1727</i>&nbsp;        }
+<b class="fc"><i>1728</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>1729</i>&nbsp;            XYAnnotation annotation = (XYAnnotation) iterator.next();</b>
+<b class="nc"><i>1730</i>&nbsp;            int index = this.plot.getIndexOf(this);</b>
+<b class="nc"><i>1731</i>&nbsp;            annotation.draw(g2, this.plot, dataArea, domainAxis, rangeAxis,</b>
+<i>1732</i>&nbsp;                    index, info);
+<b class="nc"><i>1733</i>&nbsp;        }</b>
+<i>1734</i>&nbsp;
+<b class="fc"><i>1735</i>&nbsp;    }</b>
+<i>1736</i>&nbsp;
+<i>1737</i>&nbsp;    /**
+<i>1738</i>&nbsp;     * Adds an entity to the collection.
+<i>1739</i>&nbsp;     *
+<i>1740</i>&nbsp;     * @param entities  the entity collection being populated.
+<i>1741</i>&nbsp;     * @param area  the entity area (if &lt;code&gt;null&lt;/code&gt; a default will be
+<i>1742</i>&nbsp;     *              used).
+<i>1743</i>&nbsp;     * @param dataset  the dataset.
+<i>1744</i>&nbsp;     * @param series  the series.
+<i>1745</i>&nbsp;     * @param item  the item.
+<i>1746</i>&nbsp;     * @param entityX  the entity&#39;s center x-coordinate in user space (only
+<i>1747</i>&nbsp;     *                 used if &lt;code&gt;area&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;).
+<i>1748</i>&nbsp;     * @param entityY  the entity&#39;s center y-coordinate in user space (only
+<i>1749</i>&nbsp;     *                 used if &lt;code&gt;area&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;).
+<i>1750</i>&nbsp;     */
+<i>1751</i>&nbsp;    protected void addEntity(EntityCollection entities, Shape area,
+<i>1752</i>&nbsp;                             XYDataset dataset, int series, int item,
+<i>1753</i>&nbsp;                             double entityX, double entityY) {
+<b class="nc"><i>1754</i>&nbsp;        if (!getItemCreateEntity(series, item)) {</b>
+<b class="nc"><i>1755</i>&nbsp;            return;</b>
+<i>1756</i>&nbsp;        }
+<b class="nc"><i>1757</i>&nbsp;        Shape hotspot = area;</b>
+<b class="nc"><i>1758</i>&nbsp;        if (hotspot == null) {</b>
+<b class="nc"><i>1759</i>&nbsp;            double r = getDefaultEntityRadius();</b>
+<b class="nc"><i>1760</i>&nbsp;            double w = r * 2;</b>
+<b class="nc"><i>1761</i>&nbsp;            if (getPlot().getOrientation() == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>1762</i>&nbsp;                hotspot = new Ellipse2D.Double(entityX - r, entityY - r, w, w);</b>
+<i>1763</i>&nbsp;            }
+<i>1764</i>&nbsp;            else {
+<b class="nc"><i>1765</i>&nbsp;                hotspot = new Ellipse2D.Double(entityY - r, entityX - r, w, w);</b>
+<i>1766</i>&nbsp;            }
+<i>1767</i>&nbsp;        }
+<b class="nc"><i>1768</i>&nbsp;        String tip = null;</b>
+<b class="nc"><i>1769</i>&nbsp;        XYToolTipGenerator generator = getToolTipGenerator(series, item);</b>
+<b class="nc"><i>1770</i>&nbsp;        if (generator != null) {</b>
+<b class="nc"><i>1771</i>&nbsp;            tip = generator.generateToolTip(dataset, series, item);</b>
+<i>1772</i>&nbsp;        }
+<b class="nc"><i>1773</i>&nbsp;        String url = null;</b>
+<b class="nc"><i>1774</i>&nbsp;        if (getURLGenerator() != null) {</b>
+<b class="nc"><i>1775</i>&nbsp;            url = getURLGenerator().generateURL(dataset, series, item);</b>
+<i>1776</i>&nbsp;        }
+<b class="nc"><i>1777</i>&nbsp;        XYItemEntity entity = new XYItemEntity(hotspot, dataset, series, item,</b>
+<i>1778</i>&nbsp;                tip, url);
+<b class="nc"><i>1779</i>&nbsp;        entities.add(entity);</b>
+<b class="nc"><i>1780</i>&nbsp;    }</b>
+<i>1781</i>&nbsp;
+<i>1782</i>&nbsp;    /**
+<i>1783</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the specified point (x, y) falls within or
+<i>1784</i>&nbsp;     * on the boundary of the specified rectangle.
+<i>1785</i>&nbsp;     *
+<i>1786</i>&nbsp;     * @param rect  the rectangle (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1787</i>&nbsp;     * @param x  the x-coordinate.
+<i>1788</i>&nbsp;     * @param y  the y-coordinate.
+<i>1789</i>&nbsp;     *
+<i>1790</i>&nbsp;     * @return A boolean.
+<i>1791</i>&nbsp;     *
+<i>1792</i>&nbsp;     * @since 1.0.10
+<i>1793</i>&nbsp;     */
+<i>1794</i>&nbsp;    public static boolean isPointInRect(Rectangle2D rect, double x, double y) {
+<i>1795</i>&nbsp;        // TODO: For JFreeChart 1.2.0, this method should go in the
+<i>1796</i>&nbsp;        //       ShapeUtilities class
+<b class="fc"><i>1797</i>&nbsp;        return (x &gt;= rect.getMinX() &amp;&amp; x &lt;= rect.getMaxX()</b>
+<b class="nc"><i>1798</i>&nbsp;                &amp;&amp; y &gt;= rect.getMinY() &amp;&amp; y &lt;= rect.getMaxY());</b>
+<i>1799</i>&nbsp;    }
+<i>1800</i>&nbsp;
+<i>1801</i>&nbsp;    /**
+<i>1802</i>&nbsp;     * Utility method delegating to {@link GeneralPath#moveTo} taking double as
+<i>1803</i>&nbsp;     * parameters.
+<i>1804</i>&nbsp;     *
+<i>1805</i>&nbsp;     * @param hotspot  the region under construction (&lt;code&gt;null&lt;/code&gt; not 
+<i>1806</i>&nbsp;     *           permitted);
+<i>1807</i>&nbsp;     * @param x  the x coordinate;
+<i>1808</i>&nbsp;     * @param y  the y coordinate;
+<i>1809</i>&nbsp;     *
+<i>1810</i>&nbsp;     * @since 1.0.14
+<i>1811</i>&nbsp;     */
+<i>1812</i>&nbsp;    protected static void moveTo(GeneralPath hotspot, double x, double y) {
+<b class="fc"><i>1813</i>&nbsp;        hotspot.moveTo((float) x, (float) y);</b>
+<b class="fc"><i>1814</i>&nbsp;    }</b>
+<i>1815</i>&nbsp;
+<i>1816</i>&nbsp;    /**
+<i>1817</i>&nbsp;     * Utility method delegating to {@link GeneralPath#lineTo} taking double as
+<i>1818</i>&nbsp;     * parameters.
+<i>1819</i>&nbsp;     *
+<i>1820</i>&nbsp;     * @param hotspot  the region under construction (&lt;code&gt;null&lt;/code&gt; not 
+<i>1821</i>&nbsp;     *           permitted);
+<i>1822</i>&nbsp;     * @param x  the x coordinate;
+<i>1823</i>&nbsp;     * @param y  the y coordinate;
+<i>1824</i>&nbsp;     *
+<i>1825</i>&nbsp;     * @since 1.0.14
+<i>1826</i>&nbsp;     */
+<i>1827</i>&nbsp;    protected static void lineTo(GeneralPath hotspot, double x, double y) {
+<b class="fc"><i>1828</i>&nbsp;        hotspot.lineTo((float) x, (float) y);</b>
+<b class="fc"><i>1829</i>&nbsp;    }</b>
+<i>1830</i>&nbsp;
+<i>1831</i>&nbsp;    // === DEPRECATED CODE ===
+<i>1832</i>&nbsp;
+<i>1833</i>&nbsp;    /**
+<i>1834</i>&nbsp;     * The item label generator for ALL series.
+<i>1835</i>&nbsp;     *
+<i>1836</i>&nbsp;     * @deprecated This field is redundant, use itemLabelGeneratorList and
+<i>1837</i>&nbsp;     *     baseItemLabelGenerator instead.  Deprecated as of version 1.0.6.
+<i>1838</i>&nbsp;     */
+<i>1839</i>&nbsp;    private XYItemLabelGenerator itemLabelGenerator;
+<i>1840</i>&nbsp;
+<i>1841</i>&nbsp;    /**
+<i>1842</i>&nbsp;     * The tool tip generator for ALL series.
+<i>1843</i>&nbsp;     *
+<i>1844</i>&nbsp;     * @deprecated This field is redundant, use tooltipGeneratorList and
+<i>1845</i>&nbsp;     *     baseToolTipGenerator instead.  Deprecated as of version 1.0.6.
+<i>1846</i>&nbsp;     */
+<i>1847</i>&nbsp;    private XYToolTipGenerator toolTipGenerator;
+<i>1848</i>&nbsp;
+<i>1849</i>&nbsp;    /**
+<i>1850</i>&nbsp;     * Returns the item label generator override.
+<i>1851</i>&nbsp;     *
+<i>1852</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1853</i>&nbsp;     *
+<i>1854</i>&nbsp;     * @since 1.0.5
+<i>1855</i>&nbsp;     *
+<i>1856</i>&nbsp;     * @see #setItemLabelGenerator(XYItemLabelGenerator)
+<i>1857</i>&nbsp;     *
+<i>1858</i>&nbsp;     * @deprecated As of version 1.0.6, this override setting should not be
+<i>1859</i>&nbsp;     *     used.  You can use the base setting instead
+<i>1860</i>&nbsp;     *     ({@link #getBaseItemLabelGenerator()}).
+<i>1861</i>&nbsp;     */
+<i>1862</i>&nbsp;    public XYItemLabelGenerator getItemLabelGenerator() {
+<b class="nc"><i>1863</i>&nbsp;        return this.itemLabelGenerator;</b>
+<i>1864</i>&nbsp;    }
+<i>1865</i>&nbsp;
+<i>1866</i>&nbsp;    /**
+<i>1867</i>&nbsp;     * Sets the item label generator for ALL series and sends a
+<i>1868</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1869</i>&nbsp;     *
+<i>1870</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1871</i>&nbsp;     *
+<i>1872</i>&nbsp;     * @see #getItemLabelGenerator()
+<i>1873</i>&nbsp;     *
+<i>1874</i>&nbsp;     * @deprecated As of version 1.0.6, this override setting should not be
+<i>1875</i>&nbsp;     *     used.  You can use the base setting instead
+<i>1876</i>&nbsp;     *     ({@link #setBaseItemLabelGenerator(XYItemLabelGenerator)}).
+<i>1877</i>&nbsp;     */
+<i>1878</i>&nbsp;    @Override
+<i>1879</i>&nbsp;    public void setItemLabelGenerator(XYItemLabelGenerator generator) {
+<b class="fc"><i>1880</i>&nbsp;        this.itemLabelGenerator = generator;</b>
+<b class="fc"><i>1881</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>1882</i>&nbsp;    }</b>
+<i>1883</i>&nbsp;
+<i>1884</i>&nbsp;    /**
+<i>1885</i>&nbsp;     * Returns the override tool tip generator.
+<i>1886</i>&nbsp;     *
+<i>1887</i>&nbsp;     * @return The tool tip generator (possible &lt;code&gt;null&lt;/code&gt;).
+<i>1888</i>&nbsp;     *
+<i>1889</i>&nbsp;     * @since 1.0.5
+<i>1890</i>&nbsp;     *
+<i>1891</i>&nbsp;     * @see #setToolTipGenerator(XYToolTipGenerator)
+<i>1892</i>&nbsp;     *
+<i>1893</i>&nbsp;     * @deprecated As of version 1.0.6, this override setting should not be
+<i>1894</i>&nbsp;     *     used.  You can use the base setting instead
+<i>1895</i>&nbsp;     *     ({@link #getBaseToolTipGenerator()}).
+<i>1896</i>&nbsp;     */
+<i>1897</i>&nbsp;    public XYToolTipGenerator getToolTipGenerator() {
+<b class="nc"><i>1898</i>&nbsp;        return this.toolTipGenerator;</b>
+<i>1899</i>&nbsp;    }
+<i>1900</i>&nbsp;
+<i>1901</i>&nbsp;    /**
+<i>1902</i>&nbsp;     * Sets the tool tip generator for ALL series and sends a
+<i>1903</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1904</i>&nbsp;     *
+<i>1905</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1906</i>&nbsp;     *
+<i>1907</i>&nbsp;     * @see #getToolTipGenerator()
+<i>1908</i>&nbsp;     *
+<i>1909</i>&nbsp;     * @deprecated As of version 1.0.6, this override setting should not be
+<i>1910</i>&nbsp;     *     used.  You can use the base setting instead
+<i>1911</i>&nbsp;     *     ({@link #setBaseToolTipGenerator(XYToolTipGenerator)}).
+<i>1912</i>&nbsp;     */
+<i>1913</i>&nbsp;    @Override
+<i>1914</i>&nbsp;    public void setToolTipGenerator(XYToolTipGenerator generator) {
+<b class="fc"><i>1915</i>&nbsp;        this.toolTipGenerator = generator;</b>
+<b class="fc"><i>1916</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>1917</i>&nbsp;    }</b>
+<i>1918</i>&nbsp;
+<i>1919</i>&nbsp;    /**
+<i>1920</i>&nbsp;     * Considers the current (x, y) coordinate and updates the crosshair point
+<i>1921</i>&nbsp;     * if it meets the criteria (usually means the (x, y) coordinate is the
+<i>1922</i>&nbsp;     * closest to the anchor point so far).
+<i>1923</i>&nbsp;     *
+<i>1924</i>&nbsp;     * @param crosshairState  the crosshair state (&lt;code&gt;null&lt;/code&gt; permitted,
+<i>1925</i>&nbsp;     *                        but the method does nothing in that case).
+<i>1926</i>&nbsp;     * @param x  the x-value (in data space).
+<i>1927</i>&nbsp;     * @param y  the y-value (in data space).
+<i>1928</i>&nbsp;     * @param transX  the x-value translated to Java2D space.
+<i>1929</i>&nbsp;     * @param transY  the y-value translated to Java2D space.
+<i>1930</i>&nbsp;     * @param orientation  the plot orientation (&lt;code&gt;null&lt;/code&gt; not
+<i>1931</i>&nbsp;     *                     permitted).
+<i>1932</i>&nbsp;     *
+<i>1933</i>&nbsp;     * @deprecated Use {@link #updateCrosshairValues(CrosshairState, double,
+<i>1934</i>&nbsp;     *         double, int, int, double, double, PlotOrientation)} -- see bug
+<i>1935</i>&nbsp;     *         report 1086307.
+<i>1936</i>&nbsp;     */
+<i>1937</i>&nbsp;    protected void updateCrosshairValues(CrosshairState crosshairState,
+<i>1938</i>&nbsp;            double x, double y, double transX, double transY,
+<i>1939</i>&nbsp;            PlotOrientation orientation) {
+<b class="nc"><i>1940</i>&nbsp;        updateCrosshairValues(crosshairState, x, y, 0, 0, transX, transY,</b>
+<i>1941</i>&nbsp;                orientation);
+<b class="nc"><i>1942</i>&nbsp;    }</b>
+<i>1943</i>&nbsp;
+<i>1944</i>&nbsp;
+<i>1945</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

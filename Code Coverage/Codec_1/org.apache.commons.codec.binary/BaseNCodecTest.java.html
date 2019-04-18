@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseNCodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">BaseNCodecTest.java</span></div><h1>BaseNCodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package org.apache.commons.codec.binary;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
+<span class="pc bpc" id="L29" title="3 of 4 branches missed.">public class BaseNCodecTest {</span>
+
+    BaseNCodec codec;
+
+    @Before
+<span class="fc" id="L34">    public void setUp() {</span>
+<span class="fc" id="L35">        codec = new BaseNCodec(0, 0, 0, 0) {</span>
+            @Override
+<span class="fc" id="L37">            protected boolean isInAlphabet(final byte b) {</span>
+<span class="fc bfc" id="L38" title="All 4 branches covered.">                return b=='O' || b == 'K'; // allow OK</span>
+            }
+
+            @Override
+<span class="nc" id="L42">            void encode(final byte[] pArray, final int i, final int length, final Context context) {</span>
+<span class="nc" id="L43">            }</span>
+
+            @Override
+<span class="nc" id="L46">            void decode(final byte[] pArray, final int i, final int length, final Context context) {</span>
+<span class="nc" id="L47">            }</span>
+        };
+<span class="fc" id="L49">    }</span>
+
+    @Test
+<span class="pc bnc" id="L52" title="All 4 branches missed.">    public void testBaseNCodec() {</span>
+<span class="fc" id="L53">        assertNotNull(codec);</span>
+<span class="fc" id="L54">    }</span>
+
+//    @Test
+//    public void testHasData() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testAvail() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testEnsureBufferSize() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testReadResults() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+    @Test
+<span class="pc bnc" id="L77" title="All 4 branches missed.">    public void testIsWhiteSpace() {</span>
+<span class="fc" id="L78">        assertTrue(BaseNCodec.isWhiteSpace((byte) ' '));</span>
+<span class="fc" id="L79">        assertTrue(BaseNCodec.isWhiteSpace((byte) '\n'));</span>
+<span class="fc" id="L80">        assertTrue(BaseNCodec.isWhiteSpace((byte) '\r'));</span>
+<span class="fc" id="L81">        assertTrue(BaseNCodec.isWhiteSpace((byte) '\t'));</span>
+<span class="fc" id="L82">    }</span>
+//
+//    @Test
+//    public void testEncodeObject() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testEncodeToString() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testDecodeObject() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testDecodeString() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testDecodeByteArray() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testEncodeByteArray() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testEncodeAsString() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testEncodeByteArrayIntInt() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+//    @Test
+//    public void testDecodeByteArrayIntInt() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+//
+    @Test
+<span class="pc bnc" id="L130" title="All 4 branches missed.">    public void testIsInAlphabetByte() {</span>
+<span class="fc" id="L131">        assertFalse(codec.isInAlphabet((byte) 0));</span>
+<span class="fc" id="L132">        assertFalse(codec.isInAlphabet((byte) 'a'));</span>
+<span class="fc" id="L133">        assertTrue(codec.isInAlphabet((byte) 'O'));</span>
+<span class="fc" id="L134">        assertTrue(codec.isInAlphabet((byte) 'K'));</span>
+<span class="fc" id="L135">    }</span>
+
+    @Test
+<span class="pc bnc" id="L138" title="All 4 branches missed.">    public void testIsInAlphabetByteArrayBoolean() {</span>
+<span class="fc" id="L139">        assertTrue(codec.isInAlphabet(new byte[]{}, false));</span>
+<span class="fc" id="L140">        assertTrue(codec.isInAlphabet(new byte[]{'O'}, false));</span>
+<span class="fc" id="L141">        assertFalse(codec.isInAlphabet(new byte[]{'O',' '}, false));</span>
+<span class="fc" id="L142">        assertFalse(codec.isInAlphabet(new byte[]{' '}, false));</span>
+<span class="fc" id="L143">        assertTrue(codec.isInAlphabet(new byte[]{}, true));</span>
+<span class="fc" id="L144">        assertTrue(codec.isInAlphabet(new byte[]{'O'}, true));</span>
+<span class="fc" id="L145">        assertTrue(codec.isInAlphabet(new byte[]{'O',' '}, true));</span>
+<span class="fc" id="L146">        assertTrue(codec.isInAlphabet(new byte[]{' '}, true));</span>
+<span class="fc" id="L147">    }</span>
+
+    @Test
+<span class="pc bnc" id="L150" title="All 4 branches missed.">    public void testIsInAlphabetString() {</span>
+<span class="fc" id="L151">        assertTrue(codec.isInAlphabet(&quot;OK&quot;));</span>
+<span class="fc" id="L152">        assertTrue(codec.isInAlphabet(&quot;O=K= \t\n\r&quot;));</span>
+<span class="fc" id="L153">    }</span>
+
+    @Test
+<span class="pc bnc" id="L156" title="All 4 branches missed.">    public void testContainsAlphabetOrPad() {</span>
+<span class="fc" id="L157">        assertFalse(codec.containsAlphabetOrPad(null));</span>
+<span class="fc" id="L158">        assertFalse(codec.containsAlphabetOrPad(new byte[]{}));</span>
+<span class="fc" id="L159">        assertTrue(codec.containsAlphabetOrPad(&quot;OK&quot;.getBytes()));</span>
+<span class="fc" id="L160">        assertTrue(codec.containsAlphabetOrPad(&quot;OK &quot;.getBytes()));</span>
+<span class="fc" id="L161">        assertFalse(codec.containsAlphabetOrPad(&quot;ok &quot;.getBytes()));</span>
+<span class="fc" id="L162">        assertTrue(codec.containsAlphabetOrPad(new byte[]{codec.pad}));</span>
+<span class="fc" id="L163">    }</span>
+
+//    @Test
+//    public void testGetEncodedLength() {
+//        fail(&quot;Not yet implemented&quot;);
+//    }
+
+    @Test
+<span class="pc bnc" id="L171" title="All 4 branches missed.">    public void testProvidePaddingByte() {</span>
+        // Given
+<span class="fc" id="L173">        codec = new BaseNCodec(0, 0, 0, 0, (byte)0x25) {</span>
+            @Override
+<span class="nc" id="L175">            protected boolean isInAlphabet(final byte b) {</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">                return b=='O' || b == 'K'; // allow OK</span>
+            }
+
+            @Override
+<span class="nc" id="L180">            void encode(final byte[] pArray, final int i, final int length, final Context context) {</span>
+<span class="nc" id="L181">            }</span>
+
+            @Override
+<span class="nc" id="L184">            void decode(final byte[] pArray, final int i, final int length, final Context context) {</span>
+<span class="nc" id="L185">            }</span>
+        };
+
+        // When
+<span class="fc" id="L189">        final byte actualPaddingByte = codec.pad;</span>
+
+        // Then
+<span class="fc" id="L192">        assertEquals(0x25, actualPaddingByte);</span>
+<span class="fc" id="L193">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

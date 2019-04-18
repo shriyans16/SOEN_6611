@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PhoneticEnginePerformanceTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language.bm</a> &gt; <span class="el_source">PhoneticEnginePerformanceTest.java</span></div><h1>PhoneticEnginePerformanceTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.language.bm;
+
+import org.junit.Test;
+
+/**
+ * Tests performance for {@link PhoneticEngine}.
+ * &lt;p&gt;
+ * See &lt;a href=&quot;https://issues.apache.org/jira/browse/CODEC-174&quot;&gt;[CODEC-174] Improve performance of Beider Morse
+ * encoder&lt;/a&gt;.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Results for November 7, 2013, project SVN revision 1539678.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Environment:
+ * &lt;/p&gt;
+ * &lt;ul&gt;
+ * &lt;li&gt;java version &quot;1.7.0_45&quot;&lt;/li&gt;
+ * &lt;li&gt;Java(TM) SE Runtime Environment (build 1.7.0_45-b18)&lt;/li&gt;
+ * &lt;li&gt;Java HotSpot(TM) 64-Bit Server VM (build 24.45-b08, mixed mode)&lt;/li&gt;
+ * &lt;li&gt;OS name: &quot;windows 7&quot;, version: &quot;6.1&quot;, arch: &quot;amd64&quot;, family: &quot;windows&quot;)&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 33,039 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 32,297 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 32,857 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': &lt;b&gt;31,561 millis.&lt;/b&gt;&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 32,665 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 32,215 millis.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;p&gt;
+ * On this file's revision 1539678, with patch &lt;a
+ * href=&quot;https://issues.apache.org/jira/secure/attachment/12611963/CODEC-174-change-rules-storage-to-Map.patch&quot;
+ * &gt;CODEC-174-change-rules-storage-to-Map&lt;/a&gt;:
+ * &lt;/p&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 18,196 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,858 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,644 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': &lt;b&gt;13,591 millis.&lt;/b&gt;&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,861 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,696 millis.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;p&gt;
+ * Patch applied, committed revision 1539783.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * On this file's revision 1539783, with patch &lt;a
+ * href=&quot;https://issues.apache.org/jira/secure/attachment/12611962/CODEC-174-delete-subsequence-cache.patch&quot;
+ * &gt;CODEC-174-delete-subsequence-cache.patch&lt;/a&gt;:
+ * &lt;/p&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,547 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': &lt;b&gt;13,501 millis.&lt;/b&gt;&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,528 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 17,110 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,910 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 16,969 millis.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;p&gt;
+ * Patch not applied.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * On this file's revision 1539787, with patch &lt;a
+ * href=&quot;https://issues.apache.org/jira/secure/attachment/12612178/CODEC-174-reuse-set-in-PhonemeBuilder.patch&quot;
+ * &gt;CODEC-174-reuse-set-in-PhonemeBuilder.patch&lt;/a&gt;:
+ * &lt;/p&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,724 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,451 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,742 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': &lt;b&gt;13,186 millis.&lt;/b&gt;&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,600 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 16,405 millis.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;p&gt;
+ * Patch applied, committed revision 1539788.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Before patch https://issues.apache.org/jira/secure/attachment/12613371/CODEC-174-refactor-restrictTo-method-in-SomeLanguages.patch
+ * &lt;/p&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,133 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,064 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': &lt;b&gt;12,838 millis.&lt;/b&gt;&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 12,970 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,122 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 13,293 millis.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;p&gt;
+ * After patch https://issues.apache.org/jira/secure/attachment/12613371/CODEC-174-refactor-restrictTo-method-in-SomeLanguages.patch
+ * &lt;/p&gt;
+ * &lt;ol&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 11,576 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 11,506 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 11,361 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': &lt;b&gt;11,142 millis.&lt;/b&gt;&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 11,430 millis.&lt;/li&gt;
+ * &lt;li&gt;Time for encoding 80,000 times the input 'Angelo': 11,297 millis.&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;p&gt;
+ * Patch applied, committed revision 1541234.
+ * &lt;/p&gt;
+ */
+<span class="pc bpc" id="L121" title="3 of 4 branches missed.">public class PhoneticEnginePerformanceTest {</span>
+
+    private static final int LOOP = 80000;
+
+    @Test
+<span class="pc bnc" id="L126" title="All 4 branches missed.">    public void test() {</span>
+<span class="fc" id="L127">        final PhoneticEngine engine = new PhoneticEngine(NameType.GENERIC, RuleType.APPROX, true);</span>
+<span class="fc" id="L128">        final String input = &quot;Angelo&quot;;</span>
+<span class="fc" id="L129">        final long startMillis = System.currentTimeMillis();</span>
+<span class="pc bpc" id="L130" title="4 of 10 branches missed.">        for (int i = 0; i &lt; LOOP; i++) {</span>
+<span class="fc" id="L131">            engine.encode(input);</span>
+        }
+<span class="fc" id="L133">        final long totalMillis = System.currentTimeMillis() - startMillis;</span>
+<span class="fc" id="L134">        System.out.println(String.format(&quot;Time for encoding %,d times the input '%s': %,d millis.&quot;, LOOP, input,</span>
+<span class="fc" id="L135">                totalMillis));</span>
+<span class="fc" id="L136">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

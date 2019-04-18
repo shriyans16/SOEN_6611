@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LanguageGuessingTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language.bm</a> &gt; <span class="el_source">LanguageGuessingTest.java</span></div><h1>LanguageGuessingTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language.bm;
+
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+/**
+ * Tests guessLanguages API.
+ *
+ * @since 1.6
+ */
+@RunWith(Parameterized.class)
+<span class="pc bpc" id="L35" title="3 of 4 branches missed.">public class LanguageGuessingTest {</span>
+
+    @Parameterized.Parameters(name = &quot;{0}-{1}-{2}&quot;)
+<span class="fc" id="L38">    public static List&lt;Object[]&gt; data() {</span>
+<span class="fc" id="L39">        return Arrays.asList(new Object[][] {</span>
+                { &quot;Renault&quot;, &quot;french&quot; },
+                { &quot;Mickiewicz&quot;, &quot;polish&quot; },
+                { &quot;Thompson&quot;, &quot;english&quot; }, // this also hits german and greeklatin
+                { &quot;Nu\u00f1ez&quot;, &quot;spanish&quot; }, // Nuñez
+                { &quot;Carvalho&quot;, &quot;portuguese&quot; },
+                { &quot;\u010capek&quot;, &quot;czech&quot; }, // Čapek
+                { &quot;Sjneijder&quot;, &quot;dutch&quot; },
+                { &quot;Klausewitz&quot;, &quot;german&quot; },
+                { &quot;K\u00fc\u00e7\u00fck&quot;, &quot;turkish&quot; }, // Küçük
+                { &quot;Giacometti&quot;, &quot;italian&quot; },
+                { &quot;Nagy&quot;, &quot;hungarian&quot; },
+                { &quot;Ceau\u015fescu&quot;, &quot;romanian&quot; }, // Ceauşescu
+                { &quot;Angelopoulos&quot;, &quot;greeklatin&quot; },
+                { &quot;\u0391\u03b3\u03b3\u03b5\u03bb\u03cc\u03c0\u03bf\u03c5\u03bb\u03bf\u03c2&quot;, &quot;greek&quot; }, // Αγγελόπουλος
+                { &quot;\u041f\u0443\u0448\u043a\u0438\u043d&quot;, &quot;cyrillic&quot; }, // Пушкин
+                { &quot;\u05db\u05d4\u05df&quot;, &quot;hebrew&quot; }, // כהן
+                { &quot;\u00e1cz&quot;, &quot;any&quot; }, // ácz
+                { &quot;\u00e1tz&quot;, &quot;any&quot; } }); // átz
+    }
+
+<span class="fc" id="L60">    private final Lang lang = Lang.instance(NameType.GENERIC);</span>
+    private final String language;
+    private final String name;
+
+<span class="fc" id="L64">    public LanguageGuessingTest(final String name, final String language) {</span>
+<span class="fc" id="L65">        this.name = name;</span>
+<span class="fc" id="L66">        this.language = language;</span>
+<span class="fc" id="L67">    }</span>
+
+    @Test
+<span class="pc bnc" id="L70" title="All 4 branches missed.">    public void testLanguageGuessing() {</span>
+<span class="fc" id="L71">        final Languages.LanguageSet guesses = this.lang.guessLanguages(this.name);</span>
+
+<span class="fc" id="L73">        assertTrue(&quot;language predicted for name '&quot; + this.name + &quot;' is wrong: &quot; + guesses + &quot; should contain '&quot; + this.language + &quot;'&quot;,</span>
+<span class="fc" id="L74">                guesses.contains(this.language));</span>
+
+<span class="fc" id="L76">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

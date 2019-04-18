@@ -1,0 +1,229 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GanttCategoryDataset</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.gantt</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GanttCategoryDataset (org.jfree.data.gantt)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">GanttCategoryDataset</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------------
+<i>28</i>&nbsp; * GanttCategoryDataset.java
+<i>29</i>&nbsp; * -------------------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2008, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 16-Sep-2003 : Version 1, based on MultiIntervalCategoryDataset (DG);
+<i>38</i>&nbsp; * 23-Sep-2003 : Fixed Checkstyle issues (DG);
+<i>39</i>&nbsp; * 12-May-2008 : Updated API docs (DG);
+<i>40</i>&nbsp; *
+<i>41</i>&nbsp; */
+<i>42</i>&nbsp;
+<i>43</i>&nbsp; package org.jfree.data.gantt;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;import org.jfree.data.category.IntervalCategoryDataset;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;/**
+<i>48</i>&nbsp; * An extension of the {@link IntervalCategoryDataset} interface that adds
+<i>49</i>&nbsp; * support for multiple sub-intervals.
+<i>50</i>&nbsp; */
+<i>51</i>&nbsp;public interface GanttCategoryDataset extends IntervalCategoryDataset {
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * Returns the percent complete for a given item.
+<i>55</i>&nbsp;     *
+<i>56</i>&nbsp;     * @param row  the row index (zero-based).
+<i>57</i>&nbsp;     * @param column  the column index (zero-based).
+<i>58</i>&nbsp;     *
+<i>59</i>&nbsp;     * @return The percent complete.
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     * @see #getPercentComplete(Comparable, Comparable)
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    public Number getPercentComplete(int row, int column);
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Returns the percent complete for a given item.
+<i>67</i>&nbsp;     *
+<i>68</i>&nbsp;     * @param rowKey  the row key.
+<i>69</i>&nbsp;     * @param columnKey  the column key.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @return The percent complete.
+<i>72</i>&nbsp;     *
+<i>73</i>&nbsp;     * @see #getPercentComplete(int, int)
+<i>74</i>&nbsp;     */
+<i>75</i>&nbsp;    public Number getPercentComplete(Comparable rowKey, Comparable columnKey);
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * Returns the number of sub-intervals for a given item.
+<i>79</i>&nbsp;     *
+<i>80</i>&nbsp;     * @param row  the row index (zero-based).
+<i>81</i>&nbsp;     * @param column  the column index (zero-based).
+<i>82</i>&nbsp;     *
+<i>83</i>&nbsp;     * @return The sub-interval count.
+<i>84</i>&nbsp;     *
+<i>85</i>&nbsp;     * @see #getSubIntervalCount(Comparable, Comparable)
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public int getSubIntervalCount(int row, int column);
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Returns the number of sub-intervals for a given item.
+<i>91</i>&nbsp;     *
+<i>92</i>&nbsp;     * @param rowKey  the row key.
+<i>93</i>&nbsp;     * @param columnKey  the column key.
+<i>94</i>&nbsp;     *
+<i>95</i>&nbsp;     * @return The sub-interval count.
+<i>96</i>&nbsp;     *
+<i>97</i>&nbsp;     * @see #getSubIntervalCount(int, int)
+<i>98</i>&nbsp;     */
+<i>99</i>&nbsp;    public int getSubIntervalCount(Comparable rowKey, Comparable columnKey);
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Returns the start value of a sub-interval for a given item.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @param row  the row index (zero-based).
+<i>105</i>&nbsp;     * @param column  the column index (zero-based).
+<i>106</i>&nbsp;     * @param subinterval  the sub-interval index (zero-based).
+<i>107</i>&nbsp;     *
+<i>108</i>&nbsp;     * @return The start value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>109</i>&nbsp;     *
+<i>110</i>&nbsp;     * @see #getEndValue(int, int, int)
+<i>111</i>&nbsp;     */
+<i>112</i>&nbsp;    public Number getStartValue(int row, int column, int subinterval);
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    /**
+<i>115</i>&nbsp;     * Returns the start value of a sub-interval for a given item.
+<i>116</i>&nbsp;     *
+<i>117</i>&nbsp;     * @param rowKey  the row key.
+<i>118</i>&nbsp;     * @param columnKey  the column key.
+<i>119</i>&nbsp;     * @param subinterval  the sub-interval.
+<i>120</i>&nbsp;     *
+<i>121</i>&nbsp;     * @return The start value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>122</i>&nbsp;     *
+<i>123</i>&nbsp;     * @see #getEndValue(Comparable, Comparable, int)
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    public Number getStartValue(Comparable rowKey, Comparable columnKey,
+<i>126</i>&nbsp;                                int subinterval);
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /**
+<i>129</i>&nbsp;     * Returns the end value of a sub-interval for a given item.
+<i>130</i>&nbsp;     *
+<i>131</i>&nbsp;     * @param row  the row index (zero-based).
+<i>132</i>&nbsp;     * @param column  the column index (zero-based).
+<i>133</i>&nbsp;     * @param subinterval  the sub-interval.
+<i>134</i>&nbsp;     *
+<i>135</i>&nbsp;     * @return The end value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>136</i>&nbsp;     *
+<i>137</i>&nbsp;     * @see #getStartValue(int, int, int)
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    public Number getEndValue(int row, int column, int subinterval);
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Returns the end value of a sub-interval for a given item.
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @param rowKey  the row key.
+<i>145</i>&nbsp;     * @param columnKey  the column key.
+<i>146</i>&nbsp;     * @param subinterval  the sub-interval.
+<i>147</i>&nbsp;     *
+<i>148</i>&nbsp;     * @return The end value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @see #getStartValue(Comparable, Comparable, int)
+<i>151</i>&nbsp;     */
+<i>152</i>&nbsp;    public Number getEndValue(Comparable rowKey, Comparable columnKey,
+<i>153</i>&nbsp;                              int subinterval);
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Returns the percentage complete value of a sub-interval for a given item.
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @param row  the row index (zero-based).
+<i>159</i>&nbsp;     * @param column  the column index (zero-based).
+<i>160</i>&nbsp;     * @param subinterval  the sub-interval.
+<i>161</i>&nbsp;     *
+<i>162</i>&nbsp;     * @return The percent complete value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>163</i>&nbsp;     *
+<i>164</i>&nbsp;     * @see #getPercentComplete(Comparable, Comparable, int)
+<i>165</i>&nbsp;     */
+<i>166</i>&nbsp;    public Number getPercentComplete(int row, int column, int subinterval);
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * Returns the percentage complete value of a sub-interval for a given item.
+<i>170</i>&nbsp;     *
+<i>171</i>&nbsp;     * @param rowKey  the row key.
+<i>172</i>&nbsp;     * @param columnKey  the column key.
+<i>173</i>&nbsp;     * @param subinterval  the sub-interval.
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @return The percent complete value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>176</i>&nbsp;     *
+<i>177</i>&nbsp;     * @see #getPercentComplete(int, int, int)
+<i>178</i>&nbsp;     */
+<i>179</i>&nbsp;    public Number getPercentComplete(Comparable rowKey, Comparable columnKey,
+<i>180</i>&nbsp;                                     int subinterval);
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

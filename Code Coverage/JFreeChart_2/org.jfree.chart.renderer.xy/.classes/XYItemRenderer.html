@@ -1,0 +1,1425 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: XYItemRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: XYItemRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">XYItemRenderer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------
+<i>28</i>&nbsp; * XYItemRenderer.java
+<i>29</i>&nbsp; * -------------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2017, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Mark Watson (www.markwatson.com);
+<i>34</i>&nbsp; *                   Sylvain Vieujot;
+<i>35</i>&nbsp; *                   Focus Computer Services Limited;
+<i>36</i>&nbsp; *                   Richard Atkinson;
+<i>37</i>&nbsp; *
+<i>38</i>&nbsp; * Changes
+<i>39</i>&nbsp; * -------
+<i>40</i>&nbsp; * 19-Oct-2001 : Version 1, based on code by Mark Watson (DG);
+<i>41</i>&nbsp; * 22-Oct-2001 : Renamed DataSource.java --&gt; Dataset.java etc. (DG);
+<i>42</i>&nbsp; * 13-Dec-2001 : Changed return type of drawItem from void --&gt; Shape.  The area
+<i>43</i>&nbsp; *               returned can be used as the tooltip region.
+<i>44</i>&nbsp; * 23-Jan-2002 : Added DrawInfo parameter to drawItem() method (DG);
+<i>45</i>&nbsp; * 28-Mar-2002 : Added a property change listener mechanism.  Now renderers do
+<i>46</i>&nbsp; *               not have to be immutable (DG);
+<i>47</i>&nbsp; * 04-Apr-2002 : Added the initialise() method (DG);
+<i>48</i>&nbsp; * 09-Apr-2002 : Removed the translated zero from the drawItem method, it can
+<i>49</i>&nbsp; *               be calculated inside the initialise method if it is required.
+<i>50</i>&nbsp; *               Added a new getToolTipGenerator() method.  Changed the return
+<i>51</i>&nbsp; *               type for drawItem() to void (DG);
+<i>52</i>&nbsp; * 24-May-2002 : Added ChartRenderingInfo the initialise method API (DG);
+<i>53</i>&nbsp; * 25-Jun-2002 : Removed redundant import (DG);
+<i>54</i>&nbsp; * 20-Aug-2002 : Added get/setURLGenerator methods to interface (DG);
+<i>55</i>&nbsp; * 02-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+<i>56</i>&nbsp; * 18-Nov-2002 : Added methods for drawing grid lines (DG);
+<i>57</i>&nbsp; * 17-Jan-2003 : Moved plot classes into a separate package (DG);
+<i>58</i>&nbsp; * 27-Jan-2003 : Added shape lookup table (DG);
+<i>59</i>&nbsp; * 05-Jun-2003 : Added domain and range grid bands (sponsored by Focus Computer
+<i>60</i>&nbsp; *               Services Ltd) (DG);
+<i>61</i>&nbsp; * 27-Jul-2003 : Added getRangeType() to support stacked XY area charts (RA);
+<i>62</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>63</i>&nbsp; * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState.  Renamed
+<i>64</i>&nbsp; *               XYToolTipGenerator --&gt; XYItemLabelGenerator (DG);
+<i>65</i>&nbsp; * 26-Feb-2004 : Added lots of new methods (DG);
+<i>66</i>&nbsp; * 30-Apr-2004 : Added getRangeExtent() method (DG);
+<i>67</i>&nbsp; * 06-May-2004 : Added methods for controlling item label visibility (DG);
+<i>68</i>&nbsp; * 13-May-2004 : Removed property change listener mechanism (DG);
+<i>69</i>&nbsp; * 18-May-2004 : Added item label font and paint methods (DG);
+<i>70</i>&nbsp; * 10-Sep-2004 : Removed redundant getRangeType() method (DG);
+<i>71</i>&nbsp; * 06-Oct-2004 : Replaced getRangeExtent() with findRangeBounds() and added
+<i>72</i>&nbsp; *               findDomainBounds (DG);
+<i>73</i>&nbsp; * 23-Nov-2004 : Changed drawRangeGridLine() --&gt; drawRangeLine() (DG);
+<i>74</i>&nbsp; * 07-Jan-2005 : Removed deprecated method (DG);
+<i>75</i>&nbsp; * 24-Feb-2005 : Now extends LegendItemSource (DG);
+<i>76</i>&nbsp; * 20-Apr-2005 : Renamed XYLabelGenerator --&gt; XYItemLabelGenerator (DG);
+<i>77</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>78</i>&nbsp; * 19-Apr-2007 : Deprecated seriesVisible and seriesVisibleInLegend flags (DG);
+<i>79</i>&nbsp; * 20-Apr-2007 : Deprecated paint, fillPaint, outlinePaint, stroke,
+<i>80</i>&nbsp; *               outlineStroke, shape, itemLabelsVisible, itemLabelFont,
+<i>81</i>&nbsp; *               itemLabelPaint, positiveItemLabelPosition,
+<i>82</i>&nbsp; *               negativeItemLabelPosition and createEntities override
+<i>83</i>&nbsp; *               fields (DG);
+<i>84</i>&nbsp; *
+<i>85</i>&nbsp; */
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;import java.awt.Font;
+<i>90</i>&nbsp;import java.awt.Graphics2D;
+<i>91</i>&nbsp;import java.awt.Paint;
+<i>92</i>&nbsp;import java.awt.Shape;
+<i>93</i>&nbsp;import java.awt.Stroke;
+<i>94</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;import org.jfree.chart.LegendItem;
+<i>97</i>&nbsp;import org.jfree.chart.LegendItemSource;
+<i>98</i>&nbsp;import org.jfree.chart.annotations.XYAnnotation;
+<i>99</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>100</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>101</i>&nbsp;import org.jfree.chart.event.RendererChangeListener;
+<i>102</i>&nbsp;import org.jfree.chart.labels.ItemLabelPosition;
+<i>103</i>&nbsp;import org.jfree.chart.labels.XYItemLabelGenerator;
+<i>104</i>&nbsp;import org.jfree.chart.labels.XYSeriesLabelGenerator;
+<i>105</i>&nbsp;import org.jfree.chart.labels.XYToolTipGenerator;
+<i>106</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>107</i>&nbsp;import org.jfree.chart.plot.Marker;
+<i>108</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>109</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>110</i>&nbsp;import org.jfree.chart.ui.Layer;
+<i>111</i>&nbsp;import org.jfree.chart.urls.XYURLGenerator;
+<i>112</i>&nbsp;import org.jfree.data.Range;
+<i>113</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;/**
+<i>116</i>&nbsp; * Interface for rendering the visual representation of a single (x, y) item on
+<i>117</i>&nbsp; * an {@link XYPlot}.
+<i>118</i>&nbsp; * &lt;p&gt;
+<i>119</i>&nbsp; * To support cloning charts, it is recommended that renderers implement both
+<i>120</i>&nbsp; * the {@link Cloneable} and {@code PublicCloneable} interfaces.
+<i>121</i>&nbsp; */
+<i>122</i>&nbsp;public interface XYItemRenderer extends LegendItemSource {
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * Returns the plot that this renderer has been assigned to.
+<i>126</i>&nbsp;     *
+<i>127</i>&nbsp;     * @return The plot.
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    public XYPlot getPlot();
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Sets the plot that this renderer is assigned to.  This method will be
+<i>133</i>&nbsp;     * called by the plot class...you do not need to call it yourself.
+<i>134</i>&nbsp;     *
+<i>135</i>&nbsp;     * @param plot  the plot.
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public void setPlot(XYPlot plot);
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /**
+<i>140</i>&nbsp;     * Returns the number of passes through the data required by the renderer.
+<i>141</i>&nbsp;     *
+<i>142</i>&nbsp;     * @return The pass count.
+<i>143</i>&nbsp;     */
+<i>144</i>&nbsp;    public int getPassCount();
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Returns the lower and upper bounds (range) of the x-values in the
+<i>148</i>&nbsp;     * specified dataset.
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @param dataset  the dataset ({@code null} permitted).
+<i>151</i>&nbsp;     *
+<i>152</i>&nbsp;     * @return The range.
+<i>153</i>&nbsp;     */
+<i>154</i>&nbsp;    public Range findDomainBounds(XYDataset dataset);
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    /**
+<i>157</i>&nbsp;     * Returns the lower and upper bounds (range) of the y-values in the
+<i>158</i>&nbsp;     * specified dataset.  The implementation of this method will take
+<i>159</i>&nbsp;     * into account the presentation used by the renderers (for example,
+<i>160</i>&nbsp;     * a renderer that &quot;stacks&quot; values will return a bigger range than
+<i>161</i>&nbsp;     * a renderer that doesn&#39;t).
+<i>162</i>&nbsp;     *
+<i>163</i>&nbsp;     * @param dataset  the dataset ({@code null} permitted).
+<i>164</i>&nbsp;     *
+<i>165</i>&nbsp;     * @return The range (or {@code null} if the dataset is
+<i>166</i>&nbsp;     *         {@code null} or empty).
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    public Range findRangeBounds(XYDataset dataset);
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Add a renderer change listener.
+<i>172</i>&nbsp;     *
+<i>173</i>&nbsp;     * @param listener  the listener.
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @see #removeChangeListener(RendererChangeListener)
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;    public void addChangeListener(RendererChangeListener listener);
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    /**
+<i>180</i>&nbsp;     * Removes a change listener.
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @param listener  the listener.
+<i>183</i>&nbsp;     *
+<i>184</i>&nbsp;     * @see #addChangeListener(RendererChangeListener)
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    public void removeChangeListener(RendererChangeListener listener);
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    //// VISIBLE //////////////////////////////////////////////////////////////
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    /**
+<i>192</i>&nbsp;     * Returns a boolean that indicates whether or not the specified item
+<i>193</i>&nbsp;     * should be drawn (this is typically used to hide an entire series).
+<i>194</i>&nbsp;     *
+<i>195</i>&nbsp;     * @param series  the series index.
+<i>196</i>&nbsp;     * @param item  the item index.
+<i>197</i>&nbsp;     *
+<i>198</i>&nbsp;     * @return A boolean.
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public boolean getItemVisible(int series, int item);
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;    /**
+<i>203</i>&nbsp;     * Returns a boolean that indicates whether or not the specified series
+<i>204</i>&nbsp;     * should be drawn (this is typically used to hide an entire series).
+<i>205</i>&nbsp;     *
+<i>206</i>&nbsp;     * @param series  the series index.
+<i>207</i>&nbsp;     *
+<i>208</i>&nbsp;     * @return A boolean.
+<i>209</i>&nbsp;     */
+<i>210</i>&nbsp;    public boolean isSeriesVisible(int series);
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /**
+<i>213</i>&nbsp;     * Returns the flag that controls whether a series is visible.
+<i>214</i>&nbsp;     *
+<i>215</i>&nbsp;     * @param series  the series index (zero-based).
+<i>216</i>&nbsp;     *
+<i>217</i>&nbsp;     * @return The flag (possibly {@code null}).
+<i>218</i>&nbsp;     *
+<i>219</i>&nbsp;     * @see #setSeriesVisible(int, Boolean)
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;    public Boolean getSeriesVisible(int series);
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    /**
+<i>224</i>&nbsp;     * Sets the flag that controls whether a series is visible and sends a
+<i>225</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>226</i>&nbsp;     *
+<i>227</i>&nbsp;     * @param series  the series index (zero-based).
+<i>228</i>&nbsp;     * @param visible  the flag ({@code null} permitted).
+<i>229</i>&nbsp;     *
+<i>230</i>&nbsp;     * @see #getSeriesVisible(int)
+<i>231</i>&nbsp;     */
+<i>232</i>&nbsp;    public void setSeriesVisible(int series, Boolean visible);
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    /**
+<i>235</i>&nbsp;     * Sets the flag that controls whether a series is visible and, if
+<i>236</i>&nbsp;     * requested, sends a {@link RendererChangeEvent} to all registered
+<i>237</i>&nbsp;     * listeners.
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @param series  the series index.
+<i>240</i>&nbsp;     * @param visible  the flag ({@code null} permitted).
+<i>241</i>&nbsp;     * @param notify  notify listeners?
+<i>242</i>&nbsp;     *
+<i>243</i>&nbsp;     * @see #getSeriesVisible(int)
+<i>244</i>&nbsp;     */
+<i>245</i>&nbsp;    public void setSeriesVisible(int series, Boolean visible, boolean notify);
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /**
+<i>248</i>&nbsp;     * Returns the default visibility for all series.
+<i>249</i>&nbsp;     *
+<i>250</i>&nbsp;     * @return The default visibility.
+<i>251</i>&nbsp;     *
+<i>252</i>&nbsp;     * @see #setDefaultSeriesVisible(boolean)
+<i>253</i>&nbsp;     */
+<i>254</i>&nbsp;    public boolean getDefaultSeriesVisible();
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    /**
+<i>257</i>&nbsp;     * Sets the default visibility and sends a {@link RendererChangeEvent} to all
+<i>258</i>&nbsp;     * registered listeners.
+<i>259</i>&nbsp;     *
+<i>260</i>&nbsp;     * @param visible  the flag.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @see #getDefaultSeriesVisible()
+<i>263</i>&nbsp;     */
+<i>264</i>&nbsp;    public void setDefaultSeriesVisible(boolean visible);
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;    /**
+<i>267</i>&nbsp;     * Sets the default visibility and, if requested, sends
+<i>268</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>269</i>&nbsp;     *
+<i>270</i>&nbsp;     * @param visible  the visibility.
+<i>271</i>&nbsp;     * @param notify  notify listeners?
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @see #getDefaultSeriesVisible()
+<i>274</i>&nbsp;     */
+<i>275</i>&nbsp;    public void setDefaultSeriesVisible(boolean visible, boolean notify);
+<i>276</i>&nbsp;
+<i>277</i>&nbsp;    // SERIES VISIBLE IN LEGEND (not yet respected by all renderers)
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    /**
+<i>280</i>&nbsp;     * Returns {@code true} if the series should be shown in the legend,
+<i>281</i>&nbsp;     * and {@code false} otherwise.
+<i>282</i>&nbsp;     *
+<i>283</i>&nbsp;     * @param series  the series index.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @return A boolean.
+<i>286</i>&nbsp;     */
+<i>287</i>&nbsp;    public boolean isSeriesVisibleInLegend(int series);
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;    /**
+<i>290</i>&nbsp;     * Returns the flag that controls whether a series is visible in the
+<i>291</i>&nbsp;     * legend.  This method returns only the &quot;per series&quot; settings - to
+<i>292</i>&nbsp;     * incorporate the override and base settings as well, you need to use the
+<i>293</i>&nbsp;     * {@link #isSeriesVisibleInLegend(int)} method.
+<i>294</i>&nbsp;     *
+<i>295</i>&nbsp;     * @param series  the series index (zero-based).
+<i>296</i>&nbsp;     *
+<i>297</i>&nbsp;     * @return The flag (possibly {@code null}).
+<i>298</i>&nbsp;     *
+<i>299</i>&nbsp;     * @see #setSeriesVisibleInLegend(int, Boolean)
+<i>300</i>&nbsp;     */
+<i>301</i>&nbsp;    public Boolean getSeriesVisibleInLegend(int series);
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    /**
+<i>304</i>&nbsp;     * Sets the flag that controls whether a series is visible in the legend
+<i>305</i>&nbsp;     * and sends a {@link RendererChangeEvent} to all registered listeners.
+<i>306</i>&nbsp;     *
+<i>307</i>&nbsp;     * @param series  the series index (zero-based).
+<i>308</i>&nbsp;     * @param visible  the flag ({@code null} permitted).
+<i>309</i>&nbsp;     *
+<i>310</i>&nbsp;     * @see #getSeriesVisibleInLegend(int)
+<i>311</i>&nbsp;     */
+<i>312</i>&nbsp;    public void setSeriesVisibleInLegend(int series, Boolean visible);
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;    /**
+<i>315</i>&nbsp;     * Sets the flag that controls whether a series is visible in the legend
+<i>316</i>&nbsp;     * and, if requested, sends a {@link RendererChangeEvent} to all registered
+<i>317</i>&nbsp;     * listeners.
+<i>318</i>&nbsp;     *
+<i>319</i>&nbsp;     * @param series  the series index.
+<i>320</i>&nbsp;     * @param visible  the flag ({@code null} permitted).
+<i>321</i>&nbsp;     * @param notify  notify listeners?
+<i>322</i>&nbsp;     *
+<i>323</i>&nbsp;     * @see #getSeriesVisibleInLegend(int)
+<i>324</i>&nbsp;     */
+<i>325</i>&nbsp;    public void setSeriesVisibleInLegend(int series, Boolean visible,
+<i>326</i>&nbsp;                                         boolean notify);
+<i>327</i>&nbsp;
+<i>328</i>&nbsp;    /**
+<i>329</i>&nbsp;     * Returns the default visibility in the legend for all series.
+<i>330</i>&nbsp;     *
+<i>331</i>&nbsp;     * @return The default visibility.
+<i>332</i>&nbsp;     *
+<i>333</i>&nbsp;     * @see #setDefaultSeriesVisibleInLegend(boolean)
+<i>334</i>&nbsp;     */
+<i>335</i>&nbsp;    public boolean getDefaultSeriesVisibleInLegend();
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * Sets the default visibility in the legend and sends a
+<i>339</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>340</i>&nbsp;     *
+<i>341</i>&nbsp;     * @param visible  the flag.
+<i>342</i>&nbsp;     *
+<i>343</i>&nbsp;     * @see #getDefaultSeriesVisibleInLegend()
+<i>344</i>&nbsp;     */
+<i>345</i>&nbsp;    public void setDefaultSeriesVisibleInLegend(boolean visible);
+<i>346</i>&nbsp;
+<i>347</i>&nbsp;    /**
+<i>348</i>&nbsp;     * Sets the default visibility in the legend and, if requested, sends
+<i>349</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>350</i>&nbsp;     *
+<i>351</i>&nbsp;     * @param visible  the visibility.
+<i>352</i>&nbsp;     * @param notify  notify listeners?
+<i>353</i>&nbsp;     *
+<i>354</i>&nbsp;     * @see #getDefaultSeriesVisibleInLegend()
+<i>355</i>&nbsp;     */
+<i>356</i>&nbsp;    public void setDefaultSeriesVisibleInLegend(boolean visible, boolean notify);
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    //// PAINT ////////////////////////////////////////////////////////////////
+<i>360</i>&nbsp;
+<i>361</i>&nbsp;    /**
+<i>362</i>&nbsp;     * Returns the paint used to color data items as they are drawn.
+<i>363</i>&nbsp;     *
+<i>364</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>365</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>366</i>&nbsp;     *
+<i>367</i>&nbsp;     * @return The paint (never {@code null}).
+<i>368</i>&nbsp;     */
+<i>369</i>&nbsp;    public Paint getItemPaint(int row, int column);
+<i>370</i>&nbsp;
+<i>371</i>&nbsp;    /**
+<i>372</i>&nbsp;     * Returns the paint used to color an item drawn by the renderer.
+<i>373</i>&nbsp;     *
+<i>374</i>&nbsp;     * @param series  the series index (zero-based).
+<i>375</i>&nbsp;     *
+<i>376</i>&nbsp;     * @return The paint (possibly {@code null}).
+<i>377</i>&nbsp;     *
+<i>378</i>&nbsp;     * @see #setSeriesPaint(int, Paint)
+<i>379</i>&nbsp;     */
+<i>380</i>&nbsp;    public Paint getSeriesPaint(int series);
+<i>381</i>&nbsp;
+<i>382</i>&nbsp;    /**
+<i>383</i>&nbsp;     * Sets the paint used for a series and sends a {@link RendererChangeEvent}
+<i>384</i>&nbsp;     * to all registered listeners.
+<i>385</i>&nbsp;     *
+<i>386</i>&nbsp;     * @param series  the series index (zero-based).
+<i>387</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>388</i>&nbsp;     *
+<i>389</i>&nbsp;     * @see #getSeriesPaint(int)
+<i>390</i>&nbsp;     */
+<i>391</i>&nbsp;    public void setSeriesPaint(int series, Paint paint);
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    public void setSeriesPaint(int series, Paint paint, boolean notify);
+<i>394</i>&nbsp;
+<i>395</i>&nbsp;    /**
+<i>396</i>&nbsp;     * Returns the default paint.
+<i>397</i>&nbsp;     *
+<i>398</i>&nbsp;     * @return The default paint (never {@code null}).
+<i>399</i>&nbsp;     *
+<i>400</i>&nbsp;     * @see #setDefaultPaint(Paint)
+<i>401</i>&nbsp;     */
+<i>402</i>&nbsp;    public Paint getDefaultPaint();
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;    /**
+<i>405</i>&nbsp;     * Sets the default paint and sends a {@link RendererChangeEvent} to all
+<i>406</i>&nbsp;     * registered listeners.
+<i>407</i>&nbsp;     *
+<i>408</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>409</i>&nbsp;     *
+<i>410</i>&nbsp;     * @see #getDefaultPaint()
+<i>411</i>&nbsp;     */
+<i>412</i>&nbsp;    public void setDefaultPaint(Paint paint);
+<i>413</i>&nbsp;
+<i>414</i>&nbsp;    public void setDefaultPaint(Paint paint, boolean notify);
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;    // FILL PAINT
+<i>417</i>&nbsp;
+<i>418</i>&nbsp;    /**
+<i>419</i>&nbsp;     * Returns the paint used to fill data items as they are drawn.
+<i>420</i>&nbsp;     *
+<i>421</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>422</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>423</i>&nbsp;     *
+<i>424</i>&nbsp;     * @return The paint (never {@code null}).
+<i>425</i>&nbsp;     */
+<i>426</i>&nbsp;    public Paint getItemFillPaint(int row, int column);
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;    /**
+<i>429</i>&nbsp;     * Returns the paint used to fill an item drawn by the renderer.
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @param series  the series index (zero-based).
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     * @return The paint (possibly {@code null}).
+<i>434</i>&nbsp;     */
+<i>435</i>&nbsp;    public Paint getSeriesFillPaint(int series);
+<i>436</i>&nbsp;
+<i>437</i>&nbsp;    /**
+<i>438</i>&nbsp;     * Sets the paint used for a series and sends a
+<i>439</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>440</i>&nbsp;     *
+<i>441</i>&nbsp;     * @param series  the series index (zero-based).
+<i>442</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>443</i>&nbsp;     */
+<i>444</i>&nbsp;    public void setSeriesFillPaint(int series, Paint paint);
+<i>445</i>&nbsp;
+<i>446</i>&nbsp;    public void setSeriesFillPaint(int series, Paint paint, boolean notify);
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;    /**
+<i>449</i>&nbsp;     * Returns the default paint.
+<i>450</i>&nbsp;     *
+<i>451</i>&nbsp;     * @return The default paint (never {@code null}).
+<i>452</i>&nbsp;     */
+<i>453</i>&nbsp;    public Paint getDefaultFillPaint();
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;    /**
+<i>456</i>&nbsp;     * Sets the default paint and sends a {@link RendererChangeEvent} to all
+<i>457</i>&nbsp;     * registered listeners.
+<i>458</i>&nbsp;     *
+<i>459</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>460</i>&nbsp;     */
+<i>461</i>&nbsp;    public void setDefaultFillPaint(Paint paint);
+<i>462</i>&nbsp;
+<i>463</i>&nbsp;    public void setDefaultFillPaint(Paint paint, boolean notify);
+<i>464</i>&nbsp;
+<i>465</i>&nbsp;    //// OUTLINE PAINT ////////////////////////////////////////////////////////
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;    /**
+<i>468</i>&nbsp;     * Returns the paint used to outline data items as they are drawn.
+<i>469</i>&nbsp;     *
+<i>470</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>471</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>472</i>&nbsp;     *
+<i>473</i>&nbsp;     * @return The paint (never {@code null}).
+<i>474</i>&nbsp;     */
+<i>475</i>&nbsp;    public Paint getItemOutlinePaint(int row, int column);
+<i>476</i>&nbsp;
+<i>477</i>&nbsp;    /**
+<i>478</i>&nbsp;     * Returns the paint used to outline an item drawn by the renderer.
+<i>479</i>&nbsp;     *
+<i>480</i>&nbsp;     * @param series  the series (zero-based index).
+<i>481</i>&nbsp;     *
+<i>482</i>&nbsp;     * @return The paint (possibly {@code null}).
+<i>483</i>&nbsp;     *
+<i>484</i>&nbsp;     * @see #setSeriesOutlinePaint(int, Paint)
+<i>485</i>&nbsp;     */
+<i>486</i>&nbsp;    public Paint getSeriesOutlinePaint(int series);
+<i>487</i>&nbsp;
+<i>488</i>&nbsp;    /**
+<i>489</i>&nbsp;     * Sets the paint used for a series outline and sends a
+<i>490</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>491</i>&nbsp;     *
+<i>492</i>&nbsp;     * @param series  the series index (zero-based).
+<i>493</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>494</i>&nbsp;     *
+<i>495</i>&nbsp;     * @see #getSeriesOutlinePaint(int)
+<i>496</i>&nbsp;     */
+<i>497</i>&nbsp;    public void setSeriesOutlinePaint(int series, Paint paint);
+<i>498</i>&nbsp;
+<i>499</i>&nbsp;    public void setSeriesOutlinePaint(int series, Paint paint, boolean notify);
+<i>500</i>&nbsp;
+<i>501</i>&nbsp;    /**
+<i>502</i>&nbsp;     * Returns the default outline paint.
+<i>503</i>&nbsp;     *
+<i>504</i>&nbsp;     * @return The paint (never {@code null}).
+<i>505</i>&nbsp;     *
+<i>506</i>&nbsp;     * @see #setDefaultOutlinePaint(Paint)
+<i>507</i>&nbsp;     */
+<i>508</i>&nbsp;    public Paint getDefaultOutlinePaint();
+<i>509</i>&nbsp;
+<i>510</i>&nbsp;    /**
+<i>511</i>&nbsp;     * Sets the default outline paint and sends a {@link RendererChangeEvent} to
+<i>512</i>&nbsp;     * all registered listeners.
+<i>513</i>&nbsp;     *
+<i>514</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>515</i>&nbsp;     *
+<i>516</i>&nbsp;     * @see #getDefaultOutlinePaint()
+<i>517</i>&nbsp;     */
+<i>518</i>&nbsp;    public void setDefaultOutlinePaint(Paint paint);
+<i>519</i>&nbsp;
+<i>520</i>&nbsp;    public void setDefaultOutlinePaint(Paint paint, boolean notify);
+<i>521</i>&nbsp;
+<i>522</i>&nbsp;    //// STROKE ///////////////////////////////////////////////////////////////
+<i>523</i>&nbsp;
+<i>524</i>&nbsp;    /**
+<i>525</i>&nbsp;     * Returns the stroke used to draw data items.
+<i>526</i>&nbsp;     *
+<i>527</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>528</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>529</i>&nbsp;     *
+<i>530</i>&nbsp;     * @return The stroke (never {@code null}).
+<i>531</i>&nbsp;     */
+<i>532</i>&nbsp;    public Stroke getItemStroke(int row, int column);
+<i>533</i>&nbsp;
+<i>534</i>&nbsp;    /**
+<i>535</i>&nbsp;     * Returns the stroke used to draw the items in a series.
+<i>536</i>&nbsp;     *
+<i>537</i>&nbsp;     * @param series  the series (zero-based index).
+<i>538</i>&nbsp;     *
+<i>539</i>&nbsp;     * @return The stroke (possibly {@code null}).
+<i>540</i>&nbsp;     *
+<i>541</i>&nbsp;     * @see #setSeriesStroke(int, Stroke)
+<i>542</i>&nbsp;     */
+<i>543</i>&nbsp;    public Stroke getSeriesStroke(int series);
+<i>544</i>&nbsp;
+<i>545</i>&nbsp;    /**
+<i>546</i>&nbsp;     * Sets the stroke used for a series and sends a
+<i>547</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>548</i>&nbsp;     *
+<i>549</i>&nbsp;     * @param series  the series index (zero-based).
+<i>550</i>&nbsp;     * @param stroke  the stroke ({@code null} permitted).
+<i>551</i>&nbsp;     *
+<i>552</i>&nbsp;     * @see #getSeriesStroke(int)
+<i>553</i>&nbsp;     */
+<i>554</i>&nbsp;    public void setSeriesStroke(int series, Stroke stroke);
+<i>555</i>&nbsp;
+<i>556</i>&nbsp;    public void setSeriesStroke(int series, Stroke stroke, boolean notify);
+<i>557</i>&nbsp;
+<i>558</i>&nbsp;    /**
+<i>559</i>&nbsp;     * Returns the default stroke.
+<i>560</i>&nbsp;     *
+<i>561</i>&nbsp;     * @return The default stroke (never {@code null}).
+<i>562</i>&nbsp;     *
+<i>563</i>&nbsp;     * @see #setDefaultStroke(Stroke)
+<i>564</i>&nbsp;     */
+<i>565</i>&nbsp;    public Stroke getDefaultStroke();
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;    /**
+<i>568</i>&nbsp;     * Sets the default stroke and sends a {@link RendererChangeEvent} to all
+<i>569</i>&nbsp;     * registered listeners.
+<i>570</i>&nbsp;     *
+<i>571</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>572</i>&nbsp;     *
+<i>573</i>&nbsp;     * @see #getDefaultStroke()
+<i>574</i>&nbsp;     */
+<i>575</i>&nbsp;    public void setDefaultStroke(Stroke stroke);
+<i>576</i>&nbsp;
+<i>577</i>&nbsp;    public void setDefaultStroke(Stroke stroke, boolean notify);
+<i>578</i>&nbsp;
+<i>579</i>&nbsp;    //// OUTLINE STROKE ///////////////////////////////////////////////////////
+<i>580</i>&nbsp;
+<i>581</i>&nbsp;    /**
+<i>582</i>&nbsp;     * Returns the stroke used to outline data items.  The default
+<i>583</i>&nbsp;     * implementation passes control to the lookupSeriesOutlineStroke method.
+<i>584</i>&nbsp;     * You can override this method if you require different behaviour.
+<i>585</i>&nbsp;     *
+<i>586</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>587</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>588</i>&nbsp;     *
+<i>589</i>&nbsp;     * @return The stroke (never {@code null}).
+<i>590</i>&nbsp;     */
+<i>591</i>&nbsp;    public Stroke getItemOutlineStroke(int row, int column);
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;    /**
+<i>594</i>&nbsp;     * Returns the stroke used to outline the items in a series.
+<i>595</i>&nbsp;     *
+<i>596</i>&nbsp;     * @param series  the series (zero-based index).
+<i>597</i>&nbsp;     *
+<i>598</i>&nbsp;     * @return The stroke (possibly {@code null}).
+<i>599</i>&nbsp;     *
+<i>600</i>&nbsp;     * @see #setSeriesOutlineStroke(int, Stroke)
+<i>601</i>&nbsp;     */
+<i>602</i>&nbsp;    public Stroke getSeriesOutlineStroke(int series);
+<i>603</i>&nbsp;
+<i>604</i>&nbsp;    /**
+<i>605</i>&nbsp;     * Sets the outline stroke used for a series and sends a
+<i>606</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>607</i>&nbsp;     *
+<i>608</i>&nbsp;     * @param series  the series index (zero-based).
+<i>609</i>&nbsp;     * @param stroke  the stroke ({@code null} permitted).
+<i>610</i>&nbsp;     *
+<i>611</i>&nbsp;     * @see #getSeriesOutlineStroke(int)
+<i>612</i>&nbsp;     */
+<i>613</i>&nbsp;    public void setSeriesOutlineStroke(int series, Stroke stroke);
+<i>614</i>&nbsp;
+<i>615</i>&nbsp;    public void setSeriesOutlineStroke(int series, Stroke stroke, boolean notify);
+<i>616</i>&nbsp;
+<i>617</i>&nbsp;    /**
+<i>618</i>&nbsp;     * Returns the default outline stroke.
+<i>619</i>&nbsp;     *
+<i>620</i>&nbsp;     * @return The stroke (never {@code null}).
+<i>621</i>&nbsp;     *
+<i>622</i>&nbsp;     * @see #setDefaultOutlineStroke(Stroke)
+<i>623</i>&nbsp;     */
+<i>624</i>&nbsp;    public Stroke getDefaultOutlineStroke();
+<i>625</i>&nbsp;
+<i>626</i>&nbsp;    /**
+<i>627</i>&nbsp;     * Sets the base outline stroke and sends a {@link RendererChangeEvent} to
+<i>628</i>&nbsp;     * all registered listeners.
+<i>629</i>&nbsp;     *
+<i>630</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>631</i>&nbsp;     *
+<i>632</i>&nbsp;     * @see #getDefaultOutlineStroke()
+<i>633</i>&nbsp;     */
+<i>634</i>&nbsp;    public void setDefaultOutlineStroke(Stroke stroke);
+<i>635</i>&nbsp;
+<i>636</i>&nbsp;    public void setDefaultOutlineStroke(Stroke stroke, boolean notify);
+<i>637</i>&nbsp;
+<i>638</i>&nbsp;    //// SHAPE ////////////////////////////////////////////////////////////////
+<i>639</i>&nbsp;
+<i>640</i>&nbsp;    /**
+<i>641</i>&nbsp;     * Returns a shape used to represent a data item.
+<i>642</i>&nbsp;     *
+<i>643</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>644</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>645</i>&nbsp;     *
+<i>646</i>&nbsp;     * @return The shape (never {@code null}).
+<i>647</i>&nbsp;     */
+<i>648</i>&nbsp;    public Shape getItemShape(int row, int column);
+<i>649</i>&nbsp;
+<i>650</i>&nbsp;    /**
+<i>651</i>&nbsp;     * Returns a shape used to represent the items in a series.
+<i>652</i>&nbsp;     *
+<i>653</i>&nbsp;     * @param series  the series (zero-based index).
+<i>654</i>&nbsp;     *
+<i>655</i>&nbsp;     * @return The shape (possibly {@code null}).
+<i>656</i>&nbsp;     *
+<i>657</i>&nbsp;     * @see #setSeriesShape(int, Shape)
+<i>658</i>&nbsp;     */
+<i>659</i>&nbsp;    public Shape getSeriesShape(int series);
+<i>660</i>&nbsp;
+<i>661</i>&nbsp;    /**
+<i>662</i>&nbsp;     * Sets the shape used for a series and sends a {@link RendererChangeEvent}
+<i>663</i>&nbsp;     * to all registered listeners.
+<i>664</i>&nbsp;     *
+<i>665</i>&nbsp;     * @param series  the series index (zero-based).
+<i>666</i>&nbsp;     * @param shape  the shape ({@code null} permitted).
+<i>667</i>&nbsp;     *
+<i>668</i>&nbsp;     * @see #getSeriesShape(int)
+<i>669</i>&nbsp;     */
+<i>670</i>&nbsp;    public void setSeriesShape(int series, Shape shape);
+<i>671</i>&nbsp;
+<i>672</i>&nbsp;    public void setSeriesShape(int series, Shape shape, boolean notify);
+<i>673</i>&nbsp;
+<i>674</i>&nbsp;    /**
+<i>675</i>&nbsp;     * Returns the default shape.
+<i>676</i>&nbsp;     *
+<i>677</i>&nbsp;     * @return The shape (never {@code null}).
+<i>678</i>&nbsp;     *
+<i>679</i>&nbsp;     * @see #setDefaultShape(Shape)
+<i>680</i>&nbsp;     */
+<i>681</i>&nbsp;    public Shape getDefaultShape();
+<i>682</i>&nbsp;
+<i>683</i>&nbsp;    /**
+<i>684</i>&nbsp;     * Sets the default shape and sends a {@link RendererChangeEvent} to all
+<i>685</i>&nbsp;     * registered listeners.
+<i>686</i>&nbsp;     *
+<i>687</i>&nbsp;     * @param shape  the shape ({@code null} not permitted).
+<i>688</i>&nbsp;     *
+<i>689</i>&nbsp;     * @see #getDefaultShape()
+<i>690</i>&nbsp;     */
+<i>691</i>&nbsp;    public void setDefaultShape(Shape shape);
+<i>692</i>&nbsp;
+<i>693</i>&nbsp;    public void setDefaultShape(Shape shape, boolean notify);
+<i>694</i>&nbsp;
+<i>695</i>&nbsp;
+<i>696</i>&nbsp;    //// LEGEND ITEMS /////////////////////////////////////////////////////////
+<i>697</i>&nbsp;
+<i>698</i>&nbsp;    /**
+<i>699</i>&nbsp;     * Returns a legend item for a series from a dataset.
+<i>700</i>&nbsp;     *
+<i>701</i>&nbsp;     * @param datasetIndex  the dataset index.
+<i>702</i>&nbsp;     * @param series  the series (zero-based index).
+<i>703</i>&nbsp;     *
+<i>704</i>&nbsp;     * @return The legend item (possibly {@code null}).
+<i>705</i>&nbsp;     */
+<i>706</i>&nbsp;    public LegendItem getLegendItem(int datasetIndex, int series);
+<i>707</i>&nbsp;
+<i>708</i>&nbsp;
+<i>709</i>&nbsp;    //// LEGEND ITEM LABEL GENERATOR //////////////////////////////////////////
+<i>710</i>&nbsp;
+<i>711</i>&nbsp;    /**
+<i>712</i>&nbsp;     * Returns the legend item label generator.
+<i>713</i>&nbsp;     *
+<i>714</i>&nbsp;     * @return The legend item label generator (never {@code null}).
+<i>715</i>&nbsp;     *
+<i>716</i>&nbsp;     * @see #setLegendItemLabelGenerator(XYSeriesLabelGenerator)
+<i>717</i>&nbsp;     */
+<i>718</i>&nbsp;    public XYSeriesLabelGenerator getLegendItemLabelGenerator();
+<i>719</i>&nbsp;
+<i>720</i>&nbsp;    /**
+<i>721</i>&nbsp;     * Sets the legend item label generator and sends a
+<i>722</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>723</i>&nbsp;     *
+<i>724</i>&nbsp;     * @param generator  the generator ({@code null} not permitted).
+<i>725</i>&nbsp;     */
+<i>726</i>&nbsp;    public void setLegendItemLabelGenerator(XYSeriesLabelGenerator generator);
+<i>727</i>&nbsp;
+<i>728</i>&nbsp;
+<i>729</i>&nbsp;    //// TOOL TIP GENERATOR ///////////////////////////////////////////////////
+<i>730</i>&nbsp;
+<i>731</i>&nbsp;    /**
+<i>732</i>&nbsp;     * Returns the tool tip generator for a data item.
+<i>733</i>&nbsp;     *
+<i>734</i>&nbsp;     * @param row  the row index (zero based).
+<i>735</i>&nbsp;     * @param column  the column index (zero based).
+<i>736</i>&nbsp;     *
+<i>737</i>&nbsp;     * @return The generator (possibly {@code null}).
+<i>738</i>&nbsp;     */
+<i>739</i>&nbsp;    public XYToolTipGenerator getToolTipGenerator(int row, int column);
+<i>740</i>&nbsp;
+<i>741</i>&nbsp;    /**
+<i>742</i>&nbsp;     * Returns the tool tip generator for a series.
+<i>743</i>&nbsp;     *
+<i>744</i>&nbsp;     * @param series  the series index (zero based).
+<i>745</i>&nbsp;     *
+<i>746</i>&nbsp;     * @return The generator (possibly {@code null}).
+<i>747</i>&nbsp;     *
+<i>748</i>&nbsp;     * @see #setSeriesToolTipGenerator(int, XYToolTipGenerator)
+<i>749</i>&nbsp;     */
+<i>750</i>&nbsp;    public XYToolTipGenerator getSeriesToolTipGenerator(int series);
+<i>751</i>&nbsp;
+<i>752</i>&nbsp;    /**
+<i>753</i>&nbsp;     * Sets the tool tip generator for a series and sends a
+<i>754</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>755</i>&nbsp;     *
+<i>756</i>&nbsp;     * @param series  the series index (zero based).
+<i>757</i>&nbsp;     * @param generator  the generator ({@code null} permitted).
+<i>758</i>&nbsp;     *
+<i>759</i>&nbsp;     * @see #getSeriesToolTipGenerator(int)
+<i>760</i>&nbsp;     */
+<i>761</i>&nbsp;    public void setSeriesToolTipGenerator(int series, 
+<i>762</i>&nbsp;            XYToolTipGenerator generator);
+<i>763</i>&nbsp;
+<i>764</i>&nbsp;    /**
+<i>765</i>&nbsp;     * Returns the default tool tip generator.
+<i>766</i>&nbsp;     *
+<i>767</i>&nbsp;     * @return The generator (possibly {@code null}).
+<i>768</i>&nbsp;     *
+<i>769</i>&nbsp;     * @see #setDefaultToolTipGenerator(XYToolTipGenerator)
+<i>770</i>&nbsp;     */
+<i>771</i>&nbsp;    public XYToolTipGenerator getDefaultToolTipGenerator();
+<i>772</i>&nbsp;
+<i>773</i>&nbsp;    /**
+<i>774</i>&nbsp;     * Sets the default tool tip generator and sends a {@link RendererChangeEvent}
+<i>775</i>&nbsp;     * to all registered listeners.
+<i>776</i>&nbsp;     *
+<i>777</i>&nbsp;     * @param generator  the generator ({@code null} permitted).
+<i>778</i>&nbsp;     *
+<i>779</i>&nbsp;     * @see #getDefaultToolTipGenerator()
+<i>780</i>&nbsp;     */
+<i>781</i>&nbsp;    public void setDefaultToolTipGenerator(XYToolTipGenerator generator);
+<i>782</i>&nbsp;
+<i>783</i>&nbsp;    //// URL GENERATOR ////////////////////////////////////////////////////////
+<i>784</i>&nbsp;
+<i>785</i>&nbsp;    /**
+<i>786</i>&nbsp;     * Returns the URL generator for HTML image maps.
+<i>787</i>&nbsp;     *
+<i>788</i>&nbsp;     * @return The URL generator (possibly null).
+<i>789</i>&nbsp;     */
+<i>790</i>&nbsp;    public XYURLGenerator getURLGenerator();
+<i>791</i>&nbsp;
+<i>792</i>&nbsp;    /**
+<i>793</i>&nbsp;     * Sets the URL generator for HTML image maps.
+<i>794</i>&nbsp;     *
+<i>795</i>&nbsp;     * @param urlGenerator the URL generator (null permitted).
+<i>796</i>&nbsp;     */
+<i>797</i>&nbsp;    public void setURLGenerator(XYURLGenerator urlGenerator);
+<i>798</i>&nbsp;
+<i>799</i>&nbsp;    //// ITEM LABELS VISIBLE //////////////////////////////////////////////////
+<i>800</i>&nbsp;
+<i>801</i>&nbsp;    /**
+<i>802</i>&nbsp;     * Returns {@code true} if an item label is visible, and
+<i>803</i>&nbsp;     * {@code false} otherwise.
+<i>804</i>&nbsp;     *
+<i>805</i>&nbsp;     * @param row  the row index (zero-based).
+<i>806</i>&nbsp;     * @param column  the column index (zero-based).
+<i>807</i>&nbsp;     *
+<i>808</i>&nbsp;     * @return A boolean.
+<i>809</i>&nbsp;     */
+<i>810</i>&nbsp;    public boolean isItemLabelVisible(int row, int column);
+<i>811</i>&nbsp;
+<i>812</i>&nbsp;    /**
+<i>813</i>&nbsp;     * Returns {@code true} if the item labels for a series are visible,
+<i>814</i>&nbsp;     * and {@code false} otherwise.
+<i>815</i>&nbsp;     *
+<i>816</i>&nbsp;     * @param series  the series index (zero-based).
+<i>817</i>&nbsp;     *
+<i>818</i>&nbsp;     * @return A boolean.
+<i>819</i>&nbsp;     */
+<i>820</i>&nbsp;    public boolean isSeriesItemLabelsVisible(int series);
+<i>821</i>&nbsp;
+<i>822</i>&nbsp;    /**
+<i>823</i>&nbsp;     * Sets a flag that controls the visibility of the item labels for a
+<i>824</i>&nbsp;     * series and sends a {@link RendererChangeEvent} to all registered
+<i>825</i>&nbsp;     * listeners.
+<i>826</i>&nbsp;     *
+<i>827</i>&nbsp;     * @param series  the series index (zero-based).
+<i>828</i>&nbsp;     * @param visible  the flag.
+<i>829</i>&nbsp;     *
+<i>830</i>&nbsp;     * @see #isSeriesItemLabelsVisible(int)
+<i>831</i>&nbsp;     */
+<i>832</i>&nbsp;    public void setSeriesItemLabelsVisible(int series, boolean visible);
+<i>833</i>&nbsp;
+<i>834</i>&nbsp;    /**
+<i>835</i>&nbsp;     * Sets a flag that controls the visibility of the item labels for a series.
+<i>836</i>&nbsp;     *
+<i>837</i>&nbsp;     * @param series  the series index (zero-based).
+<i>838</i>&nbsp;     * @param visible  the flag ({@code null} permitted).
+<i>839</i>&nbsp;     *
+<i>840</i>&nbsp;     * @see #isSeriesItemLabelsVisible(int)
+<i>841</i>&nbsp;     */
+<i>842</i>&nbsp;    public void setSeriesItemLabelsVisible(int series, Boolean visible);
+<i>843</i>&nbsp;
+<i>844</i>&nbsp;    /**
+<i>845</i>&nbsp;     * Sets the visibility of item labels for a series and, if requested,
+<i>846</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>847</i>&nbsp;     *
+<i>848</i>&nbsp;     * @param series  the series index (zero-based).
+<i>849</i>&nbsp;     * @param visible  the visible flag.
+<i>850</i>&nbsp;     * @param notify  a flag that controls whether or not listeners are
+<i>851</i>&nbsp;     *                notified.
+<i>852</i>&nbsp;     *
+<i>853</i>&nbsp;     * @see #isSeriesItemLabelsVisible(int)
+<i>854</i>&nbsp;     */
+<i>855</i>&nbsp;    public void setSeriesItemLabelsVisible(int series, Boolean visible,
+<i>856</i>&nbsp;            boolean notify);
+<i>857</i>&nbsp;
+<i>858</i>&nbsp;    /**
+<i>859</i>&nbsp;     * Returns the default setting for item label visibility.
+<i>860</i>&nbsp;     *
+<i>861</i>&nbsp;     * @return A flag (possibly {@code null}).
+<i>862</i>&nbsp;     *
+<i>863</i>&nbsp;     * @see #setDefaultItemLabelsVisible(boolean)
+<i>864</i>&nbsp;     */
+<i>865</i>&nbsp;    public boolean getDefaultItemLabelsVisible();
+<i>866</i>&nbsp;
+<i>867</i>&nbsp;    /**
+<i>868</i>&nbsp;     * Sets the default flag that controls whether or not item labels are visible.
+<i>869</i>&nbsp;     *
+<i>870</i>&nbsp;     * @param visible  the flag.
+<i>871</i>&nbsp;     *
+<i>872</i>&nbsp;     * @see #getDefaultItemLabelsVisible()
+<i>873</i>&nbsp;     */
+<i>874</i>&nbsp;    public void setDefaultItemLabelsVisible(boolean visible);
+<i>875</i>&nbsp;
+<i>876</i>&nbsp;    /**
+<i>877</i>&nbsp;     * Sets the default visibility for item labels and, if requested, sends a
+<i>878</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>879</i>&nbsp;     *
+<i>880</i>&nbsp;     * @param visible  the visibility flag.
+<i>881</i>&nbsp;     * @param notify  a flag that controls whether or not listeners are
+<i>882</i>&nbsp;     *                notified.
+<i>883</i>&nbsp;     *
+<i>884</i>&nbsp;     * @see #getDefaultItemLabelsVisible()
+<i>885</i>&nbsp;     */
+<i>886</i>&nbsp;    public void setDefaultItemLabelsVisible(boolean visible, boolean notify);
+<i>887</i>&nbsp;
+<i>888</i>&nbsp;
+<i>889</i>&nbsp;    //// ITEM LABEL GENERATOR /////////////////////////////////////////////////
+<i>890</i>&nbsp;
+<i>891</i>&nbsp;    /**
+<i>892</i>&nbsp;     * Returns the item label generator for a data item.
+<i>893</i>&nbsp;     *
+<i>894</i>&nbsp;     * @param row  the row index (zero based).
+<i>895</i>&nbsp;     * @param column  the column index (zero based).
+<i>896</i>&nbsp;     *
+<i>897</i>&nbsp;     * @return The generator (possibly {@code null}).
+<i>898</i>&nbsp;     */
+<i>899</i>&nbsp;    public XYItemLabelGenerator getItemLabelGenerator(int row, int column);
+<i>900</i>&nbsp;
+<i>901</i>&nbsp;    /**
+<i>902</i>&nbsp;     * Returns the item label generator for a series.
+<i>903</i>&nbsp;     *
+<i>904</i>&nbsp;     * @param series  the series index (zero based).
+<i>905</i>&nbsp;     *
+<i>906</i>&nbsp;     * @return The generator (possibly {@code null}).
+<i>907</i>&nbsp;     *
+<i>908</i>&nbsp;     * @see #setSeriesItemLabelGenerator(int, XYItemLabelGenerator)
+<i>909</i>&nbsp;     */
+<i>910</i>&nbsp;    public XYItemLabelGenerator getSeriesItemLabelGenerator(int series);
+<i>911</i>&nbsp;
+<i>912</i>&nbsp;    /**
+<i>913</i>&nbsp;     * Sets the item label generator for a series and sends a
+<i>914</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>915</i>&nbsp;     *
+<i>916</i>&nbsp;     * @param series  the series index (zero based).
+<i>917</i>&nbsp;     * @param generator  the generator ({@code null} permitted).
+<i>918</i>&nbsp;     *
+<i>919</i>&nbsp;     * @see #getSeriesItemLabelGenerator(int)
+<i>920</i>&nbsp;     */
+<i>921</i>&nbsp;    public void setSeriesItemLabelGenerator(int series, 
+<i>922</i>&nbsp;            XYItemLabelGenerator generator);
+<i>923</i>&nbsp;
+<i>924</i>&nbsp;    /**
+<i>925</i>&nbsp;     * Returns the default item label generator.
+<i>926</i>&nbsp;     *
+<i>927</i>&nbsp;     * @return The generator (possibly {@code null}).
+<i>928</i>&nbsp;     *
+<i>929</i>&nbsp;     * @see #setDefaultItemLabelGenerator(XYItemLabelGenerator)
+<i>930</i>&nbsp;     */
+<i>931</i>&nbsp;    public XYItemLabelGenerator getDefaultItemLabelGenerator();
+<i>932</i>&nbsp;
+<i>933</i>&nbsp;    /**
+<i>934</i>&nbsp;     * Sets the default item label generator and sends a
+<i>935</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>936</i>&nbsp;     *
+<i>937</i>&nbsp;     * @param generator  the generator ({@code null} permitted).
+<i>938</i>&nbsp;     *
+<i>939</i>&nbsp;     * @see #getDefaultItemLabelGenerator()
+<i>940</i>&nbsp;     */
+<i>941</i>&nbsp;    public void setDefaultItemLabelGenerator(XYItemLabelGenerator generator);
+<i>942</i>&nbsp;
+<i>943</i>&nbsp;    //// ITEM LABEL FONT ///////////////////////////////////////////////////////
+<i>944</i>&nbsp;
+<i>945</i>&nbsp;    /**
+<i>946</i>&nbsp;     * Returns the font for an item label.
+<i>947</i>&nbsp;     *
+<i>948</i>&nbsp;     * @param row  the row index (zero-based).
+<i>949</i>&nbsp;     * @param column  the column index (zero-based).
+<i>950</i>&nbsp;     *
+<i>951</i>&nbsp;     * @return The font (never {@code null}).
+<i>952</i>&nbsp;     */
+<i>953</i>&nbsp;    public Font getItemLabelFont(int row, int column);
+<i>954</i>&nbsp;
+<i>955</i>&nbsp;    /**
+<i>956</i>&nbsp;     * Returns the font for all the item labels in a series.
+<i>957</i>&nbsp;     *
+<i>958</i>&nbsp;     * @param series  the series index (zero-based).
+<i>959</i>&nbsp;     *
+<i>960</i>&nbsp;     * @return The font (possibly {@code null}).
+<i>961</i>&nbsp;     */
+<i>962</i>&nbsp;    public Font getSeriesItemLabelFont(int series);
+<i>963</i>&nbsp;
+<i>964</i>&nbsp;    /**
+<i>965</i>&nbsp;     * Sets the item label font for a series and sends a
+<i>966</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>967</i>&nbsp;     *
+<i>968</i>&nbsp;     * @param series  the series index (zero-based).
+<i>969</i>&nbsp;     * @param font  the font ({@code null} permitted).
+<i>970</i>&nbsp;     *
+<i>971</i>&nbsp;     * @see #getSeriesItemLabelFont(int)
+<i>972</i>&nbsp;     */
+<i>973</i>&nbsp;    public void setSeriesItemLabelFont(int series, Font font);
+<i>974</i>&nbsp;
+<i>975</i>&nbsp;    /**
+<i>976</i>&nbsp;     * Returns the default item label font (this is used when no other font
+<i>977</i>&nbsp;     * setting is available).
+<i>978</i>&nbsp;     *
+<i>979</i>&nbsp;     * @return The font (never {@code null}).
+<i>980</i>&nbsp;     *
+<i>981</i>&nbsp;     * @see #setDefaultItemLabelFont(Font)
+<i>982</i>&nbsp;     */
+<i>983</i>&nbsp;    public Font getDefaultItemLabelFont();
+<i>984</i>&nbsp;
+<i>985</i>&nbsp;    /**
+<i>986</i>&nbsp;     * Sets the default item label font and sends a {@link RendererChangeEvent}
+<i>987</i>&nbsp;     * to all registered listeners.
+<i>988</i>&nbsp;     *
+<i>989</i>&nbsp;     * @param font  the font ({@code null} not permitted).
+<i>990</i>&nbsp;     *
+<i>991</i>&nbsp;     * @see #getDefaultItemLabelFont()
+<i>992</i>&nbsp;     */
+<i>993</i>&nbsp;    public void setDefaultItemLabelFont(Font font);
+<i>994</i>&nbsp;
+<i>995</i>&nbsp;    //// ITEM LABEL PAINT  /////////////////////////////////////////////////////
+<i>996</i>&nbsp;
+<i>997</i>&nbsp;    /**
+<i>998</i>&nbsp;     * Returns the paint used to draw an item label.
+<i>999</i>&nbsp;     *
+<i>1000</i>&nbsp;     * @param row  the row index (zero based).
+<i>1001</i>&nbsp;     * @param column  the column index (zero based).
+<i>1002</i>&nbsp;     *
+<i>1003</i>&nbsp;     * @return The paint (never {@code null}).
+<i>1004</i>&nbsp;     */
+<i>1005</i>&nbsp;    public Paint getItemLabelPaint(int row, int column);
+<i>1006</i>&nbsp;
+<i>1007</i>&nbsp;    /**
+<i>1008</i>&nbsp;     * Returns the paint used to draw the item labels for a series.
+<i>1009</i>&nbsp;     *
+<i>1010</i>&nbsp;     * @param series  the series index (zero based).
+<i>1011</i>&nbsp;     *
+<i>1012</i>&nbsp;     * @return The paint (possibly {@code null}).
+<i>1013</i>&nbsp;     *
+<i>1014</i>&nbsp;     * @see #setSeriesItemLabelPaint(int, Paint)
+<i>1015</i>&nbsp;     */
+<i>1016</i>&nbsp;    public Paint getSeriesItemLabelPaint(int series);
+<i>1017</i>&nbsp;
+<i>1018</i>&nbsp;    /**
+<i>1019</i>&nbsp;     * Sets the item label paint for a series and sends a
+<i>1020</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1021</i>&nbsp;     *
+<i>1022</i>&nbsp;     * @param series  the series (zero based index).
+<i>1023</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>1024</i>&nbsp;     *
+<i>1025</i>&nbsp;     * @see #getSeriesItemLabelPaint(int)
+<i>1026</i>&nbsp;     */
+<i>1027</i>&nbsp;    public void setSeriesItemLabelPaint(int series, Paint paint);
+<i>1028</i>&nbsp;
+<i>1029</i>&nbsp;    /**
+<i>1030</i>&nbsp;     * Returns the default item label paint.
+<i>1031</i>&nbsp;     *
+<i>1032</i>&nbsp;     * @return The paint (never {@code null}).
+<i>1033</i>&nbsp;     */
+<i>1034</i>&nbsp;    public Paint getDefaultItemLabelPaint();
+<i>1035</i>&nbsp;
+<i>1036</i>&nbsp;    /**
+<i>1037</i>&nbsp;     * Sets the default item label paint and sends a {@link RendererChangeEvent}
+<i>1038</i>&nbsp;     * to all registered listeners.
+<i>1039</i>&nbsp;     *
+<i>1040</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>1041</i>&nbsp;     */
+<i>1042</i>&nbsp;    public void setDefaultItemLabelPaint(Paint paint);
+<i>1043</i>&nbsp;
+<i>1044</i>&nbsp;    // POSITIVE ITEM LABEL POSITION...
+<i>1045</i>&nbsp;
+<i>1046</i>&nbsp;    /**
+<i>1047</i>&nbsp;     * Returns the item label position for positive values.
+<i>1048</i>&nbsp;     *
+<i>1049</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1050</i>&nbsp;     * @param column  the column index (zero-based).
+<i>1051</i>&nbsp;     *
+<i>1052</i>&nbsp;     * @return The item label position (never {@code null}).
+<i>1053</i>&nbsp;     */
+<i>1054</i>&nbsp;    public ItemLabelPosition getPositiveItemLabelPosition(int row, int column);
+<i>1055</i>&nbsp;
+<i>1056</i>&nbsp;    /**
+<i>1057</i>&nbsp;     * Returns the item label position for all positive values in a series.
+<i>1058</i>&nbsp;     *
+<i>1059</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1060</i>&nbsp;     *
+<i>1061</i>&nbsp;     * @return The item label position (never {@code null}).
+<i>1062</i>&nbsp;     */
+<i>1063</i>&nbsp;    public ItemLabelPosition getSeriesPositiveItemLabelPosition(int series);
+<i>1064</i>&nbsp;
+<i>1065</i>&nbsp;    /**
+<i>1066</i>&nbsp;     * Sets the item label position for all positive values in a series and
+<i>1067</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>1068</i>&nbsp;     *
+<i>1069</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1070</i>&nbsp;     * @param position  the position ({@code null} permitted).
+<i>1071</i>&nbsp;     */
+<i>1072</i>&nbsp;    public void setSeriesPositiveItemLabelPosition(int series, 
+<i>1073</i>&nbsp;            ItemLabelPosition position);
+<i>1074</i>&nbsp;
+<i>1075</i>&nbsp;    /**
+<i>1076</i>&nbsp;     * Sets the item label position for all positive values in a series and (if
+<i>1077</i>&nbsp;     * requested) sends a {@link RendererChangeEvent} to all registered
+<i>1078</i>&nbsp;     * listeners.
+<i>1079</i>&nbsp;     *
+<i>1080</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1081</i>&nbsp;     * @param position  the position ({@code null} permitted).
+<i>1082</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1083</i>&nbsp;     */
+<i>1084</i>&nbsp;    public void setSeriesPositiveItemLabelPosition(int series, 
+<i>1085</i>&nbsp;            ItemLabelPosition position, boolean notify);
+<i>1086</i>&nbsp;
+<i>1087</i>&nbsp;    /**
+<i>1088</i>&nbsp;     * Returns the default positive item label position.
+<i>1089</i>&nbsp;     *
+<i>1090</i>&nbsp;     * @return The position (never {@code null}).
+<i>1091</i>&nbsp;     */
+<i>1092</i>&nbsp;    public ItemLabelPosition getDefaultPositiveItemLabelPosition();
+<i>1093</i>&nbsp;
+<i>1094</i>&nbsp;    /**
+<i>1095</i>&nbsp;     * Sets the default positive item label position.
+<i>1096</i>&nbsp;     *
+<i>1097</i>&nbsp;     * @param position  the position ({@code null} not permitted).
+<i>1098</i>&nbsp;     */
+<i>1099</i>&nbsp;    public void setDefaultPositiveItemLabelPosition(ItemLabelPosition position);
+<i>1100</i>&nbsp;
+<i>1101</i>&nbsp;    /**
+<i>1102</i>&nbsp;     * Sets the default positive item label position and, if requested, sends a
+<i>1103</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1104</i>&nbsp;     *
+<i>1105</i>&nbsp;     * @param position  the position ({@code null} not permitted).
+<i>1106</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1107</i>&nbsp;     */
+<i>1108</i>&nbsp;    public void setDefaultPositiveItemLabelPosition(ItemLabelPosition position,
+<i>1109</i>&nbsp;            boolean notify);
+<i>1110</i>&nbsp;
+<i>1111</i>&nbsp;
+<i>1112</i>&nbsp;    // NEGATIVE ITEM LABEL POSITION...
+<i>1113</i>&nbsp;
+<i>1114</i>&nbsp;    /**
+<i>1115</i>&nbsp;     * Returns the item label position for negative values.  This method can be
+<i>1116</i>&nbsp;     * overridden to provide customisation of the item label position for
+<i>1117</i>&nbsp;     * individual data items.
+<i>1118</i>&nbsp;     *
+<i>1119</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1120</i>&nbsp;     * @param column  the column (zero-based).
+<i>1121</i>&nbsp;     *
+<i>1122</i>&nbsp;     * @return The item label position (never {@code null}).
+<i>1123</i>&nbsp;     */
+<i>1124</i>&nbsp;    public ItemLabelPosition getNegativeItemLabelPosition(int row, int column);
+<i>1125</i>&nbsp;
+<i>1126</i>&nbsp;    /**
+<i>1127</i>&nbsp;     * Returns the item label position for all negative values in a series.
+<i>1128</i>&nbsp;     *
+<i>1129</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1130</i>&nbsp;     *
+<i>1131</i>&nbsp;     * @return The item label position (never {@code null}).
+<i>1132</i>&nbsp;     */
+<i>1133</i>&nbsp;    public ItemLabelPosition getSeriesNegativeItemLabelPosition(int series);
+<i>1134</i>&nbsp;
+<i>1135</i>&nbsp;    /**
+<i>1136</i>&nbsp;     * Sets the item label position for negative values in a series and sends a
+<i>1137</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1138</i>&nbsp;     *
+<i>1139</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1140</i>&nbsp;     * @param position  the position ({@code null} permitted).
+<i>1141</i>&nbsp;     */
+<i>1142</i>&nbsp;    public void setSeriesNegativeItemLabelPosition(int series, 
+<i>1143</i>&nbsp;            ItemLabelPosition position);
+<i>1144</i>&nbsp;
+<i>1145</i>&nbsp;    /**
+<i>1146</i>&nbsp;     * Sets the item label position for negative values in a series and (if
+<i>1147</i>&nbsp;     * requested) sends a {@link RendererChangeEvent} to all registered
+<i>1148</i>&nbsp;     * listeners.
+<i>1149</i>&nbsp;     *
+<i>1150</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1151</i>&nbsp;     * @param position  the position ({@code null} permitted).
+<i>1152</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1153</i>&nbsp;     */
+<i>1154</i>&nbsp;    public void setSeriesNegativeItemLabelPosition(int series, 
+<i>1155</i>&nbsp;            ItemLabelPosition position, boolean notify);
+<i>1156</i>&nbsp;
+<i>1157</i>&nbsp;    /**
+<i>1158</i>&nbsp;     * Returns the default item label position for negative values.
+<i>1159</i>&nbsp;     *
+<i>1160</i>&nbsp;     * @return The position (never {@code null}).
+<i>1161</i>&nbsp;     */
+<i>1162</i>&nbsp;    public ItemLabelPosition getDefaultNegativeItemLabelPosition();
+<i>1163</i>&nbsp;
+<i>1164</i>&nbsp;    /**
+<i>1165</i>&nbsp;     * Sets the default item label position for negative values and sends a
+<i>1166</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1167</i>&nbsp;     *
+<i>1168</i>&nbsp;     * @param position  the position ({@code null} not permitted).
+<i>1169</i>&nbsp;     */
+<i>1170</i>&nbsp;    public void setDefaultNegativeItemLabelPosition(ItemLabelPosition position);
+<i>1171</i>&nbsp;
+<i>1172</i>&nbsp;    /**
+<i>1173</i>&nbsp;     * Sets the default negative item label position and, if requested, sends a
+<i>1174</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1175</i>&nbsp;     *
+<i>1176</i>&nbsp;     * @param position  the position ({@code null} not permitted).
+<i>1177</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1178</i>&nbsp;     */
+<i>1179</i>&nbsp;    public void setDefaultNegativeItemLabelPosition(ItemLabelPosition position,
+<i>1180</i>&nbsp;            boolean notify);
+<i>1181</i>&nbsp;
+<i>1182</i>&nbsp;
+<i>1183</i>&nbsp;    // CREATE ENTITIES
+<i>1184</i>&nbsp;
+<i>1185</i>&nbsp;    public boolean getItemCreateEntity(int series, int item);
+<i>1186</i>&nbsp;
+<i>1187</i>&nbsp;    public Boolean getSeriesCreateEntities(int series);
+<i>1188</i>&nbsp;
+<i>1189</i>&nbsp;    public void setSeriesCreateEntities(int series, Boolean create);
+<i>1190</i>&nbsp;
+<i>1191</i>&nbsp;    public void setSeriesCreateEntities(int series, Boolean create,
+<i>1192</i>&nbsp;            boolean notify);
+<i>1193</i>&nbsp;
+<i>1194</i>&nbsp;    public boolean getDefaultCreateEntities();
+<i>1195</i>&nbsp;
+<i>1196</i>&nbsp;    public void setDefaultCreateEntities(boolean create);
+<i>1197</i>&nbsp;
+<i>1198</i>&nbsp;    public void setDefaultCreateEntities(boolean create, boolean notify);
+<i>1199</i>&nbsp;
+<i>1200</i>&nbsp;    //// ANNOTATIONS //////////////////////////////////////////////////////////
+<i>1201</i>&nbsp;
+<i>1202</i>&nbsp;    /**
+<i>1203</i>&nbsp;     * Adds an annotation and sends a {@link RendererChangeEvent} to all
+<i>1204</i>&nbsp;     * registered listeners.  The annotation is added to the foreground
+<i>1205</i>&nbsp;     * layer.
+<i>1206</i>&nbsp;     *
+<i>1207</i>&nbsp;     * @param annotation  the annotation ({@code null} not permitted).
+<i>1208</i>&nbsp;     */
+<i>1209</i>&nbsp;    public void addAnnotation(XYAnnotation annotation);
+<i>1210</i>&nbsp;
+<i>1211</i>&nbsp;    /**
+<i>1212</i>&nbsp;     * Adds an annotation to the specified layer.
+<i>1213</i>&nbsp;     *
+<i>1214</i>&nbsp;     * @param annotation  the annotation ({@code null} not permitted).
+<i>1215</i>&nbsp;     * @param layer  the layer ({@code null} not permitted).
+<i>1216</i>&nbsp;     */
+<i>1217</i>&nbsp;    public void addAnnotation(XYAnnotation annotation, Layer layer);
+<i>1218</i>&nbsp;
+<i>1219</i>&nbsp;    /**
+<i>1220</i>&nbsp;     * Removes the specified annotation and sends a {@link RendererChangeEvent}
+<i>1221</i>&nbsp;     * to all registered listeners.
+<i>1222</i>&nbsp;     *
+<i>1223</i>&nbsp;     * @param annotation  the annotation to remove ({@code null} not
+<i>1224</i>&nbsp;     *                    permitted).
+<i>1225</i>&nbsp;     *
+<i>1226</i>&nbsp;     * @return A boolean to indicate whether or not the annotation was
+<i>1227</i>&nbsp;     *         successfully removed.
+<i>1228</i>&nbsp;     */
+<i>1229</i>&nbsp;    public boolean removeAnnotation(XYAnnotation annotation);
+<i>1230</i>&nbsp;
+<i>1231</i>&nbsp;    /**
+<i>1232</i>&nbsp;     * Removes all annotations and sends a {@link RendererChangeEvent}
+<i>1233</i>&nbsp;     * to all registered listeners.
+<i>1234</i>&nbsp;     */
+<i>1235</i>&nbsp;    public void removeAnnotations();
+<i>1236</i>&nbsp;
+<i>1237</i>&nbsp;    /**
+<i>1238</i>&nbsp;     * Draws all the annotations for the specified layer.
+<i>1239</i>&nbsp;     *
+<i>1240</i>&nbsp;     * @param g2  the graphics device.
+<i>1241</i>&nbsp;     * @param dataArea  the data area.
+<i>1242</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1243</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1244</i>&nbsp;     * @param layer  the layer.
+<i>1245</i>&nbsp;     * @param info  the plot rendering info.
+<i>1246</i>&nbsp;     */
+<i>1247</i>&nbsp;    public void drawAnnotations(Graphics2D g2, Rectangle2D dataArea,
+<i>1248</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, Layer layer,
+<i>1249</i>&nbsp;            PlotRenderingInfo info);
+<i>1250</i>&nbsp;
+<i>1251</i>&nbsp;    //// DRAWING //////////////////////////////////////////////////////////////
+<i>1252</i>&nbsp;
+<i>1253</i>&nbsp;    /**
+<i>1254</i>&nbsp;     * Initialises the renderer then returns the number of &#39;passes&#39; through the
+<i>1255</i>&nbsp;     * data that the renderer will require (usually just one).  This method
+<i>1256</i>&nbsp;     * will be called before the first item is rendered, giving the renderer
+<i>1257</i>&nbsp;     * an opportunity to initialise any state information it wants to maintain.
+<i>1258</i>&nbsp;     * The renderer can do nothing if it chooses.
+<i>1259</i>&nbsp;     *
+<i>1260</i>&nbsp;     * @param g2  the graphics device.
+<i>1261</i>&nbsp;     * @param dataArea  the area inside the axes.
+<i>1262</i>&nbsp;     * @param plot  the plot.
+<i>1263</i>&nbsp;     * @param dataset  the dataset.
+<i>1264</i>&nbsp;     * @param info  an optional info collection object to return data back to
+<i>1265</i>&nbsp;     *              the caller.
+<i>1266</i>&nbsp;     *
+<i>1267</i>&nbsp;     * @return The number of passes the renderer requires.
+<i>1268</i>&nbsp;     */
+<i>1269</i>&nbsp;    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
+<i>1270</i>&nbsp;            XYPlot plot, XYDataset dataset, PlotRenderingInfo info);
+<i>1271</i>&nbsp;
+<i>1272</i>&nbsp;    /**
+<i>1273</i>&nbsp;     * Called for each item to be plotted.
+<i>1274</i>&nbsp;     * &lt;p&gt;
+<i>1275</i>&nbsp;     * The {@link XYPlot} can make multiple passes through the dataset,
+<i>1276</i>&nbsp;     * depending on the value returned by the renderer&#39;s initialise() method.
+<i>1277</i>&nbsp;     *
+<i>1278</i>&nbsp;     * @param g2  the graphics device.
+<i>1279</i>&nbsp;     * @param state  the renderer state.
+<i>1280</i>&nbsp;     * @param dataArea  the area within which the data is being rendered.
+<i>1281</i>&nbsp;     * @param info  collects drawing info.
+<i>1282</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>1283</i>&nbsp;     *              information etc).
+<i>1284</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1285</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1286</i>&nbsp;     * @param dataset  the dataset.
+<i>1287</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1288</i>&nbsp;     * @param item  the item index (zero-based).
+<i>1289</i>&nbsp;     * @param crosshairState  crosshair information for the plot
+<i>1290</i>&nbsp;     *                        ({@code null} permitted).
+<i>1291</i>&nbsp;     * @param pass  the pass index.
+<i>1292</i>&nbsp;     */
+<i>1293</i>&nbsp;    public void drawItem(Graphics2D g2, XYItemRendererState state,
+<i>1294</i>&nbsp;            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
+<i>1295</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
+<i>1296</i>&nbsp;            int series, int item, CrosshairState crosshairState, int pass);
+<i>1297</i>&nbsp;
+<i>1298</i>&nbsp;    /**
+<i>1299</i>&nbsp;     * Fills a band between two values on the axis.  This can be used to color
+<i>1300</i>&nbsp;     * bands between the grid lines.
+<i>1301</i>&nbsp;     *
+<i>1302</i>&nbsp;     * @param g2  the graphics device.
+<i>1303</i>&nbsp;     * @param plot  the plot.
+<i>1304</i>&nbsp;     * @param axis  the domain axis.
+<i>1305</i>&nbsp;     * @param dataArea  the data area.
+<i>1306</i>&nbsp;     * @param start  the start value.
+<i>1307</i>&nbsp;     * @param end  the end value.
+<i>1308</i>&nbsp;     */
+<i>1309</i>&nbsp;    public void fillDomainGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1310</i>&nbsp;            Rectangle2D dataArea, double start, double end);
+<i>1311</i>&nbsp;
+<i>1312</i>&nbsp;    /**
+<i>1313</i>&nbsp;     * Fills a band between two values on the range axis.  This can be used to
+<i>1314</i>&nbsp;     * color bands between the grid lines.
+<i>1315</i>&nbsp;     *
+<i>1316</i>&nbsp;     * @param g2  the graphics device.
+<i>1317</i>&nbsp;     * @param plot  the plot.
+<i>1318</i>&nbsp;     * @param axis  the range axis.
+<i>1319</i>&nbsp;     * @param dataArea  the data area.
+<i>1320</i>&nbsp;     * @param start  the start value.
+<i>1321</i>&nbsp;     * @param end  the end value.
+<i>1322</i>&nbsp;     */
+<i>1323</i>&nbsp;    public void fillRangeGridBand(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1324</i>&nbsp;            Rectangle2D dataArea, double start, double end);
+<i>1325</i>&nbsp;
+<i>1326</i>&nbsp;    /**
+<i>1327</i>&nbsp;     * Draws a grid line against the domain axis.
+<i>1328</i>&nbsp;     *
+<i>1329</i>&nbsp;     * @param g2  the graphics device.
+<i>1330</i>&nbsp;     * @param plot  the plot.
+<i>1331</i>&nbsp;     * @param axis  the value axis.
+<i>1332</i>&nbsp;     * @param dataArea  the area for plotting data.
+<i>1333</i>&nbsp;     * @param value  the value.
+<i>1334</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>1335</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>1336</i>&nbsp;     */
+<i>1337</i>&nbsp;    public void drawDomainLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1338</i>&nbsp;            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
+<i>1339</i>&nbsp;
+<i>1340</i>&nbsp;    /**
+<i>1341</i>&nbsp;     * Draws a line perpendicular to the range axis.
+<i>1342</i>&nbsp;     *
+<i>1343</i>&nbsp;     * @param g2  the graphics device.
+<i>1344</i>&nbsp;     * @param plot  the plot.
+<i>1345</i>&nbsp;     * @param axis  the value axis.
+<i>1346</i>&nbsp;     * @param dataArea  the area for plotting data.
+<i>1347</i>&nbsp;     * @param value  the data value.
+<i>1348</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>1349</i>&nbsp;     * @param stroke  the stroke ({@code null} not permitted).
+<i>1350</i>&nbsp;     */
+<i>1351</i>&nbsp;    public void drawRangeLine(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1352</i>&nbsp;            Rectangle2D dataArea, double value, Paint paint, Stroke stroke);
+<i>1353</i>&nbsp;
+<i>1354</i>&nbsp;    /**
+<i>1355</i>&nbsp;     * Draws the specified {@code marker} against the domain axis.
+<i>1356</i>&nbsp;     *
+<i>1357</i>&nbsp;     * @param g2  the graphics device.
+<i>1358</i>&nbsp;     * @param plot  the plot.
+<i>1359</i>&nbsp;     * @param axis  the value axis.
+<i>1360</i>&nbsp;     * @param marker  the marker.
+<i>1361</i>&nbsp;     * @param dataArea  the axis data area.
+<i>1362</i>&nbsp;     */
+<i>1363</i>&nbsp;    public void drawDomainMarker(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1364</i>&nbsp;            Marker marker, Rectangle2D dataArea);
+<i>1365</i>&nbsp;
+<i>1366</i>&nbsp;    /**
+<i>1367</i>&nbsp;     * Draws a horizontal line across the chart to represent a &#39;range marker&#39;.
+<i>1368</i>&nbsp;     *
+<i>1369</i>&nbsp;     * @param g2  the graphics device.
+<i>1370</i>&nbsp;     * @param plot  the plot.
+<i>1371</i>&nbsp;     * @param axis  the value axis.
+<i>1372</i>&nbsp;     * @param marker  the marker line.
+<i>1373</i>&nbsp;     * @param dataArea  the axis data area.
+<i>1374</i>&nbsp;     */
+<i>1375</i>&nbsp;    public void drawRangeMarker(Graphics2D g2, XYPlot plot, ValueAxis axis,
+<i>1376</i>&nbsp;            Marker marker, Rectangle2D dataArea);
+<i>1377</i>&nbsp;
+<i>1378</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

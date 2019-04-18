@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ObjectUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.util</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ObjectUtils (org.jfree.chart.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ObjectUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (20/ 24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2019, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;package org.jfree.chart.util;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;import java.util.Collection;
+<i>32</i>&nbsp;import java.util.Iterator;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;/**
+<i>35</i>&nbsp; * A collection of useful static utility methods for handling classes and object
+<i>36</i>&nbsp; * instantiation.
+<i>37</i>&nbsp; */
+<i>38</i>&nbsp;public final class ObjectUtils {
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * Default constructor - private.
+<i>42</i>&nbsp;     */
+<b class="nc"><i>43</i>&nbsp;    private ObjectUtils() {</b>
+<b class="nc"><i>44</i>&nbsp;    }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Returns {@code true} if the two objects are equal OR both
+<i>48</i>&nbsp;     * {@code null}.
+<i>49</i>&nbsp;     *
+<i>50</i>&nbsp;     * @param o1 object 1 ({@code null} permitted).
+<i>51</i>&nbsp;     * @param o2 object 2 ({@code null} permitted).
+<i>52</i>&nbsp;     * @return {@code true} or {@code false}.
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public static boolean equal(Object o1, Object o2) {
+<b class="fc"><i>55</i>&nbsp;        if (o1 == o2) {</b>
+<b class="fc"><i>56</i>&nbsp;            return true;</b>
+<i>57</i>&nbsp;        }
+<b class="fc"><i>58</i>&nbsp;        if (o1 != null) {</b>
+<b class="fc"><i>59</i>&nbsp;            return o1.equals(o2);</b>
+<i>60</i>&nbsp;        }
+<i>61</i>&nbsp;        else {
+<b class="fc"><i>62</i>&nbsp;            return false;</b>
+<i>63</i>&nbsp;        }
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * Returns a hash code for an object, or zero if the object is
+<i>68</i>&nbsp;     * {@code null}.
+<i>69</i>&nbsp;     *
+<i>70</i>&nbsp;     * @param object the object ({@code null} permitted).
+<i>71</i>&nbsp;     * @return The object&#39;s hash code (or zero if the object is
+<i>72</i>&nbsp;     *         {@code null}).
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    public static int hashCode(Object object) {
+<b class="fc"><i>75</i>&nbsp;        int result = 0;</b>
+<b class="fc"><i>76</i>&nbsp;        if (object != null) {</b>
+<b class="fc"><i>77</i>&nbsp;            result = object.hashCode();</b>
+<i>78</i>&nbsp;        }
+<b class="fc"><i>79</i>&nbsp;        return result;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * Returns a clone of the specified object, if it can be cloned, otherwise
+<i>84</i>&nbsp;     * throws a CloneNotSupportedException.
+<i>85</i>&nbsp;     *
+<i>86</i>&nbsp;     * @param object the object to clone ({@code null} not permitted).
+<i>87</i>&nbsp;     * @return A clone of the specified object.
+<i>88</i>&nbsp;     * @throws CloneNotSupportedException if the object cannot be cloned.
+<i>89</i>&nbsp;     * 
+<i>90</i>&nbsp;     * @deprecated Use CloneUtils#clone(Object).
+<i>91</i>&nbsp;     */
+<i>92</i>&nbsp;    public static Object clone(Object object)
+<i>93</i>&nbsp;        throws CloneNotSupportedException {
+<b class="fc"><i>94</i>&nbsp;        if (object == null) {</b>
+<b class="nc"><i>95</i>&nbsp;            throw new IllegalArgumentException(&quot;Null &#39;object&#39; argument.&quot;);</b>
+<i>96</i>&nbsp;        }
+<b class="fc"><i>97</i>&nbsp;        return CloneUtils.clone(object);</b>
+<i>98</i>&nbsp;    }
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Returns a new collection containing clones of all the items in the
+<i>102</i>&nbsp;     * specified collection.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @param collection the collection ({@code null} not permitted).
+<i>105</i>&nbsp;     * @return A new collection containing clones of all the items in the
+<i>106</i>&nbsp;     *         specified collection.
+<i>107</i>&nbsp;     * @throws CloneNotSupportedException if any of the items in the collection
+<i>108</i>&nbsp;     *                                    cannot be cloned.
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public static Collection deepClone(Collection collection)
+<i>111</i>&nbsp;            throws CloneNotSupportedException {
+<i>112</i>&nbsp;
+<b class="fc"><i>113</i>&nbsp;        if (collection == null) {</b>
+<b class="nc"><i>114</i>&nbsp;            throw new IllegalArgumentException(&quot;Null &#39;collection&#39; argument.&quot;);</b>
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;        // all JDK-Collections are cloneable ...
+<i>117</i>&nbsp;        // and if the collection is not clonable, then we should throw
+<i>118</i>&nbsp;        // a CloneNotSupportedException anyway ...
+<b class="fc"><i>119</i>&nbsp;        Collection result = (Collection) ObjectUtils.clone(collection);</b>
+<b class="fc"><i>120</i>&nbsp;        result.clear();</b>
+<b class="fc"><i>121</i>&nbsp;        Iterator iterator = collection.iterator();</b>
+<b class="fc"><i>122</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>123</i>&nbsp;            Object item = iterator.next();</b>
+<b class="fc"><i>124</i>&nbsp;            result.add(CloneUtils.clone(item));</b>
+<b class="fc"><i>125</i>&nbsp;        }</b>
+<b class="fc"><i>126</i>&nbsp;        return result;</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

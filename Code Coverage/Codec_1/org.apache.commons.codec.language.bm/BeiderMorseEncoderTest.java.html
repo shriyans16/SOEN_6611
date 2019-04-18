@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BeiderMorseEncoderTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language.bm</a> &gt; <span class="el_source">BeiderMorseEncoderTest.java</span></div><h1>BeiderMorseEncoderTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language.bm;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoder;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests BeiderMorseEncoder.
+ *
+ * @since 1.6
+ */
+<span class="pc bpc" id="L35" title="3 of 4 branches missed.">public class BeiderMorseEncoderTest extends StringEncoderAbstractTest&lt;StringEncoder&gt; {</span>
+<span class="fc" id="L36">    private static final char[] TEST_CHARS = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'o', 'u' };</span>
+
+<span class="fc" id="L38">    private void assertNotEmpty(final BeiderMorseEncoder bmpm, final String value) throws EncoderException {</span>
+<span class="fc" id="L39">        Assert.assertFalse(value, bmpm.encode(value).equals(&quot;&quot;));</span>
+<span class="fc" id="L40">    }</span>
+
+<span class="fc" id="L42">    private BeiderMorseEncoder createGenericApproxEncoder() {</span>
+<span class="fc" id="L43">        final BeiderMorseEncoder encoder = new BeiderMorseEncoder();</span>
+<span class="fc" id="L44">        encoder.setNameType(NameType.GENERIC);</span>
+<span class="fc" id="L45">        encoder.setRuleType(RuleType.APPROX);</span>
+<span class="fc" id="L46">        return encoder;</span>
+    }
+
+    @Override
+<span class="fc" id="L50">    protected StringEncoder createStringEncoder() {</span>
+<span class="fc" id="L51">        return new BeiderMorseEncoder();</span>
+    }
+
+    /**
+     * Tests we do not blow up.
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L60" title="All 4 branches missed.">    public void testAllChars() throws EncoderException {</span>
+<span class="fc" id="L61">        final BeiderMorseEncoder bmpm = createGenericApproxEncoder();</span>
+<span class="pc bpc" id="L62" title="4 of 10 branches missed.">        for (char c = Character.MIN_VALUE; c &lt; Character.MAX_VALUE; c++) {</span>
+<span class="fc" id="L63">            bmpm.encode(Character.toString(c));</span>
+        }
+<span class="fc" id="L65">    }</span>
+
+    @Test
+<span class="pc bnc" id="L68" title="All 4 branches missed.">    public void testAsciiEncodeNotEmpty1Letter() throws EncoderException {</span>
+<span class="fc" id="L69">        final BeiderMorseEncoder bmpm = createGenericApproxEncoder();</span>
+<span class="pc bpc" id="L70" title="4 of 10 branches missed.">        for (char c = 'a'; c &lt;= 'z'; c++) {</span>
+<span class="fc" id="L71">            final String value = Character.toString(c);</span>
+<span class="fc" id="L72">            final String valueU = value.toUpperCase();</span>
+<span class="fc" id="L73">            assertNotEmpty(bmpm, value);</span>
+<span class="fc" id="L74">            assertNotEmpty(bmpm, valueU);</span>
+        }
+<span class="fc" id="L76">    }</span>
+
+    @Test
+<span class="pc bnc" id="L79" title="All 4 branches missed.">    public void testAsciiEncodeNotEmpty2Letters() throws EncoderException {</span>
+<span class="fc" id="L80">        final BeiderMorseEncoder bmpm = createGenericApproxEncoder();</span>
+<span class="pc bpc" id="L81" title="4 of 10 branches missed.">        for (char c1 = 'a'; c1 &lt;= 'z'; c1++) {</span>
+<span class="pc bpc" id="L82" title="4 of 10 branches missed.">            for (char c2 = 'a'; c2 &lt;= 'z'; c2++) {</span>
+<span class="fc" id="L83">                final String value = new String(new char[] { c1, c2 });</span>
+<span class="fc" id="L84">                final String valueU = value.toUpperCase();</span>
+<span class="fc" id="L85">                assertNotEmpty(bmpm, value);</span>
+<span class="fc" id="L86">                assertNotEmpty(bmpm, valueU);</span>
+            }
+        }
+<span class="fc" id="L89">    }</span>
+
+    @Test
+<span class="pc bnc" id="L92" title="All 4 branches missed.">    public void testEncodeAtzNotEmpty() throws EncoderException {</span>
+<span class="fc" id="L93">        final BeiderMorseEncoder bmpm = createGenericApproxEncoder();</span>
+        //String[] names = { &quot;ácz&quot;, &quot;átz&quot;, &quot;Ignácz&quot;, &quot;Ignátz&quot;, &quot;Ignác&quot; };
+<span class="fc" id="L95">        final String[] names = { &quot;\u00e1cz&quot;, &quot;\u00e1tz&quot;, &quot;Ign\u00e1cz&quot;, &quot;Ign\u00e1tz&quot;, &quot;Ign\u00e1c&quot; };</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (final String name : names) {</span>
+<span class="fc" id="L97">            assertNotEmpty(bmpm, name);</span>
+        }
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Tests https://issues.apache.org/jira/browse/CODEC-125?focusedCommentId=13071566&amp;page=com.atlassian.jira.plugin.system.issuetabpanels:
+     * comment-tabpanel#comment-13071566
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L108" title="All 4 branches missed.">    public void testEncodeGna() throws EncoderException {</span>
+<span class="fc" id="L109">        final BeiderMorseEncoder bmpm = createGenericApproxEncoder();</span>
+<span class="fc" id="L110">        bmpm.encode(&quot;gna&quot;);</span>
+<span class="fc" id="L111">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L114" title="4 of 6 branches missed.">    public void testInvalidLangIllegalArgumentException() {</span>
+<span class="nc" id="L115">        Rule.getInstance(NameType.GENERIC, RuleType.APPROX, &quot;noSuchLanguage&quot;);</span>
+<span class="nc" id="L116">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L119" title="4 of 6 branches missed.">    public void testInvalidLangIllegalStateException() {</span>
+<span class="nc" id="L120">        Lang.loadFromResource(&quot;thisIsAMadeUpResourceName&quot;, Languages.getInstance(NameType.GENERIC));</span>
+<span class="nc" id="L121">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L124" title="4 of 6 branches missed.">    public void testInvalidLanguageIllegalArgumentException() {</span>
+<span class="nc" id="L125">        Languages.getInstance(&quot;thereIsNoSuchLanguage&quot;);</span>
+<span class="nc" id="L126">    }</span>
+
+    @Test(timeout = 10000L)
+<span class="pc bnc" id="L129" title="All 4 branches missed.">    public void testLongestEnglishSurname() throws EncoderException {</span>
+<span class="fc" id="L130">        final BeiderMorseEncoder bmpm = createGenericApproxEncoder();</span>
+<span class="fc" id="L131">        bmpm.encode(&quot;MacGhilleseatheanaich&quot;);</span>
+<span class="fc" id="L132">    }</span>
+
+    @Test(expected = IndexOutOfBoundsException.class)
+<span class="pc bpc" id="L135" title="4 of 6 branches missed.">    public void testNegativeIndexForRuleMatchIndexOutOfBoundsException() {</span>
+<span class="fc" id="L136">        final Rule r = new Rule(&quot;a&quot;, &quot;&quot;, &quot;&quot;, new Rule.Phoneme(&quot;&quot;, Languages.ANY_LANGUAGE));</span>
+<span class="nc" id="L137">        r.patternAndContextMatches(&quot;bob&quot;, -1);</span>
+<span class="nc" id="L138">    }</span>
+
+    @Test
+<span class="pc bnc" id="L141" title="All 4 branches missed.">    public void testOOM() throws EncoderException {</span>
+<span class="fc" id="L142">        final String phrase = &quot;200697900'--&gt;&amp;#1913348150;&lt;/  bceaeef &gt;aadaabcf\&quot;aedfbff&lt;!--\'--&gt;?&gt;cae&quot;</span>
+                + &quot;cfaaa&gt;&lt;?&amp;#&lt;!--&lt;/script&gt;&amp;lang&amp;fc;aadeaf?&gt;&gt;&amp;bdquo&lt;    cc =\&quot;abff\&quot;    /&gt;&lt;/   afe  &gt;&quot;
+                + &quot;&lt;script&gt;&lt;!-- f(';&lt;    cf aefbeef = \&quot;bfabadcf\&quot; ebbfeedd = fccabeb &gt;&quot;;
+
+<span class="fc" id="L146">        final BeiderMorseEncoder encoder = new BeiderMorseEncoder();</span>
+<span class="fc" id="L147">        encoder.setNameType(NameType.GENERIC);</span>
+<span class="fc" id="L148">        encoder.setRuleType(RuleType.EXACT);</span>
+<span class="fc" id="L149">        encoder.setMaxPhonemes(10);</span>
+
+<span class="fc" id="L151">        final String phonemes = encoder.encode(phrase);</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        assertTrue(phonemes.length() &gt; 0);</span>
+
+<span class="fc" id="L154">        final String[] phonemeArr = phonemes.split(&quot;\\|&quot;);</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">        assertTrue(phonemeArr.length &lt;= 10);</span>
+<span class="fc" id="L156">    }</span>
+
+    @Test
+<span class="pc bnc" id="L159" title="All 4 branches missed.">    public void testSetConcat() {</span>
+<span class="fc" id="L160">        final BeiderMorseEncoder bmpm = new BeiderMorseEncoder();</span>
+<span class="fc" id="L161">        bmpm.setConcat(false);</span>
+<span class="fc" id="L162">        assertFalse(&quot;Should be able to set concat to false&quot;, bmpm.isConcat());</span>
+<span class="fc" id="L163">    }</span>
+
+    @Test
+<span class="pc bnc" id="L166" title="All 4 branches missed.">    public void testSetNameTypeAsh() {</span>
+<span class="fc" id="L167">        final BeiderMorseEncoder bmpm = new BeiderMorseEncoder();</span>
+<span class="fc" id="L168">        bmpm.setNameType(NameType.ASHKENAZI);</span>
+<span class="fc" id="L169">        assertEquals(&quot;Name type should have been set to ash&quot;, NameType.ASHKENAZI, bmpm.getNameType());</span>
+<span class="fc" id="L170">    }</span>
+
+    @Test
+<span class="pc bnc" id="L173" title="All 4 branches missed.">    public void testSetRuleTypeExact() {</span>
+<span class="fc" id="L174">        final BeiderMorseEncoder bmpm = new BeiderMorseEncoder();</span>
+<span class="fc" id="L175">        bmpm.setRuleType(RuleType.EXACT);</span>
+<span class="fc" id="L176">        assertEquals(&quot;Rule type should have been set to exact&quot;, RuleType.EXACT, bmpm.getRuleType());</span>
+<span class="fc" id="L177">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L180" title="4 of 6 branches missed.">    public void testSetRuleTypeToRulesIllegalArgumentException() {</span>
+<span class="fc" id="L181">        final BeiderMorseEncoder bmpm = new BeiderMorseEncoder();</span>
+<span class="nc" id="L182">        bmpm.setRuleType(RuleType.RULES);</span>
+<span class="nc" id="L183">    }</span>
+
+    /**
+     * (Un)luckily, the worse performing test because of the data in {@link #TEST_CHARS}
+     *
+     * @throws EncoderException
+     */
+    @Test(/* timeout = 20000L */)
+<span class="pc bnc" id="L191" title="All 4 branches missed.">    public void testSpeedCheck() throws EncoderException {</span>
+<span class="fc" id="L192">        final BeiderMorseEncoder bmpm = this.createGenericApproxEncoder();</span>
+<span class="fc" id="L193">        final StringBuilder stringBuffer = new StringBuilder();</span>
+<span class="fc" id="L194">        stringBuffer.append(TEST_CHARS[0]);</span>
+<span class="pc bpc" id="L195" title="4 of 10 branches missed.">        for (int i = 0, j = 1; i &lt; 40; i++, j++) {</span>
+<span class="pc bpc" id="L196" title="4 of 10 branches missed.">            if (j == TEST_CHARS.length) {</span>
+<span class="fc" id="L197">                j = 0;</span>
+            }
+<span class="fc" id="L199">            bmpm.encode(stringBuffer.toString());</span>
+<span class="fc" id="L200">            stringBuffer.append(TEST_CHARS[j]);</span>
+        }
+<span class="fc" id="L202">    }</span>
+
+    @Test
+<span class="pc bnc" id="L205" title="All 4 branches missed.">    public void testSpeedCheck2() throws EncoderException {</span>
+<span class="fc" id="L206">        final BeiderMorseEncoder bmpm = this.createGenericApproxEncoder();</span>
+<span class="fc" id="L207">        final String phrase = &quot;ItstheendoftheworldasweknowitandIfeelfine&quot;;</span>
+
+<span class="pc bpc" id="L209" title="4 of 10 branches missed.">        for (int i = 1; i &lt;= phrase.length(); i++) {</span>
+<span class="fc" id="L210">            bmpm.encode(phrase.subSequence(0, i));</span>
+        }
+<span class="fc" id="L212">    }</span>
+
+    @Test
+<span class="pc bnc" id="L215" title="All 4 branches missed.">    public void testSpeedCheck3() throws EncoderException {</span>
+<span class="fc" id="L216">        final BeiderMorseEncoder bmpm = this.createGenericApproxEncoder();</span>
+<span class="fc" id="L217">        final String phrase = &quot;abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz&quot;;</span>
+
+<span class="pc bpc" id="L219" title="4 of 10 branches missed.">        for (int i = 1; i &lt;= phrase.length(); i++) {</span>
+<span class="fc" id="L220">            bmpm.encode(phrase.subSequence(0, i));</span>
+        }
+<span class="fc" id="L222">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

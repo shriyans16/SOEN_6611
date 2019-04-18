@@ -1,0 +1,879 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Base64</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.binary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Base64 (org.apache.commons.codec.binary)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Base64</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.3%
+  </span>
+  <span class="absValue">
+    (26/ 27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.6%
+  </span>
+  <span class="absValue">
+    (173/ 181)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Base64$__CLR4_1_22hr2hrjuluj8tm</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    96.4%
+  </span>
+  <span class="absValue">
+    (27/ 28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.6%
+  </span>
+  <span class="absValue">
+    (174/ 182)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.binary;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.math.BigInteger;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Provides Base64 encoding and decoding as defined by &lt;a href=&quot;http://www.ietf.org/rfc/rfc2045.txt&quot;&gt;RFC 2045&lt;/a&gt;.
+<i>24</i>&nbsp; *
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * This class implements section &lt;cite&gt;6.8. Base64 Content-Transfer-Encoding&lt;/cite&gt; from RFC 2045 &lt;cite&gt;Multipurpose
+<i>27</i>&nbsp; * Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies&lt;/cite&gt; by Freed and Borenstein.
+<i>28</i>&nbsp; * &lt;/p&gt;
+<i>29</i>&nbsp; * &lt;p&gt;
+<i>30</i>&nbsp; * The class can be parameterized in the following manner with various constructors:
+<i>31</i>&nbsp; * &lt;ul&gt;
+<i>32</i>&nbsp; * &lt;li&gt;URL-safe mode: Default off.&lt;/li&gt;
+<i>33</i>&nbsp; * &lt;li&gt;Line length: Default 76. Line length that aren&#39;t multiples of 4 will still essentially end up being multiples of
+<i>34</i>&nbsp; * 4 in the encoded data.
+<i>35</i>&nbsp; * &lt;li&gt;Line separator: Default is CRLF (&quot;\r\n&quot;)&lt;/li&gt;
+<i>36</i>&nbsp; * &lt;/ul&gt;
+<i>37</i>&nbsp; * &lt;/p&gt;
+<i>38</i>&nbsp; * &lt;p&gt;
+<i>39</i>&nbsp; * Since this class operates directly on byte streams, and not character streams, it is hard-coded to only
+<i>40</i>&nbsp; * encode/decode character encodings which are compatible with the lower 127 ASCII chart (ISO-8859-1, Windows-1252,
+<i>41</i>&nbsp; * UTF-8, etc).
+<i>42</i>&nbsp; * &lt;/p&gt;
+<i>43</i>&nbsp; * &lt;p&gt;
+<i>44</i>&nbsp; * This class is thread-safe.
+<i>45</i>&nbsp; * &lt;/p&gt;
+<i>46</i>&nbsp; *
+<i>47</i>&nbsp; * @see &lt;a href=&quot;http://www.ietf.org/rfc/rfc2045.txt&quot;&gt;RFC 2045&lt;/a&gt;
+<i>48</i>&nbsp; * @since 1.0
+<i>49</i>&nbsp; * @version $Id$
+<i>50</i>&nbsp; */
+<b class="fc"><i>51</i>&nbsp;public class Base64 extends BaseNCodec {</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * BASE32 characters are 6 bits in length.
+<i>55</i>&nbsp;     * They are formed by taking a block of 3 octets to form a 24-bit string,
+<i>56</i>&nbsp;     * which is converted into 4 BASE64 characters.
+<i>57</i>&nbsp;     */
+<i>58</i>&nbsp;    private static final int BITS_PER_ENCODED_BYTE = 6;
+<i>59</i>&nbsp;    private static final int BYTES_PER_UNENCODED_BLOCK = 3;
+<i>60</i>&nbsp;    private static final int BYTES_PER_ENCODED_BLOCK = 4;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * Chunk separator per RFC 2045 section 2.1.
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     * &lt;p&gt;
+<i>66</i>&nbsp;     * N.B. The next major release may break compatibility and make this field private.
+<i>67</i>&nbsp;     * &lt;/p&gt;
+<i>68</i>&nbsp;     *
+<i>69</i>&nbsp;     * @see &lt;a href=&quot;http://www.ietf.org/rfc/rfc2045.txt&quot;&gt;RFC 2045 section 2.1&lt;/a&gt;
+<i>70</i>&nbsp;     */
+<b class="fc"><i>71</i>&nbsp;    static final byte[] CHUNK_SEPARATOR = {&#39;\r&#39;, &#39;\n&#39;};</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /**
+<i>74</i>&nbsp;     * This array is a lookup table that translates 6-bit positive integer index values into their &quot;Base64 Alphabet&quot;
+<i>75</i>&nbsp;     * equivalents as specified in Table 1 of RFC 2045.
+<i>76</i>&nbsp;     *
+<i>77</i>&nbsp;     * Thanks to &quot;commons&quot; project in ws.apache.org for this code.
+<i>78</i>&nbsp;     * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
+<i>79</i>&nbsp;     */
+<b class="fc"><i>80</i>&nbsp;    private static final byte[] STANDARD_ENCODE_TABLE = {</b>
+<i>81</i>&nbsp;            &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;, &#39;I&#39;, &#39;J&#39;, &#39;K&#39;, &#39;L&#39;, &#39;M&#39;,
+<i>82</i>&nbsp;            &#39;N&#39;, &#39;O&#39;, &#39;P&#39;, &#39;Q&#39;, &#39;R&#39;, &#39;S&#39;, &#39;T&#39;, &#39;U&#39;, &#39;V&#39;, &#39;W&#39;, &#39;X&#39;, &#39;Y&#39;, &#39;Z&#39;,
+<i>83</i>&nbsp;            &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;,
+<i>84</i>&nbsp;            &#39;n&#39;, &#39;o&#39;, &#39;p&#39;, &#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;,
+<i>85</i>&nbsp;            &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;+&#39;, &#39;/&#39;
+<i>86</i>&nbsp;    };
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * This is a copy of the STANDARD_ENCODE_TABLE above, but with + and /
+<i>90</i>&nbsp;     * changed to - and _ to make the encoded Base64 results more URL-SAFE.
+<i>91</i>&nbsp;     * This table is only used when the Base64&#39;s mode is set to URL-SAFE.
+<i>92</i>&nbsp;     */
+<b class="fc"><i>93</i>&nbsp;    private static final byte[] URL_SAFE_ENCODE_TABLE = {</b>
+<i>94</i>&nbsp;            &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;, &#39;G&#39;, &#39;H&#39;, &#39;I&#39;, &#39;J&#39;, &#39;K&#39;, &#39;L&#39;, &#39;M&#39;,
+<i>95</i>&nbsp;            &#39;N&#39;, &#39;O&#39;, &#39;P&#39;, &#39;Q&#39;, &#39;R&#39;, &#39;S&#39;, &#39;T&#39;, &#39;U&#39;, &#39;V&#39;, &#39;W&#39;, &#39;X&#39;, &#39;Y&#39;, &#39;Z&#39;,
+<i>96</i>&nbsp;            &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;, &#39;i&#39;, &#39;j&#39;, &#39;k&#39;, &#39;l&#39;, &#39;m&#39;,
+<i>97</i>&nbsp;            &#39;n&#39;, &#39;o&#39;, &#39;p&#39;, &#39;q&#39;, &#39;r&#39;, &#39;s&#39;, &#39;t&#39;, &#39;u&#39;, &#39;v&#39;, &#39;w&#39;, &#39;x&#39;, &#39;y&#39;, &#39;z&#39;,
+<i>98</i>&nbsp;            &#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;-&#39;, &#39;_&#39;
+<i>99</i>&nbsp;    };
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * This array is a lookup table that translates Unicode characters drawn from the &quot;Base64 Alphabet&quot; (as specified
+<i>103</i>&nbsp;     * in Table 1 of RFC 2045) into their 6-bit positive integer equivalents. Characters that are not in the Base64
+<i>104</i>&nbsp;     * alphabet but fall within the bounds of the array are translated to -1.
+<i>105</i>&nbsp;     *
+<i>106</i>&nbsp;     * Note: &#39;+&#39; and &#39;-&#39; both decode to 62. &#39;/&#39; and &#39;_&#39; both decode to 63. This means decoder seamlessly handles both
+<i>107</i>&nbsp;     * URL_SAFE and STANDARD base64. (The encoder, on the other hand, needs to know ahead of time what to emit).
+<i>108</i>&nbsp;     *
+<i>109</i>&nbsp;     * Thanks to &quot;commons&quot; project in ws.apache.org for this code.
+<i>110</i>&nbsp;     * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
+<i>111</i>&nbsp;     */
+<b class="fc"><i>112</i>&nbsp;    private static final byte[] DECODE_TABLE = {</b>
+<i>113</i>&nbsp;            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+<i>114</i>&nbsp;            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+<i>115</i>&nbsp;            -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, 62, -1, 63, 52, 53, 54,
+<i>116</i>&nbsp;            55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4,
+<i>117</i>&nbsp;            5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+<i>118</i>&nbsp;            24, 25, -1, -1, -1, -1, 63, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+<i>119</i>&nbsp;            35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+<i>120</i>&nbsp;    };
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Base64 uses 6-bit fields.
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    /** Mask used to extract 6 bits, used when encoding */
+<i>126</i>&nbsp;    private static final int MASK_6BITS = 0x3f;
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    // The static final fields above are used for the original static byte[] methods on Base64.
+<i>129</i>&nbsp;    // The private member fields below are used with the new streaming approach, which requires
+<i>130</i>&nbsp;    // some state be preserved between calls of encode() and decode().
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * Encode table to use: either STANDARD or URL_SAFE. Note: the DECODE_TABLE above remains static because it is able
+<i>134</i>&nbsp;     * to decode both STANDARD and URL_SAFE streams, but the encodeTable must be a member variable so we can switch
+<i>135</i>&nbsp;     * between the two modes.
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    private final byte[] encodeTable;
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    // Only one decode table currently; keep for consistency with Base32 code
+<b class="fc"><i>140</i>&nbsp;    private final byte[] decodeTable = DECODE_TABLE;</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * Line separator for encoding. Not used when decoding. Only used if lineLength &gt; 0.
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    private final byte[] lineSeparator;
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Convenience variable to help us determine when our buffer is going to run out of room and needs resizing.
+<i>149</i>&nbsp;     * &lt;code&gt;decodeSize = 3 + lineSeparator.length;&lt;/code&gt;
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    private final int decodeSize;
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * Convenience variable to help us determine when our buffer is going to run out of room and needs resizing.
+<i>155</i>&nbsp;     * &lt;code&gt;encodeSize = 4 + lineSeparator.length;&lt;/code&gt;
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    private final int encodeSize;
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /**
+<i>160</i>&nbsp;     * Creates a Base64 codec used for decoding (all modes) and encoding in URL-unsafe mode.
+<i>161</i>&nbsp;     * &lt;p&gt;
+<i>162</i>&nbsp;     * When encoding the line length is 0 (no chunking), and the encoding table is STANDARD_ENCODE_TABLE.
+<i>163</i>&nbsp;     * &lt;/p&gt;
+<i>164</i>&nbsp;     *
+<i>165</i>&nbsp;     * &lt;p&gt;
+<i>166</i>&nbsp;     * When decoding all variants are supported.
+<i>167</i>&nbsp;     * &lt;/p&gt;
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public Base64() {
+<b class="fc"><i>170</i>&nbsp;        this(0);</b>
+<b class="fc"><i>171</i>&nbsp;    }</b>
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /**
+<i>174</i>&nbsp;     * Creates a Base64 codec used for decoding (all modes) and encoding in the given URL-safe mode.
+<i>175</i>&nbsp;     * &lt;p&gt;
+<i>176</i>&nbsp;     * When encoding the line length is 76, the line separator is CRLF, and the encoding table is
+<i>177</i>&nbsp;     * STANDARD_ENCODE_TABLE.
+<i>178</i>&nbsp;     * &lt;/p&gt;
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * &lt;p&gt;
+<i>181</i>&nbsp;     * When decoding all variants are supported.
+<i>182</i>&nbsp;     * &lt;/p&gt;
+<i>183</i>&nbsp;     *
+<i>184</i>&nbsp;     * @param urlSafe
+<i>185</i>&nbsp;     *            if {@code true}, URL-safe encoding is used. In most cases this should be set to {@code false}.
+<i>186</i>&nbsp;     * @since 1.4
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    public Base64(boolean urlSafe) {
+<b class="fc"><i>189</i>&nbsp;        this(MIME_CHUNK_SIZE, CHUNK_SEPARATOR, urlSafe);</b>
+<b class="fc"><i>190</i>&nbsp;    }</b>
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * Creates a Base64 codec used for decoding (all modes) and encoding in URL-unsafe mode.
+<i>194</i>&nbsp;     * &lt;p&gt;
+<i>195</i>&nbsp;     * When encoding the line length is given in the constructor, the line separator is CRLF, and the encoding table is
+<i>196</i>&nbsp;     * STANDARD_ENCODE_TABLE.
+<i>197</i>&nbsp;     * &lt;/p&gt;
+<i>198</i>&nbsp;     * &lt;p&gt;
+<i>199</i>&nbsp;     * Line lengths that aren&#39;t multiples of 4 will still essentially end up being multiples of 4 in the encoded data.
+<i>200</i>&nbsp;     * &lt;/p&gt;
+<i>201</i>&nbsp;     * &lt;p&gt;
+<i>202</i>&nbsp;     * When decoding all variants are supported.
+<i>203</i>&nbsp;     * &lt;/p&gt;
+<i>204</i>&nbsp;     *
+<i>205</i>&nbsp;     * @param lineLength
+<i>206</i>&nbsp;     *            Each line of encoded data will be at most of the given length (rounded down to nearest multiple of
+<i>207</i>&nbsp;     *            4). If lineLength &lt;= 0, then the output will not be divided into lines (chunks). Ignored when
+<i>208</i>&nbsp;     *            decoding.
+<i>209</i>&nbsp;     * @since 1.4
+<i>210</i>&nbsp;     */
+<i>211</i>&nbsp;    public Base64(int lineLength) {
+<b class="fc"><i>212</i>&nbsp;        this(lineLength, CHUNK_SEPARATOR);</b>
+<b class="fc"><i>213</i>&nbsp;    }</b>
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;    /**
+<i>216</i>&nbsp;     * Creates a Base64 codec used for decoding (all modes) and encoding in URL-unsafe mode.
+<i>217</i>&nbsp;     * &lt;p&gt;
+<i>218</i>&nbsp;     * When encoding the line length and line separator are given in the constructor, and the encoding table is
+<i>219</i>&nbsp;     * STANDARD_ENCODE_TABLE.
+<i>220</i>&nbsp;     * &lt;/p&gt;
+<i>221</i>&nbsp;     * &lt;p&gt;
+<i>222</i>&nbsp;     * Line lengths that aren&#39;t multiples of 4 will still essentially end up being multiples of 4 in the encoded data.
+<i>223</i>&nbsp;     * &lt;/p&gt;
+<i>224</i>&nbsp;     * &lt;p&gt;
+<i>225</i>&nbsp;     * When decoding all variants are supported.
+<i>226</i>&nbsp;     * &lt;/p&gt;
+<i>227</i>&nbsp;     *
+<i>228</i>&nbsp;     * @param lineLength
+<i>229</i>&nbsp;     *            Each line of encoded data will be at most of the given length (rounded down to nearest multiple of
+<i>230</i>&nbsp;     *            4). If lineLength &lt;= 0, then the output will not be divided into lines (chunks). Ignored when
+<i>231</i>&nbsp;     *            decoding.
+<i>232</i>&nbsp;     * @param lineSeparator
+<i>233</i>&nbsp;     *            Each line of encoded data will end with this sequence of bytes.
+<i>234</i>&nbsp;     * @throws IllegalArgumentException
+<i>235</i>&nbsp;     *             Thrown when the provided lineSeparator included some base64 characters.
+<i>236</i>&nbsp;     * @since 1.4
+<i>237</i>&nbsp;     */
+<i>238</i>&nbsp;    public Base64(int lineLength, byte[] lineSeparator) {
+<b class="fc"><i>239</i>&nbsp;        this(lineLength, lineSeparator, false);</b>
+<b class="fc"><i>240</i>&nbsp;    }</b>
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    /**
+<i>243</i>&nbsp;     * Creates a Base64 codec used for decoding (all modes) and encoding in URL-unsafe mode.
+<i>244</i>&nbsp;     * &lt;p&gt;
+<i>245</i>&nbsp;     * When encoding the line length and line separator are given in the constructor, and the encoding table is
+<i>246</i>&nbsp;     * STANDARD_ENCODE_TABLE.
+<i>247</i>&nbsp;     * &lt;/p&gt;
+<i>248</i>&nbsp;     * &lt;p&gt;
+<i>249</i>&nbsp;     * Line lengths that aren&#39;t multiples of 4 will still essentially end up being multiples of 4 in the encoded data.
+<i>250</i>&nbsp;     * &lt;/p&gt;
+<i>251</i>&nbsp;     * &lt;p&gt;
+<i>252</i>&nbsp;     * When decoding all variants are supported.
+<i>253</i>&nbsp;     * &lt;/p&gt;
+<i>254</i>&nbsp;     *
+<i>255</i>&nbsp;     * @param lineLength
+<i>256</i>&nbsp;     *            Each line of encoded data will be at most of the given length (rounded down to nearest multiple of
+<i>257</i>&nbsp;     *            4). If lineLength &lt;= 0, then the output will not be divided into lines (chunks). Ignored when
+<i>258</i>&nbsp;     *            decoding.
+<i>259</i>&nbsp;     * @param lineSeparator
+<i>260</i>&nbsp;     *            Each line of encoded data will end with this sequence of bytes.
+<i>261</i>&nbsp;     * @param urlSafe
+<i>262</i>&nbsp;     *            Instead of emitting &#39;+&#39; and &#39;/&#39; we emit &#39;-&#39; and &#39;_&#39; respectively. urlSafe is only applied to encode
+<i>263</i>&nbsp;     *            operations. Decoding seamlessly handles both modes.
+<i>264</i>&nbsp;     * @throws IllegalArgumentException
+<i>265</i>&nbsp;     *             The provided lineSeparator included some base64 characters. That&#39;s not going to work!
+<i>266</i>&nbsp;     * @since 1.4
+<i>267</i>&nbsp;     */
+<i>268</i>&nbsp;    public Base64(int lineLength, byte[] lineSeparator, boolean urlSafe) {
+<b class="fc"><i>269</i>&nbsp;        super(BYTES_PER_UNENCODED_BLOCK, BYTES_PER_ENCODED_BLOCK,</b>
+<i>270</i>&nbsp;                lineLength,
+<b class="fc"><i>271</i>&nbsp;                lineSeparator == null ? 0 : lineSeparator.length);</b>
+<i>272</i>&nbsp;        // TODO could be simplified if there is no requirement to reject invalid line sep when length &lt;=0
+<i>273</i>&nbsp;        // @see test case Base64Test.testConstructors()
+<b class="fc"><i>274</i>&nbsp;        if (lineSeparator != null) {</b>
+<b class="fc"><i>275</i>&nbsp;            if (containsAlphabetOrPad(lineSeparator)) {</b>
+<b class="fc"><i>276</i>&nbsp;                String sep = StringUtils.newStringUtf8(lineSeparator);</b>
+<b class="fc"><i>277</i>&nbsp;                throw new IllegalArgumentException(&quot;lineSeparator must not contain base64 characters: [&quot; + sep + &quot;]&quot;);</b>
+<i>278</i>&nbsp;            }
+<b class="fc"><i>279</i>&nbsp;            if (lineLength &gt; 0){ // null line-sep forces no chunking rather than throwing IAE</b>
+<b class="fc"><i>280</i>&nbsp;                this.encodeSize = BYTES_PER_ENCODED_BLOCK + lineSeparator.length;</b>
+<b class="fc"><i>281</i>&nbsp;                this.lineSeparator = new byte[lineSeparator.length];</b>
+<b class="fc"><i>282</i>&nbsp;                System.arraycopy(lineSeparator, 0, this.lineSeparator, 0, lineSeparator.length);</b>
+<i>283</i>&nbsp;            } else {
+<b class="fc"><i>284</i>&nbsp;                this.encodeSize = BYTES_PER_ENCODED_BLOCK;</b>
+<b class="fc"><i>285</i>&nbsp;                this.lineSeparator = null;</b>
+<i>286</i>&nbsp;            }
+<i>287</i>&nbsp;        } else {
+<b class="fc"><i>288</i>&nbsp;            this.encodeSize = BYTES_PER_ENCODED_BLOCK;</b>
+<b class="fc"><i>289</i>&nbsp;            this.lineSeparator = null;</b>
+<i>290</i>&nbsp;        }
+<b class="fc"><i>291</i>&nbsp;        this.decodeSize = this.encodeSize - 1;</b>
+<b class="fc"><i>292</i>&nbsp;        this.encodeTable = urlSafe ? URL_SAFE_ENCODE_TABLE : STANDARD_ENCODE_TABLE;</b>
+<b class="fc"><i>293</i>&nbsp;    }</b>
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;    /**
+<i>296</i>&nbsp;     * Returns our current encode mode. True if we&#39;re URL-SAFE, false otherwise.
+<i>297</i>&nbsp;     *
+<i>298</i>&nbsp;     * @return true if we&#39;re in URL-SAFE mode, false otherwise.
+<i>299</i>&nbsp;     * @since 1.4
+<i>300</i>&nbsp;     */
+<b class="fc"><i>301</i>&nbsp;    public boolean isUrlSafe() {</b>
+<b class="fc"><i>302</i>&nbsp;        return this.encodeTable == URL_SAFE_ENCODE_TABLE;</b>
+<i>303</i>&nbsp;    }
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    /**
+<i>306</i>&nbsp;     * &lt;p&gt;
+<i>307</i>&nbsp;     * Encodes all of the provided data, starting at inPos, for inAvail bytes. Must be called at least twice: once with
+<i>308</i>&nbsp;     * the data to encode, and once with inAvail set to &quot;-1&quot; to alert encoder that EOF has been reached, so flush last
+<i>309</i>&nbsp;     * remaining bytes (if not multiple of 3).
+<i>310</i>&nbsp;     * &lt;/p&gt;
+<i>311</i>&nbsp;     * &lt;p&gt;
+<i>312</i>&nbsp;     * Thanks to &quot;commons&quot; project in ws.apache.org for the bitwise operations, and general approach.
+<i>313</i>&nbsp;     * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
+<i>314</i>&nbsp;     * &lt;/p&gt;
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @param in
+<i>317</i>&nbsp;     *            byte[] array of binary data to base64 encode.
+<i>318</i>&nbsp;     * @param inPos
+<i>319</i>&nbsp;     *            Position to start reading data from.
+<i>320</i>&nbsp;     * @param inAvail
+<i>321</i>&nbsp;     *            Amount of bytes available from input for encoding.
+<i>322</i>&nbsp;     * @param context
+<i>323</i>&nbsp;     *            the context to be used
+<i>324</i>&nbsp;     */
+<i>325</i>&nbsp;    @Override
+<b class="fc"><i>326</i>&nbsp;    void encode(byte[] in, int inPos, int inAvail, Context context) {</b>
+<b class="fc"><i>327</i>&nbsp;        if (context.eof) {</b>
+<b class="fc"><i>328</i>&nbsp;            return;</b>
+<i>329</i>&nbsp;        }
+<i>330</i>&nbsp;        // inAvail &lt; 0 is how we&#39;re informed of EOF in the underlying data we&#39;re
+<i>331</i>&nbsp;        // encoding.
+<b class="fc"><i>332</i>&nbsp;        if (inAvail &lt; 0) {</b>
+<b class="fc"><i>333</i>&nbsp;            context.eof = true;</b>
+<b class="fc"><i>334</i>&nbsp;            if (0 == context.modulus &amp;&amp; lineLength == 0) {</b>
+<b class="fc"><i>335</i>&nbsp;                return; // no leftovers to process and not using chunking</b>
+<i>336</i>&nbsp;            }
+<b class="fc"><i>337</i>&nbsp;            final byte[] buffer = ensureBufferSize(encodeSize, context);</b>
+<b class="fc"><i>338</i>&nbsp;            final int savedPos = context.pos;</b>
+<b class="fc"><i>339</i>&nbsp;            switch (context.modulus) { // 0-2</b>
+<b class="fc"><i>340</i>&nbsp;                case 0 : // nothing to do here</b>
+<b class="fc"><i>341</i>&nbsp;                    break;</b>
+<b class="fc"><i>342</i>&nbsp;                case 1 : // 8 bits = 6 + 2</b>
+<i>343</i>&nbsp;                    // top 6 bits:
+<b class="fc"><i>344</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &gt;&gt; 2) &amp; MASK_6BITS];</b>
+<i>345</i>&nbsp;                    // remaining 2:
+<b class="fc"><i>346</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &lt;&lt; 4) &amp; MASK_6BITS];</b>
+<i>347</i>&nbsp;                    // URL-SAFE skips the padding to further reduce size.
+<b class="fc"><i>348</i>&nbsp;                    if (encodeTable == STANDARD_ENCODE_TABLE) {</b>
+<b class="fc"><i>349</i>&nbsp;                        buffer[context.pos++] = PAD;</b>
+<b class="fc"><i>350</i>&nbsp;                        buffer[context.pos++] = PAD;</b>
+<i>351</i>&nbsp;                    }
+<b class="fc"><i>352</i>&nbsp;                    break;</b>
+<i>353</i>&nbsp;
+<b class="fc"><i>354</i>&nbsp;                case 2 : // 16 bits = 6 + 6 + 4</b>
+<b class="fc"><i>355</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &gt;&gt; 10) &amp; MASK_6BITS];</b>
+<b class="fc"><i>356</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &gt;&gt; 4) &amp; MASK_6BITS];</b>
+<b class="fc"><i>357</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &lt;&lt; 2) &amp; MASK_6BITS];</b>
+<i>358</i>&nbsp;                    // URL-SAFE skips the padding to further reduce size.
+<b class="fc"><i>359</i>&nbsp;                    if (encodeTable == STANDARD_ENCODE_TABLE) {</b>
+<b class="fc"><i>360</i>&nbsp;                        buffer[context.pos++] = PAD;</b>
+<i>361</i>&nbsp;                    }
+<b class="fc"><i>362</i>&nbsp;                    break;</b>
+<b class="nc"><i>363</i>&nbsp;                default:</b>
+<b class="nc"><i>364</i>&nbsp;                    throw new IllegalStateException(&quot;Impossible modulus &quot;+context.modulus);</b>
+<i>365</i>&nbsp;            }
+<b class="fc"><i>366</i>&nbsp;            context.currentLinePos += context.pos - savedPos; // keep track of current line position</b>
+<i>367</i>&nbsp;            // if currentPos == 0 we are at the start of a line, so don&#39;t add CRLF
+<b class="fc"><i>368</i>&nbsp;            if (lineLength &gt; 0 &amp;&amp; context.currentLinePos &gt; 0) {</b>
+<b class="fc"><i>369</i>&nbsp;                System.arraycopy(lineSeparator, 0, buffer, context.pos, lineSeparator.length);</b>
+<b class="fc"><i>370</i>&nbsp;                context.pos += lineSeparator.length;</b>
+<i>371</i>&nbsp;            }
+<b class="fc"><i>372</i>&nbsp;        } else {</b>
+<b class="fc"><i>373</i>&nbsp;            for (int i = 0; i &lt; inAvail; i++) {</b>
+<b class="fc"><i>374</i>&nbsp;                final byte[] buffer = ensureBufferSize(encodeSize, context);</b>
+<b class="fc"><i>375</i>&nbsp;                context.modulus = (context.modulus+1) % BYTES_PER_UNENCODED_BLOCK;</b>
+<b class="fc"><i>376</i>&nbsp;                int b = in[inPos++];</b>
+<b class="fc"><i>377</i>&nbsp;                if (b &lt; 0) {</b>
+<b class="fc"><i>378</i>&nbsp;                    b += 256;</b>
+<i>379</i>&nbsp;                }
+<b class="fc"><i>380</i>&nbsp;                context.ibitWorkArea = (context.ibitWorkArea &lt;&lt; 8) + b; //  BITS_PER_BYTE</b>
+<b class="fc"><i>381</i>&nbsp;                if (0 == context.modulus) { // 3 bytes = 24 bits = 4 * 6 bits to extract</b>
+<b class="fc"><i>382</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &gt;&gt; 18) &amp; MASK_6BITS];</b>
+<b class="fc"><i>383</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &gt;&gt; 12) &amp; MASK_6BITS];</b>
+<b class="fc"><i>384</i>&nbsp;                    buffer[context.pos++] = encodeTable[(context.ibitWorkArea &gt;&gt; 6) &amp; MASK_6BITS];</b>
+<b class="fc"><i>385</i>&nbsp;                    buffer[context.pos++] = encodeTable[context.ibitWorkArea &amp; MASK_6BITS];</b>
+<b class="fc"><i>386</i>&nbsp;                    context.currentLinePos += BYTES_PER_ENCODED_BLOCK;</b>
+<b class="fc"><i>387</i>&nbsp;                    if (lineLength &gt; 0 &amp;&amp; lineLength &lt;= context.currentLinePos) {</b>
+<b class="fc"><i>388</i>&nbsp;                        System.arraycopy(lineSeparator, 0, buffer, context.pos, lineSeparator.length);</b>
+<b class="fc"><i>389</i>&nbsp;                        context.pos += lineSeparator.length;</b>
+<b class="fc"><i>390</i>&nbsp;                        context.currentLinePos = 0;</b>
+<i>391</i>&nbsp;                    }
+<i>392</i>&nbsp;                }
+<i>393</i>&nbsp;            }
+<i>394</i>&nbsp;        }
+<b class="fc"><i>395</i>&nbsp;    }</b>
+<i>396</i>&nbsp;
+<i>397</i>&nbsp;    /**
+<i>398</i>&nbsp;     * &lt;p&gt;
+<i>399</i>&nbsp;     * Decodes all of the provided data, starting at inPos, for inAvail bytes. Should be called at least twice: once
+<i>400</i>&nbsp;     * with the data to decode, and once with inAvail set to &quot;-1&quot; to alert decoder that EOF has been reached. The &quot;-1&quot;
+<i>401</i>&nbsp;     * call is not necessary when decoding, but it doesn&#39;t hurt, either.
+<i>402</i>&nbsp;     * &lt;/p&gt;
+<i>403</i>&nbsp;     * &lt;p&gt;
+<i>404</i>&nbsp;     * Ignores all non-base64 characters. This is how chunked (e.g. 76 character) data is handled, since CR and LF are
+<i>405</i>&nbsp;     * silently ignored, but has implications for other bytes, too. This method subscribes to the garbage-in,
+<i>406</i>&nbsp;     * garbage-out philosophy: it will not check the provided data for validity.
+<i>407</i>&nbsp;     * &lt;/p&gt;
+<i>408</i>&nbsp;     * &lt;p&gt;
+<i>409</i>&nbsp;     * Thanks to &quot;commons&quot; project in ws.apache.org for the bitwise operations, and general approach.
+<i>410</i>&nbsp;     * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
+<i>411</i>&nbsp;     * &lt;/p&gt;
+<i>412</i>&nbsp;     *
+<i>413</i>&nbsp;     * @param in
+<i>414</i>&nbsp;     *            byte[] array of ascii data to base64 decode.
+<i>415</i>&nbsp;     * @param inPos
+<i>416</i>&nbsp;     *            Position to start reading data from.
+<i>417</i>&nbsp;     * @param inAvail
+<i>418</i>&nbsp;     *            Amount of bytes available from input for encoding.
+<i>419</i>&nbsp;     * @param context
+<i>420</i>&nbsp;     *            the context to be used
+<i>421</i>&nbsp;     */
+<i>422</i>&nbsp;    @Override
+<b class="fc"><i>423</i>&nbsp;    void decode(byte[] in, int inPos, int inAvail, Context context) {</b>
+<b class="fc"><i>424</i>&nbsp;        if (context.eof) {</b>
+<b class="fc"><i>425</i>&nbsp;            return;</b>
+<i>426</i>&nbsp;        }
+<b class="fc"><i>427</i>&nbsp;        if (inAvail &lt; 0) {</b>
+<b class="fc"><i>428</i>&nbsp;            context.eof = true;</b>
+<i>429</i>&nbsp;        }
+<b class="fc"><i>430</i>&nbsp;        for (int i = 0; i &lt; inAvail; i++) {</b>
+<b class="fc"><i>431</i>&nbsp;            final byte[] buffer = ensureBufferSize(decodeSize, context);</b>
+<b class="fc"><i>432</i>&nbsp;            final byte b = in[inPos++];</b>
+<b class="fc"><i>433</i>&nbsp;            if (b == PAD) {</b>
+<i>434</i>&nbsp;                // We&#39;re done.
+<b class="fc"><i>435</i>&nbsp;                context.eof = true;</b>
+<b class="fc"><i>436</i>&nbsp;                break;</b>
+<i>437</i>&nbsp;            } else {
+<b class="fc"><i>438</i>&nbsp;                if (b &gt;= 0 &amp;&amp; b &lt; DECODE_TABLE.length) {</b>
+<b class="fc"><i>439</i>&nbsp;                    final int result = DECODE_TABLE[b];</b>
+<b class="fc"><i>440</i>&nbsp;                    if (result &gt;= 0) {</b>
+<b class="fc"><i>441</i>&nbsp;                        context.modulus = (context.modulus+1) % BYTES_PER_ENCODED_BLOCK;</b>
+<b class="fc"><i>442</i>&nbsp;                        context.ibitWorkArea = (context.ibitWorkArea &lt;&lt; BITS_PER_ENCODED_BYTE) + result;</b>
+<b class="fc"><i>443</i>&nbsp;                        if (context.modulus == 0) {</b>
+<b class="fc"><i>444</i>&nbsp;                            buffer[context.pos++] = (byte) ((context.ibitWorkArea &gt;&gt; 16) &amp; MASK_8BITS);</b>
+<b class="fc"><i>445</i>&nbsp;                            buffer[context.pos++] = (byte) ((context.ibitWorkArea &gt;&gt; 8) &amp; MASK_8BITS);</b>
+<b class="fc"><i>446</i>&nbsp;                            buffer[context.pos++] = (byte) (context.ibitWorkArea &amp; MASK_8BITS);</b>
+<i>447</i>&nbsp;                        }
+<i>448</i>&nbsp;                    }
+<i>449</i>&nbsp;                }
+<i>450</i>&nbsp;            }
+<i>451</i>&nbsp;        }
+<i>452</i>&nbsp;
+<i>453</i>&nbsp;        // Two forms of EOF as far as base64 decoder is concerned: actual
+<i>454</i>&nbsp;        // EOF (-1) and first time &#39;=&#39; character is encountered in stream.
+<i>455</i>&nbsp;        // This approach makes the &#39;=&#39; padding characters completely optional.
+<b class="fc"><i>456</i>&nbsp;        if (context.eof &amp;&amp; context.modulus != 0) {</b>
+<b class="fc"><i>457</i>&nbsp;            final byte[] buffer = ensureBufferSize(decodeSize, context);</b>
+<i>458</i>&nbsp;
+<i>459</i>&nbsp;            // We have some spare bits remaining
+<i>460</i>&nbsp;            // Output all whole multiples of 8 bits and ignore the rest
+<b class="fc"><i>461</i>&nbsp;            switch (context.modulus) {</b>
+<i>462</i>&nbsp;//              case 0 : // impossible, as excluded above
+<b class="nc"><i>463</i>&nbsp;                case 1 : // 6 bits - ignore entirely</b>
+<i>464</i>&nbsp;                    // TODO not currently tested; perhaps it is impossible?
+<b class="nc"><i>465</i>&nbsp;                    break;</b>
+<b class="fc"><i>466</i>&nbsp;                case 2 : // 12 bits = 8 + 4</b>
+<b class="fc"><i>467</i>&nbsp;                    context.ibitWorkArea = context.ibitWorkArea &gt;&gt; 4; // dump the extra 4 bits</b>
+<b class="fc"><i>468</i>&nbsp;                    buffer[context.pos++] = (byte) ((context.ibitWorkArea) &amp; MASK_8BITS);</b>
+<b class="fc"><i>469</i>&nbsp;                    break;</b>
+<b class="fc"><i>470</i>&nbsp;                case 3 : // 18 bits = 8 + 8 + 2</b>
+<b class="fc"><i>471</i>&nbsp;                    context.ibitWorkArea = context.ibitWorkArea &gt;&gt; 2; // dump 2 bits</b>
+<b class="fc"><i>472</i>&nbsp;                    buffer[context.pos++] = (byte) ((context.ibitWorkArea &gt;&gt; 8) &amp; MASK_8BITS);</b>
+<b class="fc"><i>473</i>&nbsp;                    buffer[context.pos++] = (byte) ((context.ibitWorkArea) &amp; MASK_8BITS);</b>
+<b class="fc"><i>474</i>&nbsp;                    break;</b>
+<b class="nc"><i>475</i>&nbsp;                default:</b>
+<b class="nc"><i>476</i>&nbsp;                    throw new IllegalStateException(&quot;Impossible modulus &quot;+context.modulus);</b>
+<i>477</i>&nbsp;            }
+<i>478</i>&nbsp;        }
+<b class="fc"><i>479</i>&nbsp;    }</b>
+<i>480</i>&nbsp;
+<i>481</i>&nbsp;    /**
+<i>482</i>&nbsp;     * Tests a given byte array to see if it contains only valid characters within the Base64 alphabet. Currently the
+<i>483</i>&nbsp;     * method treats whitespace as valid.
+<i>484</i>&nbsp;     *
+<i>485</i>&nbsp;     * @param arrayOctet
+<i>486</i>&nbsp;     *            byte array to test
+<i>487</i>&nbsp;     * @return {@code true} if all bytes are valid characters in the Base64 alphabet or if the byte array is empty;
+<i>488</i>&nbsp;     *         {@code false}, otherwise
+<i>489</i>&nbsp;     * @deprecated 1.5 Use {@link #isBase64(byte[])}, will be removed in 2.0.
+<i>490</i>&nbsp;     */
+<i>491</i>&nbsp;    @Deprecated
+<b class="nc"><i>492</i>&nbsp;    public static boolean isArrayByteBase64(byte[] arrayOctet) {</b>
+<b class="nc"><i>493</i>&nbsp;        return isBase64(arrayOctet);</b>
+<i>494</i>&nbsp;    }
+<i>495</i>&nbsp;
+<i>496</i>&nbsp;    /**
+<i>497</i>&nbsp;     * Returns whether or not the &lt;code&gt;octet&lt;/code&gt; is in the base 64 alphabet.
+<i>498</i>&nbsp;     *
+<i>499</i>&nbsp;     * @param octet
+<i>500</i>&nbsp;     *            The value to test
+<i>501</i>&nbsp;     * @return {@code true} if the value is defined in the the base 64 alphabet, {@code false} otherwise.
+<i>502</i>&nbsp;     * @since 1.4
+<i>503</i>&nbsp;     */
+<b class="fc"><i>504</i>&nbsp;    public static boolean isBase64(byte octet) {</b>
+<b class="fc"><i>505</i>&nbsp;        return octet == PAD_DEFAULT || (octet &gt;= 0 &amp;&amp; octet &lt; DECODE_TABLE.length &amp;&amp; DECODE_TABLE[octet] != -1);</b>
+<i>506</i>&nbsp;    }
+<i>507</i>&nbsp;
+<i>508</i>&nbsp;    /**
+<i>509</i>&nbsp;     * Tests a given String to see if it contains only valid characters within the Base64 alphabet. Currently the
+<i>510</i>&nbsp;     * method treats whitespace as valid.
+<i>511</i>&nbsp;     *
+<i>512</i>&nbsp;     * @param base64
+<i>513</i>&nbsp;     *            String to test
+<i>514</i>&nbsp;     * @return {@code true} if all characters in the String are valid characters in the Base64 alphabet or if
+<i>515</i>&nbsp;     *         the String is empty; {@code false}, otherwise
+<i>516</i>&nbsp;     *  @since 1.5
+<i>517</i>&nbsp;     */
+<b class="fc"><i>518</i>&nbsp;    public static boolean isBase64(String base64) {</b>
+<b class="fc"><i>519</i>&nbsp;        return isBase64(StringUtils.getBytesUtf8(base64));</b>
+<i>520</i>&nbsp;    }
+<i>521</i>&nbsp;
+<i>522</i>&nbsp;    /**
+<i>523</i>&nbsp;     * Tests a given byte array to see if it contains only valid characters within the Base64 alphabet. Currently the
+<i>524</i>&nbsp;     * method treats whitespace as valid.
+<i>525</i>&nbsp;     *
+<i>526</i>&nbsp;     * @param arrayOctet
+<i>527</i>&nbsp;     *            byte array to test
+<i>528</i>&nbsp;     * @return {@code true} if all bytes are valid characters in the Base64 alphabet or if the byte array is empty;
+<i>529</i>&nbsp;     *         {@code false}, otherwise
+<i>530</i>&nbsp;     * @since 1.5
+<i>531</i>&nbsp;     */
+<b class="fc"><i>532</i>&nbsp;    public static boolean isBase64(byte[] arrayOctet) {</b>
+<b class="fc"><i>533</i>&nbsp;        for (int i = 0; i &lt; arrayOctet.length; i++) {</b>
+<b class="fc"><i>534</i>&nbsp;            if (!isBase64(arrayOctet[i]) &amp;&amp; !isWhiteSpace(arrayOctet[i])) {</b>
+<b class="fc"><i>535</i>&nbsp;                return false;</b>
+<i>536</i>&nbsp;            }
+<i>537</i>&nbsp;        }
+<b class="fc"><i>538</i>&nbsp;        return true;</b>
+<i>539</i>&nbsp;    }
+<i>540</i>&nbsp;
+<i>541</i>&nbsp;    /**
+<i>542</i>&nbsp;     * Encodes binary data using the base64 algorithm but does not chunk the output.
+<i>543</i>&nbsp;     *
+<i>544</i>&nbsp;     * @param binaryData
+<i>545</i>&nbsp;     *            binary data to encode
+<i>546</i>&nbsp;     * @return byte[] containing Base64 characters in their UTF-8 representation.
+<i>547</i>&nbsp;     */
+<b class="fc"><i>548</i>&nbsp;    public static byte[] encodeBase64(byte[] binaryData) {</b>
+<b class="fc"><i>549</i>&nbsp;        return encodeBase64(binaryData, false);</b>
+<i>550</i>&nbsp;    }
+<i>551</i>&nbsp;
+<i>552</i>&nbsp;    /**
+<i>553</i>&nbsp;     * Encodes binary data using the base64 algorithm but does not chunk the output.
+<i>554</i>&nbsp;     *
+<i>555</i>&nbsp;     * NOTE:  We changed the behaviour of this method from multi-line chunking (commons-codec-1.4) to
+<i>556</i>&nbsp;     * single-line non-chunking (commons-codec-1.5).
+<i>557</i>&nbsp;     *
+<i>558</i>&nbsp;     * @param binaryData
+<i>559</i>&nbsp;     *            binary data to encode
+<i>560</i>&nbsp;     * @return String containing Base64 characters.
+<i>561</i>&nbsp;     * @since 1.4 (NOTE:  1.4 chunked the output, whereas 1.5 does not).
+<i>562</i>&nbsp;     */
+<b class="fc"><i>563</i>&nbsp;    public static String encodeBase64String(byte[] binaryData) {</b>
+<b class="fc"><i>564</i>&nbsp;        return StringUtils.newStringUtf8(encodeBase64(binaryData, false));</b>
+<i>565</i>&nbsp;    }
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;    /**
+<i>568</i>&nbsp;     * Encodes binary data using a URL-safe variation of the base64 algorithm but does not chunk the output. The
+<i>569</i>&nbsp;     * url-safe variation emits - and _ instead of + and / characters.
+<i>570</i>&nbsp;     *
+<i>571</i>&nbsp;     * @param binaryData
+<i>572</i>&nbsp;     *            binary data to encode
+<i>573</i>&nbsp;     * @return byte[] containing Base64 characters in their UTF-8 representation.
+<i>574</i>&nbsp;     * @since 1.4
+<i>575</i>&nbsp;     */
+<b class="fc"><i>576</i>&nbsp;    public static byte[] encodeBase64URLSafe(byte[] binaryData) {</b>
+<b class="fc"><i>577</i>&nbsp;        return encodeBase64(binaryData, false, true);</b>
+<i>578</i>&nbsp;    }
+<i>579</i>&nbsp;
+<i>580</i>&nbsp;    /**
+<i>581</i>&nbsp;     * Encodes binary data using a URL-safe variation of the base64 algorithm but does not chunk the output. The
+<i>582</i>&nbsp;     * url-safe variation emits - and _ instead of + and / characters.
+<i>583</i>&nbsp;     *
+<i>584</i>&nbsp;     * @param binaryData
+<i>585</i>&nbsp;     *            binary data to encode
+<i>586</i>&nbsp;     * @return String containing Base64 characters
+<i>587</i>&nbsp;     * @since 1.4
+<i>588</i>&nbsp;     */
+<b class="fc"><i>589</i>&nbsp;    public static String encodeBase64URLSafeString(byte[] binaryData) {</b>
+<b class="fc"><i>590</i>&nbsp;        return StringUtils.newStringUtf8(encodeBase64(binaryData, false, true));</b>
+<i>591</i>&nbsp;    }
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;    /**
+<i>594</i>&nbsp;     * Encodes binary data using the base64 algorithm and chunks the encoded output into 76 character blocks
+<i>595</i>&nbsp;     *
+<i>596</i>&nbsp;     * @param binaryData
+<i>597</i>&nbsp;     *            binary data to encode
+<i>598</i>&nbsp;     * @return Base64 characters chunked in 76 character blocks
+<i>599</i>&nbsp;     */
+<b class="fc"><i>600</i>&nbsp;    public static byte[] encodeBase64Chunked(byte[] binaryData) {</b>
+<b class="fc"><i>601</i>&nbsp;        return encodeBase64(binaryData, true);</b>
+<i>602</i>&nbsp;    }
+<i>603</i>&nbsp;
+<i>604</i>&nbsp;    /**
+<i>605</i>&nbsp;     * Encodes binary data using the base64 algorithm, optionally chunking the output into 76 character blocks.
+<i>606</i>&nbsp;     *
+<i>607</i>&nbsp;     * @param binaryData
+<i>608</i>&nbsp;     *            Array containing binary data to encode.
+<i>609</i>&nbsp;     * @param isChunked
+<i>610</i>&nbsp;     *            if {@code true} this encoder will chunk the base64 output into 76 character blocks
+<i>611</i>&nbsp;     * @return Base64-encoded data.
+<i>612</i>&nbsp;     * @throws IllegalArgumentException
+<i>613</i>&nbsp;     *             Thrown when the input array needs an output array bigger than {@link Integer#MAX_VALUE}
+<i>614</i>&nbsp;     */
+<b class="fc"><i>615</i>&nbsp;    public static byte[] encodeBase64(byte[] binaryData, boolean isChunked) {</b>
+<b class="fc"><i>616</i>&nbsp;        return encodeBase64(binaryData, isChunked, false);</b>
+<i>617</i>&nbsp;    }
+<i>618</i>&nbsp;
+<i>619</i>&nbsp;    /**
+<i>620</i>&nbsp;     * Encodes binary data using the base64 algorithm, optionally chunking the output into 76 character blocks.
+<i>621</i>&nbsp;     *
+<i>622</i>&nbsp;     * @param binaryData
+<i>623</i>&nbsp;     *            Array containing binary data to encode.
+<i>624</i>&nbsp;     * @param isChunked
+<i>625</i>&nbsp;     *            if {@code true} this encoder will chunk the base64 output into 76 character blocks
+<i>626</i>&nbsp;     * @param urlSafe
+<i>627</i>&nbsp;     *            if {@code true} this encoder will emit - and _ instead of the usual + and / characters.
+<i>628</i>&nbsp;     * @return Base64-encoded data.
+<i>629</i>&nbsp;     * @throws IllegalArgumentException
+<i>630</i>&nbsp;     *             Thrown when the input array needs an output array bigger than {@link Integer#MAX_VALUE}
+<i>631</i>&nbsp;     * @since 1.4
+<i>632</i>&nbsp;     */
+<b class="fc"><i>633</i>&nbsp;    public static byte[] encodeBase64(byte[] binaryData, boolean isChunked, boolean urlSafe) {</b>
+<b class="fc"><i>634</i>&nbsp;        return encodeBase64(binaryData, isChunked, urlSafe, Integer.MAX_VALUE);</b>
+<i>635</i>&nbsp;    }
+<i>636</i>&nbsp;
+<i>637</i>&nbsp;    /**
+<i>638</i>&nbsp;     * Encodes binary data using the base64 algorithm, optionally chunking the output into 76 character blocks.
+<i>639</i>&nbsp;     *
+<i>640</i>&nbsp;     * @param binaryData
+<i>641</i>&nbsp;     *            Array containing binary data to encode.
+<i>642</i>&nbsp;     * @param isChunked
+<i>643</i>&nbsp;     *            if {@code true} this encoder will chunk the base64 output into 76 character blocks
+<i>644</i>&nbsp;     * @param urlSafe
+<i>645</i>&nbsp;     *            if {@code true} this encoder will emit - and _ instead of the usual + and / characters.
+<i>646</i>&nbsp;     * @param maxResultSize
+<i>647</i>&nbsp;     *            The maximum result size to accept.
+<i>648</i>&nbsp;     * @return Base64-encoded data.
+<i>649</i>&nbsp;     * @throws IllegalArgumentException
+<i>650</i>&nbsp;     *             Thrown when the input array needs an output array bigger than maxResultSize
+<i>651</i>&nbsp;     * @since 1.4
+<i>652</i>&nbsp;     */
+<b class="fc"><i>653</i>&nbsp;    public static byte[] encodeBase64(byte[] binaryData, boolean isChunked, boolean urlSafe, int maxResultSize) {</b>
+<b class="fc"><i>654</i>&nbsp;        if (binaryData == null || binaryData.length == 0) {</b>
+<b class="fc"><i>655</i>&nbsp;            return binaryData;</b>
+<i>656</i>&nbsp;        }
+<i>657</i>&nbsp;
+<i>658</i>&nbsp;        // Create this so can use the super-class method
+<i>659</i>&nbsp;        // Also ensures that the same roundings are performed by the ctor and the code
+<b class="fc"><i>660</i>&nbsp;        Base64 b64 = isChunked ? new Base64(urlSafe) : new Base64(0, CHUNK_SEPARATOR, urlSafe);</b>
+<b class="fc"><i>661</i>&nbsp;        long len = b64.getEncodedLength(binaryData);</b>
+<b class="fc"><i>662</i>&nbsp;        if (len &gt; maxResultSize) {</b>
+<b class="fc"><i>663</i>&nbsp;            throw new IllegalArgumentException(&quot;Input array too big, the output array would be bigger (&quot; +</b>
+<i>664</i>&nbsp;                len +
+<i>665</i>&nbsp;                &quot;) than the specified maximum size of &quot; +
+<i>666</i>&nbsp;                maxResultSize);
+<i>667</i>&nbsp;        }
+<i>668</i>&nbsp;
+<b class="fc"><i>669</i>&nbsp;        return b64.encode(binaryData);</b>
+<i>670</i>&nbsp;    }
+<i>671</i>&nbsp;
+<i>672</i>&nbsp;    /**
+<i>673</i>&nbsp;     * Decodes a Base64 String into octets
+<i>674</i>&nbsp;     *
+<i>675</i>&nbsp;     * @param base64String
+<i>676</i>&nbsp;     *            String containing Base64 data
+<i>677</i>&nbsp;     * @return Array containing decoded data.
+<i>678</i>&nbsp;     * @since 1.4
+<i>679</i>&nbsp;     */
+<b class="fc"><i>680</i>&nbsp;    public static byte[] decodeBase64(String base64String) {</b>
+<b class="fc"><i>681</i>&nbsp;        return new Base64().decode(base64String);</b>
+<i>682</i>&nbsp;    }
+<i>683</i>&nbsp;
+<i>684</i>&nbsp;    /**
+<i>685</i>&nbsp;     * Decodes Base64 data into octets
+<i>686</i>&nbsp;     *
+<i>687</i>&nbsp;     * @param base64Data
+<i>688</i>&nbsp;     *            Byte array containing Base64 data
+<i>689</i>&nbsp;     * @return Array containing decoded data.
+<i>690</i>&nbsp;     */
+<b class="fc"><i>691</i>&nbsp;    public static byte[] decodeBase64(byte[] base64Data) {</b>
+<b class="fc"><i>692</i>&nbsp;        return new Base64().decode(base64Data);</b>
+<i>693</i>&nbsp;    }
+<i>694</i>&nbsp;
+<i>695</i>&nbsp;    // Implementation of the Encoder Interface
+<i>696</i>&nbsp;
+<i>697</i>&nbsp;    // Implementation of integer encoding used for crypto
+<i>698</i>&nbsp;    /**
+<i>699</i>&nbsp;     * Decodes a byte64-encoded integer according to crypto standards such as W3C&#39;s XML-Signature
+<i>700</i>&nbsp;     *
+<i>701</i>&nbsp;     * @param pArray
+<i>702</i>&nbsp;     *            a byte array containing base64 character data
+<i>703</i>&nbsp;     * @return A BigInteger
+<i>704</i>&nbsp;     * @since 1.4
+<i>705</i>&nbsp;     */
+<b class="fc"><i>706</i>&nbsp;    public static BigInteger decodeInteger(byte[] pArray) {</b>
+<b class="fc"><i>707</i>&nbsp;        return new BigInteger(1, decodeBase64(pArray));</b>
+<i>708</i>&nbsp;    }
+<i>709</i>&nbsp;
+<i>710</i>&nbsp;    /**
+<i>711</i>&nbsp;     * Encodes to a byte64-encoded integer according to crypto standards such as W3C&#39;s XML-Signature
+<i>712</i>&nbsp;     *
+<i>713</i>&nbsp;     * @param bigInt
+<i>714</i>&nbsp;     *            a BigInteger
+<i>715</i>&nbsp;     * @return A byte array containing base64 character data
+<i>716</i>&nbsp;     * @throws NullPointerException
+<i>717</i>&nbsp;     *             if null is passed in
+<i>718</i>&nbsp;     * @since 1.4
+<i>719</i>&nbsp;     */
+<b class="fc"><i>720</i>&nbsp;    public static byte[] encodeInteger(BigInteger bigInt) {</b>
+<b class="fc"><i>721</i>&nbsp;        if (bigInt == null) {</b>
+<b class="fc"><i>722</i>&nbsp;            throw new NullPointerException(&quot;encodeInteger called with null parameter&quot;);</b>
+<i>723</i>&nbsp;        }
+<b class="fc"><i>724</i>&nbsp;        return encodeBase64(toIntegerBytes(bigInt), false);</b>
+<i>725</i>&nbsp;    }
+<i>726</i>&nbsp;
+<i>727</i>&nbsp;    /**
+<i>728</i>&nbsp;     * Returns a byte-array representation of a &lt;code&gt;BigInteger&lt;/code&gt; without sign bit.
+<i>729</i>&nbsp;     *
+<i>730</i>&nbsp;     * @param bigInt
+<i>731</i>&nbsp;     *            &lt;code&gt;BigInteger&lt;/code&gt; to be converted
+<i>732</i>&nbsp;     * @return a byte array representation of the BigInteger parameter
+<i>733</i>&nbsp;     */
+<b class="fc"><i>734</i>&nbsp;    static byte[] toIntegerBytes(BigInteger bigInt) {</b>
+<b class="fc"><i>735</i>&nbsp;        int bitlen = bigInt.bitLength();</b>
+<i>736</i>&nbsp;        // round bitlen
+<b class="fc"><i>737</i>&nbsp;        bitlen = ((bitlen + 7) &gt;&gt; 3) &lt;&lt; 3;</b>
+<b class="fc"><i>738</i>&nbsp;        byte[] bigBytes = bigInt.toByteArray();</b>
+<i>739</i>&nbsp;
+<b class="fc"><i>740</i>&nbsp;        if (((bigInt.bitLength() % 8) != 0) &amp;&amp; (((bigInt.bitLength() / 8) + 1) == (bitlen / 8))) {</b>
+<b class="fc"><i>741</i>&nbsp;            return bigBytes;</b>
+<i>742</i>&nbsp;        }
+<i>743</i>&nbsp;        // set up params for copying everything but sign bit
+<b class="fc"><i>744</i>&nbsp;        int startSrc = 0;</b>
+<b class="fc"><i>745</i>&nbsp;        int len = bigBytes.length;</b>
+<i>746</i>&nbsp;
+<i>747</i>&nbsp;        // if bigInt is exactly byte-aligned, just skip signbit in copy
+<b class="fc"><i>748</i>&nbsp;        if ((bigInt.bitLength() % 8) == 0) {</b>
+<b class="fc"><i>749</i>&nbsp;            startSrc = 1;</b>
+<b class="fc"><i>750</i>&nbsp;            len--;</b>
+<i>751</i>&nbsp;        }
+<b class="fc"><i>752</i>&nbsp;        int startDst = bitlen / 8 - len; // to pad w/ nulls as per spec</b>
+<b class="fc"><i>753</i>&nbsp;        byte[] resizedBytes = new byte[bitlen / 8];</b>
+<b class="fc"><i>754</i>&nbsp;        System.arraycopy(bigBytes, startSrc, resizedBytes, startDst, len);</b>
+<b class="fc"><i>755</i>&nbsp;        return resizedBytes;</b>
+<i>756</i>&nbsp;    }
+<i>757</i>&nbsp;
+<i>758</i>&nbsp;    /**
+<i>759</i>&nbsp;     * Returns whether or not the &lt;code&gt;octet&lt;/code&gt; is in the Base32 alphabet.
+<i>760</i>&nbsp;     *
+<i>761</i>&nbsp;     * @param octet
+<i>762</i>&nbsp;     *            The value to test
+<i>763</i>&nbsp;     * @return {@code true} if the value is defined in the the Base32 alphabet {@code false} otherwise.
+<i>764</i>&nbsp;     */
+<i>765</i>&nbsp;    @Override
+<b class="fc"><i>766</i>&nbsp;    protected boolean isInAlphabet(byte octet) {</b>
+<b class="fc"><i>767</i>&nbsp;        return octet &gt;= 0 &amp;&amp; octet &lt; decodeTable.length &amp;&amp; decodeTable[octet] != -1;</b>
+<i>768</i>&nbsp;    }
+<i>769</i>&nbsp;
+<i>770</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:33</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractCaverphone</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractCaverphone (org.apache.commons.codec.language)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractCaverphone</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.language;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.apache.commons.codec.EncoderException;
+<i>21</i>&nbsp;import org.apache.commons.codec.StringEncoder;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Encodes a string into a Caverphone value.
+<i>25</i>&nbsp; *
+<i>26</i>&nbsp; * This is an algorithm created by the Caversham Project at the University of Otago. It implements the Caverphone 2.0
+<i>27</i>&nbsp; * algorithm:
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * &lt;p&gt;This class is immutable and thread-safe.&lt;/p&gt;
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * @version $Id: Caverphone.java 1075947 2011-03-01 17:56:14Z ggregory $
+<i>32</i>&nbsp; * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Caverphone&quot;&gt;Wikipedia - Caverphone&lt;/a&gt;
+<i>33</i>&nbsp; * @since 1.5
+<i>34</i>&nbsp; */
+<i>35</i>&nbsp;public abstract class AbstractCaverphone implements StringEncoder {
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Creates an instance of the Caverphone encoder
+<i>39</i>&nbsp;     */
+<i>40</i>&nbsp;    public AbstractCaverphone() {
+<b class="fc"><i>41</i>&nbsp;        super();</b>
+<b class="fc"><i>42</i>&nbsp;    }</b>
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * Encodes an Object using the caverphone algorithm. This method is provided in order to satisfy the requirements of
+<i>46</i>&nbsp;     * the Encoder interface, and will throw an EncoderException if the supplied object is not of type java.lang.String.
+<i>47</i>&nbsp;     *
+<i>48</i>&nbsp;     * @param source
+<i>49</i>&nbsp;     *            Object to encode
+<i>50</i>&nbsp;     * @return An object (or type java.lang.String) containing the caverphone code which corresponds to the String
+<i>51</i>&nbsp;     *         supplied.
+<i>52</i>&nbsp;     * @throws EncoderException
+<i>53</i>&nbsp;     *             if the parameter supplied is not of type java.lang.String
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    @Override
+<i>56</i>&nbsp;    public Object encode(final Object source) throws EncoderException {
+<b class="fc"><i>57</i>&nbsp;        if (!(source instanceof String)) {</b>
+<b class="fc"><i>58</i>&nbsp;            throw new EncoderException(&quot;Parameter supplied to Caverphone encode is not of type java.lang.String&quot;);</b>
+<i>59</i>&nbsp;        }
+<b class="fc"><i>60</i>&nbsp;        return this.encode((String) source);</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Tests if the encodings of two strings are equal.
+<i>65</i>&nbsp;     *
+<i>66</i>&nbsp;     * This method might be promoted to a new AbstractStringEncoder superclass.
+<i>67</i>&nbsp;     *
+<i>68</i>&nbsp;     * @param str1
+<i>69</i>&nbsp;     *            First of two strings to compare
+<i>70</i>&nbsp;     * @param str2
+<i>71</i>&nbsp;     *            Second of two strings to compare
+<i>72</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if the encodings of these strings are identical, &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>73</i>&nbsp;     * @throws EncoderException
+<i>74</i>&nbsp;     *             thrown if there is an error condition during the encoding process.
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public boolean isEncodeEqual(final String str1, final String str2) throws EncoderException {
+<b class="fc"><i>77</i>&nbsp;        return this.encode(str1).equals(this.encode(str2));</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 18:48</div>
+</div>
+</body>
+</html>

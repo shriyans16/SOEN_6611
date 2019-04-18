@@ -1,0 +1,1138 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PiePlot3D</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PiePlot3D (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PiePlot3D</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (10/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    51.4%
+  </span>
+  <span class="absValue">
+    (262/ 510)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------
+<i>28</i>&nbsp; * PiePlot3D.java
+<i>29</i>&nbsp; * --------------
+<i>30</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Tomer Peretz;
+<i>33</i>&nbsp; * Contributor(s):   Richard Atkinson;
+<i>34</i>&nbsp; *                   David Gilbert (for Object Refinery Limited);
+<i>35</i>&nbsp; *                   Xun Kang;
+<i>36</i>&nbsp; *                   Christian W. Zuckschwerdt;
+<i>37</i>&nbsp; *                   Arnaud Lelievre;
+<i>38</i>&nbsp; *                   Dave Crane;
+<i>39</i>&nbsp; *                   Martin Hoeller;
+<i>40</i>&nbsp; *                   DaveLaw (dave ATT davelaw DOTT de);
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; * Changes
+<i>43</i>&nbsp; * -------
+<i>44</i>&nbsp; * 21-Jun-2002 : Version 1;
+<i>45</i>&nbsp; * 31-Jul-2002 : Modified to use startAngle and direction, drawing modified so
+<i>46</i>&nbsp; *               that charts render with foreground alpha &lt; 1.0 (DG);
+<i>47</i>&nbsp; * 05-Aug-2002 : Small modification to draw method to support URLs for HTML
+<i>48</i>&nbsp; *               image maps (RA);
+<i>49</i>&nbsp; * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
+<i>50</i>&nbsp; * 18-Oct-2002 : Added drawing bug fix sent in by Xun Kang, and made a couple
+<i>51</i>&nbsp; *               of other related fixes (DG);
+<i>52</i>&nbsp; * 30-Oct-2002 : Changed the PieDataset interface. Fixed another drawing
+<i>53</i>&nbsp; *               bug (DG);
+<i>54</i>&nbsp; * 12-Nov-2002 : Fixed null pointer exception for zero or negative values (DG);
+<i>55</i>&nbsp; * 07-Mar-2003 : Modified to pass pieIndex on to PieSectionEntity (DG);
+<i>56</i>&nbsp; * 21-Mar-2003 : Added workaround for bug id 620031 (DG);
+<i>57</i>&nbsp; * 26-Mar-2003 : Implemented Serializable (DG);
+<i>58</i>&nbsp; * 30-Jul-2003 : Modified entity constructor (CZ);
+<i>59</i>&nbsp; * 29-Aug-2003 : Small changes for API updates in PiePlot class (DG);
+<i>60</i>&nbsp; * 02-Sep-2003 : Fixed bug where the &#39;no data&#39; message is not displayed (DG);
+<i>61</i>&nbsp; * 08-Sep-2003 : Added internationalization via use of properties
+<i>62</i>&nbsp; *               resourceBundle (RFE 690236) (AL);
+<i>63</i>&nbsp; * 29-Oct-2003 : Added workaround for font alignment in PDF output (DG);
+<i>64</i>&nbsp; * 20-Nov-2003 : Fixed bug 845289 (sides not showing) (DG);
+<i>65</i>&nbsp; * 25-Nov-2003 : Added patch (845095) to fix outline paint issues (DG);
+<i>66</i>&nbsp; * 10-Mar-2004 : Numerous changes to enhance labelling (DG);
+<i>67</i>&nbsp; * 31-Mar-2004 : Adjusted plot area when label generator is null (DG);
+<i>68</i>&nbsp; * 08-Apr-2004 : Added flag to PiePlot class to control the treatment of null
+<i>69</i>&nbsp; *               values (DG);
+<i>70</i>&nbsp; *               Added pieIndex to PieSectionEntity (DG);
+<i>71</i>&nbsp; * 15-Nov-2004 : Removed creation of default tool tip generator (DG);
+<i>72</i>&nbsp; * 16-Jun-2005 : Added default constructor (DG);
+<i>73</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>74</i>&nbsp; * 27-Sep-2006 : Updated draw() method for new lookup methods (DG);
+<i>75</i>&nbsp; * 22-Mar-2007 : Added equals() override (DG);
+<i>76</i>&nbsp; * 18-Jun-2007 : Added handling for simple label option (DG);
+<i>77</i>&nbsp; * 04-Oct-2007 : Added option to darken sides of plot - thanks to Alex Moots
+<i>78</i>&nbsp; *               (see patch 1805262) (DG);
+<i>79</i>&nbsp; * 21-Nov-2007 : Changed default depth factor, fixed labelling bugs and added
+<i>80</i>&nbsp; *               debug code - see debug flags in PiePlot class (DG);
+<i>81</i>&nbsp; * 20-Mar-2008 : Fixed bug 1920854 - multiple redraws of the section
+<i>82</i>&nbsp; *               labels (DG);
+<i>83</i>&nbsp; * 19-May-2009 : Fixed FindBugs warnings, patch by Michal Wozniak (DG);
+<i>84</i>&nbsp; * 10-Jul-2009 : Added drop shaow support (DG);
+<i>85</i>&nbsp; * 10-Oct-2011 : Localization fix: bug #3353913 (MH);
+<i>86</i>&nbsp; * 18-Oct-2011 : Fix tooltip offset with shadow generator (DG);
+<i>87</i>&nbsp; * 11-Jun-2012 : Utilise new PaintAlpha class (patch 3204823 from DaveLaw) (DG);
+<i>88</i>&nbsp; *
+<i>89</i>&nbsp; */
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;package org.jfree.chart.plot;
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;import java.awt.AlphaComposite;
+<i>94</i>&nbsp;import java.awt.Color;
+<i>95</i>&nbsp;import java.awt.Composite;
+<i>96</i>&nbsp;import java.awt.Font;
+<i>97</i>&nbsp;import java.awt.FontMetrics;
+<i>98</i>&nbsp;import java.awt.Graphics2D;
+<i>99</i>&nbsp;import java.awt.Paint;
+<i>100</i>&nbsp;import java.awt.Polygon;
+<i>101</i>&nbsp;import java.awt.Shape;
+<i>102</i>&nbsp;import java.awt.Stroke;
+<i>103</i>&nbsp;import java.awt.geom.Arc2D;
+<i>104</i>&nbsp;import java.awt.geom.Area;
+<i>105</i>&nbsp;import java.awt.geom.Ellipse2D;
+<i>106</i>&nbsp;import java.awt.geom.Point2D;
+<i>107</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>108</i>&nbsp;import java.awt.image.BufferedImage;
+<i>109</i>&nbsp;import java.io.Serializable;
+<i>110</i>&nbsp;import java.util.ArrayList;
+<i>111</i>&nbsp;import java.util.Iterator;
+<i>112</i>&nbsp;import java.util.List;
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>115</i>&nbsp;import org.jfree.chart.entity.PieSectionEntity;
+<i>116</i>&nbsp;import org.jfree.chart.event.PlotChangeEvent;
+<i>117</i>&nbsp;import org.jfree.chart.labels.PieToolTipGenerator;
+<i>118</i>&nbsp;import org.jfree.chart.ui.RectangleInsets;
+<i>119</i>&nbsp;import org.jfree.chart.util.PaintAlpha;
+<i>120</i>&nbsp;import org.jfree.data.general.DatasetUtils;
+<i>121</i>&nbsp;import org.jfree.data.general.PieDataset;
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;/**
+<i>124</i>&nbsp; * A plot that displays data in the form of a 3D pie chart, using data from
+<i>125</i>&nbsp; * any class that implements the {@link PieDataset} interface.
+<i>126</i>&nbsp; * &lt;P&gt;
+<i>127</i>&nbsp; * Although this class extends {@link PiePlot}, it does not currently support
+<i>128</i>&nbsp; * exploded sections.
+<i>129</i>&nbsp; */
+<i>130</i>&nbsp;public class PiePlot3D extends PiePlot implements Serializable {
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /** For serialization. */
+<i>133</i>&nbsp;    private static final long serialVersionUID = 3408984188945161432L;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /** The factor of the depth of the pie from the plot height */
+<b class="fc"><i>136</i>&nbsp;    private double depthFactor = 0.12;</b>
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;    /**
+<i>139</i>&nbsp;     * A flag that controls whether or not the sides of the pie chart
+<i>140</i>&nbsp;     * are rendered using a darker colour.
+<i>141</i>&nbsp;     *
+<i>142</i>&nbsp;     *  @since 1.0.7.
+<i>143</i>&nbsp;     */
+<b class="fc"><i>144</i>&nbsp;    private boolean darkerSides = false;  // default preserves previous</b>
+<i>145</i>&nbsp;                                          // behaviour
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Creates a new instance with no dataset.
+<i>149</i>&nbsp;     */
+<i>150</i>&nbsp;    public PiePlot3D() {
+<b class="fc"><i>151</i>&nbsp;        this(null);</b>
+<b class="fc"><i>152</i>&nbsp;    }</b>
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    /**
+<i>155</i>&nbsp;     * Creates a pie chart with a three dimensional effect using the specified
+<i>156</i>&nbsp;     * dataset.
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @param dataset  the dataset ({@code null} permitted).
+<i>159</i>&nbsp;     */
+<i>160</i>&nbsp;    public PiePlot3D(PieDataset dataset) {
+<b class="fc"><i>161</i>&nbsp;        super(dataset);</b>
+<b class="fc"><i>162</i>&nbsp;        setCircular(false, false);</b>
+<b class="fc"><i>163</i>&nbsp;    }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * Returns the depth factor for the chart.
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @return The depth factor.
+<i>169</i>&nbsp;     *
+<i>170</i>&nbsp;     * @see #setDepthFactor(double)
+<i>171</i>&nbsp;     */
+<i>172</i>&nbsp;    public double getDepthFactor() {
+<b class="nc"><i>173</i>&nbsp;        return this.depthFactor;</b>
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * Sets the pie depth as a percentage of the height of the plot area, and
+<i>178</i>&nbsp;     * sends a {@link PlotChangeEvent} to all registered listeners.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param factor  the depth factor (for example, 0.20 is twenty percent).
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @see #getDepthFactor()
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    public void setDepthFactor(double factor) {
+<b class="fc"><i>185</i>&nbsp;        this.depthFactor = factor;</b>
+<b class="fc"><i>186</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>187</i>&nbsp;    }</b>
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    /**
+<i>190</i>&nbsp;     * Returns a flag that controls whether or not the sides of the pie chart
+<i>191</i>&nbsp;     * are rendered using a darker colour.
+<i>192</i>&nbsp;     *
+<i>193</i>&nbsp;     * @return A boolean.
+<i>194</i>&nbsp;     *
+<i>195</i>&nbsp;     * @see #setDarkerSides(boolean)
+<i>196</i>&nbsp;     *
+<i>197</i>&nbsp;     * @since 1.0.7
+<i>198</i>&nbsp;     */
+<i>199</i>&nbsp;    public boolean getDarkerSides() {
+<b class="fc"><i>200</i>&nbsp;        return this.darkerSides;</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /**
+<i>204</i>&nbsp;     * Sets a flag that controls whether or not the sides of the pie chart
+<i>205</i>&nbsp;     * are rendered using a darker colour, and sends a {@link PlotChangeEvent}
+<i>206</i>&nbsp;     * to all registered listeners.
+<i>207</i>&nbsp;     *
+<i>208</i>&nbsp;     * @param darker true to darken the sides, false to use the default
+<i>209</i>&nbsp;     *         behaviour.
+<i>210</i>&nbsp;     *
+<i>211</i>&nbsp;     * @see #getDarkerSides()
+<i>212</i>&nbsp;     *
+<i>213</i>&nbsp;     * @since 1.0.7.
+<i>214</i>&nbsp;     */
+<i>215</i>&nbsp;    public void setDarkerSides(boolean darker) {
+<b class="fc"><i>216</i>&nbsp;        this.darkerSides = darker;</b>
+<b class="fc"><i>217</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>218</i>&nbsp;    }</b>
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Draws the plot on a Java 2D graphics device (such as the screen or a
+<i>222</i>&nbsp;     * printer).  This method is called by the
+<i>223</i>&nbsp;     * {@link org.jfree.chart.JFreeChart} class, you don&#39;t normally need
+<i>224</i>&nbsp;     * to call it yourself.
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @param g2  the graphics device.
+<i>227</i>&nbsp;     * @param plotArea  the area within which the plot should be drawn.
+<i>228</i>&nbsp;     * @param anchor  the anchor point.
+<i>229</i>&nbsp;     * @param parentState  the state from the parent plot, if there is one.
+<i>230</i>&nbsp;     * @param info  collects info about the drawing
+<i>231</i>&nbsp;     *              ({@code null} permitted).
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    @Override
+<i>234</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D plotArea, Point2D anchor,
+<i>235</i>&nbsp;                     PlotState parentState, PlotRenderingInfo info) {
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;        // adjust for insets...
+<b class="fc"><i>238</i>&nbsp;        RectangleInsets insets = getInsets();</b>
+<b class="fc"><i>239</i>&nbsp;        insets.trim(plotArea);</b>
+<i>240</i>&nbsp;
+<b class="fc"><i>241</i>&nbsp;        Rectangle2D originalPlotArea = (Rectangle2D) plotArea.clone();</b>
+<b class="fc"><i>242</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>243</i>&nbsp;            info.setPlotArea(plotArea);</b>
+<b class="nc"><i>244</i>&nbsp;            info.setDataArea(plotArea);</b>
+<i>245</i>&nbsp;        }
+<i>246</i>&nbsp;
+<b class="fc"><i>247</i>&nbsp;        drawBackground(g2, plotArea);</b>
+<i>248</i>&nbsp;
+<b class="fc"><i>249</i>&nbsp;        Shape savedClip = g2.getClip();</b>
+<b class="fc"><i>250</i>&nbsp;        g2.clip(plotArea);</b>
+<i>251</i>&nbsp;
+<b class="fc"><i>252</i>&nbsp;        Graphics2D savedG2 = g2;</b>
+<b class="fc"><i>253</i>&nbsp;        BufferedImage dataImage = null;</b>
+<b class="fc"><i>254</i>&nbsp;        if (getShadowGenerator() != null) {</b>
+<b class="nc"><i>255</i>&nbsp;            dataImage = new BufferedImage((int) plotArea.getWidth(),</b>
+<b class="nc"><i>256</i>&nbsp;                (int) plotArea.getHeight(), BufferedImage.TYPE_INT_ARGB);</b>
+<b class="nc"><i>257</i>&nbsp;            g2 = dataImage.createGraphics();</b>
+<b class="nc"><i>258</i>&nbsp;            g2.translate(-plotArea.getX(), -plotArea.getY());</b>
+<b class="nc"><i>259</i>&nbsp;            g2.setRenderingHints(savedG2.getRenderingHints());</b>
+<b class="nc"><i>260</i>&nbsp;            originalPlotArea = (Rectangle2D) plotArea.clone();</b>
+<i>261</i>&nbsp;        }
+<i>262</i>&nbsp;        // adjust the plot area by the interior spacing value
+<b class="fc"><i>263</i>&nbsp;        double gapPercent = getInteriorGap();</b>
+<b class="fc"><i>264</i>&nbsp;        double labelPercent = 0.0;</b>
+<b class="fc"><i>265</i>&nbsp;        if (getLabelGenerator() != null) {</b>
+<b class="fc"><i>266</i>&nbsp;            labelPercent = getLabelGap() + getMaximumLabelWidth();</b>
+<i>267</i>&nbsp;        }
+<b class="fc"><i>268</i>&nbsp;        double gapHorizontal = plotArea.getWidth() * (gapPercent</b>
+<i>269</i>&nbsp;                + labelPercent) * 2.0;
+<b class="fc"><i>270</i>&nbsp;        double gapVertical = plotArea.getHeight() * gapPercent * 2.0;</b>
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;        if (DEBUG_DRAW_INTERIOR) {
+<i>273</i>&nbsp;            double hGap = plotArea.getWidth() * getInteriorGap();
+<i>274</i>&nbsp;            double vGap = plotArea.getHeight() * getInteriorGap();
+<i>275</i>&nbsp;            double igx1 = plotArea.getX() + hGap;
+<i>276</i>&nbsp;            double igx2 = plotArea.getMaxX() - hGap;
+<i>277</i>&nbsp;            double igy1 = plotArea.getY() + vGap;
+<i>278</i>&nbsp;            double igy2 = plotArea.getMaxY() - vGap;
+<i>279</i>&nbsp;            g2.setPaint(Color.lightGray);
+<i>280</i>&nbsp;            g2.draw(new Rectangle2D.Double(igx1, igy1, igx2 - igx1,
+<i>281</i>&nbsp;                    igy2 - igy1));
+<i>282</i>&nbsp;        }
+<i>283</i>&nbsp;
+<b class="fc"><i>284</i>&nbsp;        double linkX = plotArea.getX() + gapHorizontal / 2;</b>
+<b class="fc"><i>285</i>&nbsp;        double linkY = plotArea.getY() + gapVertical / 2;</b>
+<b class="fc"><i>286</i>&nbsp;        double linkW = plotArea.getWidth() - gapHorizontal;</b>
+<b class="fc"><i>287</i>&nbsp;        double linkH = plotArea.getHeight() - gapVertical;</b>
+<i>288</i>&nbsp;
+<i>289</i>&nbsp;        // make the link area a square if the pie chart is to be circular...
+<b class="fc"><i>290</i>&nbsp;        if (isCircular()) { // is circular?</b>
+<b class="nc"><i>291</i>&nbsp;            double min = Math.min(linkW, linkH) / 2;</b>
+<b class="nc"><i>292</i>&nbsp;            linkX = (linkX + linkX + linkW) / 2 - min;</b>
+<b class="nc"><i>293</i>&nbsp;            linkY = (linkY + linkY + linkH) / 2 - min;</b>
+<b class="nc"><i>294</i>&nbsp;            linkW = 2 * min;</b>
+<b class="nc"><i>295</i>&nbsp;            linkH = 2 * min;</b>
+<i>296</i>&nbsp;        }
+<i>297</i>&nbsp;
+<b class="fc"><i>298</i>&nbsp;        PiePlotState state = initialise(g2, plotArea, this, null, info);</b>
+<i>299</i>&nbsp;
+<i>300</i>&nbsp;        // the link area defines the dog leg points for the linking lines to
+<i>301</i>&nbsp;        // the labels
+<b class="fc"><i>302</i>&nbsp;        Rectangle2D linkAreaXX = new Rectangle2D.Double(linkX, linkY, linkW,</b>
+<i>303</i>&nbsp;                linkH * (1 - this.depthFactor));
+<b class="fc"><i>304</i>&nbsp;        state.setLinkArea(linkAreaXX);</b>
+<i>305</i>&nbsp;
+<i>306</i>&nbsp;        if (DEBUG_DRAW_LINK_AREA) {
+<i>307</i>&nbsp;            g2.setPaint(Color.BLUE);
+<i>308</i>&nbsp;            g2.draw(linkAreaXX);
+<i>309</i>&nbsp;            g2.setPaint(Color.YELLOW);
+<i>310</i>&nbsp;            g2.draw(new Ellipse2D.Double(linkAreaXX.getX(), linkAreaXX.getY(),
+<i>311</i>&nbsp;                    linkAreaXX.getWidth(), linkAreaXX.getHeight()));
+<i>312</i>&nbsp;        }
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;        // the explode area defines the max circle/ellipse for the exploded pie
+<i>315</i>&nbsp;        // sections.
+<i>316</i>&nbsp;        // it is defined by shrinking the linkArea by the linkMargin factor.
+<b class="fc"><i>317</i>&nbsp;        double hh = linkW * getLabelLinkMargin();</b>
+<b class="fc"><i>318</i>&nbsp;        double vv = linkH * getLabelLinkMargin();</b>
+<b class="fc"><i>319</i>&nbsp;        Rectangle2D explodeArea = new Rectangle2D.Double(linkX + hh / 2.0,</b>
+<i>320</i>&nbsp;                linkY + vv / 2.0, linkW - hh, linkH - vv);
+<i>321</i>&nbsp;
+<b class="fc"><i>322</i>&nbsp;        state.setExplodedPieArea(explodeArea);</b>
+<i>323</i>&nbsp;
+<i>324</i>&nbsp;        // the pie area defines the circle/ellipse for regular pie sections.
+<i>325</i>&nbsp;        // it is defined by shrinking the explodeArea by the explodeMargin
+<i>326</i>&nbsp;        // factor.
+<b class="fc"><i>327</i>&nbsp;        double maximumExplodePercent = getMaximumExplodePercent();</b>
+<b class="fc"><i>328</i>&nbsp;        double percent = maximumExplodePercent / (1.0 + maximumExplodePercent);</b>
+<i>329</i>&nbsp;
+<b class="fc"><i>330</i>&nbsp;        double h1 = explodeArea.getWidth() * percent;</b>
+<b class="fc"><i>331</i>&nbsp;        double v1 = explodeArea.getHeight() * percent;</b>
+<b class="fc"><i>332</i>&nbsp;        Rectangle2D pieArea = new Rectangle2D.Double(explodeArea.getX()</b>
+<b class="fc"><i>333</i>&nbsp;                + h1 / 2.0, explodeArea.getY() + v1 / 2.0,</b>
+<b class="fc"><i>334</i>&nbsp;                explodeArea.getWidth() - h1, explodeArea.getHeight() - v1);</b>
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;        // the link area defines the dog-leg point for the linking lines to
+<i>337</i>&nbsp;        // the labels
+<b class="fc"><i>338</i>&nbsp;        int depth = (int) (pieArea.getHeight() * this.depthFactor);</b>
+<b class="fc"><i>339</i>&nbsp;        Rectangle2D linkArea = new Rectangle2D.Double(linkX, linkY, linkW,</b>
+<i>340</i>&nbsp;                linkH - depth);
+<b class="fc"><i>341</i>&nbsp;        state.setLinkArea(linkArea);</b>
+<i>342</i>&nbsp;
+<b class="fc"><i>343</i>&nbsp;        state.setPieArea(pieArea);</b>
+<b class="fc"><i>344</i>&nbsp;        state.setPieCenterX(pieArea.getCenterX());</b>
+<b class="fc"><i>345</i>&nbsp;        state.setPieCenterY(pieArea.getCenterY() - depth / 2.0);</b>
+<b class="fc"><i>346</i>&nbsp;        state.setPieWRadius(pieArea.getWidth() / 2.0);</b>
+<b class="fc"><i>347</i>&nbsp;        state.setPieHRadius((pieArea.getHeight() - depth) / 2.0);</b>
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;        // get the data source - return if null;
+<b class="fc"><i>350</i>&nbsp;        PieDataset dataset = getDataset();</b>
+<b class="fc"><i>351</i>&nbsp;        if (DatasetUtils.isEmptyOrNull(getDataset())) {</b>
+<b class="fc"><i>352</i>&nbsp;            drawNoDataMessage(g2, plotArea);</b>
+<b class="fc"><i>353</i>&nbsp;            g2.setClip(savedClip);</b>
+<b class="fc"><i>354</i>&nbsp;            drawOutline(g2, plotArea);</b>
+<b class="fc"><i>355</i>&nbsp;            return;</b>
+<i>356</i>&nbsp;        }
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;        // if too any elements
+<b class="fc"><i>359</i>&nbsp;        if (dataset.getKeys().size() &gt; plotArea.getWidth()) {</b>
+<b class="nc"><i>360</i>&nbsp;            String text = localizationResources.getString(&quot;Too_many_elements&quot;);</b>
+<b class="nc"><i>361</i>&nbsp;            Font sfont = new Font(&quot;dialog&quot;, Font.BOLD, 10);</b>
+<b class="nc"><i>362</i>&nbsp;            g2.setFont(sfont);</b>
+<b class="nc"><i>363</i>&nbsp;            FontMetrics fm = g2.getFontMetrics(sfont);</b>
+<b class="nc"><i>364</i>&nbsp;            int stringWidth = fm.stringWidth(text);</b>
+<i>365</i>&nbsp;
+<b class="nc"><i>366</i>&nbsp;            g2.drawString(text, (int) (plotArea.getX() + (plotArea.getWidth()</b>
+<b class="nc"><i>367</i>&nbsp;                    - stringWidth) / 2), (int) (plotArea.getY()</b>
+<b class="nc"><i>368</i>&nbsp;                    + (plotArea.getHeight() / 2)));</b>
+<b class="nc"><i>369</i>&nbsp;            return;</b>
+<i>370</i>&nbsp;        }
+<i>371</i>&nbsp;        // if we are drawing a perfect circle, we need to readjust the top left
+<i>372</i>&nbsp;        // coordinates of the drawing area for the arcs to arrive at this
+<i>373</i>&nbsp;        // effect.
+<b class="fc"><i>374</i>&nbsp;        if (isCircular()) {</b>
+<b class="nc"><i>375</i>&nbsp;            double min = Math.min(plotArea.getWidth(),</b>
+<b class="nc"><i>376</i>&nbsp;                    plotArea.getHeight()) / 2;</b>
+<b class="nc"><i>377</i>&nbsp;            plotArea = new Rectangle2D.Double(plotArea.getCenterX() - min,</b>
+<b class="nc"><i>378</i>&nbsp;                    plotArea.getCenterY() - min, 2 * min, 2 * min);</b>
+<i>379</i>&nbsp;        }
+<i>380</i>&nbsp;        // get a list of keys...
+<b class="fc"><i>381</i>&nbsp;        List sectionKeys = dataset.getKeys();</b>
+<i>382</i>&nbsp;
+<b class="fc"><i>383</i>&nbsp;        if (sectionKeys.isEmpty()) {</b>
+<b class="nc"><i>384</i>&nbsp;            return;</b>
+<i>385</i>&nbsp;        }
+<i>386</i>&nbsp;
+<i>387</i>&nbsp;        // establish the coordinates of the top left corner of the drawing area
+<b class="fc"><i>388</i>&nbsp;        double arcX = pieArea.getX();</b>
+<b class="fc"><i>389</i>&nbsp;        double arcY = pieArea.getY();</b>
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;        //g2.clip(clipArea);
+<b class="fc"><i>392</i>&nbsp;        Composite originalComposite = g2.getComposite();</b>
+<b class="fc"><i>393</i>&nbsp;        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,</b>
+<b class="fc"><i>394</i>&nbsp;                getForegroundAlpha()));</b>
+<i>395</i>&nbsp;
+<b class="fc"><i>396</i>&nbsp;        double totalValue = DatasetUtils.calculatePieDatasetTotal(dataset);</b>
+<b class="fc"><i>397</i>&nbsp;        double runningTotal = 0;</b>
+<b class="fc"><i>398</i>&nbsp;        if (depth &lt; 0) {</b>
+<b class="nc"><i>399</i>&nbsp;            return;  // if depth is negative don&#39;t draw anything</b>
+<i>400</i>&nbsp;        }
+<i>401</i>&nbsp;
+<b class="fc"><i>402</i>&nbsp;        ArrayList arcList = new ArrayList();</b>
+<i>403</i>&nbsp;        Arc2D.Double arc;
+<i>404</i>&nbsp;        Paint paint;
+<i>405</i>&nbsp;        Paint outlinePaint;
+<i>406</i>&nbsp;        Stroke outlineStroke;
+<i>407</i>&nbsp;
+<b class="fc"><i>408</i>&nbsp;        Iterator iterator = sectionKeys.iterator();</b>
+<b class="fc"><i>409</i>&nbsp;        while (iterator.hasNext()) {</b>
+<i>410</i>&nbsp;
+<b class="fc"><i>411</i>&nbsp;            Comparable currentKey = (Comparable) iterator.next();</b>
+<b class="fc"><i>412</i>&nbsp;            Number dataValue = dataset.getValue(currentKey);</b>
+<b class="fc"><i>413</i>&nbsp;            if (dataValue == null) {</b>
+<b class="fc"><i>414</i>&nbsp;                arcList.add(null);</b>
+<b class="fc"><i>415</i>&nbsp;                continue;</b>
+<i>416</i>&nbsp;            }
+<b class="fc"><i>417</i>&nbsp;            double value = dataValue.doubleValue();</b>
+<b class="fc"><i>418</i>&nbsp;            if (value &lt;= 0) {</b>
+<b class="nc"><i>419</i>&nbsp;                arcList.add(null);</b>
+<b class="nc"><i>420</i>&nbsp;                continue;</b>
+<i>421</i>&nbsp;            }
+<b class="fc"><i>422</i>&nbsp;            double startAngle = getStartAngle();</b>
+<b class="fc"><i>423</i>&nbsp;            double direction = getDirection().getFactor();</b>
+<b class="fc"><i>424</i>&nbsp;            double angle1 = startAngle + (direction * (runningTotal * 360))</b>
+<i>425</i>&nbsp;                    / totalValue;
+<b class="fc"><i>426</i>&nbsp;            double angle2 = startAngle + (direction * (runningTotal + value)</b>
+<i>427</i>&nbsp;                    * 360) / totalValue;
+<b class="fc"><i>428</i>&nbsp;            if (Math.abs(angle2 - angle1) &gt; getMinimumArcAngleToDraw()) {</b>
+<b class="fc"><i>429</i>&nbsp;                arcList.add(new Arc2D.Double(arcX, arcY + depth,</b>
+<b class="fc"><i>430</i>&nbsp;                        pieArea.getWidth(), pieArea.getHeight() - depth,</b>
+<i>431</i>&nbsp;                        angle1, angle2 - angle1, Arc2D.PIE));
+<i>432</i>&nbsp;            }
+<i>433</i>&nbsp;            else {
+<b class="nc"><i>434</i>&nbsp;                arcList.add(null);</b>
+<i>435</i>&nbsp;            }
+<b class="fc"><i>436</i>&nbsp;            runningTotal += value;</b>
+<b class="fc"><i>437</i>&nbsp;        }</b>
+<i>438</i>&nbsp;
+<b class="fc"><i>439</i>&nbsp;        Shape oldClip = g2.getClip();</b>
+<i>440</i>&nbsp;
+<b class="fc"><i>441</i>&nbsp;        Ellipse2D top = new Ellipse2D.Double(pieArea.getX(), pieArea.getY(),</b>
+<b class="fc"><i>442</i>&nbsp;                pieArea.getWidth(), pieArea.getHeight() - depth);</b>
+<i>443</i>&nbsp;
+<b class="fc"><i>444</i>&nbsp;        Ellipse2D bottom = new Ellipse2D.Double(pieArea.getX(), pieArea.getY()</b>
+<b class="fc"><i>445</i>&nbsp;                + depth, pieArea.getWidth(), pieArea.getHeight() - depth);</b>
+<i>446</i>&nbsp;
+<b class="fc"><i>447</i>&nbsp;        Rectangle2D lower = new Rectangle2D.Double(top.getX(),</b>
+<b class="fc"><i>448</i>&nbsp;                top.getCenterY(), pieArea.getWidth(), bottom.getMaxY()</b>
+<b class="fc"><i>449</i>&nbsp;                - top.getCenterY());</b>
+<i>450</i>&nbsp;
+<b class="fc"><i>451</i>&nbsp;        Rectangle2D upper = new Rectangle2D.Double(pieArea.getX(), top.getY(),</b>
+<b class="fc"><i>452</i>&nbsp;                pieArea.getWidth(), bottom.getCenterY() - top.getY());</b>
+<i>453</i>&nbsp;
+<b class="fc"><i>454</i>&nbsp;        Area a = new Area(top);</b>
+<b class="fc"><i>455</i>&nbsp;        a.add(new Area(lower));</b>
+<b class="fc"><i>456</i>&nbsp;        Area b = new Area(bottom);</b>
+<b class="fc"><i>457</i>&nbsp;        b.add(new Area(upper));</b>
+<b class="fc"><i>458</i>&nbsp;        Area pie = new Area(a);</b>
+<b class="fc"><i>459</i>&nbsp;        pie.intersect(b);</b>
+<i>460</i>&nbsp;
+<b class="fc"><i>461</i>&nbsp;        Area front = new Area(pie);</b>
+<b class="fc"><i>462</i>&nbsp;        front.subtract(new Area(top));</b>
+<i>463</i>&nbsp;
+<b class="fc"><i>464</i>&nbsp;        Area back = new Area(pie);</b>
+<b class="fc"><i>465</i>&nbsp;        back.subtract(new Area(bottom));</b>
+<i>466</i>&nbsp;
+<i>467</i>&nbsp;        // draw the bottom circle
+<i>468</i>&nbsp;        int[] xs;
+<i>469</i>&nbsp;        int[] ys;
+<i>470</i>&nbsp;
+<b class="fc"><i>471</i>&nbsp;        int categoryCount = arcList.size();</b>
+<b class="fc"><i>472</i>&nbsp;        for (int categoryIndex = 0; categoryIndex &lt; categoryCount;</b>
+<b class="fc"><i>473</i>&nbsp;                 categoryIndex++) {</b>
+<b class="fc"><i>474</i>&nbsp;            arc = (Arc2D.Double) arcList.get(categoryIndex);</b>
+<b class="fc"><i>475</i>&nbsp;            if (arc == null) {</b>
+<b class="fc"><i>476</i>&nbsp;                continue;</b>
+<i>477</i>&nbsp;            }
+<b class="fc"><i>478</i>&nbsp;            Comparable key = getSectionKey(categoryIndex);</b>
+<b class="fc"><i>479</i>&nbsp;            paint = lookupSectionPaint(key);</b>
+<b class="fc"><i>480</i>&nbsp;            outlinePaint = lookupSectionOutlinePaint(key);</b>
+<b class="fc"><i>481</i>&nbsp;            outlineStroke = lookupSectionOutlineStroke(key);</b>
+<b class="fc"><i>482</i>&nbsp;            g2.setPaint(paint);</b>
+<b class="fc"><i>483</i>&nbsp;            g2.fill(arc);</b>
+<b class="fc"><i>484</i>&nbsp;            g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>485</i>&nbsp;            g2.setStroke(outlineStroke);</b>
+<b class="fc"><i>486</i>&nbsp;            g2.draw(arc);</b>
+<b class="fc"><i>487</i>&nbsp;            g2.setPaint(paint);</b>
+<i>488</i>&nbsp;
+<b class="fc"><i>489</i>&nbsp;            Point2D p1 = arc.getStartPoint();</b>
+<i>490</i>&nbsp;
+<i>491</i>&nbsp;            // draw the height
+<b class="fc"><i>492</i>&nbsp;            xs = new int[] {(int) arc.getCenterX(), (int) arc.getCenterX(),</b>
+<b class="fc"><i>493</i>&nbsp;                    (int) p1.getX(), (int) p1.getX()};</b>
+<b class="fc"><i>494</i>&nbsp;            ys = new int[] {(int) arc.getCenterY(), (int) arc.getCenterY()</b>
+<b class="fc"><i>495</i>&nbsp;                    - depth, (int) p1.getY() - depth, (int) p1.getY()};</b>
+<b class="fc"><i>496</i>&nbsp;            Polygon polygon = new Polygon(xs, ys, 4);</b>
+<b class="fc"><i>497</i>&nbsp;            g2.setPaint(java.awt.Color.lightGray);</b>
+<b class="fc"><i>498</i>&nbsp;            g2.fill(polygon);</b>
+<b class="fc"><i>499</i>&nbsp;            g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>500</i>&nbsp;            g2.setStroke(outlineStroke);</b>
+<b class="fc"><i>501</i>&nbsp;            g2.draw(polygon);</b>
+<b class="fc"><i>502</i>&nbsp;            g2.setPaint(paint);</b>
+<i>503</i>&nbsp;
+<i>504</i>&nbsp;        }
+<i>505</i>&nbsp;
+<b class="fc"><i>506</i>&nbsp;        g2.setPaint(Color.gray);</b>
+<b class="fc"><i>507</i>&nbsp;        g2.fill(back);</b>
+<b class="fc"><i>508</i>&nbsp;        g2.fill(front);</b>
+<i>509</i>&nbsp;
+<i>510</i>&nbsp;        // cycle through once drawing only the sides at the back...
+<b class="fc"><i>511</i>&nbsp;        int cat = 0;</b>
+<b class="fc"><i>512</i>&nbsp;        iterator = arcList.iterator();</b>
+<b class="fc"><i>513</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>514</i>&nbsp;            Arc2D segment = (Arc2D) iterator.next();</b>
+<b class="fc"><i>515</i>&nbsp;            if (segment != null) {</b>
+<b class="fc"><i>516</i>&nbsp;                Comparable key = getSectionKey(cat);</b>
+<b class="fc"><i>517</i>&nbsp;                paint = lookupSectionPaint(key);</b>
+<b class="fc"><i>518</i>&nbsp;                outlinePaint = lookupSectionOutlinePaint(key);</b>
+<b class="fc"><i>519</i>&nbsp;                outlineStroke = lookupSectionOutlineStroke(key);</b>
+<b class="fc"><i>520</i>&nbsp;                drawSide(g2, pieArea, segment, front, back, paint,</b>
+<i>521</i>&nbsp;                        outlinePaint, outlineStroke, false, true);
+<i>522</i>&nbsp;            }
+<b class="fc"><i>523</i>&nbsp;            cat++;</b>
+<b class="fc"><i>524</i>&nbsp;        }</b>
+<i>525</i>&nbsp;
+<i>526</i>&nbsp;        // cycle through again drawing only the sides at the front...
+<b class="fc"><i>527</i>&nbsp;        cat = 0;</b>
+<b class="fc"><i>528</i>&nbsp;        iterator = arcList.iterator();</b>
+<b class="fc"><i>529</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>530</i>&nbsp;            Arc2D segment = (Arc2D) iterator.next();</b>
+<b class="fc"><i>531</i>&nbsp;            if (segment != null) {</b>
+<b class="fc"><i>532</i>&nbsp;                Comparable key = getSectionKey(cat);</b>
+<b class="fc"><i>533</i>&nbsp;                paint = lookupSectionPaint(key);</b>
+<b class="fc"><i>534</i>&nbsp;                outlinePaint = lookupSectionOutlinePaint(key);</b>
+<b class="fc"><i>535</i>&nbsp;                outlineStroke = lookupSectionOutlineStroke(key);</b>
+<b class="fc"><i>536</i>&nbsp;                drawSide(g2, pieArea, segment, front, back, paint,</b>
+<i>537</i>&nbsp;                        outlinePaint, outlineStroke, true, false);
+<i>538</i>&nbsp;            }
+<b class="fc"><i>539</i>&nbsp;            cat++;</b>
+<b class="fc"><i>540</i>&nbsp;        }</b>
+<i>541</i>&nbsp;
+<b class="fc"><i>542</i>&nbsp;        g2.setClip(oldClip);</b>
+<i>543</i>&nbsp;
+<i>544</i>&nbsp;        // draw the sections at the top of the pie (and set up tooltips)...
+<i>545</i>&nbsp;        Arc2D upperArc;
+<b class="fc"><i>546</i>&nbsp;        for (int sectionIndex = 0; sectionIndex &lt; categoryCount;</b>
+<b class="fc"><i>547</i>&nbsp;                 sectionIndex++) {</b>
+<b class="fc"><i>548</i>&nbsp;            arc = (Arc2D.Double) arcList.get(sectionIndex);</b>
+<b class="fc"><i>549</i>&nbsp;            if (arc == null) {</b>
+<b class="fc"><i>550</i>&nbsp;                continue;</b>
+<i>551</i>&nbsp;            }
+<b class="fc"><i>552</i>&nbsp;            upperArc = new Arc2D.Double(arcX, arcY, pieArea.getWidth(),</b>
+<b class="fc"><i>553</i>&nbsp;                    pieArea.getHeight() - depth, arc.getAngleStart(),</b>
+<b class="fc"><i>554</i>&nbsp;                    arc.getAngleExtent(), Arc2D.PIE);</b>
+<i>555</i>&nbsp;
+<b class="fc"><i>556</i>&nbsp;            Comparable currentKey = (Comparable) sectionKeys.get(sectionIndex);</b>
+<b class="fc"><i>557</i>&nbsp;            paint = lookupSectionPaint(currentKey, true);</b>
+<b class="fc"><i>558</i>&nbsp;            outlinePaint = lookupSectionOutlinePaint(currentKey);</b>
+<b class="fc"><i>559</i>&nbsp;            outlineStroke = lookupSectionOutlineStroke(currentKey);</b>
+<b class="fc"><i>560</i>&nbsp;            g2.setPaint(paint);</b>
+<b class="fc"><i>561</i>&nbsp;            g2.fill(upperArc);</b>
+<b class="fc"><i>562</i>&nbsp;            g2.setStroke(outlineStroke);</b>
+<b class="fc"><i>563</i>&nbsp;            g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>564</i>&nbsp;            g2.draw(upperArc);</b>
+<i>565</i>&nbsp;
+<i>566</i>&nbsp;           // add a tooltip for the section...
+<b class="fc"><i>567</i>&nbsp;            if (info != null) {</b>
+<b class="nc"><i>568</i>&nbsp;                EntityCollection entities</b>
+<b class="nc"><i>569</i>&nbsp;                        = info.getOwner().getEntityCollection();</b>
+<b class="nc"><i>570</i>&nbsp;                if (entities != null) {</b>
+<b class="nc"><i>571</i>&nbsp;                    String tip = null;</b>
+<b class="nc"><i>572</i>&nbsp;                    PieToolTipGenerator tipster = getToolTipGenerator();</b>
+<b class="nc"><i>573</i>&nbsp;                    if (tipster != null) {</b>
+<i>574</i>&nbsp;                        // @mgs: using the method&#39;s return value was missing
+<b class="nc"><i>575</i>&nbsp;                        tip = tipster.generateToolTip(dataset, currentKey);</b>
+<i>576</i>&nbsp;                    }
+<b class="nc"><i>577</i>&nbsp;                    String url = null;</b>
+<b class="nc"><i>578</i>&nbsp;                    if (getURLGenerator() != null) {</b>
+<b class="nc"><i>579</i>&nbsp;                        url = getURLGenerator().generateURL(dataset, currentKey,</b>
+<b class="nc"><i>580</i>&nbsp;                                getPieIndex());</b>
+<i>581</i>&nbsp;                    }
+<b class="nc"><i>582</i>&nbsp;                    PieSectionEntity entity = new PieSectionEntity(</b>
+<b class="nc"><i>583</i>&nbsp;                            upperArc, dataset, getPieIndex(), sectionIndex,</b>
+<i>584</i>&nbsp;                            currentKey, tip, url);
+<b class="nc"><i>585</i>&nbsp;                    entities.add(entity);</b>
+<i>586</i>&nbsp;                }
+<i>587</i>&nbsp;            }
+<i>588</i>&nbsp;        }
+<i>589</i>&nbsp;
+<b class="fc"><i>590</i>&nbsp;        List keys = dataset.getKeys();</b>
+<b class="fc"><i>591</i>&nbsp;        Rectangle2D adjustedPlotArea = new Rectangle2D.Double(</b>
+<b class="fc"><i>592</i>&nbsp;                originalPlotArea.getX(), originalPlotArea.getY(),</b>
+<b class="fc"><i>593</i>&nbsp;                originalPlotArea.getWidth(), originalPlotArea.getHeight()</b>
+<i>594</i>&nbsp;                - depth);
+<b class="fc"><i>595</i>&nbsp;        if (getSimpleLabels()) {</b>
+<b class="nc"><i>596</i>&nbsp;            drawSimpleLabels(g2, keys, totalValue, adjustedPlotArea,</b>
+<i>597</i>&nbsp;                    linkArea, state);
+<i>598</i>&nbsp;        }
+<i>599</i>&nbsp;        else {
+<b class="fc"><i>600</i>&nbsp;            drawLabels(g2, keys, totalValue, adjustedPlotArea, linkArea,</b>
+<i>601</i>&nbsp;                    state);
+<i>602</i>&nbsp;        }
+<i>603</i>&nbsp;
+<b class="fc"><i>604</i>&nbsp;        if (getShadowGenerator() != null) {</b>
+<b class="nc"><i>605</i>&nbsp;            BufferedImage shadowImage</b>
+<b class="nc"><i>606</i>&nbsp;                    = getShadowGenerator().createDropShadow(dataImage);</b>
+<b class="nc"><i>607</i>&nbsp;            g2 = savedG2;</b>
+<b class="nc"><i>608</i>&nbsp;            g2.drawImage(shadowImage, (int) plotArea.getX()</b>
+<b class="nc"><i>609</i>&nbsp;                    + getShadowGenerator().calculateOffsetX(),</b>
+<b class="nc"><i>610</i>&nbsp;                    (int) plotArea.getY()</b>
+<b class="nc"><i>611</i>&nbsp;                    + getShadowGenerator().calculateOffsetY(), null);</b>
+<b class="nc"><i>612</i>&nbsp;            g2.drawImage(dataImage, (int) plotArea.getX(),</b>
+<b class="nc"><i>613</i>&nbsp;                    (int) plotArea.getY(), null);</b>
+<i>614</i>&nbsp;        }
+<i>615</i>&nbsp;
+<b class="fc"><i>616</i>&nbsp;        g2.setClip(savedClip);</b>
+<b class="fc"><i>617</i>&nbsp;        g2.setComposite(originalComposite);</b>
+<b class="fc"><i>618</i>&nbsp;        drawOutline(g2, originalPlotArea);</b>
+<i>619</i>&nbsp;
+<b class="fc"><i>620</i>&nbsp;    }</b>
+<i>621</i>&nbsp;
+<i>622</i>&nbsp;    /**
+<i>623</i>&nbsp;     * Draws the side of a pie section.
+<i>624</i>&nbsp;     *
+<i>625</i>&nbsp;     * @param g2  the graphics device.
+<i>626</i>&nbsp;     * @param plotArea  the plot area.
+<i>627</i>&nbsp;     * @param arc  the arc.
+<i>628</i>&nbsp;     * @param front  the front of the pie.
+<i>629</i>&nbsp;     * @param back  the back of the pie.
+<i>630</i>&nbsp;     * @param paint  the color.
+<i>631</i>&nbsp;     * @param outlinePaint  the outline paint.
+<i>632</i>&nbsp;     * @param outlineStroke  the outline stroke.
+<i>633</i>&nbsp;     * @param drawFront  draw the front?
+<i>634</i>&nbsp;     * @param drawBack  draw the back?
+<i>635</i>&nbsp;     */
+<i>636</i>&nbsp;    protected void drawSide(Graphics2D g2,
+<i>637</i>&nbsp;                            Rectangle2D plotArea,
+<i>638</i>&nbsp;                            Arc2D arc,
+<i>639</i>&nbsp;                            Area front,
+<i>640</i>&nbsp;                            Area back,
+<i>641</i>&nbsp;                            Paint paint,
+<i>642</i>&nbsp;                            Paint outlinePaint,
+<i>643</i>&nbsp;                            Stroke outlineStroke,
+<i>644</i>&nbsp;                            boolean drawFront,
+<i>645</i>&nbsp;                            boolean drawBack) {
+<i>646</i>&nbsp;
+<b class="fc"><i>647</i>&nbsp;        if (getDarkerSides()) {</b>
+<b class="nc"><i>648</i>&nbsp;             paint = PaintAlpha.darker(paint);</b>
+<i>649</i>&nbsp;        }
+<i>650</i>&nbsp;
+<b class="fc"><i>651</i>&nbsp;        double start = arc.getAngleStart();</b>
+<b class="fc"><i>652</i>&nbsp;        double extent = arc.getAngleExtent();</b>
+<b class="fc"><i>653</i>&nbsp;        double end = start + extent;</b>
+<i>654</i>&nbsp;
+<b class="fc"><i>655</i>&nbsp;        g2.setStroke(outlineStroke);</b>
+<i>656</i>&nbsp;
+<i>657</i>&nbsp;        // for CLOCKWISE charts, the extent will be negative...
+<b class="fc"><i>658</i>&nbsp;        if (extent &lt; 0.0) {</b>
+<i>659</i>&nbsp;
+<b class="fc"><i>660</i>&nbsp;            if (isAngleAtFront(start)) {  // start at front</b>
+<i>661</i>&nbsp;
+<b class="fc"><i>662</i>&nbsp;                if (!isAngleAtBack(end)) {</b>
+<i>663</i>&nbsp;
+<b class="nc"><i>664</i>&nbsp;                    if (extent &gt; -180.0) {  // the segment is entirely at the</b>
+<i>665</i>&nbsp;                                            // front of the chart
+<b class="nc"><i>666</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>667</i>&nbsp;                            Area side = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>668</i>&nbsp;                                    arc.getEndPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>669</i>&nbsp;                                    arc.getStartPoint().getX()</b>
+<b class="nc"><i>670</i>&nbsp;                                    - arc.getEndPoint().getX(),</b>
+<b class="nc"><i>671</i>&nbsp;                                    plotArea.getHeight()));</b>
+<b class="nc"><i>672</i>&nbsp;                            side.intersect(front);</b>
+<b class="nc"><i>673</i>&nbsp;                            g2.setPaint(paint);</b>
+<b class="nc"><i>674</i>&nbsp;                            g2.fill(side);</b>
+<b class="nc"><i>675</i>&nbsp;                            g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>676</i>&nbsp;                            g2.draw(side);</b>
+<b class="nc"><i>677</i>&nbsp;                        }</b>
+<i>678</i>&nbsp;                    }
+<i>679</i>&nbsp;                    else {  // the segment starts at the front, and wraps all
+<i>680</i>&nbsp;                            // the way around
+<i>681</i>&nbsp;                            // the back and finishes at the front again
+<b class="nc"><i>682</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>683</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="nc"><i>684</i>&nbsp;                                arc.getStartPoint().getX() - plotArea.getX(),</b>
+<b class="nc"><i>685</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>686</i>&nbsp;                        side1.intersect(front);</b>
+<i>687</i>&nbsp;
+<b class="nc"><i>688</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>689</i>&nbsp;                                arc.getEndPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>690</i>&nbsp;                                plotArea.getMaxX() - arc.getEndPoint().getX(),</b>
+<b class="nc"><i>691</i>&nbsp;                                plotArea.getHeight()));</b>
+<i>692</i>&nbsp;
+<b class="nc"><i>693</i>&nbsp;                        side2.intersect(front);</b>
+<b class="nc"><i>694</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>695</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>696</i>&nbsp;                            g2.fill(side1);</b>
+<b class="nc"><i>697</i>&nbsp;                            g2.fill(side2);</b>
+<i>698</i>&nbsp;                        }
+<i>699</i>&nbsp;
+<b class="nc"><i>700</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>701</i>&nbsp;                            g2.fill(back);</b>
+<i>702</i>&nbsp;                        }
+<i>703</i>&nbsp;
+<b class="nc"><i>704</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>705</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>706</i>&nbsp;                            g2.draw(side1);</b>
+<b class="nc"><i>707</i>&nbsp;                            g2.draw(side2);</b>
+<i>708</i>&nbsp;                        }
+<i>709</i>&nbsp;
+<b class="nc"><i>710</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>711</i>&nbsp;                            g2.draw(back);</b>
+<i>712</i>&nbsp;                        }
+<i>713</i>&nbsp;
+<b class="nc"><i>714</i>&nbsp;                    }</b>
+<i>715</i>&nbsp;                }
+<i>716</i>&nbsp;                else {  // starts at the front, finishes at the back (going
+<i>717</i>&nbsp;                        // around the left side)
+<i>718</i>&nbsp;
+<b class="fc"><i>719</i>&nbsp;                    if (drawBack) {</b>
+<b class="fc"><i>720</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="fc"><i>721</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="fc"><i>722</i>&nbsp;                                arc.getEndPoint().getX() - plotArea.getX(),</b>
+<b class="fc"><i>723</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="fc"><i>724</i>&nbsp;                        side2.intersect(back);</b>
+<b class="fc"><i>725</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="fc"><i>726</i>&nbsp;                        g2.fill(side2);</b>
+<b class="fc"><i>727</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>728</i>&nbsp;                        g2.draw(side2);</b>
+<i>729</i>&nbsp;                    }
+<i>730</i>&nbsp;
+<b class="fc"><i>731</i>&nbsp;                    if (drawFront) {</b>
+<b class="fc"><i>732</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="fc"><i>733</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="fc"><i>734</i>&nbsp;                                arc.getStartPoint().getX() - plotArea.getX(),</b>
+<b class="fc"><i>735</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="fc"><i>736</i>&nbsp;                        side1.intersect(front);</b>
+<b class="fc"><i>737</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="fc"><i>738</i>&nbsp;                        g2.fill(side1);</b>
+<b class="fc"><i>739</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>740</i>&nbsp;                        g2.draw(side1);</b>
+<b class="fc"><i>741</i>&nbsp;                    }</b>
+<i>742</i>&nbsp;                }
+<i>743</i>&nbsp;            }
+<i>744</i>&nbsp;            else {  // the segment starts at the back (still extending
+<i>745</i>&nbsp;                    // CLOCKWISE)
+<i>746</i>&nbsp;
+<b class="fc"><i>747</i>&nbsp;                if (!isAngleAtFront(end)) {</b>
+<b class="nc"><i>748</i>&nbsp;                    if (extent &gt; -180.0) {  // whole segment stays at the back</b>
+<b class="nc"><i>749</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>750</i>&nbsp;                            Area side = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>751</i>&nbsp;                                    arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>752</i>&nbsp;                                    arc.getEndPoint().getX()</b>
+<b class="nc"><i>753</i>&nbsp;                                    - arc.getStartPoint().getX(),</b>
+<b class="nc"><i>754</i>&nbsp;                                    plotArea.getHeight()));</b>
+<b class="nc"><i>755</i>&nbsp;                            side.intersect(back);</b>
+<b class="nc"><i>756</i>&nbsp;                            g2.setPaint(paint);</b>
+<b class="nc"><i>757</i>&nbsp;                            g2.fill(side);</b>
+<b class="nc"><i>758</i>&nbsp;                            g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>759</i>&nbsp;                            g2.draw(side);</b>
+<b class="nc"><i>760</i>&nbsp;                        }</b>
+<i>761</i>&nbsp;                    }
+<i>762</i>&nbsp;                    else {  // starts at the back, wraps around front, and
+<i>763</i>&nbsp;                            // finishes at back again
+<b class="nc"><i>764</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>765</i>&nbsp;                                arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>766</i>&nbsp;                                plotArea.getMaxX() - arc.getStartPoint().getX(),</b>
+<b class="nc"><i>767</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>768</i>&nbsp;                        side1.intersect(back);</b>
+<i>769</i>&nbsp;
+<b class="nc"><i>770</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>771</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="nc"><i>772</i>&nbsp;                                arc.getEndPoint().getX() - plotArea.getX(),</b>
+<b class="nc"><i>773</i>&nbsp;                                plotArea.getHeight()));</b>
+<i>774</i>&nbsp;
+<b class="nc"><i>775</i>&nbsp;                        side2.intersect(back);</b>
+<i>776</i>&nbsp;
+<b class="nc"><i>777</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>778</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>779</i>&nbsp;                            g2.fill(side1);</b>
+<b class="nc"><i>780</i>&nbsp;                            g2.fill(side2);</b>
+<i>781</i>&nbsp;                        }
+<i>782</i>&nbsp;
+<b class="nc"><i>783</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>784</i>&nbsp;                            g2.fill(front);</b>
+<i>785</i>&nbsp;                        }
+<i>786</i>&nbsp;
+<b class="nc"><i>787</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>788</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>789</i>&nbsp;                            g2.draw(side1);</b>
+<b class="nc"><i>790</i>&nbsp;                            g2.draw(side2);</b>
+<i>791</i>&nbsp;                        }
+<i>792</i>&nbsp;
+<b class="nc"><i>793</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>794</i>&nbsp;                            g2.draw(front);</b>
+<i>795</i>&nbsp;                        }
+<i>796</i>&nbsp;
+<b class="nc"><i>797</i>&nbsp;                    }</b>
+<i>798</i>&nbsp;                }
+<i>799</i>&nbsp;                else {  // starts at back, finishes at front (CLOCKWISE)
+<i>800</i>&nbsp;
+<b class="fc"><i>801</i>&nbsp;                    if (drawBack) {</b>
+<b class="fc"><i>802</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="fc"><i>803</i>&nbsp;                                arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="fc"><i>804</i>&nbsp;                                plotArea.getMaxX() - arc.getStartPoint().getX(),</b>
+<b class="fc"><i>805</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="fc"><i>806</i>&nbsp;                        side1.intersect(back);</b>
+<b class="fc"><i>807</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="fc"><i>808</i>&nbsp;                        g2.fill(side1);</b>
+<b class="fc"><i>809</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>810</i>&nbsp;                        g2.draw(side1);</b>
+<i>811</i>&nbsp;                    }
+<i>812</i>&nbsp;
+<b class="fc"><i>813</i>&nbsp;                    if (drawFront) {</b>
+<b class="fc"><i>814</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="fc"><i>815</i>&nbsp;                                arc.getEndPoint().getX(), plotArea.getY(),</b>
+<b class="fc"><i>816</i>&nbsp;                                plotArea.getMaxX() - arc.getEndPoint().getX(),</b>
+<b class="fc"><i>817</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="fc"><i>818</i>&nbsp;                        side2.intersect(front);</b>
+<b class="fc"><i>819</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="fc"><i>820</i>&nbsp;                        g2.fill(side2);</b>
+<b class="fc"><i>821</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>822</i>&nbsp;                        g2.draw(side2);</b>
+<b class="fc"><i>823</i>&nbsp;                    }</b>
+<i>824</i>&nbsp;
+<i>825</i>&nbsp;                }
+<i>826</i>&nbsp;            }
+<i>827</i>&nbsp;        }
+<b class="nc"><i>828</i>&nbsp;        else if (extent &gt; 0.0) {  // the pie sections are arranged ANTICLOCKWISE</b>
+<i>829</i>&nbsp;
+<b class="nc"><i>830</i>&nbsp;            if (isAngleAtFront(start)) {  // segment starts at the front</b>
+<i>831</i>&nbsp;
+<b class="nc"><i>832</i>&nbsp;                if (!isAngleAtBack(end)) {  // and finishes at the front</b>
+<i>833</i>&nbsp;
+<b class="nc"><i>834</i>&nbsp;                    if (extent &lt; 180.0) {  // segment only occupies the front</b>
+<b class="nc"><i>835</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>836</i>&nbsp;                            Area side = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>837</i>&nbsp;                                    arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>838</i>&nbsp;                                    arc.getEndPoint().getX()</b>
+<b class="nc"><i>839</i>&nbsp;                                    - arc.getStartPoint().getX(),</b>
+<b class="nc"><i>840</i>&nbsp;                                    plotArea.getHeight()));</b>
+<b class="nc"><i>841</i>&nbsp;                            side.intersect(front);</b>
+<b class="nc"><i>842</i>&nbsp;                            g2.setPaint(paint);</b>
+<b class="nc"><i>843</i>&nbsp;                            g2.fill(side);</b>
+<b class="nc"><i>844</i>&nbsp;                            g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>845</i>&nbsp;                            g2.draw(side);</b>
+<b class="nc"><i>846</i>&nbsp;                        }</b>
+<i>847</i>&nbsp;                    }
+<i>848</i>&nbsp;                    else {  // segments wraps right around the back...
+<b class="nc"><i>849</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>850</i>&nbsp;                                arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>851</i>&nbsp;                                plotArea.getMaxX() - arc.getStartPoint().getX(),</b>
+<b class="nc"><i>852</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>853</i>&nbsp;                        side1.intersect(front);</b>
+<i>854</i>&nbsp;
+<b class="nc"><i>855</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>856</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="nc"><i>857</i>&nbsp;                                arc.getEndPoint().getX() - plotArea.getX(),</b>
+<b class="nc"><i>858</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>859</i>&nbsp;                        side2.intersect(front);</b>
+<i>860</i>&nbsp;
+<b class="nc"><i>861</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>862</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>863</i>&nbsp;                            g2.fill(side1);</b>
+<b class="nc"><i>864</i>&nbsp;                            g2.fill(side2);</b>
+<i>865</i>&nbsp;                        }
+<i>866</i>&nbsp;
+<b class="nc"><i>867</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>868</i>&nbsp;                            g2.fill(back);</b>
+<i>869</i>&nbsp;                        }
+<i>870</i>&nbsp;
+<b class="nc"><i>871</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>872</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>873</i>&nbsp;                            g2.draw(side1);</b>
+<b class="nc"><i>874</i>&nbsp;                            g2.draw(side2);</b>
+<i>875</i>&nbsp;                        }
+<i>876</i>&nbsp;
+<b class="nc"><i>877</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>878</i>&nbsp;                            g2.draw(back);</b>
+<i>879</i>&nbsp;                        }
+<i>880</i>&nbsp;
+<b class="nc"><i>881</i>&nbsp;                    }</b>
+<i>882</i>&nbsp;                }
+<i>883</i>&nbsp;                else {  // segments starts at front and finishes at back...
+<b class="nc"><i>884</i>&nbsp;                    if (drawBack) {</b>
+<b class="nc"><i>885</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>886</i>&nbsp;                                arc.getEndPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>887</i>&nbsp;                                plotArea.getMaxX() - arc.getEndPoint().getX(),</b>
+<b class="nc"><i>888</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>889</i>&nbsp;                        side2.intersect(back);</b>
+<b class="nc"><i>890</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>891</i>&nbsp;                        g2.fill(side2);</b>
+<b class="nc"><i>892</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>893</i>&nbsp;                        g2.draw(side2);</b>
+<i>894</i>&nbsp;                    }
+<i>895</i>&nbsp;
+<b class="nc"><i>896</i>&nbsp;                    if (drawFront) {</b>
+<b class="nc"><i>897</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>898</i>&nbsp;                                arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>899</i>&nbsp;                                plotArea.getMaxX() - arc.getStartPoint().getX(),</b>
+<b class="nc"><i>900</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>901</i>&nbsp;                        side1.intersect(front);</b>
+<b class="nc"><i>902</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>903</i>&nbsp;                        g2.fill(side1);</b>
+<b class="nc"><i>904</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>905</i>&nbsp;                        g2.draw(side1);</b>
+<b class="nc"><i>906</i>&nbsp;                    }</b>
+<i>907</i>&nbsp;                }
+<i>908</i>&nbsp;            }
+<i>909</i>&nbsp;            else {  // segment starts at back
+<i>910</i>&nbsp;
+<b class="nc"><i>911</i>&nbsp;                if (!isAngleAtFront(end)) {</b>
+<b class="nc"><i>912</i>&nbsp;                    if (extent &lt; 180.0) {  // and finishes at back</b>
+<b class="nc"><i>913</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>914</i>&nbsp;                            Area side = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>915</i>&nbsp;                                    arc.getEndPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>916</i>&nbsp;                                    arc.getStartPoint().getX()</b>
+<b class="nc"><i>917</i>&nbsp;                                    - arc.getEndPoint().getX(),</b>
+<b class="nc"><i>918</i>&nbsp;                                    plotArea.getHeight()));</b>
+<b class="nc"><i>919</i>&nbsp;                            side.intersect(back);</b>
+<b class="nc"><i>920</i>&nbsp;                            g2.setPaint(paint);</b>
+<b class="nc"><i>921</i>&nbsp;                            g2.fill(side);</b>
+<b class="nc"><i>922</i>&nbsp;                            g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>923</i>&nbsp;                            g2.draw(side);</b>
+<b class="nc"><i>924</i>&nbsp;                        }</b>
+<i>925</i>&nbsp;                    }
+<i>926</i>&nbsp;                    else {  // starts at back and wraps right around to the
+<i>927</i>&nbsp;                            // back again
+<b class="nc"><i>928</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>929</i>&nbsp;                                arc.getStartPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>930</i>&nbsp;                                plotArea.getX() - arc.getStartPoint().getX(),</b>
+<b class="nc"><i>931</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>932</i>&nbsp;                        side1.intersect(back);</b>
+<i>933</i>&nbsp;
+<b class="nc"><i>934</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>935</i>&nbsp;                                arc.getEndPoint().getX(), plotArea.getY(),</b>
+<b class="nc"><i>936</i>&nbsp;                                plotArea.getMaxX() - arc.getEndPoint().getX(),</b>
+<b class="nc"><i>937</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>938</i>&nbsp;                        side2.intersect(back);</b>
+<i>939</i>&nbsp;
+<b class="nc"><i>940</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>941</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>942</i>&nbsp;                            g2.fill(side1);</b>
+<b class="nc"><i>943</i>&nbsp;                            g2.fill(side2);</b>
+<i>944</i>&nbsp;                        }
+<i>945</i>&nbsp;
+<b class="nc"><i>946</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>947</i>&nbsp;                            g2.fill(front);</b>
+<i>948</i>&nbsp;                        }
+<i>949</i>&nbsp;
+<b class="nc"><i>950</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>951</i>&nbsp;                        if (drawBack) {</b>
+<b class="nc"><i>952</i>&nbsp;                            g2.draw(side1);</b>
+<b class="nc"><i>953</i>&nbsp;                            g2.draw(side2);</b>
+<i>954</i>&nbsp;                        }
+<i>955</i>&nbsp;
+<b class="nc"><i>956</i>&nbsp;                        if (drawFront) {</b>
+<b class="nc"><i>957</i>&nbsp;                            g2.draw(front);</b>
+<i>958</i>&nbsp;                        }
+<i>959</i>&nbsp;
+<b class="nc"><i>960</i>&nbsp;                    }</b>
+<i>961</i>&nbsp;                }
+<i>962</i>&nbsp;                else {  // starts at the back and finishes at the front
+<i>963</i>&nbsp;                        // (wrapping the left side)
+<b class="nc"><i>964</i>&nbsp;                    if (drawBack) {</b>
+<b class="nc"><i>965</i>&nbsp;                        Area side1 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>966</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="nc"><i>967</i>&nbsp;                                arc.getStartPoint().getX() - plotArea.getX(),</b>
+<b class="nc"><i>968</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>969</i>&nbsp;                        side1.intersect(back);</b>
+<b class="nc"><i>970</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>971</i>&nbsp;                        g2.fill(side1);</b>
+<b class="nc"><i>972</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>973</i>&nbsp;                        g2.draw(side1);</b>
+<i>974</i>&nbsp;                    }
+<i>975</i>&nbsp;
+<b class="nc"><i>976</i>&nbsp;                    if (drawFront) {</b>
+<b class="nc"><i>977</i>&nbsp;                        Area side2 = new Area(new Rectangle2D.Double(</b>
+<b class="nc"><i>978</i>&nbsp;                                plotArea.getX(), plotArea.getY(),</b>
+<b class="nc"><i>979</i>&nbsp;                                arc.getEndPoint().getX() - plotArea.getX(),</b>
+<b class="nc"><i>980</i>&nbsp;                                plotArea.getHeight()));</b>
+<b class="nc"><i>981</i>&nbsp;                        side2.intersect(front);</b>
+<b class="nc"><i>982</i>&nbsp;                        g2.setPaint(paint);</b>
+<b class="nc"><i>983</i>&nbsp;                        g2.fill(side2);</b>
+<b class="nc"><i>984</i>&nbsp;                        g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>985</i>&nbsp;                        g2.draw(side2);</b>
+<i>986</i>&nbsp;                    }
+<i>987</i>&nbsp;                }
+<i>988</i>&nbsp;            }
+<i>989</i>&nbsp;
+<i>990</i>&nbsp;        }
+<i>991</i>&nbsp;
+<b class="fc"><i>992</i>&nbsp;    }</b>
+<i>993</i>&nbsp;
+<i>994</i>&nbsp;    /**
+<i>995</i>&nbsp;     * Returns a short string describing the type of plot.
+<i>996</i>&nbsp;     *
+<i>997</i>&nbsp;     * @return &lt;i&gt;Pie 3D Plot&lt;/i&gt;.
+<i>998</i>&nbsp;     */
+<i>999</i>&nbsp;    @Override
+<i>1000</i>&nbsp;    public String getPlotType() {
+<b class="nc"><i>1001</i>&nbsp;        return localizationResources.getString(&quot;Pie_3D_Plot&quot;);</b>
+<i>1002</i>&nbsp;    }
+<i>1003</i>&nbsp;
+<i>1004</i>&nbsp;    /**
+<i>1005</i>&nbsp;     * A utility method that returns true if the angle represents a point at
+<i>1006</i>&nbsp;     * the front of the 3D pie chart.  0 - 180 degrees is the back, 180 - 360
+<i>1007</i>&nbsp;     * is the front.
+<i>1008</i>&nbsp;     *
+<i>1009</i>&nbsp;     * @param angle  the angle.
+<i>1010</i>&nbsp;     *
+<i>1011</i>&nbsp;     * @return A boolean.
+<i>1012</i>&nbsp;     */
+<i>1013</i>&nbsp;    private boolean isAngleAtFront(double angle) {
+<b class="fc"><i>1014</i>&nbsp;        return (Math.sin(Math.toRadians(angle)) &lt; 0.0);</b>
+<i>1015</i>&nbsp;    }
+<i>1016</i>&nbsp;
+<i>1017</i>&nbsp;    /**
+<i>1018</i>&nbsp;     * A utility method that returns true if the angle represents a point at
+<i>1019</i>&nbsp;     * the back of the 3D pie chart.  0 - 180 degrees is the back, 180 - 360
+<i>1020</i>&nbsp;     * is the front.
+<i>1021</i>&nbsp;     *
+<i>1022</i>&nbsp;     * @param angle  the angle.
+<i>1023</i>&nbsp;     *
+<i>1024</i>&nbsp;     * @return {@code true} if the angle is at the back of the pie.
+<i>1025</i>&nbsp;     */
+<i>1026</i>&nbsp;    private boolean isAngleAtBack(double angle) {
+<b class="fc"><i>1027</i>&nbsp;        return (Math.sin(Math.toRadians(angle)) &gt; 0.0);</b>
+<i>1028</i>&nbsp;    }
+<i>1029</i>&nbsp;
+<i>1030</i>&nbsp;    /**
+<i>1031</i>&nbsp;     * Tests this plot for equality with an arbitrary object.
+<i>1032</i>&nbsp;     *
+<i>1033</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>1034</i>&nbsp;     *
+<i>1035</i>&nbsp;     * @return A boolean.
+<i>1036</i>&nbsp;     */
+<i>1037</i>&nbsp;    @Override
+<i>1038</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1039</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>1040</i>&nbsp;            return true;</b>
+<i>1041</i>&nbsp;        }
+<b class="fc"><i>1042</i>&nbsp;        if (!(obj instanceof PiePlot3D)) {</b>
+<b class="nc"><i>1043</i>&nbsp;            return false;</b>
+<i>1044</i>&nbsp;        }
+<b class="fc"><i>1045</i>&nbsp;        PiePlot3D that = (PiePlot3D) obj;</b>
+<b class="fc"><i>1046</i>&nbsp;        if (this.depthFactor != that.depthFactor) {</b>
+<b class="fc"><i>1047</i>&nbsp;            return false;</b>
+<i>1048</i>&nbsp;        }
+<b class="fc"><i>1049</i>&nbsp;        if (this.darkerSides != that.darkerSides) {</b>
+<b class="fc"><i>1050</i>&nbsp;            return false;</b>
+<i>1051</i>&nbsp;        }
+<b class="fc"><i>1052</i>&nbsp;        return super.equals(obj);</b>
+<i>1053</i>&nbsp;    }
+<i>1054</i>&nbsp;
+<i>1055</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

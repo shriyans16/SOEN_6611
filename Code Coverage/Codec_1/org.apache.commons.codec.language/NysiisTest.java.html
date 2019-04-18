@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NysiisTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">NysiisTest.java</span></div><h1>NysiisTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests {@link Nysiis}
+ *
+ * @since 1.7
+ * @version $Id$
+ */
+<span class="pc bpc" id="L31" title="3 of 4 branches missed.">public class NysiisTest extends StringEncoderAbstractTest&lt;Nysiis&gt; {</span>
+
+<span class="fc" id="L33">    private final Nysiis fullNysiis = new Nysiis(false);</span>
+
+    /**
+     * Takes an array of String pairs where each pair's first element is the input and the second element the expected
+     * encoding.
+     *
+     * @param testValues
+     *            an array of String pairs where each pair's first element is the input and the second element the
+     *            expected encoding.
+     * @throws EncoderException
+     */
+<span class="fc" id="L44">    private void assertEncodings(final String[]... testValues) throws EncoderException {</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (final String[] arr : testValues) {</span>
+<span class="fc" id="L46">            Assert.assertEquals(&quot;Problem with &quot; + arr[0], arr[1], this.fullNysiis.encode(arr[0]));</span>
+        }
+<span class="fc" id="L48">    }</span>
+
+    @Override
+<span class="fc" id="L51">    protected Nysiis createStringEncoder() {</span>
+<span class="fc" id="L52">        return new Nysiis();</span>
+    }
+
+<span class="fc" id="L55">    private void encodeAll(final String[] strings, final String expectedEncoding) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (final String string : strings) {</span>
+<span class="fc" id="L57">            Assert.assertEquals(&quot;Problem with &quot; + string, expectedEncoding, getStringEncoder().encode(string));</span>
+        }
+<span class="fc" id="L59">    }</span>
+
+    @Test
+<span class="pc bnc" id="L62" title="All 4 branches missed.">    public void testBran() {</span>
+<span class="fc" id="L63">        encodeAll(new String[] { &quot;Brian&quot;, &quot;Brown&quot;, &quot;Brun&quot; }, &quot;BRAN&quot;);</span>
+<span class="fc" id="L64">    }</span>
+
+    @Test
+<span class="pc bnc" id="L67" title="All 4 branches missed.">    public void testCap() {</span>
+<span class="fc" id="L68">        this.encodeAll(new String[] { &quot;Capp&quot;, &quot;Cope&quot;, &quot;Copp&quot;, &quot;Kipp&quot; }, &quot;CAP&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    @Test
+<span class="pc bnc" id="L72" title="All 4 branches missed.">    public void testDad() {</span>
+        // Data Quality and Record Linkage Techniques P.121 claims this is DAN,
+        // but it should be DAD, verified also with dropby.com
+<span class="fc" id="L75">        this.encodeAll(new String[] { &quot;Dent&quot; }, &quot;DAD&quot;);</span>
+<span class="fc" id="L76">    }</span>
+
+    @Test
+<span class="pc bnc" id="L79" title="All 4 branches missed.">    public void testDan() {</span>
+<span class="fc" id="L80">        this.encodeAll(new String[] { &quot;Dane&quot;, &quot;Dean&quot;, &quot;Dionne&quot; }, &quot;DAN&quot;);</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Tests data gathered from around the internet.
+     *
+     * @see &lt;a href=&quot;http://www.dropby.com/NYSIISTextStrings.html&quot;&gt;http://www.dropby.com/NYSIISTextStrings.html&lt;/a&gt;
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L90" title="All 4 branches missed.">    public void testDropBy() throws EncoderException {</span>
+        // Explanation of differences between this implementation and the one at dropby.com is
+        // prepended to the test string. The referenced rules refer to the outlined steps the
+        // class description for Nysiis.
+
+<span class="fc" id="L95">        this.assertEncodings(</span>
+                // 1. Transcode first characters of name
+                new String[] { &quot;MACINTOSH&quot;, &quot;MCANT&quot; },
+                // violates 4j: the second N should not be added, as the first
+                //              key char is already a N
+                new String[] { &quot;KNUTH&quot;, &quot;NAT&quot; },           // Original: NNAT; modified: NATH
+                // O and E are transcoded to A because of rule 4a
+                // H also to A because of rule 4h
+                // the N gets mysteriously lost, maybe because of a wrongly implemented rule 4h
+                // that skips the next char in such a case?
+                // the remaining A is removed because of rule 7
+                new String[] { &quot;KOEHN&quot;, &quot;CAN&quot; },           // Original: C
+                // violates 4j: see also KNUTH
+                new String[] { &quot;PHILLIPSON&quot;, &quot;FALAPSAN&quot; }, // Original: FFALAP[SAN]
+                // violates 4j: see also KNUTH
+                new String[] { &quot;PFEISTER&quot;, &quot;FASTAR&quot; },     // Original: FFASTA[R]
+                // violates 4j: see also KNUTH
+                new String[] { &quot;SCHOENHOEFT&quot;, &quot;SANAFT&quot; },  // Original: SSANAF[T]
+                // 2. Transcode last characters of name:
+                new String[] { &quot;MCKEE&quot;, &quot;MCY&quot; },
+                new String[] { &quot;MACKIE&quot;, &quot;MCY&quot; },
+                new String[] { &quot;HEITSCHMIDT&quot;, &quot;HATSNAD&quot; },
+                new String[] { &quot;BART&quot;, &quot;BAD&quot; },
+                new String[] { &quot;HURD&quot;, &quot;HAD&quot; },
+                new String[] { &quot;HUNT&quot;, &quot;HAD&quot; },
+                new String[] { &quot;WESTERLUND&quot;, &quot;WASTARLAD&quot; },
+                // 4. Transcode remaining characters by following these rules,
+                //    incrementing by one character each time:
+                new String[] { &quot;CASSTEVENS&quot;, &quot;CASTAFAN&quot; },
+                new String[] { &quot;VASQUEZ&quot;, &quot;VASG&quot; },
+                new String[] { &quot;FRAZIER&quot;, &quot;FRASAR&quot; },
+                new String[] { &quot;BOWMAN&quot;, &quot;BANAN&quot; },
+                new String[] { &quot;MCKNIGHT&quot;, &quot;MCNAGT&quot; },
+                new String[] { &quot;RICKERT&quot;, &quot;RACAD&quot; },
+                // violates 5: the last S is not removed
+                // when comparing to DEUTS, which is phonetically similar
+                // the result it also DAT, which is correct for DEUTSCH too imo
+                new String[] { &quot;DEUTSCH&quot;, &quot;DAT&quot; },         // Original: DATS
+                new String[] { &quot;WESTPHAL&quot;, &quot;WASTFAL&quot; },
+                // violates 4h: the H should be transcoded to S and thus ignored as
+                // the first key character is also S
+                new String[] { &quot;SHRIVER&quot;, &quot;SRAVAR&quot; },      // Original: SHRAVA[R]
+                // same as KOEHN, the L gets mysteriously lost
+                new String[] { &quot;KUHL&quot;, &quot;CAL&quot; },            // Original: C
+                new String[] { &quot;RAWSON&quot;, &quot;RASAN&quot; },
+                // If last character is S, remove it
+                new String[] { &quot;JILES&quot;, &quot;JAL&quot; },
+                // violates 6: if the last two characters are AY, remove A
+                new String[] { &quot;CARRAWAY&quot;, &quot;CARY&quot; },       // Original: CARAY
+                new String[] { &quot;YAMADA&quot;, &quot;YANAD&quot; });
+<span class="fc" id="L145">    }</span>
+
+    @Test
+<span class="pc bnc" id="L148" title="All 4 branches missed.">    public void testFal() {</span>
+<span class="fc" id="L149">        this.encodeAll(new String[] { &quot;Phil&quot; }, &quot;FAL&quot;);</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Tests data gathered from around the internets.
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L158" title="All 4 branches missed.">    public void testOthers() throws EncoderException {</span>
+<span class="fc" id="L159">        this.assertEncodings(</span>
+                new String[] { &quot;O'Daniel&quot;, &quot;ODANAL&quot; },
+                new String[] { &quot;O'Donnel&quot;, &quot;ODANAL&quot; },
+                new String[] { &quot;Cory&quot;, &quot;CARY&quot; },
+                new String[] { &quot;Corey&quot;, &quot;CARY&quot; },
+                new String[] { &quot;Kory&quot;, &quot;CARY&quot; },
+                //
+                new String[] { &quot;FUZZY&quot;, &quot;FASY&quot; });
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Tests rule 1: Translate first characters of name: MAC → MCC, KN → N, K → C, PH, PF → FF, SCH → SSS
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L175" title="All 4 branches missed.">    public void testRule1() throws EncoderException {</span>
+<span class="fc" id="L176">        this.assertEncodings(</span>
+                new String[] { &quot;MACX&quot;, &quot;MCX&quot; },
+                new String[] { &quot;KNX&quot;, &quot;NX&quot; },
+                new String[] { &quot;KX&quot;, &quot;CX&quot; },
+                new String[] { &quot;PHX&quot;, &quot;FX&quot; },
+                new String[] { &quot;PFX&quot;, &quot;FX&quot; },
+                new String[] { &quot;SCHX&quot;, &quot;SX&quot; });
+<span class="fc" id="L183">    }</span>
+
+    /**
+     * Tests rule 2: Translate last characters of name: EE → Y, IE → Y, DT, RT, RD, NT, ND → D
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L191" title="All 4 branches missed.">    public void testRule2() throws EncoderException {</span>
+<span class="fc" id="L192">        this.assertEncodings(</span>
+                new String[] { &quot;XEE&quot;, &quot;XY&quot; },
+                new String[] { &quot;XIE&quot;, &quot;XY&quot; },
+                new String[] { &quot;XDT&quot;, &quot;XD&quot; },
+                new String[] { &quot;XRT&quot;, &quot;XD&quot; },
+                new String[] { &quot;XRD&quot;, &quot;XD&quot; },
+                new String[] { &quot;XNT&quot;, &quot;XD&quot; },
+                new String[] { &quot;XND&quot;, &quot;XD&quot; });
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Tests rule 4.1: EV → AF else A, E, I, O, U → A
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L208" title="All 4 branches missed.">    public void testRule4Dot1() throws EncoderException {</span>
+<span class="fc" id="L209">        this.assertEncodings(</span>
+                new String[] { &quot;XEV&quot;, &quot;XAF&quot; },
+                new String[] { &quot;XAX&quot;, &quot;XAX&quot; },
+                new String[] { &quot;XEX&quot;, &quot;XAX&quot; },
+                new String[] { &quot;XIX&quot;, &quot;XAX&quot; },
+                new String[] { &quot;XOX&quot;, &quot;XAX&quot; },
+                new String[] { &quot;XUX&quot;, &quot;XAX&quot; });
+<span class="fc" id="L216">    }</span>
+
+    /**
+     * Tests rule 4.2: Q → G, Z → S, M → N
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L224" title="All 4 branches missed.">    public void testRule4Dot2() throws EncoderException {</span>
+<span class="fc" id="L225">        this.assertEncodings(</span>
+                new String[] { &quot;XQ&quot;, &quot;XG&quot; },
+                new String[] { &quot;XZ&quot;, &quot;X&quot; },
+                new String[] { &quot;XM&quot;, &quot;XN&quot; });
+<span class="fc" id="L229">    }</span>
+
+    /**
+     * Tests rule 5: If last character is S, remove it.
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L237" title="All 4 branches missed.">    public void testRule5() throws EncoderException {</span>
+<span class="fc" id="L238">        this.assertEncodings(</span>
+                new String[] { &quot;XS&quot;, &quot;X&quot; },
+                new String[] { &quot;XSS&quot;, &quot;X&quot; });
+<span class="fc" id="L241">    }</span>
+
+    /**
+     * Tests rule 6: If last characters are AY, replace with Y.
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L249" title="All 4 branches missed.">    public void testRule6() throws EncoderException {</span>
+<span class="fc" id="L250">        this.assertEncodings(</span>
+                new String[] { &quot;XAY&quot;, &quot;XY&quot; },
+                new String[] { &quot;XAYS&quot;, &quot;XY&quot; }); // Rules 5, 6
+<span class="fc" id="L253">    }</span>
+
+    /**
+     * Tests rule 7: If last character is A, remove it.
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L261" title="All 4 branches missed.">    public void testRule7() throws EncoderException {</span>
+<span class="fc" id="L262">        this.assertEncodings(</span>
+                new String[] { &quot;XA&quot;, &quot;X&quot; },
+                new String[] { &quot;XAS&quot;, &quot;X&quot; }); // Rules 5, 7
+<span class="fc" id="L265">    }</span>
+    @Test
+<span class="pc bnc" id="L267" title="All 4 branches missed.">    public void testSnad() {</span>
+        // Data Quality and Record Linkage Techniques P.121 claims this is SNAT,
+        // but it should be SNAD
+<span class="fc" id="L270">        this.encodeAll(new String[] { &quot;Schmidt&quot; }, &quot;SNAD&quot;);</span>
+<span class="fc" id="L271">    }</span>
+
+    @Test
+<span class="pc bnc" id="L274" title="All 4 branches missed.">    public void testSnat() {</span>
+<span class="fc" id="L275">        this.encodeAll(new String[] { &quot;Smith&quot;, &quot;Schmit&quot; }, &quot;SNAT&quot;);</span>
+<span class="fc" id="L276">    }</span>
+
+    @Test
+<span class="pc bnc" id="L279" title="All 4 branches missed.">    public void testSpecialBranches() {</span>
+<span class="fc" id="L280">        this.encodeAll(new String[] { &quot;Kobwick&quot; }, &quot;CABWAC&quot;);</span>
+<span class="fc" id="L281">        this.encodeAll(new String[] { &quot;Kocher&quot; }, &quot;CACAR&quot;);</span>
+<span class="fc" id="L282">        this.encodeAll(new String[] { &quot;Fesca&quot; }, &quot;FASC&quot;);</span>
+<span class="fc" id="L283">        this.encodeAll(new String[] { &quot;Shom&quot; }, &quot;SAN&quot;);</span>
+<span class="fc" id="L284">        this.encodeAll(new String[] { &quot;Ohlo&quot; }, &quot;OL&quot;);</span>
+<span class="fc" id="L285">        this.encodeAll(new String[] { &quot;Uhu&quot; }, &quot;UH&quot;);</span>
+<span class="fc" id="L286">        this.encodeAll(new String[] { &quot;Um&quot; }, &quot;UN&quot;);</span>
+<span class="fc" id="L287">    }</span>
+
+    @Test
+<span class="pc bnc" id="L290" title="All 4 branches missed.">    public void testTranan() {</span>
+<span class="fc" id="L291">        this.encodeAll(new String[] { &quot;Trueman&quot;, &quot;Truman&quot; }, &quot;TRANAN&quot;);</span>
+<span class="fc" id="L292">    }</span>
+
+    @Test
+<span class="pc bnc" id="L295" title="All 4 branches missed.">    public void testTrueVariant() {</span>
+<span class="fc" id="L296">        final Nysiis encoder = new Nysiis(true);</span>
+
+<span class="fc" id="L298">        final String encoded = encoder.encode(&quot;WESTERLUND&quot;);</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        Assert.assertTrue(encoded.length() &lt;= 6);</span>
+<span class="fc" id="L300">        Assert.assertEquals(&quot;WASTAR&quot;, encoded);</span>
+<span class="fc" id="L301">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

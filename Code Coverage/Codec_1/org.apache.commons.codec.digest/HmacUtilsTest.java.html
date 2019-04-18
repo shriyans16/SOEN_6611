@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HmacUtilsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">HmacUtilsTest.java</span></div><h1>HmacUtilsTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements. See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.digest;
+
+import static org.junit.Assert.assertEquals;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.binary.StringUtils;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests HmacUtils methods.
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L37" title="3 of 4 branches missed.">public class HmacUtilsTest {</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L41" title="4 of 6 branches missed.">    public void testEmptyKey() {</span>
+<span class="nc" id="L42">        HmacUtils.getHmacMd5(new byte[] {});</span>
+<span class="nc" id="L43">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L47" title="All 4 branches missed.">    public void testGetHMac() {</span>
+<span class="fc" id="L48">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_BYTES,</span>
+<span class="fc" id="L49">                HmacUtils.getHmacMd5(HmacAlgorithmsTest.STANDARD_KEY_BYTES).doFinal(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L50">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_BYTES,</span>
+<span class="fc" id="L51">                HmacUtils.getHmacSha1(HmacAlgorithmsTest.STANDARD_KEY_BYTES).doFinal(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L52">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_BYTES,</span>
+<span class="fc" id="L53">                HmacUtils.getHmacSha256(HmacAlgorithmsTest.STANDARD_KEY_BYTES).doFinal(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L54">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_BYTES,</span>
+<span class="fc" id="L55">                HmacUtils.getHmacSha384(HmacAlgorithmsTest.STANDARD_KEY_BYTES).doFinal(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L56">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_BYTES,</span>
+<span class="fc" id="L57">                HmacUtils.getHmacSha512(HmacAlgorithmsTest.STANDARD_KEY_BYTES).doFinal(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L58">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L62" title="All 4 branches missed.">    public void testHmacMd5Hex() throws IOException {</span>
+<span class="fc" id="L63">        assertEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_STRING,</span>
+<span class="fc" id="L64">                HmacUtils.hmacMd5Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, &quot;The quick brown fox jumps over the lazy dog&quot;));</span>
+<span class="fc" id="L65">        assertEquals(&quot;750c783e6ab0b503eaa86e310a5db738&quot;, HmacUtils.hmacMd5Hex(&quot;Jefe&quot;, &quot;what do ya want for nothing?&quot;));</span>
+<span class="fc" id="L66">        assertEquals(</span>
+                &quot;750c783e6ab0b503eaa86e310a5db738&quot;,
+<span class="fc" id="L68">                HmacUtils.hmacMd5Hex(&quot;Jefe&quot;.getBytes(),</span>
+<span class="fc" id="L69">                        new ByteArrayInputStream(&quot;what do ya want for nothing?&quot;.getBytes())));</span>
+<span class="fc" id="L70">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L74" title="All 4 branches missed.">    public void testHmacSha1Hex() throws IOException {</span>
+<span class="fc" id="L75">        assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING, HmacUtils.hmacSha1Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L76">        assertEquals(&quot;f42bb0eeb018ebbd4597ae7213711ec60760843f&quot;, HmacUtils.hmacSha1Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, &quot;&quot;));</span>
+<span class="fc" id="L77">        assertEquals(&quot;effcdf6ae5eb2fa2d27416d5f184df9c259a7c79&quot;,</span>
+<span class="fc" id="L78">                HmacUtils.hmacSha1Hex(&quot;Jefe&quot;, &quot;what do ya want for nothing?&quot;));</span>
+<span class="fc" id="L79">        assertEquals(</span>
+                &quot;effcdf6ae5eb2fa2d27416d5f184df9c259a7c79&quot;,
+<span class="fc" id="L81">                HmacUtils.hmacSha1Hex(&quot;Jefe&quot;.getBytes(),</span>
+<span class="fc" id="L82">                        new ByteArrayInputStream(&quot;what do ya want for nothing?&quot;.getBytes())));</span>
+<span class="fc" id="L83">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L87" title="All 4 branches missed.">    public void testHmacSha1UpdateWithByteArray() {</span>
+<span class="fc" id="L88">        final Mac mac = HmacUtils.getHmacSha1(HmacAlgorithmsTest.STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L89">        HmacUtils.updateHmac(mac, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES);</span>
+<span class="fc" id="L90">        assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING, Hex.encodeHexString(mac.doFinal()));</span>
+<span class="fc" id="L91">        HmacUtils.updateHmac(mac, &quot;&quot;.getBytes());</span>
+<span class="fc" id="L92">        assertEquals(&quot;f42bb0eeb018ebbd4597ae7213711ec60760843f&quot;, Hex.encodeHexString(mac.doFinal()));</span>
+<span class="fc" id="L93">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L97" title="All 4 branches missed.">    public void testHmacSha1UpdateWithInpustream() throws IOException {</span>
+<span class="fc" id="L98">        final Mac mac = HmacUtils.getHmacSha1(HmacAlgorithmsTest.STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L99">        HmacUtils.updateHmac(mac, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L100">        assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING, Hex.encodeHexString(mac.doFinal()));</span>
+<span class="fc" id="L101">        HmacUtils.updateHmac(mac, new ByteArrayInputStream(&quot;&quot;.getBytes()));</span>
+<span class="fc" id="L102">        assertEquals(&quot;f42bb0eeb018ebbd4597ae7213711ec60760843f&quot;, Hex.encodeHexString(mac.doFinal()));</span>
+<span class="fc" id="L103">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L107" title="All 4 branches missed.">    public void testHmacSha1UpdateWithString() {</span>
+<span class="fc" id="L108">        final Mac mac = HmacUtils.getHmacSha1(HmacAlgorithmsTest.STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L109">        HmacUtils.updateHmac(mac, HmacAlgorithmsTest.STANDARD_PHRASE_STRING);</span>
+<span class="fc" id="L110">        assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING, Hex.encodeHexString(mac.doFinal()));</span>
+<span class="fc" id="L111">        HmacUtils.updateHmac(mac, &quot;&quot;);</span>
+<span class="fc" id="L112">        assertEquals(&quot;f42bb0eeb018ebbd4597ae7213711ec60760843f&quot;, Hex.encodeHexString(mac.doFinal()));</span>
+<span class="fc" id="L113">    }</span>
+
+    @Test
+<span class="pc bnc" id="L116" title="All 4 branches missed.">    public void testInitializedMac() {</span>
+<span class="fc" id="L117">        final Mac md5Mac = HmacUtils.getInitializedMac(HmacAlgorithms.HMAC_MD5, HmacAlgorithmsTest.STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L118">        final Mac md5Mac2 = HmacUtils.getInitializedMac(&quot;HmacMD5&quot;, HmacAlgorithmsTest.STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L119">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_BYTES, HmacUtils.updateHmac(md5Mac, HmacAlgorithmsTest.STANDARD_PHRASE_STRING)</span>
+<span class="fc" id="L120">                .doFinal());</span>
+<span class="fc" id="L121">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_BYTES, HmacUtils.updateHmac(md5Mac2, HmacAlgorithmsTest.STANDARD_PHRASE_STRING)</span>
+<span class="fc" id="L122">                .doFinal());</span>
+<span class="fc" id="L123">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L126" title="4 of 6 branches missed.">    public void testInitializedMacNullAlgo() {</span>
+<span class="nc" id="L127">        HmacUtils.getInitializedMac((String) null, HmacAlgorithmsTest.STANDARD_KEY_BYTES);</span>
+<span class="nc" id="L128">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L131" title="4 of 6 branches missed.">    public void testInitializedMacNullKey() {</span>
+<span class="nc" id="L132">        HmacUtils.getInitializedMac(HmacAlgorithms.HMAC_MD5, null);</span>
+<span class="nc" id="L133">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L136" title="4 of 6 branches missed.">    public void testInternalNoSuchAlgorithmException() {</span>
+<span class="nc" id="L137">        HmacUtils.getInitializedMac(&quot;Bogus Bogus&quot;, StringUtils.getBytesUtf8(&quot;akey&quot;));</span>
+<span class="nc" id="L138">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L142" title="All 4 branches missed.">    public void testMd5HMac() throws IOException {</span>
+<span class="fc" id="L143">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_BYTES,</span>
+<span class="fc" id="L144">                HmacUtils.hmacMd5(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L145">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_BYTES,</span>
+<span class="fc" id="L146">                HmacUtils.hmacMd5(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L147">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_BYTES,</span>
+<span class="fc" id="L148">                HmacUtils.hmacMd5(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L149">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_STRING, HmacUtils.hmacMd5Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L150">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_STRING,</span>
+<span class="fc" id="L151">                HmacUtils.hmacMd5Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L152">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_MD5_RESULT_STRING,</span>
+<span class="fc" id="L153">                HmacUtils.hmacMd5Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L154">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L158" title="4 of 6 branches missed.">    public void testMd5HMacFail() {</span>
+<span class="nc" id="L159">        HmacUtils.hmacMd5((byte[]) null, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L160">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L164" title="4 of 6 branches missed.">    public void testNullKey() {</span>
+<span class="nc" id="L165">        HmacUtils.getHmacMd5(null);</span>
+<span class="nc" id="L166">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L169" title="4 of 6 branches missed.">    public void testSecretKeySpecAllowsEmtyKeys() {</span>
+<span class="nc" id="L170">        new SecretKeySpec(new byte[] {}, &quot;HmacMD5&quot;);</span>
+<span class="nc" id="L171">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L175" title="All 4 branches missed.">    public void testSha1HMac() throws IOException {</span>
+<span class="fc" id="L176">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_BYTES,</span>
+<span class="fc" id="L177">                HmacUtils.hmacSha1(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L178">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_BYTES,</span>
+<span class="fc" id="L179">                HmacUtils.hmacSha1(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L180">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_BYTES,</span>
+<span class="fc" id="L181">                HmacUtils.hmacSha1(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L182">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING,</span>
+<span class="fc" id="L183">                HmacUtils.hmacSha1Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L184">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING,</span>
+<span class="fc" id="L185">                HmacUtils.hmacSha1Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L186">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA1_RESULT_STRING,</span>
+<span class="fc" id="L187">                HmacUtils.hmacSha1Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L188">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L192" title="4 of 6 branches missed.">    public void testSha1HMacFail() {</span>
+<span class="nc" id="L193">        HmacUtils.hmacSha1((byte[]) null, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L194">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L198" title="All 4 branches missed.">    public void testSha256HMac() throws IOException {</span>
+<span class="fc" id="L199">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_BYTES,</span>
+<span class="fc" id="L200">                HmacUtils.hmacSha256(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L201">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_BYTES,</span>
+<span class="fc" id="L202">                HmacUtils.hmacSha256(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L203">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_BYTES,</span>
+<span class="fc" id="L204">                HmacUtils.hmacSha256(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L205">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_STRING,</span>
+<span class="fc" id="L206">                HmacUtils.hmacSha256Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L207">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_STRING,</span>
+<span class="fc" id="L208">                HmacUtils.hmacSha256Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L209">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA256_RESULT_STRING,</span>
+<span class="fc" id="L210">                HmacUtils.hmacSha256Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L211">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L215" title="4 of 6 branches missed.">    public void testSha256HMacFail() {</span>
+<span class="nc" id="L216">        HmacUtils.hmacSha256((byte[]) null, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L217">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L221" title="All 4 branches missed.">    public void testSha384HMac() throws IOException {</span>
+<span class="fc" id="L222">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_BYTES,</span>
+<span class="fc" id="L223">                HmacUtils.hmacSha384(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L224">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_BYTES,</span>
+<span class="fc" id="L225">                HmacUtils.hmacSha384(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L226">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_BYTES,</span>
+<span class="fc" id="L227">                HmacUtils.hmacSha384(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L228">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_STRING,</span>
+<span class="fc" id="L229">                HmacUtils.hmacSha384Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L230">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_STRING,</span>
+<span class="fc" id="L231">                HmacUtils.hmacSha384Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L232">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA384_RESULT_STRING,</span>
+<span class="fc" id="L233">                HmacUtils.hmacSha384Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L234">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L238" title="4 of 6 branches missed.">    public void testSha384HMacFail() {</span>
+<span class="nc" id="L239">        HmacUtils.hmacSha384((byte[]) null, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L240">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test
+<span class="pc bnc" id="L244" title="All 4 branches missed.">    public void testSha512HMac() throws IOException {</span>
+<span class="fc" id="L245">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_BYTES,</span>
+<span class="fc" id="L246">                HmacUtils.hmacSha512(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L247">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_BYTES,</span>
+<span class="fc" id="L248">                HmacUtils.hmacSha512(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L249">        Assert.assertArrayEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_BYTES,</span>
+<span class="fc" id="L250">                HmacUtils.hmacSha512(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L251">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_STRING,</span>
+<span class="fc" id="L252">                HmacUtils.hmacSha512Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L253">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_STRING,</span>
+<span class="fc" id="L254">                HmacUtils.hmacSha512Hex(HmacAlgorithmsTest.STANDARD_KEY_BYTES, new ByteArrayInputStream(HmacAlgorithmsTest.STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L255">        Assert.assertEquals(HmacAlgorithmsTest.STANDARD_SHA512_RESULT_STRING,</span>
+<span class="fc" id="L256">                HmacUtils.hmacSha512Hex(HmacAlgorithmsTest.STANDARD_KEY_STRING, HmacAlgorithmsTest.STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L257">    }</span>
+
+    @SuppressWarnings(&quot;deprecation&quot;) // most of the static methods are deprecated
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L261" title="4 of 6 branches missed.">    public void testSha512HMacFail() {</span>
+<span class="nc" id="L262">        HmacUtils.hmacSha512((byte[]) null, HmacAlgorithmsTest.STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L263">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

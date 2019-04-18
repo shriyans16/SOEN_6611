@@ -1,0 +1,1252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DoubleMetaphoneTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">DoubleMetaphoneTest.java</span></div><h1>DoubleMetaphoneTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Test;
+
+/**
+ * Tests {@link DoubleMetaphone}.
+ *
+ * &lt;p&gt;Keep this file in UTF-8 encoding for proper Javadoc processing.&lt;/p&gt;
+ *
+ * @see &quot;http://www.cuj.com/documents/s=8038/cuj0006philips/&quot;
+ * @version $Id$
+ */
+<span class="pc bpc" id="L37" title="3 of 4 branches missed.">public class DoubleMetaphoneTest extends StringEncoderAbstractTest&lt;DoubleMetaphone&gt; {</span>
+
+    /**
+     * Test data from http://aspell.net/test/orig/batch0.tab.
+     *
+     * &quot;Copyright (C) 2002 Kevin Atkinson (kevina@gnu.org). Verbatim copying
+     * and distribution of this entire article is permitted in any medium,
+     * provided this notice is preserved.&quot;
+     *
+     * Massaged the test data in the array below.
+     */
+<span class="fc" id="L48">    private static final String[][] FIXTURE = { { &quot;Accosinly&quot;, &quot;Occasionally&quot; }, {</span>
+            &quot;Ciculer&quot;, &quot;Circler&quot; }, {
+            &quot;Circue&quot;, &quot;Circle&quot; }, {
+            &quot;Maddness&quot;, &quot;Madness&quot; }, {
+            &quot;Occusionaly&quot;, &quot;Occasionally&quot; }, {
+            &quot;Steffen&quot;, &quot;Stephen&quot; }, {
+            &quot;Thw&quot;, &quot;The&quot; }, {
+            &quot;Unformanlly&quot;, &quot;Unfortunately&quot; }, {
+            &quot;Unfortally&quot;, &quot;Unfortunately&quot; }, {
+            &quot;abilitey&quot;, &quot;ability&quot; }, {
+            &quot;abouy&quot;, &quot;about&quot; }, {
+            &quot;absorbtion&quot;, &quot;absorption&quot; }, {
+            &quot;accidently&quot;, &quot;accidentally&quot; }, {
+            &quot;accomodate&quot;, &quot;accommodate&quot; }, {
+            &quot;acommadate&quot;, &quot;accommodate&quot; }, {
+            &quot;acord&quot;, &quot;accord&quot; }, {
+            &quot;adultry&quot;, &quot;adultery&quot; }, {
+            &quot;aggresive&quot;, &quot;aggressive&quot; }, {
+            &quot;alchohol&quot;, &quot;alcohol&quot; }, {
+            &quot;alchoholic&quot;, &quot;alcoholic&quot; }, {
+            &quot;allieve&quot;, &quot;alive&quot; }, {
+            &quot;alot&quot;, &quot;a lot&quot; }, {
+            &quot;alright&quot;, &quot;all right&quot; }, {
+            &quot;amature&quot;, &quot;amateur&quot; }, {
+            &quot;ambivilant&quot;, &quot;ambivalent&quot; }, {
+            &quot;amification&quot;, &quot;amplification&quot; }, {
+            &quot;amourfous&quot;, &quot;amorphous&quot; }, {
+            &quot;annoint&quot;, &quot;anoint&quot; }, {
+            &quot;annonsment&quot;, &quot;announcement&quot; }, {
+            &quot;annoyting&quot;, &quot;anting&quot; }, {
+            &quot;annuncio&quot;, &quot;announce&quot; }, {
+            &quot;anonomy&quot;, &quot;anatomy&quot; }, {
+            &quot;anotomy&quot;, &quot;anatomy&quot; }, {
+            &quot;antidesestablishmentarianism&quot;, &quot;antidisestablishmentarianism&quot; }, {
+            &quot;antidisestablishmentarism&quot;, &quot;antidisestablishmentarianism&quot; }, {
+            &quot;anynomous&quot;, &quot;anonymous&quot; }, {
+            &quot;appelet&quot;, &quot;applet&quot; }, {
+            &quot;appreceiated&quot;, &quot;appreciated&quot; }, {
+            &quot;appresteate&quot;, &quot;appreciate&quot; }, {
+            &quot;aquantance&quot;, &quot;acquaintance&quot; }, {
+            &quot;aratictature&quot;, &quot;architecture&quot; }, {
+            &quot;archeype&quot;, &quot;archetype&quot; }, {
+            &quot;aricticure&quot;, &quot;architecture&quot; }, {
+            &quot;artic&quot;, &quot;arctic&quot; }, {
+            &quot;asentote&quot;, &quot;asymptote&quot; }, {
+            &quot;ast&quot;, &quot;at&quot; }, {
+            &quot;asterick&quot;, &quot;asterisk&quot; }, {
+            &quot;asymetric&quot;, &quot;asymmetric&quot; }, {
+            &quot;atentively&quot;, &quot;attentively&quot; }, {
+            &quot;autoamlly&quot;, &quot;automatically&quot; }, {
+            &quot;bankrot&quot;, &quot;bankrupt&quot; }, {
+            &quot;basicly&quot;, &quot;basically&quot; }, {
+            &quot;batallion&quot;, &quot;battalion&quot; }, {
+            &quot;bbrose&quot;, &quot;browse&quot; }, {
+            &quot;beauro&quot;, &quot;bureau&quot; }, {
+            &quot;beaurocracy&quot;, &quot;bureaucracy&quot; }, {
+            &quot;beggining&quot;, &quot;beginning&quot; }, {
+            &quot;beging&quot;, &quot;beginning&quot; }, {
+            &quot;behaviour&quot;, &quot;behavior&quot; }, {
+            &quot;beleive&quot;, &quot;believe&quot; }, {
+            &quot;belive&quot;, &quot;believe&quot; }, {
+            &quot;benidifs&quot;, &quot;benefits&quot; }, {
+            &quot;bigginging&quot;, &quot;beginning&quot; }, {
+            &quot;blait&quot;, &quot;bleat&quot; }, {
+            &quot;bouyant&quot;, &quot;buoyant&quot; }, {
+            &quot;boygot&quot;, &quot;boycott&quot; }, {
+            &quot;brocolli&quot;, &quot;broccoli&quot; }, {
+            &quot;buch&quot;, &quot;bush&quot; }, {
+            &quot;buder&quot;, &quot;butter&quot; }, {
+            &quot;budr&quot;, &quot;butter&quot; }, {
+            &quot;budter&quot;, &quot;butter&quot; }, {
+            &quot;buracracy&quot;, &quot;bureaucracy&quot; }, {
+            &quot;burracracy&quot;, &quot;bureaucracy&quot; }, {
+            &quot;buton&quot;, &quot;button&quot; }, {
+            &quot;byby&quot;, &quot;by by&quot; }, {
+            &quot;cauler&quot;, &quot;caller&quot; }, {
+            &quot;ceasar&quot;, &quot;caesar&quot; }, {
+            &quot;cemetary&quot;, &quot;cemetery&quot; }, {
+            &quot;changeing&quot;, &quot;changing&quot; }, {
+            &quot;cheet&quot;, &quot;cheat&quot; }, {
+            &quot;cicle&quot;, &quot;circle&quot; }, {
+            &quot;cimplicity&quot;, &quot;simplicity&quot; }, {
+            &quot;circumstaces&quot;, &quot;circumstances&quot; }, {
+            &quot;clob&quot;, &quot;club&quot; }, {
+            &quot;coaln&quot;, &quot;colon&quot; }, {
+            &quot;cocamena&quot;, &quot;cockamamie&quot; }, {
+            &quot;colleaque&quot;, &quot;colleague&quot; }, {
+            &quot;colloquilism&quot;, &quot;colloquialism&quot; }, {
+            &quot;columne&quot;, &quot;column&quot; }, {
+            &quot;comiler&quot;, &quot;compiler&quot; }, {
+            &quot;comitmment&quot;, &quot;commitment&quot; }, {
+            &quot;comitte&quot;, &quot;committee&quot; }, {
+            &quot;comittmen&quot;, &quot;commitment&quot; }, {
+            &quot;comittmend&quot;, &quot;commitment&quot; }, {
+            &quot;commerciasl&quot;, &quot;commercials&quot; }, {
+            &quot;commited&quot;, &quot;committed&quot; }, {
+            &quot;commitee&quot;, &quot;committee&quot; }, {
+            &quot;companys&quot;, &quot;companies&quot; }, {
+            &quot;compicated&quot;, &quot;complicated&quot; }, {
+            &quot;comupter&quot;, &quot;computer&quot; }, {
+            &quot;concensus&quot;, &quot;consensus&quot; }, {
+            &quot;confusionism&quot;, &quot;confucianism&quot; }, {
+            &quot;congradulations&quot;, &quot;congratulations&quot; }, {
+            &quot;conibation&quot;, &quot;contribution&quot; }, {
+            &quot;consident&quot;, &quot;consistent&quot; }, {
+            &quot;consident&quot;, &quot;consonant&quot; }, {
+            &quot;contast&quot;, &quot;constant&quot; }, {
+            &quot;contastant&quot;, &quot;constant&quot; }, {
+            &quot;contunie&quot;, &quot;continue&quot; }, {
+            &quot;cooly&quot;, &quot;coolly&quot; }, {
+            &quot;copping&quot;, &quot;coping&quot; }, {
+            &quot;cosmoplyton&quot;, &quot;cosmopolitan&quot; }, {
+            &quot;courst&quot;, &quot;court&quot; }, {
+            &quot;crasy&quot;, &quot;crazy&quot; }, {
+            &quot;cravets&quot;, &quot;caveats&quot; }, {
+            &quot;credetability&quot;, &quot;credibility&quot; }, {
+            &quot;criqitue&quot;, &quot;critique&quot; }, {
+            &quot;croke&quot;, &quot;croak&quot; }, {
+            &quot;crucifiction&quot;, &quot;crucifixion&quot; }, {
+            &quot;crusifed&quot;, &quot;crucified&quot; }, {
+            &quot;ctitique&quot;, &quot;critique&quot; }, {
+            &quot;cumba&quot;, &quot;combo&quot; }, {
+            &quot;custamisation&quot;, &quot;customization&quot; }, {
+            &quot;dag&quot;, &quot;dog&quot; }, {
+            &quot;daly&quot;, &quot;daily&quot; }, {
+            &quot;danguages&quot;, &quot;dangerous&quot; }, {
+            &quot;deaft&quot;, &quot;draft&quot; }, {
+            &quot;defence&quot;, &quot;defense&quot; }, {
+            &quot;defenly&quot;, &quot;defiantly&quot; }, {
+            &quot;definate&quot;, &quot;definite&quot; }, {
+            &quot;definately&quot;, &quot;definitely&quot; }, {
+            &quot;dependeble&quot;, &quot;dependable&quot; }, {
+            &quot;descrption&quot;, &quot;description&quot; }, {
+            &quot;descrptn&quot;, &quot;description&quot; }, {
+            &quot;desparate&quot;, &quot;desperate&quot; }, {
+            &quot;dessicate&quot;, &quot;desiccate&quot; }, {
+            &quot;destint&quot;, &quot;distant&quot; }, {
+            &quot;develepment&quot;, &quot;developments&quot; }, {
+            &quot;developement&quot;, &quot;development&quot; }, {
+            &quot;develpond&quot;, &quot;development&quot; }, {
+            &quot;devulge&quot;, &quot;divulge&quot; }, {
+            &quot;diagree&quot;, &quot;disagree&quot; }, {
+            &quot;dieties&quot;, &quot;deities&quot; }, {
+            &quot;dinasaur&quot;, &quot;dinosaur&quot; }, {
+            &quot;dinasour&quot;, &quot;dinosaur&quot; }, {
+            &quot;direcyly&quot;, &quot;directly&quot; }, {
+            &quot;discuess&quot;, &quot;discuss&quot; }, {
+            &quot;disect&quot;, &quot;dissect&quot; }, {
+            &quot;disippate&quot;, &quot;dissipate&quot; }, {
+            &quot;disition&quot;, &quot;decision&quot; }, {
+            &quot;dispair&quot;, &quot;despair&quot; }, {
+            &quot;disssicion&quot;, &quot;discussion&quot; }, {
+            &quot;distarct&quot;, &quot;distract&quot; }, {
+            &quot;distart&quot;, &quot;distort&quot; }, {
+            &quot;distroy&quot;, &quot;destroy&quot; }, {
+            &quot;documtations&quot;, &quot;documentation&quot; }, {
+            &quot;doenload&quot;, &quot;download&quot; }, {
+            &quot;dongle&quot;, &quot;dangle&quot; }, {
+            &quot;doog&quot;, &quot;dog&quot; }, {
+            &quot;dramaticly&quot;, &quot;dramatically&quot; }, {
+            &quot;drunkeness&quot;, &quot;drunkenness&quot; }, {
+            &quot;ductioneery&quot;, &quot;dictionary&quot; }, {
+            &quot;dur&quot;, &quot;due&quot; }, {
+            &quot;duren&quot;, &quot;during&quot; }, {
+            &quot;dymatic&quot;, &quot;dynamic&quot; }, {
+            &quot;dynaic&quot;, &quot;dynamic&quot; }, {
+            &quot;ecstacy&quot;, &quot;ecstasy&quot; }, {
+            &quot;efficat&quot;, &quot;efficient&quot; }, {
+            &quot;efficity&quot;, &quot;efficacy&quot; }, {
+            &quot;effots&quot;, &quot;efforts&quot; }, {
+            &quot;egsistence&quot;, &quot;existence&quot; }, {
+            &quot;eitiology&quot;, &quot;etiology&quot; }, {
+            &quot;elagent&quot;, &quot;elegant&quot; }, {
+            &quot;elligit&quot;, &quot;elegant&quot; }, {
+            &quot;embarass&quot;, &quot;embarrass&quot; }, {
+            &quot;embarassment&quot;, &quot;embarrassment&quot; }, {
+            &quot;embaress&quot;, &quot;embarrass&quot; }, {
+            &quot;encapsualtion&quot;, &quot;encapsulation&quot; }, {
+            &quot;encyclapidia&quot;, &quot;encyclopedia&quot; }, {
+            &quot;encyclopia&quot;, &quot;encyclopedia&quot; }, {
+            &quot;engins&quot;, &quot;engine&quot; }, {
+            &quot;enhence&quot;, &quot;enhance&quot; }, {
+            &quot;enligtment&quot;, &quot;Enlightenment&quot; }, {
+            &quot;ennuui&quot;, &quot;ennui&quot; }, {
+            &quot;enought&quot;, &quot;enough&quot; }, {
+            &quot;enventions&quot;, &quot;inventions&quot; }, {
+            &quot;envireminakl&quot;, &quot;environmental&quot; }, {
+            &quot;enviroment&quot;, &quot;environment&quot; }, {
+            &quot;epitomy&quot;, &quot;epitome&quot; }, {
+            &quot;equire&quot;, &quot;acquire&quot; }, {
+            &quot;errara&quot;, &quot;error&quot; }, {
+            &quot;erro&quot;, &quot;error&quot; }, {
+            &quot;evaualtion&quot;, &quot;evaluation&quot; }, {
+            &quot;evething&quot;, &quot;everything&quot; }, {
+            &quot;evtually&quot;, &quot;eventually&quot; }, {
+            &quot;excede&quot;, &quot;exceed&quot; }, {
+            &quot;excercise&quot;, &quot;exercise&quot; }, {
+            &quot;excpt&quot;, &quot;except&quot; }, {
+            &quot;excution&quot;, &quot;execution&quot; }, {
+            &quot;exhileration&quot;, &quot;exhilaration&quot; }, {
+            &quot;existance&quot;, &quot;existence&quot; }, {
+            &quot;expleyly&quot;, &quot;explicitly&quot; }, {
+            &quot;explity&quot;, &quot;explicitly&quot; }, {
+            &quot;expresso&quot;, &quot;espresso&quot; }, {
+            &quot;exspidient&quot;, &quot;expedient&quot; }, {
+            &quot;extions&quot;, &quot;extensions&quot; }, {
+            &quot;factontion&quot;, &quot;factorization&quot; }, {
+            &quot;failer&quot;, &quot;failure&quot; }, {
+            &quot;famdasy&quot;, &quot;fantasy&quot; }, {
+            &quot;faver&quot;, &quot;favor&quot; }, {
+            &quot;faxe&quot;, &quot;fax&quot; }, {
+            &quot;febuary&quot;, &quot;february&quot; }, {
+            &quot;firey&quot;, &quot;fiery&quot; }, {
+            &quot;fistival&quot;, &quot;festival&quot; }, {
+            &quot;flatterring&quot;, &quot;flattering&quot; }, {
+            &quot;fluk&quot;, &quot;flux&quot; }, {
+            &quot;flukse&quot;, &quot;flux&quot; }, {
+            &quot;fone&quot;, &quot;phone&quot; }, {
+            &quot;forsee&quot;, &quot;foresee&quot; }, {
+            &quot;frustartaion&quot;, &quot;frustrating&quot; }, {
+            &quot;fuction&quot;, &quot;function&quot; }, {
+            &quot;funetik&quot;, &quot;phonetic&quot; }, {
+            &quot;futs&quot;, &quot;guts&quot; }, {
+            &quot;gamne&quot;, &quot;came&quot; }, {
+            &quot;gaurd&quot;, &quot;guard&quot; }, {
+            &quot;generly&quot;, &quot;generally&quot; }, {
+            &quot;ghandi&quot;, &quot;gandhi&quot; }, {
+            &quot;goberment&quot;, &quot;government&quot; }, {
+            &quot;gobernement&quot;, &quot;government&quot; }, {
+            &quot;gobernment&quot;, &quot;government&quot; }, {
+            &quot;gotton&quot;, &quot;gotten&quot; }, {
+            &quot;gracefull&quot;, &quot;graceful&quot; }, {
+            &quot;gradualy&quot;, &quot;gradually&quot; }, {
+            &quot;grammer&quot;, &quot;grammar&quot; }, {
+            &quot;hallo&quot;, &quot;hello&quot; }, {
+            &quot;hapily&quot;, &quot;happily&quot; }, {
+            &quot;harrass&quot;, &quot;harass&quot; }, {
+            &quot;havne&quot;, &quot;have&quot; }, {
+            &quot;heellp&quot;, &quot;help&quot; }, {
+            &quot;heighth&quot;, &quot;height&quot; }, {
+            &quot;hellp&quot;, &quot;help&quot; }, {
+            &quot;helo&quot;, &quot;hello&quot; }, {
+            &quot;herlo&quot;, &quot;hello&quot; }, {
+            &quot;hifin&quot;, &quot;hyphen&quot; }, {
+            &quot;hifine&quot;, &quot;hyphen&quot; }, {
+            &quot;higer&quot;, &quot;higher&quot; }, {
+            &quot;hiphine&quot;, &quot;hyphen&quot; }, {
+            &quot;hippie&quot;, &quot;hippy&quot; }, {
+            &quot;hippopotamous&quot;, &quot;hippopotamus&quot; }, {
+            &quot;hlp&quot;, &quot;help&quot; }, {
+            &quot;hourse&quot;, &quot;horse&quot; }, {
+            &quot;houssing&quot;, &quot;housing&quot; }, {
+            &quot;howaver&quot;, &quot;however&quot; }, {
+            &quot;howver&quot;, &quot;however&quot; }, {
+            &quot;humaniti&quot;, &quot;humanity&quot; }, {
+            &quot;hyfin&quot;, &quot;hyphen&quot; }, {
+            &quot;hypotathes&quot;, &quot;hypothesis&quot; }, {
+            &quot;hypotathese&quot;, &quot;hypothesis&quot; }, {
+            &quot;hystrical&quot;, &quot;hysterical&quot; }, {
+            &quot;ident&quot;, &quot;indent&quot; }, {
+            &quot;illegitament&quot;, &quot;illegitimate&quot; }, {
+            &quot;imbed&quot;, &quot;embed&quot; }, {
+            &quot;imediaetly&quot;, &quot;immediately&quot; }, {
+            &quot;imfamy&quot;, &quot;infamy&quot; }, {
+            &quot;immenant&quot;, &quot;immanent&quot; }, {
+            &quot;implemtes&quot;, &quot;implements&quot; }, {
+            &quot;inadvertant&quot;, &quot;inadvertent&quot; }, {
+            &quot;incase&quot;, &quot;in case&quot; }, {
+            &quot;incedious&quot;, &quot;insidious&quot; }, {
+            &quot;incompleet&quot;, &quot;incomplete&quot; }, {
+            &quot;incomplot&quot;, &quot;incomplete&quot; }, {
+            &quot;inconvenant&quot;, &quot;inconvenient&quot; }, {
+            &quot;inconvience&quot;, &quot;inconvenience&quot; }, {
+            &quot;independant&quot;, &quot;independent&quot; }, {
+            &quot;independenent&quot;, &quot;independent&quot; }, {
+            &quot;indepnends&quot;, &quot;independent&quot; }, {
+            &quot;indepth&quot;, &quot;in depth&quot; }, {
+            &quot;indispensible&quot;, &quot;indispensable&quot; }, {
+            &quot;inefficite&quot;, &quot;inefficient&quot; }, {
+            &quot;inerface&quot;, &quot;interface&quot; }, {
+            &quot;infact&quot;, &quot;in fact&quot; }, {
+            &quot;influencial&quot;, &quot;influential&quot; }, {
+            &quot;inital&quot;, &quot;initial&quot; }, {
+            &quot;initinized&quot;, &quot;initialized&quot; }, {
+            &quot;initized&quot;, &quot;initialized&quot; }, {
+            &quot;innoculate&quot;, &quot;inoculate&quot; }, {
+            &quot;insistant&quot;, &quot;insistent&quot; }, {
+            &quot;insistenet&quot;, &quot;insistent&quot; }, {
+            &quot;instulation&quot;, &quot;installation&quot; }, {
+            &quot;intealignt&quot;, &quot;intelligent&quot; }, {
+            &quot;intejilent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelegent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelegnent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelejent&quot;, &quot;intelligent&quot; }, {
+            &quot;inteligent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelignt&quot;, &quot;intelligent&quot; }, {
+            &quot;intellagant&quot;, &quot;intelligent&quot; }, {
+            &quot;intellegent&quot;, &quot;intelligent&quot; }, {
+            &quot;intellegint&quot;, &quot;intelligent&quot; }, {
+            &quot;intellgnt&quot;, &quot;intelligent&quot; }, {
+            &quot;intensionality&quot;, &quot;intensionally&quot; }, {
+            &quot;interate&quot;, &quot;iterate&quot; }, {
+            &quot;internation&quot;, &quot;international&quot; }, {
+            &quot;interpretate&quot;, &quot;interpret&quot; }, {
+            &quot;interpretter&quot;, &quot;interpreter&quot; }, {
+            &quot;intertes&quot;, &quot;interested&quot; }, {
+            &quot;intertesd&quot;, &quot;interested&quot; }, {
+            &quot;invermeantial&quot;, &quot;environmental&quot; }, {
+            &quot;irregardless&quot;, &quot;regardless&quot; }, {
+            &quot;irresistable&quot;, &quot;irresistible&quot; }, {
+            &quot;irritible&quot;, &quot;irritable&quot; }, {
+            &quot;islams&quot;, &quot;muslims&quot; }, {
+            &quot;isotrop&quot;, &quot;isotope&quot; }, {
+            &quot;isreal&quot;, &quot;israel&quot; }, {
+            &quot;johhn&quot;, &quot;john&quot; }, {
+            &quot;judgement&quot;, &quot;judgment&quot; }, {
+            &quot;kippur&quot;, &quot;kipper&quot; }, {
+            &quot;knawing&quot;, &quot;knowing&quot; }, {
+            &quot;latext&quot;, &quot;latest&quot; }, {
+            &quot;leasve&quot;, &quot;leave&quot; }, {
+            &quot;lesure&quot;, &quot;leisure&quot; }, {
+            &quot;liasion&quot;, &quot;lesion&quot; }, {
+            &quot;liason&quot;, &quot;liaison&quot; }, {
+            &quot;libary&quot;, &quot;library&quot; }, {
+            &quot;likly&quot;, &quot;likely&quot; }, {
+            &quot;lilometer&quot;, &quot;kilometer&quot; }, {
+            &quot;liquify&quot;, &quot;liquefy&quot; }, {
+            &quot;lloyer&quot;, &quot;layer&quot; }, {
+            &quot;lossing&quot;, &quot;losing&quot; }, {
+            &quot;luser&quot;, &quot;laser&quot; }, {
+            &quot;maintanence&quot;, &quot;maintenance&quot; }, {
+            &quot;majaerly&quot;, &quot;majority&quot; }, {
+            &quot;majoraly&quot;, &quot;majority&quot; }, {
+            &quot;maks&quot;, &quot;masks&quot; }, {
+            &quot;mandelbrot&quot;, &quot;Mandelbrot&quot; }, {
+            &quot;mant&quot;, &quot;want&quot; }, {
+            &quot;marshall&quot;, &quot;marshal&quot; }, {
+            &quot;maxium&quot;, &quot;maximum&quot; }, {
+            &quot;meory&quot;, &quot;memory&quot; }, {
+            &quot;metter&quot;, &quot;better&quot; }, {
+            &quot;mic&quot;, &quot;mike&quot; }, {
+            &quot;midia&quot;, &quot;media&quot; }, {
+            &quot;millenium&quot;, &quot;millennium&quot; }, {
+            &quot;miniscule&quot;, &quot;minuscule&quot; }, {
+            &quot;minkay&quot;, &quot;monkey&quot; }, {
+            &quot;minum&quot;, &quot;minimum&quot; }, {
+            &quot;mischievious&quot;, &quot;mischievous&quot; }, {
+            &quot;misilous&quot;, &quot;miscellaneous&quot; }, {
+            &quot;momento&quot;, &quot;memento&quot; }, {
+            &quot;monkay&quot;, &quot;monkey&quot; }, {
+            &quot;mosaik&quot;, &quot;mosaic&quot; }, {
+            &quot;mostlikely&quot;, &quot;most likely&quot; }, {
+            &quot;mousr&quot;, &quot;mouser&quot; }, {
+            &quot;mroe&quot;, &quot;more&quot; }, {
+            &quot;neccessary&quot;, &quot;necessary&quot; }, {
+            &quot;necesary&quot;, &quot;necessary&quot; }, {
+            &quot;necesser&quot;, &quot;necessary&quot; }, {
+            &quot;neice&quot;, &quot;niece&quot; }, {
+            &quot;neighbour&quot;, &quot;neighbor&quot; }, {
+            &quot;nemonic&quot;, &quot;pneumonic&quot; }, {
+            &quot;nevade&quot;, &quot;Nevada&quot; }, {
+            &quot;nickleodeon&quot;, &quot;nickelodeon&quot; }, {
+            &quot;nieve&quot;, &quot;naive&quot; }, {
+            &quot;noone&quot;, &quot;no one&quot; }, {
+            &quot;noticably&quot;, &quot;noticeably&quot; }, {
+            &quot;notin&quot;, &quot;not in&quot; }, {
+            &quot;nozled&quot;, &quot;nuzzled&quot; }, {
+            &quot;objectsion&quot;, &quot;objects&quot; }, {
+            &quot;obsfuscate&quot;, &quot;obfuscate&quot; }, {
+            &quot;ocassion&quot;, &quot;occasion&quot; }, {
+            &quot;occuppied&quot;, &quot;occupied&quot; }, {
+            &quot;occurence&quot;, &quot;occurrence&quot; }, {
+            &quot;octagenarian&quot;, &quot;octogenarian&quot; }, {
+            &quot;olf&quot;, &quot;old&quot; }, {
+            &quot;opposim&quot;, &quot;opossum&quot; }, {
+            &quot;organise&quot;, &quot;organize&quot; }, {
+            &quot;organiz&quot;, &quot;organize&quot; }, {
+            &quot;orientate&quot;, &quot;orient&quot; }, {
+            &quot;oscilascope&quot;, &quot;oscilloscope&quot; }, {
+            &quot;oving&quot;, &quot;moving&quot; }, {
+            &quot;paramers&quot;, &quot;parameters&quot; }, {
+            &quot;parametic&quot;, &quot;parameter&quot; }, {
+            &quot;paranets&quot;, &quot;parameters&quot; }, {
+            &quot;partrucal&quot;, &quot;particular&quot; }, {
+            &quot;pataphysical&quot;, &quot;metaphysical&quot; }, {
+            &quot;patten&quot;, &quot;pattern&quot; }, {
+            &quot;permissable&quot;, &quot;permissible&quot; }, {
+            &quot;permition&quot;, &quot;permission&quot; }, {
+            &quot;permmasivie&quot;, &quot;permissive&quot; }, {
+            &quot;perogative&quot;, &quot;prerogative&quot; }, {
+            &quot;persue&quot;, &quot;pursue&quot; }, {
+            &quot;phantasia&quot;, &quot;fantasia&quot; }, {
+            &quot;phenominal&quot;, &quot;phenomenal&quot; }, {
+            &quot;picaresque&quot;, &quot;picturesque&quot; }, {
+            &quot;playwrite&quot;, &quot;playwright&quot; }, {
+            &quot;poeses&quot;, &quot;poesies&quot; }, {
+            &quot;polation&quot;, &quot;politician&quot; }, {
+            &quot;poligamy&quot;, &quot;polygamy&quot; }, {
+            &quot;politict&quot;, &quot;politic&quot; }, {
+            &quot;pollice&quot;, &quot;police&quot; }, {
+            &quot;polypropalene&quot;, &quot;polypropylene&quot; }, {
+            &quot;pompom&quot;, &quot;pompon&quot; }, {
+            &quot;possable&quot;, &quot;possible&quot; }, {
+            &quot;practicle&quot;, &quot;practical&quot; }, {
+            &quot;pragmaticism&quot;, &quot;pragmatism&quot; }, {
+            &quot;preceeding&quot;, &quot;preceding&quot; }, {
+            &quot;precion&quot;, &quot;precision&quot; }, {
+            &quot;precios&quot;, &quot;precision&quot; }, {
+            &quot;preemptory&quot;, &quot;peremptory&quot; }, {
+            &quot;prefices&quot;, &quot;prefixes&quot; }, {
+            &quot;prefixt&quot;, &quot;prefixed&quot; }, {
+            &quot;presbyterian&quot;, &quot;Presbyterian&quot; }, {
+            &quot;presue&quot;, &quot;pursue&quot; }, {
+            &quot;presued&quot;, &quot;pursued&quot; }, {
+            &quot;privielage&quot;, &quot;privilege&quot; }, {
+            &quot;priviledge&quot;, &quot;privilege&quot; }, {
+            &quot;proceedures&quot;, &quot;procedures&quot; }, {
+            &quot;pronensiation&quot;, &quot;pronunciation&quot; }, {
+            &quot;pronisation&quot;, &quot;pronunciation&quot; }, {
+            &quot;pronounciation&quot;, &quot;pronunciation&quot; }, {
+            &quot;properally&quot;, &quot;properly&quot; }, {
+            &quot;proplematic&quot;, &quot;problematic&quot; }, {
+            &quot;protray&quot;, &quot;portray&quot; }, {
+            &quot;pscolgst&quot;, &quot;psychologist&quot; }, {
+            &quot;psicolagest&quot;, &quot;psychologist&quot; }, {
+            &quot;psycolagest&quot;, &quot;psychologist&quot; }, {
+            &quot;quoz&quot;, &quot;quiz&quot; }, {
+            &quot;radious&quot;, &quot;radius&quot; }, {
+            &quot;ramplily&quot;, &quot;rampantly&quot; }, {
+            &quot;reccomend&quot;, &quot;recommend&quot; }, {
+            &quot;reccona&quot;, &quot;raccoon&quot; }, {
+            &quot;recieve&quot;, &quot;receive&quot; }, {
+            &quot;reconise&quot;, &quot;recognize&quot; }, {
+            &quot;rectangeles&quot;, &quot;rectangle&quot; }, {
+            &quot;redign&quot;, &quot;redesign&quot; }, {
+            &quot;reoccurring&quot;, &quot;recurring&quot; }, {
+            &quot;repitition&quot;, &quot;repetition&quot; }, {
+            &quot;replasments&quot;, &quot;replacement&quot; }, {
+            &quot;reposable&quot;, &quot;responsible&quot; }, {
+            &quot;reseblence&quot;, &quot;resemblance&quot; }, {
+            &quot;respct&quot;, &quot;respect&quot; }, {
+            &quot;respecally&quot;, &quot;respectfully&quot; }, {
+            &quot;roon&quot;, &quot;room&quot; }, {
+            &quot;rought&quot;, &quot;roughly&quot; }, {
+            &quot;rsx&quot;, &quot;RSX&quot; }, {
+            &quot;rudemtry&quot;, &quot;rudimentary&quot; }, {
+            &quot;runnung&quot;, &quot;running&quot; }, {
+            &quot;sacreligious&quot;, &quot;sacrilegious&quot; }, {
+            &quot;saftly&quot;, &quot;safely&quot; }, {
+            &quot;salut&quot;, &quot;salute&quot; }, {
+            &quot;satifly&quot;, &quot;satisfy&quot; }, {
+            &quot;scrabdle&quot;, &quot;scrabble&quot; }, {
+            &quot;searcheable&quot;, &quot;searchable&quot; }, {
+            &quot;secion&quot;, &quot;section&quot; }, {
+            &quot;seferal&quot;, &quot;several&quot; }, {
+            &quot;segements&quot;, &quot;segments&quot; }, {
+            &quot;sence&quot;, &quot;sense&quot; }, {
+            &quot;seperate&quot;, &quot;separate&quot; }, {
+            &quot;sherbert&quot;, &quot;sherbet&quot; }, {
+            &quot;sicolagest&quot;, &quot;psychologist&quot; }, {
+            &quot;sieze&quot;, &quot;seize&quot; }, {
+            &quot;simpfilty&quot;, &quot;simplicity&quot; }, {
+            &quot;simplye&quot;, &quot;simply&quot; }, {
+            &quot;singal&quot;, &quot;signal&quot; }, {
+            &quot;sitte&quot;, &quot;site&quot; }, {
+            &quot;situration&quot;, &quot;situation&quot; }, {
+            &quot;slyph&quot;, &quot;sylph&quot; }, {
+            &quot;smil&quot;, &quot;smile&quot; }, {
+            &quot;snuck&quot;, &quot;sneaked&quot; }, {
+            &quot;sometmes&quot;, &quot;sometimes&quot; }, {
+            &quot;soonec&quot;, &quot;sonic&quot; }, {
+            &quot;specificialy&quot;, &quot;specifically&quot; }, {
+            &quot;spel&quot;, &quot;spell&quot; }, {
+            &quot;spoak&quot;, &quot;spoke&quot; }, {
+            &quot;sponsered&quot;, &quot;sponsored&quot; }, {
+            &quot;stering&quot;, &quot;steering&quot; }, {
+            &quot;straightjacket&quot;, &quot;straitjacket&quot; }, {
+            &quot;stumach&quot;, &quot;stomach&quot; }, {
+            &quot;stutent&quot;, &quot;student&quot; }, {
+            &quot;styleguide&quot;, &quot;style guide&quot; }, {
+            &quot;subisitions&quot;, &quot;substitutions&quot; }, {
+            &quot;subjecribed&quot;, &quot;subscribed&quot; }, {
+            &quot;subpena&quot;, &quot;subpoena&quot; }, {
+            &quot;substations&quot;, &quot;substitutions&quot; }, {
+            &quot;suger&quot;, &quot;sugar&quot; }, {
+            &quot;supercede&quot;, &quot;supersede&quot; }, {
+            &quot;superfulous&quot;, &quot;superfluous&quot; }, {
+            &quot;susan&quot;, &quot;Susan&quot; }, {
+            &quot;swimwear&quot;, &quot;swim wear&quot; }, {
+            &quot;syncorization&quot;, &quot;synchronization&quot; }, {
+            &quot;taff&quot;, &quot;tough&quot; }, {
+            &quot;taht&quot;, &quot;that&quot; }, {
+            &quot;tattos&quot;, &quot;tattoos&quot; }, {
+            &quot;techniquely&quot;, &quot;technically&quot; }, {
+            &quot;teh&quot;, &quot;the&quot; }, {
+            &quot;tem&quot;, &quot;team&quot; }, {
+            &quot;teo&quot;, &quot;two&quot; }, {
+            &quot;teridical&quot;, &quot;theoretical&quot; }, {
+            &quot;tesst&quot;, &quot;test&quot; }, {
+            &quot;tets&quot;, &quot;tests&quot; }, {
+            &quot;thanot&quot;, &quot;than or&quot; }, {
+            &quot;theirselves&quot;, &quot;themselves&quot; }, {
+            &quot;theridically&quot;, &quot;theoretical&quot; }, {
+            &quot;thredically&quot;, &quot;theoretically&quot; }, {
+            &quot;thruout&quot;, &quot;throughout&quot; }, {
+            &quot;ths&quot;, &quot;this&quot; }, {
+            &quot;titalate&quot;, &quot;titillate&quot; }, {
+            &quot;tobagan&quot;, &quot;tobaggon&quot; }, {
+            &quot;tommorrow&quot;, &quot;tomorrow&quot; }, {
+            &quot;tomorow&quot;, &quot;tomorrow&quot; }, {
+            &quot;tradegy&quot;, &quot;tragedy&quot; }, {
+            &quot;trubbel&quot;, &quot;trouble&quot; }, {
+            &quot;ttest&quot;, &quot;test&quot; }, {
+            &quot;tunnellike&quot;, &quot;tunnel like&quot; }, {
+            &quot;tured&quot;, &quot;turned&quot; }, {
+            &quot;tyrrany&quot;, &quot;tyranny&quot; }, {
+            &quot;unatourral&quot;, &quot;unnatural&quot; }, {
+            &quot;unaturral&quot;, &quot;unnatural&quot; }, {
+            &quot;unconisitional&quot;, &quot;unconstitutional&quot; }, {
+            &quot;unconscience&quot;, &quot;unconscious&quot; }, {
+            &quot;underladder&quot;, &quot;under ladder&quot; }, {
+            &quot;unentelegible&quot;, &quot;unintelligible&quot; }, {
+            &quot;unfortunently&quot;, &quot;unfortunately&quot; }, {
+            &quot;unnaturral&quot;, &quot;unnatural&quot; }, {
+            &quot;upcast&quot;, &quot;up cast&quot; }, {
+            &quot;upmost&quot;, &quot;utmost&quot; }, {
+            &quot;uranisium&quot;, &quot;uranium&quot; }, {
+            &quot;verison&quot;, &quot;version&quot; }, {
+            &quot;vinagarette&quot;, &quot;vinaigrette&quot; }, {
+            &quot;volumptuous&quot;, &quot;voluptuous&quot; }, {
+            &quot;volunteerism&quot;, &quot;voluntarism&quot; }, {
+            &quot;volye&quot;, &quot;volley&quot; }, {
+            &quot;wadting&quot;, &quot;wasting&quot; }, {
+            &quot;waite&quot;, &quot;wait&quot; }, {
+            &quot;wan't&quot;, &quot;won't&quot; }, {
+            &quot;warloord&quot;, &quot;warlord&quot; }, {
+            &quot;whaaat&quot;, &quot;what&quot; }, {
+            &quot;whard&quot;, &quot;ward&quot; }, {
+            &quot;whimp&quot;, &quot;wimp&quot; }, {
+            &quot;wicken&quot;, &quot;weaken&quot; }, {
+            &quot;wierd&quot;, &quot;weird&quot; }, {
+            &quot;wrank&quot;, &quot;rank&quot; }, {
+            &quot;writeen&quot;, &quot;righten&quot; }, {
+            &quot;writting&quot;, &quot;writing&quot; }, {
+            &quot;wundeews&quot;, &quot;windows&quot; }, {
+            &quot;yeild&quot;, &quot;yield&quot; }, {
+            &quot;youe&quot;, &quot;your&quot; }
+    };
+
+    /**
+     * A subset of FIXTURE generated by this test.
+     */
+<span class="fc" id="L600">    private static final String[][] MATCHES = { { &quot;Accosinly&quot;, &quot;Occasionally&quot; }, {</span>
+            &quot;Maddness&quot;, &quot;Madness&quot; }, {
+            &quot;Occusionaly&quot;, &quot;Occasionally&quot; }, {
+            &quot;Steffen&quot;, &quot;Stephen&quot; }, {
+            &quot;Thw&quot;, &quot;The&quot; }, {
+            &quot;Unformanlly&quot;, &quot;Unfortunately&quot; }, {
+            &quot;Unfortally&quot;, &quot;Unfortunately&quot; }, {
+            &quot;abilitey&quot;, &quot;ability&quot; }, {
+            &quot;absorbtion&quot;, &quot;absorption&quot; }, {
+            &quot;accidently&quot;, &quot;accidentally&quot; }, {
+            &quot;accomodate&quot;, &quot;accommodate&quot; }, {
+            &quot;acommadate&quot;, &quot;accommodate&quot; }, {
+            &quot;acord&quot;, &quot;accord&quot; }, {
+            &quot;adultry&quot;, &quot;adultery&quot; }, {
+            &quot;aggresive&quot;, &quot;aggressive&quot; }, {
+            &quot;alchohol&quot;, &quot;alcohol&quot; }, {
+            &quot;alchoholic&quot;, &quot;alcoholic&quot; }, {
+            &quot;allieve&quot;, &quot;alive&quot; }, {
+            &quot;alot&quot;, &quot;a lot&quot; }, {
+            &quot;alright&quot;, &quot;all right&quot; }, {
+            &quot;amature&quot;, &quot;amateur&quot; }, {
+            &quot;ambivilant&quot;, &quot;ambivalent&quot; }, {
+            &quot;amourfous&quot;, &quot;amorphous&quot; }, {
+            &quot;annoint&quot;, &quot;anoint&quot; }, {
+            &quot;annonsment&quot;, &quot;announcement&quot; }, {
+            &quot;annoyting&quot;, &quot;anting&quot; }, {
+            &quot;annuncio&quot;, &quot;announce&quot; }, {
+            &quot;anotomy&quot;, &quot;anatomy&quot; }, {
+            &quot;antidesestablishmentarianism&quot;, &quot;antidisestablishmentarianism&quot; }, {
+            &quot;antidisestablishmentarism&quot;, &quot;antidisestablishmentarianism&quot; }, {
+            &quot;anynomous&quot;, &quot;anonymous&quot; }, {
+            &quot;appelet&quot;, &quot;applet&quot; }, {
+            &quot;appreceiated&quot;, &quot;appreciated&quot; }, {
+            &quot;appresteate&quot;, &quot;appreciate&quot; }, {
+            &quot;aquantance&quot;, &quot;acquaintance&quot; }, {
+            &quot;aricticure&quot;, &quot;architecture&quot; }, {
+            &quot;asterick&quot;, &quot;asterisk&quot; }, {
+            &quot;asymetric&quot;, &quot;asymmetric&quot; }, {
+            &quot;atentively&quot;, &quot;attentively&quot; }, {
+            &quot;bankrot&quot;, &quot;bankrupt&quot; }, {
+            &quot;basicly&quot;, &quot;basically&quot; }, {
+            &quot;batallion&quot;, &quot;battalion&quot; }, {
+            &quot;bbrose&quot;, &quot;browse&quot; }, {
+            &quot;beauro&quot;, &quot;bureau&quot; }, {
+            &quot;beaurocracy&quot;, &quot;bureaucracy&quot; }, {
+            &quot;beggining&quot;, &quot;beginning&quot; }, {
+            &quot;behaviour&quot;, &quot;behavior&quot; }, {
+            &quot;beleive&quot;, &quot;believe&quot; }, {
+            &quot;belive&quot;, &quot;believe&quot; }, {
+            &quot;blait&quot;, &quot;bleat&quot; }, {
+            &quot;bouyant&quot;, &quot;buoyant&quot; }, {
+            &quot;boygot&quot;, &quot;boycott&quot; }, {
+            &quot;brocolli&quot;, &quot;broccoli&quot; }, {
+            &quot;buder&quot;, &quot;butter&quot; }, {
+            &quot;budr&quot;, &quot;butter&quot; }, {
+            &quot;budter&quot;, &quot;butter&quot; }, {
+            &quot;buracracy&quot;, &quot;bureaucracy&quot; }, {
+            &quot;burracracy&quot;, &quot;bureaucracy&quot; }, {
+            &quot;buton&quot;, &quot;button&quot; }, {
+            &quot;byby&quot;, &quot;by by&quot; }, {
+            &quot;cauler&quot;, &quot;caller&quot; }, {
+            &quot;ceasar&quot;, &quot;caesar&quot; }, {
+            &quot;cemetary&quot;, &quot;cemetery&quot; }, {
+            &quot;changeing&quot;, &quot;changing&quot; }, {
+            &quot;cheet&quot;, &quot;cheat&quot; }, {
+            &quot;cimplicity&quot;, &quot;simplicity&quot; }, {
+            &quot;circumstaces&quot;, &quot;circumstances&quot; }, {
+            &quot;clob&quot;, &quot;club&quot; }, {
+            &quot;coaln&quot;, &quot;colon&quot; }, {
+            &quot;colleaque&quot;, &quot;colleague&quot; }, {
+            &quot;colloquilism&quot;, &quot;colloquialism&quot; }, {
+            &quot;columne&quot;, &quot;column&quot; }, {
+            &quot;comitmment&quot;, &quot;commitment&quot; }, {
+            &quot;comitte&quot;, &quot;committee&quot; }, {
+            &quot;comittmen&quot;, &quot;commitment&quot; }, {
+            &quot;comittmend&quot;, &quot;commitment&quot; }, {
+            &quot;commerciasl&quot;, &quot;commercials&quot; }, {
+            &quot;commited&quot;, &quot;committed&quot; }, {
+            &quot;commitee&quot;, &quot;committee&quot; }, {
+            &quot;companys&quot;, &quot;companies&quot; }, {
+            &quot;comupter&quot;, &quot;computer&quot; }, {
+            &quot;concensus&quot;, &quot;consensus&quot; }, {
+            &quot;confusionism&quot;, &quot;confucianism&quot; }, {
+            &quot;congradulations&quot;, &quot;congratulations&quot; }, {
+            &quot;contunie&quot;, &quot;continue&quot; }, {
+            &quot;cooly&quot;, &quot;coolly&quot; }, {
+            &quot;copping&quot;, &quot;coping&quot; }, {
+            &quot;cosmoplyton&quot;, &quot;cosmopolitan&quot; }, {
+            &quot;crasy&quot;, &quot;crazy&quot; }, {
+            &quot;croke&quot;, &quot;croak&quot; }, {
+            &quot;crucifiction&quot;, &quot;crucifixion&quot; }, {
+            &quot;crusifed&quot;, &quot;crucified&quot; }, {
+            &quot;cumba&quot;, &quot;combo&quot; }, {
+            &quot;custamisation&quot;, &quot;customization&quot; }, {
+            &quot;dag&quot;, &quot;dog&quot; }, {
+            &quot;daly&quot;, &quot;daily&quot; }, {
+            &quot;defence&quot;, &quot;defense&quot; }, {
+            &quot;definate&quot;, &quot;definite&quot; }, {
+            &quot;definately&quot;, &quot;definitely&quot; }, {
+            &quot;dependeble&quot;, &quot;dependable&quot; }, {
+            &quot;descrption&quot;, &quot;description&quot; }, {
+            &quot;descrptn&quot;, &quot;description&quot; }, {
+            &quot;desparate&quot;, &quot;desperate&quot; }, {
+            &quot;dessicate&quot;, &quot;desiccate&quot; }, {
+            &quot;destint&quot;, &quot;distant&quot; }, {
+            &quot;develepment&quot;, &quot;developments&quot; }, {
+            &quot;developement&quot;, &quot;development&quot; }, {
+            &quot;develpond&quot;, &quot;development&quot; }, {
+            &quot;devulge&quot;, &quot;divulge&quot; }, {
+            &quot;dieties&quot;, &quot;deities&quot; }, {
+            &quot;dinasaur&quot;, &quot;dinosaur&quot; }, {
+            &quot;dinasour&quot;, &quot;dinosaur&quot; }, {
+            &quot;discuess&quot;, &quot;discuss&quot; }, {
+            &quot;disect&quot;, &quot;dissect&quot; }, {
+            &quot;disippate&quot;, &quot;dissipate&quot; }, {
+            &quot;disition&quot;, &quot;decision&quot; }, {
+            &quot;dispair&quot;, &quot;despair&quot; }, {
+            &quot;distarct&quot;, &quot;distract&quot; }, {
+            &quot;distart&quot;, &quot;distort&quot; }, {
+            &quot;distroy&quot;, &quot;destroy&quot; }, {
+            &quot;doenload&quot;, &quot;download&quot; }, {
+            &quot;dongle&quot;, &quot;dangle&quot; }, {
+            &quot;doog&quot;, &quot;dog&quot; }, {
+            &quot;dramaticly&quot;, &quot;dramatically&quot; }, {
+            &quot;drunkeness&quot;, &quot;drunkenness&quot; }, {
+            &quot;ductioneery&quot;, &quot;dictionary&quot; }, {
+            &quot;ecstacy&quot;, &quot;ecstasy&quot; }, {
+            &quot;egsistence&quot;, &quot;existence&quot; }, {
+            &quot;eitiology&quot;, &quot;etiology&quot; }, {
+            &quot;elagent&quot;, &quot;elegant&quot; }, {
+            &quot;embarass&quot;, &quot;embarrass&quot; }, {
+            &quot;embarassment&quot;, &quot;embarrassment&quot; }, {
+            &quot;embaress&quot;, &quot;embarrass&quot; }, {
+            &quot;encapsualtion&quot;, &quot;encapsulation&quot; }, {
+            &quot;encyclapidia&quot;, &quot;encyclopedia&quot; }, {
+            &quot;encyclopia&quot;, &quot;encyclopedia&quot; }, {
+            &quot;engins&quot;, &quot;engine&quot; }, {
+            &quot;enhence&quot;, &quot;enhance&quot; }, {
+            &quot;ennuui&quot;, &quot;ennui&quot; }, {
+            &quot;enventions&quot;, &quot;inventions&quot; }, {
+            &quot;envireminakl&quot;, &quot;environmental&quot; }, {
+            &quot;enviroment&quot;, &quot;environment&quot; }, {
+            &quot;epitomy&quot;, &quot;epitome&quot; }, {
+            &quot;equire&quot;, &quot;acquire&quot; }, {
+            &quot;errara&quot;, &quot;error&quot; }, {
+            &quot;evaualtion&quot;, &quot;evaluation&quot; }, {
+            &quot;excede&quot;, &quot;exceed&quot; }, {
+            &quot;excercise&quot;, &quot;exercise&quot; }, {
+            &quot;excpt&quot;, &quot;except&quot; }, {
+            &quot;exhileration&quot;, &quot;exhilaration&quot; }, {
+            &quot;existance&quot;, &quot;existence&quot; }, {
+            &quot;expleyly&quot;, &quot;explicitly&quot; }, {
+            &quot;explity&quot;, &quot;explicitly&quot; }, {
+            &quot;failer&quot;, &quot;failure&quot; }, {
+            &quot;faver&quot;, &quot;favor&quot; }, {
+            &quot;faxe&quot;, &quot;fax&quot; }, {
+            &quot;firey&quot;, &quot;fiery&quot; }, {
+            &quot;fistival&quot;, &quot;festival&quot; }, {
+            &quot;flatterring&quot;, &quot;flattering&quot; }, {
+            &quot;flukse&quot;, &quot;flux&quot; }, {
+            &quot;fone&quot;, &quot;phone&quot; }, {
+            &quot;forsee&quot;, &quot;foresee&quot; }, {
+            &quot;frustartaion&quot;, &quot;frustrating&quot; }, {
+            &quot;funetik&quot;, &quot;phonetic&quot; }, {
+            &quot;gaurd&quot;, &quot;guard&quot; }, {
+            &quot;generly&quot;, &quot;generally&quot; }, {
+            &quot;ghandi&quot;, &quot;gandhi&quot; }, {
+            &quot;gotton&quot;, &quot;gotten&quot; }, {
+            &quot;gracefull&quot;, &quot;graceful&quot; }, {
+            &quot;gradualy&quot;, &quot;gradually&quot; }, {
+            &quot;grammer&quot;, &quot;grammar&quot; }, {
+            &quot;hallo&quot;, &quot;hello&quot; }, {
+            &quot;hapily&quot;, &quot;happily&quot; }, {
+            &quot;harrass&quot;, &quot;harass&quot; }, {
+            &quot;heellp&quot;, &quot;help&quot; }, {
+            &quot;heighth&quot;, &quot;height&quot; }, {
+            &quot;hellp&quot;, &quot;help&quot; }, {
+            &quot;helo&quot;, &quot;hello&quot; }, {
+            &quot;hifin&quot;, &quot;hyphen&quot; }, {
+            &quot;hifine&quot;, &quot;hyphen&quot; }, {
+            &quot;hiphine&quot;, &quot;hyphen&quot; }, {
+            &quot;hippie&quot;, &quot;hippy&quot; }, {
+            &quot;hippopotamous&quot;, &quot;hippopotamus&quot; }, {
+            &quot;hourse&quot;, &quot;horse&quot; }, {
+            &quot;houssing&quot;, &quot;housing&quot; }, {
+            &quot;howaver&quot;, &quot;however&quot; }, {
+            &quot;howver&quot;, &quot;however&quot; }, {
+            &quot;humaniti&quot;, &quot;humanity&quot; }, {
+            &quot;hyfin&quot;, &quot;hyphen&quot; }, {
+            &quot;hystrical&quot;, &quot;hysterical&quot; }, {
+            &quot;illegitament&quot;, &quot;illegitimate&quot; }, {
+            &quot;imbed&quot;, &quot;embed&quot; }, {
+            &quot;imediaetly&quot;, &quot;immediately&quot; }, {
+            &quot;immenant&quot;, &quot;immanent&quot; }, {
+            &quot;implemtes&quot;, &quot;implements&quot; }, {
+            &quot;inadvertant&quot;, &quot;inadvertent&quot; }, {
+            &quot;incase&quot;, &quot;in case&quot; }, {
+            &quot;incedious&quot;, &quot;insidious&quot; }, {
+            &quot;incompleet&quot;, &quot;incomplete&quot; }, {
+            &quot;incomplot&quot;, &quot;incomplete&quot; }, {
+            &quot;inconvenant&quot;, &quot;inconvenient&quot; }, {
+            &quot;inconvience&quot;, &quot;inconvenience&quot; }, {
+            &quot;independant&quot;, &quot;independent&quot; }, {
+            &quot;independenent&quot;, &quot;independent&quot; }, {
+            &quot;indepnends&quot;, &quot;independent&quot; }, {
+            &quot;indepth&quot;, &quot;in depth&quot; }, {
+            &quot;indispensible&quot;, &quot;indispensable&quot; }, {
+            &quot;inefficite&quot;, &quot;inefficient&quot; }, {
+            &quot;infact&quot;, &quot;in fact&quot; }, {
+            &quot;influencial&quot;, &quot;influential&quot; }, {
+            &quot;innoculate&quot;, &quot;inoculate&quot; }, {
+            &quot;insistant&quot;, &quot;insistent&quot; }, {
+            &quot;insistenet&quot;, &quot;insistent&quot; }, {
+            &quot;instulation&quot;, &quot;installation&quot; }, {
+            &quot;intealignt&quot;, &quot;intelligent&quot; }, {
+            &quot;intelegent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelegnent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelejent&quot;, &quot;intelligent&quot; }, {
+            &quot;inteligent&quot;, &quot;intelligent&quot; }, {
+            &quot;intelignt&quot;, &quot;intelligent&quot; }, {
+            &quot;intellagant&quot;, &quot;intelligent&quot; }, {
+            &quot;intellegent&quot;, &quot;intelligent&quot; }, {
+            &quot;intellegint&quot;, &quot;intelligent&quot; }, {
+            &quot;intellgnt&quot;, &quot;intelligent&quot; }, {
+            &quot;intensionality&quot;, &quot;intensionally&quot; }, {
+            &quot;internation&quot;, &quot;international&quot; }, {
+            &quot;interpretate&quot;, &quot;interpret&quot; }, {
+            &quot;interpretter&quot;, &quot;interpreter&quot; }, {
+            &quot;intertes&quot;, &quot;interested&quot; }, {
+            &quot;intertesd&quot;, &quot;interested&quot; }, {
+            &quot;invermeantial&quot;, &quot;environmental&quot; }, {
+            &quot;irresistable&quot;, &quot;irresistible&quot; }, {
+            &quot;irritible&quot;, &quot;irritable&quot; }, {
+            &quot;isreal&quot;, &quot;israel&quot; }, {
+            &quot;johhn&quot;, &quot;john&quot; }, {
+            &quot;kippur&quot;, &quot;kipper&quot; }, {
+            &quot;knawing&quot;, &quot;knowing&quot; }, {
+            &quot;lesure&quot;, &quot;leisure&quot; }, {
+            &quot;liasion&quot;, &quot;lesion&quot; }, {
+            &quot;liason&quot;, &quot;liaison&quot; }, {
+            &quot;likly&quot;, &quot;likely&quot; }, {
+            &quot;liquify&quot;, &quot;liquefy&quot; }, {
+            &quot;lloyer&quot;, &quot;layer&quot; }, {
+            &quot;lossing&quot;, &quot;losing&quot; }, {
+            &quot;luser&quot;, &quot;laser&quot; }, {
+            &quot;maintanence&quot;, &quot;maintenance&quot; }, {
+            &quot;mandelbrot&quot;, &quot;Mandelbrot&quot; }, {
+            &quot;marshall&quot;, &quot;marshal&quot; }, {
+            &quot;maxium&quot;, &quot;maximum&quot; }, {
+            &quot;mic&quot;, &quot;mike&quot; }, {
+            &quot;midia&quot;, &quot;media&quot; }, {
+            &quot;millenium&quot;, &quot;millennium&quot; }, {
+            &quot;miniscule&quot;, &quot;minuscule&quot; }, {
+            &quot;minkay&quot;, &quot;monkey&quot; }, {
+            &quot;mischievious&quot;, &quot;mischievous&quot; }, {
+            &quot;momento&quot;, &quot;memento&quot; }, {
+            &quot;monkay&quot;, &quot;monkey&quot; }, {
+            &quot;mosaik&quot;, &quot;mosaic&quot; }, {
+            &quot;mostlikely&quot;, &quot;most likely&quot; }, {
+            &quot;mousr&quot;, &quot;mouser&quot; }, {
+            &quot;mroe&quot;, &quot;more&quot; }, {
+            &quot;necesary&quot;, &quot;necessary&quot; }, {
+            &quot;necesser&quot;, &quot;necessary&quot; }, {
+            &quot;neice&quot;, &quot;niece&quot; }, {
+            &quot;neighbour&quot;, &quot;neighbor&quot; }, {
+            &quot;nemonic&quot;, &quot;pneumonic&quot; }, {
+            &quot;nevade&quot;, &quot;Nevada&quot; }, {
+            &quot;nickleodeon&quot;, &quot;nickelodeon&quot; }, {
+            &quot;nieve&quot;, &quot;naive&quot; }, {
+            &quot;noone&quot;, &quot;no one&quot; }, {
+            &quot;notin&quot;, &quot;not in&quot; }, {
+            &quot;nozled&quot;, &quot;nuzzled&quot; }, {
+            &quot;objectsion&quot;, &quot;objects&quot; }, {
+            &quot;ocassion&quot;, &quot;occasion&quot; }, {
+            &quot;occuppied&quot;, &quot;occupied&quot; }, {
+            &quot;occurence&quot;, &quot;occurrence&quot; }, {
+            &quot;octagenarian&quot;, &quot;octogenarian&quot; }, {
+            &quot;opposim&quot;, &quot;opossum&quot; }, {
+            &quot;organise&quot;, &quot;organize&quot; }, {
+            &quot;organiz&quot;, &quot;organize&quot; }, {
+            &quot;orientate&quot;, &quot;orient&quot; }, {
+            &quot;oscilascope&quot;, &quot;oscilloscope&quot; }, {
+            &quot;parametic&quot;, &quot;parameter&quot; }, {
+            &quot;permissable&quot;, &quot;permissible&quot; }, {
+            &quot;permmasivie&quot;, &quot;permissive&quot; }, {
+            &quot;persue&quot;, &quot;pursue&quot; }, {
+            &quot;phantasia&quot;, &quot;fantasia&quot; }, {
+            &quot;phenominal&quot;, &quot;phenomenal&quot; }, {
+            &quot;playwrite&quot;, &quot;playwright&quot; }, {
+            &quot;poeses&quot;, &quot;poesies&quot; }, {
+            &quot;poligamy&quot;, &quot;polygamy&quot; }, {
+            &quot;politict&quot;, &quot;politic&quot; }, {
+            &quot;pollice&quot;, &quot;police&quot; }, {
+            &quot;polypropalene&quot;, &quot;polypropylene&quot; }, {
+            &quot;possable&quot;, &quot;possible&quot; }, {
+            &quot;practicle&quot;, &quot;practical&quot; }, {
+            &quot;pragmaticism&quot;, &quot;pragmatism&quot; }, {
+            &quot;preceeding&quot;, &quot;preceding&quot; }, {
+            &quot;precios&quot;, &quot;precision&quot; }, {
+            &quot;preemptory&quot;, &quot;peremptory&quot; }, {
+            &quot;prefixt&quot;, &quot;prefixed&quot; }, {
+            &quot;presbyterian&quot;, &quot;Presbyterian&quot; }, {
+            &quot;presue&quot;, &quot;pursue&quot; }, {
+            &quot;presued&quot;, &quot;pursued&quot; }, {
+            &quot;privielage&quot;, &quot;privilege&quot; }, {
+            &quot;priviledge&quot;, &quot;privilege&quot; }, {
+            &quot;proceedures&quot;, &quot;procedures&quot; }, {
+            &quot;pronensiation&quot;, &quot;pronunciation&quot; }, {
+            &quot;pronounciation&quot;, &quot;pronunciation&quot; }, {
+            &quot;properally&quot;, &quot;properly&quot; }, {
+            &quot;proplematic&quot;, &quot;problematic&quot; }, {
+            &quot;protray&quot;, &quot;portray&quot; }, {
+            &quot;pscolgst&quot;, &quot;psychologist&quot; }, {
+            &quot;psicolagest&quot;, &quot;psychologist&quot; }, {
+            &quot;psycolagest&quot;, &quot;psychologist&quot; }, {
+            &quot;quoz&quot;, &quot;quiz&quot; }, {
+            &quot;radious&quot;, &quot;radius&quot; }, {
+            &quot;reccomend&quot;, &quot;recommend&quot; }, {
+            &quot;reccona&quot;, &quot;raccoon&quot; }, {
+            &quot;recieve&quot;, &quot;receive&quot; }, {
+            &quot;reconise&quot;, &quot;recognize&quot; }, {
+            &quot;rectangeles&quot;, &quot;rectangle&quot; }, {
+            &quot;reoccurring&quot;, &quot;recurring&quot; }, {
+            &quot;repitition&quot;, &quot;repetition&quot; }, {
+            &quot;replasments&quot;, &quot;replacement&quot; }, {
+            &quot;respct&quot;, &quot;respect&quot; }, {
+            &quot;respecally&quot;, &quot;respectfully&quot; }, {
+            &quot;rsx&quot;, &quot;RSX&quot; }, {
+            &quot;runnung&quot;, &quot;running&quot; }, {
+            &quot;sacreligious&quot;, &quot;sacrilegious&quot; }, {
+            &quot;salut&quot;, &quot;salute&quot; }, {
+            &quot;searcheable&quot;, &quot;searchable&quot; }, {
+            &quot;seferal&quot;, &quot;several&quot; }, {
+            &quot;segements&quot;, &quot;segments&quot; }, {
+            &quot;sence&quot;, &quot;sense&quot; }, {
+            &quot;seperate&quot;, &quot;separate&quot; }, {
+            &quot;sicolagest&quot;, &quot;psychologist&quot; }, {
+            &quot;sieze&quot;, &quot;seize&quot; }, {
+            &quot;simplye&quot;, &quot;simply&quot; }, {
+            &quot;sitte&quot;, &quot;site&quot; }, {
+            &quot;slyph&quot;, &quot;sylph&quot; }, {
+            &quot;smil&quot;, &quot;smile&quot; }, {
+            &quot;sometmes&quot;, &quot;sometimes&quot; }, {
+            &quot;soonec&quot;, &quot;sonic&quot; }, {
+            &quot;specificialy&quot;, &quot;specifically&quot; }, {
+            &quot;spel&quot;, &quot;spell&quot; }, {
+            &quot;spoak&quot;, &quot;spoke&quot; }, {
+            &quot;sponsered&quot;, &quot;sponsored&quot; }, {
+            &quot;stering&quot;, &quot;steering&quot; }, {
+            &quot;straightjacket&quot;, &quot;straitjacket&quot; }, {
+            &quot;stumach&quot;, &quot;stomach&quot; }, {
+            &quot;stutent&quot;, &quot;student&quot; }, {
+            &quot;styleguide&quot;, &quot;style guide&quot; }, {
+            &quot;subpena&quot;, &quot;subpoena&quot; }, {
+            &quot;substations&quot;, &quot;substitutions&quot; }, {
+            &quot;supercede&quot;, &quot;supersede&quot; }, {
+            &quot;superfulous&quot;, &quot;superfluous&quot; }, {
+            &quot;susan&quot;, &quot;Susan&quot; }, {
+            &quot;swimwear&quot;, &quot;swim wear&quot; }, {
+            &quot;syncorization&quot;, &quot;synchronization&quot; }, {
+            &quot;taff&quot;, &quot;tough&quot; }, {
+            &quot;taht&quot;, &quot;that&quot; }, {
+            &quot;tattos&quot;, &quot;tattoos&quot; }, {
+            &quot;techniquely&quot;, &quot;technically&quot; }, {
+            &quot;teh&quot;, &quot;the&quot; }, {
+            &quot;tem&quot;, &quot;team&quot; }, {
+            &quot;teo&quot;, &quot;two&quot; }, {
+            &quot;teridical&quot;, &quot;theoretical&quot; }, {
+            &quot;tesst&quot;, &quot;test&quot; }, {
+            &quot;theridically&quot;, &quot;theoretical&quot; }, {
+            &quot;thredically&quot;, &quot;theoretically&quot; }, {
+            &quot;thruout&quot;, &quot;throughout&quot; }, {
+            &quot;ths&quot;, &quot;this&quot; }, {
+            &quot;titalate&quot;, &quot;titillate&quot; }, {
+            &quot;tobagan&quot;, &quot;tobaggon&quot; }, {
+            &quot;tommorrow&quot;, &quot;tomorrow&quot; }, {
+            &quot;tomorow&quot;, &quot;tomorrow&quot; }, {
+            &quot;trubbel&quot;, &quot;trouble&quot; }, {
+            &quot;ttest&quot;, &quot;test&quot; }, {
+            &quot;tyrrany&quot;, &quot;tyranny&quot; }, {
+            &quot;unatourral&quot;, &quot;unnatural&quot; }, {
+            &quot;unaturral&quot;, &quot;unnatural&quot; }, {
+            &quot;unconisitional&quot;, &quot;unconstitutional&quot; }, {
+            &quot;unconscience&quot;, &quot;unconscious&quot; }, {
+            &quot;underladder&quot;, &quot;under ladder&quot; }, {
+            &quot;unentelegible&quot;, &quot;unintelligible&quot; }, {
+            &quot;unfortunently&quot;, &quot;unfortunately&quot; }, {
+            &quot;unnaturral&quot;, &quot;unnatural&quot; }, {
+            &quot;upcast&quot;, &quot;up cast&quot; }, {
+            &quot;verison&quot;, &quot;version&quot; }, {
+            &quot;vinagarette&quot;, &quot;vinaigrette&quot; }, {
+            &quot;volunteerism&quot;, &quot;voluntarism&quot; }, {
+            &quot;volye&quot;, &quot;volley&quot; }, {
+            &quot;waite&quot;, &quot;wait&quot; }, {
+            &quot;wan't&quot;, &quot;won't&quot; }, {
+            &quot;warloord&quot;, &quot;warlord&quot; }, {
+            &quot;whaaat&quot;, &quot;what&quot; }, {
+            &quot;whard&quot;, &quot;ward&quot; }, {
+            &quot;whimp&quot;, &quot;wimp&quot; }, {
+            &quot;wicken&quot;, &quot;weaken&quot; }, {
+            &quot;wierd&quot;, &quot;weird&quot; }, {
+            &quot;wrank&quot;, &quot;rank&quot; }, {
+            &quot;writeen&quot;, &quot;righten&quot; }, {
+            &quot;writting&quot;, &quot;writing&quot; }, {
+            &quot;wundeews&quot;, &quot;windows&quot; }, {
+            &quot;yeild&quot;, &quot;yield&quot; }, };
+
+    /**
+     * Tests encoding APIs in one place.
+     */
+<span class="fc" id="L1010">    private void assertDoubleMetaphone(final String expected, final String source) {</span>
+<span class="fc" id="L1011">        assertEquals(expected, this.getStringEncoder().encode(source));</span>
+<span class="fc" id="L1012">        try {</span>
+<span class="fc" id="L1013">            assertEquals(expected, this.getStringEncoder().encode((Object) source));</span>
+<span class="nc" id="L1014">        } catch (final EncoderException e) {</span>
+<span class="nc" id="L1015">            fail(&quot;Unexpected expection: &quot; + e);</span>
+<span class="fc" id="L1016">        }</span>
+<span class="fc" id="L1017">        assertEquals(expected, this.getStringEncoder().doubleMetaphone(source));</span>
+<span class="fc" id="L1018">        assertEquals(expected, this.getStringEncoder().doubleMetaphone(source, false));</span>
+<span class="fc" id="L1019">    }</span>
+
+    /**
+     * Tests encoding APIs in one place.
+     */
+<span class="fc" id="L1024">    public void assertDoubleMetaphoneAlt(final String expected, final String source) {</span>
+<span class="fc" id="L1025">        assertEquals(expected, this.getStringEncoder().doubleMetaphone(source, true));</span>
+<span class="fc" id="L1026">    }</span>
+
+    @Override
+<span class="fc" id="L1029">    protected DoubleMetaphone createStringEncoder() {</span>
+<span class="fc" id="L1030">        return new DoubleMetaphone();</span>
+    }
+
+<span class="fc" id="L1033">    public void doubleMetaphoneEqualTest(final String[][] pairs, final boolean useAlternate) {</span>
+<span class="fc" id="L1034">        this.validateFixture(pairs);</span>
+<span class="fc bfc" id="L1035" title="All 2 branches covered.">        for (final String[] pair : pairs) {</span>
+<span class="fc" id="L1036">            final String name0 = pair[0];</span>
+<span class="fc" id="L1037">            final String name1 = pair[1];</span>
+<span class="fc" id="L1038">            final String failMsg = &quot;Expected match between &quot; + name0 + &quot; and &quot; + name1 + &quot; (use alternate: &quot; + useAlternate + &quot;)&quot;;</span>
+<span class="fc" id="L1039">            assertTrue(failMsg, this.getStringEncoder().isDoubleMetaphoneEqual(name0, name1, useAlternate));</span>
+<span class="fc" id="L1040">            assertTrue(failMsg, this.getStringEncoder().isDoubleMetaphoneEqual(name1, name0, useAlternate));</span>
+<span class="pc bpc" id="L1041" title="4 of 10 branches missed.">            if (!useAlternate) {</span>
+<span class="fc" id="L1042">                assertTrue(failMsg, this.getStringEncoder().isDoubleMetaphoneEqual(name0, name1));</span>
+<span class="fc" id="L1043">                assertTrue(failMsg, this.getStringEncoder().isDoubleMetaphoneEqual(name1, name0));</span>
+            }
+        }
+<span class="fc" id="L1046">    }</span>
+
+<span class="fc" id="L1048">    public void doubleMetaphoneNotEqualTest(final boolean alternate) {</span>
+<span class="fc" id="L1049">        assertFalse(this.getStringEncoder().isDoubleMetaphoneEqual(&quot;Brain&quot;, &quot;Band&quot;, alternate));</span>
+<span class="fc" id="L1050">        assertFalse(this.getStringEncoder().isDoubleMetaphoneEqual(&quot;Band&quot;, &quot;Brain&quot;, alternate));</span>
+
+<span class="pc bpc" id="L1052" title="4 of 10 branches missed.">        if (!alternate) {</span>
+<span class="fc" id="L1053">            assertFalse(this.getStringEncoder().isDoubleMetaphoneEqual(&quot;Brain&quot;, &quot;Band&quot;));</span>
+<span class="fc" id="L1054">            assertFalse(this.getStringEncoder().isDoubleMetaphoneEqual(&quot;Band&quot;, &quot;Brain&quot;));</span>
+        }
+<span class="fc" id="L1056">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1059" title="All 4 branches missed.">    public void testCCedilla() {</span>
+<span class="fc" id="L1060">        assertTrue(this.getStringEncoder().isDoubleMetaphoneEqual(&quot;\u00e7&quot;, &quot;S&quot;)); // c-cedilla</span>
+<span class="fc" id="L1061">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1064" title="All 4 branches missed.">    public void testCodec184() throws Throwable {</span>
+<span class="fc" id="L1065">        assertTrue(new DoubleMetaphone().isDoubleMetaphoneEqual(&quot;&quot;, &quot;&quot;, false));</span>
+<span class="fc" id="L1066">        assertTrue(new DoubleMetaphone().isDoubleMetaphoneEqual(&quot;&quot;, &quot;&quot;, true));</span>
+<span class="fc" id="L1067">        assertFalse(new DoubleMetaphone().isDoubleMetaphoneEqual(&quot;aa&quot;, &quot;&quot;, false));</span>
+<span class="fc" id="L1068">        assertFalse(new DoubleMetaphone().isDoubleMetaphoneEqual(&quot;aa&quot;, &quot;&quot;, true));</span>
+<span class="fc" id="L1069">        assertFalse(new DoubleMetaphone().isDoubleMetaphoneEqual(&quot;&quot;, &quot;aa&quot;, false));</span>
+<span class="fc" id="L1070">        assertFalse(new DoubleMetaphone().isDoubleMetaphoneEqual(&quot;&quot;, &quot;aa&quot;, true));</span>
+<span class="fc" id="L1071">      }</span>
+
+    @Test
+<span class="pc bnc" id="L1074" title="All 4 branches missed.">    public void testDoubleMetaphone() {</span>
+<span class="fc" id="L1075">        assertDoubleMetaphone(&quot;TSTN&quot;, &quot;testing&quot;);</span>
+<span class="fc" id="L1076">        assertDoubleMetaphone(&quot;0&quot;, &quot;The&quot;);</span>
+<span class="fc" id="L1077">        assertDoubleMetaphone(&quot;KK&quot;, &quot;quick&quot;);</span>
+<span class="fc" id="L1078">        assertDoubleMetaphone(&quot;PRN&quot;, &quot;brown&quot;);</span>
+<span class="fc" id="L1079">        assertDoubleMetaphone(&quot;FKS&quot;, &quot;fox&quot;);</span>
+<span class="fc" id="L1080">        assertDoubleMetaphone(&quot;JMPT&quot;, &quot;jumped&quot;);</span>
+<span class="fc" id="L1081">        assertDoubleMetaphone(&quot;AFR&quot;, &quot;over&quot;);</span>
+<span class="fc" id="L1082">        assertDoubleMetaphone(&quot;0&quot;, &quot;the&quot;);</span>
+<span class="fc" id="L1083">        assertDoubleMetaphone(&quot;LS&quot;, &quot;lazy&quot;);</span>
+<span class="fc" id="L1084">        assertDoubleMetaphone(&quot;TKS&quot;, &quot;dogs&quot;);</span>
+<span class="fc" id="L1085">        assertDoubleMetaphone(&quot;MKFR&quot;, &quot;MacCafferey&quot;);</span>
+<span class="fc" id="L1086">        assertDoubleMetaphone(&quot;STFN&quot;, &quot;Stephan&quot;);</span>
+<span class="fc" id="L1087">        assertDoubleMetaphone(&quot;KSSK&quot;, &quot;Kuczewski&quot;);</span>
+<span class="fc" id="L1088">        assertDoubleMetaphone(&quot;MKLL&quot;, &quot;McClelland&quot;);</span>
+<span class="fc" id="L1089">        assertDoubleMetaphone(&quot;SNHS&quot;, &quot;san jose&quot;);</span>
+<span class="fc" id="L1090">        assertDoubleMetaphone(&quot;SNFP&quot;, &quot;xenophobia&quot;);</span>
+
+<span class="fc" id="L1092">        assertDoubleMetaphoneAlt(&quot;TSTN&quot;, &quot;testing&quot;);</span>
+<span class="fc" id="L1093">        assertDoubleMetaphoneAlt(&quot;T&quot;, &quot;The&quot;);</span>
+<span class="fc" id="L1094">        assertDoubleMetaphoneAlt(&quot;KK&quot;, &quot;quick&quot;);</span>
+<span class="fc" id="L1095">        assertDoubleMetaphoneAlt(&quot;PRN&quot;, &quot;brown&quot;);</span>
+<span class="fc" id="L1096">        assertDoubleMetaphoneAlt(&quot;FKS&quot;, &quot;fox&quot;);</span>
+<span class="fc" id="L1097">        assertDoubleMetaphoneAlt(&quot;AMPT&quot;, &quot;jumped&quot;);</span>
+<span class="fc" id="L1098">        assertDoubleMetaphoneAlt(&quot;AFR&quot;, &quot;over&quot;);</span>
+<span class="fc" id="L1099">        assertDoubleMetaphoneAlt(&quot;T&quot;, &quot;the&quot;);</span>
+<span class="fc" id="L1100">        assertDoubleMetaphoneAlt(&quot;LS&quot;, &quot;lazy&quot;);</span>
+<span class="fc" id="L1101">        assertDoubleMetaphoneAlt(&quot;TKS&quot;, &quot;dogs&quot;);</span>
+<span class="fc" id="L1102">        assertDoubleMetaphoneAlt(&quot;MKFR&quot;, &quot;MacCafferey&quot;);</span>
+<span class="fc" id="L1103">        assertDoubleMetaphoneAlt(&quot;STFN&quot;, &quot;Stephan&quot;);</span>
+<span class="fc" id="L1104">        assertDoubleMetaphoneAlt(&quot;KXFS&quot;, &quot;Kutchefski&quot;);</span>
+<span class="fc" id="L1105">        assertDoubleMetaphoneAlt(&quot;MKLL&quot;, &quot;McClelland&quot;);</span>
+<span class="fc" id="L1106">        assertDoubleMetaphoneAlt(&quot;SNHS&quot;, &quot;san jose&quot;);</span>
+<span class="fc" id="L1107">        assertDoubleMetaphoneAlt(&quot;SNFP&quot;, &quot;xenophobia&quot;);</span>
+<span class="fc" id="L1108">        assertDoubleMetaphoneAlt(&quot;FKR&quot;, &quot;Fokker&quot;);</span>
+<span class="fc" id="L1109">        assertDoubleMetaphoneAlt(&quot;AK&quot;, &quot;Joqqi&quot;);</span>
+<span class="fc" id="L1110">        assertDoubleMetaphoneAlt(&quot;HF&quot;, &quot;Hovvi&quot;);</span>
+<span class="fc" id="L1111">        assertDoubleMetaphoneAlt(&quot;XRN&quot;, &quot;Czerny&quot;);</span>
+<span class="fc" id="L1112">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1115" title="All 4 branches missed.">    public void testEmpty() {</span>
+<span class="fc" id="L1116">        assertEquals(null, this.getStringEncoder().doubleMetaphone(null));</span>
+<span class="fc" id="L1117">        assertEquals(null, this.getStringEncoder().doubleMetaphone(&quot;&quot;));</span>
+<span class="fc" id="L1118">        assertEquals(null, this.getStringEncoder().doubleMetaphone(&quot; &quot;));</span>
+<span class="fc" id="L1119">        assertEquals(null, this.getStringEncoder().doubleMetaphone(&quot;\t\n\r &quot;));</span>
+<span class="fc" id="L1120">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1123" title="All 4 branches missed.">    public void testIsDoubleMetaphoneEqualBasic() {</span>
+<span class="fc" id="L1124">        final String[][] testFixture = new String[][] { {</span>
+                &quot;&quot;, &quot;&quot; }, {
+                &quot;Case&quot;, &quot;case&quot; }, {
+                &quot;CASE&quot;, &quot;Case&quot; }, {
+                &quot;caSe&quot;, &quot;cAsE&quot; }, {
+                &quot;cookie&quot;, &quot;quick&quot; }, {
+                &quot;quick&quot;, &quot;cookie&quot; }, {
+                &quot;Brian&quot;, &quot;Bryan&quot; }, {
+                &quot;Auto&quot;, &quot;Otto&quot; }, {
+                &quot;Steven&quot;, &quot;Stefan&quot; }, {
+                &quot;Philipowitz&quot;, &quot;Filipowicz&quot; }
+        };
+<span class="fc" id="L1136">        doubleMetaphoneEqualTest(testFixture, false);</span>
+<span class="fc" id="L1137">        doubleMetaphoneEqualTest(testFixture, true);</span>
+<span class="fc" id="L1138">    }</span>
+
+    /**
+     * Example in the original article but failures in this Java impl:
+     */
+    @Test
+<span class="pc bnc" id="L1144" title="All 4 branches missed.">    public void testIsDoubleMetaphoneEqualExtended1() {</span>
+        //        String[][] testFixture = new String[][] { { &quot;Smith&quot;, &quot;Schmidt&quot; }
+        //        };
+        //        doubleMetaphoneEqualTest(testFixture, false);
+        //        doubleMetaphoneEqualTest(testFixture, true);
+<span class="fc" id="L1149">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1152" title="All 4 branches missed.">    public void testIsDoubleMetaphoneEqualExtended2() {</span>
+<span class="fc" id="L1153">        final String[][] testFixture = new String[][] { { &quot;Jablonski&quot;, &quot;Yablonsky&quot; }</span>
+        };
+        //doubleMetaphoneEqualTest(testFixture, false);
+<span class="fc" id="L1156">        doubleMetaphoneEqualTest(testFixture, true);</span>
+<span class="fc" id="L1157">    }</span>
+
+    /**
+     * Used to generate the MATCHES array and test possible matches from the
+     * FIXTURE array.
+     */
+    @Test
+<span class="pc bnc" id="L1164" title="All 4 branches missed.">    public void testIsDoubleMetaphoneEqualExtended3() {</span>
+<span class="fc" id="L1165">        this.validateFixture(FIXTURE);</span>
+<span class="fc" id="L1166">        final StringBuilder failures = new StringBuilder();</span>
+<span class="fc" id="L1167">        final StringBuilder matches = new StringBuilder();</span>
+<span class="fc" id="L1168">        final String cr = System.lineSeparator();</span>
+<span class="fc" id="L1169">        matches.append(&quot;private static final String[][] MATCHES = {&quot; + cr);</span>
+<span class="fc" id="L1170">        int failCount = 0;</span>
+<span class="pc bpc" id="L1171" title="4 of 10 branches missed.">        for (int i = 0; i &lt; FIXTURE.length; i++) {</span>
+<span class="fc" id="L1172">            final String name0 = FIXTURE[i][0];</span>
+<span class="fc" id="L1173">            final String name1 = FIXTURE[i][1];</span>
+<span class="fc" id="L1174">            final boolean match1 = this.getStringEncoder().isDoubleMetaphoneEqual(name0, name1, false);</span>
+<span class="fc" id="L1175">            final boolean match2 = this.getStringEncoder().isDoubleMetaphoneEqual(name0, name1, true);</span>
+<span class="pc bpc" id="L1176" title="4 of 12 branches missed.">            if (match1 == false &amp;&amp; match2 == false) {</span>
+<span class="fc" id="L1177">                final String failMsg = &quot;[&quot; + i + &quot;] &quot; + name0 + &quot; and &quot; + name1 + cr;</span>
+<span class="fc" id="L1178">                failures.append(failMsg);</span>
+<span class="fc" id="L1179">                failCount++;</span>
+<span class="fc" id="L1180">            } else {</span>
+<span class="fc" id="L1181">                matches.append(&quot;{\&quot;&quot; + name0 + &quot;\&quot;, \&quot;&quot; + name1 + &quot;\&quot;},&quot; + cr);</span>
+            }
+        }
+<span class="fc" id="L1184">        matches.append(&quot;};&quot;);</span>
+        // Turn on to print a new MATCH array
+        //System.out.println(matches.toString());
+<span class="pc bpc" id="L1187" title="7 of 10 branches missed.">        if (failCount &gt; 0) {</span>
+            // Turn on to see which pairs do NOT match.
+            // String msg = failures.toString();
+            //fail(failCount + &quot; failures out of &quot; + FIXTURE.length + &quot;. The
+            // following could be made to match: &quot; + cr + msg);
+        }
+<span class="fc" id="L1193">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1196" title="All 4 branches missed.">    public void testIsDoubleMetaphoneEqualWithMATCHES() {</span>
+<span class="fc" id="L1197">        this.validateFixture(MATCHES);</span>
+<span class="pc bpc" id="L1198" title="4 of 10 branches missed.">        for (int i = 0; i &lt; MATCHES.length; i++) {</span>
+<span class="fc" id="L1199">            final String name0 = MATCHES[i][0];</span>
+<span class="fc" id="L1200">            final String name1 = MATCHES[i][1];</span>
+<span class="fc" id="L1201">            final boolean match1 = this.getStringEncoder().isDoubleMetaphoneEqual(name0, name1, false);</span>
+<span class="fc" id="L1202">            final boolean match2 = this.getStringEncoder().isDoubleMetaphoneEqual(name0, name1, true);</span>
+<span class="pc bpc" id="L1203" title="7 of 12 branches missed.">            if (match1 == false &amp;&amp; match2 == false) {</span>
+<span class="nc" id="L1204">                fail(&quot;Expected match [&quot; + i + &quot;] &quot; + name0 + &quot; and &quot; + name1);</span>
+            }
+        }
+<span class="fc" id="L1207">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1210" title="All 4 branches missed.">    public void testIsDoubleMetaphoneNotEqual() {</span>
+<span class="fc" id="L1211">        doubleMetaphoneNotEqualTest(false);</span>
+<span class="fc" id="L1212">        doubleMetaphoneNotEqualTest(true);</span>
+<span class="fc" id="L1213">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1216" title="All 4 branches missed.">    public void testNTilde() {</span>
+<span class="fc" id="L1217">        assertTrue(this.getStringEncoder().isDoubleMetaphoneEqual(&quot;\u00f1&quot;, &quot;N&quot;)); // n-tilde</span>
+<span class="fc" id="L1218">    }</span>
+
+    /**
+     * Test setting maximum length
+     */
+    @Test
+<span class="pc bnc" id="L1224" title="All 4 branches missed.">    public void testSetMaxCodeLength() {</span>
+<span class="fc" id="L1225">        final String value = &quot;jumped&quot;;</span>
+
+<span class="fc" id="L1227">        final DoubleMetaphone doubleMetaphone = new DoubleMetaphone();</span>
+
+        // Sanity check of default settings
+<span class="fc" id="L1230">        assertEquals(&quot;Default Max Code Length&quot;, 4, doubleMetaphone.getMaxCodeLen());</span>
+<span class="fc" id="L1231">        assertEquals(&quot;Default Primary&quot;,   &quot;JMPT&quot;, doubleMetaphone.doubleMetaphone(value, false));</span>
+<span class="fc" id="L1232">        assertEquals(&quot;Default Alternate&quot;, &quot;AMPT&quot;, doubleMetaphone.doubleMetaphone(value, true));</span>
+
+        // Check setting Max Code Length
+<span class="fc" id="L1235">        doubleMetaphone.setMaxCodeLen(3);</span>
+<span class="fc" id="L1236">        assertEquals(&quot;Set Max Code Length&quot;, 3, doubleMetaphone.getMaxCodeLen());</span>
+<span class="fc" id="L1237">        assertEquals(&quot;Max=3 Primary&quot;,   &quot;JMP&quot;, doubleMetaphone.doubleMetaphone(value, false));</span>
+<span class="fc" id="L1238">        assertEquals(&quot;Max=3 Alternate&quot;, &quot;AMP&quot;, doubleMetaphone.doubleMetaphone(value, true));</span>
+<span class="fc" id="L1239">    }</span>
+
+<span class="fc" id="L1241">    public void validateFixture(final String[][] pairs) {</span>
+<span class="pc bpc" id="L1242" title="7 of 10 branches missed.">        if (pairs.length == 0) {</span>
+<span class="nc" id="L1243">            fail(&quot;Test fixture is empty&quot;);</span>
+        }
+<span class="pc bpc" id="L1245" title="4 of 10 branches missed.">        for (int i = 0; i &lt; pairs.length; i++) {</span>
+<span class="pc bpc" id="L1246" title="7 of 10 branches missed.">            if (pairs[i].length != 2) {</span>
+<span class="nc" id="L1247">                fail(&quot;Error in test fixture in the data array at index &quot; + i);</span>
+            }
+        }
+<span class="fc" id="L1250">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

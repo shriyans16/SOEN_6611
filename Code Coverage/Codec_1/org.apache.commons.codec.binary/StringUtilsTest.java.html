@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StringUtilsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">StringUtilsTest.java</span></div><h1>StringUtilsTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.binary;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests {@link StringUtils}
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L31" title="3 of 4 branches missed.">public class StringUtilsTest {</span>
+
+<span class="fc" id="L33">    private static final byte[] BYTES_FIXTURE = {'a','b','c'};</span>
+
+    // This is valid input for UTF-16BE
+<span class="fc" id="L36">    private static final byte[] BYTES_FIXTURE_16BE = {0, 'a', 0, 'b', 0, 'c'};</span>
+
+    // This is valid for UTF-16LE
+<span class="fc" id="L39">    private static final byte[] BYTES_FIXTURE_16LE = {'a', 0, 'b', 0, 'c', 0};</span>
+
+    private static final String STRING_FIXTURE = &quot;ABC&quot;;
+
+    /**
+     * We could make the constructor private but there does not seem to be a point to jumping through extra code hoops
+     * to restrict instantiation right now.
+     */
+    @Test
+<span class="pc bnc" id="L48" title="All 4 branches missed.">    public void testConstructor() {</span>
+<span class="fc" id="L49">        new StringUtils();</span>
+<span class="fc" id="L50">    }</span>
+
+    @Test
+<span class="pc bnc" id="L53" title="All 4 branches missed.">    public void testGetBytesIso8859_1() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L54">        final String charsetName = &quot;ISO-8859-1&quot;;</span>
+<span class="fc" id="L55">        testGetBytesUnchecked(charsetName);</span>
+<span class="fc" id="L56">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L57">        final byte[] actual = StringUtils.getBytesIso8859_1(STRING_FIXTURE);</span>
+<span class="fc" id="L58">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L59">    }</span>
+
+<span class="fc" id="L61">    private void testGetBytesUnchecked(final String charsetName) throws UnsupportedEncodingException {</span>
+<span class="fc" id="L62">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L63">        final byte[] actual = StringUtils.getBytesUnchecked(STRING_FIXTURE, charsetName);</span>
+<span class="fc" id="L64">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L65">    }</span>
+
+    @Test
+<span class="pc bnc" id="L68" title="All 4 branches missed.">    public void testGetBytesUsAscii() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L69">        final String charsetName = &quot;US-ASCII&quot;;</span>
+<span class="fc" id="L70">        testGetBytesUnchecked(charsetName);</span>
+<span class="fc" id="L71">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L72">        final byte[] actual = StringUtils.getBytesUsAscii(STRING_FIXTURE);</span>
+<span class="fc" id="L73">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+<span class="pc bnc" id="L77" title="All 4 branches missed.">    public void testGetBytesUtf16() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L78">        final String charsetName = &quot;UTF-16&quot;;</span>
+<span class="fc" id="L79">        testGetBytesUnchecked(charsetName);</span>
+<span class="fc" id="L80">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L81">        final byte[] actual = StringUtils.getBytesUtf16(STRING_FIXTURE);</span>
+<span class="fc" id="L82">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L83">    }</span>
+
+    @Test
+<span class="pc bnc" id="L86" title="All 4 branches missed.">    public void testGetBytesUtf16Be() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L87">        final String charsetName = &quot;UTF-16BE&quot;;</span>
+<span class="fc" id="L88">        testGetBytesUnchecked(charsetName);</span>
+<span class="fc" id="L89">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L90">        final byte[] actual = StringUtils.getBytesUtf16Be(STRING_FIXTURE);</span>
+<span class="fc" id="L91">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L92">    }</span>
+
+    @Test
+<span class="pc bnc" id="L95" title="All 4 branches missed.">    public void testGetBytesUtf16Le() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L96">        final String charsetName = &quot;UTF-16LE&quot;;</span>
+<span class="fc" id="L97">        testGetBytesUnchecked(charsetName);</span>
+<span class="fc" id="L98">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L99">        final byte[] actual = StringUtils.getBytesUtf16Le(STRING_FIXTURE);</span>
+<span class="fc" id="L100">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L101">    }</span>
+
+    @Test
+<span class="pc bnc" id="L104" title="All 4 branches missed.">    public void testGetBytesUtf8() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L105">        final String charsetName = &quot;UTF-8&quot;;</span>
+<span class="fc" id="L106">        testGetBytesUnchecked(charsetName);</span>
+<span class="fc" id="L107">        final byte[] expected = STRING_FIXTURE.getBytes(charsetName);</span>
+<span class="fc" id="L108">        final byte[] actual = StringUtils.getBytesUtf8(STRING_FIXTURE);</span>
+<span class="fc" id="L109">        Assert.assertTrue(Arrays.equals(expected, actual));</span>
+<span class="fc" id="L110">    }</span>
+
+    @Test
+<span class="pc bnc" id="L113" title="All 4 branches missed.">    public void testGetBytesUncheckedBadName() {</span>
+<span class="fc" id="L114">        try {</span>
+<span class="nc" id="L115">            StringUtils.getBytesUnchecked(STRING_FIXTURE, &quot;UNKNOWN&quot;);</span>
+<span class="nc" id="L116">            Assert.fail(&quot;Expected &quot; + IllegalStateException.class.getName());</span>
+<span class="fc" id="L117">        } catch (final IllegalStateException e) {</span>
+            // Expected
+<span class="nc" id="L119">        }</span>
+<span class="fc" id="L120">    }</span>
+
+    @Test
+<span class="pc bnc" id="L123" title="All 4 branches missed.">    public void testGetBytesUncheckedNullInput() {</span>
+<span class="fc" id="L124">        Assert.assertNull(StringUtils.getBytesUnchecked(null, &quot;UNKNOWN&quot;));</span>
+<span class="fc" id="L125">    }</span>
+
+<span class="fc" id="L127">    private void testNewString(final String charsetName) throws UnsupportedEncodingException {</span>
+<span class="fc" id="L128">        final String expected = new String(BYTES_FIXTURE, charsetName);</span>
+<span class="fc" id="L129">        final String actual = StringUtils.newString(BYTES_FIXTURE, charsetName);</span>
+<span class="fc" id="L130">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L131">    }</span>
+
+    @Test
+<span class="pc bnc" id="L134" title="All 4 branches missed.">    public void testNewStringBadEnc() {</span>
+<span class="fc" id="L135">        try {</span>
+<span class="nc" id="L136">            StringUtils.newString(BYTES_FIXTURE, &quot;UNKNOWN&quot;);</span>
+<span class="nc" id="L137">            Assert.fail(&quot;Expected &quot; + IllegalStateException.class.getName());</span>
+<span class="fc" id="L138">        } catch (final IllegalStateException e) {</span>
+            // Expected
+<span class="nc" id="L140">        }</span>
+<span class="fc" id="L141">    }</span>
+
+    @Test
+<span class="pc bnc" id="L144" title="All 4 branches missed.">    public void testNewStringNullInput() {</span>
+<span class="fc" id="L145">        Assert.assertNull(StringUtils.newString(null, &quot;UNKNOWN&quot;));</span>
+<span class="fc" id="L146">    }</span>
+
+    @Test
+<span class="pc bnc" id="L149" title="All 4 branches missed.">    public void testNewStringNullInput_CODEC229() {</span>
+<span class="fc" id="L150">        Assert.assertNull(StringUtils.newStringUtf8(null));</span>
+<span class="fc" id="L151">        Assert.assertNull(StringUtils.newStringIso8859_1(null));</span>
+<span class="fc" id="L152">        Assert.assertNull(StringUtils.newStringUsAscii(null));</span>
+<span class="fc" id="L153">        Assert.assertNull(StringUtils.newStringUtf16(null));</span>
+<span class="fc" id="L154">        Assert.assertNull(StringUtils.newStringUtf16Be(null));</span>
+<span class="fc" id="L155">        Assert.assertNull(StringUtils.newStringUtf16Le(null));</span>
+<span class="fc" id="L156">    }</span>
+
+    @Test
+<span class="pc bnc" id="L159" title="All 4 branches missed.">    public void testNewStringIso8859_1() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L160">        final String charsetName = &quot;ISO-8859-1&quot;;</span>
+<span class="fc" id="L161">        testNewString(charsetName);</span>
+<span class="fc" id="L162">        final String expected = new String(BYTES_FIXTURE, charsetName);</span>
+<span class="fc" id="L163">        final String actual = StringUtils.newStringIso8859_1(BYTES_FIXTURE);</span>
+<span class="fc" id="L164">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L165">    }</span>
+
+    @Test
+<span class="pc bnc" id="L168" title="All 4 branches missed.">    public void testNewStringUsAscii() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L169">        final String charsetName = &quot;US-ASCII&quot;;</span>
+<span class="fc" id="L170">        testNewString(charsetName);</span>
+<span class="fc" id="L171">        final String expected = new String(BYTES_FIXTURE, charsetName);</span>
+<span class="fc" id="L172">        final String actual = StringUtils.newStringUsAscii(BYTES_FIXTURE);</span>
+<span class="fc" id="L173">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L174">    }</span>
+
+    @Test
+<span class="pc bnc" id="L177" title="All 4 branches missed.">    public void testNewStringUtf16() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L178">        final String charsetName = &quot;UTF-16&quot;;</span>
+<span class="fc" id="L179">        testNewString(charsetName);</span>
+<span class="fc" id="L180">        final String expected = new String(BYTES_FIXTURE, charsetName);</span>
+<span class="fc" id="L181">        final String actual = StringUtils.newStringUtf16(BYTES_FIXTURE);</span>
+<span class="fc" id="L182">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L183">    }</span>
+
+    @Test
+<span class="pc bnc" id="L186" title="All 4 branches missed.">    public void testNewStringUtf16Be() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L187">        final String charsetName = &quot;UTF-16BE&quot;;</span>
+<span class="fc" id="L188">        testNewString(charsetName);</span>
+<span class="fc" id="L189">        final String expected = new String(BYTES_FIXTURE_16BE, charsetName);</span>
+<span class="fc" id="L190">        final String actual = StringUtils.newStringUtf16Be(BYTES_FIXTURE_16BE);</span>
+<span class="fc" id="L191">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L192">    }</span>
+
+    @Test
+<span class="pc bnc" id="L195" title="All 4 branches missed.">    public void testNewStringUtf16Le() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L196">        final String charsetName = &quot;UTF-16LE&quot;;</span>
+<span class="fc" id="L197">        testNewString(charsetName);</span>
+<span class="fc" id="L198">        final String expected = new String(BYTES_FIXTURE_16LE, charsetName);</span>
+<span class="fc" id="L199">        final String actual = StringUtils.newStringUtf16Le(BYTES_FIXTURE_16LE);</span>
+<span class="fc" id="L200">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L201">    }</span>
+
+    @Test
+<span class="pc bnc" id="L204" title="All 4 branches missed.">    public void testNewStringUtf8() throws UnsupportedEncodingException {</span>
+<span class="fc" id="L205">        final String charsetName = &quot;UTF-8&quot;;</span>
+<span class="fc" id="L206">        testNewString(charsetName);</span>
+<span class="fc" id="L207">        final String expected = new String(BYTES_FIXTURE, charsetName);</span>
+<span class="fc" id="L208">        final String actual = StringUtils.newStringUtf8(BYTES_FIXTURE);</span>
+<span class="fc" id="L209">        Assert.assertEquals(expected, actual);</span>
+<span class="fc" id="L210">    }</span>
+
+    @Test
+<span class="pc bnc" id="L213" title="All 4 branches missed.">    public void testEqualsString() {</span>
+<span class="fc" id="L214">        Assert.assertTrue(StringUtils.equals(null, null));</span>
+<span class="fc" id="L215">        Assert.assertFalse(StringUtils.equals(&quot;abc&quot;, null));</span>
+<span class="fc" id="L216">        Assert.assertFalse(StringUtils.equals(null, &quot;abc&quot;));</span>
+<span class="fc" id="L217">        Assert.assertTrue(StringUtils.equals(&quot;abc&quot;, &quot;abc&quot;));</span>
+<span class="fc" id="L218">        Assert.assertFalse(StringUtils.equals(&quot;abc&quot;, &quot;abcd&quot;));</span>
+<span class="fc" id="L219">        Assert.assertFalse(StringUtils.equals(&quot;abcd&quot;, &quot;abc&quot;));</span>
+<span class="fc" id="L220">        Assert.assertFalse(StringUtils.equals(&quot;abc&quot;, &quot;ABC&quot;));</span>
+<span class="fc" id="L221">    }</span>
+
+    @Test
+<span class="pc bnc" id="L224" title="All 4 branches missed.">    public void testEqualsCS1() {</span>
+<span class="fc" id="L225">        Assert.assertFalse(StringUtils.equals(new StringBuilder(&quot;abc&quot;), null));</span>
+<span class="fc" id="L226">        Assert.assertFalse(StringUtils.equals(null, new StringBuilder(&quot;abc&quot;)));</span>
+<span class="fc" id="L227">        Assert.assertTrue(StringUtils.equals(new StringBuilder(&quot;abc&quot;), new StringBuilder(&quot;abc&quot;)));</span>
+<span class="fc" id="L228">        Assert.assertFalse(StringUtils.equals(new StringBuilder(&quot;abc&quot;), new StringBuilder(&quot;abcd&quot;)));</span>
+<span class="fc" id="L229">        Assert.assertFalse(StringUtils.equals(new StringBuilder(&quot;abcd&quot;), new StringBuilder(&quot;abc&quot;)));</span>
+<span class="fc" id="L230">        Assert.assertFalse(StringUtils.equals(new StringBuilder(&quot;abc&quot;), new StringBuilder(&quot;ABC&quot;)));</span>
+<span class="fc" id="L231">    }</span>
+
+    @Test
+<span class="pc bnc" id="L234" title="All 4 branches missed.">    public void testEqualsCS2() {</span>
+<span class="fc" id="L235">        Assert.assertTrue(StringUtils.equals(&quot;abc&quot;, new StringBuilder(&quot;abc&quot;)));</span>
+<span class="fc" id="L236">        Assert.assertFalse(StringUtils.equals(new StringBuilder(&quot;abc&quot;), &quot;abcd&quot;));</span>
+<span class="fc" id="L237">        Assert.assertFalse(StringUtils.equals(&quot;abcd&quot;, new StringBuilder(&quot;abc&quot;)));</span>
+<span class="fc" id="L238">        Assert.assertFalse(StringUtils.equals(new StringBuilder(&quot;abc&quot;), &quot;ABC&quot;));</span>
+<span class="fc" id="L239">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

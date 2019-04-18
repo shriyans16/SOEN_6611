@@ -1,0 +1,227 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BoxAndWhiskerXYDataset</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.statistics</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BoxAndWhiskerXYDataset (org.jfree.data.statistics)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">BoxAndWhiskerXYDataset</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------------------
+<i>28</i>&nbsp; * BoxAndWhiskerXYDataset.java
+<i>29</i>&nbsp; * ---------------------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2008, by David Browning and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Browning (for Australian Institute of Marine
+<i>33</i>&nbsp; *                   Science);
+<i>34</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * Changes
+<i>37</i>&nbsp; * -------
+<i>38</i>&nbsp; * 05-Aug-2003 : Version 1, contributed by David Browning (DG);
+<i>39</i>&nbsp; * 12-Aug-2003 : Added new methods: getMaxNonOutlierValue
+<i>40</i>&nbsp; *                                  getMaxNonFaroutValue
+<i>41</i>&nbsp; *                                  getOutlierCoefficient
+<i>42</i>&nbsp; *                                  setOutlierCoefficient
+<i>43</i>&nbsp; *                                  getFaroutCoefficient
+<i>44</i>&nbsp; *                                  setFaroutCoefficient
+<i>45</i>&nbsp; *                                  getInterquartileRange (DB)
+<i>46</i>&nbsp; * 27-Aug-2003 : Renamed BoxAndWhiskerDataset --&gt; BoxAndWhiskerXYDataset, and
+<i>47</i>&nbsp; *               cut down methods (DG);
+<i>48</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>49</i>&nbsp; * 02-Feb-2007 : Removed author tags from all over JFreeChart sources (DG);
+<i>50</i>&nbsp; *
+<i>51</i>&nbsp; */
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;package org.jfree.data.statistics;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;import java.util.List;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;/**
+<i>60</i>&nbsp; * An interface that defines data in the form of (x, max, min, average, median)
+<i>61</i>&nbsp; * tuples.
+<i>62</i>&nbsp; * &lt;P&gt;
+<i>63</i>&nbsp; * Example: JFreeChart uses this interface to obtain data for AIMS
+<i>64</i>&nbsp; * max-min-average-median plots.
+<i>65</i>&nbsp; */
+<i>66</i>&nbsp;public interface BoxAndWhiskerXYDataset extends XYDataset {
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Returns the mean for the specified series and item.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param series  the series (zero-based index).
+<i>72</i>&nbsp;     * @param item  the item (zero-based index).
+<i>73</i>&nbsp;     *
+<i>74</i>&nbsp;     * @return The mean for the specified series and item.
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public Number getMeanValue(int series, int item);
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * Returns the median-value for the specified series and item.
+<i>80</i>&nbsp;     *
+<i>81</i>&nbsp;     * @param series  the series (zero-based index).
+<i>82</i>&nbsp;     * @param item  the item (zero-based index).
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @return The median-value for the specified series and item.
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    public Number getMedianValue(int series, int item);
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Returns the Q1 median-value for the specified series and item.
+<i>90</i>&nbsp;     *
+<i>91</i>&nbsp;     * @param series  the series (zero-based index).
+<i>92</i>&nbsp;     * @param item  the item (zero-based index).
+<i>93</i>&nbsp;     *
+<i>94</i>&nbsp;     * @return The Q1 median-value for the specified series and item.
+<i>95</i>&nbsp;     */
+<i>96</i>&nbsp;    public Number getQ1Value(int series, int item);
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    /**
+<i>99</i>&nbsp;     * Returns the Q3 median-value for the specified series and item.
+<i>100</i>&nbsp;     *
+<i>101</i>&nbsp;     * @param series  the series (zero-based index).
+<i>102</i>&nbsp;     * @param item  the item (zero-based index).
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @return The Q3 median-value for the specified series and item.
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public Number getQ3Value(int series, int item);
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;    /**
+<i>109</i>&nbsp;     * Returns the min-value for the specified series and item.
+<i>110</i>&nbsp;     *
+<i>111</i>&nbsp;     * @param series  the series (zero-based index).
+<i>112</i>&nbsp;     * @param item  the item (zero-based index).
+<i>113</i>&nbsp;     *
+<i>114</i>&nbsp;     * @return The min-value for the specified series and item.
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    public Number getMinRegularValue(int series, int item);
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    /**
+<i>119</i>&nbsp;     * Returns the max-value for the specified series and item.
+<i>120</i>&nbsp;     *
+<i>121</i>&nbsp;     * @param series  the series (zero-based index).
+<i>122</i>&nbsp;     * @param item  the item (zero-based index).
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @return The max-value for the specified series and item.
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    public Number getMaxRegularValue(int series, int item);
+<i>127</i>&nbsp;
+<i>128</i>&nbsp;    /**
+<i>129</i>&nbsp;     * Returns the minimum value which is not a farout.
+<i>130</i>&nbsp;     * @param series  the series (zero-based index).
+<i>131</i>&nbsp;     * @param item  the item (zero-based index).
+<i>132</i>&nbsp;     *
+<i>133</i>&nbsp;     * @return A {@code Number} representing the maximum non-farout value.
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    public Number getMinOutlier(int series, int item);
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * Returns the maximum value which is not a farout, ie Q3 + (interquartile
+<i>139</i>&nbsp;     * range * farout coefficient).
+<i>140</i>&nbsp;     *
+<i>141</i>&nbsp;     * @param series  the series (zero-based index).
+<i>142</i>&nbsp;     * @param item  the item (zero-based index).
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @return A {@code Number} representing the maximum non-farout value.
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public Number getMaxOutlier(int series, int item);
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /**
+<i>149</i>&nbsp;     * Returns a list of outliers for the specified series and item.
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @param series  the series (zero-based index).
+<i>152</i>&nbsp;     * @param item  the item (zero-based index).
+<i>153</i>&nbsp;     *
+<i>154</i>&nbsp;     * @return The list of outliers for the specified series and item
+<i>155</i>&nbsp;     *         (possibly {@code null}).
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    public List getOutliers(int series, int item);
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /**
+<i>160</i>&nbsp;     * Returns the value used as the outlier coefficient. The outlier
+<i>161</i>&nbsp;     * coefficient gives an indication of the degree of certainty in an
+<i>162</i>&nbsp;     * unskewed distribution.  Increasing the coefficient increases the number
+<i>163</i>&nbsp;     * of values included.  Currently only used to ensure farout coefficient
+<i>164</i>&nbsp;     * is greater than the outlier coefficient
+<i>165</i>&nbsp;     *
+<i>166</i>&nbsp;     * @return A {@code double} representing the value used to calculate
+<i>167</i>&nbsp;     *         outliers
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public double getOutlierCoefficient();
+<i>170</i>&nbsp;
+<i>171</i>&nbsp;    /**
+<i>172</i>&nbsp;     * Returns the value used as the farout coefficient. The farout coefficient
+<i>173</i>&nbsp;     * allows the calculation of which values will be off the graph.
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @return A {@code double} representing the value used to calculate
+<i>176</i>&nbsp;     *         farouts
+<i>177</i>&nbsp;     */
+<i>178</i>&nbsp;    public double getFaroutCoefficient();
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:56</div>
+</div>
+</body>
+</html>

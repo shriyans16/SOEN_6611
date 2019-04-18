@@ -1,0 +1,608 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HighLowRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HighLowRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HighLowRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    64.7%
+  </span>
+  <span class="absValue">
+    (11/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    36.4%
+  </span>
+  <span class="absValue">
+    (47/ 129)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------------
+<i>28</i>&nbsp; * HighLowRenderer.java
+<i>29</i>&nbsp; * --------------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2016, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Richard Atkinson;
+<i>34</i>&nbsp; *                   Christian W. Zuckschwerdt;
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * Changes
+<i>37</i>&nbsp; * -------
+<i>38</i>&nbsp; * 13-Dec-2001 : Version 1 (DG);
+<i>39</i>&nbsp; * 23-Jan-2002 : Added DrawInfo parameter to drawItem() method (DG);
+<i>40</i>&nbsp; * 28-Mar-2002 : Added a property change listener mechanism so that renderers
+<i>41</i>&nbsp; *               no longer need to be immutable (DG);
+<i>42</i>&nbsp; * 09-Apr-2002 : Removed translatedRangeZero from the drawItem() method, and
+<i>43</i>&nbsp; *               changed the return type of the drawItem method to void,
+<i>44</i>&nbsp; *               reflecting a change in the XYItemRenderer interface.  Added
+<i>45</i>&nbsp; *               tooltip code to drawItem() method (DG);
+<i>46</i>&nbsp; * 05-Aug-2002 : Small modification to drawItem method to support URLs for
+<i>47</i>&nbsp; *               HTML image maps (RA);
+<i>48</i>&nbsp; * 25-Mar-2003 : Implemented Serializable (DG);
+<i>49</i>&nbsp; * 01-May-2003 : Modified drawItem() method signature (DG);
+<i>50</i>&nbsp; * 30-Jul-2003 : Modified entity constructor (CZ);
+<i>51</i>&nbsp; * 31-Jul-2003 : Deprecated constructor (DG);
+<i>52</i>&nbsp; * 20-Aug-2003 : Implemented Cloneable and PublicCloneable (DG);
+<i>53</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>54</i>&nbsp; * 29-Jan-2004 : Fixed bug (882392) when rendering with
+<i>55</i>&nbsp; *               PlotOrientation.HORIZONTAL (DG);
+<i>56</i>&nbsp; * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState.  Renamed
+<i>57</i>&nbsp; *               XYToolTipGenerator --&gt; XYItemLabelGenerator (DG);
+<i>58</i>&nbsp; * 15-Jul-2004 : Switched getX() with getXValue() and getY() with
+<i>59</i>&nbsp; *               getYValue() (DG);
+<i>60</i>&nbsp; * 01-Nov-2005 : Added optional openTickPaint and closeTickPaint settings (DG);
+<i>61</i>&nbsp; * ------------- JFREECHART 1.0.0 ---------------------------------------------
+<i>62</i>&nbsp; * 06-Jul-2006 : Replace dataset methods getX() --&gt; getXValue() (DG);
+<i>63</i>&nbsp; * 08-Apr-2008 : Added findRangeBounds() override (DG);
+<i>64</i>&nbsp; * 29-Apr-2008 : Added tickLength field (DG);
+<i>65</i>&nbsp; * 25-Sep-2008 : Check for non-null entity collection (DG);
+<i>66</i>&nbsp; *
+<i>67</i>&nbsp; */
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;import java.awt.Graphics2D;
+<i>72</i>&nbsp;import java.awt.Paint;
+<i>73</i>&nbsp;import java.awt.Shape;
+<i>74</i>&nbsp;import java.awt.Stroke;
+<i>75</i>&nbsp;import java.awt.geom.Line2D;
+<i>76</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>77</i>&nbsp;import java.io.IOException;
+<i>78</i>&nbsp;import java.io.ObjectInputStream;
+<i>79</i>&nbsp;import java.io.ObjectOutputStream;
+<i>80</i>&nbsp;import java.io.Serializable;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>83</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>84</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>85</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>86</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>87</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>88</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>89</i>&nbsp;import org.jfree.chart.ui.RectangleEdge;
+<i>90</i>&nbsp;import org.jfree.chart.util.PaintUtils;
+<i>91</i>&nbsp;import org.jfree.chart.util.PublicCloneable;
+<i>92</i>&nbsp;import org.jfree.chart.util.SerialUtils;
+<i>93</i>&nbsp;import org.jfree.data.Range;
+<i>94</i>&nbsp;import org.jfree.data.general.DatasetUtils;
+<i>95</i>&nbsp;import org.jfree.data.xy.OHLCDataset;
+<i>96</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;/**
+<i>99</i>&nbsp; * A renderer that draws high/low/open/close markers on an {@link XYPlot}
+<i>100</i>&nbsp; * (requires a {@link OHLCDataset}).  This renderer does not include code to
+<i>101</i>&nbsp; * calculate the crosshair point for the plot.
+<i>102</i>&nbsp; *
+<i>103</i>&nbsp; * The example shown here is generated by the {@code HighLowChartDemo1.java} 
+<i>104</i>&nbsp; * program included in the JFreeChart Demo Collection:
+<i>105</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>106</i>&nbsp; * &lt;img src=&quot;../../../../../images/HighLowRendererSample.png&quot;
+<i>107</i>&nbsp; * alt=&quot;HighLowRendererSample.png&quot;&gt;
+<i>108</i>&nbsp; */
+<i>109</i>&nbsp;public class HighLowRenderer extends AbstractXYItemRenderer
+<i>110</i>&nbsp;        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /** For serialization. */
+<i>113</i>&nbsp;    private static final long serialVersionUID = -8135673815876552516L;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /** A flag that controls whether the open ticks are drawn. */
+<i>116</i>&nbsp;    private boolean drawOpenTicks;
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    /** A flag that controls whether the close ticks are drawn. */
+<i>119</i>&nbsp;    private boolean drawCloseTicks;
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * The paint used for the open ticks (if {@code null}, the series
+<i>123</i>&nbsp;     * paint is used instead).
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    private transient Paint openTickPaint;
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;    /**
+<i>128</i>&nbsp;     * The paint used for the close ticks (if {@code null}, the series
+<i>129</i>&nbsp;     * paint is used instead).
+<i>130</i>&nbsp;     */
+<i>131</i>&nbsp;    private transient Paint closeTickPaint;
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    /**
+<i>134</i>&nbsp;     * The tick length (in Java2D units).
+<i>135</i>&nbsp;     *
+<i>136</i>&nbsp;     * @since 1.0.10
+<i>137</i>&nbsp;     */
+<i>138</i>&nbsp;    private double tickLength;
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    /**
+<i>141</i>&nbsp;     * The default constructor.
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    public HighLowRenderer() {
+<b class="fc"><i>144</i>&nbsp;        super();</b>
+<b class="fc"><i>145</i>&nbsp;        this.drawOpenTicks = true;</b>
+<b class="fc"><i>146</i>&nbsp;        this.drawCloseTicks = true;</b>
+<b class="fc"><i>147</i>&nbsp;        this.tickLength = 2.0;</b>
+<b class="fc"><i>148</i>&nbsp;    }</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    /**
+<i>151</i>&nbsp;     * Returns the flag that controls whether open ticks are drawn.
+<i>152</i>&nbsp;     *
+<i>153</i>&nbsp;     * @return A boolean.
+<i>154</i>&nbsp;     *
+<i>155</i>&nbsp;     * @see #getDrawCloseTicks()
+<i>156</i>&nbsp;     * @see #setDrawOpenTicks(boolean)
+<i>157</i>&nbsp;     */
+<i>158</i>&nbsp;    public boolean getDrawOpenTicks() {
+<b class="nc"><i>159</i>&nbsp;        return this.drawOpenTicks;</b>
+<i>160</i>&nbsp;    }
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;    /**
+<i>163</i>&nbsp;     * Sets the flag that controls whether open ticks are drawn, and sends a
+<i>164</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>165</i>&nbsp;     *
+<i>166</i>&nbsp;     * @param draw  the flag.
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @see #getDrawOpenTicks()
+<i>169</i>&nbsp;     */
+<i>170</i>&nbsp;    public void setDrawOpenTicks(boolean draw) {
+<b class="fc"><i>171</i>&nbsp;        this.drawOpenTicks = draw;</b>
+<b class="fc"><i>172</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>173</i>&nbsp;    }</b>
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Returns the flag that controls whether close ticks are drawn.
+<i>177</i>&nbsp;     *
+<i>178</i>&nbsp;     * @return A boolean.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @see #getDrawOpenTicks()
+<i>181</i>&nbsp;     * @see #setDrawCloseTicks(boolean)
+<i>182</i>&nbsp;     */
+<i>183</i>&nbsp;    public boolean getDrawCloseTicks() {
+<b class="nc"><i>184</i>&nbsp;        return this.drawCloseTicks;</b>
+<i>185</i>&nbsp;    }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    /**
+<i>188</i>&nbsp;     * Sets the flag that controls whether close ticks are drawn, and sends a
+<i>189</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @param draw  the flag.
+<i>192</i>&nbsp;     *
+<i>193</i>&nbsp;     * @see #getDrawCloseTicks()
+<i>194</i>&nbsp;     */
+<i>195</i>&nbsp;    public void setDrawCloseTicks(boolean draw) {
+<b class="fc"><i>196</i>&nbsp;        this.drawCloseTicks = draw;</b>
+<b class="fc"><i>197</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>198</i>&nbsp;    }</b>
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /**
+<i>201</i>&nbsp;     * Returns the paint used to draw the ticks for the open values.
+<i>202</i>&nbsp;     *
+<i>203</i>&nbsp;     * @return The paint used to draw the ticks for the open values (possibly
+<i>204</i>&nbsp;     *         {@code null}).
+<i>205</i>&nbsp;     *
+<i>206</i>&nbsp;     * @see #setOpenTickPaint(Paint)
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    public Paint getOpenTickPaint() {
+<b class="nc"><i>209</i>&nbsp;        return this.openTickPaint;</b>
+<i>210</i>&nbsp;    }
+<i>211</i>&nbsp;
+<i>212</i>&nbsp;    /**
+<i>213</i>&nbsp;     * Sets the paint used to draw the ticks for the open values and sends a
+<i>214</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  If you set
+<i>215</i>&nbsp;     * this to {@code null} (the default), the series paint is used
+<i>216</i>&nbsp;     * instead.
+<i>217</i>&nbsp;     *
+<i>218</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>219</i>&nbsp;     *
+<i>220</i>&nbsp;     * @see #getOpenTickPaint()
+<i>221</i>&nbsp;     */
+<i>222</i>&nbsp;    public void setOpenTickPaint(Paint paint) {
+<b class="fc"><i>223</i>&nbsp;        this.openTickPaint = paint;</b>
+<b class="fc"><i>224</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>225</i>&nbsp;    }</b>
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;    /**
+<i>228</i>&nbsp;     * Returns the paint used to draw the ticks for the close values.
+<i>229</i>&nbsp;     *
+<i>230</i>&nbsp;     * @return The paint used to draw the ticks for the close values (possibly
+<i>231</i>&nbsp;     *         {@code null}).
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @see #setCloseTickPaint(Paint)
+<i>234</i>&nbsp;     */
+<i>235</i>&nbsp;    public Paint getCloseTickPaint() {
+<b class="nc"><i>236</i>&nbsp;        return this.closeTickPaint;</b>
+<i>237</i>&nbsp;    }
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;    /**
+<i>240</i>&nbsp;     * Sets the paint used to draw the ticks for the close values and sends a
+<i>241</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  If you set
+<i>242</i>&nbsp;     * this to {@code null} (the default), the series paint is used
+<i>243</i>&nbsp;     * instead.
+<i>244</i>&nbsp;     *
+<i>245</i>&nbsp;     * @param paint  the paint ({@code null} permitted).
+<i>246</i>&nbsp;     *
+<i>247</i>&nbsp;     * @see #getCloseTickPaint()
+<i>248</i>&nbsp;     */
+<i>249</i>&nbsp;    public void setCloseTickPaint(Paint paint) {
+<b class="fc"><i>250</i>&nbsp;        this.closeTickPaint = paint;</b>
+<b class="fc"><i>251</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>252</i>&nbsp;    }</b>
+<i>253</i>&nbsp;
+<i>254</i>&nbsp;    /**
+<i>255</i>&nbsp;     * Returns the tick length (in Java2D units).
+<i>256</i>&nbsp;     *
+<i>257</i>&nbsp;     * @return The tick length.
+<i>258</i>&nbsp;     *
+<i>259</i>&nbsp;     * @since 1.0.10
+<i>260</i>&nbsp;     *
+<i>261</i>&nbsp;     * @see #setTickLength(double)
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    public double getTickLength() {
+<b class="nc"><i>264</i>&nbsp;        return this.tickLength;</b>
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;
+<i>267</i>&nbsp;    /**
+<i>268</i>&nbsp;     * Sets the tick length (in Java2D units) and sends a
+<i>269</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @param length  the length.
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @since 1.0.10
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @see #getTickLength()
+<i>276</i>&nbsp;     */
+<i>277</i>&nbsp;    public void setTickLength(double length) {
+<b class="fc"><i>278</i>&nbsp;        this.tickLength = length;</b>
+<b class="fc"><i>279</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>280</i>&nbsp;    }</b>
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    /**
+<i>283</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>284</i>&nbsp;     * items from the specified dataset.
+<i>285</i>&nbsp;     *
+<i>286</i>&nbsp;     * @param dataset  the dataset ({@code null} permitted).
+<i>287</i>&nbsp;     *
+<i>288</i>&nbsp;     * @return The range ({@code null} if the dataset is {@code null}
+<i>289</i>&nbsp;     *         or empty).
+<i>290</i>&nbsp;     */
+<i>291</i>&nbsp;    @Override
+<i>292</i>&nbsp;    public Range findRangeBounds(XYDataset dataset) {
+<b class="fc"><i>293</i>&nbsp;        if (dataset != null) {</b>
+<b class="fc"><i>294</i>&nbsp;            return DatasetUtils.findRangeBounds(dataset, true);</b>
+<i>295</i>&nbsp;        }
+<i>296</i>&nbsp;        else {
+<b class="fc"><i>297</i>&nbsp;            return null;</b>
+<i>298</i>&nbsp;        }
+<i>299</i>&nbsp;    }
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    /**
+<i>302</i>&nbsp;     * Draws the visual representation of a single data item.
+<i>303</i>&nbsp;     *
+<i>304</i>&nbsp;     * @param g2  the graphics device.
+<i>305</i>&nbsp;     * @param state  the renderer state.
+<i>306</i>&nbsp;     * @param dataArea  the area within which the plot is being drawn.
+<i>307</i>&nbsp;     * @param info  collects information about the drawing.
+<i>308</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>309</i>&nbsp;     *              information etc).
+<i>310</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>311</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>312</i>&nbsp;     * @param dataset  the dataset.
+<i>313</i>&nbsp;     * @param series  the series index (zero-based).
+<i>314</i>&nbsp;     * @param item  the item index (zero-based).
+<i>315</i>&nbsp;     * @param crosshairState  crosshair information for the plot
+<i>316</i>&nbsp;     *                        ({@code null} permitted).
+<i>317</i>&nbsp;     * @param pass  the pass index.
+<i>318</i>&nbsp;     */
+<i>319</i>&nbsp;    @Override
+<i>320</i>&nbsp;    public void drawItem(Graphics2D g2, XYItemRendererState state,
+<i>321</i>&nbsp;            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
+<i>322</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
+<i>323</i>&nbsp;            int series, int item, CrosshairState crosshairState, int pass) {
+<i>324</i>&nbsp;
+<b class="nc"><i>325</i>&nbsp;        double x = dataset.getXValue(series, item);</b>
+<b class="nc"><i>326</i>&nbsp;        if (!domainAxis.getRange().contains(x)) {</b>
+<b class="nc"><i>327</i>&nbsp;            return;    // the x value is not within the axis range</b>
+<i>328</i>&nbsp;        }
+<b class="nc"><i>329</i>&nbsp;        double xx = domainAxis.valueToJava2D(x, dataArea,</b>
+<b class="nc"><i>330</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;        // setup for collecting optional entity info...
+<b class="nc"><i>333</i>&nbsp;        Shape entityArea = null;</b>
+<b class="nc"><i>334</i>&nbsp;        EntityCollection entities = null;</b>
+<b class="nc"><i>335</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>336</i>&nbsp;            entities = info.getOwner().getEntityCollection();</b>
+<i>337</i>&nbsp;        }
+<i>338</i>&nbsp;
+<b class="nc"><i>339</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>340</i>&nbsp;        RectangleEdge location = plot.getRangeAxisEdge();</b>
+<i>341</i>&nbsp;
+<b class="nc"><i>342</i>&nbsp;        Paint itemPaint = getItemPaint(series, item);</b>
+<b class="nc"><i>343</i>&nbsp;        Stroke itemStroke = getItemStroke(series, item);</b>
+<b class="nc"><i>344</i>&nbsp;        g2.setPaint(itemPaint);</b>
+<b class="nc"><i>345</i>&nbsp;        g2.setStroke(itemStroke);</b>
+<i>346</i>&nbsp;
+<b class="nc"><i>347</i>&nbsp;        if (dataset instanceof OHLCDataset) {</b>
+<b class="nc"><i>348</i>&nbsp;            OHLCDataset hld = (OHLCDataset) dataset;</b>
+<i>349</i>&nbsp;
+<b class="nc"><i>350</i>&nbsp;            double yHigh = hld.getHighValue(series, item);</b>
+<b class="nc"><i>351</i>&nbsp;            double yLow = hld.getLowValue(series, item);</b>
+<b class="nc"><i>352</i>&nbsp;            if (!Double.isNaN(yHigh) &amp;&amp; !Double.isNaN(yLow)) {</b>
+<b class="nc"><i>353</i>&nbsp;                double yyHigh = rangeAxis.valueToJava2D(yHigh, dataArea,</b>
+<i>354</i>&nbsp;                        location);
+<b class="nc"><i>355</i>&nbsp;                double yyLow = rangeAxis.valueToJava2D(yLow, dataArea,</b>
+<i>356</i>&nbsp;                        location);
+<b class="nc"><i>357</i>&nbsp;                if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>358</i>&nbsp;                    g2.draw(new Line2D.Double(yyLow, xx, yyHigh, xx));</b>
+<b class="nc"><i>359</i>&nbsp;                    entityArea = new Rectangle2D.Double(Math.min(yyLow, yyHigh),</b>
+<b class="nc"><i>360</i>&nbsp;                            xx - 1.0, Math.abs(yyHigh - yyLow), 2.0);</b>
+<i>361</i>&nbsp;                }
+<b class="nc"><i>362</i>&nbsp;                else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>363</i>&nbsp;                    g2.draw(new Line2D.Double(xx, yyLow, xx, yyHigh));</b>
+<b class="nc"><i>364</i>&nbsp;                    entityArea = new Rectangle2D.Double(xx - 1.0,</b>
+<b class="nc"><i>365</i>&nbsp;                            Math.min(yyLow, yyHigh), 2.0,</b>
+<b class="nc"><i>366</i>&nbsp;                            Math.abs(yyHigh - yyLow));</b>
+<i>367</i>&nbsp;                }
+<i>368</i>&nbsp;            }
+<i>369</i>&nbsp;
+<b class="nc"><i>370</i>&nbsp;            double delta = getTickLength();</b>
+<b class="nc"><i>371</i>&nbsp;            if (domainAxis.isInverted()) {</b>
+<b class="nc"><i>372</i>&nbsp;                delta = -delta;</b>
+<i>373</i>&nbsp;            }
+<b class="nc"><i>374</i>&nbsp;            if (getDrawOpenTicks()) {</b>
+<b class="nc"><i>375</i>&nbsp;                double yOpen = hld.getOpenValue(series, item);</b>
+<b class="nc"><i>376</i>&nbsp;                if (!Double.isNaN(yOpen)) {</b>
+<b class="nc"><i>377</i>&nbsp;                    double yyOpen = rangeAxis.valueToJava2D(yOpen, dataArea,</b>
+<i>378</i>&nbsp;                            location);
+<b class="nc"><i>379</i>&nbsp;                    if (this.openTickPaint != null) {</b>
+<b class="nc"><i>380</i>&nbsp;                        g2.setPaint(this.openTickPaint);</b>
+<i>381</i>&nbsp;                    }
+<i>382</i>&nbsp;                    else {
+<b class="nc"><i>383</i>&nbsp;                        g2.setPaint(itemPaint);</b>
+<i>384</i>&nbsp;                    }
+<b class="nc"><i>385</i>&nbsp;                    if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>386</i>&nbsp;                        g2.draw(new Line2D.Double(yyOpen, xx + delta, yyOpen,</b>
+<i>387</i>&nbsp;                                xx));
+<i>388</i>&nbsp;                    }
+<b class="nc"><i>389</i>&nbsp;                    else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>390</i>&nbsp;                        g2.draw(new Line2D.Double(xx - delta, yyOpen, xx,</b>
+<i>391</i>&nbsp;                                yyOpen));
+<i>392</i>&nbsp;                    }
+<i>393</i>&nbsp;                }
+<i>394</i>&nbsp;            }
+<i>395</i>&nbsp;
+<b class="nc"><i>396</i>&nbsp;            if (getDrawCloseTicks()) {</b>
+<b class="nc"><i>397</i>&nbsp;                double yClose = hld.getCloseValue(series, item);</b>
+<b class="nc"><i>398</i>&nbsp;                if (!Double.isNaN(yClose)) {</b>
+<b class="nc"><i>399</i>&nbsp;                    double yyClose = rangeAxis.valueToJava2D(</b>
+<i>400</i>&nbsp;                        yClose, dataArea, location);
+<b class="nc"><i>401</i>&nbsp;                    if (this.closeTickPaint != null) {</b>
+<b class="nc"><i>402</i>&nbsp;                        g2.setPaint(this.closeTickPaint);</b>
+<i>403</i>&nbsp;                    }
+<i>404</i>&nbsp;                    else {
+<b class="nc"><i>405</i>&nbsp;                        g2.setPaint(itemPaint);</b>
+<i>406</i>&nbsp;                    }
+<b class="nc"><i>407</i>&nbsp;                    if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>408</i>&nbsp;                        g2.draw(new Line2D.Double(yyClose, xx, yyClose,</b>
+<i>409</i>&nbsp;                                xx - delta));
+<i>410</i>&nbsp;                    }
+<b class="nc"><i>411</i>&nbsp;                    else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>412</i>&nbsp;                        g2.draw(new Line2D.Double(xx, yyClose, xx + delta,</b>
+<i>413</i>&nbsp;                                yyClose));
+<i>414</i>&nbsp;                    }
+<i>415</i>&nbsp;                }
+<i>416</i>&nbsp;            }
+<i>417</i>&nbsp;
+<b class="nc"><i>418</i>&nbsp;        }</b>
+<i>419</i>&nbsp;        else {
+<i>420</i>&nbsp;            // not a HighLowDataset, so just draw a line connecting this point
+<i>421</i>&nbsp;            // with the previous point...
+<b class="nc"><i>422</i>&nbsp;            if (item &gt; 0) {</b>
+<b class="nc"><i>423</i>&nbsp;                double x0 = dataset.getXValue(series, item - 1);</b>
+<b class="nc"><i>424</i>&nbsp;                double y0 = dataset.getYValue(series, item - 1);</b>
+<b class="nc"><i>425</i>&nbsp;                double y = dataset.getYValue(series, item);</b>
+<b class="nc"><i>426</i>&nbsp;                if (Double.isNaN(x0) || Double.isNaN(y0) || Double.isNaN(y)) {</b>
+<b class="nc"><i>427</i>&nbsp;                    return;</b>
+<i>428</i>&nbsp;                }
+<b class="nc"><i>429</i>&nbsp;                double xx0 = domainAxis.valueToJava2D(x0, dataArea,</b>
+<b class="nc"><i>430</i>&nbsp;                        plot.getDomainAxisEdge());</b>
+<b class="nc"><i>431</i>&nbsp;                double yy0 = rangeAxis.valueToJava2D(y0, dataArea, location);</b>
+<b class="nc"><i>432</i>&nbsp;                double yy = rangeAxis.valueToJava2D(y, dataArea, location);</b>
+<b class="nc"><i>433</i>&nbsp;                if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>434</i>&nbsp;                    g2.draw(new Line2D.Double(yy0, xx0, yy, xx));</b>
+<i>435</i>&nbsp;                }
+<b class="nc"><i>436</i>&nbsp;                else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>437</i>&nbsp;                    g2.draw(new Line2D.Double(xx0, yy0, xx, yy));</b>
+<i>438</i>&nbsp;                }
+<i>439</i>&nbsp;            }
+<i>440</i>&nbsp;        }
+<i>441</i>&nbsp;
+<b class="nc"><i>442</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>443</i>&nbsp;            addEntity(entities, entityArea, dataset, series, item, 0.0, 0.0);</b>
+<i>444</i>&nbsp;        }
+<i>445</i>&nbsp;
+<b class="nc"><i>446</i>&nbsp;    }</b>
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;    /**
+<i>449</i>&nbsp;     * Returns a clone of the renderer.
+<i>450</i>&nbsp;     *
+<i>451</i>&nbsp;     * @return A clone.
+<i>452</i>&nbsp;     *
+<i>453</i>&nbsp;     * @throws CloneNotSupportedException  if the renderer cannot be cloned.
+<i>454</i>&nbsp;     */
+<i>455</i>&nbsp;    @Override
+<i>456</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>457</i>&nbsp;        return super.clone();</b>
+<i>458</i>&nbsp;    }
+<i>459</i>&nbsp;
+<i>460</i>&nbsp;    /**
+<i>461</i>&nbsp;     * Tests this renderer for equality with an arbitrary object.
+<i>462</i>&nbsp;     *
+<i>463</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>464</i>&nbsp;     *
+<i>465</i>&nbsp;     * @return A boolean.
+<i>466</i>&nbsp;     */
+<i>467</i>&nbsp;    @Override
+<i>468</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>469</i>&nbsp;        if (this == obj) {</b>
+<b class="nc"><i>470</i>&nbsp;            return true;</b>
+<i>471</i>&nbsp;        }
+<b class="fc"><i>472</i>&nbsp;        if (!(obj instanceof HighLowRenderer)) {</b>
+<b class="nc"><i>473</i>&nbsp;            return false;</b>
+<i>474</i>&nbsp;        }
+<b class="fc"><i>475</i>&nbsp;        HighLowRenderer that = (HighLowRenderer) obj;</b>
+<b class="fc"><i>476</i>&nbsp;        if (this.drawOpenTicks != that.drawOpenTicks) {</b>
+<b class="fc"><i>477</i>&nbsp;            return false;</b>
+<i>478</i>&nbsp;        }
+<b class="fc"><i>479</i>&nbsp;        if (this.drawCloseTicks != that.drawCloseTicks) {</b>
+<b class="fc"><i>480</i>&nbsp;            return false;</b>
+<i>481</i>&nbsp;        }
+<b class="fc"><i>482</i>&nbsp;        if (!PaintUtils.equal(this.openTickPaint, that.openTickPaint)) {</b>
+<b class="fc"><i>483</i>&nbsp;            return false;</b>
+<i>484</i>&nbsp;        }
+<b class="fc"><i>485</i>&nbsp;        if (!PaintUtils.equal(this.closeTickPaint, that.closeTickPaint)) {</b>
+<b class="fc"><i>486</i>&nbsp;            return false;</b>
+<i>487</i>&nbsp;        }
+<b class="fc"><i>488</i>&nbsp;        if (this.tickLength != that.tickLength) {</b>
+<b class="fc"><i>489</i>&nbsp;            return false;</b>
+<i>490</i>&nbsp;        }
+<b class="fc"><i>491</i>&nbsp;        if (!super.equals(obj)) {</b>
+<b class="nc"><i>492</i>&nbsp;            return false;</b>
+<i>493</i>&nbsp;        }
+<b class="fc"><i>494</i>&nbsp;        return true;</b>
+<i>495</i>&nbsp;    }
+<i>496</i>&nbsp;
+<i>497</i>&nbsp;    /**
+<i>498</i>&nbsp;     * Provides serialization support.
+<i>499</i>&nbsp;     *
+<i>500</i>&nbsp;     * @param stream  the input stream.
+<i>501</i>&nbsp;     *
+<i>502</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>503</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>504</i>&nbsp;     */
+<i>505</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>506</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>507</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>508</i>&nbsp;        this.openTickPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>509</i>&nbsp;        this.closeTickPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>510</i>&nbsp;    }</b>
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;    /**
+<i>513</i>&nbsp;     * Provides serialization support.
+<i>514</i>&nbsp;     *
+<i>515</i>&nbsp;     * @param stream  the output stream.
+<i>516</i>&nbsp;     *
+<i>517</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>518</i>&nbsp;     */
+<i>519</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>520</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>521</i>&nbsp;        SerialUtils.writePaint(this.openTickPaint, stream);</b>
+<b class="fc"><i>522</i>&nbsp;        SerialUtils.writePaint(this.closeTickPaint, stream);</b>
+<b class="fc"><i>523</i>&nbsp;    }</b>
+<i>524</i>&nbsp;
+<i>525</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

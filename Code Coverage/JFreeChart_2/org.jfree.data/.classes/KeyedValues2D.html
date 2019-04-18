@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: KeyedValues2D</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data</a> ]
+</div>
+
+<h1>Coverage Summary for Class: KeyedValues2D (org.jfree.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">KeyedValues2D</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ------------------
+<i>28</i>&nbsp; * KeyedValues2D.java
+<i>29</i>&nbsp; * ------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2008, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 28-Oct-2002 : Version 1 (DG);
+<i>38</i>&nbsp; * 12-Jan-2005 : Updated Javadocs (DG);
+<i>39</i>&nbsp; *
+<i>40</i>&nbsp; */
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;package org.jfree.data;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;import java.util.List;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;/**
+<i>47</i>&nbsp; * An extension of the {@link Values2D} interface where a unique key is
+<i>48</i>&nbsp; * associated with the row and column indices.
+<i>49</i>&nbsp; */
+<i>50</i>&nbsp;public interface KeyedValues2D extends Values2D {
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * Returns the row key for a given index.
+<i>54</i>&nbsp;     *
+<i>55</i>&nbsp;     * @param row  the row index (zero-based).
+<i>56</i>&nbsp;     *
+<i>57</i>&nbsp;     * @return The row key.
+<i>58</i>&nbsp;     *
+<i>59</i>&nbsp;     * @throws IndexOutOfBoundsException if {@code row} is out of bounds.
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public Comparable getRowKey(int row);
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Returns the row index for a given key.
+<i>65</i>&nbsp;     *
+<i>66</i>&nbsp;     * @param key  the row key.
+<i>67</i>&nbsp;     *
+<i>68</i>&nbsp;     * @return The row index, or {@code -1} if the key is unrecognised.
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    public int getRowIndex(Comparable key);
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Returns the row keys.
+<i>74</i>&nbsp;     *
+<i>75</i>&nbsp;     * @return The keys.
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    public List getRowKeys();
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Returns the column key for a given index.
+<i>81</i>&nbsp;     *
+<i>82</i>&nbsp;     * @param column  the column index (zero-based).
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @return The column key.
+<i>85</i>&nbsp;     *
+<i>86</i>&nbsp;     * @throws IndexOutOfBoundsException if {@code row} is out of bounds.
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public Comparable getColumnKey(int column);
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Returns the column index for a given key.
+<i>92</i>&nbsp;     *
+<i>93</i>&nbsp;     * @param key  the column key.
+<i>94</i>&nbsp;     *
+<i>95</i>&nbsp;     * @return The column index, or {@code -1} if the key is unrecognised.
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public int getColumnIndex(Comparable key);
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Returns the column keys.
+<i>101</i>&nbsp;     *
+<i>102</i>&nbsp;     * @return The keys.
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    public List getColumnKeys();
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /**
+<i>107</i>&nbsp;     * Returns the value associated with the specified keys.
+<i>108</i>&nbsp;     *
+<i>109</i>&nbsp;     * @param rowKey  the row key ({@code null} not permitted).
+<i>110</i>&nbsp;     * @param columnKey  the column key ({@code null} not permitted).
+<i>111</i>&nbsp;     *
+<i>112</i>&nbsp;     * @return The value.
+<i>113</i>&nbsp;     *
+<i>114</i>&nbsp;     * @throws UnknownKeyException if either key is not recognised.
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    public Number getValue(Comparable rowKey, Comparable columnKey);
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

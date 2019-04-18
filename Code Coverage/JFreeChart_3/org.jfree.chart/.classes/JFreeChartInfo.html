@@ -1,0 +1,1969 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: JFreeChartInfo</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart</a> ]
+</div>
+
+<h1>Coverage Summary for Class: JFreeChartInfo (org.jfree.chart)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JFreeChartInfo</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------
+<i>28</i>&nbsp; * JFreeChart.java
+<i>29</i>&nbsp; * ---------------
+<i>30</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Andrzej Porebski;
+<i>34</i>&nbsp; *                   David Li;
+<i>35</i>&nbsp; *                   Wolfgang Irler;
+<i>36</i>&nbsp; *                   Christian W. Zuckschwerdt;
+<i>37</i>&nbsp; *                   Klaus Rheinwald;
+<i>38</i>&nbsp; *                   Nicolas Brodu;
+<i>39</i>&nbsp; *                   Peter Kolb (patch 2603321);
+<i>40</i>&nbsp; *
+<i>41</i>&nbsp; * NOTE: The above list of contributors lists only the people that have
+<i>42</i>&nbsp; * contributed to this source file (JFreeChart.java) - for a list of ALL
+<i>43</i>&nbsp; * contributors to the project, please see the README.txt file.
+<i>44</i>&nbsp; *
+<i>45</i>&nbsp; * Changes (from 20-Jun-2001)
+<i>46</i>&nbsp; * --------------------------
+<i>47</i>&nbsp; * 20-Jun-2001 : Modifications submitted by Andrzej Porebski for legend
+<i>48</i>&nbsp; *               placement;
+<i>49</i>&nbsp; * 21-Jun-2001 : Removed JFreeChart parameter from Plot constructors (DG);
+<i>50</i>&nbsp; * 22-Jun-2001 : Multiple titles added (original code by David Berry, with
+<i>51</i>&nbsp; *               reworkings by DG);
+<i>52</i>&nbsp; * 18-Sep-2001 : Updated header (DG);
+<i>53</i>&nbsp; * 15-Oct-2001 : Moved data source classes into new package
+<i>54</i>&nbsp; *               com.jrefinery.data.* (DG);
+<i>55</i>&nbsp; * 18-Oct-2001 : New factory method for creating VerticalXYBarChart (DG);
+<i>56</i>&nbsp; * 19-Oct-2001 : Moved series paint and stroke methods to the Plot class (DG);
+<i>57</i>&nbsp; *               Moved static chart creation methods to new ChartFactory
+<i>58</i>&nbsp; *               class (DG);
+<i>59</i>&nbsp; * 22-Oct-2001 : Renamed DataSource.java --&gt; Dataset.java etc. (DG);
+<i>60</i>&nbsp; *               Fixed bug where chart isn&#39;t registered with the dataset (DG);
+<i>61</i>&nbsp; * 07-Nov-2001 : Fixed bug where null title in constructor causes
+<i>62</i>&nbsp; *               exception (DG);
+<i>63</i>&nbsp; *               Tidied up event notification code (DG);
+<i>64</i>&nbsp; * 17-Nov-2001 : Added getLegendItemCount() method (DG);
+<i>65</i>&nbsp; * 21-Nov-2001 : Set clipping in draw method to ensure that nothing gets drawn
+<i>66</i>&nbsp; *               outside the chart area (DG);
+<i>67</i>&nbsp; * 11-Dec-2001 : Added the createBufferedImage() method, taken from the
+<i>68</i>&nbsp; *               JFreeChartServletDemo class (DG);
+<i>69</i>&nbsp; * 13-Dec-2001 : Added tooltips (DG);
+<i>70</i>&nbsp; * 16-Jan-2002 : Added handleClick() method (DG);
+<i>71</i>&nbsp; * 22-Jan-2002 : Fixed bug correlating legend labels with pie data (DG);
+<i>72</i>&nbsp; * 05-Feb-2002 : Removed redundant tooltips code (DG);
+<i>73</i>&nbsp; * 19-Feb-2002 : Added accessor methods for the backgroundImage and
+<i>74</i>&nbsp; *               backgroundImageAlpha attributes (DG);
+<i>75</i>&nbsp; * 21-Feb-2002 : Added static fields for INFO, COPYRIGHT, LICENCE, CONTRIBUTORS
+<i>76</i>&nbsp; *               and LIBRARIES.  These can be used to display information about
+<i>77</i>&nbsp; *               JFreeChart (DG);
+<i>78</i>&nbsp; * 06-Mar-2002 : Moved constants to JFreeChartConstants interface (DG);
+<i>79</i>&nbsp; * 18-Apr-2002 : PieDataset is no longer sorted (oldman);
+<i>80</i>&nbsp; * 23-Apr-2002 : Moved dataset to the Plot class (DG);
+<i>81</i>&nbsp; * 13-Jun-2002 : Added an extra draw() method (DG);
+<i>82</i>&nbsp; * 25-Jun-2002 : Implemented the Drawable interface and removed redundant
+<i>83</i>&nbsp; *               imports (DG);
+<i>84</i>&nbsp; * 26-Jun-2002 : Added another createBufferedImage() method (DG);
+<i>85</i>&nbsp; * 18-Sep-2002 : Fixed issues reported by Checkstyle (DG);
+<i>86</i>&nbsp; * 23-Sep-2002 : Added new contributor (DG);
+<i>87</i>&nbsp; * 28-Oct-2002 : Created main title and subtitle list to replace existing title
+<i>88</i>&nbsp; *               list (DG);
+<i>89</i>&nbsp; * 08-Jan-2003 : Added contributor (DG);
+<i>90</i>&nbsp; * 17-Jan-2003 : Added new constructor (DG);
+<i>91</i>&nbsp; * 22-Jan-2003 : Added ChartColor class by Cameron Riley, and background image
+<i>92</i>&nbsp; *               alignment code by Christian W. Zuckschwerdt (DG);
+<i>93</i>&nbsp; * 11-Feb-2003 : Added flag to allow suppression of chart change events, based
+<i>94</i>&nbsp; *               on a suggestion by Klaus Rheinwald (DG);
+<i>95</i>&nbsp; * 04-Mar-2003 : Added small fix for suppressed chart change events (see bug id
+<i>96</i>&nbsp; *               690865) (DG);
+<i>97</i>&nbsp; * 10-Mar-2003 : Added Benoit Xhenseval to contributors (DG);
+<i>98</i>&nbsp; * 26-Mar-2003 : Implemented Serializable (DG);
+<i>99</i>&nbsp; * 15-Jul-2003 : Added an optional border for the chart (DG);
+<i>100</i>&nbsp; * 11-Sep-2003 : Took care of listeners while cloning (NB);
+<i>101</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>102</i>&nbsp; * 22-Sep-2003 : Added nullpointer checks.
+<i>103</i>&nbsp; * 25-Sep-2003 : Added nullpointer checks too (NB).
+<i>104</i>&nbsp; * 03-Dec-2003 : Legends are now registered by this class instead of using the
+<i>105</i>&nbsp; *               old constructor way (TM);
+<i>106</i>&nbsp; * 03-Dec-2003 : Added anchorPoint to draw() method (DG);
+<i>107</i>&nbsp; * 08-Jan-2004 : Reworked title code, introducing line wrapping (DG);
+<i>108</i>&nbsp; * 09-Feb-2004 : Created additional createBufferedImage() method (DG);
+<i>109</i>&nbsp; * 05-Apr-2004 : Added new createBufferedImage() method (DG);
+<i>110</i>&nbsp; * 27-May-2004 : Moved constants from JFreeChartConstants.java back to this
+<i>111</i>&nbsp; *               class (DG);
+<i>112</i>&nbsp; * 25-Nov-2004 : Updates for changes to Title class (DG);
+<i>113</i>&nbsp; * 06-Jan-2005 : Change lookup for default background color (DG);
+<i>114</i>&nbsp; * 31-Jan-2005 : Added Don Elliott to contributors (DG);
+<i>115</i>&nbsp; * 02-Feb-2005 : Added clearSubtitles() method (DG);
+<i>116</i>&nbsp; * 03-Feb-2005 : Added Mofeed Shahin to contributors (DG);
+<i>117</i>&nbsp; * 08-Feb-2005 : Updated for RectangleConstraint changes (DG);
+<i>118</i>&nbsp; * 28-Mar-2005 : Renamed Legend --&gt; OldLegend (DG);
+<i>119</i>&nbsp; * 12-Apr-2005 : Added methods to access legend(s) in subtitle list (DG);
+<i>120</i>&nbsp; * 13-Apr-2005 : Added removeLegend() and removeSubtitle() methods (DG);
+<i>121</i>&nbsp; * 20-Apr-2005 : Modified to collect chart entities from titles and
+<i>122</i>&nbsp; *               subtitles (DG);
+<i>123</i>&nbsp; * 26-Apr-2005 : Removed LOGGER (DG);
+<i>124</i>&nbsp; * 06-Jun-2005 : Added addLegend() method and padding attribute, fixed equals()
+<i>125</i>&nbsp; *               method (DG);
+<i>126</i>&nbsp; * 24-Nov-2005 : Removed OldLegend and related code - don&#39;t want to support
+<i>127</i>&nbsp; *               this in 1.0.0 final (DG);
+<i>128</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>129</i>&nbsp; * 27-Jan-2006 : Updated version number (DG);
+<i>130</i>&nbsp; * 07-Dec-2006 : Added some missing credits (DG);
+<i>131</i>&nbsp; * 17-Jan-2007 : Added Darren Jung to contributor list (DG);
+<i>132</i>&nbsp; * 05-Mar-2007 : Added Sergei Ivanov to the contributor list (DG);
+<i>133</i>&nbsp; * 16-Mar-2007 : Modified initial legend border (DG);
+<i>134</i>&nbsp; * 22-Mar-2007 : New methods for text anti-aliasing (DG);
+<i>135</i>&nbsp; * 16-May-2007 : Fixed argument check in getSubtitle(), copy list in
+<i>136</i>&nbsp; *               get/setSubtitles(), and added new addSubtitle(int, Title)
+<i>137</i>&nbsp; *               method (DG);
+<i>138</i>&nbsp; * 05-Jun-2007 : Add change listener to default legend (DG);
+<i>139</i>&nbsp; * 04-Dec-2007 : In createBufferedImage() methods, make the default image type
+<i>140</i>&nbsp; *               BufferedImage.TYPE_INT_ARGB (thanks to Klaus Rheinwald) (DG);
+<i>141</i>&nbsp; * 05-Dec-2007 : Fixed bug 1749124 (not registering as listener with
+<i>142</i>&nbsp; *               TextTitle) (DG);
+<i>143</i>&nbsp; * 23-Apr-2008 : Added new contributor (Diego Pierangeli) (DG);
+<i>144</i>&nbsp; * 16-May-2008 : Added new contributor (Michael Siemer) (DG);
+<i>145</i>&nbsp; * 19-Sep-2008 : Check for title visibility (DG);
+<i>146</i>&nbsp; * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
+<i>147</i>&nbsp; *               Jess Thrysoee (DG);
+<i>148</i>&nbsp; * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
+<i>149</i>&nbsp; * 19-May-2009 : Fixed FindBugs warnings, patch by Michal Wozniak (DG);
+<i>150</i>&nbsp; * 29-Jun-2009 : Check visibility flag in main title (DG);
+<i>151</i>&nbsp; * 02-Jul-2013 : Use ParamChecks class (DG);
+<i>152</i>&nbsp; * 21-Jun-2014 : Set default hint value for stroke control (DG);
+<i>153</i>&nbsp; *
+<i>154</i>&nbsp; */
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;package org.jfree.chart;
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;import java.awt.AlphaComposite;
+<i>159</i>&nbsp;import java.awt.BasicStroke;
+<i>160</i>&nbsp;import java.awt.Color;
+<i>161</i>&nbsp;import java.awt.Composite;
+<i>162</i>&nbsp;import java.awt.Font;
+<i>163</i>&nbsp;import java.awt.Graphics2D;
+<i>164</i>&nbsp;import java.awt.Image;
+<i>165</i>&nbsp;import java.awt.Paint;
+<i>166</i>&nbsp;import java.awt.RenderingHints;
+<i>167</i>&nbsp;import java.awt.Shape;
+<i>168</i>&nbsp;import java.awt.Stroke;
+<i>169</i>&nbsp;import java.awt.geom.AffineTransform;
+<i>170</i>&nbsp;import java.awt.geom.Point2D;
+<i>171</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>172</i>&nbsp;import java.awt.image.BufferedImage;
+<i>173</i>&nbsp;import java.io.IOException;
+<i>174</i>&nbsp;import java.io.ObjectInputStream;
+<i>175</i>&nbsp;import java.io.ObjectOutputStream;
+<i>176</i>&nbsp;import java.io.Serializable;
+<i>177</i>&nbsp;import java.net.URL;
+<i>178</i>&nbsp;import java.util.ArrayList;
+<i>179</i>&nbsp;import java.util.Arrays;
+<i>180</i>&nbsp;import java.util.Iterator;
+<i>181</i>&nbsp;import java.util.List;
+<i>182</i>&nbsp;import java.util.ResourceBundle;
+<i>183</i>&nbsp;
+<i>184</i>&nbsp;import javax.swing.ImageIcon;
+<i>185</i>&nbsp;import javax.swing.UIManager;
+<i>186</i>&nbsp;import javax.swing.event.EventListenerList;
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;import org.jfree.JCommon;
+<i>189</i>&nbsp;import org.jfree.chart.block.BlockParams;
+<i>190</i>&nbsp;import org.jfree.chart.block.EntityBlockResult;
+<i>191</i>&nbsp;import org.jfree.chart.block.LengthConstraintType;
+<i>192</i>&nbsp;import org.jfree.chart.block.LineBorder;
+<i>193</i>&nbsp;import org.jfree.chart.block.RectangleConstraint;
+<i>194</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>195</i>&nbsp;import org.jfree.chart.entity.JFreeChartEntity;
+<i>196</i>&nbsp;import org.jfree.chart.event.ChartChangeEvent;
+<i>197</i>&nbsp;import org.jfree.chart.event.ChartChangeListener;
+<i>198</i>&nbsp;import org.jfree.chart.event.ChartProgressEvent;
+<i>199</i>&nbsp;import org.jfree.chart.event.ChartProgressListener;
+<i>200</i>&nbsp;import org.jfree.chart.event.PlotChangeEvent;
+<i>201</i>&nbsp;import org.jfree.chart.event.PlotChangeListener;
+<i>202</i>&nbsp;import org.jfree.chart.event.TitleChangeEvent;
+<i>203</i>&nbsp;import org.jfree.chart.event.TitleChangeListener;
+<i>204</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>205</i>&nbsp;import org.jfree.chart.plot.Plot;
+<i>206</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>207</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>208</i>&nbsp;import org.jfree.chart.title.LegendTitle;
+<i>209</i>&nbsp;import org.jfree.chart.title.TextTitle;
+<i>210</i>&nbsp;import org.jfree.chart.title.Title;
+<i>211</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>212</i>&nbsp;import org.jfree.chart.util.ResourceBundleWrapper;
+<i>213</i>&nbsp;import org.jfree.data.Range;
+<i>214</i>&nbsp;import org.jfree.io.SerialUtilities;
+<i>215</i>&nbsp;import org.jfree.ui.Align;
+<i>216</i>&nbsp;import org.jfree.ui.Drawable;
+<i>217</i>&nbsp;import org.jfree.ui.HorizontalAlignment;
+<i>218</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>219</i>&nbsp;import org.jfree.ui.RectangleInsets;
+<i>220</i>&nbsp;import org.jfree.ui.Size2D;
+<i>221</i>&nbsp;import org.jfree.ui.VerticalAlignment;
+<i>222</i>&nbsp;import org.jfree.ui.about.Contributor;
+<i>223</i>&nbsp;import org.jfree.ui.about.Licences;
+<i>224</i>&nbsp;import org.jfree.ui.about.ProjectInfo;
+<i>225</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>226</i>&nbsp;import org.jfree.util.PaintUtilities;
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;/**
+<i>229</i>&nbsp; * A chart class implemented using the Java 2D APIs.  The current version
+<i>230</i>&nbsp; * supports bar charts, line charts, pie charts and xy plots (including time
+<i>231</i>&nbsp; * series data).
+<i>232</i>&nbsp; * &lt;P&gt;
+<i>233</i>&nbsp; * JFreeChart coordinates several objects to achieve its aim of being able to
+<i>234</i>&nbsp; * draw a chart on a Java 2D graphics device: a list of {@link Title} objects
+<i>235</i>&nbsp; * (which often includes the chart&#39;s legend), a {@link Plot} and a
+<i>236</i>&nbsp; * {@link org.jfree.data.general.Dataset} (the plot in turn manages a
+<i>237</i>&nbsp; * domain axis and a range axis).
+<i>238</i>&nbsp; * &lt;P&gt;
+<i>239</i>&nbsp; * You should use a {@link ChartPanel} to display a chart in a GUI.
+<i>240</i>&nbsp; * &lt;P&gt;
+<i>241</i>&nbsp; * The {@link ChartFactory} class contains static methods for creating
+<i>242</i>&nbsp; * &#39;ready-made&#39; charts.
+<i>243</i>&nbsp; *
+<i>244</i>&nbsp; * @see ChartPanel
+<i>245</i>&nbsp; * @see ChartFactory
+<i>246</i>&nbsp; * @see Title
+<i>247</i>&nbsp; * @see Plot
+<i>248</i>&nbsp; */
+<i>249</i>&nbsp;public class JFreeChart implements Drawable, TitleChangeListener,
+<i>250</i>&nbsp;        PlotChangeListener, Serializable, Cloneable {
+<i>251</i>&nbsp;
+<i>252</i>&nbsp;    /** For serialization. */
+<i>253</i>&nbsp;    private static final long serialVersionUID = -3470703747817429120L;
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;    /** Information about the project. */
+<i>256</i>&nbsp;    public static final ProjectInfo INFO = new JFreeChartInfo();
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /** The default font for titles. */
+<i>259</i>&nbsp;    public static final Font DEFAULT_TITLE_FONT
+<i>260</i>&nbsp;            = new Font(&quot;SansSerif&quot;, Font.BOLD, 18);
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    /** The default background color. */
+<i>263</i>&nbsp;    public static final Paint DEFAULT_BACKGROUND_PAINT
+<i>264</i>&nbsp;            = UIManager.getColor(&quot;Panel.background&quot;);
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;    /** The default background image. */
+<i>267</i>&nbsp;    public static final Image DEFAULT_BACKGROUND_IMAGE = null;
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    /** The default background image alignment. */
+<i>270</i>&nbsp;    public static final int DEFAULT_BACKGROUND_IMAGE_ALIGNMENT = Align.FIT;
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    /** The default background image alpha. */
+<i>273</i>&nbsp;    public static final float DEFAULT_BACKGROUND_IMAGE_ALPHA = 0.5f;
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;    /**
+<i>276</i>&nbsp;     * The key for a rendering hint that can suppress the generation of a 
+<i>277</i>&nbsp;     * shadow effect when drawing the chart.  The hint value must be a 
+<i>278</i>&nbsp;     * Boolean.
+<i>279</i>&nbsp;     * 
+<i>280</i>&nbsp;     * @since 1.0.16
+<i>281</i>&nbsp;     */
+<i>282</i>&nbsp;    public static final RenderingHints.Key KEY_SUPPRESS_SHADOW_GENERATION
+<i>283</i>&nbsp;            = new RenderingHints.Key(0) {
+<i>284</i>&nbsp;        @Override
+<i>285</i>&nbsp;        public boolean isCompatibleValue(Object val) {
+<i>286</i>&nbsp;            return val instanceof Boolean;
+<i>287</i>&nbsp;        }
+<i>288</i>&nbsp;    };
+<i>289</i>&nbsp;    
+<i>290</i>&nbsp;    /**
+<i>291</i>&nbsp;     * Rendering hints that will be used for chart drawing.  This should never
+<i>292</i>&nbsp;     * be &lt;code&gt;null&lt;/code&gt;.
+<i>293</i>&nbsp;     */
+<i>294</i>&nbsp;    private transient RenderingHints renderingHints;
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;    /** A flag that controls whether or not the chart border is drawn. */
+<i>297</i>&nbsp;    private boolean borderVisible;
+<i>298</i>&nbsp;
+<i>299</i>&nbsp;    /** The stroke used to draw the chart border (if visible). */
+<i>300</i>&nbsp;    private transient Stroke borderStroke;
+<i>301</i>&nbsp;
+<i>302</i>&nbsp;    /** The paint used to draw the chart border (if visible). */
+<i>303</i>&nbsp;    private transient Paint borderPaint;
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    /** The padding between the chart border and the chart drawing area. */
+<i>306</i>&nbsp;    private RectangleInsets padding;
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    /** The chart title (optional). */
+<i>309</i>&nbsp;    private TextTitle title;
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;    /**
+<i>312</i>&nbsp;     * The chart subtitles (zero, one or many).  This field should never be
+<i>313</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;.
+<i>314</i>&nbsp;     */
+<i>315</i>&nbsp;    private List subtitles;
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    /** Draws the visual representation of the data. */
+<i>318</i>&nbsp;    private Plot plot;
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    /** Paint used to draw the background of the chart. */
+<i>321</i>&nbsp;    private transient Paint backgroundPaint;
+<i>322</i>&nbsp;
+<i>323</i>&nbsp;    /** An optional background image for the chart. */
+<i>324</i>&nbsp;    private transient Image backgroundImage;  // todo: not serialized yet
+<i>325</i>&nbsp;
+<i>326</i>&nbsp;    /** The alignment for the background image. */
+<i>327</i>&nbsp;    private int backgroundImageAlignment = Align.FIT;
+<i>328</i>&nbsp;
+<i>329</i>&nbsp;    /** The alpha transparency for the background image. */
+<i>330</i>&nbsp;    private float backgroundImageAlpha = 0.5f;
+<i>331</i>&nbsp;
+<i>332</i>&nbsp;    /** Storage for registered change listeners. */
+<i>333</i>&nbsp;    private transient EventListenerList changeListeners;
+<i>334</i>&nbsp;
+<i>335</i>&nbsp;    /** Storage for registered progress listeners. */
+<i>336</i>&nbsp;    private transient EventListenerList progressListeners;
+<i>337</i>&nbsp;
+<i>338</i>&nbsp;    /**
+<i>339</i>&nbsp;     * A flag that can be used to enable/disable notification of chart change
+<i>340</i>&nbsp;     * events.
+<i>341</i>&nbsp;     */
+<i>342</i>&nbsp;    private boolean notify;
+<i>343</i>&nbsp;
+<i>344</i>&nbsp;    /**
+<i>345</i>&nbsp;     * Creates a new chart based on the supplied plot.  The chart will have
+<i>346</i>&nbsp;     * a legend added automatically, but no title (although you can easily add
+<i>347</i>&nbsp;     * one later).
+<i>348</i>&nbsp;     * &lt;br&gt;&lt;br&gt;
+<i>349</i>&nbsp;     * Note that the  {@link ChartFactory} class contains a range
+<i>350</i>&nbsp;     * of static methods that will return ready-made charts, and often this
+<i>351</i>&nbsp;     * is a more convenient way to create charts than using this constructor.
+<i>352</i>&nbsp;     *
+<i>353</i>&nbsp;     * @param plot  the plot (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>354</i>&nbsp;     */
+<i>355</i>&nbsp;    public JFreeChart(Plot plot) {
+<i>356</i>&nbsp;        this(null, null, plot, true);
+<i>357</i>&nbsp;    }
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    /**
+<i>360</i>&nbsp;     * Creates a new chart with the given title and plot.  A default font
+<i>361</i>&nbsp;     * ({@link #DEFAULT_TITLE_FONT}) is used for the title, and the chart will
+<i>362</i>&nbsp;     * have a legend added automatically.
+<i>363</i>&nbsp;     * &lt;br&gt;&lt;br&gt;
+<i>364</i>&nbsp;     * Note that the {@link ChartFactory} class contains a range
+<i>365</i>&nbsp;     * of static methods that will return ready-made charts, and often this
+<i>366</i>&nbsp;     * is a more convenient way to create charts than using this constructor.
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @param title  the chart title (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>369</i>&nbsp;     * @param plot  the plot (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>370</i>&nbsp;     */
+<i>371</i>&nbsp;    public JFreeChart(String title, Plot plot) {
+<i>372</i>&nbsp;        this(title, JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+<i>373</i>&nbsp;    }
+<i>374</i>&nbsp;
+<i>375</i>&nbsp;    /**
+<i>376</i>&nbsp;     * Creates a new chart with the given title and plot.  The
+<i>377</i>&nbsp;     * &lt;code&gt;createLegend&lt;/code&gt; argument specifies whether or not a legend
+<i>378</i>&nbsp;     * should be added to the chart.
+<i>379</i>&nbsp;     * &lt;br&gt;&lt;br&gt;
+<i>380</i>&nbsp;     * Note that the  {@link ChartFactory} class contains a range
+<i>381</i>&nbsp;     * of static methods that will return ready-made charts, and often this
+<i>382</i>&nbsp;     * is a more convenient way to create charts than using this constructor.
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @param title  the chart title (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>385</i>&nbsp;     * @param titleFont  the font for displaying the chart title
+<i>386</i>&nbsp;     *                   (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>387</i>&nbsp;     * @param plot  controller of the visual representation of the data
+<i>388</i>&nbsp;     *              (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>389</i>&nbsp;     * @param createLegend  a flag indicating whether or not a legend should
+<i>390</i>&nbsp;     *                      be created for the chart.
+<i>391</i>&nbsp;     */
+<i>392</i>&nbsp;    public JFreeChart(String title, Font titleFont, Plot plot,
+<i>393</i>&nbsp;                      boolean createLegend) {
+<i>394</i>&nbsp;
+<i>395</i>&nbsp;        ParamChecks.nullNotPermitted(plot, &quot;plot&quot;);
+<i>396</i>&nbsp;
+<i>397</i>&nbsp;        // create storage for listeners...
+<i>398</i>&nbsp;        this.progressListeners = new EventListenerList();
+<i>399</i>&nbsp;        this.changeListeners = new EventListenerList();
+<i>400</i>&nbsp;        this.notify = true;  // default is to notify listeners when the
+<i>401</i>&nbsp;                             // chart changes
+<i>402</i>&nbsp;
+<i>403</i>&nbsp;        this.renderingHints = new RenderingHints(
+<i>404</i>&nbsp;                RenderingHints.KEY_ANTIALIASING,
+<i>405</i>&nbsp;                RenderingHints.VALUE_ANTIALIAS_ON);
+<i>406</i>&nbsp;        // added the following hint because of 
+<i>407</i>&nbsp;        // http://stackoverflow.com/questions/7785082/
+<i>408</i>&nbsp;        this.renderingHints.put(RenderingHints.KEY_STROKE_CONTROL,
+<i>409</i>&nbsp;                RenderingHints.VALUE_STROKE_PURE);
+<i>410</i>&nbsp;        
+<i>411</i>&nbsp;        this.borderVisible = false;
+<i>412</i>&nbsp;        this.borderStroke = new BasicStroke(1.0f);
+<i>413</i>&nbsp;        this.borderPaint = Color.black;
+<i>414</i>&nbsp;
+<i>415</i>&nbsp;        this.padding = RectangleInsets.ZERO_INSETS;
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;        this.plot = plot;
+<i>418</i>&nbsp;        plot.addChangeListener(this);
+<i>419</i>&nbsp;
+<i>420</i>&nbsp;        this.subtitles = new ArrayList();
+<i>421</i>&nbsp;
+<i>422</i>&nbsp;        // create a legend, if requested...
+<i>423</i>&nbsp;        if (createLegend) {
+<i>424</i>&nbsp;            LegendTitle legend = new LegendTitle(this.plot);
+<i>425</i>&nbsp;            legend.setMargin(new RectangleInsets(1.0, 1.0, 1.0, 1.0));
+<i>426</i>&nbsp;            legend.setFrame(new LineBorder());
+<i>427</i>&nbsp;            legend.setBackgroundPaint(Color.white);
+<i>428</i>&nbsp;            legend.setPosition(RectangleEdge.BOTTOM);
+<i>429</i>&nbsp;            this.subtitles.add(legend);
+<i>430</i>&nbsp;            legend.addChangeListener(this);
+<i>431</i>&nbsp;        }
+<i>432</i>&nbsp;
+<i>433</i>&nbsp;        // add the chart title, if one has been specified...
+<i>434</i>&nbsp;        if (title != null) {
+<i>435</i>&nbsp;            if (titleFont == null) {
+<i>436</i>&nbsp;                titleFont = DEFAULT_TITLE_FONT;
+<i>437</i>&nbsp;            }
+<i>438</i>&nbsp;            this.title = new TextTitle(title, titleFont);
+<i>439</i>&nbsp;            this.title.addChangeListener(this);
+<i>440</i>&nbsp;        }
+<i>441</i>&nbsp;
+<i>442</i>&nbsp;        this.backgroundPaint = DEFAULT_BACKGROUND_PAINT;
+<i>443</i>&nbsp;
+<i>444</i>&nbsp;        this.backgroundImage = DEFAULT_BACKGROUND_IMAGE;
+<i>445</i>&nbsp;        this.backgroundImageAlignment = DEFAULT_BACKGROUND_IMAGE_ALIGNMENT;
+<i>446</i>&nbsp;        this.backgroundImageAlpha = DEFAULT_BACKGROUND_IMAGE_ALPHA;
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;    }
+<i>449</i>&nbsp;
+<i>450</i>&nbsp;    /**
+<i>451</i>&nbsp;     * Returns the collection of rendering hints for the chart.
+<i>452</i>&nbsp;     *
+<i>453</i>&nbsp;     * @return The rendering hints for the chart (never &lt;code&gt;null&lt;/code&gt;).
+<i>454</i>&nbsp;     *
+<i>455</i>&nbsp;     * @see #setRenderingHints(RenderingHints)
+<i>456</i>&nbsp;     */
+<i>457</i>&nbsp;    public RenderingHints getRenderingHints() {
+<i>458</i>&nbsp;        return this.renderingHints;
+<i>459</i>&nbsp;    }
+<i>460</i>&nbsp;
+<i>461</i>&nbsp;    /**
+<i>462</i>&nbsp;     * Sets the rendering hints for the chart.  These will be added (using the
+<i>463</i>&nbsp;     * {@code Graphics2D.addRenderingHints()} method) near the start of the
+<i>464</i>&nbsp;     * {@code JFreeChart.draw()} method.
+<i>465</i>&nbsp;     *
+<i>466</i>&nbsp;     * @param renderingHints  the rendering hints ({@code null} not permitted).
+<i>467</i>&nbsp;     *
+<i>468</i>&nbsp;     * @see #getRenderingHints()
+<i>469</i>&nbsp;     */
+<i>470</i>&nbsp;    public void setRenderingHints(RenderingHints renderingHints) {
+<i>471</i>&nbsp;        ParamChecks.nullNotPermitted(renderingHints, &quot;renderingHints&quot;);
+<i>472</i>&nbsp;        this.renderingHints = renderingHints;
+<i>473</i>&nbsp;        fireChartChanged();
+<i>474</i>&nbsp;    }
+<i>475</i>&nbsp;
+<i>476</i>&nbsp;    /**
+<i>477</i>&nbsp;     * Returns a flag that controls whether or not a border is drawn around the
+<i>478</i>&nbsp;     * outside of the chart.
+<i>479</i>&nbsp;     *
+<i>480</i>&nbsp;     * @return A boolean.
+<i>481</i>&nbsp;     *
+<i>482</i>&nbsp;     * @see #setBorderVisible(boolean)
+<i>483</i>&nbsp;     */
+<i>484</i>&nbsp;    public boolean isBorderVisible() {
+<i>485</i>&nbsp;        return this.borderVisible;
+<i>486</i>&nbsp;    }
+<i>487</i>&nbsp;
+<i>488</i>&nbsp;    /**
+<i>489</i>&nbsp;     * Sets a flag that controls whether or not a border is drawn around the
+<i>490</i>&nbsp;     * outside of the chart.
+<i>491</i>&nbsp;     *
+<i>492</i>&nbsp;     * @param visible  the flag.
+<i>493</i>&nbsp;     *
+<i>494</i>&nbsp;     * @see #isBorderVisible()
+<i>495</i>&nbsp;     */
+<i>496</i>&nbsp;    public void setBorderVisible(boolean visible) {
+<i>497</i>&nbsp;        this.borderVisible = visible;
+<i>498</i>&nbsp;        fireChartChanged();
+<i>499</i>&nbsp;    }
+<i>500</i>&nbsp;
+<i>501</i>&nbsp;    /**
+<i>502</i>&nbsp;     * Returns the stroke used to draw the chart border (if visible).
+<i>503</i>&nbsp;     *
+<i>504</i>&nbsp;     * @return The border stroke.
+<i>505</i>&nbsp;     *
+<i>506</i>&nbsp;     * @see #setBorderStroke(Stroke)
+<i>507</i>&nbsp;     */
+<i>508</i>&nbsp;    public Stroke getBorderStroke() {
+<i>509</i>&nbsp;        return this.borderStroke;
+<i>510</i>&nbsp;    }
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;    /**
+<i>513</i>&nbsp;     * Sets the stroke used to draw the chart border (if visible).
+<i>514</i>&nbsp;     *
+<i>515</i>&nbsp;     * @param stroke  the stroke.
+<i>516</i>&nbsp;     *
+<i>517</i>&nbsp;     * @see #getBorderStroke()
+<i>518</i>&nbsp;     */
+<i>519</i>&nbsp;    public void setBorderStroke(Stroke stroke) {
+<i>520</i>&nbsp;        this.borderStroke = stroke;
+<i>521</i>&nbsp;        fireChartChanged();
+<i>522</i>&nbsp;    }
+<i>523</i>&nbsp;
+<i>524</i>&nbsp;    /**
+<i>525</i>&nbsp;     * Returns the paint used to draw the chart border (if visible).
+<i>526</i>&nbsp;     *
+<i>527</i>&nbsp;     * @return The border paint.
+<i>528</i>&nbsp;     *
+<i>529</i>&nbsp;     * @see #setBorderPaint(Paint)
+<i>530</i>&nbsp;     */
+<i>531</i>&nbsp;    public Paint getBorderPaint() {
+<i>532</i>&nbsp;        return this.borderPaint;
+<i>533</i>&nbsp;    }
+<i>534</i>&nbsp;
+<i>535</i>&nbsp;    /**
+<i>536</i>&nbsp;     * Sets the paint used to draw the chart border (if visible).
+<i>537</i>&nbsp;     *
+<i>538</i>&nbsp;     * @param paint  the paint.
+<i>539</i>&nbsp;     *
+<i>540</i>&nbsp;     * @see #getBorderPaint()
+<i>541</i>&nbsp;     */
+<i>542</i>&nbsp;    public void setBorderPaint(Paint paint) {
+<i>543</i>&nbsp;        this.borderPaint = paint;
+<i>544</i>&nbsp;        fireChartChanged();
+<i>545</i>&nbsp;    }
+<i>546</i>&nbsp;
+<i>547</i>&nbsp;    /**
+<i>548</i>&nbsp;     * Returns the padding between the chart border and the chart drawing area.
+<i>549</i>&nbsp;     *
+<i>550</i>&nbsp;     * @return The padding (never &lt;code&gt;null&lt;/code&gt;).
+<i>551</i>&nbsp;     *
+<i>552</i>&nbsp;     * @see #setPadding(RectangleInsets)
+<i>553</i>&nbsp;     */
+<i>554</i>&nbsp;    public RectangleInsets getPadding() {
+<i>555</i>&nbsp;        return this.padding;
+<i>556</i>&nbsp;    }
+<i>557</i>&nbsp;
+<i>558</i>&nbsp;    /**
+<i>559</i>&nbsp;     * Sets the padding between the chart border and the chart drawing area,
+<i>560</i>&nbsp;     * and sends a {@link ChartChangeEvent} to all registered listeners.
+<i>561</i>&nbsp;     *
+<i>562</i>&nbsp;     * @param padding  the padding (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>563</i>&nbsp;     *
+<i>564</i>&nbsp;     * @see #getPadding()
+<i>565</i>&nbsp;     */
+<i>566</i>&nbsp;    public void setPadding(RectangleInsets padding) {
+<i>567</i>&nbsp;        ParamChecks.nullNotPermitted(padding, &quot;padding&quot;);
+<i>568</i>&nbsp;        this.padding = padding;
+<i>569</i>&nbsp;        notifyListeners(new ChartChangeEvent(this));
+<i>570</i>&nbsp;    }
+<i>571</i>&nbsp;
+<i>572</i>&nbsp;    /**
+<i>573</i>&nbsp;     * Returns the main chart title.  Very often a chart will have just one
+<i>574</i>&nbsp;     * title, so we make this case simple by providing accessor methods for
+<i>575</i>&nbsp;     * the main title.  However, multiple titles are supported - see the
+<i>576</i>&nbsp;     * {@link #addSubtitle(Title)} method.
+<i>577</i>&nbsp;     *
+<i>578</i>&nbsp;     * @return The chart title (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>579</i>&nbsp;     *
+<i>580</i>&nbsp;     * @see #setTitle(TextTitle)
+<i>581</i>&nbsp;     */
+<i>582</i>&nbsp;    public TextTitle getTitle() {
+<i>583</i>&nbsp;        return this.title;
+<i>584</i>&nbsp;    }
+<i>585</i>&nbsp;
+<i>586</i>&nbsp;    /**
+<i>587</i>&nbsp;     * Sets the main title for the chart and sends a {@link ChartChangeEvent}
+<i>588</i>&nbsp;     * to all registered listeners.  If you do not want a title for the
+<i>589</i>&nbsp;     * chart, set it to &lt;code&gt;null&lt;/code&gt;.  If you want more than one title on
+<i>590</i>&nbsp;     * a chart, use the {@link #addSubtitle(Title)} method.
+<i>591</i>&nbsp;     *
+<i>592</i>&nbsp;     * @param title  the title (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>593</i>&nbsp;     *
+<i>594</i>&nbsp;     * @see #getTitle()
+<i>595</i>&nbsp;     */
+<i>596</i>&nbsp;    public void setTitle(TextTitle title) {
+<i>597</i>&nbsp;        if (this.title != null) {
+<i>598</i>&nbsp;            this.title.removeChangeListener(this);
+<i>599</i>&nbsp;        }
+<i>600</i>&nbsp;        this.title = title;
+<i>601</i>&nbsp;        if (title != null) {
+<i>602</i>&nbsp;            title.addChangeListener(this);
+<i>603</i>&nbsp;        }
+<i>604</i>&nbsp;        fireChartChanged();
+<i>605</i>&nbsp;    }
+<i>606</i>&nbsp;
+<i>607</i>&nbsp;    /**
+<i>608</i>&nbsp;     * Sets the chart title and sends a {@link ChartChangeEvent} to all
+<i>609</i>&nbsp;     * registered listeners.  This is a convenience method that ends up calling
+<i>610</i>&nbsp;     * the {@link #setTitle(TextTitle)} method.  If there is an existing title,
+<i>611</i>&nbsp;     * its text is updated, otherwise a new title using the default font is
+<i>612</i>&nbsp;     * added to the chart.  If &lt;code&gt;text&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt; the chart
+<i>613</i>&nbsp;     * title is set to &lt;code&gt;null&lt;/code&gt;.
+<i>614</i>&nbsp;     *
+<i>615</i>&nbsp;     * @param text  the title text (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>616</i>&nbsp;     *
+<i>617</i>&nbsp;     * @see #getTitle()
+<i>618</i>&nbsp;     */
+<i>619</i>&nbsp;    public void setTitle(String text) {
+<i>620</i>&nbsp;        if (text != null) {
+<i>621</i>&nbsp;            if (this.title == null) {
+<i>622</i>&nbsp;                setTitle(new TextTitle(text, JFreeChart.DEFAULT_TITLE_FONT));
+<i>623</i>&nbsp;            }
+<i>624</i>&nbsp;            else {
+<i>625</i>&nbsp;                this.title.setText(text);
+<i>626</i>&nbsp;            }
+<i>627</i>&nbsp;        }
+<i>628</i>&nbsp;        else {
+<i>629</i>&nbsp;            setTitle((TextTitle) null);
+<i>630</i>&nbsp;        }
+<i>631</i>&nbsp;    }
+<i>632</i>&nbsp;
+<i>633</i>&nbsp;    /**
+<i>634</i>&nbsp;     * Adds a legend to the plot and sends a {@link ChartChangeEvent} to all
+<i>635</i>&nbsp;     * registered listeners.
+<i>636</i>&nbsp;     *
+<i>637</i>&nbsp;     * @param legend  the legend (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>638</i>&nbsp;     *
+<i>639</i>&nbsp;     * @see #removeLegend()
+<i>640</i>&nbsp;     */
+<i>641</i>&nbsp;    public void addLegend(LegendTitle legend) {
+<i>642</i>&nbsp;        addSubtitle(legend);
+<i>643</i>&nbsp;    }
+<i>644</i>&nbsp;
+<i>645</i>&nbsp;    /**
+<i>646</i>&nbsp;     * Returns the legend for the chart, if there is one.  Note that a chart
+<i>647</i>&nbsp;     * can have more than one legend - this method returns the first.
+<i>648</i>&nbsp;     *
+<i>649</i>&nbsp;     * @return The legend (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>650</i>&nbsp;     *
+<i>651</i>&nbsp;     * @see #getLegend(int)
+<i>652</i>&nbsp;     */
+<i>653</i>&nbsp;    public LegendTitle getLegend() {
+<i>654</i>&nbsp;        return getLegend(0);
+<i>655</i>&nbsp;    }
+<i>656</i>&nbsp;
+<i>657</i>&nbsp;    /**
+<i>658</i>&nbsp;     * Returns the nth legend for a chart, or &lt;code&gt;null&lt;/code&gt;.
+<i>659</i>&nbsp;     *
+<i>660</i>&nbsp;     * @param index  the legend index (zero-based).
+<i>661</i>&nbsp;     *
+<i>662</i>&nbsp;     * @return The legend (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>663</i>&nbsp;     *
+<i>664</i>&nbsp;     * @see #addLegend(LegendTitle)
+<i>665</i>&nbsp;     */
+<i>666</i>&nbsp;    public LegendTitle getLegend(int index) {
+<i>667</i>&nbsp;        int seen = 0;
+<i>668</i>&nbsp;        Iterator iterator = this.subtitles.iterator();
+<i>669</i>&nbsp;        while (iterator.hasNext()) {
+<i>670</i>&nbsp;            Title subtitle = (Title) iterator.next();
+<i>671</i>&nbsp;            if (subtitle instanceof LegendTitle) {
+<i>672</i>&nbsp;                if (seen == index) {
+<i>673</i>&nbsp;                    return (LegendTitle) subtitle;
+<i>674</i>&nbsp;                }
+<i>675</i>&nbsp;                else {
+<i>676</i>&nbsp;                    seen++;
+<i>677</i>&nbsp;                }
+<i>678</i>&nbsp;            }
+<i>679</i>&nbsp;        }
+<i>680</i>&nbsp;        return null;
+<i>681</i>&nbsp;    }
+<i>682</i>&nbsp;
+<i>683</i>&nbsp;    /**
+<i>684</i>&nbsp;     * Removes the first legend in the chart and sends a
+<i>685</i>&nbsp;     * {@link ChartChangeEvent} to all registered listeners.
+<i>686</i>&nbsp;     *
+<i>687</i>&nbsp;     * @see #getLegend()
+<i>688</i>&nbsp;     */
+<i>689</i>&nbsp;    public void removeLegend() {
+<i>690</i>&nbsp;        removeSubtitle(getLegend());
+<i>691</i>&nbsp;    }
+<i>692</i>&nbsp;
+<i>693</i>&nbsp;    /**
+<i>694</i>&nbsp;     * Returns the list of subtitles for the chart.
+<i>695</i>&nbsp;     *
+<i>696</i>&nbsp;     * @return The subtitle list (possibly empty, but never &lt;code&gt;null&lt;/code&gt;).
+<i>697</i>&nbsp;     *
+<i>698</i>&nbsp;     * @see #setSubtitles(List)
+<i>699</i>&nbsp;     */
+<i>700</i>&nbsp;    public List getSubtitles() {
+<i>701</i>&nbsp;        return new ArrayList(this.subtitles);
+<i>702</i>&nbsp;    }
+<i>703</i>&nbsp;
+<i>704</i>&nbsp;    /**
+<i>705</i>&nbsp;     * Sets the title list for the chart (completely replaces any existing
+<i>706</i>&nbsp;     * titles) and sends a {@link ChartChangeEvent} to all registered
+<i>707</i>&nbsp;     * listeners.
+<i>708</i>&nbsp;     *
+<i>709</i>&nbsp;     * @param subtitles  the new list of subtitles (&lt;code&gt;null&lt;/code&gt; not
+<i>710</i>&nbsp;     *                   permitted).
+<i>711</i>&nbsp;     *
+<i>712</i>&nbsp;     * @see #getSubtitles()
+<i>713</i>&nbsp;     */
+<i>714</i>&nbsp;    public void setSubtitles(List subtitles) {
+<i>715</i>&nbsp;        if (subtitles == null) {
+<i>716</i>&nbsp;            throw new NullPointerException(&quot;Null &#39;subtitles&#39; argument.&quot;);
+<i>717</i>&nbsp;        }
+<i>718</i>&nbsp;        setNotify(false);
+<i>719</i>&nbsp;        clearSubtitles();
+<i>720</i>&nbsp;        Iterator iterator = subtitles.iterator();
+<i>721</i>&nbsp;        while (iterator.hasNext()) {
+<i>722</i>&nbsp;            Title t = (Title) iterator.next();
+<i>723</i>&nbsp;            if (t != null) {
+<i>724</i>&nbsp;                addSubtitle(t);
+<i>725</i>&nbsp;            }
+<i>726</i>&nbsp;        }
+<i>727</i>&nbsp;        setNotify(true);  // this fires a ChartChangeEvent
+<i>728</i>&nbsp;    }
+<i>729</i>&nbsp;
+<i>730</i>&nbsp;    /**
+<i>731</i>&nbsp;     * Returns the number of titles for the chart.
+<i>732</i>&nbsp;     *
+<i>733</i>&nbsp;     * @return The number of titles for the chart.
+<i>734</i>&nbsp;     *
+<i>735</i>&nbsp;     * @see #getSubtitles()
+<i>736</i>&nbsp;     */
+<i>737</i>&nbsp;    public int getSubtitleCount() {
+<i>738</i>&nbsp;        return this.subtitles.size();
+<i>739</i>&nbsp;    }
+<i>740</i>&nbsp;
+<i>741</i>&nbsp;    /**
+<i>742</i>&nbsp;     * Returns a chart subtitle.
+<i>743</i>&nbsp;     *
+<i>744</i>&nbsp;     * @param index  the index of the chart subtitle (zero based).
+<i>745</i>&nbsp;     *
+<i>746</i>&nbsp;     * @return A chart subtitle.
+<i>747</i>&nbsp;     *
+<i>748</i>&nbsp;     * @see #addSubtitle(Title)
+<i>749</i>&nbsp;     */
+<i>750</i>&nbsp;    public Title getSubtitle(int index) {
+<i>751</i>&nbsp;        if ((index &lt; 0) || (index &gt;= getSubtitleCount())) {
+<i>752</i>&nbsp;            throw new IllegalArgumentException(&quot;Index out of range.&quot;);
+<i>753</i>&nbsp;        }
+<i>754</i>&nbsp;        return (Title) this.subtitles.get(index);
+<i>755</i>&nbsp;    }
+<i>756</i>&nbsp;
+<i>757</i>&nbsp;    /**
+<i>758</i>&nbsp;     * Adds a chart subtitle, and notifies registered listeners that the chart
+<i>759</i>&nbsp;     * has been modified.
+<i>760</i>&nbsp;     *
+<i>761</i>&nbsp;     * @param subtitle  the subtitle (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>762</i>&nbsp;     *
+<i>763</i>&nbsp;     * @see #getSubtitle(int)
+<i>764</i>&nbsp;     */
+<i>765</i>&nbsp;    public void addSubtitle(Title subtitle) {
+<i>766</i>&nbsp;        ParamChecks.nullNotPermitted(subtitle, &quot;subtitle&quot;);
+<i>767</i>&nbsp;        this.subtitles.add(subtitle);
+<i>768</i>&nbsp;        subtitle.addChangeListener(this);
+<i>769</i>&nbsp;        fireChartChanged();
+<i>770</i>&nbsp;    }
+<i>771</i>&nbsp;
+<i>772</i>&nbsp;    /**
+<i>773</i>&nbsp;     * Adds a subtitle at a particular position in the subtitle list, and sends
+<i>774</i>&nbsp;     * a {@link ChartChangeEvent} to all registered listeners.
+<i>775</i>&nbsp;     *
+<i>776</i>&nbsp;     * @param index  the index (in the range 0 to {@link #getSubtitleCount()}).
+<i>777</i>&nbsp;     * @param subtitle  the subtitle to add (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>778</i>&nbsp;     *
+<i>779</i>&nbsp;     * @since 1.0.6
+<i>780</i>&nbsp;     */
+<i>781</i>&nbsp;    public void addSubtitle(int index, Title subtitle) {
+<i>782</i>&nbsp;        if (index &lt; 0 || index &gt; getSubtitleCount()) {
+<i>783</i>&nbsp;            throw new IllegalArgumentException(
+<i>784</i>&nbsp;                    &quot;The &#39;index&#39; argument is out of range.&quot;);
+<i>785</i>&nbsp;        }
+<i>786</i>&nbsp;        ParamChecks.nullNotPermitted(subtitle, &quot;subtitle&quot;);
+<i>787</i>&nbsp;        this.subtitles.add(index, subtitle);
+<i>788</i>&nbsp;        subtitle.addChangeListener(this);
+<i>789</i>&nbsp;        fireChartChanged();
+<i>790</i>&nbsp;    }
+<i>791</i>&nbsp;
+<i>792</i>&nbsp;    /**
+<i>793</i>&nbsp;     * Clears all subtitles from the chart and sends a {@link ChartChangeEvent}
+<i>794</i>&nbsp;     * to all registered listeners.
+<i>795</i>&nbsp;     *
+<i>796</i>&nbsp;     * @see #addSubtitle(Title)
+<i>797</i>&nbsp;     */
+<i>798</i>&nbsp;    public void clearSubtitles() {
+<i>799</i>&nbsp;        Iterator iterator = this.subtitles.iterator();
+<i>800</i>&nbsp;        while (iterator.hasNext()) {
+<i>801</i>&nbsp;            Title t = (Title) iterator.next();
+<i>802</i>&nbsp;            t.removeChangeListener(this);
+<i>803</i>&nbsp;        }
+<i>804</i>&nbsp;        this.subtitles.clear();
+<i>805</i>&nbsp;        fireChartChanged();
+<i>806</i>&nbsp;    }
+<i>807</i>&nbsp;
+<i>808</i>&nbsp;    /**
+<i>809</i>&nbsp;     * Removes the specified subtitle and sends a {@link ChartChangeEvent} to
+<i>810</i>&nbsp;     * all registered listeners.
+<i>811</i>&nbsp;     *
+<i>812</i>&nbsp;     * @param title  the title.
+<i>813</i>&nbsp;     *
+<i>814</i>&nbsp;     * @see #addSubtitle(Title)
+<i>815</i>&nbsp;     */
+<i>816</i>&nbsp;    public void removeSubtitle(Title title) {
+<i>817</i>&nbsp;        this.subtitles.remove(title);
+<i>818</i>&nbsp;        fireChartChanged();
+<i>819</i>&nbsp;    }
+<i>820</i>&nbsp;
+<i>821</i>&nbsp;    /**
+<i>822</i>&nbsp;     * Returns the plot for the chart.  The plot is a class responsible for
+<i>823</i>&nbsp;     * coordinating the visual representation of the data, including the axes
+<i>824</i>&nbsp;     * (if any).
+<i>825</i>&nbsp;     *
+<i>826</i>&nbsp;     * @return The plot.
+<i>827</i>&nbsp;     */
+<i>828</i>&nbsp;    public Plot getPlot() {
+<i>829</i>&nbsp;        return this.plot;
+<i>830</i>&nbsp;    }
+<i>831</i>&nbsp;
+<i>832</i>&nbsp;    /**
+<i>833</i>&nbsp;     * Returns the plot cast as a {@link CategoryPlot}.
+<i>834</i>&nbsp;     * &lt;p&gt;
+<i>835</i>&nbsp;     * NOTE: if the plot is not an instance of {@link CategoryPlot}, then a
+<i>836</i>&nbsp;     * &lt;code&gt;ClassCastException&lt;/code&gt; is thrown.
+<i>837</i>&nbsp;     *
+<i>838</i>&nbsp;     * @return The plot.
+<i>839</i>&nbsp;     *
+<i>840</i>&nbsp;     * @see #getPlot()
+<i>841</i>&nbsp;     */
+<i>842</i>&nbsp;    public CategoryPlot getCategoryPlot() {
+<i>843</i>&nbsp;        return (CategoryPlot) this.plot;
+<i>844</i>&nbsp;    }
+<i>845</i>&nbsp;
+<i>846</i>&nbsp;    /**
+<i>847</i>&nbsp;     * Returns the plot cast as an {@link XYPlot}.
+<i>848</i>&nbsp;     * &lt;p&gt;
+<i>849</i>&nbsp;     * NOTE: if the plot is not an instance of {@link XYPlot}, then a
+<i>850</i>&nbsp;     * &lt;code&gt;ClassCastException&lt;/code&gt; is thrown.
+<i>851</i>&nbsp;     *
+<i>852</i>&nbsp;     * @return The plot.
+<i>853</i>&nbsp;     *
+<i>854</i>&nbsp;     * @see #getPlot()
+<i>855</i>&nbsp;     */
+<i>856</i>&nbsp;    public XYPlot getXYPlot() {
+<i>857</i>&nbsp;        return (XYPlot) this.plot;
+<i>858</i>&nbsp;    }
+<i>859</i>&nbsp;
+<i>860</i>&nbsp;    /**
+<i>861</i>&nbsp;     * Returns a flag that indicates whether or not anti-aliasing is used when
+<i>862</i>&nbsp;     * the chart is drawn.
+<i>863</i>&nbsp;     *
+<i>864</i>&nbsp;     * @return The flag.
+<i>865</i>&nbsp;     *
+<i>866</i>&nbsp;     * @see #setAntiAlias(boolean)
+<i>867</i>&nbsp;     */
+<i>868</i>&nbsp;    public boolean getAntiAlias() {
+<i>869</i>&nbsp;        Object val = this.renderingHints.get(RenderingHints.KEY_ANTIALIASING);
+<i>870</i>&nbsp;        return RenderingHints.VALUE_ANTIALIAS_ON.equals(val);
+<i>871</i>&nbsp;    }
+<i>872</i>&nbsp;
+<i>873</i>&nbsp;    /**
+<i>874</i>&nbsp;     * Sets a flag that indicates whether or not anti-aliasing is used when the
+<i>875</i>&nbsp;     * chart is drawn.
+<i>876</i>&nbsp;     * &lt;P&gt;
+<i>877</i>&nbsp;     * Anti-aliasing usually improves the appearance of charts, but is slower.
+<i>878</i>&nbsp;     *
+<i>879</i>&nbsp;     * @param flag  the new value of the flag.
+<i>880</i>&nbsp;     *
+<i>881</i>&nbsp;     * @see #getAntiAlias()
+<i>882</i>&nbsp;     */
+<i>883</i>&nbsp;    public void setAntiAlias(boolean flag) {
+<i>884</i>&nbsp;        Object hint = flag ? RenderingHints.VALUE_ANTIALIAS_ON 
+<i>885</i>&nbsp;                : RenderingHints.VALUE_ANTIALIAS_OFF;
+<i>886</i>&nbsp;        this.renderingHints.put(RenderingHints.KEY_ANTIALIASING, hint);
+<i>887</i>&nbsp;        fireChartChanged();
+<i>888</i>&nbsp;    }
+<i>889</i>&nbsp;
+<i>890</i>&nbsp;    /**
+<i>891</i>&nbsp;     * Returns the current value stored in the rendering hints table for
+<i>892</i>&nbsp;     * {@link RenderingHints#KEY_TEXT_ANTIALIASING}.
+<i>893</i>&nbsp;     *
+<i>894</i>&nbsp;     * @return The hint value (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>895</i>&nbsp;     *
+<i>896</i>&nbsp;     * @since 1.0.5
+<i>897</i>&nbsp;     *
+<i>898</i>&nbsp;     * @see #setTextAntiAlias(Object)
+<i>899</i>&nbsp;     */
+<i>900</i>&nbsp;    public Object getTextAntiAlias() {
+<i>901</i>&nbsp;        return this.renderingHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
+<i>902</i>&nbsp;    }
+<i>903</i>&nbsp;
+<i>904</i>&nbsp;    /**
+<i>905</i>&nbsp;     * Sets the value in the rendering hints table for
+<i>906</i>&nbsp;     * {@link RenderingHints#KEY_TEXT_ANTIALIASING} to either
+<i>907</i>&nbsp;     * {@link RenderingHints#VALUE_TEXT_ANTIALIAS_ON} or
+<i>908</i>&nbsp;     * {@link RenderingHints#VALUE_TEXT_ANTIALIAS_OFF}, then sends a
+<i>909</i>&nbsp;     * {@link ChartChangeEvent} to all registered listeners.
+<i>910</i>&nbsp;     *
+<i>911</i>&nbsp;     * @param flag  the new value of the flag.
+<i>912</i>&nbsp;     *
+<i>913</i>&nbsp;     * @since 1.0.5
+<i>914</i>&nbsp;     *
+<i>915</i>&nbsp;     * @see #getTextAntiAlias()
+<i>916</i>&nbsp;     * @see #setTextAntiAlias(Object)
+<i>917</i>&nbsp;     */
+<i>918</i>&nbsp;    public void setTextAntiAlias(boolean flag) {
+<i>919</i>&nbsp;        if (flag) {
+<i>920</i>&nbsp;            setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+<i>921</i>&nbsp;        }
+<i>922</i>&nbsp;        else {
+<i>923</i>&nbsp;            setTextAntiAlias(RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+<i>924</i>&nbsp;        }
+<i>925</i>&nbsp;    }
+<i>926</i>&nbsp;
+<i>927</i>&nbsp;    /**
+<i>928</i>&nbsp;     * Sets the value in the rendering hints table for
+<i>929</i>&nbsp;     * {@link RenderingHints#KEY_TEXT_ANTIALIASING} and sends a
+<i>930</i>&nbsp;     * {@link ChartChangeEvent} to all registered listeners.
+<i>931</i>&nbsp;     *
+<i>932</i>&nbsp;     * @param val  the new value (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>933</i>&nbsp;     *
+<i>934</i>&nbsp;     * @since 1.0.5
+<i>935</i>&nbsp;     *
+<i>936</i>&nbsp;     * @see #getTextAntiAlias()
+<i>937</i>&nbsp;     * @see #setTextAntiAlias(boolean)
+<i>938</i>&nbsp;     */
+<i>939</i>&nbsp;    public void setTextAntiAlias(Object val) {
+<i>940</i>&nbsp;        this.renderingHints.put(RenderingHints.KEY_TEXT_ANTIALIASING, val);
+<i>941</i>&nbsp;        notifyListeners(new ChartChangeEvent(this));
+<i>942</i>&nbsp;    }
+<i>943</i>&nbsp;
+<i>944</i>&nbsp;    /**
+<i>945</i>&nbsp;     * Returns the paint used for the chart background.
+<i>946</i>&nbsp;     *
+<i>947</i>&nbsp;     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>948</i>&nbsp;     *
+<i>949</i>&nbsp;     * @see #setBackgroundPaint(Paint)
+<i>950</i>&nbsp;     */
+<i>951</i>&nbsp;    public Paint getBackgroundPaint() {
+<i>952</i>&nbsp;        return this.backgroundPaint;
+<i>953</i>&nbsp;    }
+<i>954</i>&nbsp;
+<i>955</i>&nbsp;    /**
+<i>956</i>&nbsp;     * Sets the paint used to fill the chart background and sends a
+<i>957</i>&nbsp;     * {@link ChartChangeEvent} to all registered listeners.
+<i>958</i>&nbsp;     *
+<i>959</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>960</i>&nbsp;     *
+<i>961</i>&nbsp;     * @see #getBackgroundPaint()
+<i>962</i>&nbsp;     */
+<i>963</i>&nbsp;    public void setBackgroundPaint(Paint paint) {
+<i>964</i>&nbsp;
+<i>965</i>&nbsp;        if (this.backgroundPaint != null) {
+<i>966</i>&nbsp;            if (!this.backgroundPaint.equals(paint)) {
+<i>967</i>&nbsp;                this.backgroundPaint = paint;
+<i>968</i>&nbsp;                fireChartChanged();
+<i>969</i>&nbsp;            }
+<i>970</i>&nbsp;        }
+<i>971</i>&nbsp;        else {
+<i>972</i>&nbsp;            if (paint != null) {
+<i>973</i>&nbsp;                this.backgroundPaint = paint;
+<i>974</i>&nbsp;                fireChartChanged();
+<i>975</i>&nbsp;            }
+<i>976</i>&nbsp;        }
+<i>977</i>&nbsp;
+<i>978</i>&nbsp;    }
+<i>979</i>&nbsp;
+<i>980</i>&nbsp;    /**
+<i>981</i>&nbsp;     * Returns the background image for the chart, or &lt;code&gt;null&lt;/code&gt; if
+<i>982</i>&nbsp;     * there is no image.
+<i>983</i>&nbsp;     *
+<i>984</i>&nbsp;     * @return The image (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>985</i>&nbsp;     *
+<i>986</i>&nbsp;     * @see #setBackgroundImage(Image)
+<i>987</i>&nbsp;     */
+<i>988</i>&nbsp;    public Image getBackgroundImage() {
+<i>989</i>&nbsp;        return this.backgroundImage;
+<i>990</i>&nbsp;    }
+<i>991</i>&nbsp;
+<i>992</i>&nbsp;    /**
+<i>993</i>&nbsp;     * Sets the background image for the chart and sends a
+<i>994</i>&nbsp;     * {@link ChartChangeEvent} to all registered listeners.
+<i>995</i>&nbsp;     *
+<i>996</i>&nbsp;     * @param image  the image (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>997</i>&nbsp;     *
+<i>998</i>&nbsp;     * @see #getBackgroundImage()
+<i>999</i>&nbsp;     */
+<i>1000</i>&nbsp;    public void setBackgroundImage(Image image) {
+<i>1001</i>&nbsp;
+<i>1002</i>&nbsp;        if (this.backgroundImage != null) {
+<i>1003</i>&nbsp;            if (!this.backgroundImage.equals(image)) {
+<i>1004</i>&nbsp;                this.backgroundImage = image;
+<i>1005</i>&nbsp;                fireChartChanged();
+<i>1006</i>&nbsp;            }
+<i>1007</i>&nbsp;        }
+<i>1008</i>&nbsp;        else {
+<i>1009</i>&nbsp;            if (image != null) {
+<i>1010</i>&nbsp;                this.backgroundImage = image;
+<i>1011</i>&nbsp;                fireChartChanged();
+<i>1012</i>&nbsp;            }
+<i>1013</i>&nbsp;        }
+<i>1014</i>&nbsp;
+<i>1015</i>&nbsp;    }
+<i>1016</i>&nbsp;
+<i>1017</i>&nbsp;    /**
+<i>1018</i>&nbsp;     * Returns the background image alignment. Alignment constants are defined
+<i>1019</i>&nbsp;     * in the &lt;code&gt;org.jfree.ui.Align&lt;/code&gt; class in the JCommon class
+<i>1020</i>&nbsp;     * library.
+<i>1021</i>&nbsp;     *
+<i>1022</i>&nbsp;     * @return The alignment.
+<i>1023</i>&nbsp;     *
+<i>1024</i>&nbsp;     * @see #setBackgroundImageAlignment(int)
+<i>1025</i>&nbsp;     */
+<i>1026</i>&nbsp;    public int getBackgroundImageAlignment() {
+<i>1027</i>&nbsp;        return this.backgroundImageAlignment;
+<i>1028</i>&nbsp;    }
+<i>1029</i>&nbsp;
+<i>1030</i>&nbsp;    /**
+<i>1031</i>&nbsp;     * Sets the background alignment.  Alignment options are defined by the
+<i>1032</i>&nbsp;     * {@link org.jfree.ui.Align} class.
+<i>1033</i>&nbsp;     *
+<i>1034</i>&nbsp;     * @param alignment  the alignment.
+<i>1035</i>&nbsp;     *
+<i>1036</i>&nbsp;     * @see #getBackgroundImageAlignment()
+<i>1037</i>&nbsp;     */
+<i>1038</i>&nbsp;    public void setBackgroundImageAlignment(int alignment) {
+<i>1039</i>&nbsp;        if (this.backgroundImageAlignment != alignment) {
+<i>1040</i>&nbsp;            this.backgroundImageAlignment = alignment;
+<i>1041</i>&nbsp;            fireChartChanged();
+<i>1042</i>&nbsp;        }
+<i>1043</i>&nbsp;    }
+<i>1044</i>&nbsp;
+<i>1045</i>&nbsp;    /**
+<i>1046</i>&nbsp;     * Returns the alpha-transparency for the chart&#39;s background image.
+<i>1047</i>&nbsp;     *
+<i>1048</i>&nbsp;     * @return The alpha-transparency.
+<i>1049</i>&nbsp;     *
+<i>1050</i>&nbsp;     * @see #setBackgroundImageAlpha(float)
+<i>1051</i>&nbsp;     */
+<i>1052</i>&nbsp;    public float getBackgroundImageAlpha() {
+<i>1053</i>&nbsp;        return this.backgroundImageAlpha;
+<i>1054</i>&nbsp;    }
+<i>1055</i>&nbsp;
+<i>1056</i>&nbsp;    /**
+<i>1057</i>&nbsp;     * Sets the alpha-transparency for the chart&#39;s background image.
+<i>1058</i>&nbsp;     * Registered listeners are notified that the chart has been changed.
+<i>1059</i>&nbsp;     *
+<i>1060</i>&nbsp;     * @param alpha  the alpha value.
+<i>1061</i>&nbsp;     *
+<i>1062</i>&nbsp;     * @see #getBackgroundImageAlpha()
+<i>1063</i>&nbsp;     */
+<i>1064</i>&nbsp;    public void setBackgroundImageAlpha(float alpha) {
+<i>1065</i>&nbsp;
+<i>1066</i>&nbsp;        if (this.backgroundImageAlpha != alpha) {
+<i>1067</i>&nbsp;            this.backgroundImageAlpha = alpha;
+<i>1068</i>&nbsp;            fireChartChanged();
+<i>1069</i>&nbsp;        }
+<i>1070</i>&nbsp;
+<i>1071</i>&nbsp;    }
+<i>1072</i>&nbsp;
+<i>1073</i>&nbsp;    /**
+<i>1074</i>&nbsp;     * Returns a flag that controls whether or not change events are sent to
+<i>1075</i>&nbsp;     * registered listeners.
+<i>1076</i>&nbsp;     *
+<i>1077</i>&nbsp;     * @return A boolean.
+<i>1078</i>&nbsp;     *
+<i>1079</i>&nbsp;     * @see #setNotify(boolean)
+<i>1080</i>&nbsp;     */
+<i>1081</i>&nbsp;    public boolean isNotify() {
+<i>1082</i>&nbsp;        return this.notify;
+<i>1083</i>&nbsp;    }
+<i>1084</i>&nbsp;
+<i>1085</i>&nbsp;    /**
+<i>1086</i>&nbsp;     * Sets a flag that controls whether or not listeners receive
+<i>1087</i>&nbsp;     * {@link ChartChangeEvent} notifications.
+<i>1088</i>&nbsp;     *
+<i>1089</i>&nbsp;     * @param notify  a boolean.
+<i>1090</i>&nbsp;     *
+<i>1091</i>&nbsp;     * @see #isNotify()
+<i>1092</i>&nbsp;     */
+<i>1093</i>&nbsp;    public void setNotify(boolean notify) {
+<i>1094</i>&nbsp;        this.notify = notify;
+<i>1095</i>&nbsp;        // if the flag is being set to true, there may be queued up changes...
+<i>1096</i>&nbsp;        if (notify) {
+<i>1097</i>&nbsp;            notifyListeners(new ChartChangeEvent(this));
+<i>1098</i>&nbsp;        }
+<i>1099</i>&nbsp;    }
+<i>1100</i>&nbsp;
+<i>1101</i>&nbsp;    /**
+<i>1102</i>&nbsp;     * Draws the chart on a Java 2D graphics device (such as the screen or a
+<i>1103</i>&nbsp;     * printer).
+<i>1104</i>&nbsp;     * &lt;P&gt;
+<i>1105</i>&nbsp;     * This method is the focus of the entire JFreeChart library.
+<i>1106</i>&nbsp;     *
+<i>1107</i>&nbsp;     * @param g2  the graphics device.
+<i>1108</i>&nbsp;     * @param area  the area within which the chart should be drawn.
+<i>1109</i>&nbsp;     */
+<i>1110</i>&nbsp;    @Override
+<i>1111</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D area) {
+<i>1112</i>&nbsp;        draw(g2, area, null, null);
+<i>1113</i>&nbsp;    }
+<i>1114</i>&nbsp;
+<i>1115</i>&nbsp;    /**
+<i>1116</i>&nbsp;     * Draws the chart on a Java 2D graphics device (such as the screen or a
+<i>1117</i>&nbsp;     * printer).  This method is the focus of the entire JFreeChart library.
+<i>1118</i>&nbsp;     *
+<i>1119</i>&nbsp;     * @param g2  the graphics device.
+<i>1120</i>&nbsp;     * @param area  the area within which the chart should be drawn.
+<i>1121</i>&nbsp;     * @param info  records info about the drawing (null means collect no info).
+<i>1122</i>&nbsp;     */
+<i>1123</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D area, ChartRenderingInfo info) {
+<i>1124</i>&nbsp;        draw(g2, area, null, info);
+<i>1125</i>&nbsp;    }
+<i>1126</i>&nbsp;
+<i>1127</i>&nbsp;    /**
+<i>1128</i>&nbsp;     * Draws the chart on a Java 2D graphics device (such as the screen or a
+<i>1129</i>&nbsp;     * printer).
+<i>1130</i>&nbsp;     * &lt;P&gt;
+<i>1131</i>&nbsp;     * This method is the focus of the entire JFreeChart library.
+<i>1132</i>&nbsp;     *
+<i>1133</i>&nbsp;     * @param g2  the graphics device.
+<i>1134</i>&nbsp;     * @param chartArea  the area within which the chart should be drawn.
+<i>1135</i>&nbsp;     * @param anchor  the anchor point (in Java2D space) for the chart
+<i>1136</i>&nbsp;     *                (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1137</i>&nbsp;     * @param info  records info about the drawing (null means collect no info).
+<i>1138</i>&nbsp;     */
+<i>1139</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D chartArea, Point2D anchor,
+<i>1140</i>&nbsp;             ChartRenderingInfo info) {
+<i>1141</i>&nbsp;
+<i>1142</i>&nbsp;        notifyListeners(new ChartProgressEvent(this, this,
+<i>1143</i>&nbsp;                ChartProgressEvent.DRAWING_STARTED, 0));
+<i>1144</i>&nbsp;        
+<i>1145</i>&nbsp;        EntityCollection entities = null;
+<i>1146</i>&nbsp;        // record the chart area, if info is requested...
+<i>1147</i>&nbsp;        if (info != null) {
+<i>1148</i>&nbsp;            info.clear();
+<i>1149</i>&nbsp;            info.setChartArea(chartArea);
+<i>1150</i>&nbsp;            entities = info.getEntityCollection();
+<i>1151</i>&nbsp;        }
+<i>1152</i>&nbsp;        if (entities != null) {
+<i>1153</i>&nbsp;            entities.add(new JFreeChartEntity((Rectangle2D) chartArea.clone(),
+<i>1154</i>&nbsp;                    this));
+<i>1155</i>&nbsp;        }
+<i>1156</i>&nbsp;
+<i>1157</i>&nbsp;        // ensure no drawing occurs outside chart area...
+<i>1158</i>&nbsp;        Shape savedClip = g2.getClip();
+<i>1159</i>&nbsp;        g2.clip(chartArea);
+<i>1160</i>&nbsp;
+<i>1161</i>&nbsp;        g2.addRenderingHints(this.renderingHints);
+<i>1162</i>&nbsp;
+<i>1163</i>&nbsp;        // draw the chart background...
+<i>1164</i>&nbsp;        if (this.backgroundPaint != null) {
+<i>1165</i>&nbsp;            g2.setPaint(this.backgroundPaint);
+<i>1166</i>&nbsp;            g2.fill(chartArea);
+<i>1167</i>&nbsp;        }
+<i>1168</i>&nbsp;
+<i>1169</i>&nbsp;        if (this.backgroundImage != null) {
+<i>1170</i>&nbsp;            Composite originalComposite = g2.getComposite();
+<i>1171</i>&nbsp;            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+<i>1172</i>&nbsp;                    this.backgroundImageAlpha));
+<i>1173</i>&nbsp;            Rectangle2D dest = new Rectangle2D.Double(0.0, 0.0,
+<i>1174</i>&nbsp;                    this.backgroundImage.getWidth(null),
+<i>1175</i>&nbsp;                    this.backgroundImage.getHeight(null));
+<i>1176</i>&nbsp;            Align.align(dest, chartArea, this.backgroundImageAlignment);
+<i>1177</i>&nbsp;            g2.drawImage(this.backgroundImage, (int) dest.getX(),
+<i>1178</i>&nbsp;                    (int) dest.getY(), (int) dest.getWidth(),
+<i>1179</i>&nbsp;                    (int) dest.getHeight(), null);
+<i>1180</i>&nbsp;            g2.setComposite(originalComposite);
+<i>1181</i>&nbsp;        }
+<i>1182</i>&nbsp;
+<i>1183</i>&nbsp;        if (isBorderVisible()) {
+<i>1184</i>&nbsp;            Paint paint = getBorderPaint();
+<i>1185</i>&nbsp;            Stroke stroke = getBorderStroke();
+<i>1186</i>&nbsp;            if (paint != null &amp;&amp; stroke != null) {
+<i>1187</i>&nbsp;                Rectangle2D borderArea = new Rectangle2D.Double(
+<i>1188</i>&nbsp;                        chartArea.getX(), chartArea.getY(),
+<i>1189</i>&nbsp;                        chartArea.getWidth() - 1.0, chartArea.getHeight()
+<i>1190</i>&nbsp;                        - 1.0);
+<i>1191</i>&nbsp;                g2.setPaint(paint);
+<i>1192</i>&nbsp;                g2.setStroke(stroke);
+<i>1193</i>&nbsp;                g2.draw(borderArea);
+<i>1194</i>&nbsp;            }
+<i>1195</i>&nbsp;        }
+<i>1196</i>&nbsp;
+<i>1197</i>&nbsp;        // draw the title and subtitles...
+<i>1198</i>&nbsp;        Rectangle2D nonTitleArea = new Rectangle2D.Double();
+<i>1199</i>&nbsp;        nonTitleArea.setRect(chartArea);
+<i>1200</i>&nbsp;        this.padding.trim(nonTitleArea);
+<i>1201</i>&nbsp;
+<i>1202</i>&nbsp;        if (this.title != null &amp;&amp; this.title.isVisible()) {
+<i>1203</i>&nbsp;            EntityCollection e = drawTitle(this.title, g2, nonTitleArea,
+<i>1204</i>&nbsp;                    (entities != null));
+<i>1205</i>&nbsp;            if (e != null &amp;&amp; entities != null) {
+<i>1206</i>&nbsp;                entities.addAll(e);
+<i>1207</i>&nbsp;            }
+<i>1208</i>&nbsp;        }
+<i>1209</i>&nbsp;
+<i>1210</i>&nbsp;        Iterator iterator = this.subtitles.iterator();
+<i>1211</i>&nbsp;        while (iterator.hasNext()) {
+<i>1212</i>&nbsp;            Title currentTitle = (Title) iterator.next();
+<i>1213</i>&nbsp;            if (currentTitle.isVisible()) {
+<i>1214</i>&nbsp;                EntityCollection e = drawTitle(currentTitle, g2, nonTitleArea,
+<i>1215</i>&nbsp;                        (entities != null));
+<i>1216</i>&nbsp;                if (e != null &amp;&amp; entities != null) {
+<i>1217</i>&nbsp;                    entities.addAll(e);
+<i>1218</i>&nbsp;                }
+<i>1219</i>&nbsp;            }
+<i>1220</i>&nbsp;        }
+<i>1221</i>&nbsp;
+<i>1222</i>&nbsp;        Rectangle2D plotArea = nonTitleArea;
+<i>1223</i>&nbsp;
+<i>1224</i>&nbsp;        // draw the plot (axes and data visualisation)
+<i>1225</i>&nbsp;        PlotRenderingInfo plotInfo = null;
+<i>1226</i>&nbsp;        if (info != null) {
+<i>1227</i>&nbsp;            plotInfo = info.getPlotInfo();
+<i>1228</i>&nbsp;        }
+<i>1229</i>&nbsp;        this.plot.draw(g2, plotArea, anchor, null, plotInfo);
+<i>1230</i>&nbsp;
+<i>1231</i>&nbsp;        g2.setClip(savedClip);
+<i>1232</i>&nbsp;
+<i>1233</i>&nbsp;        notifyListeners(new ChartProgressEvent(this, this,
+<i>1234</i>&nbsp;                ChartProgressEvent.DRAWING_FINISHED, 100));
+<i>1235</i>&nbsp;    }
+<i>1236</i>&nbsp;
+<i>1237</i>&nbsp;    /**
+<i>1238</i>&nbsp;     * Creates a rectangle that is aligned to the frame.
+<i>1239</i>&nbsp;     *
+<i>1240</i>&nbsp;     * @param dimensions  the dimensions for the rectangle.
+<i>1241</i>&nbsp;     * @param frame  the frame to align to.
+<i>1242</i>&nbsp;     * @param hAlign  the horizontal alignment.
+<i>1243</i>&nbsp;     * @param vAlign  the vertical alignment.
+<i>1244</i>&nbsp;     *
+<i>1245</i>&nbsp;     * @return A rectangle.
+<i>1246</i>&nbsp;     */
+<i>1247</i>&nbsp;    private Rectangle2D createAlignedRectangle2D(Size2D dimensions,
+<i>1248</i>&nbsp;            Rectangle2D frame, HorizontalAlignment hAlign,
+<i>1249</i>&nbsp;            VerticalAlignment vAlign) {
+<i>1250</i>&nbsp;        double x = Double.NaN;
+<i>1251</i>&nbsp;        double y = Double.NaN;
+<i>1252</i>&nbsp;        if (hAlign == HorizontalAlignment.LEFT) {
+<i>1253</i>&nbsp;            x = frame.getX();
+<i>1254</i>&nbsp;        }
+<i>1255</i>&nbsp;        else if (hAlign == HorizontalAlignment.CENTER) {
+<i>1256</i>&nbsp;            x = frame.getCenterX() - (dimensions.width / 2.0);
+<i>1257</i>&nbsp;        }
+<i>1258</i>&nbsp;        else if (hAlign == HorizontalAlignment.RIGHT) {
+<i>1259</i>&nbsp;            x = frame.getMaxX() - dimensions.width;
+<i>1260</i>&nbsp;        }
+<i>1261</i>&nbsp;        if (vAlign == VerticalAlignment.TOP) {
+<i>1262</i>&nbsp;            y = frame.getY();
+<i>1263</i>&nbsp;        }
+<i>1264</i>&nbsp;        else if (vAlign == VerticalAlignment.CENTER) {
+<i>1265</i>&nbsp;            y = frame.getCenterY() - (dimensions.height / 2.0);
+<i>1266</i>&nbsp;        }
+<i>1267</i>&nbsp;        else if (vAlign == VerticalAlignment.BOTTOM) {
+<i>1268</i>&nbsp;            y = frame.getMaxY() - dimensions.height;
+<i>1269</i>&nbsp;        }
+<i>1270</i>&nbsp;
+<i>1271</i>&nbsp;        return new Rectangle2D.Double(x, y, dimensions.width,
+<i>1272</i>&nbsp;                dimensions.height);
+<i>1273</i>&nbsp;    }
+<i>1274</i>&nbsp;
+<i>1275</i>&nbsp;    /**
+<i>1276</i>&nbsp;     * Draws a title.  The title should be drawn at the top, bottom, left or
+<i>1277</i>&nbsp;     * right of the specified area, and the area should be updated to reflect
+<i>1278</i>&nbsp;     * the amount of space used by the title.
+<i>1279</i>&nbsp;     *
+<i>1280</i>&nbsp;     * @param t  the title (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1281</i>&nbsp;     * @param g2  the graphics device (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1282</i>&nbsp;     * @param area  the chart area, excluding any existing titles
+<i>1283</i>&nbsp;     *              (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1284</i>&nbsp;     * @param entities  a flag that controls whether or not an entity
+<i>1285</i>&nbsp;     *                  collection is returned for the title.
+<i>1286</i>&nbsp;     *
+<i>1287</i>&nbsp;     * @return An entity collection for the title (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1288</i>&nbsp;     */
+<i>1289</i>&nbsp;    protected EntityCollection drawTitle(Title t, Graphics2D g2,
+<i>1290</i>&nbsp;                                         Rectangle2D area, boolean entities) {
+<i>1291</i>&nbsp;
+<i>1292</i>&nbsp;        ParamChecks.nullNotPermitted(t, &quot;t&quot;);
+<i>1293</i>&nbsp;        ParamChecks.nullNotPermitted(area, &quot;area&quot;);
+<i>1294</i>&nbsp;        Rectangle2D titleArea;
+<i>1295</i>&nbsp;        RectangleEdge position = t.getPosition();
+<i>1296</i>&nbsp;        double ww = area.getWidth();
+<i>1297</i>&nbsp;        if (ww &lt;= 0.0) {
+<i>1298</i>&nbsp;            return null;
+<i>1299</i>&nbsp;        }
+<i>1300</i>&nbsp;        double hh = area.getHeight();
+<i>1301</i>&nbsp;        if (hh &lt;= 0.0) {
+<i>1302</i>&nbsp;            return null;
+<i>1303</i>&nbsp;        }
+<i>1304</i>&nbsp;        RectangleConstraint constraint = new RectangleConstraint(ww,
+<i>1305</i>&nbsp;                new Range(0.0, ww), LengthConstraintType.RANGE, hh,
+<i>1306</i>&nbsp;                new Range(0.0, hh), LengthConstraintType.RANGE);
+<i>1307</i>&nbsp;        Object retValue = null;
+<i>1308</i>&nbsp;        BlockParams p = new BlockParams();
+<i>1309</i>&nbsp;        p.setGenerateEntities(entities);
+<i>1310</i>&nbsp;        if (position == RectangleEdge.TOP) {
+<i>1311</i>&nbsp;            Size2D size = t.arrange(g2, constraint);
+<i>1312</i>&nbsp;            titleArea = createAlignedRectangle2D(size, area,
+<i>1313</i>&nbsp;                    t.getHorizontalAlignment(), VerticalAlignment.TOP);
+<i>1314</i>&nbsp;            retValue = t.draw(g2, titleArea, p);
+<i>1315</i>&nbsp;            area.setRect(area.getX(), Math.min(area.getY() + size.height,
+<i>1316</i>&nbsp;                    area.getMaxY()), area.getWidth(), Math.max(area.getHeight()
+<i>1317</i>&nbsp;                    - size.height, 0));
+<i>1318</i>&nbsp;        }
+<i>1319</i>&nbsp;        else if (position == RectangleEdge.BOTTOM) {
+<i>1320</i>&nbsp;            Size2D size = t.arrange(g2, constraint);
+<i>1321</i>&nbsp;            titleArea = createAlignedRectangle2D(size, area,
+<i>1322</i>&nbsp;                    t.getHorizontalAlignment(), VerticalAlignment.BOTTOM);
+<i>1323</i>&nbsp;            retValue = t.draw(g2, titleArea, p);
+<i>1324</i>&nbsp;            area.setRect(area.getX(), area.getY(), area.getWidth(),
+<i>1325</i>&nbsp;                    area.getHeight() - size.height);
+<i>1326</i>&nbsp;        }
+<i>1327</i>&nbsp;        else if (position == RectangleEdge.RIGHT) {
+<i>1328</i>&nbsp;            Size2D size = t.arrange(g2, constraint);
+<i>1329</i>&nbsp;            titleArea = createAlignedRectangle2D(size, area,
+<i>1330</i>&nbsp;                    HorizontalAlignment.RIGHT, t.getVerticalAlignment());
+<i>1331</i>&nbsp;            retValue = t.draw(g2, titleArea, p);
+<i>1332</i>&nbsp;            area.setRect(area.getX(), area.getY(), area.getWidth()
+<i>1333</i>&nbsp;                    - size.width, area.getHeight());
+<i>1334</i>&nbsp;        }
+<i>1335</i>&nbsp;
+<i>1336</i>&nbsp;        else if (position == RectangleEdge.LEFT) {
+<i>1337</i>&nbsp;            Size2D size = t.arrange(g2, constraint);
+<i>1338</i>&nbsp;            titleArea = createAlignedRectangle2D(size, area,
+<i>1339</i>&nbsp;                    HorizontalAlignment.LEFT, t.getVerticalAlignment());
+<i>1340</i>&nbsp;            retValue = t.draw(g2, titleArea, p);
+<i>1341</i>&nbsp;            area.setRect(area.getX() + size.width, area.getY(), area.getWidth()
+<i>1342</i>&nbsp;                    - size.width, area.getHeight());
+<i>1343</i>&nbsp;        }
+<i>1344</i>&nbsp;        else {
+<i>1345</i>&nbsp;            throw new RuntimeException(&quot;Unrecognised title position.&quot;);
+<i>1346</i>&nbsp;        }
+<i>1347</i>&nbsp;        EntityCollection result = null;
+<i>1348</i>&nbsp;        if (retValue instanceof EntityBlockResult) {
+<i>1349</i>&nbsp;            EntityBlockResult ebr = (EntityBlockResult) retValue;
+<i>1350</i>&nbsp;            result = ebr.getEntityCollection();
+<i>1351</i>&nbsp;        }
+<i>1352</i>&nbsp;        return result;
+<i>1353</i>&nbsp;    }
+<i>1354</i>&nbsp;
+<i>1355</i>&nbsp;    /**
+<i>1356</i>&nbsp;     * Creates and returns a buffered image into which the chart has been drawn.
+<i>1357</i>&nbsp;     *
+<i>1358</i>&nbsp;     * @param width  the width.
+<i>1359</i>&nbsp;     * @param height  the height.
+<i>1360</i>&nbsp;     *
+<i>1361</i>&nbsp;     * @return A buffered image.
+<i>1362</i>&nbsp;     */
+<i>1363</i>&nbsp;    public BufferedImage createBufferedImage(int width, int height) {
+<i>1364</i>&nbsp;        return createBufferedImage(width, height, null);
+<i>1365</i>&nbsp;    }
+<i>1366</i>&nbsp;
+<i>1367</i>&nbsp;    /**
+<i>1368</i>&nbsp;     * Creates and returns a buffered image into which the chart has been drawn.
+<i>1369</i>&nbsp;     *
+<i>1370</i>&nbsp;     * @param width  the width.
+<i>1371</i>&nbsp;     * @param height  the height.
+<i>1372</i>&nbsp;     * @param info  carries back chart state information (&lt;code&gt;null&lt;/code&gt;
+<i>1373</i>&nbsp;     *              permitted).
+<i>1374</i>&nbsp;     *
+<i>1375</i>&nbsp;     * @return A buffered image.
+<i>1376</i>&nbsp;     */
+<i>1377</i>&nbsp;    public BufferedImage createBufferedImage(int width, int height,
+<i>1378</i>&nbsp;                                             ChartRenderingInfo info) {
+<i>1379</i>&nbsp;        return createBufferedImage(width, height, BufferedImage.TYPE_INT_ARGB,
+<i>1380</i>&nbsp;                info);
+<i>1381</i>&nbsp;    }
+<i>1382</i>&nbsp;
+<i>1383</i>&nbsp;    /**
+<i>1384</i>&nbsp;     * Creates and returns a buffered image into which the chart has been drawn.
+<i>1385</i>&nbsp;     *
+<i>1386</i>&nbsp;     * @param width  the width.
+<i>1387</i>&nbsp;     * @param height  the height.
+<i>1388</i>&nbsp;     * @param imageType  the image type.
+<i>1389</i>&nbsp;     * @param info  carries back chart state information (&lt;code&gt;null&lt;/code&gt;
+<i>1390</i>&nbsp;     *              permitted).
+<i>1391</i>&nbsp;     *
+<i>1392</i>&nbsp;     * @return A buffered image.
+<i>1393</i>&nbsp;     */
+<i>1394</i>&nbsp;    public BufferedImage createBufferedImage(int width, int height,
+<i>1395</i>&nbsp;                                             int imageType,
+<i>1396</i>&nbsp;                                             ChartRenderingInfo info) {
+<i>1397</i>&nbsp;        BufferedImage image = new BufferedImage(width, height, imageType);
+<i>1398</i>&nbsp;        Graphics2D g2 = image.createGraphics();
+<i>1399</i>&nbsp;        draw(g2, new Rectangle2D.Double(0, 0, width, height), null, info);
+<i>1400</i>&nbsp;        g2.dispose();
+<i>1401</i>&nbsp;        return image;
+<i>1402</i>&nbsp;    }
+<i>1403</i>&nbsp;
+<i>1404</i>&nbsp;    /**
+<i>1405</i>&nbsp;     * Creates and returns a buffered image into which the chart has been drawn.
+<i>1406</i>&nbsp;     *
+<i>1407</i>&nbsp;     * @param imageWidth  the image width.
+<i>1408</i>&nbsp;     * @param imageHeight  the image height.
+<i>1409</i>&nbsp;     * @param drawWidth  the width for drawing the chart (will be scaled to
+<i>1410</i>&nbsp;     *                   fit image).
+<i>1411</i>&nbsp;     * @param drawHeight  the height for drawing the chart (will be scaled to
+<i>1412</i>&nbsp;     *                    fit image).
+<i>1413</i>&nbsp;     * @param info  optional object for collection chart dimension and entity
+<i>1414</i>&nbsp;     *              information.
+<i>1415</i>&nbsp;     *
+<i>1416</i>&nbsp;     * @return A buffered image.
+<i>1417</i>&nbsp;     */
+<i>1418</i>&nbsp;    public BufferedImage createBufferedImage(int imageWidth,
+<i>1419</i>&nbsp;                                             int imageHeight,
+<i>1420</i>&nbsp;                                             double drawWidth,
+<i>1421</i>&nbsp;                                             double drawHeight,
+<i>1422</i>&nbsp;                                             ChartRenderingInfo info) {
+<i>1423</i>&nbsp;
+<i>1424</i>&nbsp;        BufferedImage image = new BufferedImage(imageWidth, imageHeight,
+<i>1425</i>&nbsp;                BufferedImage.TYPE_INT_ARGB);
+<i>1426</i>&nbsp;        Graphics2D g2 = image.createGraphics();
+<i>1427</i>&nbsp;        double scaleX = imageWidth / drawWidth;
+<i>1428</i>&nbsp;        double scaleY = imageHeight / drawHeight;
+<i>1429</i>&nbsp;        AffineTransform st = AffineTransform.getScaleInstance(scaleX, scaleY);
+<i>1430</i>&nbsp;        g2.transform(st);
+<i>1431</i>&nbsp;        draw(g2, new Rectangle2D.Double(0, 0, drawWidth, drawHeight), null,
+<i>1432</i>&nbsp;                info);
+<i>1433</i>&nbsp;        g2.dispose();
+<i>1434</i>&nbsp;        return image;
+<i>1435</i>&nbsp;
+<i>1436</i>&nbsp;    }
+<i>1437</i>&nbsp;
+<i>1438</i>&nbsp;    /**
+<i>1439</i>&nbsp;     * Handles a &#39;click&#39; on the chart.  JFreeChart is not a UI component, so
+<i>1440</i>&nbsp;     * some other object (for example, {@link ChartPanel}) needs to capture
+<i>1441</i>&nbsp;     * the click event and pass it onto the JFreeChart object.
+<i>1442</i>&nbsp;     * If you are not using JFreeChart in a client application, then this
+<i>1443</i>&nbsp;     * method is not required.
+<i>1444</i>&nbsp;     *
+<i>1445</i>&nbsp;     * @param x  x-coordinate of the click (in Java2D space).
+<i>1446</i>&nbsp;     * @param y  y-coordinate of the click (in Java2D space).
+<i>1447</i>&nbsp;     * @param info  contains chart dimension and entity information
+<i>1448</i>&nbsp;     *              (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1449</i>&nbsp;     */
+<i>1450</i>&nbsp;    public void handleClick(int x, int y, ChartRenderingInfo info) {
+<i>1451</i>&nbsp;
+<i>1452</i>&nbsp;        // pass the click on to the plot...
+<i>1453</i>&nbsp;        // rely on the plot to post a plot change event and redraw the chart...
+<i>1454</i>&nbsp;        this.plot.handleClick(x, y, info.getPlotInfo());
+<i>1455</i>&nbsp;
+<i>1456</i>&nbsp;    }
+<i>1457</i>&nbsp;
+<i>1458</i>&nbsp;    /**
+<i>1459</i>&nbsp;     * Registers an object for notification of changes to the chart.
+<i>1460</i>&nbsp;     *
+<i>1461</i>&nbsp;     * @param listener  the listener (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1462</i>&nbsp;     *
+<i>1463</i>&nbsp;     * @see #removeChangeListener(ChartChangeListener)
+<i>1464</i>&nbsp;     */
+<i>1465</i>&nbsp;    public void addChangeListener(ChartChangeListener listener) {
+<i>1466</i>&nbsp;        ParamChecks.nullNotPermitted(listener, &quot;listener&quot;);
+<i>1467</i>&nbsp;        this.changeListeners.add(ChartChangeListener.class, listener);
+<i>1468</i>&nbsp;    }
+<i>1469</i>&nbsp;
+<i>1470</i>&nbsp;    /**
+<i>1471</i>&nbsp;     * Deregisters an object for notification of changes to the chart.
+<i>1472</i>&nbsp;     *
+<i>1473</i>&nbsp;     * @param listener  the listener (&lt;code&gt;null&lt;/code&gt; not permitted)
+<i>1474</i>&nbsp;     *
+<i>1475</i>&nbsp;     * @see #addChangeListener(ChartChangeListener)
+<i>1476</i>&nbsp;     */
+<i>1477</i>&nbsp;    public void removeChangeListener(ChartChangeListener listener) {
+<i>1478</i>&nbsp;        ParamChecks.nullNotPermitted(listener, &quot;listener&quot;);
+<i>1479</i>&nbsp;        this.changeListeners.remove(ChartChangeListener.class, listener);
+<i>1480</i>&nbsp;    }
+<i>1481</i>&nbsp;
+<i>1482</i>&nbsp;    /**
+<i>1483</i>&nbsp;     * Sends a default {@link ChartChangeEvent} to all registered listeners.
+<i>1484</i>&nbsp;     * &lt;P&gt;
+<i>1485</i>&nbsp;     * This method is for convenience only.
+<i>1486</i>&nbsp;     */
+<i>1487</i>&nbsp;    public void fireChartChanged() {
+<i>1488</i>&nbsp;        ChartChangeEvent event = new ChartChangeEvent(this);
+<i>1489</i>&nbsp;        notifyListeners(event);
+<i>1490</i>&nbsp;    }
+<i>1491</i>&nbsp;
+<i>1492</i>&nbsp;    /**
+<i>1493</i>&nbsp;     * Sends a {@link ChartChangeEvent} to all registered listeners.
+<i>1494</i>&nbsp;     *
+<i>1495</i>&nbsp;     * @param event  information about the event that triggered the
+<i>1496</i>&nbsp;     *               notification.
+<i>1497</i>&nbsp;     */
+<i>1498</i>&nbsp;    protected void notifyListeners(ChartChangeEvent event) {
+<i>1499</i>&nbsp;        if (this.notify) {
+<i>1500</i>&nbsp;            Object[] listeners = this.changeListeners.getListenerList();
+<i>1501</i>&nbsp;            for (int i = listeners.length - 2; i &gt;= 0; i -= 2) {
+<i>1502</i>&nbsp;                if (listeners[i] == ChartChangeListener.class) {
+<i>1503</i>&nbsp;                    ((ChartChangeListener) listeners[i + 1]).chartChanged(
+<i>1504</i>&nbsp;                            event);
+<i>1505</i>&nbsp;                }
+<i>1506</i>&nbsp;            }
+<i>1507</i>&nbsp;        }
+<i>1508</i>&nbsp;    }
+<i>1509</i>&nbsp;
+<i>1510</i>&nbsp;    /**
+<i>1511</i>&nbsp;     * Registers an object for notification of progress events relating to the
+<i>1512</i>&nbsp;     * chart.
+<i>1513</i>&nbsp;     *
+<i>1514</i>&nbsp;     * @param listener  the object being registered.
+<i>1515</i>&nbsp;     *
+<i>1516</i>&nbsp;     * @see #removeProgressListener(ChartProgressListener)
+<i>1517</i>&nbsp;     */
+<i>1518</i>&nbsp;    public void addProgressListener(ChartProgressListener listener) {
+<i>1519</i>&nbsp;        this.progressListeners.add(ChartProgressListener.class, listener);
+<i>1520</i>&nbsp;    }
+<i>1521</i>&nbsp;
+<i>1522</i>&nbsp;    /**
+<i>1523</i>&nbsp;     * Deregisters an object for notification of changes to the chart.
+<i>1524</i>&nbsp;     *
+<i>1525</i>&nbsp;     * @param listener  the object being deregistered.
+<i>1526</i>&nbsp;     *
+<i>1527</i>&nbsp;     * @see #addProgressListener(ChartProgressListener)
+<i>1528</i>&nbsp;     */
+<i>1529</i>&nbsp;    public void removeProgressListener(ChartProgressListener listener) {
+<i>1530</i>&nbsp;        this.progressListeners.remove(ChartProgressListener.class, listener);
+<i>1531</i>&nbsp;    }
+<i>1532</i>&nbsp;
+<i>1533</i>&nbsp;    /**
+<i>1534</i>&nbsp;     * Sends a {@link ChartProgressEvent} to all registered listeners.
+<i>1535</i>&nbsp;     *
+<i>1536</i>&nbsp;     * @param event  information about the event that triggered the
+<i>1537</i>&nbsp;     *               notification.
+<i>1538</i>&nbsp;     */
+<i>1539</i>&nbsp;    protected void notifyListeners(ChartProgressEvent event) {
+<i>1540</i>&nbsp;
+<i>1541</i>&nbsp;        Object[] listeners = this.progressListeners.getListenerList();
+<i>1542</i>&nbsp;        for (int i = listeners.length - 2; i &gt;= 0; i -= 2) {
+<i>1543</i>&nbsp;            if (listeners[i] == ChartProgressListener.class) {
+<i>1544</i>&nbsp;                ((ChartProgressListener) listeners[i + 1]).chartProgress(event);
+<i>1545</i>&nbsp;            }
+<i>1546</i>&nbsp;        }
+<i>1547</i>&nbsp;
+<i>1548</i>&nbsp;    }
+<i>1549</i>&nbsp;
+<i>1550</i>&nbsp;    /**
+<i>1551</i>&nbsp;     * Receives notification that a chart title has changed, and passes this
+<i>1552</i>&nbsp;     * on to registered listeners.
+<i>1553</i>&nbsp;     *
+<i>1554</i>&nbsp;     * @param event  information about the chart title change.
+<i>1555</i>&nbsp;     */
+<i>1556</i>&nbsp;    @Override
+<i>1557</i>&nbsp;    public void titleChanged(TitleChangeEvent event) {
+<i>1558</i>&nbsp;        event.setChart(this);
+<i>1559</i>&nbsp;        notifyListeners(event);
+<i>1560</i>&nbsp;    }
+<i>1561</i>&nbsp;
+<i>1562</i>&nbsp;    /**
+<i>1563</i>&nbsp;     * Receives notification that the plot has changed, and passes this on to
+<i>1564</i>&nbsp;     * registered listeners.
+<i>1565</i>&nbsp;     *
+<i>1566</i>&nbsp;     * @param event  information about the plot change.
+<i>1567</i>&nbsp;     */
+<i>1568</i>&nbsp;    @Override
+<i>1569</i>&nbsp;    public void plotChanged(PlotChangeEvent event) {
+<i>1570</i>&nbsp;        event.setChart(this);
+<i>1571</i>&nbsp;        notifyListeners(event);
+<i>1572</i>&nbsp;    }
+<i>1573</i>&nbsp;
+<i>1574</i>&nbsp;    /**
+<i>1575</i>&nbsp;     * Tests this chart for equality with another object.
+<i>1576</i>&nbsp;     *
+<i>1577</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1578</i>&nbsp;     *
+<i>1579</i>&nbsp;     * @return A boolean.
+<i>1580</i>&nbsp;     */
+<i>1581</i>&nbsp;    @Override
+<i>1582</i>&nbsp;    public boolean equals(Object obj) {
+<i>1583</i>&nbsp;        if (obj == this) {
+<i>1584</i>&nbsp;            return true;
+<i>1585</i>&nbsp;        }
+<i>1586</i>&nbsp;        if (!(obj instanceof JFreeChart)) {
+<i>1587</i>&nbsp;            return false;
+<i>1588</i>&nbsp;        }
+<i>1589</i>&nbsp;        JFreeChart that = (JFreeChart) obj;
+<i>1590</i>&nbsp;        if (!this.renderingHints.equals(that.renderingHints)) {
+<i>1591</i>&nbsp;            return false;
+<i>1592</i>&nbsp;        }
+<i>1593</i>&nbsp;        if (this.borderVisible != that.borderVisible) {
+<i>1594</i>&nbsp;            return false;
+<i>1595</i>&nbsp;        }
+<i>1596</i>&nbsp;        if (!ObjectUtilities.equal(this.borderStroke, that.borderStroke)) {
+<i>1597</i>&nbsp;            return false;
+<i>1598</i>&nbsp;        }
+<i>1599</i>&nbsp;        if (!PaintUtilities.equal(this.borderPaint, that.borderPaint)) {
+<i>1600</i>&nbsp;            return false;
+<i>1601</i>&nbsp;        }
+<i>1602</i>&nbsp;        if (!this.padding.equals(that.padding)) {
+<i>1603</i>&nbsp;            return false;
+<i>1604</i>&nbsp;        }
+<i>1605</i>&nbsp;        if (!ObjectUtilities.equal(this.title, that.title)) {
+<i>1606</i>&nbsp;            return false;
+<i>1607</i>&nbsp;        }
+<i>1608</i>&nbsp;        if (!ObjectUtilities.equal(this.subtitles, that.subtitles)) {
+<i>1609</i>&nbsp;            return false;
+<i>1610</i>&nbsp;        }
+<i>1611</i>&nbsp;        if (!ObjectUtilities.equal(this.plot, that.plot)) {
+<i>1612</i>&nbsp;            return false;
+<i>1613</i>&nbsp;        }
+<i>1614</i>&nbsp;        if (!PaintUtilities.equal(
+<i>1615</i>&nbsp;            this.backgroundPaint, that.backgroundPaint
+<i>1616</i>&nbsp;        )) {
+<i>1617</i>&nbsp;            return false;
+<i>1618</i>&nbsp;        }
+<i>1619</i>&nbsp;        if (!ObjectUtilities.equal(this.backgroundImage,
+<i>1620</i>&nbsp;                that.backgroundImage)) {
+<i>1621</i>&nbsp;            return false;
+<i>1622</i>&nbsp;        }
+<i>1623</i>&nbsp;        if (this.backgroundImageAlignment != that.backgroundImageAlignment) {
+<i>1624</i>&nbsp;            return false;
+<i>1625</i>&nbsp;        }
+<i>1626</i>&nbsp;        if (this.backgroundImageAlpha != that.backgroundImageAlpha) {
+<i>1627</i>&nbsp;            return false;
+<i>1628</i>&nbsp;        }
+<i>1629</i>&nbsp;        if (this.notify != that.notify) {
+<i>1630</i>&nbsp;            return false;
+<i>1631</i>&nbsp;        }
+<i>1632</i>&nbsp;        return true;
+<i>1633</i>&nbsp;    }
+<i>1634</i>&nbsp;
+<i>1635</i>&nbsp;    /**
+<i>1636</i>&nbsp;     * Provides serialization support.
+<i>1637</i>&nbsp;     *
+<i>1638</i>&nbsp;     * @param stream  the output stream.
+<i>1639</i>&nbsp;     *
+<i>1640</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1641</i>&nbsp;     */
+<i>1642</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<i>1643</i>&nbsp;        stream.defaultWriteObject();
+<i>1644</i>&nbsp;        SerialUtilities.writeStroke(this.borderStroke, stream);
+<i>1645</i>&nbsp;        SerialUtilities.writePaint(this.borderPaint, stream);
+<i>1646</i>&nbsp;        SerialUtilities.writePaint(this.backgroundPaint, stream);
+<i>1647</i>&nbsp;    }
+<i>1648</i>&nbsp;
+<i>1649</i>&nbsp;    /**
+<i>1650</i>&nbsp;     * Provides serialization support.
+<i>1651</i>&nbsp;     *
+<i>1652</i>&nbsp;     * @param stream  the input stream.
+<i>1653</i>&nbsp;     *
+<i>1654</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1655</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>1656</i>&nbsp;     */
+<i>1657</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>1658</i>&nbsp;        throws IOException, ClassNotFoundException {
+<i>1659</i>&nbsp;        stream.defaultReadObject();
+<i>1660</i>&nbsp;        this.borderStroke = SerialUtilities.readStroke(stream);
+<i>1661</i>&nbsp;        this.borderPaint = SerialUtilities.readPaint(stream);
+<i>1662</i>&nbsp;        this.backgroundPaint = SerialUtilities.readPaint(stream);
+<i>1663</i>&nbsp;        this.progressListeners = new EventListenerList();
+<i>1664</i>&nbsp;        this.changeListeners = new EventListenerList();
+<i>1665</i>&nbsp;        this.renderingHints = new RenderingHints(
+<i>1666</i>&nbsp;                RenderingHints.KEY_ANTIALIASING,
+<i>1667</i>&nbsp;                RenderingHints.VALUE_ANTIALIAS_ON);
+<i>1668</i>&nbsp;        this.renderingHints.put(RenderingHints.KEY_STROKE_CONTROL,
+<i>1669</i>&nbsp;                RenderingHints.VALUE_STROKE_PURE);
+<i>1670</i>&nbsp;        
+<i>1671</i>&nbsp;        // register as a listener with sub-components...
+<i>1672</i>&nbsp;        if (this.title != null) {
+<i>1673</i>&nbsp;            this.title.addChangeListener(this);
+<i>1674</i>&nbsp;        }
+<i>1675</i>&nbsp;
+<i>1676</i>&nbsp;        for (int i = 0; i &lt; getSubtitleCount(); i++) {
+<i>1677</i>&nbsp;            getSubtitle(i).addChangeListener(this);
+<i>1678</i>&nbsp;        }
+<i>1679</i>&nbsp;        this.plot.addChangeListener(this);
+<i>1680</i>&nbsp;    }
+<i>1681</i>&nbsp;
+<i>1682</i>&nbsp;    /**
+<i>1683</i>&nbsp;     * Prints information about JFreeChart to standard output.
+<i>1684</i>&nbsp;     *
+<i>1685</i>&nbsp;     * @param args  no arguments are honored.
+<i>1686</i>&nbsp;     */
+<i>1687</i>&nbsp;    public static void main(String[] args) {
+<i>1688</i>&nbsp;        System.out.println(JFreeChart.INFO.toString());
+<i>1689</i>&nbsp;    }
+<i>1690</i>&nbsp;
+<i>1691</i>&nbsp;    /**
+<i>1692</i>&nbsp;     * Clones the object, and takes care of listeners.
+<i>1693</i>&nbsp;     * Note: caller shall register its own listeners on cloned graph.
+<i>1694</i>&nbsp;     *
+<i>1695</i>&nbsp;     * @return A clone.
+<i>1696</i>&nbsp;     *
+<i>1697</i>&nbsp;     * @throws CloneNotSupportedException if the chart is not cloneable.
+<i>1698</i>&nbsp;     */
+<i>1699</i>&nbsp;    @Override
+<i>1700</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<i>1701</i>&nbsp;        JFreeChart chart = (JFreeChart) super.clone();
+<i>1702</i>&nbsp;
+<i>1703</i>&nbsp;        chart.renderingHints = (RenderingHints) this.renderingHints.clone();
+<i>1704</i>&nbsp;        // private boolean borderVisible;
+<i>1705</i>&nbsp;        // private transient Stroke borderStroke;
+<i>1706</i>&nbsp;        // private transient Paint borderPaint;
+<i>1707</i>&nbsp;
+<i>1708</i>&nbsp;        if (this.title != null) {
+<i>1709</i>&nbsp;            chart.title = (TextTitle) this.title.clone();
+<i>1710</i>&nbsp;            chart.title.addChangeListener(chart);
+<i>1711</i>&nbsp;        }
+<i>1712</i>&nbsp;
+<i>1713</i>&nbsp;        chart.subtitles = new ArrayList();
+<i>1714</i>&nbsp;        for (int i = 0; i &lt; getSubtitleCount(); i++) {
+<i>1715</i>&nbsp;            Title subtitle = (Title) getSubtitle(i).clone();
+<i>1716</i>&nbsp;            chart.subtitles.add(subtitle);
+<i>1717</i>&nbsp;            subtitle.addChangeListener(chart);
+<i>1718</i>&nbsp;        }
+<i>1719</i>&nbsp;
+<i>1720</i>&nbsp;        if (this.plot != null) {
+<i>1721</i>&nbsp;            chart.plot = (Plot) this.plot.clone();
+<i>1722</i>&nbsp;            chart.plot.addChangeListener(chart);
+<i>1723</i>&nbsp;        }
+<i>1724</i>&nbsp;
+<i>1725</i>&nbsp;        chart.progressListeners = new EventListenerList();
+<i>1726</i>&nbsp;        chart.changeListeners = new EventListenerList();
+<i>1727</i>&nbsp;        return chart;
+<i>1728</i>&nbsp;    }
+<i>1729</i>&nbsp;
+<i>1730</i>&nbsp;}
+<i>1731</i>&nbsp;
+<i>1732</i>&nbsp;/**
+<i>1733</i>&nbsp; * Information about the JFreeChart project.  One instance of this class is
+<i>1734</i>&nbsp; * assigned to &lt;code&gt;JFreeChart.INFO&lt;/code&gt;.
+<i>1735</i>&nbsp; */
+<i>1736</i>&nbsp;class JFreeChartInfo extends ProjectInfo {
+<i>1737</i>&nbsp;
+<i>1738</i>&nbsp;    /**
+<i>1739</i>&nbsp;     * Default constructor.
+<i>1740</i>&nbsp;     */
+<b class="fc"><i>1741</i>&nbsp;    public JFreeChartInfo() {</b>
+<i>1742</i>&nbsp;
+<i>1743</i>&nbsp;        // get a locale-specific resource bundle...
+<b class="fc"><i>1744</i>&nbsp;        String baseResourceClass</b>
+<i>1745</i>&nbsp;                = &quot;org.jfree.chart.resources.JFreeChartResources&quot;;
+<b class="fc"><i>1746</i>&nbsp;        ResourceBundle resources = ResourceBundleWrapper.getBundle(</b>
+<i>1747</i>&nbsp;                baseResourceClass);
+<i>1748</i>&nbsp;
+<b class="fc"><i>1749</i>&nbsp;        setName(resources.getString(&quot;project.name&quot;));</b>
+<b class="fc"><i>1750</i>&nbsp;        setVersion(resources.getString(&quot;project.version&quot;));</b>
+<b class="fc"><i>1751</i>&nbsp;        setInfo(resources.getString(&quot;project.info&quot;));</b>
+<b class="fc"><i>1752</i>&nbsp;        setCopyright(resources.getString(&quot;project.copyright&quot;));</b>
+<b class="fc"><i>1753</i>&nbsp;        setLogo(null);  // load only when required</b>
+<b class="fc"><i>1754</i>&nbsp;        setLicenceName(&quot;LGPL&quot;);</b>
+<b class="fc"><i>1755</i>&nbsp;        setLicenceText(Licences.getInstance().getLGPL());</b>
+<i>1756</i>&nbsp;
+<b class="fc"><i>1757</i>&nbsp;        setContributors(Arrays.asList(</b>
+<i>1758</i>&nbsp;            new Contributor[]{
+<i>1759</i>&nbsp;                new Contributor(&quot;Eric Alexander&quot;, &quot;-&quot;),
+<i>1760</i>&nbsp;                new Contributor(&quot;Richard Atkinson&quot;,
+<i>1761</i>&nbsp;                        &quot;richard_c_atkinson@ntlworld.com&quot;),
+<i>1762</i>&nbsp;                new Contributor(&quot;David Basten&quot;, &quot;-&quot;),
+<i>1763</i>&nbsp;                new Contributor(&quot;David Berry&quot;, &quot;-&quot;),
+<i>1764</i>&nbsp;                new Contributor(&quot;Chris Boek&quot;, &quot;-&quot;),
+<i>1765</i>&nbsp;                new Contributor(&quot;Zoheb Borbora&quot;, &quot;-&quot;),
+<i>1766</i>&nbsp;                new Contributor(&quot;Anthony Boulestreau&quot;, &quot;-&quot;),
+<i>1767</i>&nbsp;                new Contributor(&quot;Jeremy Bowman&quot;, &quot;-&quot;),
+<i>1768</i>&nbsp;                new Contributor(&quot;Nicolas Brodu&quot;, &quot;-&quot;),
+<i>1769</i>&nbsp;                new Contributor(&quot;Jody Brownell&quot;, &quot;-&quot;),
+<i>1770</i>&nbsp;                new Contributor(&quot;David Browning&quot;, &quot;-&quot;),
+<i>1771</i>&nbsp;                new Contributor(&quot;Soren Caspersen&quot;, &quot;-&quot;),
+<i>1772</i>&nbsp;                new Contributor(&quot;Chuanhao Chiu&quot;, &quot;-&quot;),
+<i>1773</i>&nbsp;                new Contributor(&quot;Brian Cole&quot;, &quot;-&quot;),
+<i>1774</i>&nbsp;                new Contributor(&quot;Pascal Collet&quot;, &quot;-&quot;),
+<i>1775</i>&nbsp;                new Contributor(&quot;Martin Cordova&quot;, &quot;-&quot;),
+<i>1776</i>&nbsp;                new Contributor(&quot;Paolo Cova&quot;, &quot;-&quot;),
+<i>1777</i>&nbsp;                new Contributor(&quot;Greg Darke&quot;, &quot;-&quot;),
+<i>1778</i>&nbsp;                new Contributor(&quot;Mike Duffy&quot;, &quot;-&quot;),
+<i>1779</i>&nbsp;                new Contributor(&quot;Don Elliott&quot;, &quot;-&quot;),
+<i>1780</i>&nbsp;                new Contributor(&quot;David Forslund&quot;, &quot;-&quot;),
+<i>1781</i>&nbsp;                new Contributor(&quot;Jonathan Gabbai&quot;, &quot;-&quot;),
+<i>1782</i>&nbsp;                new Contributor(&quot;David Gilbert&quot;,
+<i>1783</i>&nbsp;                        &quot;david.gilbert@object-refinery.com&quot;),
+<i>1784</i>&nbsp;                new Contributor(&quot;Serge V. Grachov&quot;, &quot;-&quot;),
+<i>1785</i>&nbsp;                new Contributor(&quot;Daniel Gredler&quot;, &quot;-&quot;),
+<i>1786</i>&nbsp;                new Contributor(&quot;Hans-Jurgen Greiner&quot;, &quot;-&quot;),
+<i>1787</i>&nbsp;                new Contributor(&quot;Joao Guilherme Del Valle&quot;, &quot;-&quot;),
+<i>1788</i>&nbsp;                new Contributor(&quot;Aiman Han&quot;, &quot;-&quot;),
+<i>1789</i>&nbsp;                new Contributor(&quot;Cameron Hayne&quot;, &quot;-&quot;),
+<i>1790</i>&nbsp;                new Contributor(&quot;Martin Hoeller&quot;, &quot;-&quot;),
+<i>1791</i>&nbsp;                new Contributor(&quot;Jon Iles&quot;, &quot;-&quot;),
+<i>1792</i>&nbsp;                new Contributor(&quot;Wolfgang Irler&quot;, &quot;-&quot;),
+<i>1793</i>&nbsp;                new Contributor(&quot;Sergei Ivanov&quot;, &quot;-&quot;),
+<i>1794</i>&nbsp;                new Contributor(&quot;Adriaan Joubert&quot;, &quot;-&quot;),
+<i>1795</i>&nbsp;                new Contributor(&quot;Darren Jung&quot;, &quot;-&quot;),
+<i>1796</i>&nbsp;                new Contributor(&quot;Xun Kang&quot;, &quot;-&quot;),
+<i>1797</i>&nbsp;                new Contributor(&quot;Bill Kelemen&quot;, &quot;-&quot;),
+<i>1798</i>&nbsp;                new Contributor(&quot;Norbert Kiesel&quot;, &quot;-&quot;),
+<i>1799</i>&nbsp;                new Contributor(&quot;Peter Kolb&quot;, &quot;-&quot;),
+<i>1800</i>&nbsp;                new Contributor(&quot;Gideon Krause&quot;, &quot;-&quot;),
+<i>1801</i>&nbsp;                new Contributor(&quot;Pierre-Marie Le Biot&quot;, &quot;-&quot;),
+<i>1802</i>&nbsp;                new Contributor(&quot;Arnaud Lelievre&quot;, &quot;-&quot;),
+<i>1803</i>&nbsp;                new Contributor(&quot;Wolfgang Lenhard&quot;, &quot;-&quot;),
+<i>1804</i>&nbsp;                new Contributor(&quot;David Li&quot;, &quot;-&quot;),
+<i>1805</i>&nbsp;                new Contributor(&quot;Yan Liu&quot;, &quot;-&quot;),
+<i>1806</i>&nbsp;                new Contributor(&quot;Tin Luu&quot;, &quot;-&quot;),
+<i>1807</i>&nbsp;                new Contributor(&quot;Craig MacFarlane&quot;, &quot;-&quot;),
+<i>1808</i>&nbsp;                new Contributor(&quot;Achilleus Mantzios&quot;, &quot;-&quot;),
+<i>1809</i>&nbsp;                new Contributor(&quot;Thomas Meier&quot;, &quot;-&quot;),
+<i>1810</i>&nbsp;                new Contributor(&quot;Jim Moore&quot;, &quot;-&quot;),
+<i>1811</i>&nbsp;                new Contributor(&quot;Jonathan Nash&quot;, &quot;-&quot;),
+<i>1812</i>&nbsp;                new Contributor(&quot;Barak Naveh&quot;, &quot;-&quot;),
+<i>1813</i>&nbsp;                new Contributor(&quot;David M. O&#39;Donnell&quot;, &quot;-&quot;),
+<i>1814</i>&nbsp;                new Contributor(&quot;Krzysztof Paz&quot;, &quot;-&quot;),
+<i>1815</i>&nbsp;                new Contributor(&quot;Eric Penfold&quot;, &quot;-&quot;),
+<i>1816</i>&nbsp;                new Contributor(&quot;Tomer Peretz&quot;, &quot;-&quot;),
+<i>1817</i>&nbsp;                new Contributor(&quot;Diego Pierangeli&quot;, &quot;-&quot;),
+<i>1818</i>&nbsp;                new Contributor(&quot;Xavier Poinsard&quot;, &quot;-&quot;),
+<i>1819</i>&nbsp;                new Contributor(&quot;Andrzej Porebski&quot;, &quot;-&quot;),
+<i>1820</i>&nbsp;                new Contributor(&quot;Viktor Rajewski&quot;, &quot;-&quot;),
+<i>1821</i>&nbsp;                new Contributor(&quot;Eduardo Ramalho&quot;, &quot;-&quot;),
+<i>1822</i>&nbsp;                new Contributor(&quot;Michael Rauch&quot;, &quot;-&quot;),
+<i>1823</i>&nbsp;                new Contributor(&quot;Cameron Riley&quot;, &quot;-&quot;),
+<i>1824</i>&nbsp;                new Contributor(&quot;Klaus Rheinwald&quot;, &quot;-&quot;),
+<i>1825</i>&nbsp;                new Contributor(&quot;Dan Rivett&quot;, &quot;d.rivett@ukonline.co.uk&quot;),
+<i>1826</i>&nbsp;                new Contributor(&quot;Scott Sams&quot;, &quot;-&quot;),
+<i>1827</i>&nbsp;                new Contributor(&quot;Michel Santos&quot;, &quot;-&quot;),
+<i>1828</i>&nbsp;                new Contributor(&quot;Thierry Saura&quot;, &quot;-&quot;),
+<i>1829</i>&nbsp;                new Contributor(&quot;Andreas Schneider&quot;, &quot;-&quot;),
+<i>1830</i>&nbsp;                new Contributor(&quot;Jean-Luc SCHWAB&quot;, &quot;-&quot;),
+<i>1831</i>&nbsp;                new Contributor(&quot;Bryan Scott&quot;, &quot;-&quot;),
+<i>1832</i>&nbsp;                new Contributor(&quot;Tobias Selb&quot;, &quot;-&quot;),
+<i>1833</i>&nbsp;                new Contributor(&quot;Darshan Shah&quot;, &quot;-&quot;),
+<i>1834</i>&nbsp;                new Contributor(&quot;Mofeed Shahin&quot;, &quot;-&quot;),
+<i>1835</i>&nbsp;                new Contributor(&quot;Michael Siemer&quot;, &quot;-&quot;),
+<i>1836</i>&nbsp;                new Contributor(&quot;Pady Srinivasan&quot;, &quot;-&quot;),
+<i>1837</i>&nbsp;                new Contributor(&quot;Greg Steckman&quot;, &quot;-&quot;),
+<i>1838</i>&nbsp;                new Contributor(&quot;Gerald Struck&quot;, &quot;-&quot;),
+<i>1839</i>&nbsp;                new Contributor(&quot;Roger Studner&quot;, &quot;-&quot;),
+<i>1840</i>&nbsp;                new Contributor(&quot;Irv Thomae&quot;, &quot;-&quot;),
+<i>1841</i>&nbsp;                new Contributor(&quot;Eric Thomas&quot;, &quot;-&quot;),
+<i>1842</i>&nbsp;                new Contributor(&quot;Rich Unger&quot;, &quot;-&quot;),
+<i>1843</i>&nbsp;                new Contributor(&quot;Daniel van Enckevort&quot;, &quot;-&quot;),
+<i>1844</i>&nbsp;                new Contributor(&quot;Laurence Vanhelsuwe&quot;, &quot;-&quot;),
+<i>1845</i>&nbsp;                new Contributor(&quot;Sylvain Vieujot&quot;, &quot;-&quot;),
+<i>1846</i>&nbsp;                new Contributor(&quot;Ulrich Voigt&quot;, &quot;-&quot;),
+<i>1847</i>&nbsp;                new Contributor(&quot;Jelai Wang&quot;, &quot;-&quot;),
+<i>1848</i>&nbsp;                new Contributor(&quot;Mark Watson&quot;, &quot;www.markwatson.com&quot;),
+<i>1849</i>&nbsp;                new Contributor(&quot;Alex Weber&quot;, &quot;-&quot;),
+<i>1850</i>&nbsp;                new Contributor(&quot;Matthew Wright&quot;, &quot;-&quot;),
+<i>1851</i>&nbsp;                new Contributor(&quot;Benoit Xhenseval&quot;, &quot;-&quot;),
+<i>1852</i>&nbsp;                new Contributor(&quot;Christian W. Zuckschwerdt&quot;,
+<i>1853</i>&nbsp;                        &quot;Christian.Zuckschwerdt@Informatik.Uni-Oldenburg.de&quot;),
+<i>1854</i>&nbsp;                new Contributor(&quot;Hari&quot;, &quot;-&quot;),
+<i>1855</i>&nbsp;                new Contributor(&quot;Sam (oldman)&quot;, &quot;-&quot;),
+<i>1856</i>&nbsp;                new Contributor(&quot;Patrick Schlott&quot;, &quot;-&quot;),
+<i>1857</i>&nbsp;                new Contributor(&quot;Christoph Schroeder&quot;, &quot;-&quot;)
+<i>1858</i>&nbsp;            }
+<i>1859</i>&nbsp;        ));
+<i>1860</i>&nbsp;
+<b class="fc"><i>1861</i>&nbsp;        addLibrary(JCommon.INFO);</b>
+<i>1862</i>&nbsp;
+<b class="fc"><i>1863</i>&nbsp;    }</b>
+<i>1864</i>&nbsp;
+<i>1865</i>&nbsp;    /**
+<i>1866</i>&nbsp;     * Returns the JFreeChart logo (a picture of a gorilla).
+<i>1867</i>&nbsp;     *
+<i>1868</i>&nbsp;     * @return The JFreeChart logo.
+<i>1869</i>&nbsp;     */
+<i>1870</i>&nbsp;    @Override
+<i>1871</i>&nbsp;    public Image getLogo() {
+<b class="fc"><i>1872</i>&nbsp;        Image logo = super.getLogo();</b>
+<b class="fc"><i>1873</i>&nbsp;        if (logo == null) {</b>
+<b class="fc"><i>1874</i>&nbsp;            URL imageURL = this.getClass().getClassLoader().getResource(</b>
+<i>1875</i>&nbsp;                    &quot;org/jfree/chart/gorilla.jpg&quot;);
+<b class="fc"><i>1876</i>&nbsp;            if (imageURL != null) {</b>
+<b class="fc"><i>1877</i>&nbsp;                ImageIcon temp = new ImageIcon(imageURL);</b>
+<i>1878</i>&nbsp;                    // use ImageIcon because it waits for the image to load...
+<b class="fc"><i>1879</i>&nbsp;                logo = temp.getImage();</b>
+<b class="fc"><i>1880</i>&nbsp;                setLogo(logo);</b>
+<i>1881</i>&nbsp;            }
+<i>1882</i>&nbsp;        }
+<b class="fc"><i>1883</i>&nbsp;        return logo;</b>
+<i>1884</i>&nbsp;    }
+<i>1885</i>&nbsp;
+<i>1886</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

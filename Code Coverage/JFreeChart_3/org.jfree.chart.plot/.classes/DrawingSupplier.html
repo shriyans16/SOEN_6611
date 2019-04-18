@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DrawingSupplier</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DrawingSupplier (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">DrawingSupplier</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------------
+<i>28</i>&nbsp; * DrawingSupplier.java
+<i>29</i>&nbsp; * --------------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2008, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 16-Jan-2003 : Version 1 (DG);
+<i>38</i>&nbsp; * 17-Jan-2003 : Renamed PaintSupplier --&gt; DrawingSupplier (DG);
+<i>39</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>40</i>&nbsp; * 13-Jun-2007 : Added getNextOutlinePaint() method.
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; */
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;package org.jfree.chart.plot;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;import java.awt.Paint;
+<i>47</i>&nbsp;import java.awt.Shape;
+<i>48</i>&nbsp;import java.awt.Stroke;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;/**
+<i>51</i>&nbsp; * A supplier of &lt;code&gt;Paint&lt;/code&gt;, &lt;code&gt;Stroke&lt;/code&gt; and &lt;code&gt;Shape&lt;/code&gt;
+<i>52</i>&nbsp; * objects for use by plots and renderers.  By providing a central place for
+<i>53</i>&nbsp; * obtaining these items, we can ensure that duplication is avoided.
+<i>54</i>&nbsp; * &lt;p&gt;
+<i>55</i>&nbsp; * To support the cloning of charts, classes that implement this interface
+<i>56</i>&nbsp; * should also implement &lt;code&gt;PublicCloneable&lt;/code&gt;.
+<i>57</i>&nbsp; */
+<i>58</i>&nbsp;public interface DrawingSupplier {
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * Returns the next paint in a sequence maintained by the supplier.
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @return The paint.
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    public Paint getNextPaint();
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Returns the next outline paint in a sequence maintained by the supplier.
+<i>69</i>&nbsp;     *
+<i>70</i>&nbsp;     * @return The paint.
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    public Paint getNextOutlinePaint();
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Returns the next fill paint in a sequence maintained by the supplier.
+<i>76</i>&nbsp;     *
+<i>77</i>&nbsp;     * @return The paint.
+<i>78</i>&nbsp;     *
+<i>79</i>&nbsp;     * @since 1.0.6
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public Paint getNextFillPaint();
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Returns the next &lt;code&gt;Stroke&lt;/code&gt; object in a sequence maintained by
+<i>85</i>&nbsp;     * the supplier.
+<i>86</i>&nbsp;     *
+<i>87</i>&nbsp;     * @return The stroke.
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public Stroke getNextStroke();
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    /**
+<i>92</i>&nbsp;     * Returns the next &lt;code&gt;Stroke&lt;/code&gt; object in a sequence maintained by
+<i>93</i>&nbsp;     * the supplier.
+<i>94</i>&nbsp;     *
+<i>95</i>&nbsp;     * @return The stroke.
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public Stroke getNextOutlineStroke();
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Returns the next &lt;code&gt;Shape&lt;/code&gt; object in a sequence maintained by
+<i>101</i>&nbsp;     * the supplier.
+<i>102</i>&nbsp;     *
+<i>103</i>&nbsp;     * @return The shape.
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    public Shape getNextShape();
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

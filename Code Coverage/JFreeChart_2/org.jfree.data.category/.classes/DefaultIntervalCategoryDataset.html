@@ -1,0 +1,900 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DefaultIntervalCategoryDataset</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DefaultIntervalCategoryDataset (org.jfree.data.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DefaultIntervalCategoryDataset</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.8%
+  </span>
+  <span class="absValue">
+    (30/ 32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.9%
+  </span>
+  <span class="absValue">
+    (147/ 184)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------------------------
+<i>28</i>&nbsp; * DefaultIntervalCategoryDataset.java
+<i>29</i>&nbsp; * -----------------------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2016, by Jeremy Bowman and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Jeremy Bowman;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 29-Apr-2002 : Version 1, contributed by Jeremy Bowman (DG);
+<i>38</i>&nbsp; * 24-Oct-2002 : Amendments for changes made to the dataset interface (DG);
+<i>39</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>40</i>&nbsp; * 08-Mar-2007 : Added equals() and clone() overrides (DG);
+<i>41</i>&nbsp; * 25-Feb-2008 : Fix for the special case where the dataset is empty, see bug
+<i>42</i>&nbsp; *               1897580 (DG)
+<i>43</i>&nbsp; * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
+<i>44</i>&nbsp; *               Jess Thrysoee (DG);
+<i>45</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>46</i>&nbsp; *
+<i>47</i>&nbsp; */
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;package org.jfree.data.category;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;import java.util.ArrayList;
+<i>52</i>&nbsp;import java.util.Arrays;
+<i>53</i>&nbsp;import java.util.Collections;
+<i>54</i>&nbsp;import java.util.List;
+<i>55</i>&nbsp;import java.util.ResourceBundle;
+<i>56</i>&nbsp;import org.jfree.chart.util.Args;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;import org.jfree.chart.util.ResourceBundleWrapper;
+<i>59</i>&nbsp;import org.jfree.data.DataUtils;
+<i>60</i>&nbsp;import org.jfree.data.UnknownKeyException;
+<i>61</i>&nbsp;import org.jfree.data.general.AbstractSeriesDataset;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;/**
+<i>64</i>&nbsp; * A convenience class that provides a default implementation of the
+<i>65</i>&nbsp; * {@link IntervalCategoryDataset} interface.
+<i>66</i>&nbsp; * &lt;p&gt;
+<i>67</i>&nbsp; * The standard constructor accepts data in a two dimensional array where the
+<i>68</i>&nbsp; * first dimension is the series, and the second dimension is the category.
+<i>69</i>&nbsp; */
+<i>70</i>&nbsp;public class DefaultIntervalCategoryDataset extends AbstractSeriesDataset
+<i>71</i>&nbsp;        implements IntervalCategoryDataset {
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /** The series keys. */
+<i>74</i>&nbsp;    private Comparable[] seriesKeys;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /** The category keys. */
+<i>77</i>&nbsp;    private Comparable[] categoryKeys;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /** Storage for the start value data. */
+<i>80</i>&nbsp;    private Number[][] startData;
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /** Storage for the end value data. */
+<i>83</i>&nbsp;    private Number[][] endData;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * Creates a new dataset using the specified data values and automatically
+<i>87</i>&nbsp;     * generated series and category keys.
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param starts  the starting values for the intervals ({@code null}
+<i>90</i>&nbsp;     *                not permitted).
+<i>91</i>&nbsp;     * @param ends  the ending values for the intervals ({@code null} not
+<i>92</i>&nbsp;     *                permitted).
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public DefaultIntervalCategoryDataset(double[][] starts, double[][] ends) {
+<b class="fc"><i>95</i>&nbsp;        this(DataUtils.createNumberArray2D(starts),</b>
+<b class="fc"><i>96</i>&nbsp;                DataUtils.createNumberArray2D(ends));</b>
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * Constructs a dataset and populates it with data from the array.
+<i>101</i>&nbsp;     * &lt;p&gt;
+<i>102</i>&nbsp;     * The arrays are indexed as data[series][category].  Series and category
+<i>103</i>&nbsp;     * names are automatically generated - you can change them using the
+<i>104</i>&nbsp;     * {@link #setSeriesKeys(Comparable[])} and
+<i>105</i>&nbsp;     * {@link #setCategoryKeys(Comparable[])} methods.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param starts  the start values data.
+<i>108</i>&nbsp;     * @param ends  the end values data.
+<i>109</i>&nbsp;     */
+<i>110</i>&nbsp;    public DefaultIntervalCategoryDataset(Number[][] starts, Number[][] ends) {
+<b class="fc"><i>111</i>&nbsp;        this(null, null, starts, ends);</b>
+<b class="fc"><i>112</i>&nbsp;    }</b>
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;    /**
+<i>115</i>&nbsp;     * Constructs a DefaultIntervalCategoryDataset, populates it with data
+<i>116</i>&nbsp;     * from the arrays, and uses the supplied names for the series.
+<i>117</i>&nbsp;     * &lt;p&gt;
+<i>118</i>&nbsp;     * Category names are generated automatically (&quot;Category 1&quot;, &quot;Category 2&quot;,
+<i>119</i>&nbsp;     * etc).
+<i>120</i>&nbsp;     *
+<i>121</i>&nbsp;     * @param seriesNames  the series names (if {@code null}, series names
+<i>122</i>&nbsp;     *         will be generated automatically).
+<i>123</i>&nbsp;     * @param starts  the start values data, indexed as data[series][category].
+<i>124</i>&nbsp;     * @param ends  the end values data, indexed as data[series][category].
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    public DefaultIntervalCategoryDataset(String[] seriesNames,
+<i>127</i>&nbsp;                                          Number[][] starts,
+<i>128</i>&nbsp;                                          Number[][] ends) {
+<i>129</i>&nbsp;
+<b class="nc"><i>130</i>&nbsp;        this(seriesNames, null, starts, ends);</b>
+<i>131</i>&nbsp;
+<b class="nc"><i>132</i>&nbsp;    }</b>
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Constructs a DefaultIntervalCategoryDataset, populates it with data
+<i>136</i>&nbsp;     * from the arrays, and uses the supplied names for the series and the
+<i>137</i>&nbsp;     * supplied objects for the categories.
+<i>138</i>&nbsp;     *
+<i>139</i>&nbsp;     * @param seriesKeys  the series keys (if {@code null}, series keys
+<i>140</i>&nbsp;     *         will be generated automatically).
+<i>141</i>&nbsp;     * @param categoryKeys  the category keys (if {@code null}, category
+<i>142</i>&nbsp;     *         keys will be generated automatically).
+<i>143</i>&nbsp;     * @param starts  the start values data, indexed as data[series][category].
+<i>144</i>&nbsp;     * @param ends  the end values data, indexed as data[series][category].
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    public DefaultIntervalCategoryDataset(Comparable[] seriesKeys,
+<i>147</i>&nbsp;                                          Comparable[] categoryKeys,
+<i>148</i>&nbsp;                                          Number[][] starts,
+<b class="fc"><i>149</i>&nbsp;                                          Number[][] ends) {</b>
+<i>150</i>&nbsp;
+<b class="fc"><i>151</i>&nbsp;        this.startData = starts;</b>
+<b class="fc"><i>152</i>&nbsp;        this.endData = ends;</b>
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;        if (starts != null &amp;&amp; ends != null) {</b>
+<i>155</i>&nbsp;
+<b class="fc"><i>156</i>&nbsp;            String baseName = &quot;org.jfree.data.resources.DataPackageResources&quot;;</b>
+<b class="fc"><i>157</i>&nbsp;            ResourceBundle resources = ResourceBundleWrapper.getBundle(</b>
+<i>158</i>&nbsp;                    baseName);
+<i>159</i>&nbsp;
+<b class="fc"><i>160</i>&nbsp;            int seriesCount = starts.length;</b>
+<b class="fc"><i>161</i>&nbsp;            if (seriesCount != ends.length) {</b>
+<b class="nc"><i>162</i>&nbsp;                String errMsg = &quot;DefaultIntervalCategoryDataset: the number &quot;</b>
+<i>163</i>&nbsp;                    + &quot;of series in the start value dataset does &quot;
+<i>164</i>&nbsp;                    + &quot;not match the number of series in the end &quot;
+<i>165</i>&nbsp;                    + &quot;value dataset.&quot;;
+<b class="nc"><i>166</i>&nbsp;                throw new IllegalArgumentException(errMsg);</b>
+<i>167</i>&nbsp;            }
+<b class="fc"><i>168</i>&nbsp;            if (seriesCount &gt; 0) {</b>
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;                // set up the series names...
+<b class="fc"><i>171</i>&nbsp;                if (seriesKeys != null) {</b>
+<i>172</i>&nbsp;
+<b class="fc"><i>173</i>&nbsp;                    if (seriesKeys.length != seriesCount) {</b>
+<b class="nc"><i>174</i>&nbsp;                        throw new IllegalArgumentException(</b>
+<i>175</i>&nbsp;                                &quot;The number of series keys does not &quot;
+<i>176</i>&nbsp;                                + &quot;match the number of series in the data.&quot;);
+<i>177</i>&nbsp;                    }
+<i>178</i>&nbsp;
+<b class="fc"><i>179</i>&nbsp;                    this.seriesKeys = seriesKeys;</b>
+<i>180</i>&nbsp;                }
+<i>181</i>&nbsp;                else {
+<b class="fc"><i>182</i>&nbsp;                    String prefix = resources.getString(</b>
+<i>183</i>&nbsp;                            &quot;series.default-prefix&quot;) + &quot; &quot;;
+<b class="fc"><i>184</i>&nbsp;                    this.seriesKeys = generateKeys(seriesCount, prefix);</b>
+<i>185</i>&nbsp;                }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;                // set up the category names...
+<b class="fc"><i>188</i>&nbsp;                int categoryCount = starts[0].length;</b>
+<b class="fc"><i>189</i>&nbsp;                if (categoryCount != ends[0].length) {</b>
+<b class="nc"><i>190</i>&nbsp;                    String errMsg = &quot;DefaultIntervalCategoryDataset: the &quot;</b>
+<i>191</i>&nbsp;                                + &quot;number of categories in the start value &quot;
+<i>192</i>&nbsp;                                + &quot;dataset does not match the number of &quot;
+<i>193</i>&nbsp;                                + &quot;categories in the end value dataset.&quot;;
+<b class="nc"><i>194</i>&nbsp;                    throw new IllegalArgumentException(errMsg);</b>
+<i>195</i>&nbsp;                }
+<b class="fc"><i>196</i>&nbsp;                if (categoryKeys != null) {</b>
+<b class="fc"><i>197</i>&nbsp;                    if (categoryKeys.length != categoryCount) {</b>
+<b class="nc"><i>198</i>&nbsp;                        throw new IllegalArgumentException(</b>
+<i>199</i>&nbsp;                                &quot;The number of category keys does not match &quot;
+<i>200</i>&nbsp;                                + &quot;the number of categories in the data.&quot;);
+<i>201</i>&nbsp;                    }
+<b class="fc"><i>202</i>&nbsp;                    this.categoryKeys = categoryKeys;</b>
+<i>203</i>&nbsp;                }
+<i>204</i>&nbsp;                else {
+<b class="fc"><i>205</i>&nbsp;                    String prefix = resources.getString(</b>
+<i>206</i>&nbsp;                            &quot;categories.default-prefix&quot;) + &quot; &quot;;
+<b class="fc"><i>207</i>&nbsp;                    this.categoryKeys = generateKeys(categoryCount, prefix);</b>
+<i>208</i>&nbsp;                }
+<i>209</i>&nbsp;
+<b class="fc"><i>210</i>&nbsp;            }</b>
+<i>211</i>&nbsp;            else {
+<b class="fc"><i>212</i>&nbsp;                this.seriesKeys = new Comparable[0];</b>
+<b class="fc"><i>213</i>&nbsp;                this.categoryKeys = new Comparable[0];</b>
+<i>214</i>&nbsp;            }
+<i>215</i>&nbsp;        }
+<i>216</i>&nbsp;
+<b class="fc"><i>217</i>&nbsp;    }</b>
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    /**
+<i>220</i>&nbsp;     * Returns the number of series in the dataset (possibly zero).
+<i>221</i>&nbsp;     *
+<i>222</i>&nbsp;     * @return The number of series in the dataset.
+<i>223</i>&nbsp;     *
+<i>224</i>&nbsp;     * @see #getRowCount()
+<i>225</i>&nbsp;     * @see #getCategoryCount()
+<i>226</i>&nbsp;     */
+<i>227</i>&nbsp;    @Override
+<i>228</i>&nbsp;    public int getSeriesCount() {
+<b class="fc"><i>229</i>&nbsp;        int result = 0;</b>
+<b class="fc"><i>230</i>&nbsp;        if (this.startData != null) {</b>
+<b class="fc"><i>231</i>&nbsp;            result = this.startData.length;</b>
+<i>232</i>&nbsp;        }
+<b class="fc"><i>233</i>&nbsp;        return result;</b>
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /**
+<i>237</i>&nbsp;     * Returns a series index.
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @param seriesKey  the series key.
+<i>240</i>&nbsp;     *
+<i>241</i>&nbsp;     * @return The series index.
+<i>242</i>&nbsp;     *
+<i>243</i>&nbsp;     * @see #getRowIndex(Comparable)
+<i>244</i>&nbsp;     * @see #getSeriesKey(int)
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    public int getSeriesIndex(Comparable seriesKey) {
+<b class="fc"><i>247</i>&nbsp;        int result = -1;</b>
+<b class="fc"><i>248</i>&nbsp;        for (int i = 0; i &lt; this.seriesKeys.length; i++) {</b>
+<b class="fc"><i>249</i>&nbsp;            if (seriesKey.equals(this.seriesKeys[i])) {</b>
+<b class="fc"><i>250</i>&nbsp;                result = i;</b>
+<b class="fc"><i>251</i>&nbsp;                break;</b>
+<i>252</i>&nbsp;            }
+<i>253</i>&nbsp;        }
+<b class="fc"><i>254</i>&nbsp;        return result;</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Returns the name of the specified series.
+<i>259</i>&nbsp;     *
+<i>260</i>&nbsp;     * @param series  the index of the required series (zero-based).
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @return The name of the specified series.
+<i>263</i>&nbsp;     *
+<i>264</i>&nbsp;     * @see #getSeriesIndex(Comparable)
+<i>265</i>&nbsp;     */
+<i>266</i>&nbsp;    @Override
+<i>267</i>&nbsp;    public Comparable getSeriesKey(int series) {
+<b class="nc"><i>268</i>&nbsp;        if ((series &gt;= getSeriesCount()) || (series &lt; 0)) {</b>
+<b class="nc"><i>269</i>&nbsp;            throw new IllegalArgumentException(&quot;No such series : &quot; + series);</b>
+<i>270</i>&nbsp;        }
+<b class="nc"><i>271</i>&nbsp;        return this.seriesKeys[series];</b>
+<i>272</i>&nbsp;    }
+<i>273</i>&nbsp;
+<i>274</i>&nbsp;    /**
+<i>275</i>&nbsp;     * Sets the names of the series in the dataset.
+<i>276</i>&nbsp;     *
+<i>277</i>&nbsp;     * @param seriesKeys  the new keys ({@code null} not permitted, the
+<i>278</i>&nbsp;     *         length of the array must match the number of series in the
+<i>279</i>&nbsp;     *         dataset).
+<i>280</i>&nbsp;     *
+<i>281</i>&nbsp;     * @see #setCategoryKeys(Comparable[])
+<i>282</i>&nbsp;     */
+<i>283</i>&nbsp;    public void setSeriesKeys(Comparable[] seriesKeys) {
+<b class="fc"><i>284</i>&nbsp;        Args.nullNotPermitted(seriesKeys, &quot;seriesKeys&quot;);</b>
+<b class="fc"><i>285</i>&nbsp;        if (seriesKeys.length != getSeriesCount()) {</b>
+<b class="nc"><i>286</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>287</i>&nbsp;                    &quot;The number of series keys does not match the data.&quot;);
+<i>288</i>&nbsp;        }
+<b class="fc"><i>289</i>&nbsp;        this.seriesKeys = seriesKeys;</b>
+<b class="fc"><i>290</i>&nbsp;        fireDatasetChanged();</b>
+<b class="fc"><i>291</i>&nbsp;    }</b>
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /**
+<i>294</i>&nbsp;     * Returns the number of categories in the dataset.
+<i>295</i>&nbsp;     *
+<i>296</i>&nbsp;     * @return The number of categories in the dataset.
+<i>297</i>&nbsp;     *
+<i>298</i>&nbsp;     * @see #getColumnCount()
+<i>299</i>&nbsp;     */
+<i>300</i>&nbsp;    public int getCategoryCount() {
+<b class="fc"><i>301</i>&nbsp;        int result = 0;</b>
+<b class="fc"><i>302</i>&nbsp;        if (this.startData != null) {</b>
+<b class="fc"><i>303</i>&nbsp;            if (getSeriesCount() &gt; 0) {</b>
+<b class="fc"><i>304</i>&nbsp;                result = this.startData[0].length;</b>
+<i>305</i>&nbsp;            }
+<i>306</i>&nbsp;        }
+<b class="fc"><i>307</i>&nbsp;        return result;</b>
+<i>308</i>&nbsp;    }
+<i>309</i>&nbsp;
+<i>310</i>&nbsp;    /**
+<i>311</i>&nbsp;     * Returns a list of the categories in the dataset.  This method supports
+<i>312</i>&nbsp;     * the {@link CategoryDataset} interface.
+<i>313</i>&nbsp;     *
+<i>314</i>&nbsp;     * @return A list of the categories in the dataset.
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @see #getRowKeys()
+<i>317</i>&nbsp;     */
+<i>318</i>&nbsp;    @Override
+<i>319</i>&nbsp;    public List getColumnKeys() {
+<i>320</i>&nbsp;        // the CategoryDataset interface expects a list of categories, but
+<i>321</i>&nbsp;        // we&#39;ve stored them in an array...
+<b class="fc"><i>322</i>&nbsp;        if (this.categoryKeys == null) {</b>
+<b class="nc"><i>323</i>&nbsp;            return new ArrayList();</b>
+<i>324</i>&nbsp;        }
+<i>325</i>&nbsp;        else {
+<b class="fc"><i>326</i>&nbsp;            return Collections.unmodifiableList(Arrays.asList(</b>
+<i>327</i>&nbsp;                    this.categoryKeys));
+<i>328</i>&nbsp;        }
+<i>329</i>&nbsp;    }
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    /**
+<i>332</i>&nbsp;     * Sets the categories for the dataset.
+<i>333</i>&nbsp;     *
+<i>334</i>&nbsp;     * @param categoryKeys  an array of objects representing the categories in
+<i>335</i>&nbsp;     *                      the dataset.
+<i>336</i>&nbsp;     *
+<i>337</i>&nbsp;     * @see #getRowKeys()
+<i>338</i>&nbsp;     * @see #setSeriesKeys(Comparable[])
+<i>339</i>&nbsp;     */
+<i>340</i>&nbsp;    public void setCategoryKeys(Comparable[] categoryKeys) {
+<b class="fc"><i>341</i>&nbsp;        Args.nullNotPermitted(categoryKeys, &quot;categoryKeys&quot;);</b>
+<b class="fc"><i>342</i>&nbsp;        if (categoryKeys.length != getCategoryCount()) {</b>
+<b class="nc"><i>343</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>344</i>&nbsp;                    &quot;The number of categories does not match the data.&quot;);
+<i>345</i>&nbsp;        }
+<b class="fc"><i>346</i>&nbsp;        for (int i = 0; i &lt; categoryKeys.length; i++) {</b>
+<b class="nc"><i>347</i>&nbsp;            if (categoryKeys[i] == null) {</b>
+<b class="nc"><i>348</i>&nbsp;                throw new IllegalArgumentException(</b>
+<i>349</i>&nbsp;                    &quot;DefaultIntervalCategoryDataset.setCategoryKeys(): &quot;
+<i>350</i>&nbsp;                    + &quot;null category not permitted.&quot;);
+<i>351</i>&nbsp;            }
+<i>352</i>&nbsp;        }
+<b class="fc"><i>353</i>&nbsp;        this.categoryKeys = categoryKeys;</b>
+<b class="fc"><i>354</i>&nbsp;        fireDatasetChanged();</b>
+<b class="fc"><i>355</i>&nbsp;    }</b>
+<i>356</i>&nbsp;
+<i>357</i>&nbsp;    /**
+<i>358</i>&nbsp;     * Returns the data value for one category in a series.
+<i>359</i>&nbsp;     * &lt;P&gt;
+<i>360</i>&nbsp;     * This method is part of the CategoryDataset interface.  Not particularly
+<i>361</i>&nbsp;     * meaningful for this class...returns the end value.
+<i>362</i>&nbsp;     *
+<i>363</i>&nbsp;     * @param series    The required series (zero based index).
+<i>364</i>&nbsp;     * @param category  The required category.
+<i>365</i>&nbsp;     *
+<i>366</i>&nbsp;     * @return The data value for one category in a series (null possible).
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @see #getEndValue(Comparable, Comparable)
+<i>369</i>&nbsp;     */
+<i>370</i>&nbsp;    @Override
+<i>371</i>&nbsp;    public Number getValue(Comparable series, Comparable category) {
+<b class="fc"><i>372</i>&nbsp;        int seriesIndex = getSeriesIndex(series);</b>
+<b class="fc"><i>373</i>&nbsp;        if (seriesIndex &lt; 0) {</b>
+<b class="fc"><i>374</i>&nbsp;            throw new UnknownKeyException(&quot;Unknown &#39;series&#39; key.&quot;);</b>
+<i>375</i>&nbsp;        }
+<b class="fc"><i>376</i>&nbsp;        int itemIndex = getColumnIndex(category);</b>
+<b class="fc"><i>377</i>&nbsp;        if (itemIndex &lt; 0) {</b>
+<b class="fc"><i>378</i>&nbsp;            throw new UnknownKeyException(&quot;Unknown &#39;category&#39; key.&quot;);</b>
+<i>379</i>&nbsp;        }
+<b class="nc"><i>380</i>&nbsp;        return getValue(seriesIndex, itemIndex);</b>
+<i>381</i>&nbsp;    }
+<i>382</i>&nbsp;
+<i>383</i>&nbsp;    /**
+<i>384</i>&nbsp;     * Returns the data value for one category in a series.
+<i>385</i>&nbsp;     * &lt;P&gt;
+<i>386</i>&nbsp;     * This method is part of the CategoryDataset interface.  Not particularly
+<i>387</i>&nbsp;     * meaningful for this class...returns the end value.
+<i>388</i>&nbsp;     *
+<i>389</i>&nbsp;     * @param series  the required series (zero based index).
+<i>390</i>&nbsp;     * @param category  the required category.
+<i>391</i>&nbsp;     *
+<i>392</i>&nbsp;     * @return The data value for one category in a series (null possible).
+<i>393</i>&nbsp;     *
+<i>394</i>&nbsp;     * @see #getEndValue(int, int)
+<i>395</i>&nbsp;     */
+<i>396</i>&nbsp;    @Override
+<i>397</i>&nbsp;    public Number getValue(int series, int category) {
+<b class="fc"><i>398</i>&nbsp;        return getEndValue(series, category);</b>
+<i>399</i>&nbsp;    }
+<i>400</i>&nbsp;
+<i>401</i>&nbsp;    /**
+<i>402</i>&nbsp;     * Returns the start data value for one category in a series.
+<i>403</i>&nbsp;     *
+<i>404</i>&nbsp;     * @param series  the required series.
+<i>405</i>&nbsp;     * @param category  the required category.
+<i>406</i>&nbsp;     *
+<i>407</i>&nbsp;     * @return The start data value for one category in a series
+<i>408</i>&nbsp;     *         (possibly {@code null}).
+<i>409</i>&nbsp;     *
+<i>410</i>&nbsp;     * @see #getStartValue(int, int)
+<i>411</i>&nbsp;     */
+<i>412</i>&nbsp;    @Override
+<i>413</i>&nbsp;    public Number getStartValue(Comparable series, Comparable category) {
+<b class="fc"><i>414</i>&nbsp;        int seriesIndex = getSeriesIndex(series);</b>
+<b class="fc"><i>415</i>&nbsp;        if (seriesIndex &lt; 0) {</b>
+<b class="nc"><i>416</i>&nbsp;            throw new UnknownKeyException(&quot;Unknown &#39;series&#39; key.&quot;);</b>
+<i>417</i>&nbsp;        }
+<b class="fc"><i>418</i>&nbsp;        int itemIndex = getColumnIndex(category);</b>
+<b class="fc"><i>419</i>&nbsp;        if (itemIndex &lt; 0) {</b>
+<b class="nc"><i>420</i>&nbsp;            throw new UnknownKeyException(&quot;Unknown &#39;category&#39; key.&quot;);</b>
+<i>421</i>&nbsp;        }
+<b class="fc"><i>422</i>&nbsp;        return getStartValue(seriesIndex, itemIndex);</b>
+<i>423</i>&nbsp;    }
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;    /**
+<i>426</i>&nbsp;     * Returns the start data value for one category in a series.
+<i>427</i>&nbsp;     *
+<i>428</i>&nbsp;     * @param series  the required series (zero based index).
+<i>429</i>&nbsp;     * @param category  the required category.
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @return The start data value for one category in a series
+<i>432</i>&nbsp;     *         (possibly {@code null}).
+<i>433</i>&nbsp;     *
+<i>434</i>&nbsp;     * @see #getStartValue(Comparable, Comparable)
+<i>435</i>&nbsp;     */
+<i>436</i>&nbsp;    @Override
+<i>437</i>&nbsp;    public Number getStartValue(int series, int category) {
+<i>438</i>&nbsp;
+<i>439</i>&nbsp;        // check arguments...
+<b class="fc"><i>440</i>&nbsp;        if ((series &lt; 0) || (series &gt;= getSeriesCount())) {</b>
+<b class="nc"><i>441</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>442</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.getValue(): &quot;
+<i>443</i>&nbsp;                + &quot;series index out of range.&quot;);
+<i>444</i>&nbsp;        }
+<i>445</i>&nbsp;
+<b class="fc"><i>446</i>&nbsp;        if ((category &lt; 0) || (category &gt;= getCategoryCount())) {</b>
+<b class="nc"><i>447</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>448</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.getValue(): &quot;
+<i>449</i>&nbsp;                + &quot;category index out of range.&quot;);
+<i>450</i>&nbsp;        }
+<i>451</i>&nbsp;
+<i>452</i>&nbsp;        // fetch the value...
+<b class="fc"><i>453</i>&nbsp;        return this.startData[series][category];</b>
+<i>454</i>&nbsp;
+<i>455</i>&nbsp;    }
+<i>456</i>&nbsp;
+<i>457</i>&nbsp;    /**
+<i>458</i>&nbsp;     * Returns the end data value for one category in a series.
+<i>459</i>&nbsp;     *
+<i>460</i>&nbsp;     * @param series  the required series.
+<i>461</i>&nbsp;     * @param category  the required category.
+<i>462</i>&nbsp;     *
+<i>463</i>&nbsp;     * @return The end data value for one category in a series (null possible).
+<i>464</i>&nbsp;     *
+<i>465</i>&nbsp;     * @see #getEndValue(int, int)
+<i>466</i>&nbsp;     */
+<i>467</i>&nbsp;    @Override
+<i>468</i>&nbsp;    public Number getEndValue(Comparable series, Comparable category) {
+<b class="fc"><i>469</i>&nbsp;        int seriesIndex = getSeriesIndex(series);</b>
+<b class="fc"><i>470</i>&nbsp;        if (seriesIndex &lt; 0) {</b>
+<b class="nc"><i>471</i>&nbsp;            throw new UnknownKeyException(&quot;Unknown &#39;series&#39; key.&quot;);</b>
+<i>472</i>&nbsp;        }
+<b class="fc"><i>473</i>&nbsp;        int itemIndex = getColumnIndex(category);</b>
+<b class="fc"><i>474</i>&nbsp;        if (itemIndex &lt; 0) {</b>
+<b class="nc"><i>475</i>&nbsp;            throw new UnknownKeyException(&quot;Unknown &#39;category&#39; key.&quot;);</b>
+<i>476</i>&nbsp;        }
+<b class="fc"><i>477</i>&nbsp;        return getEndValue(seriesIndex, itemIndex);</b>
+<i>478</i>&nbsp;    }
+<i>479</i>&nbsp;
+<i>480</i>&nbsp;    /**
+<i>481</i>&nbsp;     * Returns the end data value for one category in a series.
+<i>482</i>&nbsp;     *
+<i>483</i>&nbsp;     * @param series  the required series (zero based index).
+<i>484</i>&nbsp;     * @param category  the required category.
+<i>485</i>&nbsp;     *
+<i>486</i>&nbsp;     * @return The end data value for one category in a series (null possible).
+<i>487</i>&nbsp;     *
+<i>488</i>&nbsp;     * @see #getEndValue(Comparable, Comparable)
+<i>489</i>&nbsp;     */
+<i>490</i>&nbsp;    @Override
+<i>491</i>&nbsp;    public Number getEndValue(int series, int category) {
+<b class="fc"><i>492</i>&nbsp;        if ((series &lt; 0) || (series &gt;= getSeriesCount())) {</b>
+<b class="nc"><i>493</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>494</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.getValue(): &quot;
+<i>495</i>&nbsp;                + &quot;series index out of range.&quot;);
+<i>496</i>&nbsp;        }
+<i>497</i>&nbsp;
+<b class="fc"><i>498</i>&nbsp;        if ((category &lt; 0) || (category &gt;= getCategoryCount())) {</b>
+<b class="nc"><i>499</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>500</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.getValue(): &quot;
+<i>501</i>&nbsp;                + &quot;category index out of range.&quot;);
+<i>502</i>&nbsp;        }
+<i>503</i>&nbsp;
+<b class="fc"><i>504</i>&nbsp;        return this.endData[series][category];</b>
+<i>505</i>&nbsp;    }
+<i>506</i>&nbsp;
+<i>507</i>&nbsp;    /**
+<i>508</i>&nbsp;     * Sets the start data value for one category in a series.
+<i>509</i>&nbsp;     *
+<i>510</i>&nbsp;     * @param series  the series (zero-based index).
+<i>511</i>&nbsp;     * @param category  the category.
+<i>512</i>&nbsp;     *
+<i>513</i>&nbsp;     * @param value The value.
+<i>514</i>&nbsp;     *
+<i>515</i>&nbsp;     * @see #setEndValue(int, Comparable, Number)
+<i>516</i>&nbsp;     */
+<i>517</i>&nbsp;    public void setStartValue(int series, Comparable category, Number value) {
+<i>518</i>&nbsp;
+<i>519</i>&nbsp;        // does the series exist?
+<b class="fc"><i>520</i>&nbsp;        if ((series &lt; 0) || (series &gt; getSeriesCount() - 1)) {</b>
+<b class="fc"><i>521</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>522</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.setValue: &quot;
+<i>523</i>&nbsp;                + &quot;series outside valid range.&quot;);
+<i>524</i>&nbsp;        }
+<i>525</i>&nbsp;
+<i>526</i>&nbsp;        // is the category valid?
+<b class="fc"><i>527</i>&nbsp;        int categoryIndex = getCategoryIndex(category);</b>
+<b class="fc"><i>528</i>&nbsp;        if (categoryIndex &lt; 0) {</b>
+<b class="nc"><i>529</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>530</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.setValue: &quot;
+<i>531</i>&nbsp;                + &quot;unrecognised category.&quot;);
+<i>532</i>&nbsp;        }
+<i>533</i>&nbsp;
+<i>534</i>&nbsp;        // update the data...
+<b class="fc"><i>535</i>&nbsp;        this.startData[series][categoryIndex] = value;</b>
+<b class="fc"><i>536</i>&nbsp;        fireDatasetChanged();</b>
+<i>537</i>&nbsp;
+<b class="fc"><i>538</i>&nbsp;    }</b>
+<i>539</i>&nbsp;
+<i>540</i>&nbsp;    /**
+<i>541</i>&nbsp;     * Sets the end data value for one category in a series.
+<i>542</i>&nbsp;     *
+<i>543</i>&nbsp;     * @param series  the series (zero-based index).
+<i>544</i>&nbsp;     * @param category  the category.
+<i>545</i>&nbsp;     *
+<i>546</i>&nbsp;     * @param value the value.
+<i>547</i>&nbsp;     *
+<i>548</i>&nbsp;     * @see #setStartValue(int, Comparable, Number)
+<i>549</i>&nbsp;     */
+<i>550</i>&nbsp;    public void setEndValue(int series, Comparable category, Number value) {
+<i>551</i>&nbsp;
+<i>552</i>&nbsp;        // does the series exist?
+<b class="fc"><i>553</i>&nbsp;        if ((series &lt; 0) || (series &gt; getSeriesCount() - 1)) {</b>
+<b class="fc"><i>554</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>555</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.setValue: &quot;
+<i>556</i>&nbsp;                + &quot;series outside valid range.&quot;);
+<i>557</i>&nbsp;        }
+<i>558</i>&nbsp;
+<i>559</i>&nbsp;        // is the category valid?
+<b class="fc"><i>560</i>&nbsp;        int categoryIndex = getCategoryIndex(category);</b>
+<b class="fc"><i>561</i>&nbsp;        if (categoryIndex &lt; 0) {</b>
+<b class="nc"><i>562</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>563</i>&nbsp;                &quot;DefaultIntervalCategoryDataset.setValue: &quot;
+<i>564</i>&nbsp;                + &quot;unrecognised category.&quot;);
+<i>565</i>&nbsp;        }
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;        // update the data...
+<b class="fc"><i>568</i>&nbsp;        this.endData[series][categoryIndex] = value;</b>
+<b class="fc"><i>569</i>&nbsp;        fireDatasetChanged();</b>
+<i>570</i>&nbsp;
+<b class="fc"><i>571</i>&nbsp;    }</b>
+<i>572</i>&nbsp;
+<i>573</i>&nbsp;    /**
+<i>574</i>&nbsp;     * Returns the index for the given category.
+<i>575</i>&nbsp;     *
+<i>576</i>&nbsp;     * @param category  the category ({@code null} not permitted).
+<i>577</i>&nbsp;     *
+<i>578</i>&nbsp;     * @return The index.
+<i>579</i>&nbsp;     *
+<i>580</i>&nbsp;     * @see #getColumnIndex(Comparable)
+<i>581</i>&nbsp;     */
+<i>582</i>&nbsp;    public int getCategoryIndex(Comparable category) {
+<b class="fc"><i>583</i>&nbsp;        int result = -1;</b>
+<b class="fc"><i>584</i>&nbsp;        for (int i = 0; i &lt; this.categoryKeys.length; i++) {</b>
+<b class="fc"><i>585</i>&nbsp;            if (category.equals(this.categoryKeys[i])) {</b>
+<b class="fc"><i>586</i>&nbsp;                result = i;</b>
+<b class="fc"><i>587</i>&nbsp;                break;</b>
+<i>588</i>&nbsp;            }
+<i>589</i>&nbsp;        }
+<b class="fc"><i>590</i>&nbsp;        return result;</b>
+<i>591</i>&nbsp;    }
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;    /**
+<i>594</i>&nbsp;     * Generates an array of keys, by appending a space plus an integer
+<i>595</i>&nbsp;     * (starting with 1) to the supplied prefix string.
+<i>596</i>&nbsp;     *
+<i>597</i>&nbsp;     * @param count  the number of keys required.
+<i>598</i>&nbsp;     * @param prefix  the name prefix.
+<i>599</i>&nbsp;     *
+<i>600</i>&nbsp;     * @return An array of &lt;i&gt;prefixN&lt;/i&gt; with N = { 1 .. count}.
+<i>601</i>&nbsp;     */
+<i>602</i>&nbsp;    private Comparable[] generateKeys(int count, String prefix) {
+<b class="fc"><i>603</i>&nbsp;        Comparable[] result = new Comparable[count];</b>
+<i>604</i>&nbsp;        String name;
+<b class="fc"><i>605</i>&nbsp;        for (int i = 0; i &lt; count; i++) {</b>
+<b class="fc"><i>606</i>&nbsp;            name = prefix + (i + 1);</b>
+<b class="fc"><i>607</i>&nbsp;            result[i] = name;</b>
+<i>608</i>&nbsp;        }
+<b class="fc"><i>609</i>&nbsp;        return result;</b>
+<i>610</i>&nbsp;    }
+<i>611</i>&nbsp;
+<i>612</i>&nbsp;    /**
+<i>613</i>&nbsp;     * Returns a column key.
+<i>614</i>&nbsp;     *
+<i>615</i>&nbsp;     * @param column  the column index.
+<i>616</i>&nbsp;     *
+<i>617</i>&nbsp;     * @return The column key.
+<i>618</i>&nbsp;     *
+<i>619</i>&nbsp;     * @see #getRowKey(int)
+<i>620</i>&nbsp;     */
+<i>621</i>&nbsp;    @Override
+<i>622</i>&nbsp;    public Comparable getColumnKey(int column) {
+<b class="fc"><i>623</i>&nbsp;        return this.categoryKeys[column];</b>
+<i>624</i>&nbsp;    }
+<i>625</i>&nbsp;
+<i>626</i>&nbsp;    /**
+<i>627</i>&nbsp;     * Returns a column index.
+<i>628</i>&nbsp;     *
+<i>629</i>&nbsp;     * @param columnKey  the column key ({@code null} not permitted).
+<i>630</i>&nbsp;     *
+<i>631</i>&nbsp;     * @return The column index.
+<i>632</i>&nbsp;     *
+<i>633</i>&nbsp;     * @see #getCategoryIndex(Comparable)
+<i>634</i>&nbsp;     */
+<i>635</i>&nbsp;    @Override
+<i>636</i>&nbsp;    public int getColumnIndex(Comparable columnKey) {
+<b class="fc"><i>637</i>&nbsp;        Args.nullNotPermitted(columnKey, &quot;columnKey&quot;);</b>
+<b class="fc"><i>638</i>&nbsp;        return getCategoryIndex(columnKey);</b>
+<i>639</i>&nbsp;    }
+<i>640</i>&nbsp;
+<i>641</i>&nbsp;    /**
+<i>642</i>&nbsp;     * Returns a row index.
+<i>643</i>&nbsp;     *
+<i>644</i>&nbsp;     * @param rowKey  the row key.
+<i>645</i>&nbsp;     *
+<i>646</i>&nbsp;     * @return The row index.
+<i>647</i>&nbsp;     *
+<i>648</i>&nbsp;     * @see #getSeriesIndex(Comparable)
+<i>649</i>&nbsp;     */
+<i>650</i>&nbsp;    @Override
+<i>651</i>&nbsp;    public int getRowIndex(Comparable rowKey) {
+<b class="fc"><i>652</i>&nbsp;        return getSeriesIndex(rowKey);</b>
+<i>653</i>&nbsp;    }
+<i>654</i>&nbsp;
+<i>655</i>&nbsp;    /**
+<i>656</i>&nbsp;     * Returns a list of the series in the dataset.  This method supports the
+<i>657</i>&nbsp;     * {@link CategoryDataset} interface.
+<i>658</i>&nbsp;     *
+<i>659</i>&nbsp;     * @return A list of the series in the dataset.
+<i>660</i>&nbsp;     *
+<i>661</i>&nbsp;     * @see #getColumnKeys()
+<i>662</i>&nbsp;     */
+<i>663</i>&nbsp;    @Override
+<i>664</i>&nbsp;    public List getRowKeys() {
+<i>665</i>&nbsp;        // the CategoryDataset interface expects a list of series, but
+<i>666</i>&nbsp;        // we&#39;ve stored them in an array...
+<b class="fc"><i>667</i>&nbsp;        if (this.seriesKeys == null) {</b>
+<b class="nc"><i>668</i>&nbsp;            return new java.util.ArrayList();</b>
+<i>669</i>&nbsp;        }
+<i>670</i>&nbsp;        else {
+<b class="fc"><i>671</i>&nbsp;            return Collections.unmodifiableList(Arrays.asList(this.seriesKeys));</b>
+<i>672</i>&nbsp;        }
+<i>673</i>&nbsp;    }
+<i>674</i>&nbsp;
+<i>675</i>&nbsp;    /**
+<i>676</i>&nbsp;     * Returns the name of the specified series.
+<i>677</i>&nbsp;     *
+<i>678</i>&nbsp;     * @param row  the index of the required row/series (zero-based).
+<i>679</i>&nbsp;     *
+<i>680</i>&nbsp;     * @return The name of the specified series.
+<i>681</i>&nbsp;     *
+<i>682</i>&nbsp;     * @see #getColumnKey(int)
+<i>683</i>&nbsp;     */
+<i>684</i>&nbsp;    @Override
+<i>685</i>&nbsp;    public Comparable getRowKey(int row) {
+<b class="fc"><i>686</i>&nbsp;        if ((row &gt;= getRowCount()) || (row &lt; 0)) {</b>
+<b class="nc"><i>687</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>688</i>&nbsp;                    &quot;The &#39;row&#39; argument is out of bounds.&quot;);
+<i>689</i>&nbsp;        }
+<b class="fc"><i>690</i>&nbsp;        return this.seriesKeys[row];</b>
+<i>691</i>&nbsp;    }
+<i>692</i>&nbsp;
+<i>693</i>&nbsp;    /**
+<i>694</i>&nbsp;     * Returns the number of categories in the dataset.  This method is part of
+<i>695</i>&nbsp;     * the {@link CategoryDataset} interface.
+<i>696</i>&nbsp;     *
+<i>697</i>&nbsp;     * @return The number of categories in the dataset.
+<i>698</i>&nbsp;     *
+<i>699</i>&nbsp;     * @see #getCategoryCount()
+<i>700</i>&nbsp;     * @see #getRowCount()
+<i>701</i>&nbsp;     */
+<i>702</i>&nbsp;    @Override
+<i>703</i>&nbsp;    public int getColumnCount() {
+<b class="fc"><i>704</i>&nbsp;        return this.categoryKeys.length;</b>
+<i>705</i>&nbsp;    }
+<i>706</i>&nbsp;
+<i>707</i>&nbsp;    /**
+<i>708</i>&nbsp;     * Returns the number of series in the dataset (possibly zero).
+<i>709</i>&nbsp;     *
+<i>710</i>&nbsp;     * @return The number of series in the dataset.
+<i>711</i>&nbsp;     *
+<i>712</i>&nbsp;     * @see #getSeriesCount()
+<i>713</i>&nbsp;     * @see #getColumnCount()
+<i>714</i>&nbsp;     */
+<i>715</i>&nbsp;    @Override
+<i>716</i>&nbsp;    public int getRowCount() {
+<b class="fc"><i>717</i>&nbsp;        return this.seriesKeys.length;</b>
+<i>718</i>&nbsp;    }
+<i>719</i>&nbsp;
+<i>720</i>&nbsp;    /**
+<i>721</i>&nbsp;     * Tests this dataset for equality with an arbitrary object.
+<i>722</i>&nbsp;     *
+<i>723</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>724</i>&nbsp;     *
+<i>725</i>&nbsp;     * @return A boolean.
+<i>726</i>&nbsp;     */
+<i>727</i>&nbsp;    @Override
+<i>728</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>729</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>730</i>&nbsp;            return true;</b>
+<i>731</i>&nbsp;        }
+<b class="fc"><i>732</i>&nbsp;        if (!(obj instanceof DefaultIntervalCategoryDataset)) {</b>
+<b class="nc"><i>733</i>&nbsp;            return false;</b>
+<i>734</i>&nbsp;        }
+<b class="fc"><i>735</i>&nbsp;        DefaultIntervalCategoryDataset that</b>
+<i>736</i>&nbsp;                = (DefaultIntervalCategoryDataset) obj;
+<b class="fc"><i>737</i>&nbsp;        if (!Arrays.equals(this.seriesKeys, that.seriesKeys)) {</b>
+<b class="nc"><i>738</i>&nbsp;            return false;</b>
+<i>739</i>&nbsp;        }
+<b class="fc"><i>740</i>&nbsp;        if (!Arrays.equals(this.categoryKeys, that.categoryKeys)) {</b>
+<b class="nc"><i>741</i>&nbsp;            return false;</b>
+<i>742</i>&nbsp;        }
+<b class="fc"><i>743</i>&nbsp;        if (!equal(this.startData, that.startData)) {</b>
+<b class="fc"><i>744</i>&nbsp;            return false;</b>
+<i>745</i>&nbsp;        }
+<b class="fc"><i>746</i>&nbsp;        if (!equal(this.endData, that.endData)) {</b>
+<b class="nc"><i>747</i>&nbsp;            return false;</b>
+<i>748</i>&nbsp;        }
+<i>749</i>&nbsp;        // seem to be the same...
+<b class="fc"><i>750</i>&nbsp;        return true;</b>
+<i>751</i>&nbsp;    }
+<i>752</i>&nbsp;
+<i>753</i>&nbsp;    /**
+<i>754</i>&nbsp;     * Returns a clone of this dataset.
+<i>755</i>&nbsp;     *
+<i>756</i>&nbsp;     * @return A clone.
+<i>757</i>&nbsp;     *
+<i>758</i>&nbsp;     * @throws CloneNotSupportedException if there is a problem cloning the
+<i>759</i>&nbsp;     *         dataset.
+<i>760</i>&nbsp;     */
+<i>761</i>&nbsp;    @Override
+<i>762</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>763</i>&nbsp;        DefaultIntervalCategoryDataset clone</b>
+<b class="fc"><i>764</i>&nbsp;                = (DefaultIntervalCategoryDataset) super.clone();</b>
+<b class="fc"><i>765</i>&nbsp;        clone.categoryKeys = (Comparable[]) this.categoryKeys.clone();</b>
+<b class="fc"><i>766</i>&nbsp;        clone.seriesKeys = (Comparable[]) this.seriesKeys.clone();</b>
+<b class="fc"><i>767</i>&nbsp;        clone.startData = clone(this.startData);</b>
+<b class="fc"><i>768</i>&nbsp;        clone.endData = clone(this.endData);</b>
+<b class="fc"><i>769</i>&nbsp;        return clone;</b>
+<i>770</i>&nbsp;    }
+<i>771</i>&nbsp;
+<i>772</i>&nbsp;    /**
+<i>773</i>&nbsp;     * Tests two double[][] arrays for equality.
+<i>774</i>&nbsp;     *
+<i>775</i>&nbsp;     * @param array1  the first array ({@code null} permitted).
+<i>776</i>&nbsp;     * @param array2  the second arrray ({@code null} permitted).
+<i>777</i>&nbsp;     *
+<i>778</i>&nbsp;     * @return A boolean.
+<i>779</i>&nbsp;     */
+<i>780</i>&nbsp;    private static boolean equal(Number[][] array1, Number[][] array2) {
+<b class="fc"><i>781</i>&nbsp;        if (array1 == null) {</b>
+<b class="nc"><i>782</i>&nbsp;            return (array2 == null);</b>
+<i>783</i>&nbsp;        }
+<b class="fc"><i>784</i>&nbsp;        if (array2 == null) {</b>
+<b class="nc"><i>785</i>&nbsp;            return false;</b>
+<i>786</i>&nbsp;        }
+<b class="fc"><i>787</i>&nbsp;        if (array1.length != array2.length) {</b>
+<b class="nc"><i>788</i>&nbsp;            return false;</b>
+<i>789</i>&nbsp;        }
+<b class="fc"><i>790</i>&nbsp;        for (int i = 0; i &lt; array1.length; i++) {</b>
+<b class="fc"><i>791</i>&nbsp;            if (!Arrays.equals(array1[i], array2[i])) {</b>
+<b class="fc"><i>792</i>&nbsp;                return false;</b>
+<i>793</i>&nbsp;            }
+<i>794</i>&nbsp;        }
+<b class="fc"><i>795</i>&nbsp;        return true;</b>
+<i>796</i>&nbsp;    }
+<i>797</i>&nbsp;
+<i>798</i>&nbsp;    /**
+<i>799</i>&nbsp;     * Clones a two dimensional array of {@code Number} objects.
+<i>800</i>&nbsp;     *
+<i>801</i>&nbsp;     * @param array  the array ({@code null} not permitted).
+<i>802</i>&nbsp;     *
+<i>803</i>&nbsp;     * @return A clone of the array.
+<i>804</i>&nbsp;     */
+<i>805</i>&nbsp;    private static Number[][] clone(Number[][] array) {
+<b class="fc"><i>806</i>&nbsp;        Args.nullNotPermitted(array, &quot;array&quot;);</b>
+<b class="fc"><i>807</i>&nbsp;        Number[][] result = new Number[array.length][];</b>
+<b class="fc"><i>808</i>&nbsp;        for (int i = 0; i &lt; array.length; i++) {</b>
+<b class="fc"><i>809</i>&nbsp;            Number[] child = array[i];</b>
+<b class="fc"><i>810</i>&nbsp;            Number[] copychild = new Number[child.length];</b>
+<b class="fc"><i>811</i>&nbsp;            System.arraycopy(child, 0, copychild, 0, child.length);</b>
+<b class="fc"><i>812</i>&nbsp;            result[i] = copychild;</b>
+<i>813</i>&nbsp;        }
+<b class="fc"><i>814</i>&nbsp;        return result;</b>
+<i>815</i>&nbsp;    }
+<i>816</i>&nbsp;
+<i>817</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

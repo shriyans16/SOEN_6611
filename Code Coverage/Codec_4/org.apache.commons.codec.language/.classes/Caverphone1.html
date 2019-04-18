@@ -1,0 +1,236 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Caverphone1</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Caverphone1 (org.apache.commons.codec.language)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Caverphone1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (62/ 62)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Caverphone1$__CLR4_1_23v3vjuluj8sf</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (63/ 63)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.language;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Encodes a string into a Caverphone 1.0 value.
+<i>22</i>&nbsp; *
+<i>23</i>&nbsp; * This is an algorithm created by the Caversham Project at the University of Otago. It implements the Caverphone 1.0
+<i>24</i>&nbsp; * algorithm:
+<i>25</i>&nbsp; *
+<i>26</i>&nbsp; * @version $Id: Caverphone.java 1075947 2011-03-01 17:56:14Z ggregory $
+<i>27</i>&nbsp; * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/Caverphone&quot;&gt;Wikipedia - Caverphone&lt;/a&gt;
+<i>28</i>&nbsp; * @see &lt;a href=&quot;http://caversham.otago.ac.nz/files/working/ctp060902.pdf&quot;&gt;Caverphone 1.0 specification&lt;/a&gt;
+<i>29</i>&nbsp; * @since 1.5
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * &lt;p&gt;This class is immutable and thread-safe.&lt;/p&gt;
+<i>32</i>&nbsp; */
+<b class="fc"><i>33</i>&nbsp;public class Caverphone1 extends AbstractCaverphone {</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    private static final String SIX_1 = &quot;111111&quot;;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Encodes the given String into a Caverphone value.
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @param source
+<i>41</i>&nbsp;     *            String the source string
+<i>42</i>&nbsp;     * @return A caverphone code for the given String
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    @Override
+<b class="fc"><i>45</i>&nbsp;    public String encode(String source) {</b>
+<b class="fc"><i>46</i>&nbsp;        String txt = source;</b>
+<b class="fc"><i>47</i>&nbsp;        if (txt == null || txt.length() == 0) {</b>
+<b class="fc"><i>48</i>&nbsp;            return SIX_1;</b>
+<i>49</i>&nbsp;        }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;        // 1. Convert to lowercase
+<b class="fc"><i>52</i>&nbsp;        txt = txt.toLowerCase(java.util.Locale.ENGLISH);</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;        // 2. Remove anything not A-Z
+<b class="fc"><i>55</i>&nbsp;        txt = txt.replaceAll(&quot;[^a-z]&quot;, &quot;&quot;);</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;        // 3. Handle various start options
+<i>58</i>&nbsp;        // 2 is a temporary placeholder to indicate a consonant which we are no longer interested in.
+<b class="fc"><i>59</i>&nbsp;        txt = txt.replaceAll(&quot;^cough&quot;, &quot;cou2f&quot;);</b>
+<b class="fc"><i>60</i>&nbsp;        txt = txt.replaceAll(&quot;^rough&quot;, &quot;rou2f&quot;);</b>
+<b class="fc"><i>61</i>&nbsp;        txt = txt.replaceAll(&quot;^tough&quot;, &quot;tou2f&quot;);</b>
+<b class="fc"><i>62</i>&nbsp;        txt = txt.replaceAll(&quot;^enough&quot;, &quot;enou2f&quot;);</b>
+<b class="fc"><i>63</i>&nbsp;        txt = txt.replaceAll(&quot;^gn&quot;, &quot;2n&quot;);</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;        // End
+<b class="fc"><i>66</i>&nbsp;        txt = txt.replaceAll(&quot;mb$&quot;, &quot;m2&quot;);</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;        // 4. Handle replacements
+<b class="fc"><i>69</i>&nbsp;        txt = txt.replaceAll(&quot;cq&quot;, &quot;2q&quot;);</b>
+<b class="fc"><i>70</i>&nbsp;        txt = txt.replaceAll(&quot;ci&quot;, &quot;si&quot;);</b>
+<b class="fc"><i>71</i>&nbsp;        txt = txt.replaceAll(&quot;ce&quot;, &quot;se&quot;);</b>
+<b class="fc"><i>72</i>&nbsp;        txt = txt.replaceAll(&quot;cy&quot;, &quot;sy&quot;);</b>
+<b class="fc"><i>73</i>&nbsp;        txt = txt.replaceAll(&quot;tch&quot;, &quot;2ch&quot;);</b>
+<b class="fc"><i>74</i>&nbsp;        txt = txt.replaceAll(&quot;c&quot;, &quot;k&quot;);</b>
+<b class="fc"><i>75</i>&nbsp;        txt = txt.replaceAll(&quot;q&quot;, &quot;k&quot;);</b>
+<b class="fc"><i>76</i>&nbsp;        txt = txt.replaceAll(&quot;x&quot;, &quot;k&quot;);</b>
+<b class="fc"><i>77</i>&nbsp;        txt = txt.replaceAll(&quot;v&quot;, &quot;f&quot;);</b>
+<b class="fc"><i>78</i>&nbsp;        txt = txt.replaceAll(&quot;dg&quot;, &quot;2g&quot;);</b>
+<b class="fc"><i>79</i>&nbsp;        txt = txt.replaceAll(&quot;tio&quot;, &quot;sio&quot;);</b>
+<b class="fc"><i>80</i>&nbsp;        txt = txt.replaceAll(&quot;tia&quot;, &quot;sia&quot;);</b>
+<b class="fc"><i>81</i>&nbsp;        txt = txt.replaceAll(&quot;d&quot;, &quot;t&quot;);</b>
+<b class="fc"><i>82</i>&nbsp;        txt = txt.replaceAll(&quot;ph&quot;, &quot;fh&quot;);</b>
+<b class="fc"><i>83</i>&nbsp;        txt = txt.replaceAll(&quot;b&quot;, &quot;p&quot;);</b>
+<b class="fc"><i>84</i>&nbsp;        txt = txt.replaceAll(&quot;sh&quot;, &quot;s2&quot;);</b>
+<b class="fc"><i>85</i>&nbsp;        txt = txt.replaceAll(&quot;z&quot;, &quot;s&quot;);</b>
+<b class="fc"><i>86</i>&nbsp;        txt = txt.replaceAll(&quot;^[aeiou]&quot;, &quot;A&quot;);</b>
+<i>87</i>&nbsp;        // 3 is a temporary placeholder marking a vowel
+<b class="fc"><i>88</i>&nbsp;        txt = txt.replaceAll(&quot;[aeiou]&quot;, &quot;3&quot;);</b>
+<b class="fc"><i>89</i>&nbsp;        txt = txt.replaceAll(&quot;3gh3&quot;, &quot;3kh3&quot;);</b>
+<b class="fc"><i>90</i>&nbsp;        txt = txt.replaceAll(&quot;gh&quot;, &quot;22&quot;);</b>
+<b class="fc"><i>91</i>&nbsp;        txt = txt.replaceAll(&quot;g&quot;, &quot;k&quot;);</b>
+<b class="fc"><i>92</i>&nbsp;        txt = txt.replaceAll(&quot;s+&quot;, &quot;S&quot;);</b>
+<b class="fc"><i>93</i>&nbsp;        txt = txt.replaceAll(&quot;t+&quot;, &quot;T&quot;);</b>
+<b class="fc"><i>94</i>&nbsp;        txt = txt.replaceAll(&quot;p+&quot;, &quot;P&quot;);</b>
+<b class="fc"><i>95</i>&nbsp;        txt = txt.replaceAll(&quot;k+&quot;, &quot;K&quot;);</b>
+<b class="fc"><i>96</i>&nbsp;        txt = txt.replaceAll(&quot;f+&quot;, &quot;F&quot;);</b>
+<b class="fc"><i>97</i>&nbsp;        txt = txt.replaceAll(&quot;m+&quot;, &quot;M&quot;);</b>
+<b class="fc"><i>98</i>&nbsp;        txt = txt.replaceAll(&quot;n+&quot;, &quot;N&quot;);</b>
+<b class="fc"><i>99</i>&nbsp;        txt = txt.replaceAll(&quot;w3&quot;, &quot;W3&quot;);</b>
+<b class="fc"><i>100</i>&nbsp;        txt = txt.replaceAll(&quot;wy&quot;, &quot;Wy&quot;); // 1.0 only</b>
+<b class="fc"><i>101</i>&nbsp;        txt = txt.replaceAll(&quot;wh3&quot;, &quot;Wh3&quot;);</b>
+<b class="fc"><i>102</i>&nbsp;        txt = txt.replaceAll(&quot;why&quot;, &quot;Why&quot;); // 1.0 only</b>
+<b class="fc"><i>103</i>&nbsp;        txt = txt.replaceAll(&quot;w&quot;, &quot;2&quot;);</b>
+<b class="fc"><i>104</i>&nbsp;        txt = txt.replaceAll(&quot;^h&quot;, &quot;A&quot;);</b>
+<b class="fc"><i>105</i>&nbsp;        txt = txt.replaceAll(&quot;h&quot;, &quot;2&quot;);</b>
+<b class="fc"><i>106</i>&nbsp;        txt = txt.replaceAll(&quot;r3&quot;, &quot;R3&quot;);</b>
+<b class="fc"><i>107</i>&nbsp;        txt = txt.replaceAll(&quot;ry&quot;, &quot;Ry&quot;); // 1.0 only</b>
+<b class="fc"><i>108</i>&nbsp;        txt = txt.replaceAll(&quot;r&quot;, &quot;2&quot;);</b>
+<b class="fc"><i>109</i>&nbsp;        txt = txt.replaceAll(&quot;l3&quot;, &quot;L3&quot;);</b>
+<b class="fc"><i>110</i>&nbsp;        txt = txt.replaceAll(&quot;ly&quot;, &quot;Ly&quot;); // 1.0 only</b>
+<b class="fc"><i>111</i>&nbsp;        txt = txt.replaceAll(&quot;l&quot;, &quot;2&quot;);</b>
+<b class="fc"><i>112</i>&nbsp;        txt = txt.replaceAll(&quot;j&quot;, &quot;y&quot;); // 1.0 only</b>
+<b class="fc"><i>113</i>&nbsp;        txt = txt.replaceAll(&quot;y3&quot;, &quot;Y3&quot;); // 1.0 only</b>
+<b class="fc"><i>114</i>&nbsp;        txt = txt.replaceAll(&quot;y&quot;, &quot;2&quot;); // 1.0 only</b>
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;        // 5. Handle removals
+<b class="fc"><i>117</i>&nbsp;        txt = txt.replaceAll(&quot;2&quot;, &quot;&quot;);</b>
+<b class="fc"><i>118</i>&nbsp;        txt = txt.replaceAll(&quot;3&quot;, &quot;&quot;);</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;        // 6. put ten 1s on the end
+<b class="fc"><i>121</i>&nbsp;        txt = txt + SIX_1;</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;        // 7. take the first six characters as the code
+<b class="fc"><i>124</i>&nbsp;        return txt.substring(0, SIX_1.length());</b>
+<i>125</i>&nbsp;    }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:33</div>
+</div>
+</body>
+</html>

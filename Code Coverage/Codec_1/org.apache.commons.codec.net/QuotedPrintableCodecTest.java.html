@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuotedPrintableCodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.net</a> &gt; <span class="el_source">QuotedPrintableCodecTest.java</span></div><h1>QuotedPrintableCodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.net;
+
+import static org.junit.Assert.*;
+
+import java.nio.charset.UnsupportedCharsetException;
+
+import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.junit.Test;
+
+/**
+ * Quoted-printable codec test cases
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L35" title="3 of 4 branches missed.">public class QuotedPrintableCodecTest {</span>
+
+<span class="fc" id="L37">    static final int SWISS_GERMAN_STUFF_UNICODE [] = {</span>
+        0x47, 0x72, 0xFC, 0x65, 0x7A, 0x69, 0x5F, 0x7A, 0xE4, 0x6D, 0xE4
+    };
+
+<span class="fc" id="L41">    static final int RUSSIAN_STUFF_UNICODE [] = {</span>
+        0x412, 0x441, 0x435, 0x43C, 0x5F, 0x43F, 0x440, 0x438,
+        0x432, 0x435, 0x442
+    };
+
+<span class="fc" id="L46">    private String constructString(final int [] unicodeChars) {</span>
+<span class="fc" id="L47">        final StringBuilder buffer = new StringBuilder();</span>
+<span class="pc bpc" id="L48" title="7 of 10 branches missed.">        if (unicodeChars != null) {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            for (final int unicodeChar : unicodeChars) {</span>
+<span class="fc" id="L50">                buffer.append((char)unicodeChar);</span>
+            }
+        }
+<span class="fc" id="L53">        return buffer.toString();</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L57" title="All 4 branches missed.">    public void testUTF8RoundTrip() throws Exception {</span>
+
+<span class="fc" id="L59">        final String ru_msg = constructString(RUSSIAN_STUFF_UNICODE);</span>
+<span class="fc" id="L60">        final String ch_msg = constructString(SWISS_GERMAN_STUFF_UNICODE);</span>
+
+<span class="fc" id="L62">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+
+<span class="fc" id="L64">        assertEquals(</span>
+            &quot;=D0=92=D1=81=D0=B5=D0=BC_=D0=BF=D1=80=D0=B8=D0=B2=D0=B5=D1=82&quot;,
+<span class="fc" id="L66">        qpcodec.encode(ru_msg, CharEncoding.UTF_8)</span>
+        );
+<span class="fc" id="L68">        assertEquals(&quot;Gr=C3=BCezi_z=C3=A4m=C3=A4&quot;, qpcodec.encode(ch_msg, CharEncoding.UTF_8));</span>
+
+<span class="fc" id="L70">        assertEquals(ru_msg, qpcodec.decode(qpcodec.encode(ru_msg, CharEncoding.UTF_8), CharEncoding.UTF_8));</span>
+<span class="fc" id="L71">        assertEquals(ch_msg, qpcodec.decode(qpcodec.encode(ch_msg, CharEncoding.UTF_8), CharEncoding.UTF_8));</span>
+<span class="fc" id="L72">    }</span>
+
+    @Test
+<span class="pc bnc" id="L75" title="All 4 branches missed.">    public void testBasicEncodeDecode() throws Exception {</span>
+<span class="fc" id="L76">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L77">        final String plain = &quot;= Hello there =\r\n&quot;;</span>
+<span class="fc" id="L78">        final String encoded = qpcodec.encode(plain);</span>
+<span class="fc" id="L79">        assertEquals(&quot;Basic quoted-printable encoding test&quot;,</span>
+            &quot;=3D Hello there =3D=0D=0A&quot;, encoded);
+<span class="fc" id="L81">        assertEquals(&quot;Basic quoted-printable decoding test&quot;,</span>
+<span class="fc" id="L82">            plain, qpcodec.decode(encoded));</span>
+<span class="fc" id="L83">    }</span>
+
+    @Test
+<span class="pc bnc" id="L86" title="All 4 branches missed.">    public void testSafeCharEncodeDecode() throws Exception {</span>
+<span class="fc" id="L87">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L88">        final String plain = &quot;abc123_-.*~!@#$%^&amp;()+{}\&quot;\\;:`,/[]&quot;;</span>
+<span class="fc" id="L89">        final String encoded = qpcodec.encode(plain);</span>
+<span class="fc" id="L90">        assertEquals(&quot;Safe chars quoted-printable encoding test&quot;,</span>
+            plain, encoded);
+<span class="fc" id="L92">        assertEquals(&quot;Safe chars quoted-printable decoding test&quot;,</span>
+<span class="fc" id="L93">            plain, qpcodec.decode(encoded));</span>
+<span class="fc" id="L94">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L98" title="All 4 branches missed.">    public void testUnsafeEncodeDecode() throws Exception {</span>
+<span class="fc" id="L99">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L100">        final String plain = &quot;=\r\n&quot;;</span>
+<span class="fc" id="L101">        final String encoded = qpcodec.encode(plain);</span>
+<span class="fc" id="L102">        assertEquals(&quot;Unsafe chars quoted-printable encoding test&quot;,</span>
+            &quot;=3D=0D=0A&quot;, encoded);
+<span class="fc" id="L104">        assertEquals(&quot;Unsafe chars quoted-printable decoding test&quot;,</span>
+<span class="fc" id="L105">            plain, qpcodec.decode(encoded));</span>
+<span class="fc" id="L106">    }</span>
+
+    @Test
+<span class="pc bnc" id="L109" title="All 4 branches missed.">    public void testEncodeDecodeNull() throws Exception {</span>
+<span class="fc" id="L110">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L111">        assertNull(&quot;Null string quoted-printable encoding test&quot;,</span>
+<span class="fc" id="L112">            qpcodec.encode((String)null));</span>
+<span class="fc" id="L113">        assertNull(&quot;Null string quoted-printable decoding test&quot;,</span>
+<span class="fc" id="L114">            qpcodec.decode((String)null));</span>
+<span class="fc" id="L115">    }</span>
+
+
+    @Test
+<span class="pc bnc" id="L119" title="All 4 branches missed.">    public void testDecodeInvalid() throws Exception {</span>
+<span class="fc" id="L120">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L121">        try {</span>
+<span class="nc" id="L122">            qpcodec.decode(&quot;=&quot;);</span>
+<span class="nc" id="L123">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L124">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L126">        }</span>
+<span class="fc" id="L127">        try {</span>
+<span class="nc" id="L128">            qpcodec.decode(&quot;=A&quot;);</span>
+<span class="nc" id="L129">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L130">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L132">        }</span>
+<span class="fc" id="L133">        try {</span>
+<span class="nc" id="L134">            qpcodec.decode(&quot;=WW&quot;);</span>
+<span class="nc" id="L135">            fail(&quot;DecoderException should have been thrown&quot;);</span>
+<span class="fc" id="L136">        } catch (final DecoderException e) {</span>
+            // Expected. Move on
+<span class="nc" id="L138">        }</span>
+<span class="fc" id="L139">    }</span>
+
+    @Test
+<span class="pc bnc" id="L142" title="All 4 branches missed.">    public void testEncodeNull() throws Exception {</span>
+<span class="fc" id="L143">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L144">        final byte[] plain = null;</span>
+<span class="fc" id="L145">        final byte[] encoded = qpcodec.encode(plain);</span>
+<span class="fc" id="L146">        assertEquals(&quot;Encoding a null string should return null&quot;,</span>
+            null, encoded);
+<span class="fc" id="L148">    }</span>
+
+    @Test
+<span class="pc bnc" id="L151" title="All 4 branches missed.">    public void testEncodeUrlWithNullBitSet() throws Exception {</span>
+<span class="fc" id="L152">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L153">        final String plain = &quot;1+1 = 2&quot;;</span>
+<span class="fc" id="L154">        final String encoded = new String(QuotedPrintableCodec.</span>
+<span class="fc" id="L155">            encodeQuotedPrintable(null, plain.getBytes(Charsets.UTF_8)));</span>
+<span class="fc" id="L156">        assertEquals(&quot;Basic quoted-printable encoding test&quot;,</span>
+            &quot;1+1 =3D 2&quot;, encoded);
+<span class="fc" id="L158">        assertEquals(&quot;Basic quoted-printable decoding test&quot;,</span>
+<span class="fc" id="L159">            plain, qpcodec.decode(encoded));</span>
+
+<span class="fc" id="L161">    }</span>
+
+    @Test
+<span class="pc bnc" id="L164" title="All 4 branches missed.">    public void testDecodeWithNullArray() throws Exception {</span>
+<span class="fc" id="L165">        final byte[] plain = null;</span>
+<span class="fc" id="L166">        final byte[] result = QuotedPrintableCodec.decodeQuotedPrintable( plain );</span>
+<span class="fc" id="L167">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L168">    }</span>
+
+    @Test
+<span class="pc bnc" id="L171" title="All 4 branches missed.">    public void testEncodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L172">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L173">        final String test = null;</span>
+<span class="fc" id="L174">        final String result = qpcodec.encode( test, &quot;charset&quot; );</span>
+<span class="fc" id="L175">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L176">    }</span>
+
+    @Test
+<span class="pc bnc" id="L179" title="All 4 branches missed.">    public void testDecodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L180">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L181">        final String test = null;</span>
+<span class="fc" id="L182">        final String result = qpcodec.decode( test, &quot;charset&quot; );</span>
+<span class="fc" id="L183">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L184">    }</span>
+
+    @Test
+<span class="pc bnc" id="L187" title="All 4 branches missed.">    public void testEncodeObjects() throws Exception {</span>
+<span class="fc" id="L188">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L189">        final String plain = &quot;1+1 = 2&quot;;</span>
+<span class="fc" id="L190">        String encoded = (String) qpcodec.encode((Object) plain);</span>
+<span class="fc" id="L191">        assertEquals(&quot;Basic quoted-printable encoding test&quot;,</span>
+            &quot;1+1 =3D 2&quot;, encoded);
+
+<span class="fc" id="L194">        final byte[] plainBA = plain.getBytes(Charsets.UTF_8);</span>
+<span class="fc" id="L195">        final byte[] encodedBA = (byte[]) qpcodec.encode((Object) plainBA);</span>
+<span class="fc" id="L196">        encoded = new String(encodedBA);</span>
+<span class="fc" id="L197">        assertEquals(&quot;Basic quoted-printable encoding test&quot;,</span>
+            &quot;1+1 =3D 2&quot;, encoded);
+
+<span class="fc" id="L200">        final Object result = qpcodec.encode((Object) null);</span>
+<span class="fc" id="L201">        assertEquals( &quot;Encoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L203">        try {</span>
+<span class="fc" id="L204">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L205">            qpcodec.encode( dObj );</span>
+<span class="nc" id="L206">            fail( &quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L207">        } catch (final EncoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L209">        }</span>
+<span class="fc" id="L210">    }</span>
+
+    @Test(expected=UnsupportedCharsetException.class)
+<span class="pc bpc" id="L213" title="4 of 6 branches missed.">    public void testInvalidEncoding() {</span>
+<span class="nc" id="L214">        new QuotedPrintableCodec(&quot;NONSENSE&quot;);</span>
+<span class="nc" id="L215">    }</span>
+
+    @Test
+<span class="pc bnc" id="L218" title="All 4 branches missed.">    public void testDecodeObjects() throws Exception {</span>
+<span class="fc" id="L219">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L220">        final String plain = &quot;1+1 =3D 2&quot;;</span>
+<span class="fc" id="L221">        String decoded = (String) qpcodec.decode((Object) plain);</span>
+<span class="fc" id="L222">        assertEquals(&quot;Basic quoted-printable decoding test&quot;,</span>
+            &quot;1+1 = 2&quot;, decoded);
+
+<span class="fc" id="L225">        final byte[] plainBA = plain.getBytes(Charsets.UTF_8);</span>
+<span class="fc" id="L226">        final byte[] decodedBA = (byte[]) qpcodec.decode((Object) plainBA);</span>
+<span class="fc" id="L227">        decoded = new String(decodedBA);</span>
+<span class="fc" id="L228">        assertEquals(&quot;Basic quoted-printable decoding test&quot;,</span>
+            &quot;1+1 = 2&quot;, decoded);
+
+<span class="fc" id="L231">        final Object result = qpcodec.decode((Object) null);</span>
+<span class="fc" id="L232">        assertEquals( &quot;Decoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L234">        try {</span>
+<span class="fc" id="L235">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L236">            qpcodec.decode( dObj );</span>
+<span class="nc" id="L237">            fail( &quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L238">        } catch (final DecoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L240">        }</span>
+<span class="fc" id="L241">    }</span>
+
+    @Test
+<span class="pc bnc" id="L244" title="All 4 branches missed.">    public void testDefaultEncoding() throws Exception {</span>
+<span class="fc" id="L245">        final String plain = &quot;Hello there!&quot;;</span>
+<span class="fc" id="L246">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec(&quot;UnicodeBig&quot;);</span>
+<span class="fc" id="L247">        qpcodec.encode(plain); // To work around a weird quirk in Java 1.2.2</span>
+<span class="fc" id="L248">        final String encoded1 = qpcodec.encode(plain, &quot;UnicodeBig&quot;);</span>
+<span class="fc" id="L249">        final String encoded2 = qpcodec.encode(plain);</span>
+<span class="fc" id="L250">        assertEquals(encoded1, encoded2);</span>
+<span class="fc" id="L251">    }</span>
+
+    @Test
+<span class="pc bnc" id="L254" title="All 4 branches missed.">    public void testSoftLineBreakDecode() throws Exception {</span>
+<span class="fc" id="L255">        final String qpdata = &quot;If you believe that truth=3Dbeauty, then surely=20=\r\nmathematics is the most beautiful branch of philosophy.&quot;;</span>
+<span class="fc" id="L256">        final String expected = &quot;If you believe that truth=beauty, then surely mathematics is the most beautiful branch of philosophy.&quot;;</span>
+
+<span class="fc" id="L258">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec();</span>
+<span class="fc" id="L259">        assertEquals(expected, qpcodec.decode(qpdata));</span>
+
+<span class="fc" id="L261">        final String encoded = qpcodec.encode(expected);</span>
+<span class="fc" id="L262">        assertEquals(expected, qpcodec.decode(encoded));</span>
+<span class="fc" id="L263">    }</span>
+
+    @Test
+<span class="pc bnc" id="L266" title="All 4 branches missed.">    public void testSoftLineBreakEncode() throws Exception {</span>
+<span class="fc" id="L267">        final String qpdata = &quot;If you believe that truth=3Dbeauty, then surely mathematics is the most b=\r\neautiful branch of philosophy.&quot;;</span>
+<span class="fc" id="L268">        final String expected = &quot;If you believe that truth=beauty, then surely mathematics is the most beautiful branch of philosophy.&quot;;</span>
+
+<span class="fc" id="L270">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec(true);</span>
+<span class="fc" id="L271">        assertEquals(qpdata, qpcodec.encode(expected));</span>
+
+<span class="fc" id="L273">        final String decoded = qpcodec.decode(qpdata);</span>
+<span class="fc" id="L274">        assertEquals(qpdata, qpcodec.encode(decoded));</span>
+<span class="fc" id="L275">    }</span>
+
+    @Test
+<span class="pc bnc" id="L278" title="All 4 branches missed.">    public void testSkipNotEncodedCRLF() throws Exception {</span>
+<span class="fc" id="L279">        final String qpdata = &quot;CRLF in an\n encoded text should be=20=\r\n\rskipped in the\r decoding.&quot;;</span>
+<span class="fc" id="L280">        final String expected = &quot;CRLF in an encoded text should be skipped in the decoding.&quot;;</span>
+
+<span class="fc" id="L282">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec(true);</span>
+<span class="fc" id="L283">        assertEquals(expected, qpcodec.decode(qpdata));</span>
+
+<span class="fc" id="L285">        final String encoded = qpcodec.encode(expected);</span>
+<span class="fc" id="L286">        assertEquals(expected, qpcodec.decode(encoded));</span>
+<span class="fc" id="L287">    }</span>
+
+    @Test
+<span class="pc bnc" id="L290" title="All 4 branches missed.">    public void testTrailingSpecial() throws Exception {</span>
+<span class="fc" id="L291">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec(true);</span>
+
+<span class="fc" id="L293">        String plain =&quot;This is a example of a quoted-printable text file. This might contain sp=cial chars.&quot;;</span>
+<span class="fc" id="L294">        String expected = &quot;This is a example of a quoted-printable text file. This might contain sp=3D=\r\ncial chars.&quot;;</span>
+<span class="fc" id="L295">        assertEquals(expected, qpcodec.encode(plain));</span>
+
+<span class="fc" id="L297">        plain =&quot;This is a example of a quoted-printable text file. This might contain ta\tbs as well.&quot;;</span>
+<span class="fc" id="L298">        expected = &quot;This is a example of a quoted-printable text file. This might contain ta=09=\r\nbs as well.&quot;;</span>
+<span class="fc" id="L299">        assertEquals(expected, qpcodec.encode(plain));</span>
+<span class="fc" id="L300">    }</span>
+
+    @Test
+<span class="pc bnc" id="L303" title="All 4 branches missed.">    public void testUltimateSoftBreak() throws Exception {</span>
+<span class="fc" id="L304">        final QuotedPrintableCodec qpcodec = new QuotedPrintableCodec(true);</span>
+
+<span class="fc" id="L306">        String plain =&quot;This is a example of a quoted-printable text file. There is no end to it\t&quot;;</span>
+<span class="fc" id="L307">        String expected = &quot;This is a example of a quoted-printable text file. There is no end to i=\r\nt=09&quot;;</span>
+
+<span class="fc" id="L309">        assertEquals(expected, qpcodec.encode(plain));</span>
+
+<span class="fc" id="L311">        plain =&quot;This is a example of a quoted-printable text file. There is no end to it &quot;;</span>
+<span class="fc" id="L312">        expected = &quot;This is a example of a quoted-printable text file. There is no end to i=\r\nt=20&quot;;</span>
+
+<span class="fc" id="L314">        assertEquals(expected, qpcodec.encode(plain));</span>
+
+        // whitespace before soft break
+<span class="fc" id="L317">        plain =&quot;This is a example of a quoted-printable text file. There is no end to   &quot;;</span>
+<span class="fc" id="L318">        expected = &quot;This is a example of a quoted-printable text file. There is no end to=20=\r\n =20&quot;;</span>
+
+<span class="fc" id="L320">        assertEquals(expected, qpcodec.encode(plain));</span>
+
+        // non-printable character before soft break
+<span class="fc" id="L323">        plain =&quot;This is a example of a quoted-printable text file. There is no end to=  &quot;;</span>
+<span class="fc" id="L324">        expected = &quot;This is a example of a quoted-printable text file. There is no end to=3D=\r\n =20&quot;;</span>
+
+<span class="fc" id="L326">        assertEquals(expected, qpcodec.encode(plain));</span>
+<span class="fc" id="L327">    }</span>
+
+    @Test
+<span class="pc bnc" id="L330" title="All 4 branches missed.">    public void testFinalBytes() throws Exception {</span>
+        // whitespace, but does not need to be encoded
+<span class="fc" id="L332">        final String plain =&quot;This is a example of a quoted=printable text file. There is no tt&quot;;</span>
+<span class="fc" id="L333">        final String expected = &quot;This is a example of a quoted=3Dprintable text file. There is no tt&quot;;</span>
+
+<span class="fc" id="L335">        assertEquals(expected, new QuotedPrintableCodec(true).encode(plain));</span>
+<span class="fc" id="L336">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

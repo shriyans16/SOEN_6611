@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BCodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.net</a> &gt; <span class="el_source">BCodecTest.java</span></div><h1>BCodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.net;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import java.nio.charset.UnsupportedCharsetException;
+
+import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.junit.Test;
+
+/**
+ * Quoted-printable codec test cases
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L36" title="3 of 4 branches missed.">public class BCodecTest {</span>
+
+<span class="fc" id="L38">    static final int SWISS_GERMAN_STUFF_UNICODE[] =</span>
+        { 0x47, 0x72, 0xFC, 0x65, 0x7A, 0x69, 0x5F, 0x7A, 0xE4, 0x6D, 0xE4 };
+
+<span class="fc" id="L41">    static final int RUSSIAN_STUFF_UNICODE[] =</span>
+        { 0x412, 0x441, 0x435, 0x43C, 0x5F, 0x43F, 0x440, 0x438, 0x432, 0x435, 0x442 };
+
+<span class="fc" id="L44">    private String constructString(final int[] unicodeChars) {</span>
+<span class="fc" id="L45">        final StringBuilder buffer = new StringBuilder();</span>
+<span class="pc bpc" id="L46" title="7 of 10 branches missed.">        if (unicodeChars != null) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            for (final int unicodeChar : unicodeChars) {</span>
+<span class="fc" id="L48">                buffer.append((char) unicodeChar);</span>
+            }
+        }
+<span class="fc" id="L51">        return buffer.toString();</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L55" title="All 4 branches missed.">    public void testNullInput() throws Exception {</span>
+<span class="fc" id="L56">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L57">        assertNull(bcodec.doDecoding(null));</span>
+<span class="fc" id="L58">        assertNull(bcodec.doEncoding(null));</span>
+<span class="fc" id="L59">    }</span>
+
+    @Test
+<span class="pc bnc" id="L62" title="All 4 branches missed.">    public void testUTF8RoundTrip() throws Exception {</span>
+
+<span class="fc" id="L64">        final String ru_msg = constructString(RUSSIAN_STUFF_UNICODE);</span>
+<span class="fc" id="L65">        final String ch_msg = constructString(SWISS_GERMAN_STUFF_UNICODE);</span>
+
+<span class="fc" id="L67">        final BCodec bcodec = new BCodec(CharEncoding.UTF_8);</span>
+
+<span class="fc" id="L69">        assertEquals(&quot;=?UTF-8?B?0JLRgdC10Lxf0L/RgNC40LLQtdGC?=&quot;, bcodec.encode(ru_msg));</span>
+<span class="fc" id="L70">        assertEquals(&quot;=?UTF-8?B?R3LDvGV6aV96w6Rtw6Q=?=&quot;, bcodec.encode(ch_msg));</span>
+
+<span class="fc" id="L72">        assertEquals(ru_msg, bcodec.decode(bcodec.encode(ru_msg)));</span>
+<span class="fc" id="L73">        assertEquals(ch_msg, bcodec.decode(bcodec.encode(ch_msg)));</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test
+<span class="pc bnc" id="L77" title="All 4 branches missed.">    public void testBasicEncodeDecode() throws Exception {</span>
+<span class="fc" id="L78">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L79">        final String plain = &quot;Hello there&quot;;</span>
+<span class="fc" id="L80">        final String encoded = bcodec.encode(plain);</span>
+<span class="fc" id="L81">        assertEquals(&quot;Basic B encoding test&quot;, &quot;=?UTF-8?B?SGVsbG8gdGhlcmU=?=&quot;, encoded);</span>
+<span class="fc" id="L82">        assertEquals(&quot;Basic B decoding test&quot;, plain, bcodec.decode(encoded));</span>
+<span class="fc" id="L83">    }</span>
+
+    @Test
+<span class="pc bnc" id="L86" title="All 4 branches missed.">    public void testEncodeDecodeNull() throws Exception {</span>
+<span class="fc" id="L87">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L88">        assertNull(&quot;Null string B encoding test&quot;, bcodec.encode((String) null));</span>
+<span class="fc" id="L89">        assertNull(&quot;Null string B decoding test&quot;, bcodec.decode((String) null));</span>
+<span class="fc" id="L90">    }</span>
+
+    @Test
+<span class="pc bnc" id="L93" title="All 4 branches missed.">    public void testEncodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L94">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L95">        final String test = null;</span>
+<span class="fc" id="L96">        final String result = bcodec.encode(test, &quot;charset&quot;);</span>
+<span class="fc" id="L97">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L98">    }</span>
+
+    @Test
+<span class="pc bnc" id="L101" title="All 4 branches missed.">    public void testDecodeStringWithNull() throws Exception {</span>
+<span class="fc" id="L102">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L103">        final String test = null;</span>
+<span class="fc" id="L104">        final String result = bcodec.decode(test);</span>
+<span class="fc" id="L105">        assertEquals(&quot;Result should be null&quot;, null, result);</span>
+<span class="fc" id="L106">    }</span>
+
+    @Test
+<span class="pc bnc" id="L109" title="All 4 branches missed.">    public void testEncodeObjects() throws Exception {</span>
+<span class="fc" id="L110">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L111">        final String plain = &quot;what not&quot;;</span>
+<span class="fc" id="L112">        final String encoded = (String) bcodec.encode((Object) plain);</span>
+
+<span class="fc" id="L114">        assertEquals(&quot;Basic B encoding test&quot;, &quot;=?UTF-8?B?d2hhdCBub3Q=?=&quot;, encoded);</span>
+
+<span class="fc" id="L116">        final Object result = bcodec.encode((Object) null);</span>
+<span class="fc" id="L117">        assertEquals(&quot;Encoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L119">        try {</span>
+<span class="fc" id="L120">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L121">            bcodec.encode(dObj);</span>
+<span class="nc" id="L122">            fail(&quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L123">        } catch (final EncoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L125">        }</span>
+<span class="fc" id="L126">    }</span>
+
+    @Test(expected=UnsupportedCharsetException.class)
+<span class="pc bpc" id="L129" title="4 of 6 branches missed.">    public void testInvalidEncoding() {</span>
+<span class="nc" id="L130">        new BCodec(&quot;NONSENSE&quot;);</span>
+<span class="nc" id="L131">    }</span>
+
+    @Test
+<span class="pc bnc" id="L134" title="All 4 branches missed.">    public void testDecodeObjects() throws Exception {</span>
+<span class="fc" id="L135">        final BCodec bcodec = new BCodec();</span>
+<span class="fc" id="L136">        final String decoded = &quot;=?UTF-8?B?d2hhdCBub3Q=?=&quot;;</span>
+<span class="fc" id="L137">        final String plain = (String) bcodec.decode((Object) decoded);</span>
+<span class="fc" id="L138">        assertEquals(&quot;Basic B decoding test&quot;, &quot;what not&quot;, plain);</span>
+
+<span class="fc" id="L140">        final Object result = bcodec.decode((Object) null);</span>
+<span class="fc" id="L141">        assertEquals(&quot;Decoding a null Object should return null&quot;, null, result);</span>
+
+<span class="fc" id="L143">        try {</span>
+<span class="fc" id="L144">            final Object dObj = Double.valueOf(3.0d);</span>
+<span class="nc" id="L145">            bcodec.decode(dObj);</span>
+<span class="nc" id="L146">            fail(&quot;Trying to url encode a Double object should cause an exception.&quot;);</span>
+<span class="fc" id="L147">        } catch (final DecoderException ee) {</span>
+            // Exception expected, test segment passes.
+<span class="nc" id="L149">        }</span>
+<span class="fc" id="L150">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

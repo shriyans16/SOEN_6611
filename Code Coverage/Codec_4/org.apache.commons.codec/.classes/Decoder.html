@@ -1,0 +1,94 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Decoder</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Decoder (org.apache.commons.codec)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Decoder</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Provides the highest level of abstraction for Decoders.
+<i>22</i>&nbsp; * &lt;p&gt;
+<i>23</i>&nbsp; * This is the sister interface of {@link Encoder}. All Decoders implement this common generic interface.
+<i>24</i>&nbsp; * Allows a user to pass a generic Object to any Decoder implementation in the codec package.
+<i>25</i>&nbsp; * &lt;p&gt;
+<i>26</i>&nbsp; * One of the two interfaces at the center of the codec package.
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @version $Id$
+<i>29</i>&nbsp; */
+<i>30</i>&nbsp;public interface Decoder {
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * Decodes an &quot;encoded&quot; Object and returns a &quot;decoded&quot; Object. Note that the implementation of this interface will
+<i>34</i>&nbsp;     * try to cast the Object parameter to the specific type expected by a particular Decoder implementation. If a
+<i>35</i>&nbsp;     * {@link ClassCastException} occurs this decode method will throw a DecoderException.
+<i>36</i>&nbsp;     *
+<i>37</i>&nbsp;     * @param source
+<i>38</i>&nbsp;     *            the object to decode
+<i>39</i>&nbsp;     * @return a &#39;decoded&quot; object
+<i>40</i>&nbsp;     * @throws DecoderException
+<i>41</i>&nbsp;     *             a decoder exception can be thrown for any number of reasons. Some good candidates are that the
+<i>42</i>&nbsp;     *             parameter passed to this method is null, a param cannot be cast to the appropriate type for a
+<i>43</i>&nbsp;     *             specific encoder.
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    Object decode(Object source) throws DecoderException;
+<i>46</i>&nbsp;}
+<i>47</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:33</div>
+</div>
+</body>
+</html>

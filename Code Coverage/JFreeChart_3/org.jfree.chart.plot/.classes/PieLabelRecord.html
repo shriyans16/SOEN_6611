@@ -1,0 +1,370 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PieLabelRecord</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PieLabelRecord (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PieLabelRecord</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (12/ 16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (45/ 55)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------
+<i>28</i>&nbsp; * PieLabelRecord.java
+<i>29</i>&nbsp; * -------------------
+<i>30</i>&nbsp; * (C) Copyright 2004-2008, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 08-Mar-2004 : Version 1 (DG);
+<i>38</i>&nbsp; * 14-Jun-2007 : Implemented Serializable, updated API docs (DG);
+<i>39</i>&nbsp; * 21-Nov-2007 : Implemented equals() to shut up FindBugs (DG);
+<i>40</i>&nbsp; *
+<i>41</i>&nbsp; */
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;package org.jfree.chart.plot;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;import java.io.Serializable;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;import org.jfree.text.TextBox;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;/**
+<i>50</i>&nbsp; * A structure that retains information about the label for a section in a pie
+<i>51</i>&nbsp; * chart.
+<i>52</i>&nbsp; */
+<i>53</i>&nbsp;public class PieLabelRecord implements Comparable, Serializable {
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /** The section key. */
+<i>56</i>&nbsp;    private Comparable key;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /** The angle of the centre of the section (in radians). */
+<i>59</i>&nbsp;    private double angle;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /** The base y-coordinate. */
+<i>62</i>&nbsp;    private double baseY;
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /** The allocated y-coordinate. */
+<i>65</i>&nbsp;    private double allocatedY;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /** The label. */
+<i>68</i>&nbsp;    private TextBox label;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /** The label height. */
+<i>71</i>&nbsp;    private double labelHeight;
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /** The gap. */
+<i>74</i>&nbsp;    private double gap;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /** The link percent. */
+<i>77</i>&nbsp;    private double linkPercent;
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Creates a new record.
+<i>81</i>&nbsp;     *
+<i>82</i>&nbsp;     * @param key  the section key.
+<i>83</i>&nbsp;     * @param angle  the angle to the middle of the section (in radians).
+<i>84</i>&nbsp;     * @param baseY  the base y-coordinate.
+<i>85</i>&nbsp;     * @param label  the section label.
+<i>86</i>&nbsp;     * @param labelHeight  the label height (in Java2D units).
+<i>87</i>&nbsp;     * @param gap  the offset to the left.
+<i>88</i>&nbsp;     * @param linkPercent  the link percent.
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    public PieLabelRecord(Comparable key, double angle, double baseY,
+<i>91</i>&nbsp;                          TextBox label, double labelHeight, double gap,
+<b class="fc"><i>92</i>&nbsp;                          double linkPercent) {</b>
+<b class="fc"><i>93</i>&nbsp;        this.key = key;</b>
+<b class="fc"><i>94</i>&nbsp;        this.angle = angle;</b>
+<b class="fc"><i>95</i>&nbsp;        this.baseY = baseY;</b>
+<b class="fc"><i>96</i>&nbsp;        this.allocatedY = baseY;</b>
+<b class="fc"><i>97</i>&nbsp;        this.label = label;</b>
+<b class="fc"><i>98</i>&nbsp;        this.labelHeight = labelHeight;</b>
+<b class="fc"><i>99</i>&nbsp;        this.gap = gap;</b>
+<b class="fc"><i>100</i>&nbsp;        this.linkPercent = linkPercent;</b>
+<b class="fc"><i>101</i>&nbsp;    }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * Returns the base y-coordinate.  This is where the label will appear if
+<i>105</i>&nbsp;     * there is no overlapping of labels.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @return The base y-coordinate.
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    public double getBaseY() {
+<b class="nc"><i>110</i>&nbsp;        return this.baseY;</b>
+<i>111</i>&nbsp;    }
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /**
+<i>114</i>&nbsp;     * Sets the base y-coordinate.
+<i>115</i>&nbsp;     *
+<i>116</i>&nbsp;     * @param base  the base y-coordinate.
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    public void setBaseY(double base) {
+<b class="nc"><i>119</i>&nbsp;        this.baseY = base;</b>
+<b class="nc"><i>120</i>&nbsp;    }</b>
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * Returns the lower bound of the label.
+<i>124</i>&nbsp;     *
+<i>125</i>&nbsp;     * @return The lower bound.
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    public double getLowerY() {
+<b class="fc"><i>128</i>&nbsp;        return this.allocatedY - this.labelHeight / 2.0;</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Returns the upper bound of the label.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @return The upper bound.
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    public double getUpperY() {
+<b class="fc"><i>137</i>&nbsp;        return this.allocatedY + this.labelHeight / 2.0;</b>
+<i>138</i>&nbsp;    }
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    /**
+<i>141</i>&nbsp;     * Returns the angle of the middle of the section, in radians.
+<i>142</i>&nbsp;     *
+<i>143</i>&nbsp;     * @return The angle, in radians.
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public double getAngle() {
+<b class="fc"><i>146</i>&nbsp;        return this.angle;</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * Returns the key for the section that the label applies to.
+<i>151</i>&nbsp;     *
+<i>152</i>&nbsp;     * @return The key.
+<i>153</i>&nbsp;     */
+<i>154</i>&nbsp;    public Comparable getKey() {
+<b class="nc"><i>155</i>&nbsp;        return this.key;</b>
+<i>156</i>&nbsp;    }
+<i>157</i>&nbsp;
+<i>158</i>&nbsp;    /**
+<i>159</i>&nbsp;     * Returns the label.
+<i>160</i>&nbsp;     *
+<i>161</i>&nbsp;     * @return The label.
+<i>162</i>&nbsp;     */
+<i>163</i>&nbsp;    public TextBox getLabel() {
+<b class="fc"><i>164</i>&nbsp;        return this.label;</b>
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    /**
+<i>168</i>&nbsp;     * Returns the label height (you could derive this from the label itself,
+<i>169</i>&nbsp;     * but we cache the value so it can be retrieved quickly).
+<i>170</i>&nbsp;     *
+<i>171</i>&nbsp;     * @return The label height (in Java2D units).
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    public double getLabelHeight() {
+<b class="fc"><i>174</i>&nbsp;        return this.labelHeight;</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Returns the allocated y-coordinate.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @return The allocated y-coordinate.
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public double getAllocatedY() {
+<b class="fc"><i>183</i>&nbsp;        return this.allocatedY;</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * Sets the allocated y-coordinate.
+<i>188</i>&nbsp;     *
+<i>189</i>&nbsp;     * @param y  the y-coordinate.
+<i>190</i>&nbsp;     */
+<i>191</i>&nbsp;    public void setAllocatedY(double y) {
+<b class="fc"><i>192</i>&nbsp;        this.allocatedY = y;</b>
+<b class="fc"><i>193</i>&nbsp;    }</b>
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    /**
+<i>196</i>&nbsp;     * Returns the gap.
+<i>197</i>&nbsp;     *
+<i>198</i>&nbsp;     * @return The gap.
+<i>199</i>&nbsp;     */
+<i>200</i>&nbsp;    public double getGap() {
+<b class="fc"><i>201</i>&nbsp;        return this.gap;</b>
+<i>202</i>&nbsp;    }
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * Returns the link percent.
+<i>206</i>&nbsp;     *
+<i>207</i>&nbsp;     * @return The link percent.
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    public double getLinkPercent() {
+<b class="fc"><i>210</i>&nbsp;        return this.linkPercent;</b>
+<i>211</i>&nbsp;    }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    /**
+<i>214</i>&nbsp;     * Compares this object to an arbitrary object.
+<i>215</i>&nbsp;     *
+<i>216</i>&nbsp;     * @param obj  the object to compare against.
+<i>217</i>&nbsp;     *
+<i>218</i>&nbsp;     * @return An integer that specifies the relative order of the two objects.
+<i>219</i>&nbsp;     */
+<i>220</i>&nbsp;    @Override
+<i>221</i>&nbsp;    public int compareTo(Object obj) {
+<b class="fc"><i>222</i>&nbsp;        int result = 0;</b>
+<b class="fc"><i>223</i>&nbsp;        if (obj instanceof PieLabelRecord) {</b>
+<b class="fc"><i>224</i>&nbsp;            PieLabelRecord plr = (PieLabelRecord) obj;</b>
+<b class="fc"><i>225</i>&nbsp;            if (this.baseY &lt; plr.baseY) {</b>
+<b class="fc"><i>226</i>&nbsp;                result = -1;</b>
+<i>227</i>&nbsp;            }
+<b class="nc"><i>228</i>&nbsp;            else if (this.baseY &gt; plr.baseY) {</b>
+<b class="nc"><i>229</i>&nbsp;                result = 1;</b>
+<i>230</i>&nbsp;            }
+<i>231</i>&nbsp;        }
+<b class="fc"><i>232</i>&nbsp;        return result;</b>
+<i>233</i>&nbsp;    }
+<i>234</i>&nbsp;
+<i>235</i>&nbsp;    /**
+<i>236</i>&nbsp;     * Tests this record for equality with an arbitrary object.
+<i>237</i>&nbsp;     *
+<i>238</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>239</i>&nbsp;     *
+<i>240</i>&nbsp;     * @return A boolean.
+<i>241</i>&nbsp;     */
+<i>242</i>&nbsp;    @Override
+<i>243</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>244</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>245</i>&nbsp;            return true;</b>
+<i>246</i>&nbsp;        }
+<b class="fc"><i>247</i>&nbsp;        if (!(obj instanceof PieLabelRecord)) {</b>
+<b class="nc"><i>248</i>&nbsp;            return false;</b>
+<i>249</i>&nbsp;        }
+<b class="fc"><i>250</i>&nbsp;        PieLabelRecord that = (PieLabelRecord) obj;</b>
+<b class="fc"><i>251</i>&nbsp;        if (!this.key.equals(that.key)) {</b>
+<b class="fc"><i>252</i>&nbsp;            return false;</b>
+<i>253</i>&nbsp;        }
+<b class="fc"><i>254</i>&nbsp;        if (this.angle != that.angle) {</b>
+<b class="fc"><i>255</i>&nbsp;            return false;</b>
+<i>256</i>&nbsp;        }
+<b class="fc"><i>257</i>&nbsp;        if (this.gap != that.gap) {</b>
+<b class="fc"><i>258</i>&nbsp;            return false;</b>
+<i>259</i>&nbsp;        }
+<b class="fc"><i>260</i>&nbsp;        if (this.allocatedY != that.allocatedY) {</b>
+<b class="fc"><i>261</i>&nbsp;            return false;</b>
+<i>262</i>&nbsp;        }
+<b class="fc"><i>263</i>&nbsp;        if (this.baseY != that.baseY) {</b>
+<b class="nc"><i>264</i>&nbsp;            return false;</b>
+<i>265</i>&nbsp;        }
+<b class="fc"><i>266</i>&nbsp;        if (this.labelHeight != that.labelHeight) {</b>
+<b class="fc"><i>267</i>&nbsp;            return false;</b>
+<i>268</i>&nbsp;        }
+<b class="fc"><i>269</i>&nbsp;        if (this.linkPercent != that.linkPercent) {</b>
+<b class="fc"><i>270</i>&nbsp;            return false;</b>
+<i>271</i>&nbsp;        }
+<b class="fc"><i>272</i>&nbsp;        if (!this.label.equals(that.label)) {</b>
+<b class="fc"><i>273</i>&nbsp;            return false;</b>
+<i>274</i>&nbsp;        }
+<b class="fc"><i>275</i>&nbsp;        return true;</b>
+<i>276</i>&nbsp;    }
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    /**
+<i>279</i>&nbsp;     * Returns a string describing the object.  This is used for debugging only.
+<i>280</i>&nbsp;     *
+<i>281</i>&nbsp;     * @return A string.
+<i>282</i>&nbsp;     */
+<i>283</i>&nbsp;    @Override
+<i>284</i>&nbsp;    public String toString() {
+<b class="nc"><i>285</i>&nbsp;        return this.baseY + &quot;, &quot; + this.key.toString();</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

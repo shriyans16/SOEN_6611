@@ -1,0 +1,1907 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FXGraphics2D</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.fx</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FXGraphics2D (org.jfree.chart.fx)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FXGraphics2D</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 84)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 425)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------
+<i>28</i>&nbsp; * FXGraphics2D.java
+<i>29</i>&nbsp; * -----------------
+<i>30</i>&nbsp; * (C) Copyright 2014, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp; * Changes:
+<i>36</i>&nbsp; * --------
+<i>37</i>&nbsp; * 20-Jun-2014 : Version 1 (DG);
+<i>38</i>&nbsp; */
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;package org.jfree.chart.fx;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;import java.awt.AlphaComposite;
+<i>44</i>&nbsp;import java.awt.BasicStroke;
+<i>45</i>&nbsp;import java.awt.Color;
+<i>46</i>&nbsp;import java.awt.Composite;
+<i>47</i>&nbsp;import java.awt.Font;
+<i>48</i>&nbsp;import java.awt.FontMetrics;
+<i>49</i>&nbsp;import java.awt.GradientPaint;
+<i>50</i>&nbsp;import java.awt.Graphics;
+<i>51</i>&nbsp;import java.awt.Graphics2D;
+<i>52</i>&nbsp;import java.awt.GraphicsConfiguration;
+<i>53</i>&nbsp;import java.awt.Image;
+<i>54</i>&nbsp;import java.awt.LinearGradientPaint;
+<i>55</i>&nbsp;import java.awt.MultipleGradientPaint;
+<i>56</i>&nbsp;import java.awt.Paint;
+<i>57</i>&nbsp;import java.awt.RadialGradientPaint;
+<i>58</i>&nbsp;import java.awt.Rectangle;
+<i>59</i>&nbsp;import java.awt.RenderingHints;
+<i>60</i>&nbsp;import java.awt.Shape;
+<i>61</i>&nbsp;import java.awt.Stroke;
+<i>62</i>&nbsp;import java.awt.font.FontRenderContext;
+<i>63</i>&nbsp;import java.awt.font.GlyphVector;
+<i>64</i>&nbsp;import java.awt.font.TextLayout;
+<i>65</i>&nbsp;import java.awt.geom.AffineTransform;
+<i>66</i>&nbsp;import java.awt.geom.Arc2D;
+<i>67</i>&nbsp;import java.awt.geom.Area;
+<i>68</i>&nbsp;import java.awt.geom.Ellipse2D;
+<i>69</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>70</i>&nbsp;import java.awt.geom.Line2D;
+<i>71</i>&nbsp;import java.awt.geom.NoninvertibleTransformException;
+<i>72</i>&nbsp;import java.awt.geom.Path2D;
+<i>73</i>&nbsp;import java.awt.geom.PathIterator;
+<i>74</i>&nbsp;import java.awt.geom.Point2D;
+<i>75</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>76</i>&nbsp;import java.awt.geom.RoundRectangle2D;
+<i>77</i>&nbsp;import java.awt.image.BufferedImage;
+<i>78</i>&nbsp;import java.awt.image.BufferedImageOp;
+<i>79</i>&nbsp;import java.awt.image.ColorModel;
+<i>80</i>&nbsp;import java.awt.image.ImageObserver;
+<i>81</i>&nbsp;import java.awt.image.RenderedImage;
+<i>82</i>&nbsp;import java.awt.image.WritableRaster;
+<i>83</i>&nbsp;import java.awt.image.renderable.RenderableImage;
+<i>84</i>&nbsp;import java.text.AttributedCharacterIterator;
+<i>85</i>&nbsp;import java.util.Hashtable;
+<i>86</i>&nbsp;import java.util.Map;
+<i>87</i>&nbsp;import java.util.Set;
+<i>88</i>&nbsp;import javafx.embed.swing.SwingFXUtils;
+<i>89</i>&nbsp;import javafx.scene.canvas.Canvas;
+<i>90</i>&nbsp;import javafx.scene.canvas.GraphicsContext;
+<i>91</i>&nbsp;import javafx.scene.paint.CycleMethod;
+<i>92</i>&nbsp;import javafx.scene.paint.LinearGradient;
+<i>93</i>&nbsp;import javafx.scene.paint.RadialGradient;
+<i>94</i>&nbsp;import javafx.scene.paint.Stop;
+<i>95</i>&nbsp;import javafx.scene.shape.ArcType;
+<i>96</i>&nbsp;import javafx.scene.shape.StrokeLineCap;
+<i>97</i>&nbsp;import javafx.scene.shape.StrokeLineJoin;
+<i>98</i>&nbsp;import javafx.scene.text.FontPosture;
+<i>99</i>&nbsp;import javafx.scene.text.FontWeight;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;/**
+<i>102</i>&nbsp; * A {@link Graphics2D} implementation that writes to a JavaFX {@link Canvas}.
+<i>103</i>&nbsp; * This class is copied directly from the FXGraphics2D project, we keep a local
+<i>104</i>&nbsp; * copy to avoid having a dependency to manage.
+<i>105</i>&nbsp; * 
+<i>106</i>&nbsp; * @since 1.0.18
+<i>107</i>&nbsp; */
+<i>108</i>&nbsp;public class FXGraphics2D extends Graphics2D {
+<i>109</i>&nbsp;    
+<i>110</i>&nbsp;    /** The graphics context for the JavaFX canvas. */
+<i>111</i>&nbsp;    private final GraphicsContext gc;
+<i>112</i>&nbsp;    
+<i>113</i>&nbsp;    /** The number of times the graphics state has been saved. */
+<b class="nc"><i>114</i>&nbsp;    private int saveCount = 0;</b>
+<i>115</i>&nbsp;    
+<i>116</i>&nbsp;    /** A flag to permit clipping to be disabled (since it is buggy). */
+<b class="nc"><i>117</i>&nbsp;    private boolean clippingDisabled = false;</b>
+<i>118</i>&nbsp;    
+<i>119</i>&nbsp;    /** Rendering hints. */
+<i>120</i>&nbsp;    private final RenderingHints hints;
+<i>121</i>&nbsp;    
+<i>122</i>&nbsp;    private Shape clip;
+<i>123</i>&nbsp;    
+<b class="nc"><i>124</i>&nbsp;    private Paint paint = Color.BLACK;</b>
+<i>125</i>&nbsp;    
+<b class="nc"><i>126</i>&nbsp;    private Color awtColor = Color.BLACK;</b>
+<i>127</i>&nbsp;    
+<b class="nc"><i>128</i>&nbsp;    private Composite composite = AlphaComposite.getInstance(</b>
+<i>129</i>&nbsp;            AlphaComposite.SRC_OVER, 1.0f);
+<i>130</i>&nbsp;    
+<b class="nc"><i>131</i>&nbsp;    private Stroke stroke = new BasicStroke(1.0f);</b>
+<i>132</i>&nbsp;    
+<i>133</i>&nbsp;    /** 
+<i>134</i>&nbsp;     * The width of the stroke to use when the user supplies a
+<i>135</i>&nbsp;     * BasicStroke with a width of 0.0 (in this case the Java specification
+<i>136</i>&nbsp;     * says &quot;If width is set to 0.0f, the stroke is rendered as the thinnest 
+<i>137</i>&nbsp;     * possible line for the target device and the antialias hint setting.&quot;)
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    private double zeroStrokeWidth;
+<i>140</i>&nbsp;    
+<b class="nc"><i>141</i>&nbsp;    private Font font = new Font(&quot;SansSerif&quot;, Font.PLAIN, 12);</b>
+<i>142</i>&nbsp;    
+<b class="nc"><i>143</i>&nbsp;    private AffineTransform transform = new AffineTransform();</b>
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /** The background color, presently ignored. */
+<b class="nc"><i>146</i>&nbsp;    private Color background = Color.BLACK;</b>
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /**
+<i>149</i>&nbsp;     * An instance that is lazily instantiated in drawLine and then 
+<i>150</i>&nbsp;     * subsequently reused to avoid creating a lot of garbage.
+<i>151</i>&nbsp;     */
+<i>152</i>&nbsp;    private Line2D line;
+<i>153</i>&nbsp;    
+<i>154</i>&nbsp;    /**
+<i>155</i>&nbsp;     * An instance that is lazily instantiated in fillRect and then 
+<i>156</i>&nbsp;     * subsequently reused to avoid creating a lot of garbage.
+<i>157</i>&nbsp;     */
+<i>158</i>&nbsp;    Rectangle2D rect;
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * An instance that is lazily instantiated in draw/fillRoundRect and then
+<i>162</i>&nbsp;     * subsequently reused to avoid creating a lot of garbage.
+<i>163</i>&nbsp;     */
+<i>164</i>&nbsp;    private RoundRectangle2D roundRect;
+<i>165</i>&nbsp;    
+<i>166</i>&nbsp;     /**
+<i>167</i>&nbsp;     * An instance that is lazily instantiated in draw/fillOval and then
+<i>168</i>&nbsp;     * subsequently reused to avoid creating a lot of garbage.
+<i>169</i>&nbsp;     */
+<i>170</i>&nbsp;   private Ellipse2D oval;
+<i>171</i>&nbsp;    
+<i>172</i>&nbsp;    /**
+<i>173</i>&nbsp;     * An instance that is lazily instantiated in draw/fillArc and then
+<i>174</i>&nbsp;     * subsequently reused to avoid creating a lot of garbage.
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    private Arc2D arc;
+<i>177</i>&nbsp;    
+<i>178</i>&nbsp;    /** A hidden image used for font metrics. */
+<b class="nc"><i>179</i>&nbsp;    private final BufferedImage fmImage = new BufferedImage(10, 10, </b>
+<i>180</i>&nbsp;            BufferedImage.TYPE_INT_RGB);
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * Throws an {@code IllegalArgumentException} if {@code arg} is
+<i>184</i>&nbsp;     * {@code null}.
+<i>185</i>&nbsp;     * 
+<i>186</i>&nbsp;     * @param arg  the argument to check.
+<i>187</i>&nbsp;     * @param name  the name of the
+<i>188</i>&nbsp;     */
+<i>189</i>&nbsp;    private static void nullNotPermitted(Object arg, String name) {
+<b class="nc"><i>190</i>&nbsp;        if (arg == null) {</b>
+<b class="nc"><i>191</i>&nbsp;            throw new IllegalArgumentException(&quot;Null &#39;&quot; + name + &quot;&#39; argument.&quot;);</b>
+<i>192</i>&nbsp;        }    
+<i>193</i>&nbsp;    }
+<i>194</i>&nbsp;    
+<i>195</i>&nbsp;    /**
+<i>196</i>&nbsp;     * Creates a new instance that will render to the specified JavaFX
+<i>197</i>&nbsp;     * {@code GraphicsContext}.
+<i>198</i>&nbsp;     * 
+<i>199</i>&nbsp;     * @param gc  the graphics context ({@code null} not permitted). 
+<i>200</i>&nbsp;     */
+<b class="nc"><i>201</i>&nbsp;    public FXGraphics2D(GraphicsContext gc) {</b>
+<b class="nc"><i>202</i>&nbsp;        nullNotPermitted(gc, &quot;gc&quot;);</b>
+<b class="nc"><i>203</i>&nbsp;        this.gc = gc;</b>
+<b class="nc"><i>204</i>&nbsp;        this.zeroStrokeWidth = 0.5;</b>
+<b class="nc"><i>205</i>&nbsp;        this.hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, </b>
+<i>206</i>&nbsp;                RenderingHints.VALUE_ANTIALIAS_DEFAULT);
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;    
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * Returns the width to use for the stroke when the AWT stroke
+<i>211</i>&nbsp;     * specified has a zero width (the default value is {@code 0.5}).  
+<i>212</i>&nbsp;     * &lt;p&gt;In the Java specification for {@code BasicStroke} it states &quot;If width 
+<i>213</i>&nbsp;     * is set to 0.0f, the stroke is rendered as the thinnest possible 
+<i>214</i>&nbsp;     * line for the target device and the antialias hint setting.&quot;  We don&#39;t 
+<i>215</i>&nbsp;     * have a means to implement that accurately since we must specify a fixed
+<i>216</i>&nbsp;     * width to the JavaFX canvas - this attribute is the width that is 
+<i>217</i>&nbsp;     * used.&lt;/p&gt;
+<i>218</i>&nbsp;     * 
+<i>219</i>&nbsp;     * @return The width.
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;    public double getZeroStrokeWidth() {
+<b class="nc"><i>222</i>&nbsp;        return this.zeroStrokeWidth;</b>
+<i>223</i>&nbsp;    }
+<i>224</i>&nbsp;    
+<i>225</i>&nbsp;    /**
+<i>226</i>&nbsp;     * Sets the width to use for the stroke when the current AWT stroke
+<i>227</i>&nbsp;     * has a width of {@code 0.0}.
+<i>228</i>&nbsp;     * 
+<i>229</i>&nbsp;     * @param width  the new width (must be 0 or greater).
+<i>230</i>&nbsp;     */
+<i>231</i>&nbsp;    public void setZeroStrokeWidth(double width) {
+<b class="nc"><i>232</i>&nbsp;        if (width &lt; 0.0) {</b>
+<b class="nc"><i>233</i>&nbsp;            throw new IllegalArgumentException(&quot;Width cannot be negative.&quot;);</b>
+<i>234</i>&nbsp;        }
+<b class="nc"><i>235</i>&nbsp;        this.zeroStrokeWidth = width;</b>
+<i>236</i>&nbsp;    }
+<i>237</i>&nbsp; 
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * Returns the flag that controls whether or not clipping is actually 
+<i>240</i>&nbsp;     * applied to the JavaFX canvas.  The default value is currently 
+<i>241</i>&nbsp;     * {@code false} (the clipping is ENABLED) but since it does not always
+<i>242</i>&nbsp;     * work correctly you have the option to disable it.  See 
+<i>243</i>&nbsp;     * &lt;a href=&quot;https://javafx-jira.kenai.com/browse/RT-36891&quot;&gt;
+<i>244</i>&nbsp;     * https://javafx-jira.kenai.com/browse/RT-36891&lt;/a&gt; for details (requires 
+<i>245</i>&nbsp;     * an account).
+<i>246</i>&nbsp;     * 
+<i>247</i>&nbsp;     * @return A boolean.
+<i>248</i>&nbsp;     * 
+<i>249</i>&nbsp;     * @see #setClippingDisabled(boolean) 
+<i>250</i>&nbsp;     */
+<i>251</i>&nbsp;    public boolean isClippingDisabled() {
+<b class="nc"><i>252</i>&nbsp;        return this.clippingDisabled;</b>
+<i>253</i>&nbsp;    }
+<i>254</i>&nbsp;    
+<i>255</i>&nbsp;    /**
+<i>256</i>&nbsp;     * Sets the flag that controls whether or not clipping is disabled.
+<i>257</i>&nbsp;     * 
+<i>258</i>&nbsp;     * @param disabled  the new flag value.
+<i>259</i>&nbsp;     * 
+<i>260</i>&nbsp;     * @see #isClippingDisabled() 
+<i>261</i>&nbsp;     */
+<i>262</i>&nbsp;    public void setClippingDisabled(boolean disabled) {
+<b class="nc"><i>263</i>&nbsp;        this.clippingDisabled = disabled;    </b>
+<i>264</i>&nbsp;    }
+<i>265</i>&nbsp;    
+<i>266</i>&nbsp;    /**
+<i>267</i>&nbsp;     * This method is not implemented yet.
+<i>268</i>&nbsp;     * @return {@code null}.
+<i>269</i>&nbsp;     */
+<i>270</i>&nbsp;    @Override
+<i>271</i>&nbsp;    public GraphicsConfiguration getDeviceConfiguration() {
+<i>272</i>&nbsp;        // FIXME
+<b class="nc"><i>273</i>&nbsp;        return null;</b>
+<i>274</i>&nbsp;    }
+<i>275</i>&nbsp;
+<i>276</i>&nbsp;    /**
+<i>277</i>&nbsp;     * Creates a new graphics object that is a copy of this graphics object.
+<i>278</i>&nbsp;     * 
+<i>279</i>&nbsp;     * @return A new graphics object.
+<i>280</i>&nbsp;     */
+<i>281</i>&nbsp;    @Override
+<i>282</i>&nbsp;    public Graphics create() {
+<b class="nc"><i>283</i>&nbsp;        FXGraphics2D copy = new FXGraphics2D(this.gc);</b>
+<b class="nc"><i>284</i>&nbsp;        copy.setRenderingHints(getRenderingHints());</b>
+<b class="nc"><i>285</i>&nbsp;        copy.setClip(getClip());</b>
+<b class="nc"><i>286</i>&nbsp;        copy.setPaint(getPaint());</b>
+<b class="nc"><i>287</i>&nbsp;        copy.setColor(getColor());</b>
+<b class="nc"><i>288</i>&nbsp;        copy.setComposite(getComposite());</b>
+<b class="nc"><i>289</i>&nbsp;        copy.setStroke(getStroke());</b>
+<b class="nc"><i>290</i>&nbsp;        copy.setFont(getFont());</b>
+<b class="nc"><i>291</i>&nbsp;        copy.setTransform(getTransform());</b>
+<b class="nc"><i>292</i>&nbsp;        copy.setBackground(getBackground());</b>
+<b class="nc"><i>293</i>&nbsp;        return copy;</b>
+<i>294</i>&nbsp;    }
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;    /**
+<i>297</i>&nbsp;     * Returns the paint used to draw or fill shapes (or text).  The default 
+<i>298</i>&nbsp;     * value is {@link Color#BLACK}.
+<i>299</i>&nbsp;     * 
+<i>300</i>&nbsp;     * @return The paint (never {@code null}). 
+<i>301</i>&nbsp;     * 
+<i>302</i>&nbsp;     * @see #setPaint(java.awt.Paint) 
+<i>303</i>&nbsp;     */
+<i>304</i>&nbsp;    @Override
+<i>305</i>&nbsp;    public Paint getPaint() {
+<b class="nc"><i>306</i>&nbsp;        return this.paint;</b>
+<i>307</i>&nbsp;    }
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;    /**
+<i>310</i>&nbsp;     * Sets the paint used to draw or fill shapes (or text).  If 
+<i>311</i>&nbsp;     * {@code paint} is an instance of {@code Color}, this method will
+<i>312</i>&nbsp;     * also update the current color attribute (see {@link #getColor()}). If 
+<i>313</i>&nbsp;     * you pass {@code null} to this method, it does nothing (in 
+<i>314</i>&nbsp;     * accordance with the JDK specification).
+<i>315</i>&nbsp;     * &lt;br&gt;&lt;br&gt;
+<i>316</i>&nbsp;     * Note that this implementation will map {@link Color}, 
+<i>317</i>&nbsp;     * {@link GradientPaint}, {@link LinearGradientPaint} and 
+<i>318</i>&nbsp;     * {@link RadialGradientPaint}, other paint implementations are not 
+<i>319</i>&nbsp;     * handled.
+<i>320</i>&nbsp;     * 
+<i>321</i>&nbsp;     * @param paint  the paint ({@code null} is permitted but ignored).
+<i>322</i>&nbsp;     * 
+<i>323</i>&nbsp;     * @see #getPaint() 
+<i>324</i>&nbsp;     */
+<i>325</i>&nbsp;    @Override
+<i>326</i>&nbsp;    public void setPaint(Paint paint) {
+<b class="nc"><i>327</i>&nbsp;        if (paint == null) {</b>
+<i>328</i>&nbsp;            return;
+<i>329</i>&nbsp;        }
+<b class="nc"><i>330</i>&nbsp;        this.paint = paint;</b>
+<b class="nc"><i>331</i>&nbsp;        if (paint instanceof Color) {</b>
+<b class="nc"><i>332</i>&nbsp;            setColor((Color) paint);</b>
+<b class="nc"><i>333</i>&nbsp;        } else if (paint instanceof GradientPaint) {</b>
+<b class="nc"><i>334</i>&nbsp;            GradientPaint gp = (GradientPaint) paint;</b>
+<b class="nc"><i>335</i>&nbsp;            Stop[] stops = new Stop[] { new Stop(0, </b>
+<b class="nc"><i>336</i>&nbsp;                    awtColorToJavaFX(gp.getColor1())), </b>
+<b class="nc"><i>337</i>&nbsp;                    new Stop(1, awtColorToJavaFX(gp.getColor2())) };</b>
+<b class="nc"><i>338</i>&nbsp;            Point2D p1 = gp.getPoint1();</b>
+<b class="nc"><i>339</i>&nbsp;            Point2D p2 = gp.getPoint2();</b>
+<b class="nc"><i>340</i>&nbsp;            LinearGradient lg = new LinearGradient(p1.getX(), p1.getY(), </b>
+<b class="nc"><i>341</i>&nbsp;                    p2.getX(), p2.getY(), false, CycleMethod.NO_CYCLE, stops);</b>
+<b class="nc"><i>342</i>&nbsp;            this.gc.setStroke(lg);</b>
+<b class="nc"><i>343</i>&nbsp;            this.gc.setFill(lg);</b>
+<b class="nc"><i>344</i>&nbsp;        } else if (paint instanceof MultipleGradientPaint) {</b>
+<b class="nc"><i>345</i>&nbsp;            MultipleGradientPaint mgp = (MultipleGradientPaint) paint;</b>
+<b class="nc"><i>346</i>&nbsp;            Color[] colors = mgp.getColors();</b>
+<b class="nc"><i>347</i>&nbsp;            float[] fractions = mgp.getFractions();</b>
+<b class="nc"><i>348</i>&nbsp;            Stop[] stops = new Stop[colors.length];</b>
+<b class="nc"><i>349</i>&nbsp;            for (int i = 0; i &lt; colors.length; i++) {</b>
+<b class="nc"><i>350</i>&nbsp;                stops[i] = new Stop(fractions[i], awtColorToJavaFX(colors[i]));</b>
+<i>351</i>&nbsp;            }
+<i>352</i>&nbsp;
+<b class="nc"><i>353</i>&nbsp;            if (paint instanceof RadialGradientPaint) {</b>
+<b class="nc"><i>354</i>&nbsp;                RadialGradientPaint rgp = (RadialGradientPaint) paint;</b>
+<b class="nc"><i>355</i>&nbsp;                Point2D center = rgp.getCenterPoint();</b>
+<b class="nc"><i>356</i>&nbsp;                Point2D focus = rgp.getFocusPoint();           </b>
+<b class="nc"><i>357</i>&nbsp;                double focusDistance = focus.distance(center);</b>
+<b class="nc"><i>358</i>&nbsp;                double focusAngle = 0.0;</b>
+<b class="nc"><i>359</i>&nbsp;                if (!focus.equals(center)) {</b>
+<b class="nc"><i>360</i>&nbsp;                    focusAngle = Math.atan2(focus.getY() - center.getY(), </b>
+<b class="nc"><i>361</i>&nbsp;                        focus.getX() - center.getX());</b>
+<i>362</i>&nbsp;                }
+<b class="nc"><i>363</i>&nbsp;                double radius = rgp.getRadius();</b>
+<b class="nc"><i>364</i>&nbsp;                RadialGradient rg = new RadialGradient(</b>
+<i>365</i>&nbsp;                        focusAngle * Math.PI / 180, focusDistance, 
+<b class="nc"><i>366</i>&nbsp;                        center.getX(), center.getY(), radius, false, </b>
+<i>367</i>&nbsp;                        CycleMethod.NO_CYCLE, stops);
+<b class="nc"><i>368</i>&nbsp;                this.gc.setStroke(rg);</b>
+<b class="nc"><i>369</i>&nbsp;                this.gc.setFill(rg);</b>
+<b class="nc"><i>370</i>&nbsp;            } else if (paint instanceof LinearGradientPaint) {</b>
+<b class="nc"><i>371</i>&nbsp;                LinearGradientPaint lgp = (LinearGradientPaint) paint;</b>
+<b class="nc"><i>372</i>&nbsp;                Point2D start = lgp.getStartPoint();</b>
+<b class="nc"><i>373</i>&nbsp;                Point2D end = lgp.getEndPoint();</b>
+<b class="nc"><i>374</i>&nbsp;                LinearGradient lg = new LinearGradient(start.getX(), </b>
+<b class="nc"><i>375</i>&nbsp;                        start.getY(), end.getX(), end.getY(), false, </b>
+<i>376</i>&nbsp;                        CycleMethod.NO_CYCLE, stops);
+<b class="nc"><i>377</i>&nbsp;                this.gc.setStroke(lg);</b>
+<b class="nc"><i>378</i>&nbsp;                this.gc.setFill(lg);</b>
+<i>379</i>&nbsp;            }
+<i>380</i>&nbsp;        } else {
+<i>381</i>&nbsp;            // this is a paint we don&#39;t recognise
+<i>382</i>&nbsp;        }
+<i>383</i>&nbsp;    }
+<i>384</i>&nbsp;
+<i>385</i>&nbsp;    /**
+<i>386</i>&nbsp;     * Returns the foreground color.  This method exists for backwards
+<i>387</i>&nbsp;     * compatibility in AWT, you should use the {@link #getPaint()} method.
+<i>388</i>&nbsp;     * 
+<i>389</i>&nbsp;     * @return The foreground color (never {@code null}).
+<i>390</i>&nbsp;     * 
+<i>391</i>&nbsp;     * @see #getPaint() 
+<i>392</i>&nbsp;     */
+<i>393</i>&nbsp;    @Override
+<i>394</i>&nbsp;    public Color getColor() {
+<b class="nc"><i>395</i>&nbsp;        return this.awtColor;</b>
+<i>396</i>&nbsp;    }
+<i>397</i>&nbsp;
+<i>398</i>&nbsp;    /**
+<i>399</i>&nbsp;     * Sets the foreground color.  This method exists for backwards 
+<i>400</i>&nbsp;     * compatibility in AWT, you should use the 
+<i>401</i>&nbsp;     * {@link #setPaint(java.awt.Paint)} method.
+<i>402</i>&nbsp;     * 
+<i>403</i>&nbsp;     * @param c  the color ({@code null} permitted but ignored). 
+<i>404</i>&nbsp;     * 
+<i>405</i>&nbsp;     * @see #setPaint(java.awt.Paint) 
+<i>406</i>&nbsp;     */
+<i>407</i>&nbsp;    @Override
+<i>408</i>&nbsp;    public void setColor(Color c) {
+<b class="nc"><i>409</i>&nbsp;        if (c == null) {</b>
+<i>410</i>&nbsp;            return;
+<i>411</i>&nbsp;        }
+<b class="nc"><i>412</i>&nbsp;        this.awtColor = c;</b>
+<b class="nc"><i>413</i>&nbsp;        this.paint = c;</b>
+<b class="nc"><i>414</i>&nbsp;        javafx.scene.paint.Color fxcolor = awtColorToJavaFX(c);</b>
+<b class="nc"><i>415</i>&nbsp;        this.gc.setFill(fxcolor);</b>
+<b class="nc"><i>416</i>&nbsp;        this.gc.setStroke(fxcolor);</b>
+<i>417</i>&nbsp;    }
+<i>418</i>&nbsp;
+<i>419</i>&nbsp;    /**
+<i>420</i>&nbsp;     * Returns a JavaFX color that is equivalent to the specified AWT color.
+<i>421</i>&nbsp;     * 
+<i>422</i>&nbsp;     * @param c  the color ({@code null} not permitted).
+<i>423</i>&nbsp;     * 
+<i>424</i>&nbsp;     * @return A JavaFX color. 
+<i>425</i>&nbsp;     */
+<i>426</i>&nbsp;    private javafx.scene.paint.Color awtColorToJavaFX(Color c) {
+<b class="nc"><i>427</i>&nbsp;        return javafx.scene.paint.Color.rgb(c.getRed(), c.getGreen(), </b>
+<b class="nc"><i>428</i>&nbsp;                c.getBlue(), c.getAlpha() / 255.0);</b>
+<i>429</i>&nbsp;    }
+<i>430</i>&nbsp;    
+<i>431</i>&nbsp;    /**
+<i>432</i>&nbsp;     * Returns the background color (the default value is {@link Color#BLACK}).
+<i>433</i>&nbsp;     * This attribute is used by the {@link #clearRect(int, int, int, int)} 
+<i>434</i>&nbsp;     * method.
+<i>435</i>&nbsp;     * 
+<i>436</i>&nbsp;     * @return The background color (possibly {@code null}). 
+<i>437</i>&nbsp;     * 
+<i>438</i>&nbsp;     * @see #setBackground(java.awt.Color) 
+<i>439</i>&nbsp;     */
+<i>440</i>&nbsp;    @Override
+<i>441</i>&nbsp;    public Color getBackground() {
+<b class="nc"><i>442</i>&nbsp;        return this.background;</b>
+<i>443</i>&nbsp;    }
+<i>444</i>&nbsp;
+<i>445</i>&nbsp;    /**
+<i>446</i>&nbsp;     * Sets the background color.  This attribute is used by the 
+<i>447</i>&nbsp;     * {@link #clearRect(int, int, int, int)} method.  The reference 
+<i>448</i>&nbsp;     * implementation allows {@code null} for the background color so
+<i>449</i>&nbsp;     * we allow that too (but for that case, the {@link #clearRect(int, int, int, int)} 
+<i>450</i>&nbsp;     * method will do nothing).
+<i>451</i>&nbsp;     * 
+<i>452</i>&nbsp;     * @param color  the color ({@code null} permitted).
+<i>453</i>&nbsp;     * 
+<i>454</i>&nbsp;     * @see #getBackground() 
+<i>455</i>&nbsp;     */
+<i>456</i>&nbsp;    @Override
+<i>457</i>&nbsp;    public void setBackground(Color color) {
+<b class="nc"><i>458</i>&nbsp;        this.background = color;</b>
+<i>459</i>&nbsp;    }
+<i>460</i>&nbsp;
+<i>461</i>&nbsp;    /**
+<i>462</i>&nbsp;     * Returns the current composite.
+<i>463</i>&nbsp;     * 
+<i>464</i>&nbsp;     * @return The current composite (never {@code null}).
+<i>465</i>&nbsp;     * 
+<i>466</i>&nbsp;     * @see #setComposite(java.awt.Composite) 
+<i>467</i>&nbsp;     */
+<i>468</i>&nbsp;    @Override
+<i>469</i>&nbsp;    public Composite getComposite() {
+<b class="nc"><i>470</i>&nbsp;        return this.composite;</b>
+<i>471</i>&nbsp;    }
+<i>472</i>&nbsp;    
+<i>473</i>&nbsp;    /**
+<i>474</i>&nbsp;     * Sets the composite (only {@code AlphaComposite} is handled).
+<i>475</i>&nbsp;     * 
+<i>476</i>&nbsp;     * @param comp  the composite ({@code null} not permitted).
+<i>477</i>&nbsp;     * 
+<i>478</i>&nbsp;     * @see #getComposite() 
+<i>479</i>&nbsp;     */
+<i>480</i>&nbsp;    @Override
+<i>481</i>&nbsp;    public void setComposite(Composite comp) {
+<b class="nc"><i>482</i>&nbsp;        nullNotPermitted(comp, &quot;comp&quot;);</b>
+<b class="nc"><i>483</i>&nbsp;        this.composite = comp;</b>
+<i>484</i>&nbsp;    }
+<i>485</i>&nbsp;
+<i>486</i>&nbsp;    /**
+<i>487</i>&nbsp;     * Returns the current stroke (this attribute is used when drawing shapes). 
+<i>488</i>&nbsp;     * 
+<i>489</i>&nbsp;     * @return The current stroke (never {@code null}). 
+<i>490</i>&nbsp;     * 
+<i>491</i>&nbsp;     * @see #setStroke(java.awt.Stroke) 
+<i>492</i>&nbsp;     */
+<i>493</i>&nbsp;    @Override
+<i>494</i>&nbsp;    public Stroke getStroke() {
+<b class="nc"><i>495</i>&nbsp;        return this.stroke;</b>
+<i>496</i>&nbsp;    }
+<i>497</i>&nbsp;
+<i>498</i>&nbsp;    /**
+<i>499</i>&nbsp;     * Sets the stroke that will be used to draw shapes.
+<i>500</i>&nbsp;     * 
+<i>501</i>&nbsp;     * @param s  the stroke ({@code null} not permitted).
+<i>502</i>&nbsp;     * 
+<i>503</i>&nbsp;     * @see #getStroke() 
+<i>504</i>&nbsp;     */
+<i>505</i>&nbsp;    @Override
+<i>506</i>&nbsp;    public void setStroke(Stroke s) {
+<b class="nc"><i>507</i>&nbsp;        nullNotPermitted(s, &quot;s&quot;);</b>
+<b class="nc"><i>508</i>&nbsp;        this.stroke = s;</b>
+<b class="nc"><i>509</i>&nbsp;        if (stroke instanceof BasicStroke) {</b>
+<b class="nc"><i>510</i>&nbsp;            BasicStroke bs = (BasicStroke) s;</b>
+<b class="nc"><i>511</i>&nbsp;            double lineWidth = bs.getLineWidth();</b>
+<b class="nc"><i>512</i>&nbsp;            if (lineWidth == 0.0) {</b>
+<b class="nc"><i>513</i>&nbsp;                lineWidth = this.zeroStrokeWidth;</b>
+<i>514</i>&nbsp;            }
+<b class="nc"><i>515</i>&nbsp;            this.gc.setLineWidth(lineWidth);</b>
+<b class="nc"><i>516</i>&nbsp;            this.gc.setLineCap(awtToJavaFXLineCap(bs.getEndCap()));</b>
+<b class="nc"><i>517</i>&nbsp;            this.gc.setLineJoin(awtToJavaFXLineJoin(bs.getLineJoin()));</b>
+<b class="nc"><i>518</i>&nbsp;            this.gc.setMiterLimit(bs.getMiterLimit());</b>
+<i>519</i>&nbsp;        }
+<i>520</i>&nbsp;    }
+<i>521</i>&nbsp;    
+<i>522</i>&nbsp;    /**
+<i>523</i>&nbsp;     * Maps a line cap code from AWT to the corresponding JavaFX StrokeLineCap
+<i>524</i>&nbsp;     * enum value.
+<i>525</i>&nbsp;     * 
+<i>526</i>&nbsp;     * @param c  the line cap code.
+<i>527</i>&nbsp;     * 
+<i>528</i>&nbsp;     * @return A JavaFX line cap value. 
+<i>529</i>&nbsp;     */
+<i>530</i>&nbsp;    private StrokeLineCap awtToJavaFXLineCap(int c) {
+<b class="nc"><i>531</i>&nbsp;        if (c == BasicStroke.CAP_BUTT) {</b>
+<b class="nc"><i>532</i>&nbsp;            return StrokeLineCap.BUTT;</b>
+<b class="nc"><i>533</i>&nbsp;        } else if (c == BasicStroke.CAP_ROUND) {</b>
+<b class="nc"><i>534</i>&nbsp;            return StrokeLineCap.ROUND;</b>
+<b class="nc"><i>535</i>&nbsp;        } else if (c == BasicStroke.CAP_SQUARE) {</b>
+<b class="nc"><i>536</i>&nbsp;            return StrokeLineCap.SQUARE;</b>
+<i>537</i>&nbsp;        } else {
+<b class="nc"><i>538</i>&nbsp;            throw new IllegalArgumentException(&quot;Unrecognised cap code: &quot; + c);</b>
+<i>539</i>&nbsp;        }
+<i>540</i>&nbsp;    }
+<i>541</i>&nbsp;
+<i>542</i>&nbsp;    /**
+<i>543</i>&nbsp;     * Maps a line join code from AWT to the corresponding JavaFX 
+<i>544</i>&nbsp;     * StrokeLineJoin enum value.
+<i>545</i>&nbsp;     * 
+<i>546</i>&nbsp;     * @param c  the line join code.
+<i>547</i>&nbsp;     * 
+<i>548</i>&nbsp;     * @return A JavaFX line join value. 
+<i>549</i>&nbsp;     */
+<i>550</i>&nbsp;    private StrokeLineJoin awtToJavaFXLineJoin(int j) {
+<b class="nc"><i>551</i>&nbsp;        if (j == BasicStroke.JOIN_BEVEL) {</b>
+<b class="nc"><i>552</i>&nbsp;            return StrokeLineJoin.BEVEL;</b>
+<b class="nc"><i>553</i>&nbsp;        } else if (j == BasicStroke.JOIN_MITER) {</b>
+<b class="nc"><i>554</i>&nbsp;            return StrokeLineJoin.MITER;</b>
+<b class="nc"><i>555</i>&nbsp;        } else if (j == BasicStroke.JOIN_ROUND) {</b>
+<b class="nc"><i>556</i>&nbsp;            return StrokeLineJoin.ROUND;</b>
+<i>557</i>&nbsp;        } else {
+<b class="nc"><i>558</i>&nbsp;            throw new IllegalArgumentException(&quot;Unrecognised join code: &quot; + j);            </b>
+<i>559</i>&nbsp;        }
+<i>560</i>&nbsp;    }
+<i>561</i>&nbsp;    
+<i>562</i>&nbsp;    /**
+<i>563</i>&nbsp;     * Returns the current value for the specified hint.  Note that all hints
+<i>564</i>&nbsp;     * are currently ignored in this implementation.
+<i>565</i>&nbsp;     * 
+<i>566</i>&nbsp;     * @param hintKey  the hint key ({@code null} permitted, but the
+<i>567</i>&nbsp;     *     result will be {@code null} also in that case).
+<i>568</i>&nbsp;     * 
+<i>569</i>&nbsp;     * @return The current value for the specified hint 
+<i>570</i>&nbsp;     *     (possibly {@code null}).
+<i>571</i>&nbsp;     * 
+<i>572</i>&nbsp;     * @see #setRenderingHint(java.awt.RenderingHints.Key, java.lang.Object) 
+<i>573</i>&nbsp;     */
+<i>574</i>&nbsp;    @Override
+<i>575</i>&nbsp;    public Object getRenderingHint(RenderingHints.Key hintKey) {
+<b class="nc"><i>576</i>&nbsp;        return this.hints.get(hintKey);</b>
+<i>577</i>&nbsp;    }
+<i>578</i>&nbsp;
+<i>579</i>&nbsp;    /**
+<i>580</i>&nbsp;     * Sets the value for a hint.  Note that all hints are currently
+<i>581</i>&nbsp;     * ignored in this implementation.
+<i>582</i>&nbsp;     * 
+<i>583</i>&nbsp;     * @param hintKey  the hint key ({@code null} not permitted).
+<i>584</i>&nbsp;     * @param hintValue  the hint value.
+<i>585</i>&nbsp;     * 
+<i>586</i>&nbsp;     * @see #getRenderingHint(java.awt.RenderingHints.Key) 
+<i>587</i>&nbsp;     */
+<i>588</i>&nbsp;    @Override
+<i>589</i>&nbsp;    public void setRenderingHint(RenderingHints.Key hintKey, Object hintValue) {
+<b class="nc"><i>590</i>&nbsp;        this.hints.put(hintKey, hintValue);</b>
+<i>591</i>&nbsp;    }
+<i>592</i>&nbsp;
+<i>593</i>&nbsp;    /**
+<i>594</i>&nbsp;     * Returns a copy of the rendering hints.  Modifying the returned copy
+<i>595</i>&nbsp;     * will have no impact on the state of this {@code Graphics2D} 
+<i>596</i>&nbsp;     * instance.
+<i>597</i>&nbsp;     * 
+<i>598</i>&nbsp;     * @return The rendering hints (never {@code null}). 
+<i>599</i>&nbsp;     * 
+<i>600</i>&nbsp;     * @see #setRenderingHints(java.util.Map) 
+<i>601</i>&nbsp;     */
+<i>602</i>&nbsp;    @Override
+<i>603</i>&nbsp;    public RenderingHints getRenderingHints() {
+<b class="nc"><i>604</i>&nbsp;        return (RenderingHints) this.hints.clone();</b>
+<i>605</i>&nbsp;    }
+<i>606</i>&nbsp;
+<i>607</i>&nbsp;    /**
+<i>608</i>&nbsp;     * Sets the rendering hints to the specified collection.
+<i>609</i>&nbsp;     * 
+<i>610</i>&nbsp;     * @param hints  the new set of hints ({@code null} not permitted).
+<i>611</i>&nbsp;     * 
+<i>612</i>&nbsp;     * @see #getRenderingHints() 
+<i>613</i>&nbsp;     */
+<i>614</i>&nbsp;    @Override
+<i>615</i>&nbsp;    public void setRenderingHints(Map&lt;?, ?&gt; hints) {
+<b class="nc"><i>616</i>&nbsp;        this.hints.clear();</b>
+<b class="nc"><i>617</i>&nbsp;        this.hints.putAll(hints);</b>
+<i>618</i>&nbsp;    }
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;    /**
+<i>621</i>&nbsp;     * Adds all the supplied rendering hints.
+<i>622</i>&nbsp;     * 
+<i>623</i>&nbsp;     * @param hints  the hints ({@code null} not permitted).
+<i>624</i>&nbsp;     */
+<i>625</i>&nbsp;    @Override
+<i>626</i>&nbsp;    public void addRenderingHints(Map&lt;?, ?&gt; hints) {
+<b class="nc"><i>627</i>&nbsp;        this.hints.putAll(hints);</b>
+<i>628</i>&nbsp;    }
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;    /**
+<i>631</i>&nbsp;     * Draws the specified shape with the current {@code paint} and 
+<i>632</i>&nbsp;     * {@code stroke}.  There is direct handling for {@code Line2D}, 
+<i>633</i>&nbsp;     * {@code Rectangle2D}, {@code Ellipse2D}, {@code Arc2D} and 
+<i>634</i>&nbsp;     * {@code Path2D}. All other shapes are mapped to a path outline and then
+<i>635</i>&nbsp;     * drawn.
+<i>636</i>&nbsp;     * 
+<i>637</i>&nbsp;     * @param s  the shape ({@code null} not permitted).
+<i>638</i>&nbsp;     * 
+<i>639</i>&nbsp;     * @see #fill(java.awt.Shape) 
+<i>640</i>&nbsp;     */
+<i>641</i>&nbsp;    @Override
+<i>642</i>&nbsp;    public void draw(Shape s) {
+<i>643</i>&nbsp;        // if the current stroke is not a BasicStroke then it is handled as
+<i>644</i>&nbsp;        // a special case
+<b class="nc"><i>645</i>&nbsp;        if (!(this.stroke instanceof BasicStroke)) {</b>
+<b class="nc"><i>646</i>&nbsp;            fill(this.stroke.createStrokedShape(s));</b>
+<i>647</i>&nbsp;            return;
+<i>648</i>&nbsp;        }
+<b class="nc"><i>649</i>&nbsp;        if (s instanceof Line2D) {</b>
+<b class="nc"><i>650</i>&nbsp;            Line2D l = (Line2D) s;</b>
+<b class="nc"><i>651</i>&nbsp;            Object hint = getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="nc"><i>652</i>&nbsp;            if (hint != RenderingHints.VALUE_STROKE_PURE) {</b>
+<b class="nc"><i>653</i>&nbsp;                double x1 = Math.rint(l.getX1()) - 0.5;</b>
+<b class="nc"><i>654</i>&nbsp;                double y1 = Math.rint(l.getY1()) - 0.5;</b>
+<b class="nc"><i>655</i>&nbsp;                double x2 = Math.rint(l.getX2()) - 0.5;</b>
+<b class="nc"><i>656</i>&nbsp;                double y2 = Math.rint(l.getY2()) - 0.5;</b>
+<b class="nc"><i>657</i>&nbsp;                l.setLine(x1, y1, x2, y2);</b>
+<i>658</i>&nbsp;            }
+<b class="nc"><i>659</i>&nbsp;            this.gc.strokeLine(l.getX1(), l.getY1(), l.getX2(), l.getY2());</b>
+<b class="nc"><i>660</i>&nbsp;        } else if (s instanceof RoundRectangle2D) {</b>
+<b class="nc"><i>661</i>&nbsp;            RoundRectangle2D rr = (RoundRectangle2D) s;</b>
+<b class="nc"><i>662</i>&nbsp;            this.gc.strokeRoundRect(rr.getX(), rr.getY(), rr.getWidth(), </b>
+<b class="nc"><i>663</i>&nbsp;                    rr.getHeight(), rr.getArcWidth(), rr.getArcHeight());</b>
+<b class="nc"><i>664</i>&nbsp;        } else if (s instanceof Rectangle2D) {</b>
+<b class="nc"><i>665</i>&nbsp;            Rectangle2D r = (Rectangle2D) s;</b>
+<b class="nc"><i>666</i>&nbsp;            if (s instanceof Rectangle) {</b>
+<i>667</i>&nbsp;                // special case - if the underlying rectangle uses ints we
+<i>668</i>&nbsp;                // need to create one that uses doubles
+<b class="nc"><i>669</i>&nbsp;                r = new Rectangle2D.Double(r.getX(), r.getY(), r.getWidth(), </b>
+<b class="nc"><i>670</i>&nbsp;                        r.getHeight());</b>
+<i>671</i>&nbsp;            }
+<b class="nc"><i>672</i>&nbsp;            Object hint = getRenderingHint(RenderingHints.KEY_STROKE_CONTROL);</b>
+<b class="nc"><i>673</i>&nbsp;            if (hint != RenderingHints.VALUE_STROKE_PURE) {</b>
+<b class="nc"><i>674</i>&nbsp;                double x = Math.rint(r.getX()) - 0.5;</b>
+<b class="nc"><i>675</i>&nbsp;                double y = Math.rint(r.getY()) - 0.5;</b>
+<b class="nc"><i>676</i>&nbsp;                double w = Math.floor(r.getWidth());</b>
+<b class="nc"><i>677</i>&nbsp;                double h = Math.floor(r.getHeight());</b>
+<b class="nc"><i>678</i>&nbsp;                r.setRect(x, y, w, h);</b>
+<i>679</i>&nbsp;            }
+<b class="nc"><i>680</i>&nbsp;            this.gc.strokeRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());</b>
+<b class="nc"><i>681</i>&nbsp;        } else if (s instanceof Ellipse2D) {</b>
+<b class="nc"><i>682</i>&nbsp;            Ellipse2D e = (Ellipse2D) s;</b>
+<b class="nc"><i>683</i>&nbsp;            this.gc.strokeOval(e.getX(), e.getY(), e.getWidth(), e.getHeight());</b>
+<b class="nc"><i>684</i>&nbsp;        } else if (s instanceof Arc2D) {</b>
+<b class="nc"><i>685</i>&nbsp;            Arc2D a = (Arc2D) s;</b>
+<b class="nc"><i>686</i>&nbsp;            this.gc.strokeArc(a.getX(), a.getY(), a.getWidth(), a.getHeight(), </b>
+<b class="nc"><i>687</i>&nbsp;                    a.getAngleStart(), a.getAngleExtent(), </b>
+<b class="nc"><i>688</i>&nbsp;                    intToArcType(a.getArcType()));</b>
+<b class="nc"><i>689</i>&nbsp;        } else {</b>
+<b class="nc"><i>690</i>&nbsp;            shapeToPath(s);</b>
+<b class="nc"><i>691</i>&nbsp;            this.gc.stroke();</b>
+<i>692</i>&nbsp;        }
+<i>693</i>&nbsp;    }
+<i>694</i>&nbsp;
+<i>695</i>&nbsp;    /**
+<i>696</i>&nbsp;     * Maps a shape to a path in the graphics context. 
+<i>697</i>&nbsp;     * 
+<i>698</i>&nbsp;     * @param s  the shape ({@code null} not permitted).
+<i>699</i>&nbsp;     */
+<i>700</i>&nbsp;    private void shapeToPath(Shape s) {
+<b class="nc"><i>701</i>&nbsp;        double[] coords = new double[6];</b>
+<b class="nc"><i>702</i>&nbsp;        this.gc.beginPath();</b>
+<b class="nc"><i>703</i>&nbsp;        PathIterator iterator = s.getPathIterator(null);</b>
+<b class="nc"><i>704</i>&nbsp;        while (!iterator.isDone()) {</b>
+<b class="nc"><i>705</i>&nbsp;            int segType = iterator.currentSegment(coords);</b>
+<b class="nc"><i>706</i>&nbsp;            switch (segType) {</b>
+<i>707</i>&nbsp;                case PathIterator.SEG_MOVETO:
+<b class="nc"><i>708</i>&nbsp;                    this.gc.moveTo(coords[0], coords[1]);</b>
+<b class="nc"><i>709</i>&nbsp;                    break;</b>
+<i>710</i>&nbsp;                case PathIterator.SEG_LINETO:
+<b class="nc"><i>711</i>&nbsp;                    this.gc.lineTo(coords[0], coords[1]);</b>
+<b class="nc"><i>712</i>&nbsp;                    break;</b>
+<i>713</i>&nbsp;                case PathIterator.SEG_QUADTO:
+<b class="nc"><i>714</i>&nbsp;                    this.gc.quadraticCurveTo(coords[0], coords[1], coords[2], </b>
+<i>715</i>&nbsp;                            coords[3]);
+<b class="nc"><i>716</i>&nbsp;                    break;</b>
+<i>717</i>&nbsp;                case PathIterator.SEG_CUBICTO:
+<b class="nc"><i>718</i>&nbsp;                    this.gc.bezierCurveTo(coords[0], coords[1], coords[2], </b>
+<i>719</i>&nbsp;                            coords[3], coords[4], coords[5]);
+<b class="nc"><i>720</i>&nbsp;                    break;</b>
+<i>721</i>&nbsp;                case PathIterator.SEG_CLOSE:
+<b class="nc"><i>722</i>&nbsp;                    this.gc.closePath();</b>
+<b class="nc"><i>723</i>&nbsp;                    break;</b>
+<i>724</i>&nbsp;                default:
+<b class="nc"><i>725</i>&nbsp;                    throw new RuntimeException(&quot;Unrecognised segment type &quot; </b>
+<i>726</i>&nbsp;                            + segType);
+<i>727</i>&nbsp;            }
+<b class="nc"><i>728</i>&nbsp;            iterator.next();</b>
+<b class="nc"><i>729</i>&nbsp;        }</b>
+<i>730</i>&nbsp;    }
+<i>731</i>&nbsp;    
+<i>732</i>&nbsp;    private ArcType intToArcType(int t) {
+<b class="nc"><i>733</i>&nbsp;        if (t == Arc2D.CHORD) {</b>
+<b class="nc"><i>734</i>&nbsp;            return ArcType.CHORD;</b>
+<b class="nc"><i>735</i>&nbsp;        } else if (t == Arc2D.OPEN) {</b>
+<b class="nc"><i>736</i>&nbsp;            return ArcType.OPEN;</b>
+<b class="nc"><i>737</i>&nbsp;        } else if (t == Arc2D.PIE) {</b>
+<b class="nc"><i>738</i>&nbsp;            return ArcType.ROUND;</b>
+<i>739</i>&nbsp;        }
+<b class="nc"><i>740</i>&nbsp;        throw new IllegalArgumentException(&quot;Unrecognised t: &quot; + t);</b>
+<i>741</i>&nbsp;    }
+<i>742</i>&nbsp;    
+<i>743</i>&nbsp;    /**
+<i>744</i>&nbsp;     * Fills the specified shape with the current {@code paint}.  There is
+<i>745</i>&nbsp;     * direct handling for {@code RoundRectangle2D}, 
+<i>746</i>&nbsp;     * {@code Rectangle2D}, {@code Ellipse2D} and {@code Arc2D}.  
+<i>747</i>&nbsp;     * All other shapes are mapped to a path outline and then filled.
+<i>748</i>&nbsp;     * 
+<i>749</i>&nbsp;     * @param s  the shape ({@code null} not permitted). 
+<i>750</i>&nbsp;     * 
+<i>751</i>&nbsp;     * @see #draw(java.awt.Shape) 
+<i>752</i>&nbsp;     */
+<i>753</i>&nbsp;    @Override
+<i>754</i>&nbsp;    public void fill(Shape s) {
+<b class="nc"><i>755</i>&nbsp;        if (s instanceof RoundRectangle2D) {</b>
+<b class="nc"><i>756</i>&nbsp;            RoundRectangle2D rr = (RoundRectangle2D) s;</b>
+<b class="nc"><i>757</i>&nbsp;            this.gc.fillRoundRect(rr.getX(), rr.getY(), rr.getWidth(), </b>
+<b class="nc"><i>758</i>&nbsp;                    rr.getHeight(), rr.getArcWidth(), rr.getArcHeight());</b>
+<b class="nc"><i>759</i>&nbsp;        } else if (s instanceof Rectangle2D) {</b>
+<b class="nc"><i>760</i>&nbsp;            Rectangle2D r = (Rectangle2D) s;</b>
+<b class="nc"><i>761</i>&nbsp;            this.gc.fillRect(r.getX(), r.getY(), r.getWidth(), r.getHeight());</b>
+<b class="nc"><i>762</i>&nbsp;        } else if (s instanceof Ellipse2D) {</b>
+<b class="nc"><i>763</i>&nbsp;            Ellipse2D e = (Ellipse2D) s;</b>
+<b class="nc"><i>764</i>&nbsp;            this.gc.fillOval(e.getX(), e.getY(), e.getWidth(), e.getHeight());</b>
+<b class="nc"><i>765</i>&nbsp;        } else if (s instanceof Arc2D) {</b>
+<b class="nc"><i>766</i>&nbsp;            Arc2D a = (Arc2D) s;</b>
+<b class="nc"><i>767</i>&nbsp;            this.gc.fillArc(a.getX(), a.getY(), a.getWidth(), a.getHeight(), </b>
+<b class="nc"><i>768</i>&nbsp;                    a.getAngleStart(), a.getAngleExtent(), </b>
+<b class="nc"><i>769</i>&nbsp;                    intToArcType(a.getArcType()));</b>
+<b class="nc"><i>770</i>&nbsp;        } else {</b>
+<b class="nc"><i>771</i>&nbsp;            shapeToPath(s);</b>
+<b class="nc"><i>772</i>&nbsp;            this.gc.fill();</b>
+<i>773</i>&nbsp;        }
+<i>774</i>&nbsp;    }
+<i>775</i>&nbsp;
+<i>776</i>&nbsp;    /**
+<i>777</i>&nbsp;     * Returns the current font used for drawing text.
+<i>778</i>&nbsp;     * 
+<i>779</i>&nbsp;     * @return The current font (never {@code null}).
+<i>780</i>&nbsp;     * 
+<i>781</i>&nbsp;     * @see #setFont(java.awt.Font) 
+<i>782</i>&nbsp;     */
+<i>783</i>&nbsp;    @Override
+<i>784</i>&nbsp;    public Font getFont() {
+<b class="nc"><i>785</i>&nbsp;        return this.font;</b>
+<i>786</i>&nbsp;    }
+<i>787</i>&nbsp;
+<i>788</i>&nbsp;    /**
+<i>789</i>&nbsp;     * Sets the font to be used for drawing text.
+<i>790</i>&nbsp;     * 
+<i>791</i>&nbsp;     * @param font  the font ({@code null} is permitted but ignored).
+<i>792</i>&nbsp;     * 
+<i>793</i>&nbsp;     * @see #getFont() 
+<i>794</i>&nbsp;     */
+<i>795</i>&nbsp;    @Override
+<i>796</i>&nbsp;    public void setFont(Font font) {
+<b class="nc"><i>797</i>&nbsp;        if (font == null) {</b>
+<i>798</i>&nbsp;            return;
+<i>799</i>&nbsp;        }
+<b class="nc"><i>800</i>&nbsp;        this.font = font;</b>
+<b class="nc"><i>801</i>&nbsp;        FontWeight weight = font.isBold() ? FontWeight.BOLD : FontWeight.NORMAL;</b>
+<b class="nc"><i>802</i>&nbsp;        FontPosture posture = font.isItalic() </b>
+<i>803</i>&nbsp;                ? FontPosture.ITALIC : FontPosture.REGULAR;
+<b class="nc"><i>804</i>&nbsp;        this.gc.setFont(javafx.scene.text.Font.font(font.getFamily(), </b>
+<b class="nc"><i>805</i>&nbsp;                weight, posture, font.getSize()));</b>
+<i>806</i>&nbsp;    }
+<i>807</i>&nbsp;    
+<i>808</i>&nbsp;    /**
+<i>809</i>&nbsp;     * Returns the font metrics for the specified font.
+<i>810</i>&nbsp;     * 
+<i>811</i>&nbsp;     * @param f  the font.
+<i>812</i>&nbsp;     * 
+<i>813</i>&nbsp;     * @return The font metrics. 
+<i>814</i>&nbsp;     */
+<i>815</i>&nbsp;    @Override
+<i>816</i>&nbsp;    public FontMetrics getFontMetrics(Font f) {
+<b class="nc"><i>817</i>&nbsp;        return this.fmImage.createGraphics().getFontMetrics(f);</b>
+<i>818</i>&nbsp;    }
+<i>819</i>&nbsp;    
+<i>820</i>&nbsp;    /**
+<i>821</i>&nbsp;     * Returns the font render context.  The implementation here returns the
+<i>822</i>&nbsp;     * {@code FontRenderContext} for an image that is maintained 
+<i>823</i>&nbsp;     * internally (as for {@link #getFontMetrics}).
+<i>824</i>&nbsp;     * 
+<i>825</i>&nbsp;     * @return The font render context.
+<i>826</i>&nbsp;     */
+<i>827</i>&nbsp;    @Override
+<i>828</i>&nbsp;    public FontRenderContext getFontRenderContext() {
+<b class="nc"><i>829</i>&nbsp;        return this.fmImage.createGraphics().getFontRenderContext();</b>
+<i>830</i>&nbsp;    }
+<i>831</i>&nbsp;
+<i>832</i>&nbsp;    /**
+<i>833</i>&nbsp;     * Draws a string at {@code (x, y)}.  The start of the text at the
+<i>834</i>&nbsp;     * baseline level will be aligned with the {@code (x, y)} point.
+<i>835</i>&nbsp;     * 
+<i>836</i>&nbsp;     * @param str  the string ({@code null} not permitted).
+<i>837</i>&nbsp;     * @param x  the x-coordinate.
+<i>838</i>&nbsp;     * @param y  the y-coordinate.
+<i>839</i>&nbsp;     * 
+<i>840</i>&nbsp;     * @see #drawString(java.lang.String, float, float) 
+<i>841</i>&nbsp;     */
+<i>842</i>&nbsp;    @Override
+<i>843</i>&nbsp;    public void drawString(String str, int x, int y) {
+<b class="nc"><i>844</i>&nbsp;        drawString(str, (float) x, (float) y);</b>
+<i>845</i>&nbsp;    }
+<i>846</i>&nbsp;
+<i>847</i>&nbsp;    /**
+<i>848</i>&nbsp;     * Draws a string at {@code (x, y)}. The start of the text at the
+<i>849</i>&nbsp;     * baseline level will be aligned with the {@code (x, y)} point.
+<i>850</i>&nbsp;     * 
+<i>851</i>&nbsp;     * @param str  the string ({@code null} not permitted).
+<i>852</i>&nbsp;     * @param x  the x-coordinate.
+<i>853</i>&nbsp;     * @param y  the y-coordinate.
+<i>854</i>&nbsp;     */
+<i>855</i>&nbsp;    @Override
+<i>856</i>&nbsp;    public void drawString(String str, float x, float y) {
+<b class="nc"><i>857</i>&nbsp;        if (str == null) {</b>
+<b class="nc"><i>858</i>&nbsp;            throw new NullPointerException(&quot;Null &#39;str&#39; argument.&quot;);</b>
+<i>859</i>&nbsp;        }
+<b class="nc"><i>860</i>&nbsp;        this.gc.fillText(str, x, y);</b>
+<i>861</i>&nbsp;    }
+<i>862</i>&nbsp;
+<i>863</i>&nbsp;    /**
+<i>864</i>&nbsp;     * Draws a string of attributed characters at {@code (x, y)}.  The 
+<i>865</i>&nbsp;     * call is delegated to 
+<i>866</i>&nbsp;     * {@link #drawString(AttributedCharacterIterator, float, float)}. 
+<i>867</i>&nbsp;     * 
+<i>868</i>&nbsp;     * @param iterator  an iterator for the characters.
+<i>869</i>&nbsp;     * @param x  the x-coordinate.
+<i>870</i>&nbsp;     * @param y  the x-coordinate.
+<i>871</i>&nbsp;     */
+<i>872</i>&nbsp;    @Override
+<i>873</i>&nbsp;    public void drawString(AttributedCharacterIterator iterator, int x, int y) {
+<b class="nc"><i>874</i>&nbsp;        drawString(iterator, (float) x, (float) y); </b>
+<i>875</i>&nbsp;    }
+<i>876</i>&nbsp;
+<i>877</i>&nbsp;    /**
+<i>878</i>&nbsp;     * Draws a string of attributed characters at {@code (x, y)}. 
+<i>879</i>&nbsp;     * 
+<i>880</i>&nbsp;     * @param iterator  an iterator over the characters ({@code null} not 
+<i>881</i>&nbsp;     *     permitted).
+<i>882</i>&nbsp;     * @param x  the x-coordinate.
+<i>883</i>&nbsp;     * @param y  the y-coordinate.
+<i>884</i>&nbsp;     */
+<i>885</i>&nbsp;    @Override
+<i>886</i>&nbsp;    public void drawString(AttributedCharacterIterator iterator, float x, 
+<i>887</i>&nbsp;            float y) {
+<i>888</i>&nbsp;        Set&lt;AttributedCharacterIterator.Attribute&gt; 
+<b class="nc"><i>889</i>&nbsp;                s = iterator.getAllAttributeKeys();</b>
+<b class="nc"><i>890</i>&nbsp;        if (!s.isEmpty()) {</b>
+<b class="nc"><i>891</i>&nbsp;            TextLayout layout = new TextLayout(iterator, </b>
+<b class="nc"><i>892</i>&nbsp;                    getFontRenderContext());</b>
+<b class="nc"><i>893</i>&nbsp;            layout.draw(this, x, y);</b>
+<b class="nc"><i>894</i>&nbsp;        } else {</b>
+<b class="nc"><i>895</i>&nbsp;            StringBuilder strb = new StringBuilder();</b>
+<b class="nc"><i>896</i>&nbsp;            iterator.first();</b>
+<b class="nc"><i>897</i>&nbsp;            for (int i = iterator.getBeginIndex(); i &lt; iterator.getEndIndex(); </b>
+<b class="nc"><i>898</i>&nbsp;                    i++) {</b>
+<b class="nc"><i>899</i>&nbsp;                strb.append(iterator.current());</b>
+<b class="nc"><i>900</i>&nbsp;                iterator.next();</b>
+<i>901</i>&nbsp;            }
+<b class="nc"><i>902</i>&nbsp;            drawString(strb.toString(), x, y);</b>
+<i>903</i>&nbsp;        }
+<i>904</i>&nbsp;    }
+<i>905</i>&nbsp;
+<i>906</i>&nbsp;    /**
+<i>907</i>&nbsp;     * Draws the specified glyph vector at the location {@code (x, y)}.
+<i>908</i>&nbsp;     * 
+<i>909</i>&nbsp;     * @param g  the glyph vector ({@code null} not permitted).
+<i>910</i>&nbsp;     * @param x  the x-coordinate.
+<i>911</i>&nbsp;     * @param y  the y-coordinate.
+<i>912</i>&nbsp;     */
+<i>913</i>&nbsp;    @Override
+<i>914</i>&nbsp;    public void drawGlyphVector(GlyphVector g, float x, float y) {
+<b class="nc"><i>915</i>&nbsp;        fill(g.getOutline(x, y));</b>
+<i>916</i>&nbsp;    }
+<i>917</i>&nbsp;
+<i>918</i>&nbsp;    /**
+<i>919</i>&nbsp;     * Applies the translation {@code (tx, ty)}.  This call is delegated 
+<i>920</i>&nbsp;     * to {@link #translate(double, double)}.
+<i>921</i>&nbsp;     * 
+<i>922</i>&nbsp;     * @param tx  the x-translation.
+<i>923</i>&nbsp;     * @param ty  the y-translation.
+<i>924</i>&nbsp;     * 
+<i>925</i>&nbsp;     * @see #translate(double, double) 
+<i>926</i>&nbsp;     */
+<i>927</i>&nbsp;    @Override
+<i>928</i>&nbsp;    public void translate(int tx, int ty) {
+<b class="nc"><i>929</i>&nbsp;        translate((double) tx, (double) ty);</b>
+<i>930</i>&nbsp;    }
+<i>931</i>&nbsp;
+<i>932</i>&nbsp;    /**
+<i>933</i>&nbsp;     * Applies the translation {@code (tx, ty)}.
+<i>934</i>&nbsp;     * 
+<i>935</i>&nbsp;     * @param tx  the x-translation.
+<i>936</i>&nbsp;     * @param ty  the y-translation.
+<i>937</i>&nbsp;     */
+<i>938</i>&nbsp;    @Override
+<i>939</i>&nbsp;    public void translate(double tx, double ty) {
+<b class="nc"><i>940</i>&nbsp;        this.transform.translate(tx, ty);</b>
+<b class="nc"><i>941</i>&nbsp;        this.gc.translate(tx, ty);</b>
+<i>942</i>&nbsp;    }
+<i>943</i>&nbsp;
+<i>944</i>&nbsp;    /**
+<i>945</i>&nbsp;     * Applies a rotation (anti-clockwise) about {@code (0, 0)}.
+<i>946</i>&nbsp;     * 
+<i>947</i>&nbsp;     * @param theta  the rotation angle (in radians). 
+<i>948</i>&nbsp;     */
+<i>949</i>&nbsp;    @Override
+<i>950</i>&nbsp;    public void rotate(double theta) {
+<b class="nc"><i>951</i>&nbsp;        this.transform.rotate(theta);</b>
+<b class="nc"><i>952</i>&nbsp;        this.gc.rotate(theta * Math.PI / 180);</b>
+<i>953</i>&nbsp;    }
+<i>954</i>&nbsp;
+<i>955</i>&nbsp;    /**
+<i>956</i>&nbsp;     * Applies a rotation (anti-clockwise) about {@code (x, y)}.
+<i>957</i>&nbsp;     * 
+<i>958</i>&nbsp;     * @param theta  the rotation angle (in radians).
+<i>959</i>&nbsp;     * @param x  the x-coordinate.
+<i>960</i>&nbsp;     * @param y  the y-coordinate.
+<i>961</i>&nbsp;     */
+<i>962</i>&nbsp;    @Override
+<i>963</i>&nbsp;    public void rotate(double theta, double x, double y) {
+<b class="nc"><i>964</i>&nbsp;        translate(x, y);</b>
+<b class="nc"><i>965</i>&nbsp;        rotate(theta);</b>
+<b class="nc"><i>966</i>&nbsp;        translate(-x, -y);</b>
+<i>967</i>&nbsp;    }
+<i>968</i>&nbsp;
+<i>969</i>&nbsp;    /**
+<i>970</i>&nbsp;     * Applies a scale transformation.
+<i>971</i>&nbsp;     * 
+<i>972</i>&nbsp;     * @param sx  the x-scaling factor.
+<i>973</i>&nbsp;     * @param sy  the y-scaling factor.
+<i>974</i>&nbsp;     */
+<i>975</i>&nbsp;    @Override
+<i>976</i>&nbsp;    public void scale(double sx, double sy) {
+<b class="nc"><i>977</i>&nbsp;        this.transform.scale(sx, sy);</b>
+<b class="nc"><i>978</i>&nbsp;        this.gc.scale(sx, sy);</b>
+<i>979</i>&nbsp;    }
+<i>980</i>&nbsp;
+<i>981</i>&nbsp;    /**
+<i>982</i>&nbsp;     * Applies a shear transformation. This is equivalent to the following 
+<i>983</i>&nbsp;     * call to the {@code transform} method:
+<i>984</i>&nbsp;     * &lt;br&gt;&lt;br&gt;
+<i>985</i>&nbsp;     * &lt;ul&gt;&lt;li&gt;
+<i>986</i>&nbsp;     * {@code transform(AffineTransform.getShearInstance(shx, shy));}
+<i>987</i>&nbsp;     * &lt;/ul&gt;
+<i>988</i>&nbsp;     * 
+<i>989</i>&nbsp;     * @param shx  the x-shear factor.
+<i>990</i>&nbsp;     * @param shy  the y-shear factor.
+<i>991</i>&nbsp;     */
+<i>992</i>&nbsp;    @Override
+<i>993</i>&nbsp;    public void shear(double shx, double shy) {
+<b class="nc"><i>994</i>&nbsp;        transform(AffineTransform.getShearInstance(shx, shy));</b>
+<i>995</i>&nbsp;    }
+<i>996</i>&nbsp;
+<i>997</i>&nbsp;    /**
+<i>998</i>&nbsp;     * Applies this transform to the existing transform by concatenating it.
+<i>999</i>&nbsp;     * 
+<i>1000</i>&nbsp;     * @param t  the transform ({@code null} not permitted). 
+<i>1001</i>&nbsp;     */
+<i>1002</i>&nbsp;    @Override
+<i>1003</i>&nbsp;    public void transform(AffineTransform t) {
+<b class="nc"><i>1004</i>&nbsp;        AffineTransform tx = getTransform();</b>
+<b class="nc"><i>1005</i>&nbsp;        tx.concatenate(t);</b>
+<b class="nc"><i>1006</i>&nbsp;        setTransform(tx);</b>
+<i>1007</i>&nbsp;    }
+<i>1008</i>&nbsp;
+<i>1009</i>&nbsp;    /**
+<i>1010</i>&nbsp;     * Returns a copy of the current transform.
+<i>1011</i>&nbsp;     * 
+<i>1012</i>&nbsp;     * @return A copy of the current transform (never {@code null}).
+<i>1013</i>&nbsp;     * 
+<i>1014</i>&nbsp;     * @see #setTransform(java.awt.geom.AffineTransform) 
+<i>1015</i>&nbsp;     */
+<i>1016</i>&nbsp;    @Override
+<i>1017</i>&nbsp;    public AffineTransform getTransform() {
+<b class="nc"><i>1018</i>&nbsp;        return (AffineTransform) this.transform.clone();</b>
+<i>1019</i>&nbsp;    }
+<i>1020</i>&nbsp;
+<i>1021</i>&nbsp;    /**
+<i>1022</i>&nbsp;     * Sets the transform.
+<i>1023</i>&nbsp;     * 
+<i>1024</i>&nbsp;     * @param t  the new transform ({@code null} permitted, resets to the
+<i>1025</i>&nbsp;     *     identity transform).
+<i>1026</i>&nbsp;     * 
+<i>1027</i>&nbsp;     * @see #getTransform() 
+<i>1028</i>&nbsp;     */
+<i>1029</i>&nbsp;    @Override
+<i>1030</i>&nbsp;    public void setTransform(AffineTransform t) {
+<b class="nc"><i>1031</i>&nbsp;        if (t == null) {</b>
+<b class="nc"><i>1032</i>&nbsp;            this.transform = new AffineTransform();</b>
+<b class="nc"><i>1033</i>&nbsp;            t = this.transform;</b>
+<i>1034</i>&nbsp;        } else {
+<b class="nc"><i>1035</i>&nbsp;            this.transform = new AffineTransform(t);</b>
+<i>1036</i>&nbsp;        }
+<b class="nc"><i>1037</i>&nbsp;        this.gc.setTransform(t.getScaleX(), t.getShearY(), t.getShearX(), </b>
+<b class="nc"><i>1038</i>&nbsp;                t.getScaleY(), t.getTranslateX(), t.getTranslateY());</b>
+<i>1039</i>&nbsp;    }
+<i>1040</i>&nbsp;
+<i>1041</i>&nbsp;    /**
+<i>1042</i>&nbsp;     * Returns {@code true} if the rectangle (in device space) intersects
+<i>1043</i>&nbsp;     * with the shape (the interior, if {@code onStroke} is false, 
+<i>1044</i>&nbsp;     * otherwise the stroked outline of the shape).
+<i>1045</i>&nbsp;     * 
+<i>1046</i>&nbsp;     * @param rect  a rectangle (in device space).
+<i>1047</i>&nbsp;     * @param s the shape.
+<i>1048</i>&nbsp;     * @param onStroke  test the stroked outline only?
+<i>1049</i>&nbsp;     * 
+<i>1050</i>&nbsp;     * @return A boolean. 
+<i>1051</i>&nbsp;     */
+<i>1052</i>&nbsp;    @Override
+<i>1053</i>&nbsp;    public boolean hit(Rectangle rect, Shape s, boolean onStroke) {
+<i>1054</i>&nbsp;        Shape ts;
+<b class="nc"><i>1055</i>&nbsp;        if (onStroke) {</b>
+<b class="nc"><i>1056</i>&nbsp;            ts = this.transform.createTransformedShape(</b>
+<b class="nc"><i>1057</i>&nbsp;                    this.stroke.createStrokedShape(s));</b>
+<i>1058</i>&nbsp;        } else {
+<b class="nc"><i>1059</i>&nbsp;            ts = this.transform.createTransformedShape(s);</b>
+<i>1060</i>&nbsp;        }
+<b class="nc"><i>1061</i>&nbsp;        if (!rect.getBounds2D().intersects(ts.getBounds2D())) {</b>
+<b class="nc"><i>1062</i>&nbsp;            return false;</b>
+<i>1063</i>&nbsp;        }
+<b class="nc"><i>1064</i>&nbsp;        Area a1 = new Area(rect);</b>
+<b class="nc"><i>1065</i>&nbsp;        Area a2 = new Area(ts);</b>
+<b class="nc"><i>1066</i>&nbsp;        a1.intersect(a2);</b>
+<b class="nc"><i>1067</i>&nbsp;        return !a1.isEmpty();</b>
+<i>1068</i>&nbsp;    }
+<i>1069</i>&nbsp;
+<i>1070</i>&nbsp;    /**
+<i>1071</i>&nbsp;     * Not implemented - the method does nothing.
+<i>1072</i>&nbsp;     */
+<i>1073</i>&nbsp;    @Override
+<i>1074</i>&nbsp;    public void setPaintMode() {
+<i>1075</i>&nbsp;        // not implemented
+<i>1076</i>&nbsp;    }
+<i>1077</i>&nbsp;
+<i>1078</i>&nbsp;    /**
+<i>1079</i>&nbsp;     * Not implemented - the method does nothing.
+<i>1080</i>&nbsp;     */
+<i>1081</i>&nbsp;    @Override
+<i>1082</i>&nbsp;    public void setXORMode(Color c1) {
+<i>1083</i>&nbsp;        // not implemented
+<i>1084</i>&nbsp;    }
+<i>1085</i>&nbsp;
+<i>1086</i>&nbsp;    /**
+<i>1087</i>&nbsp;     * Returns the bounds of the user clipping region.
+<i>1088</i>&nbsp;     * 
+<i>1089</i>&nbsp;     * @return The clip bounds (possibly {@code null}). 
+<i>1090</i>&nbsp;     * 
+<i>1091</i>&nbsp;     * @see #getClip() 
+<i>1092</i>&nbsp;     */
+<i>1093</i>&nbsp;    @Override
+<i>1094</i>&nbsp;    public Rectangle getClipBounds() {
+<b class="nc"><i>1095</i>&nbsp;        if (this.clip == null) {</b>
+<b class="nc"><i>1096</i>&nbsp;            return null;</b>
+<i>1097</i>&nbsp;        }
+<b class="nc"><i>1098</i>&nbsp;        return getClip().getBounds();</b>
+<i>1099</i>&nbsp;    }
+<i>1100</i>&nbsp;
+<i>1101</i>&nbsp;    /**
+<i>1102</i>&nbsp;     * Returns the user clipping region.  The initial default value is 
+<i>1103</i>&nbsp;     * {@code null}.
+<i>1104</i>&nbsp;     * 
+<i>1105</i>&nbsp;     * @return The user clipping region (possibly {@code null}).
+<i>1106</i>&nbsp;     * 
+<i>1107</i>&nbsp;     * @see #setClip(java.awt.Shape)
+<i>1108</i>&nbsp;     */
+<i>1109</i>&nbsp;    @Override
+<i>1110</i>&nbsp;    public Shape getClip() {
+<b class="nc"><i>1111</i>&nbsp;        if (this.clip == null) {</b>
+<b class="nc"><i>1112</i>&nbsp;            return null;</b>
+<i>1113</i>&nbsp;        }
+<i>1114</i>&nbsp;        AffineTransform inv;
+<i>1115</i>&nbsp;        try {
+<b class="nc"><i>1116</i>&nbsp;            inv = this.transform.createInverse();</b>
+<b class="nc"><i>1117</i>&nbsp;            return inv.createTransformedShape(this.clip);</b>
+<b class="nc"><i>1118</i>&nbsp;        } catch (NoninvertibleTransformException ex) {</b>
+<b class="nc"><i>1119</i>&nbsp;            return null;</b>
+<i>1120</i>&nbsp;        }
+<i>1121</i>&nbsp;    }
+<i>1122</i>&nbsp;
+<i>1123</i>&nbsp;    /**
+<i>1124</i>&nbsp;     * Sets the user clipping region.
+<i>1125</i>&nbsp;     * 
+<i>1126</i>&nbsp;     * @param shape  the new user clipping region ({@code null} permitted).
+<i>1127</i>&nbsp;     * 
+<i>1128</i>&nbsp;     * @see #getClip()
+<i>1129</i>&nbsp;     */
+<i>1130</i>&nbsp;    @Override
+<i>1131</i>&nbsp;    public void setClip(Shape shape) {
+<b class="nc"><i>1132</i>&nbsp;        boolean restored = false;</b>
+<b class="nc"><i>1133</i>&nbsp;        while (this.saveCount &gt; 0) {</b>
+<b class="nc"><i>1134</i>&nbsp;            this.gc.restore();</b>
+<b class="nc"><i>1135</i>&nbsp;            restored = true;</b>
+<b class="nc"><i>1136</i>&nbsp;            this.saveCount--;</b>
+<i>1137</i>&nbsp;        }
+<b class="nc"><i>1138</i>&nbsp;        if (restored) {</b>
+<b class="nc"><i>1139</i>&nbsp;            reapplyAttributes();</b>
+<i>1140</i>&nbsp;        }
+<i>1141</i>&nbsp;        // null is handled fine here...
+<b class="nc"><i>1142</i>&nbsp;        this.clip = this.transform.createTransformedShape(shape);</b>
+<b class="nc"><i>1143</i>&nbsp;        if (clip != null) {</b>
+<b class="nc"><i>1144</i>&nbsp;            this.gc.save(); </b>
+<b class="nc"><i>1145</i>&nbsp;            this.saveCount++;</b>
+<b class="nc"><i>1146</i>&nbsp;            shapeToPath(shape);</b>
+<b class="nc"><i>1147</i>&nbsp;            this.gc.clip();</b>
+<i>1148</i>&nbsp;        } 
+<i>1149</i>&nbsp;    }
+<i>1150</i>&nbsp;    
+<i>1151</i>&nbsp;    private void reapplyAttributes() {
+<b class="nc"><i>1152</i>&nbsp;        setPaint(this.paint);</b>
+<b class="nc"><i>1153</i>&nbsp;        setBackground(this.background);</b>
+<b class="nc"><i>1154</i>&nbsp;        setStroke(this.stroke);</b>
+<b class="nc"><i>1155</i>&nbsp;        setFont(this.font);</b>
+<b class="nc"><i>1156</i>&nbsp;        setTransform(this.transform);</b>
+<i>1157</i>&nbsp;    }
+<i>1158</i>&nbsp;    
+<i>1159</i>&nbsp;    /**
+<i>1160</i>&nbsp;     * Clips to the intersection of the current clipping region and the
+<i>1161</i>&nbsp;     * specified shape. 
+<i>1162</i>&nbsp;     * 
+<i>1163</i>&nbsp;     * According to the Oracle API specification, this method will accept a 
+<i>1164</i>&nbsp;     * {@code null} argument, but there is an open bug report (since 2004) 
+<i>1165</i>&nbsp;     * that suggests this is wrong:
+<i>1166</i>&nbsp;     * &lt;p&gt;
+<i>1167</i>&nbsp;     * &lt;a href=&quot;http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6206189&quot;&gt;
+<i>1168</i>&nbsp;     * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6206189&lt;/a&gt;
+<i>1169</i>&nbsp;     * 
+<i>1170</i>&nbsp;     * In this implementation, a {@code null} argument is not permitted.
+<i>1171</i>&nbsp;     * 
+<i>1172</i>&nbsp;     * @param s  the clip shape ({@code null} not permitted). 
+<i>1173</i>&nbsp;     */
+<i>1174</i>&nbsp;    @Override
+<i>1175</i>&nbsp;    public void clip(Shape s) {
+<b class="nc"><i>1176</i>&nbsp;        if (this.clip == null) {</b>
+<b class="nc"><i>1177</i>&nbsp;            setClip(s);</b>
+<i>1178</i>&nbsp;            return;
+<i>1179</i>&nbsp;        }
+<b class="nc"><i>1180</i>&nbsp;        Shape ts = this.transform.createTransformedShape(s);</b>
+<i>1181</i>&nbsp;        Shape clipNew;
+<b class="nc"><i>1182</i>&nbsp;        if (!ts.intersects(this.clip.getBounds2D())) {</b>
+<b class="nc"><i>1183</i>&nbsp;            clipNew = new Rectangle2D.Double();</b>
+<i>1184</i>&nbsp;        } else {
+<b class="nc"><i>1185</i>&nbsp;            Area a1 = new Area(ts);</b>
+<b class="nc"><i>1186</i>&nbsp;            Area a2 = new Area(this.clip);</b>
+<b class="nc"><i>1187</i>&nbsp;            a1.intersect(a2);</b>
+<b class="nc"><i>1188</i>&nbsp;            clipNew = new Path2D.Double(a1);</b>
+<i>1189</i>&nbsp;        }
+<b class="nc"><i>1190</i>&nbsp;        this.clip = clipNew;</b>
+<b class="nc"><i>1191</i>&nbsp;        if (!this.clippingDisabled) {</b>
+<b class="nc"><i>1192</i>&nbsp;            this.gc.save();</b>
+<b class="nc"><i>1193</i>&nbsp;            this.saveCount++;</b>
+<b class="nc"><i>1194</i>&nbsp;            shapeToPath(this.clip);</b>
+<b class="nc"><i>1195</i>&nbsp;            this.gc.clip();</b>
+<i>1196</i>&nbsp;        }
+<i>1197</i>&nbsp;    }
+<i>1198</i>&nbsp;
+<i>1199</i>&nbsp;    /**
+<i>1200</i>&nbsp;     * Clips to the intersection of the current clipping region and the 
+<i>1201</i>&nbsp;     * specified rectangle.
+<i>1202</i>&nbsp;     * 
+<i>1203</i>&nbsp;     * @param x  the x-coordinate.
+<i>1204</i>&nbsp;     * @param y  the y-coordinate.
+<i>1205</i>&nbsp;     * @param width  the width.
+<i>1206</i>&nbsp;     * @param height  the height.
+<i>1207</i>&nbsp;     */
+<i>1208</i>&nbsp;    @Override
+<i>1209</i>&nbsp;    public void clipRect(int x, int y, int width, int height) {
+<b class="nc"><i>1210</i>&nbsp;        setRect(x, y, width, height);</b>
+<b class="nc"><i>1211</i>&nbsp;        clip(this.rect);</b>
+<i>1212</i>&nbsp;    }
+<i>1213</i>&nbsp;
+<i>1214</i>&nbsp;    /**
+<i>1215</i>&nbsp;     * Sets the user clipping region to the specified rectangle.
+<i>1216</i>&nbsp;     * 
+<i>1217</i>&nbsp;     * @param x  the x-coordinate.
+<i>1218</i>&nbsp;     * @param y  the y-coordinate.
+<i>1219</i>&nbsp;     * @param width  the width.
+<i>1220</i>&nbsp;     * @param height  the height.
+<i>1221</i>&nbsp;     * 
+<i>1222</i>&nbsp;     * @see #getClip() 
+<i>1223</i>&nbsp;     */
+<i>1224</i>&nbsp;    @Override
+<i>1225</i>&nbsp;    public void setClip(int x, int y, int width, int height) {
+<b class="nc"><i>1226</i>&nbsp;        setRect(x, y, width, height);</b>
+<b class="nc"><i>1227</i>&nbsp;        setClip(this.rect);</b>
+<i>1228</i>&nbsp;    }
+<i>1229</i>&nbsp;
+<i>1230</i>&nbsp;    /**
+<i>1231</i>&nbsp;     * Draws a line from {@code (x1, y1)} to {@code (x2, y2)} using 
+<i>1232</i>&nbsp;     * the current {@code paint} and {@code stroke}.
+<i>1233</i>&nbsp;     * 
+<i>1234</i>&nbsp;     * @param x1  the x-coordinate of the start point.
+<i>1235</i>&nbsp;     * @param y1  the y-coordinate of the start point.
+<i>1236</i>&nbsp;     * @param x2  the x-coordinate of the end point.
+<i>1237</i>&nbsp;     * @param y2  the x-coordinate of the end point.
+<i>1238</i>&nbsp;     */
+<i>1239</i>&nbsp;    @Override
+<i>1240</i>&nbsp;    public void drawLine(int x1, int y1, int x2, int y2) {
+<b class="nc"><i>1241</i>&nbsp;        if (this.line == null) {</b>
+<b class="nc"><i>1242</i>&nbsp;            this.line = new Line2D.Double(x1, y1, x2, y2);</b>
+<i>1243</i>&nbsp;        } else {
+<b class="nc"><i>1244</i>&nbsp;            this.line.setLine(x1, y1, x2, y2);</b>
+<i>1245</i>&nbsp;        }
+<b class="nc"><i>1246</i>&nbsp;        draw(this.line);</b>
+<i>1247</i>&nbsp;    }
+<i>1248</i>&nbsp;
+<i>1249</i>&nbsp;    /**
+<i>1250</i>&nbsp;     * Fills the specified rectangle with the current {@code paint}.
+<i>1251</i>&nbsp;     * 
+<i>1252</i>&nbsp;     * @param x  the x-coordinate.
+<i>1253</i>&nbsp;     * @param y  the y-coordinate.
+<i>1254</i>&nbsp;     * @param width  the rectangle width.
+<i>1255</i>&nbsp;     * @param height  the rectangle height.
+<i>1256</i>&nbsp;     */
+<i>1257</i>&nbsp;    @Override
+<i>1258</i>&nbsp;    public void fillRect(int x, int y, int width, int height) {
+<b class="nc"><i>1259</i>&nbsp;        setRect(x, y, width, height);</b>
+<b class="nc"><i>1260</i>&nbsp;        fill(this.rect);</b>
+<i>1261</i>&nbsp;    }
+<i>1262</i>&nbsp;
+<i>1263</i>&nbsp;    /**
+<i>1264</i>&nbsp;     * Clears the specified rectangle by filling it with the current 
+<i>1265</i>&nbsp;     * background color.  If the background color is {@code null}, this
+<i>1266</i>&nbsp;     * method will do nothing.
+<i>1267</i>&nbsp;     * 
+<i>1268</i>&nbsp;     * @param x  the x-coordinate.
+<i>1269</i>&nbsp;     * @param y  the y-coordinate.
+<i>1270</i>&nbsp;     * @param width  the width.
+<i>1271</i>&nbsp;     * @param height  the height.
+<i>1272</i>&nbsp;     * 
+<i>1273</i>&nbsp;     * @see #getBackground() 
+<i>1274</i>&nbsp;     */
+<i>1275</i>&nbsp;    @Override
+<i>1276</i>&nbsp;    public void clearRect(int x, int y, int width, int height) {
+<b class="nc"><i>1277</i>&nbsp;        if (getBackground() == null) {</b>
+<i>1278</i>&nbsp;            return;  // we can&#39;t do anything
+<i>1279</i>&nbsp;        }
+<b class="nc"><i>1280</i>&nbsp;        Paint saved = getPaint();</b>
+<b class="nc"><i>1281</i>&nbsp;        setPaint(getBackground());</b>
+<b class="nc"><i>1282</i>&nbsp;        fillRect(x, y, width, height);</b>
+<b class="nc"><i>1283</i>&nbsp;        setPaint(saved);</b>
+<i>1284</i>&nbsp;    }
+<i>1285</i>&nbsp;    
+<i>1286</i>&nbsp;    /**
+<i>1287</i>&nbsp;     * Draws a rectangle with rounded corners using the current 
+<i>1288</i>&nbsp;     * {@code paint} and {@code stroke}.
+<i>1289</i>&nbsp;     * 
+<i>1290</i>&nbsp;     * @param x  the x-coordinate.
+<i>1291</i>&nbsp;     * @param y  the y-coordinate.
+<i>1292</i>&nbsp;     * @param width  the width.
+<i>1293</i>&nbsp;     * @param height  the height.
+<i>1294</i>&nbsp;     * @param arcWidth  the arc-width.
+<i>1295</i>&nbsp;     * @param arcHeight  the arc-height.
+<i>1296</i>&nbsp;     * 
+<i>1297</i>&nbsp;     * @see #fillRoundRect(int, int, int, int, int, int) 
+<i>1298</i>&nbsp;     */
+<i>1299</i>&nbsp;    @Override
+<i>1300</i>&nbsp;    public void drawRoundRect(int x, int y, int width, int height, 
+<i>1301</i>&nbsp;            int arcWidth, int arcHeight) {
+<b class="nc"><i>1302</i>&nbsp;        setRoundRect(x, y, width, height, arcWidth, arcHeight);</b>
+<b class="nc"><i>1303</i>&nbsp;        draw(this.roundRect);</b>
+<i>1304</i>&nbsp;    }
+<i>1305</i>&nbsp;
+<i>1306</i>&nbsp;    /**
+<i>1307</i>&nbsp;     * Fills a rectangle with rounded corners using the current {@code paint}.
+<i>1308</i>&nbsp;     * 
+<i>1309</i>&nbsp;     * @param x  the x-coordinate.
+<i>1310</i>&nbsp;     * @param y  the y-coordinate.
+<i>1311</i>&nbsp;     * @param width  the width.
+<i>1312</i>&nbsp;     * @param height  the height.
+<i>1313</i>&nbsp;     * @param arcWidth  the arc-width.
+<i>1314</i>&nbsp;     * @param arcHeight  the arc-height.
+<i>1315</i>&nbsp;     * 
+<i>1316</i>&nbsp;     * @see #drawRoundRect(int, int, int, int, int, int) 
+<i>1317</i>&nbsp;     */
+<i>1318</i>&nbsp;    @Override
+<i>1319</i>&nbsp;    public void fillRoundRect(int x, int y, int width, int height, 
+<i>1320</i>&nbsp;            int arcWidth, int arcHeight) {
+<b class="nc"><i>1321</i>&nbsp;        setRoundRect(x, y, width, height, arcWidth, arcHeight);</b>
+<b class="nc"><i>1322</i>&nbsp;        fill(this.roundRect);</b>
+<i>1323</i>&nbsp;    }
+<i>1324</i>&nbsp;    
+<i>1325</i>&nbsp;    /**
+<i>1326</i>&nbsp;     * Draws an oval framed by the rectangle {@code (x, y, width, height)}
+<i>1327</i>&nbsp;     * using the current {@code paint} and {@code stroke}.
+<i>1328</i>&nbsp;     * 
+<i>1329</i>&nbsp;     * @param x  the x-coordinate.
+<i>1330</i>&nbsp;     * @param y  the y-coordinate.
+<i>1331</i>&nbsp;     * @param width  the width.
+<i>1332</i>&nbsp;     * @param height  the height.
+<i>1333</i>&nbsp;     * 
+<i>1334</i>&nbsp;     * @see #fillOval(int, int, int, int) 
+<i>1335</i>&nbsp;     */
+<i>1336</i>&nbsp;    @Override
+<i>1337</i>&nbsp;    public void drawOval(int x, int y, int width, int height) {
+<b class="nc"><i>1338</i>&nbsp;        setOval(x, y, width, height);</b>
+<b class="nc"><i>1339</i>&nbsp;        draw(this.oval);</b>
+<i>1340</i>&nbsp;    }
+<i>1341</i>&nbsp;
+<i>1342</i>&nbsp;    /**
+<i>1343</i>&nbsp;     * Fills an oval framed by the rectangle {@code (x, y, width, height)}.
+<i>1344</i>&nbsp;     * 
+<i>1345</i>&nbsp;     * @param x  the x-coordinate.
+<i>1346</i>&nbsp;     * @param y  the y-coordinate.
+<i>1347</i>&nbsp;     * @param width  the width.
+<i>1348</i>&nbsp;     * @param height  the height.
+<i>1349</i>&nbsp;     * 
+<i>1350</i>&nbsp;     * @see #drawOval(int, int, int, int) 
+<i>1351</i>&nbsp;     */
+<i>1352</i>&nbsp;    @Override
+<i>1353</i>&nbsp;    public void fillOval(int x, int y, int width, int height) {
+<b class="nc"><i>1354</i>&nbsp;        setOval(x, y, width, height);</b>
+<b class="nc"><i>1355</i>&nbsp;        fill(this.oval);</b>
+<i>1356</i>&nbsp;    }
+<i>1357</i>&nbsp;
+<i>1358</i>&nbsp;    /**
+<i>1359</i>&nbsp;     * Draws an arc contained within the rectangle 
+<i>1360</i>&nbsp;     * {@code (x, y, width, height)}, starting at {@code startAngle}
+<i>1361</i>&nbsp;     * and continuing through {@code arcAngle} degrees using 
+<i>1362</i>&nbsp;     * the current {@code paint} and {@code stroke}.
+<i>1363</i>&nbsp;     * 
+<i>1364</i>&nbsp;     * @param x  the x-coordinate.
+<i>1365</i>&nbsp;     * @param y  the y-coordinate.
+<i>1366</i>&nbsp;     * @param width  the width.
+<i>1367</i>&nbsp;     * @param height  the height.
+<i>1368</i>&nbsp;     * @param startAngle  the start angle in degrees, 0 = 3 o&#39;clock.
+<i>1369</i>&nbsp;     * @param arcAngle  the angle (anticlockwise) in degrees.
+<i>1370</i>&nbsp;     * 
+<i>1371</i>&nbsp;     * @see #fillArc(int, int, int, int, int, int) 
+<i>1372</i>&nbsp;     */
+<i>1373</i>&nbsp;    @Override
+<i>1374</i>&nbsp;    public void drawArc(int x, int y, int width, int height, int startAngle, 
+<i>1375</i>&nbsp;            int arcAngle) {
+<b class="nc"><i>1376</i>&nbsp;        setArc(x, y, width, height, startAngle, arcAngle);</b>
+<b class="nc"><i>1377</i>&nbsp;        draw(this.arc);</b>
+<i>1378</i>&nbsp;    }
+<i>1379</i>&nbsp;
+<i>1380</i>&nbsp;    /**
+<i>1381</i>&nbsp;     * Fills an arc contained within the rectangle 
+<i>1382</i>&nbsp;     * {@code (x, y, width, height)}, starting at {@code startAngle}
+<i>1383</i>&nbsp;     * and continuing through {@code arcAngle} degrees, using 
+<i>1384</i>&nbsp;     * the current {@code paint}.
+<i>1385</i>&nbsp;     * 
+<i>1386</i>&nbsp;     * @param x  the x-coordinate.
+<i>1387</i>&nbsp;     * @param y  the y-coordinate.
+<i>1388</i>&nbsp;     * @param width  the width.
+<i>1389</i>&nbsp;     * @param height  the height.
+<i>1390</i>&nbsp;     * @param startAngle  the start angle in degrees, 0 = 3 o&#39;clock.
+<i>1391</i>&nbsp;     * @param arcAngle  the angle (anticlockwise) in degrees.
+<i>1392</i>&nbsp;     * 
+<i>1393</i>&nbsp;     * @see #drawArc(int, int, int, int, int, int) 
+<i>1394</i>&nbsp;     */
+<i>1395</i>&nbsp;    @Override
+<i>1396</i>&nbsp;    public void fillArc(int x, int y, int width, int height, int startAngle, 
+<i>1397</i>&nbsp;            int arcAngle) {
+<b class="nc"><i>1398</i>&nbsp;        setArc(x, y, width, height, startAngle, arcAngle);</b>
+<b class="nc"><i>1399</i>&nbsp;        fill(this.arc);</b>
+<i>1400</i>&nbsp;    }
+<i>1401</i>&nbsp;
+<i>1402</i>&nbsp;    /**
+<i>1403</i>&nbsp;     * Draws the specified multi-segment line using the current 
+<i>1404</i>&nbsp;     * {@code paint} and {@code stroke}.
+<i>1405</i>&nbsp;     * 
+<i>1406</i>&nbsp;     * @param xPoints  the x-points.
+<i>1407</i>&nbsp;     * @param yPoints  the y-points.
+<i>1408</i>&nbsp;     * @param nPoints  the number of points to use for the polyline.
+<i>1409</i>&nbsp;     */
+<i>1410</i>&nbsp;    @Override
+<i>1411</i>&nbsp;    public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
+<b class="nc"><i>1412</i>&nbsp;        GeneralPath p = createPolygon(xPoints, yPoints, nPoints, false);</b>
+<b class="nc"><i>1413</i>&nbsp;        draw(p);</b>
+<i>1414</i>&nbsp;    }
+<i>1415</i>&nbsp;
+<i>1416</i>&nbsp;    /**
+<i>1417</i>&nbsp;     * Draws the specified polygon using the current {@code paint} and 
+<i>1418</i>&nbsp;     * {@code stroke}.
+<i>1419</i>&nbsp;     * 
+<i>1420</i>&nbsp;     * @param xPoints  the x-points.
+<i>1421</i>&nbsp;     * @param yPoints  the y-points.
+<i>1422</i>&nbsp;     * @param nPoints  the number of points to use for the polygon.
+<i>1423</i>&nbsp;     * 
+<i>1424</i>&nbsp;     * @see #fillPolygon(int[], int[], int)      */
+<i>1425</i>&nbsp;    @Override
+<i>1426</i>&nbsp;    public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+<b class="nc"><i>1427</i>&nbsp;        GeneralPath p = createPolygon(xPoints, yPoints, nPoints, true);</b>
+<b class="nc"><i>1428</i>&nbsp;        draw(p);</b>
+<i>1429</i>&nbsp;    }
+<i>1430</i>&nbsp;
+<i>1431</i>&nbsp;    /**
+<i>1432</i>&nbsp;     * Fills the specified polygon using the current {@code paint}.
+<i>1433</i>&nbsp;     * 
+<i>1434</i>&nbsp;     * @param xPoints  the x-points.
+<i>1435</i>&nbsp;     * @param yPoints  the y-points.
+<i>1436</i>&nbsp;     * @param nPoints  the number of points to use for the polygon.
+<i>1437</i>&nbsp;     * 
+<i>1438</i>&nbsp;     * @see #drawPolygon(int[], int[], int) 
+<i>1439</i>&nbsp;     */
+<i>1440</i>&nbsp;    @Override
+<i>1441</i>&nbsp;    public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+<b class="nc"><i>1442</i>&nbsp;        GeneralPath p = createPolygon(xPoints, yPoints, nPoints, true);</b>
+<b class="nc"><i>1443</i>&nbsp;        fill(p);</b>
+<i>1444</i>&nbsp;    }
+<i>1445</i>&nbsp;
+<i>1446</i>&nbsp;    /**
+<i>1447</i>&nbsp;     * Creates a polygon from the specified {@code x} and 
+<i>1448</i>&nbsp;     * {@code y} coordinate arrays.
+<i>1449</i>&nbsp;     * 
+<i>1450</i>&nbsp;     * @param xPoints  the x-points.
+<i>1451</i>&nbsp;     * @param yPoints  the y-points.
+<i>1452</i>&nbsp;     * @param nPoints  the number of points to use for the polyline.
+<i>1453</i>&nbsp;     * @param close  closed?
+<i>1454</i>&nbsp;     * 
+<i>1455</i>&nbsp;     * @return A polygon.
+<i>1456</i>&nbsp;     */
+<i>1457</i>&nbsp;    public GeneralPath createPolygon(int[] xPoints, int[] yPoints, 
+<i>1458</i>&nbsp;            int nPoints, boolean close) {
+<b class="nc"><i>1459</i>&nbsp;        GeneralPath p = new GeneralPath();</b>
+<b class="nc"><i>1460</i>&nbsp;        p.moveTo(xPoints[0], yPoints[0]);</b>
+<b class="nc"><i>1461</i>&nbsp;        for (int i = 1; i &lt; nPoints; i++) {</b>
+<b class="nc"><i>1462</i>&nbsp;            p.lineTo(xPoints[i], yPoints[i]);</b>
+<i>1463</i>&nbsp;        }
+<b class="nc"><i>1464</i>&nbsp;        if (close) {</b>
+<b class="nc"><i>1465</i>&nbsp;            p.closePath();</b>
+<i>1466</i>&nbsp;        }
+<b class="nc"><i>1467</i>&nbsp;        return p;</b>
+<i>1468</i>&nbsp;    }
+<i>1469</i>&nbsp;    
+<i>1470</i>&nbsp;    /**
+<i>1471</i>&nbsp;     * Draws an image at the location {@code (x, y)}.  Note that the 
+<i>1472</i>&nbsp;     * {@code observer} is ignored.
+<i>1473</i>&nbsp;     * 
+<i>1474</i>&nbsp;     * @param img  the image.
+<i>1475</i>&nbsp;     * @param x  the x-coordinate.
+<i>1476</i>&nbsp;     * @param y  the y-coordinate.
+<i>1477</i>&nbsp;     * @param observer  ignored.
+<i>1478</i>&nbsp;     * 
+<i>1479</i>&nbsp;     * @return {@code true} if the image is drawn. 
+<i>1480</i>&nbsp;     */
+<i>1481</i>&nbsp;    @Override
+<i>1482</i>&nbsp;    public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
+<b class="nc"><i>1483</i>&nbsp;        int w = img.getWidth(observer);</b>
+<b class="nc"><i>1484</i>&nbsp;        if (w &lt; 0) {</b>
+<b class="nc"><i>1485</i>&nbsp;            return false;</b>
+<i>1486</i>&nbsp;        }
+<b class="nc"><i>1487</i>&nbsp;        int h = img.getHeight(observer);</b>
+<b class="nc"><i>1488</i>&nbsp;        if (h &lt; 0) {</b>
+<b class="nc"><i>1489</i>&nbsp;            return false;</b>
+<i>1490</i>&nbsp;        }
+<b class="nc"><i>1491</i>&nbsp;        return drawImage(img, x, y, w, h, observer);</b>
+<i>1492</i>&nbsp;    }
+<i>1493</i>&nbsp;
+<i>1494</i>&nbsp;    /**
+<i>1495</i>&nbsp;     * Draws an image at the location {@code (x, y)}.  Note that the 
+<i>1496</i>&nbsp;     * {@code observer} is ignored.
+<i>1497</i>&nbsp;     * 
+<i>1498</i>&nbsp;     * @param img  the image.
+<i>1499</i>&nbsp;     * @param x  the x-coordinate.
+<i>1500</i>&nbsp;     * @param y  the y-coordinate.
+<i>1501</i>&nbsp;     * @param width  the width of the target rectangle for the image.
+<i>1502</i>&nbsp;     * @param height  the height of the target rectangle for the image.
+<i>1503</i>&nbsp;     * @param observer  ignored.
+<i>1504</i>&nbsp;     * 
+<i>1505</i>&nbsp;     * @return {@code true} if the image is drawn. 
+<i>1506</i>&nbsp;     */
+<i>1507</i>&nbsp;    @Override
+<i>1508</i>&nbsp;    public boolean drawImage(Image img, int x, int y, int width, int height, 
+<i>1509</i>&nbsp;            ImageObserver observer) {
+<b class="nc"><i>1510</i>&nbsp;        BufferedImage img2 = new BufferedImage(width, height, </b>
+<i>1511</i>&nbsp;                BufferedImage.TYPE_INT_ARGB);
+<b class="nc"><i>1512</i>&nbsp;        Graphics2D g2 = img2.createGraphics();</b>
+<b class="nc"><i>1513</i>&nbsp;        g2.drawImage(img, 0, 0, width, height, null);</b>
+<b class="nc"><i>1514</i>&nbsp;        javafx.scene.image.WritableImage fxImage = SwingFXUtils.toFXImage(img2, </b>
+<i>1515</i>&nbsp;                null);
+<b class="nc"><i>1516</i>&nbsp;        this.gc.drawImage(fxImage, x, y, width, height);</b>
+<b class="nc"><i>1517</i>&nbsp;        return true;</b>
+<i>1518</i>&nbsp;    }
+<i>1519</i>&nbsp;
+<i>1520</i>&nbsp;    /**
+<i>1521</i>&nbsp;     * Draws an image at the location {@code (x, y)}.  Note that the 
+<i>1522</i>&nbsp;     * {@code observer} is ignored.
+<i>1523</i>&nbsp;     * 
+<i>1524</i>&nbsp;     * @param img  the image ({@code null} not permitted).
+<i>1525</i>&nbsp;     * @param x  the x-coordinate.
+<i>1526</i>&nbsp;     * @param y  the y-coordinate.
+<i>1527</i>&nbsp;     * @param bgcolor  the background color ({@code null} permitted).
+<i>1528</i>&nbsp;     * @param observer  ignored.
+<i>1529</i>&nbsp;     * 
+<i>1530</i>&nbsp;     * @return {@code true} if the image is drawn. 
+<i>1531</i>&nbsp;     */
+<i>1532</i>&nbsp;    @Override
+<i>1533</i>&nbsp;    public boolean drawImage(Image img, int x, int y, Color bgcolor, 
+<i>1534</i>&nbsp;            ImageObserver observer) {
+<b class="nc"><i>1535</i>&nbsp;        int w = img.getWidth(null);</b>
+<b class="nc"><i>1536</i>&nbsp;        if (w &lt; 0) {</b>
+<b class="nc"><i>1537</i>&nbsp;            return false;</b>
+<i>1538</i>&nbsp;        }
+<b class="nc"><i>1539</i>&nbsp;        int h = img.getHeight(null);</b>
+<b class="nc"><i>1540</i>&nbsp;        if (h &lt; 0) {</b>
+<b class="nc"><i>1541</i>&nbsp;            return false;</b>
+<i>1542</i>&nbsp;        }
+<b class="nc"><i>1543</i>&nbsp;        return drawImage(img, x, y, w, h, bgcolor, observer);</b>
+<i>1544</i>&nbsp;    }
+<i>1545</i>&nbsp;
+<i>1546</i>&nbsp;    /**
+<i>1547</i>&nbsp;     * Draws an image to the rectangle {@code (x, y, w, h)} (scaling it if
+<i>1548</i>&nbsp;     * required), first filling the background with the specified color.  Note 
+<i>1549</i>&nbsp;     * that the {@code observer} is ignored.
+<i>1550</i>&nbsp;     * 
+<i>1551</i>&nbsp;     * @param img  the image.
+<i>1552</i>&nbsp;     * @param x  the x-coordinate.
+<i>1553</i>&nbsp;     * @param y  the y-coordinate.
+<i>1554</i>&nbsp;     * @param w  the width.
+<i>1555</i>&nbsp;     * @param h  the height.
+<i>1556</i>&nbsp;     * @param bgcolor  the background color ({@code null} permitted).
+<i>1557</i>&nbsp;     * @param observer  ignored.
+<i>1558</i>&nbsp;     * 
+<i>1559</i>&nbsp;     * @return {@code true} if the image is drawn.      
+<i>1560</i>&nbsp;     */
+<i>1561</i>&nbsp;    @Override
+<i>1562</i>&nbsp;    public boolean drawImage(Image img, int x, int y, int w, int h, 
+<i>1563</i>&nbsp;            Color bgcolor, ImageObserver observer) {
+<b class="nc"><i>1564</i>&nbsp;        Paint saved = getPaint();</b>
+<b class="nc"><i>1565</i>&nbsp;        setPaint(bgcolor);</b>
+<b class="nc"><i>1566</i>&nbsp;        fillRect(x, y, w, h);</b>
+<b class="nc"><i>1567</i>&nbsp;        setPaint(saved);</b>
+<b class="nc"><i>1568</i>&nbsp;        return drawImage(img, x, y, w, h, observer);</b>
+<i>1569</i>&nbsp;    }
+<i>1570</i>&nbsp;
+<i>1571</i>&nbsp;    /**
+<i>1572</i>&nbsp;     * Draws part of an image (defined by the source rectangle 
+<i>1573</i>&nbsp;     * {@code (sx1, sy1, sx2, sy2)}) into the destination rectangle
+<i>1574</i>&nbsp;     * {@code (dx1, dy1, dx2, dy2)}.  Note that the {@code observer} 
+<i>1575</i>&nbsp;     * is ignored.
+<i>1576</i>&nbsp;     * 
+<i>1577</i>&nbsp;     * @param img  the image.
+<i>1578</i>&nbsp;     * @param dx1  the x-coordinate for the top left of the destination.
+<i>1579</i>&nbsp;     * @param dy1  the y-coordinate for the top left of the destination.
+<i>1580</i>&nbsp;     * @param dx2  the x-coordinate for the bottom right of the destination.
+<i>1581</i>&nbsp;     * @param dy2  the y-coordinate for the bottom right of the destination.
+<i>1582</i>&nbsp;     * @param sx1 the x-coordinate for the top left of the source.
+<i>1583</i>&nbsp;     * @param sy1 the y-coordinate for the top left of the source.
+<i>1584</i>&nbsp;     * @param sx2 the x-coordinate for the bottom right of the source.
+<i>1585</i>&nbsp;     * @param sy2 the y-coordinate for the bottom right of the source.
+<i>1586</i>&nbsp;     * 
+<i>1587</i>&nbsp;     * @return {@code true} if the image is drawn. 
+<i>1588</i>&nbsp;     */
+<i>1589</i>&nbsp;    @Override
+<i>1590</i>&nbsp;    public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, 
+<i>1591</i>&nbsp;            int sx1, int sy1, int sx2, int sy2, ImageObserver observer) {
+<b class="nc"><i>1592</i>&nbsp;        int w = dx2 - dx1;</b>
+<b class="nc"><i>1593</i>&nbsp;        int h = dy2 - dy1;</b>
+<b class="nc"><i>1594</i>&nbsp;        BufferedImage img2 = new BufferedImage(BufferedImage.TYPE_INT_ARGB, </b>
+<i>1595</i>&nbsp;                w, h);
+<b class="nc"><i>1596</i>&nbsp;        Graphics2D g2 = img2.createGraphics();</b>
+<b class="nc"><i>1597</i>&nbsp;        g2.drawImage(img, 0, 0, w, h, sx1, sy1, sx2, sy2, null);</b>
+<b class="nc"><i>1598</i>&nbsp;        return drawImage(img2, dx1, dx2, null);</b>
+<i>1599</i>&nbsp;    }
+<i>1600</i>&nbsp;
+<i>1601</i>&nbsp;    /**
+<i>1602</i>&nbsp;     * Draws part of an image (defined by the source rectangle 
+<i>1603</i>&nbsp;     * {@code (sx1, sy1, sx2, sy2)}) into the destination rectangle
+<i>1604</i>&nbsp;     * {@code (dx1, dy1, dx2, dy2)}.  The destination rectangle is first
+<i>1605</i>&nbsp;     * cleared by filling it with the specified {@code bgcolor}. Note that
+<i>1606</i>&nbsp;     * the {@code observer} is ignored. 
+<i>1607</i>&nbsp;     * 
+<i>1608</i>&nbsp;     * @param img  the image.
+<i>1609</i>&nbsp;     * @param dx1  the x-coordinate for the top left of the destination.
+<i>1610</i>&nbsp;     * @param dy1  the y-coordinate for the top left of the destination.
+<i>1611</i>&nbsp;     * @param dx2  the x-coordinate for the bottom right of the destination.
+<i>1612</i>&nbsp;     * @param dy2  the y-coordinate for the bottom right of the destination.
+<i>1613</i>&nbsp;     * @param sx1 the x-coordinate for the top left of the source.
+<i>1614</i>&nbsp;     * @param sy1 the y-coordinate for the top left of the source.
+<i>1615</i>&nbsp;     * @param sx2 the x-coordinate for the bottom right of the source.
+<i>1616</i>&nbsp;     * @param sy2 the y-coordinate for the bottom right of the source.
+<i>1617</i>&nbsp;     * @param bgcolor  the background color ({@code null} permitted).
+<i>1618</i>&nbsp;     * @param observer  ignored.
+<i>1619</i>&nbsp;     * 
+<i>1620</i>&nbsp;     * @return {@code true} if the image is drawn. 
+<i>1621</i>&nbsp;     */
+<i>1622</i>&nbsp;    @Override
+<i>1623</i>&nbsp;    public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, 
+<i>1624</i>&nbsp;            int sx1, int sy1, int sx2, int sy2, Color bgcolor, 
+<i>1625</i>&nbsp;            ImageObserver observer) {
+<b class="nc"><i>1626</i>&nbsp;        Paint saved = getPaint();</b>
+<b class="nc"><i>1627</i>&nbsp;        setPaint(bgcolor);</b>
+<b class="nc"><i>1628</i>&nbsp;        fillRect(dx1, dy1, dx2 - dx1, dy2 - dy1);</b>
+<b class="nc"><i>1629</i>&nbsp;        setPaint(saved);</b>
+<b class="nc"><i>1630</i>&nbsp;        return drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer);</b>
+<i>1631</i>&nbsp;    }
+<i>1632</i>&nbsp;
+<i>1633</i>&nbsp;    @Override
+<i>1634</i>&nbsp;    public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
+<b class="nc"><i>1635</i>&nbsp;        BufferedImage bi = convertRenderedImage(img);</b>
+<b class="nc"><i>1636</i>&nbsp;        drawImage(bi, xform, null);</b>
+<i>1637</i>&nbsp;    }
+<i>1638</i>&nbsp;
+<i>1639</i>&nbsp;    /**
+<i>1640</i>&nbsp;     * Converts a rendered image to a {@code BufferedImage}.  This utility
+<i>1641</i>&nbsp;     * method has come from a forum post by Jim Moore at:
+<i>1642</i>&nbsp;     * &lt;p&gt;
+<i>1643</i>&nbsp;     * &lt;a href=&quot;http://www.jguru.com/faq/view.jsp?EID=114602&quot;&gt;
+<i>1644</i>&nbsp;     * http://www.jguru.com/faq/view.jsp?EID=114602&lt;/a&gt;
+<i>1645</i>&nbsp;     * 
+<i>1646</i>&nbsp;     * @param img  the rendered image.
+<i>1647</i>&nbsp;     * 
+<i>1648</i>&nbsp;     * @return A buffered image. 
+<i>1649</i>&nbsp;     */
+<i>1650</i>&nbsp;    private static BufferedImage convertRenderedImage(RenderedImage img) {
+<b class="nc"><i>1651</i>&nbsp;        if (img instanceof BufferedImage) {</b>
+<b class="nc"><i>1652</i>&nbsp;            return (BufferedImage) img;</b>
+<i>1653</i>&nbsp;        }
+<b class="nc"><i>1654</i>&nbsp;        ColorModel cm = img.getColorModel();</b>
+<b class="nc"><i>1655</i>&nbsp;        int width = img.getWidth();</b>
+<b class="nc"><i>1656</i>&nbsp;        int height = img.getHeight();</b>
+<b class="nc"><i>1657</i>&nbsp;        WritableRaster raster = cm.createCompatibleWritableRaster(width, height);</b>
+<b class="nc"><i>1658</i>&nbsp;        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();</b>
+<b class="nc"><i>1659</i>&nbsp;        Hashtable properties = new Hashtable();</b>
+<b class="nc"><i>1660</i>&nbsp;        String[] keys = img.getPropertyNames();</b>
+<b class="nc"><i>1661</i>&nbsp;        if (keys != null) {</b>
+<b class="nc"><i>1662</i>&nbsp;            for (int i = 0; i &lt; keys.length; i++) {</b>
+<b class="nc"><i>1663</i>&nbsp;                properties.put(keys[i], img.getProperty(keys[i]));</b>
+<i>1664</i>&nbsp;            }
+<i>1665</i>&nbsp;        }
+<b class="nc"><i>1666</i>&nbsp;        BufferedImage result = new BufferedImage(cm, raster, </b>
+<i>1667</i>&nbsp;                isAlphaPremultiplied, properties);
+<b class="nc"><i>1668</i>&nbsp;        img.copyData(raster);</b>
+<b class="nc"><i>1669</i>&nbsp;        return result;</b>
+<i>1670</i>&nbsp;    }
+<i>1671</i>&nbsp;
+<i>1672</i>&nbsp;    /**
+<i>1673</i>&nbsp;     * Draws the renderable image.
+<i>1674</i>&nbsp;     * 
+<i>1675</i>&nbsp;     * @param img  the renderable image.
+<i>1676</i>&nbsp;     * @param xform  the transform.
+<i>1677</i>&nbsp;     */
+<i>1678</i>&nbsp;    @Override
+<i>1679</i>&nbsp;    public void drawRenderableImage(RenderableImage img, 
+<i>1680</i>&nbsp;            AffineTransform xform) {
+<b class="nc"><i>1681</i>&nbsp;        RenderedImage ri = img.createDefaultRendering();</b>
+<b class="nc"><i>1682</i>&nbsp;        drawRenderedImage(ri, xform);</b>
+<i>1683</i>&nbsp;    }
+<i>1684</i>&nbsp;
+<i>1685</i>&nbsp;    /**
+<i>1686</i>&nbsp;     * Draws an image with the specified transform. Note that the 
+<i>1687</i>&nbsp;     * {@code observer} is ignored.     
+<i>1688</i>&nbsp;     * 
+<i>1689</i>&nbsp;     * @param img  the image.
+<i>1690</i>&nbsp;     * @param xform  the transform.
+<i>1691</i>&nbsp;     * @param obs  the image observer (ignored).
+<i>1692</i>&nbsp;     * 
+<i>1693</i>&nbsp;     * @return {@code true} if the image is drawn. 
+<i>1694</i>&nbsp;     */
+<i>1695</i>&nbsp;    @Override
+<i>1696</i>&nbsp;    public boolean drawImage(Image img, AffineTransform xform, 
+<i>1697</i>&nbsp;            ImageObserver obs) {
+<b class="nc"><i>1698</i>&nbsp;        AffineTransform savedTransform = getTransform();</b>
+<b class="nc"><i>1699</i>&nbsp;        transform(xform);</b>
+<b class="nc"><i>1700</i>&nbsp;        boolean result = drawImage(img, 0, 0, obs);</b>
+<b class="nc"><i>1701</i>&nbsp;        setTransform(savedTransform);</b>
+<b class="nc"><i>1702</i>&nbsp;        return result;</b>
+<i>1703</i>&nbsp;    }
+<i>1704</i>&nbsp;
+<i>1705</i>&nbsp;    /**
+<i>1706</i>&nbsp;     * Draws the image resulting from applying the {@code BufferedImageOp}
+<i>1707</i>&nbsp;     * to the specified image at the location {@code (x, y)}.
+<i>1708</i>&nbsp;     * 
+<i>1709</i>&nbsp;     * @param img  the image.
+<i>1710</i>&nbsp;     * @param op  the operation.
+<i>1711</i>&nbsp;     * @param x  the x-coordinate.
+<i>1712</i>&nbsp;     * @param y  the y-coordinate.
+<i>1713</i>&nbsp;     */
+<i>1714</i>&nbsp;    @Override
+<i>1715</i>&nbsp;    public void drawImage(BufferedImage img, BufferedImageOp op, int x, int y) {
+<b class="nc"><i>1716</i>&nbsp;        BufferedImage imageToDraw = op.filter(img, null);</b>
+<b class="nc"><i>1717</i>&nbsp;        drawImage(imageToDraw, new AffineTransform(1f, 0f, 0f, 1f, x, y), null);</b>
+<i>1718</i>&nbsp;    }
+<i>1719</i>&nbsp;
+<i>1720</i>&nbsp;    /**
+<i>1721</i>&nbsp;     * Not yet implemented.
+<i>1722</i>&nbsp;     * 
+<i>1723</i>&nbsp;     * @param x  the x-coordinate.
+<i>1724</i>&nbsp;     * @param y  the y-coordinate.
+<i>1725</i>&nbsp;     * @param width  the width of the area.
+<i>1726</i>&nbsp;     * @param height  the height of the area.
+<i>1727</i>&nbsp;     * @param dx  the delta x.
+<i>1728</i>&nbsp;     * @param dy  the delta y.
+<i>1729</i>&nbsp;     */
+<i>1730</i>&nbsp;    @Override
+<i>1731</i>&nbsp;    public void copyArea(int x, int y, int width, int height, int dx, int dy) {
+<i>1732</i>&nbsp;        // FIXME: implement this, low priority
+<i>1733</i>&nbsp;    }
+<i>1734</i>&nbsp;
+<i>1735</i>&nbsp;    /**
+<i>1736</i>&nbsp;     * This method does nothing.
+<i>1737</i>&nbsp;     */
+<i>1738</i>&nbsp;    @Override
+<i>1739</i>&nbsp;    public void dispose() {
+<i>1740</i>&nbsp;        // nothing to do
+<i>1741</i>&nbsp;    }
+<i>1742</i>&nbsp; 
+<i>1743</i>&nbsp;    /**
+<i>1744</i>&nbsp;     * Sets the attributes of the reusable {@link Rectangle2D} object that is
+<i>1745</i>&nbsp;     * used by the {@link FXGraphics2D#drawRect(int, int, int, int)} and 
+<i>1746</i>&nbsp;     * {@link FXGraphics2D#fillRect(int, int, int, int)} methods.
+<i>1747</i>&nbsp;     * 
+<i>1748</i>&nbsp;     * @param x  the x-coordinate.
+<i>1749</i>&nbsp;     * @param y  the y-coordinate.
+<i>1750</i>&nbsp;     * @param width  the width.
+<i>1751</i>&nbsp;     * @param height  the height.
+<i>1752</i>&nbsp;     */
+<i>1753</i>&nbsp;    private void setRect(int x, int y, int width, int height) {
+<b class="nc"><i>1754</i>&nbsp;        if (this.rect == null) {</b>
+<b class="nc"><i>1755</i>&nbsp;            this.rect = new Rectangle2D.Double(x, y, width, height);</b>
+<i>1756</i>&nbsp;        } else {
+<b class="nc"><i>1757</i>&nbsp;            this.rect.setRect(x, y, width, height);</b>
+<i>1758</i>&nbsp;        }
+<i>1759</i>&nbsp;    }
+<i>1760</i>&nbsp;
+<i>1761</i>&nbsp;    /**
+<i>1762</i>&nbsp;     * Sets the attributes of the reusable {@link RoundRectangle2D} object that
+<i>1763</i>&nbsp;     * is used by the {@link #drawRoundRect(int, int, int, int, int, int)} and
+<i>1764</i>&nbsp;     * {@link #fillRoundRect(int, int, int, int, int, int)} methods.
+<i>1765</i>&nbsp;     * 
+<i>1766</i>&nbsp;     * @param x  the x-coordinate.
+<i>1767</i>&nbsp;     * @param y  the y-coordinate.
+<i>1768</i>&nbsp;     * @param width  the width.
+<i>1769</i>&nbsp;     * @param height  the height.
+<i>1770</i>&nbsp;     * @param arcWidth  the arc width.
+<i>1771</i>&nbsp;     * @param arcHeight  the arc height.
+<i>1772</i>&nbsp;     */
+<i>1773</i>&nbsp;    private void setRoundRect(int x, int y, int width, int height, int arcWidth, 
+<i>1774</i>&nbsp;            int arcHeight) {
+<b class="nc"><i>1775</i>&nbsp;        if (this.roundRect == null) {</b>
+<b class="nc"><i>1776</i>&nbsp;            this.roundRect = new RoundRectangle2D.Double(x, y, width, height, </b>
+<i>1777</i>&nbsp;                    arcWidth, arcHeight);
+<i>1778</i>&nbsp;        } else {
+<b class="nc"><i>1779</i>&nbsp;            this.roundRect.setRoundRect(x, y, width, height, </b>
+<i>1780</i>&nbsp;                    arcWidth, arcHeight);
+<i>1781</i>&nbsp;        }        
+<i>1782</i>&nbsp;    }
+<i>1783</i>&nbsp;
+<i>1784</i>&nbsp;    /**
+<i>1785</i>&nbsp;     * Sets the attributes of the reusable {@link Arc2D} object that is used by
+<i>1786</i>&nbsp;     * {@link #drawArc(int, int, int, int, int, int)} and 
+<i>1787</i>&nbsp;     * {@link #fillArc(int, int, int, int, int, int)} methods.
+<i>1788</i>&nbsp;     * 
+<i>1789</i>&nbsp;     * @param x  the x-coordinate.
+<i>1790</i>&nbsp;     * @param y  the y-coordinate.
+<i>1791</i>&nbsp;     * @param width  the width.
+<i>1792</i>&nbsp;     * @param height  the height.
+<i>1793</i>&nbsp;     * @param startAngle  the start angle in degrees, 0 = 3 o&#39;clock.
+<i>1794</i>&nbsp;     * @param arcAngle  the angle (anticlockwise) in degrees.
+<i>1795</i>&nbsp;     */
+<i>1796</i>&nbsp;    private void setArc(int x, int y, int width, int height, int startAngle, 
+<i>1797</i>&nbsp;            int arcAngle) {
+<b class="nc"><i>1798</i>&nbsp;        if (this.arc == null) {</b>
+<b class="nc"><i>1799</i>&nbsp;            this.arc = new Arc2D.Double(x, y, width, height, startAngle, </b>
+<i>1800</i>&nbsp;                    arcAngle, Arc2D.OPEN);
+<i>1801</i>&nbsp;        } else {
+<b class="nc"><i>1802</i>&nbsp;            this.arc.setArc(x, y, width, height, startAngle, arcAngle, </b>
+<i>1803</i>&nbsp;                    Arc2D.OPEN);
+<i>1804</i>&nbsp;        }        
+<i>1805</i>&nbsp;    }
+<i>1806</i>&nbsp;            
+<i>1807</i>&nbsp;    /**
+<i>1808</i>&nbsp;     * Sets the attributes of the reusable {@link Ellipse2D} object that is 
+<i>1809</i>&nbsp;     * used by the {@link #drawOval(int, int, int, int)} and
+<i>1810</i>&nbsp;     * {@link #fillOval(int, int, int, int)} methods.
+<i>1811</i>&nbsp;     * 
+<i>1812</i>&nbsp;     * @param x  the x-coordinate.
+<i>1813</i>&nbsp;     * @param y  the y-coordinate.
+<i>1814</i>&nbsp;     * @param width  the width.
+<i>1815</i>&nbsp;     * @param height  the height.
+<i>1816</i>&nbsp;     */
+<i>1817</i>&nbsp;    private void setOval(int x, int y, int width, int height) {
+<b class="nc"><i>1818</i>&nbsp;        if (this.oval == null) {</b>
+<b class="nc"><i>1819</i>&nbsp;            this.oval = new Ellipse2D.Double(x, y, width, height);</b>
+<i>1820</i>&nbsp;        } else {
+<b class="nc"><i>1821</i>&nbsp;            this.oval.setFrame(x, y, width, height);</b>
+<i>1822</i>&nbsp;        }
+<i>1823</i>&nbsp;    }    
+<i>1824</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,453 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AreaRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AreaRenderer (org.jfree.chart.renderer.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AreaRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (5/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    32.8%
+  </span>
+  <span class="absValue">
+    (39/ 119)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------
+<i>28</i>&nbsp; * AreaRenderer.java
+<i>29</i>&nbsp; * -----------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2014, by Jon Iles and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Jon Iles;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *                   Christian W. Zuckschwerdt;
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * Changes:
+<i>37</i>&nbsp; * --------
+<i>38</i>&nbsp; * 21-May-2002 : Version 1, contributed by John Iles (DG);
+<i>39</i>&nbsp; * 29-May-2002 : Now extends AbstractCategoryItemRenderer (DG);
+<i>40</i>&nbsp; * 11-Jun-2002 : Updated Javadoc comments (DG);
+<i>41</i>&nbsp; * 25-Jun-2002 : Removed unnecessary imports (DG);
+<i>42</i>&nbsp; * 01-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+<i>43</i>&nbsp; * 10-Oct-2002 : Added constructors and basic entity support (DG);
+<i>44</i>&nbsp; * 24-Oct-2002 : Amendments for changes in CategoryDataset interface and
+<i>45</i>&nbsp; *               CategoryToolTipGenerator interface (DG);
+<i>46</i>&nbsp; * 05-Nov-2002 : Replaced references to CategoryDataset with TableDataset (DG);
+<i>47</i>&nbsp; * 06-Nov-2002 : Renamed drawCategoryItem() --&gt; drawItem() and now using axis
+<i>48</i>&nbsp; *               for category spacing.  Renamed AreaCategoryItemRenderer
+<i>49</i>&nbsp; *               --&gt; AreaRenderer (DG);
+<i>50</i>&nbsp; * 17-Jan-2003 : Moved plot classes into a separate package (DG);
+<i>51</i>&nbsp; * 25-Mar-2003 : Implemented Serializable (DG);
+<i>52</i>&nbsp; * 10-Apr-2003 : Changed CategoryDataset to KeyedValues2DDataset in
+<i>53</i>&nbsp; *               drawItem() method (DG);
+<i>54</i>&nbsp; * 12-May-2003 : Modified to take into account the plot orientation (DG);
+<i>55</i>&nbsp; * 30-Jul-2003 : Modified entity constructor (CZ);
+<i>56</i>&nbsp; * 13-Aug-2003 : Implemented Cloneable (DG);
+<i>57</i>&nbsp; * 07-Oct-2003 : Added renderer state (DG);
+<i>58</i>&nbsp; * 05-Nov-2004 : Modified drawItem() signature (DG);
+<i>59</i>&nbsp; * 20-Apr-2005 : Apply tooltips and URLs to legend items (DG);
+<i>60</i>&nbsp; * 09-Jun-2005 : Use addItemEntity() method from superclass (DG);
+<i>61</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>62</i>&nbsp; * 11-Oct-2006 : Fixed bug in equals() method (DG);
+<i>63</i>&nbsp; * 30-Nov-2006 : Added checks for series visibility (DG);
+<i>64</i>&nbsp; * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
+<i>65</i>&nbsp; * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
+<i>66</i>&nbsp; * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+<i>67</i>&nbsp; * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
+<i>68</i>&nbsp; * 26-Jun-2008 : Added crosshair support (DG);
+<i>69</i>&nbsp; * 26-May-2009 : Support AreaRendererEndType.LEVEL (DG);
+<i>70</i>&nbsp; * 27-May-2009 : Fixed item label anchor for horizontal orientation (DG);
+<i>71</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>72</i>&nbsp; * 
+<i>73</i>&nbsp; */
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;package org.jfree.chart.renderer.category;
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;import java.awt.Graphics2D;
+<i>78</i>&nbsp;import java.awt.Paint;
+<i>79</i>&nbsp;import java.awt.Shape;
+<i>80</i>&nbsp;import java.awt.Stroke;
+<i>81</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>82</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>83</i>&nbsp;import java.io.Serializable;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;import org.jfree.chart.LegendItem;
+<i>86</i>&nbsp;import org.jfree.chart.axis.CategoryAxis;
+<i>87</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>88</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>89</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>90</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>91</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>92</i>&nbsp;import org.jfree.chart.renderer.AreaRendererEndType;
+<i>93</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>94</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>95</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>96</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;/**
+<i>99</i>&nbsp; * A category item renderer that draws area charts.  You can use this renderer
+<i>100</i>&nbsp; * with the {@link CategoryPlot} class.  The example shown here is generated
+<i>101</i>&nbsp; * by the &lt;code&gt;AreaChartDemo1.java&lt;/code&gt; program included in the JFreeChart
+<i>102</i>&nbsp; * Demo Collection:
+<i>103</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>104</i>&nbsp; * &lt;img src=&quot;../../../../../images/AreaRendererSample.png&quot;
+<i>105</i>&nbsp; * alt=&quot;AreaRendererSample.png&quot;&gt;
+<i>106</i>&nbsp; */
+<i>107</i>&nbsp;public class AreaRenderer extends AbstractCategoryItemRenderer
+<i>108</i>&nbsp;        implements Cloneable, PublicCloneable, Serializable {
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /** For serialization. */
+<i>111</i>&nbsp;    private static final long serialVersionUID = -4231878281385812757L;
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /** A flag that controls how the ends of the areas are drawn. */
+<i>114</i>&nbsp;    private AreaRendererEndType endType;
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Creates a new renderer.
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    public AreaRenderer() {
+<b class="fc"><i>120</i>&nbsp;        super();</b>
+<b class="fc"><i>121</i>&nbsp;        this.endType = AreaRendererEndType.TAPER;</b>
+<b class="fc"><i>122</i>&nbsp;        setBaseLegendShape(new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));</b>
+<b class="fc"><i>123</i>&nbsp;    }</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * Returns a token that controls how the renderer draws the end points.
+<i>127</i>&nbsp;     * The default value is {@link AreaRendererEndType#TAPER}.
+<i>128</i>&nbsp;     *
+<i>129</i>&nbsp;     * @return The end type (never &lt;code&gt;null&lt;/code&gt;).
+<i>130</i>&nbsp;     *
+<i>131</i>&nbsp;     * @see #setEndType
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    public AreaRendererEndType getEndType() {
+<b class="nc"><i>134</i>&nbsp;        return this.endType;</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * Sets a token that controls how the renderer draws the end points, and
+<i>139</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>140</i>&nbsp;     *
+<i>141</i>&nbsp;     * @param type  the end type (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>142</i>&nbsp;     *
+<i>143</i>&nbsp;     * @see #getEndType()
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public void setEndType(AreaRendererEndType type) {
+<b class="fc"><i>146</i>&nbsp;        ParamChecks.nullNotPermitted(type, &quot;type&quot;);</b>
+<b class="fc"><i>147</i>&nbsp;        this.endType = type;</b>
+<b class="fc"><i>148</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>149</i>&nbsp;    }</b>
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /**
+<i>152</i>&nbsp;     * Returns a legend item for a series.
+<i>153</i>&nbsp;     *
+<i>154</i>&nbsp;     * @param datasetIndex  the dataset index (zero-based).
+<i>155</i>&nbsp;     * @param series  the series index (zero-based).
+<i>156</i>&nbsp;     *
+<i>157</i>&nbsp;     * @return The legend item.
+<i>158</i>&nbsp;     */
+<i>159</i>&nbsp;    @Override
+<i>160</i>&nbsp;    public LegendItem getLegendItem(int datasetIndex, int series) {
+<i>161</i>&nbsp;
+<i>162</i>&nbsp;        // if there is no plot, there is no dataset to access...
+<b class="fc"><i>163</i>&nbsp;        CategoryPlot cp = getPlot();</b>
+<b class="fc"><i>164</i>&nbsp;        if (cp == null) {</b>
+<b class="nc"><i>165</i>&nbsp;            return null;</b>
+<i>166</i>&nbsp;        }
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;        // check that a legend item needs to be displayed...
+<b class="fc"><i>169</i>&nbsp;        if (!isSeriesVisible(series) || !isSeriesVisibleInLegend(series)) {</b>
+<b class="nc"><i>170</i>&nbsp;            return null;</b>
+<i>171</i>&nbsp;        }
+<i>172</i>&nbsp;
+<b class="fc"><i>173</i>&nbsp;        CategoryDataset dataset = cp.getDataset(datasetIndex);</b>
+<b class="fc"><i>174</i>&nbsp;        String label = getLegendItemLabelGenerator().generateLabel(dataset,</b>
+<i>175</i>&nbsp;                series);
+<b class="fc"><i>176</i>&nbsp;        String description = label;</b>
+<b class="fc"><i>177</i>&nbsp;        String toolTipText = null;</b>
+<b class="fc"><i>178</i>&nbsp;        if (getLegendItemToolTipGenerator() != null) {</b>
+<b class="nc"><i>179</i>&nbsp;            toolTipText = getLegendItemToolTipGenerator().generateLabel(</b>
+<i>180</i>&nbsp;                    dataset, series);
+<i>181</i>&nbsp;        }
+<b class="fc"><i>182</i>&nbsp;        String urlText = null;</b>
+<b class="fc"><i>183</i>&nbsp;        if (getLegendItemURLGenerator() != null) {</b>
+<b class="nc"><i>184</i>&nbsp;            urlText = getLegendItemURLGenerator().generateLabel(dataset,</b>
+<i>185</i>&nbsp;                    series);
+<i>186</i>&nbsp;        }
+<b class="fc"><i>187</i>&nbsp;        Shape shape = lookupLegendShape(series);</b>
+<b class="fc"><i>188</i>&nbsp;        Paint paint = lookupSeriesPaint(series);</b>
+<b class="fc"><i>189</i>&nbsp;        Paint outlinePaint = lookupSeriesOutlinePaint(series);</b>
+<b class="fc"><i>190</i>&nbsp;        Stroke outlineStroke = lookupSeriesOutlineStroke(series);</b>
+<i>191</i>&nbsp;
+<b class="fc"><i>192</i>&nbsp;        LegendItem result = new LegendItem(label, description, toolTipText,</b>
+<i>193</i>&nbsp;                urlText, shape, paint, outlineStroke, outlinePaint);
+<b class="fc"><i>194</i>&nbsp;        result.setLabelFont(lookupLegendTextFont(series));</b>
+<b class="fc"><i>195</i>&nbsp;        Paint labelPaint = lookupLegendTextPaint(series);</b>
+<b class="fc"><i>196</i>&nbsp;        if (labelPaint != null) {</b>
+<b class="nc"><i>197</i>&nbsp;            result.setLabelPaint(labelPaint);</b>
+<i>198</i>&nbsp;        }
+<b class="fc"><i>199</i>&nbsp;        result.setDataset(dataset);</b>
+<b class="fc"><i>200</i>&nbsp;        result.setDatasetIndex(datasetIndex);</b>
+<b class="fc"><i>201</i>&nbsp;        result.setSeriesKey(dataset.getRowKey(series));</b>
+<b class="fc"><i>202</i>&nbsp;        result.setSeriesIndex(series);</b>
+<b class="fc"><i>203</i>&nbsp;        return result;</b>
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    }
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    /**
+<i>208</i>&nbsp;     * Draw a single data item.
+<i>209</i>&nbsp;     *
+<i>210</i>&nbsp;     * @param g2  the graphics device.
+<i>211</i>&nbsp;     * @param state  the renderer state.
+<i>212</i>&nbsp;     * @param dataArea  the data plot area.
+<i>213</i>&nbsp;     * @param plot  the plot.
+<i>214</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>215</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>216</i>&nbsp;     * @param dataset  the dataset.
+<i>217</i>&nbsp;     * @param row  the row index (zero-based).
+<i>218</i>&nbsp;     * @param column  the column index (zero-based).
+<i>219</i>&nbsp;     * @param pass  the pass index.
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;    @Override
+<i>222</i>&nbsp;    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+<i>223</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>224</i>&nbsp;            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+<i>225</i>&nbsp;            int pass) {
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;        // do nothing if item is not visible or null
+<b class="nc"><i>228</i>&nbsp;        if (!getItemVisible(row, column)) {</b>
+<b class="nc"><i>229</i>&nbsp;            return;</b>
+<i>230</i>&nbsp;        }
+<b class="nc"><i>231</i>&nbsp;        Number value = dataset.getValue(row, column);</b>
+<b class="nc"><i>232</i>&nbsp;        if (value == null) {</b>
+<b class="nc"><i>233</i>&nbsp;            return;</b>
+<i>234</i>&nbsp;        }
+<b class="nc"><i>235</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>236</i>&nbsp;        RectangleEdge axisEdge = plot.getDomainAxisEdge();</b>
+<b class="nc"><i>237</i>&nbsp;        int count = dataset.getColumnCount();</b>
+<b class="nc"><i>238</i>&nbsp;        float x0 = (float) domainAxis.getCategoryStart(column, count, dataArea,</b>
+<i>239</i>&nbsp;                axisEdge);
+<b class="nc"><i>240</i>&nbsp;        float x1 = (float) domainAxis.getCategoryMiddle(column, count,</b>
+<i>241</i>&nbsp;                dataArea, axisEdge);
+<b class="nc"><i>242</i>&nbsp;        float x2 = (float) domainAxis.getCategoryEnd(column, count, dataArea,</b>
+<i>243</i>&nbsp;                axisEdge);
+<i>244</i>&nbsp;
+<b class="nc"><i>245</i>&nbsp;        x0 = Math.round(x0);</b>
+<b class="nc"><i>246</i>&nbsp;        x1 = Math.round(x1);</b>
+<b class="nc"><i>247</i>&nbsp;        x2 = Math.round(x2);</b>
+<i>248</i>&nbsp;
+<b class="nc"><i>249</i>&nbsp;        if (this.endType == AreaRendererEndType.TRUNCATE) {</b>
+<b class="nc"><i>250</i>&nbsp;            if (column == 0) {</b>
+<b class="nc"><i>251</i>&nbsp;                x0 = x1;</b>
+<i>252</i>&nbsp;            }
+<b class="nc"><i>253</i>&nbsp;            else if (column == getColumnCount() - 1) {</b>
+<b class="nc"><i>254</i>&nbsp;                x2 = x1;</b>
+<i>255</i>&nbsp;            }
+<i>256</i>&nbsp;        }
+<i>257</i>&nbsp;
+<b class="nc"><i>258</i>&nbsp;        double yy1 = value.doubleValue();</b>
+<i>259</i>&nbsp;
+<b class="nc"><i>260</i>&nbsp;        double yy0 = 0.0;</b>
+<b class="nc"><i>261</i>&nbsp;        if (this.endType == AreaRendererEndType.LEVEL) {</b>
+<b class="nc"><i>262</i>&nbsp;            yy0 = yy1;</b>
+<i>263</i>&nbsp;        }
+<b class="nc"><i>264</i>&nbsp;        if (column &gt; 0) {</b>
+<b class="nc"><i>265</i>&nbsp;            Number n0 = dataset.getValue(row, column - 1);</b>
+<b class="nc"><i>266</i>&nbsp;            if (n0 != null) {</b>
+<b class="nc"><i>267</i>&nbsp;                yy0 = (n0.doubleValue() + yy1) / 2.0;</b>
+<i>268</i>&nbsp;            }
+<i>269</i>&nbsp;        }
+<i>270</i>&nbsp;
+<b class="nc"><i>271</i>&nbsp;        double yy2 = 0.0;</b>
+<b class="nc"><i>272</i>&nbsp;        if (column &lt; dataset.getColumnCount() - 1) {</b>
+<b class="nc"><i>273</i>&nbsp;            Number n2 = dataset.getValue(row, column + 1);</b>
+<b class="nc"><i>274</i>&nbsp;            if (n2 != null) {</b>
+<b class="nc"><i>275</i>&nbsp;                yy2 = (n2.doubleValue() + yy1) / 2.0;</b>
+<i>276</i>&nbsp;            }
+<b class="nc"><i>277</i>&nbsp;        }</b>
+<b class="nc"><i>278</i>&nbsp;        else if (this.endType == AreaRendererEndType.LEVEL) {</b>
+<b class="nc"><i>279</i>&nbsp;            yy2 = yy1;</b>
+<i>280</i>&nbsp;        }
+<i>281</i>&nbsp;
+<b class="nc"><i>282</i>&nbsp;        RectangleEdge edge = plot.getRangeAxisEdge();</b>
+<b class="nc"><i>283</i>&nbsp;        float y0 = (float) rangeAxis.valueToJava2D(yy0, dataArea, edge);</b>
+<b class="nc"><i>284</i>&nbsp;        float y1 = (float) rangeAxis.valueToJava2D(yy1, dataArea, edge);</b>
+<b class="nc"><i>285</i>&nbsp;        float y2 = (float) rangeAxis.valueToJava2D(yy2, dataArea, edge);</b>
+<b class="nc"><i>286</i>&nbsp;        float yz = (float) rangeAxis.valueToJava2D(0.0, dataArea, edge);</b>
+<b class="nc"><i>287</i>&nbsp;        double labelXX = x1;</b>
+<b class="nc"><i>288</i>&nbsp;        double labelYY = y1;</b>
+<b class="nc"><i>289</i>&nbsp;        g2.setPaint(getItemPaint(row, column));</b>
+<b class="nc"><i>290</i>&nbsp;        g2.setStroke(getItemStroke(row, column));</b>
+<i>291</i>&nbsp;
+<b class="nc"><i>292</i>&nbsp;        GeneralPath area = new GeneralPath();</b>
+<i>293</i>&nbsp;
+<b class="nc"><i>294</i>&nbsp;        if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>295</i>&nbsp;            area.moveTo(x0, yz);</b>
+<b class="nc"><i>296</i>&nbsp;            area.lineTo(x0, y0);</b>
+<b class="nc"><i>297</i>&nbsp;            area.lineTo(x1, y1);</b>
+<b class="nc"><i>298</i>&nbsp;            area.lineTo(x2, y2);</b>
+<b class="nc"><i>299</i>&nbsp;            area.lineTo(x2, yz);</b>
+<i>300</i>&nbsp;        }
+<b class="nc"><i>301</i>&nbsp;        else if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>302</i>&nbsp;            area.moveTo(yz, x0);</b>
+<b class="nc"><i>303</i>&nbsp;            area.lineTo(y0, x0);</b>
+<b class="nc"><i>304</i>&nbsp;            area.lineTo(y1, x1);</b>
+<b class="nc"><i>305</i>&nbsp;            area.lineTo(y2, x2);</b>
+<b class="nc"><i>306</i>&nbsp;            area.lineTo(yz, x2);</b>
+<b class="nc"><i>307</i>&nbsp;            double temp = labelXX;</b>
+<b class="nc"><i>308</i>&nbsp;            labelXX = labelYY;</b>
+<b class="nc"><i>309</i>&nbsp;            labelYY = temp;</b>
+<i>310</i>&nbsp;        }
+<b class="nc"><i>311</i>&nbsp;        area.closePath();</b>
+<i>312</i>&nbsp;
+<b class="nc"><i>313</i>&nbsp;        g2.setPaint(getItemPaint(row, column));</b>
+<b class="nc"><i>314</i>&nbsp;        g2.fill(area);</b>
+<i>315</i>&nbsp;
+<i>316</i>&nbsp;        // draw the item labels if there are any...
+<b class="nc"><i>317</i>&nbsp;        if (isItemLabelVisible(row, column)) {</b>
+<b class="nc"><i>318</i>&nbsp;            drawItemLabel(g2, orientation, dataset, row, column, labelXX,</b>
+<b class="nc"><i>319</i>&nbsp;                    labelYY, (value.doubleValue() &lt; 0.0));</b>
+<i>320</i>&nbsp;        }
+<i>321</i>&nbsp;
+<i>322</i>&nbsp;        // submit the current data point as a crosshair candidate
+<b class="nc"><i>323</i>&nbsp;        int datasetIndex = plot.indexOf(dataset);</b>
+<b class="nc"><i>324</i>&nbsp;        updateCrosshairValues(state.getCrosshairState(), </b>
+<b class="nc"><i>325</i>&nbsp;                dataset.getRowKey(row), dataset.getColumnKey(column), yy1,</b>
+<i>326</i>&nbsp;                datasetIndex, x1, y1, orientation);
+<i>327</i>&nbsp;
+<i>328</i>&nbsp;        // add an item entity, if this information is being collected
+<b class="nc"><i>329</i>&nbsp;        EntityCollection entities = state.getEntityCollection();</b>
+<b class="nc"><i>330</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>331</i>&nbsp;            addItemEntity(entities, dataset, row, column, area);</b>
+<i>332</i>&nbsp;        }
+<i>333</i>&nbsp;
+<b class="nc"><i>334</i>&nbsp;    }</b>
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    /**
+<i>337</i>&nbsp;     * Tests this instance for equality with an arbitrary object.
+<i>338</i>&nbsp;     *
+<i>339</i>&nbsp;     * @param obj  the object to test (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>340</i>&nbsp;     *
+<i>341</i>&nbsp;     * @return A boolean.
+<i>342</i>&nbsp;     */
+<i>343</i>&nbsp;    @Override
+<i>344</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>345</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>346</i>&nbsp;            return true;</b>
+<i>347</i>&nbsp;        }
+<b class="fc"><i>348</i>&nbsp;        if (!(obj instanceof AreaRenderer)) {</b>
+<b class="fc"><i>349</i>&nbsp;            return false;</b>
+<i>350</i>&nbsp;        }
+<b class="fc"><i>351</i>&nbsp;        AreaRenderer that = (AreaRenderer) obj;</b>
+<b class="fc"><i>352</i>&nbsp;        if (!this.endType.equals(that.endType)) {</b>
+<b class="fc"><i>353</i>&nbsp;            return false;</b>
+<i>354</i>&nbsp;        }
+<b class="fc"><i>355</i>&nbsp;        return super.equals(obj);</b>
+<i>356</i>&nbsp;    }
+<i>357</i>&nbsp;
+<i>358</i>&nbsp;    /**
+<i>359</i>&nbsp;     * Returns an independent copy of the renderer.
+<i>360</i>&nbsp;     *
+<i>361</i>&nbsp;     * @return A clone.
+<i>362</i>&nbsp;     *
+<i>363</i>&nbsp;     * @throws CloneNotSupportedException  should not happen.
+<i>364</i>&nbsp;     */
+<i>365</i>&nbsp;    @Override
+<i>366</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>367</i>&nbsp;        return super.clone();</b>
+<i>368</i>&nbsp;    }
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

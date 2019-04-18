@@ -1,0 +1,386 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FixedMillisecond</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.time</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FixedMillisecond (org.jfree.data.time)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FixedMillisecond</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    41.2%
+  </span>
+  <span class="absValue">
+    (7/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45.5%
+  </span>
+  <span class="absValue">
+    (20/ 44)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------------
+<i>28</i>&nbsp; * FixedMillisecond.java
+<i>29</i>&nbsp; * ---------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2008, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 19-Mar-2002 : Version 1, based on original Millisecond implementation (DG);
+<i>38</i>&nbsp; * 24-Jun-2002 : Removed unnecessary imports (DG);
+<i>39</i>&nbsp; * 10-Sep-2002 : Added getSerialIndex() method (DG);
+<i>40</i>&nbsp; * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+<i>41</i>&nbsp; * 13-Mar-2003 : Moved to com.jrefinery.data.time package and implemented
+<i>42</i>&nbsp; *               Serializable (DG);
+<i>43</i>&nbsp; * 21-Oct-2003 : Added hashCode() method (DG);
+<i>44</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>45</i>&nbsp; * 06-Oct-2006 : Added peg() method (DG);
+<i>46</i>&nbsp; * 28-May-2008 : Fixed immutability problem (DG);
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; */
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;package org.jfree.data.time;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;import java.io.Serializable;
+<i>53</i>&nbsp;import java.util.Calendar;
+<i>54</i>&nbsp;import java.util.Date;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;/**
+<i>57</i>&nbsp; * Wrapper for a &lt;code&gt;java.util.Date&lt;/code&gt; object that allows it to be used
+<i>58</i>&nbsp; * as a {@link RegularTimePeriod}.  This class is immutable, which is a
+<i>59</i>&nbsp; * requirement for all {@link RegularTimePeriod} subclasses.
+<i>60</i>&nbsp; */
+<i>61</i>&nbsp;public class FixedMillisecond extends RegularTimePeriod
+<i>62</i>&nbsp;        implements Serializable {
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /** For serialization. */
+<i>65</i>&nbsp;    private static final long serialVersionUID = 7867521484545646931L;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /** The millisecond. */
+<i>68</i>&nbsp;    private long time;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * Constructs a millisecond based on the current system time.
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public FixedMillisecond() {
+<b class="fc"><i>74</i>&nbsp;        this(new Date());</b>
+<b class="fc"><i>75</i>&nbsp;    }</b>
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * Constructs a millisecond.
+<i>79</i>&nbsp;     *
+<i>80</i>&nbsp;     * @param millisecond  the millisecond (same encoding as java.util.Date).
+<i>81</i>&nbsp;     */
+<i>82</i>&nbsp;    public FixedMillisecond(long millisecond) {
+<b class="fc"><i>83</i>&nbsp;        this(new Date(millisecond));</b>
+<b class="fc"><i>84</i>&nbsp;    }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Constructs a millisecond.
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param time  the time.
+<i>90</i>&nbsp;     */
+<b class="fc"><i>91</i>&nbsp;    public FixedMillisecond(Date time) {</b>
+<b class="fc"><i>92</i>&nbsp;        this.time = time.getTime();</b>
+<b class="fc"><i>93</i>&nbsp;    }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Returns the date/time.
+<i>97</i>&nbsp;     *
+<i>98</i>&nbsp;     * @return The date/time.
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    public Date getTime() {
+<b class="nc"><i>101</i>&nbsp;        return new Date(this.time);</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * This method is overridden to do nothing.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param calendar  ignored
+<i>108</i>&nbsp;     *
+<i>109</i>&nbsp;     * @since 1.0.3
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    @Override
+<i>112</i>&nbsp;    public void peg(Calendar calendar) {
+<i>113</i>&nbsp;        // nothing to do
+<b class="nc"><i>114</i>&nbsp;    }</b>
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Returns the millisecond preceding this one.
+<i>118</i>&nbsp;     *
+<i>119</i>&nbsp;     * @return The millisecond preceding this one.
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    @Override
+<i>122</i>&nbsp;    public RegularTimePeriod previous() {
+<b class="nc"><i>123</i>&nbsp;        RegularTimePeriod result = null;</b>
+<b class="nc"><i>124</i>&nbsp;        long t = this.time;</b>
+<b class="nc"><i>125</i>&nbsp;        if (t != Long.MIN_VALUE) {</b>
+<b class="nc"><i>126</i>&nbsp;            result = new FixedMillisecond(t - 1);</b>
+<i>127</i>&nbsp;        }
+<b class="nc"><i>128</i>&nbsp;        return result;</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Returns the millisecond following this one.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @return The millisecond following this one.
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    @Override
+<i>137</i>&nbsp;    public RegularTimePeriod next() {
+<b class="nc"><i>138</i>&nbsp;        RegularTimePeriod result = null;</b>
+<b class="nc"><i>139</i>&nbsp;        long t = this.time;</b>
+<b class="nc"><i>140</i>&nbsp;        if (t != Long.MAX_VALUE) {</b>
+<b class="nc"><i>141</i>&nbsp;            result = new FixedMillisecond(t + 1);</b>
+<i>142</i>&nbsp;        }
+<b class="nc"><i>143</i>&nbsp;        return result;</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Tests the equality of this object against an arbitrary Object.
+<i>148</i>&nbsp;     *
+<i>149</i>&nbsp;     * @param object  the object to compare
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @return A boolean.
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    @Override
+<i>154</i>&nbsp;    public boolean equals(Object object) {
+<b class="fc"><i>155</i>&nbsp;        if (object instanceof FixedMillisecond) {</b>
+<b class="fc"><i>156</i>&nbsp;            FixedMillisecond m = (FixedMillisecond) object;</b>
+<b class="fc"><i>157</i>&nbsp;            return this.time == m.getFirstMillisecond();</b>
+<i>158</i>&nbsp;        }
+<i>159</i>&nbsp;        else {
+<b class="nc"><i>160</i>&nbsp;            return false;</b>
+<i>161</i>&nbsp;        }
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    }
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * Returns a hash code for this object instance.
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @return A hash code.
+<i>169</i>&nbsp;     */
+<i>170</i>&nbsp;    @Override
+<i>171</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>172</i>&nbsp;        return (int) this.time;</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Returns an integer indicating the order of this Millisecond object
+<i>177</i>&nbsp;     * relative to the specified
+<i>178</i>&nbsp;     * object: negative == before, zero == same, positive == after.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param o1    the object to compare.
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @return negative == before, zero == same, positive == after.
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    @Override
+<i>185</i>&nbsp;    public int compareTo(Object o1) {
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;        int result;
+<i>188</i>&nbsp;        long difference;
+<i>189</i>&nbsp;
+<i>190</i>&nbsp;        // CASE 1 : Comparing to another Second object
+<i>191</i>&nbsp;        // -------------------------------------------
+<b class="fc"><i>192</i>&nbsp;        if (o1 instanceof FixedMillisecond) {</b>
+<b class="fc"><i>193</i>&nbsp;            FixedMillisecond t1 = (FixedMillisecond) o1;</b>
+<b class="fc"><i>194</i>&nbsp;            difference = this.time - t1.time;</b>
+<b class="fc"><i>195</i>&nbsp;            if (difference &gt; 0) {</b>
+<b class="nc"><i>196</i>&nbsp;                result = 1;</b>
+<i>197</i>&nbsp;            }
+<i>198</i>&nbsp;            else {
+<b class="fc"><i>199</i>&nbsp;                if (difference &lt; 0) {</b>
+<b class="nc"><i>200</i>&nbsp;                   result = -1;</b>
+<i>201</i>&nbsp;                }
+<i>202</i>&nbsp;                else {
+<b class="fc"><i>203</i>&nbsp;                    result = 0;</b>
+<i>204</i>&nbsp;                }
+<i>205</i>&nbsp;            }
+<b class="fc"><i>206</i>&nbsp;        }</b>
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;        // CASE 2 : Comparing to another TimePeriod object
+<i>209</i>&nbsp;        // -----------------------------------------------
+<b class="nc"><i>210</i>&nbsp;        else if (o1 instanceof RegularTimePeriod) {</b>
+<i>211</i>&nbsp;            // more difficult case - evaluate later...
+<b class="nc"><i>212</i>&nbsp;            result = 0;</b>
+<i>213</i>&nbsp;        }
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;        // CASE 3 : Comparing to a non-TimePeriod object
+<i>216</i>&nbsp;        // ---------------------------------------------
+<i>217</i>&nbsp;        else {
+<i>218</i>&nbsp;            // consider time periods to be ordered after general objects
+<b class="nc"><i>219</i>&nbsp;            result = 1;</b>
+<i>220</i>&nbsp;        }
+<i>221</i>&nbsp;
+<b class="fc"><i>222</i>&nbsp;        return result;</b>
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;    }
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    /**
+<i>227</i>&nbsp;     * Returns the first millisecond of the time period.
+<i>228</i>&nbsp;     *
+<i>229</i>&nbsp;     * @return The first millisecond of the time period.
+<i>230</i>&nbsp;     */
+<i>231</i>&nbsp;    @Override
+<i>232</i>&nbsp;    public long getFirstMillisecond() {
+<b class="fc"><i>233</i>&nbsp;        return this.time;</b>
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;    /**
+<i>238</i>&nbsp;     * Returns the first millisecond of the time period.
+<i>239</i>&nbsp;     *
+<i>240</i>&nbsp;     * @param calendar  the calendar.
+<i>241</i>&nbsp;     *
+<i>242</i>&nbsp;     * @return The first millisecond of the time period.
+<i>243</i>&nbsp;     */
+<i>244</i>&nbsp;    @Override
+<i>245</i>&nbsp;    public long getFirstMillisecond(Calendar calendar) {
+<b class="nc"><i>246</i>&nbsp;        return this.time;</b>
+<i>247</i>&nbsp;    }
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;    /**
+<i>250</i>&nbsp;     * Returns the last millisecond of the time period.
+<i>251</i>&nbsp;     *
+<i>252</i>&nbsp;     * @return The last millisecond of the time period.
+<i>253</i>&nbsp;     */
+<i>254</i>&nbsp;    @Override
+<i>255</i>&nbsp;    public long getLastMillisecond() {
+<b class="nc"><i>256</i>&nbsp;        return this.time;</b>
+<i>257</i>&nbsp;    }
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * Returns the last millisecond of the time period.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @param calendar  the calendar.
+<i>263</i>&nbsp;     *
+<i>264</i>&nbsp;     * @return The last millisecond of the time period.
+<i>265</i>&nbsp;     */
+<i>266</i>&nbsp;    @Override
+<i>267</i>&nbsp;    public long getLastMillisecond(Calendar calendar) {
+<b class="nc"><i>268</i>&nbsp;        return this.time;</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * Returns the millisecond closest to the middle of the time period.
+<i>273</i>&nbsp;     *
+<i>274</i>&nbsp;     * @return The millisecond closest to the middle of the time period.
+<i>275</i>&nbsp;     */
+<i>276</i>&nbsp;    @Override
+<i>277</i>&nbsp;    public long getMiddleMillisecond() {
+<b class="nc"><i>278</i>&nbsp;        return this.time;</b>
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Returns the millisecond closest to the middle of the time period.
+<i>283</i>&nbsp;     *
+<i>284</i>&nbsp;     * @param calendar  the calendar.
+<i>285</i>&nbsp;     *
+<i>286</i>&nbsp;     * @return The millisecond closest to the middle of the time period.
+<i>287</i>&nbsp;     */
+<i>288</i>&nbsp;    @Override
+<i>289</i>&nbsp;    public long getMiddleMillisecond(Calendar calendar) {
+<b class="nc"><i>290</i>&nbsp;        return this.time;</b>
+<i>291</i>&nbsp;    }
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /**
+<i>294</i>&nbsp;     * Returns a serial index number for the millisecond.
+<i>295</i>&nbsp;     *
+<i>296</i>&nbsp;     * @return The serial index number.
+<i>297</i>&nbsp;     */
+<i>298</i>&nbsp;    @Override
+<i>299</i>&nbsp;    public long getSerialIndex() {
+<b class="nc"><i>300</i>&nbsp;        return this.time;</b>
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

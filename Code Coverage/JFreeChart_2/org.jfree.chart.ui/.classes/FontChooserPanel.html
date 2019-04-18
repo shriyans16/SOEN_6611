@@ -1,0 +1,292 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FontChooserPanel</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.ui</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FontChooserPanel (org.jfree.chart.ui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FontChooserPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 68)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; */
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;package org.jfree.chart.ui;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;import java.awt.BorderLayout;
+<i>32</i>&nbsp;import java.awt.Font;
+<i>33</i>&nbsp;import java.awt.GraphicsEnvironment;
+<i>34</i>&nbsp;import java.awt.GridLayout;
+<i>35</i>&nbsp;import java.util.ResourceBundle;
+<i>36</i>&nbsp;import javax.swing.BorderFactory;
+<i>37</i>&nbsp;import javax.swing.JCheckBox;
+<i>38</i>&nbsp;import javax.swing.JList;
+<i>39</i>&nbsp;import javax.swing.JPanel;
+<i>40</i>&nbsp;import javax.swing.JScrollPane;
+<i>41</i>&nbsp;import javax.swing.ListModel;
+<i>42</i>&nbsp;import org.jfree.chart.util.ResourceBundleWrapper;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;/**
+<i>45</i>&nbsp; * A panel for choosing a font from the available system fonts - still a bit of
+<i>46</i>&nbsp; * a hack at the moment, but good enough for demonstration applications.
+<i>47</i>&nbsp; */
+<i>48</i>&nbsp;public class FontChooserPanel extends JPanel {
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /** The font sizes that can be selected. */
+<b class="nc"><i>51</i>&nbsp;    public static final String[] SIZES = {&quot;9&quot;, &quot;10&quot;, &quot;11&quot;, &quot;12&quot;, &quot;14&quot;, &quot;16&quot;,</b>
+<i>52</i>&nbsp;            &quot;18&quot;, &quot;20&quot;, &quot;22&quot;, &quot;24&quot;, &quot;28&quot;, &quot;36&quot;, &quot;48&quot;, &quot;72&quot;};
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /** The list of fonts. */
+<i>55</i>&nbsp;    private JList fontlist;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /** The list of sizes. */
+<i>58</i>&nbsp;    private JList sizelist;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /** The checkbox that indicates whether the font is bold. */
+<i>61</i>&nbsp;    private JCheckBox bold;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /** The checkbox that indicates whether or not the font is italic. */
+<i>64</i>&nbsp;    private JCheckBox italic;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /** The resourceBundle for the localization. */
+<i>67</i>&nbsp;    protected static ResourceBundle localizationResources =
+<b class="nc"><i>68</i>&nbsp;        ResourceBundleWrapper.getBundle(&quot;org.jfree.chart.ui.LocalizationBundle&quot;);</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * Standard constructor - builds a FontChooserPanel initialised with the
+<i>72</i>&nbsp;     * specified font.
+<i>73</i>&nbsp;     *
+<i>74</i>&nbsp;     * @param font  the initial font to display.
+<i>75</i>&nbsp;     */
+<b class="nc"><i>76</i>&nbsp;    public FontChooserPanel(Font font) {</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;        final GraphicsEnvironment g
+<b class="nc"><i>79</i>&nbsp;                = GraphicsEnvironment.getLocalGraphicsEnvironment();</b>
+<b class="nc"><i>80</i>&nbsp;        final String[] fonts = g.getAvailableFontFamilyNames();</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;        setLayout(new BorderLayout());</b>
+<b class="nc"><i>83</i>&nbsp;        final JPanel right = new JPanel(new BorderLayout());</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;        final JPanel fontPanel = new JPanel(new BorderLayout());</b>
+<b class="nc"><i>86</i>&nbsp;        fontPanel.setBorder(BorderFactory.createTitledBorder(</b>
+<b class="nc"><i>87</i>&nbsp;                            BorderFactory.createEtchedBorder(),</b>
+<b class="nc"><i>88</i>&nbsp;                            localizationResources.getString(&quot;Font&quot;)));</b>
+<b class="nc"><i>89</i>&nbsp;        this.fontlist = new JList(fonts);</b>
+<b class="nc"><i>90</i>&nbsp;        final JScrollPane fontpane = new JScrollPane(this.fontlist);</b>
+<b class="nc"><i>91</i>&nbsp;        fontpane.setBorder(BorderFactory.createEtchedBorder());</b>
+<b class="nc"><i>92</i>&nbsp;        fontPanel.add(fontpane);</b>
+<b class="nc"><i>93</i>&nbsp;        add(fontPanel);</b>
+<i>94</i>&nbsp;
+<b class="nc"><i>95</i>&nbsp;        final JPanel sizePanel = new JPanel(new BorderLayout());</b>
+<b class="nc"><i>96</i>&nbsp;        sizePanel.setBorder(BorderFactory.createTitledBorder(</b>
+<b class="nc"><i>97</i>&nbsp;                            BorderFactory.createEtchedBorder(),</b>
+<b class="nc"><i>98</i>&nbsp;                            localizationResources.getString(&quot;Size&quot;)));</b>
+<b class="nc"><i>99</i>&nbsp;        this.sizelist = new JList(SIZES);</b>
+<b class="nc"><i>100</i>&nbsp;        final JScrollPane sizepane = new JScrollPane(this.sizelist);</b>
+<b class="nc"><i>101</i>&nbsp;        sizepane.setBorder(BorderFactory.createEtchedBorder());</b>
+<b class="nc"><i>102</i>&nbsp;        sizePanel.add(sizepane);</b>
+<i>103</i>&nbsp;
+<b class="nc"><i>104</i>&nbsp;        final JPanel attributes = new JPanel(new GridLayout(1, 2));</b>
+<b class="nc"><i>105</i>&nbsp;        this.bold = new JCheckBox(localizationResources.getString(&quot;Bold&quot;));</b>
+<b class="nc"><i>106</i>&nbsp;        this.italic = new JCheckBox(localizationResources.getString(&quot;Italic&quot;));</b>
+<b class="nc"><i>107</i>&nbsp;        attributes.add(this.bold);</b>
+<b class="nc"><i>108</i>&nbsp;        attributes.add(this.italic);</b>
+<b class="nc"><i>109</i>&nbsp;        attributes.setBorder(BorderFactory.createTitledBorder(</b>
+<b class="nc"><i>110</i>&nbsp;                BorderFactory.createEtchedBorder(),</b>
+<b class="nc"><i>111</i>&nbsp;                localizationResources.getString(&quot;Attributes&quot;)));</b>
+<i>112</i>&nbsp;
+<b class="nc"><i>113</i>&nbsp;        right.add(sizePanel, BorderLayout.CENTER);</b>
+<b class="nc"><i>114</i>&nbsp;        right.add(attributes, BorderLayout.SOUTH);</b>
+<i>115</i>&nbsp;
+<b class="nc"><i>116</i>&nbsp;        add(right, BorderLayout.EAST);</b>
+<i>117</i>&nbsp;
+<b class="nc"><i>118</i>&nbsp;        setSelectedFont(font);</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Returns a Font object representing the selection in the panel.
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @return the font.
+<i>125</i>&nbsp;     */
+<i>126</i>&nbsp;    public Font getSelectedFont() {
+<b class="nc"><i>127</i>&nbsp;        return new Font(getSelectedName(), getSelectedStyle(),</b>
+<b class="nc"><i>128</i>&nbsp;                getSelectedSize());</b>
+<i>129</i>&nbsp;    }
+<i>130</i>&nbsp;
+<i>131</i>&nbsp;    /**
+<i>132</i>&nbsp;     * Returns the selected name.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @return the name.
+<i>135</i>&nbsp;     */
+<i>136</i>&nbsp;    public String getSelectedName() {
+<b class="nc"><i>137</i>&nbsp;        return (String) this.fontlist.getSelectedValue();</b>
+<i>138</i>&nbsp;    }
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    /**
+<i>141</i>&nbsp;     * Returns the selected style.
+<i>142</i>&nbsp;     *
+<i>143</i>&nbsp;     * @return the style.
+<i>144</i>&nbsp;     */
+<i>145</i>&nbsp;    public int getSelectedStyle() {
+<b class="nc"><i>146</i>&nbsp;        if (this.bold.isSelected() &amp;&amp; this.italic.isSelected()) {</b>
+<b class="nc"><i>147</i>&nbsp;            return Font.BOLD + Font.ITALIC;</b>
+<i>148</i>&nbsp;        }
+<b class="nc"><i>149</i>&nbsp;        if (this.bold.isSelected()) {</b>
+<b class="nc"><i>150</i>&nbsp;            return Font.BOLD;</b>
+<i>151</i>&nbsp;        }
+<b class="nc"><i>152</i>&nbsp;        if (this.italic.isSelected()) {</b>
+<b class="nc"><i>153</i>&nbsp;            return Font.ITALIC;</b>
+<i>154</i>&nbsp;        }
+<i>155</i>&nbsp;        else {
+<b class="nc"><i>156</i>&nbsp;            return Font.PLAIN;</b>
+<i>157</i>&nbsp;        }
+<i>158</i>&nbsp;    }
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * Returns the selected size.
+<i>162</i>&nbsp;     *
+<i>163</i>&nbsp;     * @return the size.
+<i>164</i>&nbsp;     */
+<i>165</i>&nbsp;    public int getSelectedSize() {
+<b class="nc"><i>166</i>&nbsp;        final String selected = (String) this.sizelist.getSelectedValue();</b>
+<b class="nc"><i>167</i>&nbsp;        if (selected != null) {</b>
+<b class="nc"><i>168</i>&nbsp;            return Integer.parseInt(selected);</b>
+<i>169</i>&nbsp;        }
+<i>170</i>&nbsp;        else {
+<b class="nc"><i>171</i>&nbsp;            return 10;</b>
+<i>172</i>&nbsp;        }
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Initializes the contents of the dialog from the given font
+<i>177</i>&nbsp;     * object.
+<i>178</i>&nbsp;     *
+<i>179</i>&nbsp;     * @param font the font from which to read the properties.
+<i>180</i>&nbsp;     */
+<i>181</i>&nbsp;    public void setSelectedFont (Font font) {
+<b class="nc"><i>182</i>&nbsp;        if (font == null) {</b>
+<b class="nc"><i>183</i>&nbsp;            throw new NullPointerException();</b>
+<i>184</i>&nbsp;        }
+<b class="nc"><i>185</i>&nbsp;        this.bold.setSelected(font.isBold());</b>
+<b class="nc"><i>186</i>&nbsp;        this.italic.setSelected(font.isItalic());</b>
+<i>187</i>&nbsp;
+<b class="nc"><i>188</i>&nbsp;        final String fontName = font.getName();</b>
+<b class="nc"><i>189</i>&nbsp;        ListModel model = this.fontlist.getModel();</b>
+<b class="nc"><i>190</i>&nbsp;        this.fontlist.clearSelection();</b>
+<b class="nc"><i>191</i>&nbsp;        for (int i = 0; i &lt; model.getSize(); i++) {</b>
+<b class="nc"><i>192</i>&nbsp;            if (fontName.equals(model.getElementAt(i))) {</b>
+<b class="nc"><i>193</i>&nbsp;                this.fontlist.setSelectedIndex(i);</b>
+<b class="nc"><i>194</i>&nbsp;                break;</b>
+<i>195</i>&nbsp;            }
+<i>196</i>&nbsp;        }
+<i>197</i>&nbsp;
+<b class="nc"><i>198</i>&nbsp;        final String fontSize = String.valueOf(font.getSize());</b>
+<b class="nc"><i>199</i>&nbsp;        model = this.sizelist.getModel();</b>
+<b class="nc"><i>200</i>&nbsp;        this.sizelist.clearSelection();</b>
+<b class="nc"><i>201</i>&nbsp;        for (int i = 0; i &lt; model.getSize(); i++) {</b>
+<b class="nc"><i>202</i>&nbsp;            if (fontSize.equals(model.getElementAt(i))) {</b>
+<b class="nc"><i>203</i>&nbsp;                this.sizelist.setSelectedIndex(i);</b>
+<b class="nc"><i>204</i>&nbsp;                break;</b>
+<i>205</i>&nbsp;            }
+<i>206</i>&nbsp;        }
+<i>207</i>&nbsp;    }
+<i>208</i>&nbsp;}
+<i>209</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

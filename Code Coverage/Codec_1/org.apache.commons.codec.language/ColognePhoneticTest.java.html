@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ColognePhoneticTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">ColognePhoneticTest.java</span></div><h1>ColognePhoneticTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language;
+
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests the &lt;code&gt;ColognePhonetic&lt;/code&gt; class.
+ *
+ * &lt;p&gt;Keep this file in UTF-8 encoding for proper Javadoc processing.&lt;/p&gt;
+ *
+ */
+<span class="pc bpc" id="L36" title="3 of 4 branches missed.">public class ColognePhoneticTest extends StringEncoderAbstractTest&lt;ColognePhonetic&gt; {</span>
+
+<span class="fc" id="L38">    private static final Set&lt;String&gt; TESTSET = new HashSet&lt;&gt;();</span>
+
+<span class="fc" id="L40">    private static boolean hasTestCase(String re) {</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        for(String s : TESTSET) {</span>
+<span class="pc bpc" id="L42" title="4 of 10 branches missed.">            if (s.matches(re)) {</span>
+<span class="fc" id="L43">                return true;</span>
+            }
+        }
+<span class="pc" id="L46">        return false;</span>
+    }
+
+    // Character sequences to be tested by the code
+<span class="fc" id="L50">    private static final String MATCHES[] = {</span>
+            &quot;.*[AEIOUJY].*&quot;,         // A, E, I, J, O, U, Y
+            &quot;.*H.*&quot;,                 // H
+            &quot;.*B.*&quot;,                 // B
+            &quot;.*P[^H].*&quot;,             // P not before H
+            &quot;.*[DT][^CSZ].*&quot;,        // D,T not before C,S,Z
+            &quot;.*[FVW].*&quot;,             // F,V,W
+            &quot;.*PH.*&quot;,                // P before H
+            &quot;.*[GKQ].*&quot;,             // G,K,Q
+            &quot;C[AHKLOQRUX].*&quot;,        // Initial C before A, H, K, L, O, Q, R, U, X
+            &quot;.*[^SZ]C[AHKLOQRUX].*&quot;, // C before A, H, K, L, O, Q, R, U, X but not after S, Z
+            &quot;.*[^CKQ]X.*&quot;,           // X not after C,K,Q
+            &quot;.*L.*&quot;,                 // L
+            &quot;.*[MN].*&quot;,              // M,N
+            &quot;.*R.*&quot;,                 // R
+            &quot;.*[SZ].*&quot;,              // S,Z
+            &quot;.*[SZ]C.*&quot;,             // C after S,Z
+            &quot;C[^AHKLOQRUX].*&quot;,       // Initial C except before A, H, K, L, O, Q, R, U, X
+            &quot;.+C[^AHKLOQRUX].*&quot;,     // C except before A, H, K, L, O, Q, R, U, X
+            &quot;.*[DT][CSZ].*&quot;,         // D,T before C,S,Z
+            &quot;.*[CKQ]X.*&quot;,            // X after C,K,Q
+    };
+
+    @AfterClass
+    // Check that all possible input sequence conditions are represented
+<span class="fc" id="L75">    public static void finishTests() {</span>
+<span class="fc" id="L76">        int errors = 0;</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for(String m : MATCHES) {</span>
+<span class="pc bpc" id="L78" title="7 of 10 branches missed.">            if (!hasTestCase(m)) {</span>
+<span class="nc" id="L79">                System.out.println(m + &quot; has no test case&quot;);</span>
+<span class="nc" id="L80">                errors++;</span>
+            }
+        }
+<span class="fc" id="L83">        Assert.assertEquals(&quot;Not expecting any missing test cases&quot;, 0, errors);</span>
+<span class="fc" id="L84">    }</span>
+
+    @Override
+    // Capture test strings for later checking
+<span class="fc" id="L88">    public void checkEncoding(String expected, String source) throws EncoderException {</span>
+        // Note that the German letter Eszett is converted to SS by toUpperCase, so we don't need to replace it
+<span class="fc" id="L90">        TESTSET.add(source.toUpperCase(Locale.GERMAN).replace('Ä', 'A').replace('Ö', 'O').replace('Ü', 'U'));</span>
+<span class="fc" id="L91">        super.checkEncoding(expected, source);</span>
+<span class="fc" id="L92">    }</span>
+
+    @Override
+<span class="fc" id="L95">    protected ColognePhonetic createStringEncoder() {</span>
+<span class="fc" id="L96">        return new ColognePhonetic();</span>
+    }
+
+    @Test(expected=org.junit.ComparisonFailure.class)
+    // Ensure that override still allows tests to work
+<span class="pc bpc" id="L101" title="4 of 6 branches missed.">    public void testCanFail() throws EncoderException {</span>
+<span class="nc" id="L102">        this.checkEncoding(&quot;/&quot;, &quot;Fehler&quot;);</span>
+<span class="nc" id="L103">    }</span>
+
+    @Test
+<span class="pc bnc" id="L106" title="All 4 branches missed.">    public void testAabjoe() throws EncoderException {</span>
+<span class="fc" id="L107">        this.checkEncoding(&quot;01&quot;, &quot;Aabjoe&quot;);</span>
+<span class="fc" id="L108">    }</span>
+
+    @Test
+<span class="pc bnc" id="L111" title="All 4 branches missed.">    public void testAaclan() throws EncoderException {</span>
+<span class="fc" id="L112">        this.checkEncoding(&quot;0856&quot;, &quot;Aaclan&quot;);</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Tests [CODEC-122]
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L121" title="All 4 branches missed.">    public void testAychlmajrForCodec122() throws EncoderException {</span>
+<span class="fc" id="L122">        this.checkEncoding(&quot;04567&quot;, &quot;Aychlmajr&quot;);</span>
+<span class="fc" id="L123">    }</span>
+
+    @Test
+<span class="pc bnc" id="L126" title="All 4 branches missed.">    public void testEdgeCases() throws EncoderException {</span>
+<span class="fc" id="L127">        final String[][] data = {</span>
+            {&quot;a&quot;, &quot;0&quot;},
+            {&quot;e&quot;, &quot;0&quot;},
+            {&quot;i&quot;, &quot;0&quot;},
+            {&quot;o&quot;, &quot;0&quot;},
+            {&quot;u&quot;, &quot;0&quot;},
+            {&quot;\u00E4&quot;, &quot;0&quot;}, // a-umlaut
+            {&quot;\u00F6&quot;, &quot;0&quot;}, // o-umlaut
+            {&quot;\u00FC&quot;, &quot;0&quot;}, // u-umlaut
+            {&quot;\u00DF&quot;, &quot;8&quot;}, // small sharp s
+            {&quot;aa&quot;, &quot;0&quot;},
+            {&quot;ha&quot;, &quot;0&quot;},
+            {&quot;h&quot;, &quot;&quot;},
+            {&quot;aha&quot;, &quot;0&quot;},
+            {&quot;b&quot;, &quot;1&quot;},
+            {&quot;p&quot;, &quot;1&quot;},
+            {&quot;ph&quot;, &quot;3&quot;},
+            {&quot;f&quot;, &quot;3&quot;},
+            {&quot;v&quot;, &quot;3&quot;},
+            {&quot;w&quot;, &quot;3&quot;},
+            {&quot;g&quot;, &quot;4&quot;},
+            {&quot;k&quot;, &quot;4&quot;},
+            {&quot;q&quot;, &quot;4&quot;},
+            {&quot;x&quot;, &quot;48&quot;},
+            {&quot;ax&quot;, &quot;048&quot;},
+            {&quot;cx&quot;, &quot;48&quot;},
+            {&quot;l&quot;, &quot;5&quot;},
+            {&quot;cl&quot;, &quot;45&quot;},
+            {&quot;acl&quot;, &quot;085&quot;},
+            {&quot;mn&quot;, &quot;6&quot;},
+            {&quot;{mn}&quot;,&quot;6&quot;}, // test chars above Z
+            {&quot;r&quot;, &quot;7&quot;}};
+<span class="fc" id="L159">        this.checkEncodings(data);</span>
+<span class="fc" id="L160">    }</span>
+
+    @Test
+<span class="pc bnc" id="L163" title="All 4 branches missed.">    public void testExamples() throws EncoderException {</span>
+<span class="fc" id="L164">        final String[][] data = {</span>
+            {&quot;m\u00DCller&quot;, &quot;657&quot;}, // mÜller - why upper case U-umlaut?
+            {&quot;m\u00FCller&quot;, &quot;657&quot;}, // müller - add equivalent lower-case
+            {&quot;schmidt&quot;, &quot;862&quot;},
+            {&quot;schneider&quot;, &quot;8627&quot;},
+            {&quot;fischer&quot;, &quot;387&quot;},
+            {&quot;weber&quot;, &quot;317&quot;},
+            {&quot;wagner&quot;, &quot;3467&quot;},
+            {&quot;becker&quot;, &quot;147&quot;},
+            {&quot;hoffmann&quot;, &quot;0366&quot;},
+            {&quot;sch\u00C4fer&quot;, &quot;837&quot;}, // schÄfer - why upper case A-umlaut ?
+            {&quot;sch\u00e4fer&quot;, &quot;837&quot;}, // schäfer - add equivalent lower-case
+            {&quot;Breschnew&quot;, &quot;17863&quot;},
+            {&quot;Wikipedia&quot;, &quot;3412&quot;},
+            {&quot;peter&quot;, &quot;127&quot;},
+            {&quot;pharma&quot;, &quot;376&quot;},
+            {&quot;m\u00f6nchengladbach&quot;, &quot;664645214&quot;}, // mönchengladbach
+            {&quot;deutsch&quot;, &quot;28&quot;},
+            {&quot;deutz&quot;, &quot;28&quot;},
+            {&quot;hamburg&quot;, &quot;06174&quot;},
+            {&quot;hannover&quot;, &quot;0637&quot;},
+            {&quot;christstollen&quot;, &quot;478256&quot;},
+            {&quot;Xanthippe&quot;, &quot;48621&quot;},
+            {&quot;Zacharias&quot;, &quot;8478&quot;},
+            {&quot;Holzbau&quot;, &quot;0581&quot;},
+            {&quot;matsch&quot;, &quot;68&quot;},
+            {&quot;matz&quot;, &quot;68&quot;},
+            {&quot;Arbeitsamt&quot;, &quot;071862&quot;},
+            {&quot;Eberhard&quot;, &quot;01772&quot;},
+            {&quot;Eberhardt&quot;, &quot;01772&quot;},
+            {&quot;Celsius&quot;, &quot;8588&quot;},
+            {&quot;Ace&quot;, &quot;08&quot;},
+            {&quot;heithabu&quot;, &quot;021&quot;}};
+<span class="fc" id="L197">        this.checkEncodings(data);</span>
+<span class="fc" id="L198">    }</span>
+
+    @Test
+<span class="pc bnc" id="L201" title="All 4 branches missed.">    public void testHyphen() throws EncoderException {</span>
+<span class="fc" id="L202">        final String[][] data = {{&quot;bergisch-gladbach&quot;, &quot;174845214&quot;},</span>
+                {&quot;M\u00fcller-L\u00fcdenscheidt&quot;, &quot;65752682&quot;}}; // Müller-Lüdenscheidt
+<span class="fc" id="L204">        this.checkEncodings(data);</span>
+<span class="fc" id="L205">    }</span>
+
+    @Test
+<span class="pc bnc" id="L208" title="All 4 branches missed.">    public void testIsEncodeEquals() {</span>
+        //@formatter:off
+<span class="fc" id="L210">        final String[][] data = {</span>
+            {&quot;Muller&quot;, &quot;M\u00fcller&quot;}, // Müller
+            {&quot;Meyer&quot;, &quot;Mayr&quot;},
+            {&quot;house&quot;, &quot;house&quot;},
+            {&quot;House&quot;, &quot;house&quot;},
+            {&quot;Haus&quot;, &quot;house&quot;},
+            {&quot;ganz&quot;, &quot;Gans&quot;},
+            {&quot;ganz&quot;, &quot;G\u00e4nse&quot;}, // Gänse
+            {&quot;Miyagi&quot;, &quot;Miyako&quot;}};
+        //@formatter:on
+<span class="fc bfc" id="L220" title="All 2 branches covered.">        for (final String[] element : data) {</span>
+<span class="fc" id="L221">            final boolean encodeEqual = this.getStringEncoder().isEncodeEqual(element[1], element[0]);</span>
+<span class="fc" id="L222">            Assert.assertTrue(element[1] + &quot; != &quot; + element[0], encodeEqual);</span>
+        }
+<span class="fc" id="L224">    }</span>
+
+    @Test
+<span class="pc bnc" id="L227" title="All 4 branches missed.">    public void testVariationsMella() throws EncoderException {</span>
+<span class="fc" id="L228">        final String data[] = {&quot;mella&quot;, &quot;milah&quot;, &quot;moulla&quot;, &quot;mellah&quot;, &quot;muehle&quot;, &quot;mule&quot;};</span>
+<span class="fc" id="L229">        this.checkEncodingVariations(&quot;65&quot;, data);</span>
+<span class="fc" id="L230">    }</span>
+
+    @Test
+<span class="pc bnc" id="L233" title="All 4 branches missed.">    public void testVariationsMeyer() throws EncoderException {</span>
+<span class="fc" id="L234">        final String data[] = {&quot;Meier&quot;, &quot;Maier&quot;, &quot;Mair&quot;, &quot;Meyer&quot;, &quot;Meyr&quot;, &quot;Mejer&quot;, &quot;Major&quot;};</span>
+<span class="fc" id="L235">        this.checkEncodingVariations(&quot;67&quot;, data);</span>
+<span class="fc" id="L236">    }</span>
+
+    @Test
+<span class="pc bnc" id="L239" title="All 4 branches missed.">    public void testSpecialCharsBetweenSameLetters() throws EncoderException {</span>
+<span class="fc" id="L240">        final String data[] = {&quot;Test test&quot;, &quot;Testtest&quot;, &quot;Test-test&quot;, &quot;TesT#Test&quot;, &quot;TesT?test&quot;};</span>
+<span class="fc" id="L241">        this.checkEncodingVariations(&quot;28282&quot;, data);</span>
+<span class="fc" id="L242">    }</span>
+
+    // Allow command-line testing
+<span class="nc" id="L245">    public static void main(String args[]) {</span>
+<span class="nc" id="L246">        ColognePhonetic coder = new ColognePhonetic();</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">        for(String arg : args) {</span>
+<span class="nc" id="L248">            String code = coder.encode(arg);</span>
+<span class="nc" id="L249">            System.out.println(&quot;'&quot; + arg + &quot;' = '&quot; + code + &quot;'&quot;);</span>
+        }
+<span class="nc" id="L251">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

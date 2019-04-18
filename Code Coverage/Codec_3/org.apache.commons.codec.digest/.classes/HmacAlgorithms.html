@@ -1,0 +1,209 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HmacAlgorithms</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.digest</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HmacAlgorithms (org.apache.commons.codec.digest)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HmacAlgorithms</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.digest;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Standard {@link HmacUtils} algorithm names from the &lt;cite&gt;Java Cryptography Architecture Standard Algorithm Name
+<i>22</i>&nbsp; * Documentation&lt;/cite&gt;.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * &lt;p&gt;
+<i>25</i>&nbsp; * &lt;strong&gt;Note: Not all JCE implementations support all the algorithms in this enum.&lt;/strong&gt;
+<i>26</i>&nbsp; * &lt;/p&gt;
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @see &lt;a href=&quot;http://docs.oracle.com/javase/6/docs/technotes/guides/security/SunProviders.html#SunJCEProvider&quot;&gt; Java
+<i>29</i>&nbsp; *      6 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>30</i>&nbsp; * @see &lt;a href=&quot;http://docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html#SunJCEProvider&quot;&gt; Java
+<i>31</i>&nbsp; *      7 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>32</i>&nbsp; * @see &lt;a href=&quot;http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#SunJCEProvider&quot;&gt; Java
+<i>33</i>&nbsp; *      8 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>34</i>&nbsp; * @see &lt;a href=
+<i>35</i>&nbsp; *      &quot;http://docs.oracle.com/javase/9/security/oracleproviders.htm#JSSEC-GUID-A47B1249-593C-4C38-A0D0-68FA7681E0A7&quot;&gt;
+<i>36</i>&nbsp; *      Java 9 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>37</i>&nbsp; * @since 1.10
+<i>38</i>&nbsp; * @version $Id$
+<i>39</i>&nbsp; */
+<b class="fc"><i>40</i>&nbsp;public enum HmacAlgorithms {</b>
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * The HmacMD5 Message Authentication Code (MAC) algorithm specified in RFC 2104 and RFC 1321.
+<i>44</i>&nbsp;     * &lt;p&gt;
+<i>45</i>&nbsp;     * Every implementation of the Java platform is required to support this standard MAC algorithm.
+<i>46</i>&nbsp;     * &lt;/p&gt;
+<i>47</i>&nbsp;     */
+<b class="fc"><i>48</i>&nbsp;    HMAC_MD5(&quot;HmacMD5&quot;),</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * The HmacSHA1 Message Authentication Code (MAC) algorithm specified in RFC 2104 and FIPS PUB 180-2.
+<i>52</i>&nbsp;     * &lt;p&gt;
+<i>53</i>&nbsp;     * Every implementation of the Java platform is required to support this standard MAC algorithm.
+<i>54</i>&nbsp;     * &lt;/p&gt;
+<i>55</i>&nbsp;     */
+<b class="fc"><i>56</i>&nbsp;    HMAC_SHA_1(&quot;HmacSHA1&quot;),</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * The HmacSHA224 Message Authentication Code (MAC) algorithm specified in RFC 2104 and FIPS PUB 180-2.
+<i>60</i>&nbsp;     * &lt;p&gt;
+<i>61</i>&nbsp;     * Every implementation of the Java 8+ platform is required to support this standard MAC algorithm.
+<i>62</i>&nbsp;     * &lt;/p&gt;
+<i>63</i>&nbsp;     * @since 1.11
+<i>64</i>&nbsp;     */
+<b class="fc"><i>65</i>&nbsp;    HMAC_SHA_224(&quot;HmacSHA224&quot;),</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * The HmacSHA256 Message Authentication Code (MAC) algorithm specified in RFC 2104 and FIPS PUB 180-2.
+<i>69</i>&nbsp;     * &lt;p&gt;
+<i>70</i>&nbsp;     * Every implementation of the Java platform is required to support this standard MAC algorithm.
+<i>71</i>&nbsp;     * &lt;/p&gt;
+<i>72</i>&nbsp;     */
+<b class="fc"><i>73</i>&nbsp;    HMAC_SHA_256(&quot;HmacSHA256&quot;),</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * The HmacSHA384 Message Authentication Code (MAC) algorithm specified in RFC 2104 and FIPS PUB 180-2.
+<i>77</i>&nbsp;     * &lt;p&gt;
+<i>78</i>&nbsp;     * This MAC algorithm is &lt;em&gt;optional&lt;/em&gt;; not all implementations support it.
+<i>79</i>&nbsp;     * &lt;/p&gt;
+<i>80</i>&nbsp;     */
+<b class="fc"><i>81</i>&nbsp;    HMAC_SHA_384(&quot;HmacSHA384&quot;),</b>
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * The HmacSHA512 Message Authentication Code (MAC) algorithm specified in RFC 2104 and FIPS PUB 180-2.
+<i>85</i>&nbsp;     * &lt;p&gt;
+<i>86</i>&nbsp;     * This MAC algorithm is &lt;em&gt;optional&lt;/em&gt;; not all implementations support it.
+<i>87</i>&nbsp;     * &lt;/p&gt;
+<i>88</i>&nbsp;     */
+<b class="fc"><i>89</i>&nbsp;    HMAC_SHA_512(&quot;HmacSHA512&quot;);</b>
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    private final String name;
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;    private HmacAlgorithms(final String algorithm) {</b>
+<b class="fc"><i>94</i>&nbsp;        this.name = algorithm;</b>
+<b class="fc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * Gets the algorithm name.
+<i>99</i>&nbsp;     *
+<i>100</i>&nbsp;     * @return the algorithm name.
+<i>101</i>&nbsp;     * @since 1.11
+<i>102</i>&nbsp;     */
+<i>103</i>&nbsp;    public String getName() {
+<b class="fc"><i>104</i>&nbsp;        return name;</b>
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * The algorithm name
+<i>109</i>&nbsp;     *
+<i>110</i>&nbsp;     * @see &lt;a href=&quot;http://docs.oracle.com/javase/6/docs/technotes/guides/security/SunProviders.html#SunJCEProvider&quot;&gt;
+<i>111</i>&nbsp;     *      Java 6 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>112</i>&nbsp;     * @see &lt;a href=&quot;http://docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html#SunJCEProvider&quot;&gt;
+<i>113</i>&nbsp;     *      Java 7 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>114</i>&nbsp;     * @see &lt;a href=&quot;http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#SunJCEProvider&quot;&gt;
+<i>115</i>&nbsp;     *      Java 8 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>116</i>&nbsp;     * @see &lt;a href=
+<i>117</i>&nbsp;     *      &quot;http://docs.oracle.com/javase/9/security/oracleproviders.htm#JSSEC-GUID-A47B1249-593C-4C38-A0D0-68FA7681E0A7&quot;&gt;
+<i>118</i>&nbsp;     *      Java 9 Cryptography Architecture Sun Providers Documentation&lt;/a&gt;
+<i>119</i>&nbsp;     * @return The algorithm name (&quot;HmacSHA512&quot; for example)
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    @Override
+<i>122</i>&nbsp;    public String toString() {
+<b class="fc"><i>123</i>&nbsp;        return name;</b>
+<i>124</i>&nbsp;    }
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:19</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,349 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ZoomHandlerFX</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.fx.interaction</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ZoomHandlerFX (org.jfree.chart.fx.interaction)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ZoomHandlerFX</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ------------------
+<i>28</i>&nbsp; * ZoomHandlerFX.java
+<i>29</i>&nbsp; * ------------------
+<i>30</i>&nbsp; * (C) Copyright 2014, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes:
+<i>36</i>&nbsp; * --------
+<i>37</i>&nbsp; * 25-Jun-2014 : Version 1 (DG);
+<i>38</i>&nbsp; *
+<i>39</i>&nbsp; */
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;package org.jfree.chart.fx.interaction;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;import java.awt.geom.Point2D;
+<i>44</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>45</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>46</i>&nbsp;import org.jfree.chart.fx.ChartCanvas;
+<i>47</i>&nbsp;import org.jfree.chart.fx.ChartViewer;
+<i>48</i>&nbsp;import org.jfree.chart.plot.Plot;
+<i>49</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>50</i>&nbsp;import org.jfree.chart.plot.Zoomable;
+<i>51</i>&nbsp;import org.jfree.util.ShapeUtilities;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;/**
+<i>54</i>&nbsp; * Handles drag zooming of charts on a {@link ChartCanvas}.  This 
+<i>55</i>&nbsp; * handler should be configured with the required modifier keys and installed 
+<i>56</i>&nbsp; * as a live handler (not an auxiliary handler).  This handler only works for
+<i>57</i>&nbsp; * a &lt;b&gt;ChartCanvas&lt;/b&gt; that is embedded in a {@link ChartViewer}, since it 
+<i>58</i>&nbsp; * relies on the &lt;b&gt;ChartViewer&lt;/b&gt; for drawing the zoom rectangle.
+<i>59</i>&nbsp; * 
+<i>60</i>&nbsp; * &lt;p&gt;THE API FOR THIS CLASS IS SUBJECT TO CHANGE IN FUTURE RELEASES.  This is
+<i>61</i>&nbsp; * so that we can incorporate feedback on the (new) JavaFX support in 
+<i>62</i>&nbsp; * JFreeChart.&lt;/p&gt;
+<i>63</i>&nbsp; * 
+<i>64</i>&nbsp; * @since 1.0.18
+<i>65</i>&nbsp; */
+<i>66</i>&nbsp;public class ZoomHandlerFX extends AbstractMouseHandlerFX {
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /** The viewer is used to overlay the zoom rectangle. */
+<i>69</i>&nbsp;    private ChartViewer viewer;
+<i>70</i>&nbsp;    
+<i>71</i>&nbsp;    /** The starting point for the zoom. */
+<i>72</i>&nbsp;    private Point2D startPoint;
+<i>73</i>&nbsp;    
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Creates a new instance with no modifier keys required.
+<i>76</i>&nbsp;     * 
+<i>77</i>&nbsp;     * @param id  the handler ID (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>78</i>&nbsp;     * @param parent  the chart viewer.
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    public ZoomHandlerFX(String id, ChartViewer parent) { 
+<b class="nc"><i>81</i>&nbsp;        this(id, parent, false, false, false, false);</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;    
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * Creates a new instance that will be activated using the specified 
+<i>86</i>&nbsp;     * combination of modifier keys.
+<i>87</i>&nbsp;     * 
+<i>88</i>&nbsp;     * @param id  the handler ID (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>89</i>&nbsp;     * @param parent  the chart viewer.
+<i>90</i>&nbsp;     * @param altKey  require ALT key?
+<i>91</i>&nbsp;     * @param ctrlKey  require CTRL key?
+<i>92</i>&nbsp;     * @param metaKey  require META key?
+<i>93</i>&nbsp;     * @param shiftKey   require SHIFT key?
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public ZoomHandlerFX(String id, ChartViewer parent, boolean altKey, 
+<i>96</i>&nbsp;            boolean ctrlKey, boolean metaKey, boolean shiftKey) {
+<b class="nc"><i>97</i>&nbsp;        super(id, altKey, ctrlKey, metaKey, shiftKey);</b>
+<b class="nc"><i>98</i>&nbsp;        this.viewer = parent;</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;    
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Handles a mouse pressed event by recording the initial mouse pointer
+<i>103</i>&nbsp;     * location.
+<i>104</i>&nbsp;     * 
+<i>105</i>&nbsp;     * @param canvas  the JavaFX canvas (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>106</i>&nbsp;     * @param e  the mouse event (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    @Override
+<i>109</i>&nbsp;    public void handleMousePressed(ChartCanvas canvas, MouseEvent e) {
+<b class="nc"><i>110</i>&nbsp;        Point2D pt = new Point2D.Double(e.getX(), e.getY());</b>
+<b class="nc"><i>111</i>&nbsp;        Rectangle2D dataArea = canvas.findDataArea(pt);</b>
+<b class="nc"><i>112</i>&nbsp;        if (dataArea != null) {</b>
+<b class="nc"><i>113</i>&nbsp;            this.startPoint = ShapeUtilities.getPointInRectangle(e.getX(),</b>
+<b class="nc"><i>114</i>&nbsp;                    e.getY(), dataArea);</b>
+<i>115</i>&nbsp;        } else {
+<b class="nc"><i>116</i>&nbsp;            this.startPoint = null;</b>
+<b class="nc"><i>117</i>&nbsp;            canvas.clearLiveHandler();</b>
+<i>118</i>&nbsp;        }
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;    
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Handles a mouse dragged event by updating the zoom rectangle displayed
+<i>123</i>&nbsp;     * in the ChartViewer.
+<i>124</i>&nbsp;     * 
+<i>125</i>&nbsp;     * @param canvas  the JavaFX canvas (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>126</i>&nbsp;     * @param e  the mouse event (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    @Override
+<i>129</i>&nbsp;    public void handleMouseDragged(ChartCanvas canvas, MouseEvent e) {
+<b class="nc"><i>130</i>&nbsp;        if (this.startPoint == null) {</b>
+<i>131</i>&nbsp;            //no initial zoom rectangle exists but the handler is set
+<i>132</i>&nbsp;            //as life handler unregister
+<b class="nc"><i>133</i>&nbsp;            canvas.clearLiveHandler();</b>
+<i>134</i>&nbsp;            return;
+<i>135</i>&nbsp;        }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;        boolean hZoom, vZoom;
+<b class="nc"><i>138</i>&nbsp;        Plot p = canvas.getChart().getPlot();</b>
+<b class="nc"><i>139</i>&nbsp;        if (!(p instanceof Zoomable)) {</b>
+<i>140</i>&nbsp;            return;
+<i>141</i>&nbsp;        }
+<b class="nc"><i>142</i>&nbsp;        Zoomable z = (Zoomable) p;</b>
+<b class="nc"><i>143</i>&nbsp;        if (z.getOrientation().isHorizontal()) {</b>
+<b class="nc"><i>144</i>&nbsp;            hZoom = z.isRangeZoomable();</b>
+<b class="nc"><i>145</i>&nbsp;            vZoom = z.isDomainZoomable();</b>
+<i>146</i>&nbsp;        } else {
+<b class="nc"><i>147</i>&nbsp;            hZoom = z.isDomainZoomable();</b>
+<b class="nc"><i>148</i>&nbsp;            vZoom = z.isRangeZoomable();</b>
+<i>149</i>&nbsp;        }
+<b class="nc"><i>150</i>&nbsp;        Rectangle2D dataArea = canvas.findDataArea(this.startPoint);</b>
+<i>151</i>&nbsp;        
+<b class="nc"><i>152</i>&nbsp;        double x = this.startPoint.getX();</b>
+<b class="nc"><i>153</i>&nbsp;        double y = this.startPoint.getY();</b>
+<b class="nc"><i>154</i>&nbsp;        double w = 0;</b>
+<b class="nc"><i>155</i>&nbsp;        double h = 0;</b>
+<b class="nc"><i>156</i>&nbsp;        if (hZoom &amp;&amp; vZoom) {</b>
+<i>157</i>&nbsp;            // selected rectangle shouldn&#39;t extend outside the data area...
+<b class="nc"><i>158</i>&nbsp;            double xmax = Math.min(e.getX(), dataArea.getMaxX());</b>
+<b class="nc"><i>159</i>&nbsp;            double ymax = Math.min(e.getY(), dataArea.getMaxY());</b>
+<b class="nc"><i>160</i>&nbsp;            w = xmax - this.startPoint.getX();</b>
+<b class="nc"><i>161</i>&nbsp;            h = ymax - this.startPoint.getY();</b>
+<b class="nc"><i>162</i>&nbsp;        }</b>
+<b class="nc"><i>163</i>&nbsp;        else if (hZoom) {</b>
+<b class="nc"><i>164</i>&nbsp;            double xmax = Math.min(e.getX(), dataArea.getMaxX());</b>
+<b class="nc"><i>165</i>&nbsp;            y = dataArea.getMinY();</b>
+<b class="nc"><i>166</i>&nbsp;            w = xmax - this.startPoint.getX();</b>
+<b class="nc"><i>167</i>&nbsp;            h = dataArea.getHeight();</b>
+<b class="nc"><i>168</i>&nbsp;        }</b>
+<b class="nc"><i>169</i>&nbsp;        else if (vZoom) {</b>
+<b class="nc"><i>170</i>&nbsp;            double ymax = Math.min(e.getY(), dataArea.getMaxY());</b>
+<b class="nc"><i>171</i>&nbsp;            x = dataArea.getMinX();</b>
+<b class="nc"><i>172</i>&nbsp;            w = dataArea.getWidth();</b>
+<b class="nc"><i>173</i>&nbsp;            h = ymax - this.startPoint.getY();</b>
+<i>174</i>&nbsp;        }
+<b class="nc"><i>175</i>&nbsp;        viewer.showZoomRectangle(x, y, w, h);</b>
+<i>176</i>&nbsp;    }
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;    @Override
+<i>179</i>&nbsp;    public void handleMouseReleased(ChartCanvas canvas, MouseEvent e) {  
+<b class="nc"><i>180</i>&nbsp;        Plot p = canvas.getChart().getPlot();</b>
+<b class="nc"><i>181</i>&nbsp;        if (!(p instanceof Zoomable)) {</b>
+<i>182</i>&nbsp;            return;
+<i>183</i>&nbsp;        }
+<i>184</i>&nbsp;        boolean hZoom, vZoom;
+<b class="nc"><i>185</i>&nbsp;        Zoomable z = (Zoomable) p;</b>
+<b class="nc"><i>186</i>&nbsp;        if (z.getOrientation().isHorizontal()) {</b>
+<b class="nc"><i>187</i>&nbsp;            hZoom = z.isRangeZoomable();</b>
+<b class="nc"><i>188</i>&nbsp;            vZoom = z.isDomainZoomable();</b>
+<i>189</i>&nbsp;        } else {
+<b class="nc"><i>190</i>&nbsp;            hZoom = z.isDomainZoomable();</b>
+<b class="nc"><i>191</i>&nbsp;            vZoom = z.isRangeZoomable();</b>
+<i>192</i>&nbsp;        }
+<i>193</i>&nbsp;
+<b class="nc"><i>194</i>&nbsp;        boolean zoomTrigger1 = hZoom &amp;&amp; Math.abs(e.getX()</b>
+<b class="nc"><i>195</i>&nbsp;                - this.startPoint.getX()) &gt;= 10;</b>
+<b class="nc"><i>196</i>&nbsp;        boolean zoomTrigger2 = vZoom &amp;&amp; Math.abs(e.getY()</b>
+<b class="nc"><i>197</i>&nbsp;                - this.startPoint.getY()) &gt;= 10;</b>
+<b class="nc"><i>198</i>&nbsp;        if (zoomTrigger1 || zoomTrigger2) {</b>
+<b class="nc"><i>199</i>&nbsp;            Point2D endPoint = new Point2D.Double(e.getX(), e.getY());</b>
+<b class="nc"><i>200</i>&nbsp;            PlotRenderingInfo pri = canvas.getRenderingInfo().getPlotInfo();</b>
+<b class="nc"><i>201</i>&nbsp;            if ((hZoom &amp;&amp; (e.getX() &lt; this.startPoint.getX()))</b>
+<b class="nc"><i>202</i>&nbsp;                    || (vZoom &amp;&amp; (e.getY() &lt; this.startPoint.getY()))) {</b>
+<b class="nc"><i>203</i>&nbsp;                boolean saved = p.isNotify();</b>
+<b class="nc"><i>204</i>&nbsp;                p.setNotify(false);</b>
+<b class="nc"><i>205</i>&nbsp;                z.zoomDomainAxes(0, pri, endPoint);</b>
+<b class="nc"><i>206</i>&nbsp;                z.zoomRangeAxes(0, pri, endPoint);</b>
+<b class="nc"><i>207</i>&nbsp;                p.setNotify(saved);</b>
+<b class="nc"><i>208</i>&nbsp;            } else {</b>
+<b class="nc"><i>209</i>&nbsp;                double x = this.startPoint.getX();</b>
+<b class="nc"><i>210</i>&nbsp;                double y = this.startPoint.getY();</b>
+<b class="nc"><i>211</i>&nbsp;                double w = e.getX() - x;</b>
+<b class="nc"><i>212</i>&nbsp;                double h = e.getY() - y;</b>
+<b class="nc"><i>213</i>&nbsp;                Rectangle2D dataArea = canvas.findDataArea(this.startPoint);</b>
+<b class="nc"><i>214</i>&nbsp;                double maxX = dataArea.getMaxX();</b>
+<b class="nc"><i>215</i>&nbsp;                double maxY = dataArea.getMaxY();</b>
+<i>216</i>&nbsp;                // for mouseReleased event, (horizontalZoom || verticalZoom)
+<i>217</i>&nbsp;                // will be true, so we can just test for either being false;
+<i>218</i>&nbsp;                // otherwise both are true
+<b class="nc"><i>219</i>&nbsp;                if (!vZoom) {</b>
+<b class="nc"><i>220</i>&nbsp;                    y = dataArea.getMinY();</b>
+<b class="nc"><i>221</i>&nbsp;                    w = Math.min(w, maxX - this.startPoint.getX());</b>
+<b class="nc"><i>222</i>&nbsp;                    h = dataArea.getHeight();</b>
+<i>223</i>&nbsp;                }
+<b class="nc"><i>224</i>&nbsp;                else if (!hZoom) {</b>
+<b class="nc"><i>225</i>&nbsp;                    x = dataArea.getMinX();</b>
+<b class="nc"><i>226</i>&nbsp;                    w = dataArea.getWidth();</b>
+<b class="nc"><i>227</i>&nbsp;                    h = Math.min(h, maxY - this.startPoint.getY());</b>
+<i>228</i>&nbsp;                }
+<i>229</i>&nbsp;                else {
+<b class="nc"><i>230</i>&nbsp;                    w = Math.min(w, maxX - this.startPoint.getX());</b>
+<b class="nc"><i>231</i>&nbsp;                    h = Math.min(h, maxY - this.startPoint.getY());</b>
+<i>232</i>&nbsp;                }
+<b class="nc"><i>233</i>&nbsp;                Rectangle2D zoomArea = new Rectangle2D.Double(x, y, w, h);</b>
+<i>234</i>&nbsp;                
+<b class="nc"><i>235</i>&nbsp;                boolean saved = p.isNotify();</b>
+<b class="nc"><i>236</i>&nbsp;                p.setNotify(false);</b>
+<b class="nc"><i>237</i>&nbsp;                double pw0 = percentW(x, dataArea);</b>
+<b class="nc"><i>238</i>&nbsp;                double pw1 = percentW(x + w, dataArea);</b>
+<b class="nc"><i>239</i>&nbsp;                double ph0 = percentH(y, dataArea);</b>
+<b class="nc"><i>240</i>&nbsp;                double ph1 = percentH(y + h, dataArea);</b>
+<b class="nc"><i>241</i>&nbsp;                PlotRenderingInfo info </b>
+<b class="nc"><i>242</i>&nbsp;                        = this.viewer.getRenderingInfo().getPlotInfo();</b>
+<b class="nc"><i>243</i>&nbsp;                if (z.getOrientation().isVertical()) {</b>
+<b class="nc"><i>244</i>&nbsp;                    z.zoomDomainAxes(pw0, pw1, info, endPoint);</b>
+<b class="nc"><i>245</i>&nbsp;                    z.zoomRangeAxes(1 - ph1, 1 - ph0, info, endPoint);</b>
+<i>246</i>&nbsp;                } else {
+<b class="nc"><i>247</i>&nbsp;                    z.zoomRangeAxes(pw0, pw1, info, endPoint);</b>
+<b class="nc"><i>248</i>&nbsp;                    z.zoomDomainAxes(1 - ph1, 1 - ph0, info, endPoint);</b>
+<i>249</i>&nbsp;                }
+<b class="nc"><i>250</i>&nbsp;                p.setNotify(saved);</b>
+<i>251</i>&nbsp;                
+<i>252</i>&nbsp;            }
+<i>253</i>&nbsp;        }
+<b class="nc"><i>254</i>&nbsp;        viewer.hideZoomRectangle();</b>
+<b class="nc"><i>255</i>&nbsp;        this.startPoint = null;</b>
+<b class="nc"><i>256</i>&nbsp;        canvas.clearLiveHandler();</b>
+<i>257</i>&nbsp;    }
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    private double percentW(double x, Rectangle2D r) {
+<b class="nc"><i>260</i>&nbsp;        return (x - r.getMinX()) / r.getWidth();</b>
+<i>261</i>&nbsp;    }
+<i>262</i>&nbsp;    
+<i>263</i>&nbsp;    private double percentH(double y, Rectangle2D r) {
+<b class="nc"><i>264</i>&nbsp;        return (y - r.getMinY()) / r.getHeight();</b>
+<i>265</i>&nbsp;    }
+<i>266</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

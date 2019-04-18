@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DaitchMokotoffSoundexTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">DaitchMokotoffSoundexTest.java</span></div><h1>DaitchMokotoffSoundexTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.language;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests {@link DaitchMokotoffSoundex}.
+ * &lt;p&gt;
+ * Keep this file in UTF-8 encoding for proper Javadoc processing.
+ * &lt;/p&gt;
+ *
+ * @since 1.10
+ */
+<span class="pc bpc" id="L32" title="3 of 4 branches missed.">public class DaitchMokotoffSoundexTest extends StringEncoderAbstractTest&lt;DaitchMokotoffSoundex&gt; {</span>
+
+    @Override
+<span class="fc" id="L35">    protected DaitchMokotoffSoundex createStringEncoder() {</span>
+<span class="fc" id="L36">        return new DaitchMokotoffSoundex();</span>
+    }
+
+<span class="fc" id="L39">    private String soundex(final String source) {</span>
+<span class="fc" id="L40">        return getStringEncoder().soundex(source);</span>
+    }
+
+<span class="fc" id="L43">    private String encode(final String source) {</span>
+<span class="fc" id="L44">        return getStringEncoder().encode(source);</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L48" title="All 4 branches missed.">    public void testAccentedCharacterFolding() {</span>
+<span class="fc" id="L49">        Assert.assertEquals(&quot;294795&quot;, soundex(&quot;Straßburg&quot;));</span>
+<span class="fc" id="L50">        Assert.assertEquals(&quot;294795&quot;, soundex(&quot;Strasburg&quot;));</span>
+
+<span class="fc" id="L52">        Assert.assertEquals(&quot;095600&quot;, soundex(&quot;Éregon&quot;));</span>
+<span class="fc" id="L53">        Assert.assertEquals(&quot;095600&quot;, soundex(&quot;Eregon&quot;));</span>
+<span class="fc" id="L54">    }</span>
+
+    @Test
+<span class="pc bnc" id="L57" title="All 4 branches missed.">    public void testAdjacentCodes() {</span>
+        // AKSSOL
+        // A-KS-S-O-L
+        // 0-54-4---8 -&gt; wrong
+        // 0-54-----8 -&gt; correct
+<span class="fc" id="L62">        Assert.assertEquals(&quot;054800&quot;, soundex(&quot;AKSSOL&quot;));</span>
+
+        // GERSCHFELD
+        // G-E-RS-CH-F-E-L-D
+        // 5--4/94-5/4-7-8-3 -&gt; wrong
+        // 5--4/94-5/--7-8-3 -&gt; correct
+<span class="fc" id="L68">        Assert.assertEquals(&quot;547830|545783|594783|594578&quot;, soundex(&quot;GERSCHFELD&quot;));</span>
+<span class="fc" id="L69">    }</span>
+
+<span class="nc bnc" id="L71" title="All 4 branches missed.">    public void testEncodeBasic() {</span>
+        // same as above, but without branching
+<span class="nc" id="L73">        Assert.assertEquals(&quot;097400&quot;, encode(&quot;AUERBACH&quot;));</span>
+<span class="nc" id="L74">        Assert.assertEquals(&quot;097400&quot;, encode(&quot;OHRBACH&quot;));</span>
+<span class="nc" id="L75">        Assert.assertEquals(&quot;874400&quot;, encode(&quot;LIPSHITZ&quot;));</span>
+<span class="nc" id="L76">        Assert.assertEquals(&quot;874400&quot;, encode(&quot;LIPPSZYC&quot;));</span>
+<span class="nc" id="L77">        Assert.assertEquals(&quot;876450&quot;, encode(&quot;LEWINSKY&quot;));</span>
+<span class="nc" id="L78">        Assert.assertEquals(&quot;876450&quot;, encode(&quot;LEVINSKI&quot;));</span>
+<span class="nc" id="L79">        Assert.assertEquals(&quot;486740&quot;, encode(&quot;SZLAMAWICZ&quot;));</span>
+<span class="nc" id="L80">        Assert.assertEquals(&quot;486740&quot;, encode(&quot;SHLAMOVITZ&quot;));</span>
+<span class="nc" id="L81">    }</span>
+
+    @Test
+<span class="pc bnc" id="L84" title="All 4 branches missed.">    public void testEncodeIgnoreApostrophes() throws EncoderException {</span>
+<span class="fc" id="L85">        this.checkEncodingVariations(&quot;079600&quot;, new String[] { &quot;OBrien&quot;, &quot;'OBrien&quot;, &quot;O'Brien&quot;, &quot;OB'rien&quot;, &quot;OBr'ien&quot;,</span>
+                &quot;OBri'en&quot;, &quot;OBrie'n&quot;, &quot;OBrien'&quot; });
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Test data from http://www.myatt.demon.co.uk/sxalg.htm
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L95" title="All 4 branches missed.">    public void testEncodeIgnoreHyphens() throws EncoderException {</span>
+<span class="fc" id="L96">        this.checkEncodingVariations(&quot;565463&quot;, new String[] { &quot;KINGSMITH&quot;, &quot;-KINGSMITH&quot;, &quot;K-INGSMITH&quot;, &quot;KI-NGSMITH&quot;,</span>
+                &quot;KIN-GSMITH&quot;, &quot;KING-SMITH&quot;, &quot;KINGS-MITH&quot;, &quot;KINGSM-ITH&quot;, &quot;KINGSMI-TH&quot;, &quot;KINGSMIT-H&quot;, &quot;KINGSMITH-&quot; });
+<span class="fc" id="L98">    }</span>
+
+    @Test
+<span class="pc bnc" id="L101" title="All 4 branches missed.">    public void testEncodeIgnoreTrimmable() {</span>
+<span class="fc" id="L102">        Assert.assertEquals(&quot;746536&quot;, encode(&quot; \t\n\r Washington \t\n\r &quot;));</span>
+<span class="fc" id="L103">        Assert.assertEquals(&quot;746536&quot;, encode(&quot;Washington&quot;));</span>
+<span class="fc" id="L104">    }</span>
+
+    /**
+     * Examples from http://www.jewishgen.org/infofiles/soundex.html
+     */
+    @Test
+<span class="pc bnc" id="L110" title="All 4 branches missed.">    public void testSoundexBasic() {</span>
+<span class="fc" id="L111">        Assert.assertEquals(&quot;583600&quot;, soundex(&quot;GOLDEN&quot;));</span>
+<span class="fc" id="L112">        Assert.assertEquals(&quot;087930&quot;, soundex(&quot;Alpert&quot;));</span>
+<span class="fc" id="L113">        Assert.assertEquals(&quot;791900&quot;, soundex(&quot;Breuer&quot;));</span>
+<span class="fc" id="L114">        Assert.assertEquals(&quot;579000&quot;, soundex(&quot;Haber&quot;));</span>
+<span class="fc" id="L115">        Assert.assertEquals(&quot;665600&quot;, soundex(&quot;Mannheim&quot;));</span>
+<span class="fc" id="L116">        Assert.assertEquals(&quot;664000&quot;, soundex(&quot;Mintz&quot;));</span>
+<span class="fc" id="L117">        Assert.assertEquals(&quot;370000&quot;, soundex(&quot;Topf&quot;));</span>
+<span class="fc" id="L118">        Assert.assertEquals(&quot;586660&quot;, soundex(&quot;Kleinmann&quot;));</span>
+<span class="fc" id="L119">        Assert.assertEquals(&quot;769600&quot;, soundex(&quot;Ben Aron&quot;));</span>
+
+<span class="fc" id="L121">        Assert.assertEquals(&quot;097400|097500&quot;, soundex(&quot;AUERBACH&quot;));</span>
+<span class="fc" id="L122">        Assert.assertEquals(&quot;097400|097500&quot;, soundex(&quot;OHRBACH&quot;));</span>
+<span class="fc" id="L123">        Assert.assertEquals(&quot;874400&quot;, soundex(&quot;LIPSHITZ&quot;));</span>
+<span class="fc" id="L124">        Assert.assertEquals(&quot;874400|874500&quot;, soundex(&quot;LIPPSZYC&quot;));</span>
+<span class="fc" id="L125">        Assert.assertEquals(&quot;876450&quot;, soundex(&quot;LEWINSKY&quot;));</span>
+<span class="fc" id="L126">        Assert.assertEquals(&quot;876450&quot;, soundex(&quot;LEVINSKI&quot;));</span>
+<span class="fc" id="L127">        Assert.assertEquals(&quot;486740&quot;, soundex(&quot;SZLAMAWICZ&quot;));</span>
+<span class="fc" id="L128">        Assert.assertEquals(&quot;486740&quot;, soundex(&quot;SHLAMOVITZ&quot;));</span>
+<span class="fc" id="L129">    }</span>
+
+    /**
+     * Examples from http://www.avotaynu.com/soundex.htm
+     */
+    @Test
+<span class="pc bnc" id="L135" title="All 4 branches missed.">    public void testSoundexBasic2() {</span>
+<span class="fc" id="L136">        Assert.assertEquals(&quot;467000|567000&quot;, soundex(&quot;Ceniow&quot;));</span>
+<span class="fc" id="L137">        Assert.assertEquals(&quot;467000&quot;, soundex(&quot;Tsenyuv&quot;));</span>
+<span class="fc" id="L138">        Assert.assertEquals(&quot;587400|587500&quot;, soundex(&quot;Holubica&quot;));</span>
+<span class="fc" id="L139">        Assert.assertEquals(&quot;587400&quot;, soundex(&quot;Golubitsa&quot;));</span>
+<span class="fc" id="L140">        Assert.assertEquals(&quot;746480|794648&quot;, soundex(&quot;Przemysl&quot;));</span>
+<span class="fc" id="L141">        Assert.assertEquals(&quot;746480&quot;, soundex(&quot;Pshemeshil&quot;));</span>
+<span class="fc" id="L142">        Assert.assertEquals(&quot;944744|944745|944754|944755|945744|945745|945754|945755&quot;, soundex(&quot;Rosochowaciec&quot;));</span>
+<span class="fc" id="L143">        Assert.assertEquals(&quot;945744&quot;, soundex(&quot;Rosokhovatsets&quot;));</span>
+<span class="fc" id="L144">    }</span>
+
+    /**
+     * Examples from http://en.wikipedia.org/wiki/Daitch%E2%80%93Mokotoff_Soundex
+     */
+    @Test
+<span class="pc bnc" id="L150" title="All 4 branches missed.">    public void testSoundexBasic3() {</span>
+<span class="fc" id="L151">        Assert.assertEquals(&quot;734000|739400&quot;, soundex(&quot;Peters&quot;));</span>
+<span class="fc" id="L152">        Assert.assertEquals(&quot;734600|739460&quot;, soundex(&quot;Peterson&quot;));</span>
+<span class="fc" id="L153">        Assert.assertEquals(&quot;645740&quot;, soundex(&quot;Moskowitz&quot;));</span>
+<span class="fc" id="L154">        Assert.assertEquals(&quot;645740&quot;, soundex(&quot;Moskovitz&quot;));</span>
+<span class="fc" id="L155">        Assert.assertEquals(&quot;154600|145460|454600|445460&quot;, soundex(&quot;Jackson&quot;));</span>
+<span class="fc" id="L156">        Assert.assertEquals(&quot;154654|154645|154644|145465|145464|454654|454645|454644|445465|445464&quot;,</span>
+<span class="fc" id="L157">                soundex(&quot;Jackson-Jackson&quot;));</span>
+<span class="fc" id="L158">    }</span>
+
+    @Test
+<span class="pc bnc" id="L161" title="All 4 branches missed.">    public void testSpecialRomanianCharacters() {</span>
+<span class="fc" id="L162">        Assert.assertEquals(&quot;364000|464000&quot;, soundex(&quot;ţamas&quot;)); // t-cedilla</span>
+<span class="fc" id="L163">        Assert.assertEquals(&quot;364000|464000&quot;, soundex(&quot;țamas&quot;)); // t-comma</span>
+<span class="fc" id="L164">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

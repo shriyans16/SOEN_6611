@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SoundexUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SoundexUtils (org.apache.commons.codec.language)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SoundexUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (24/ 24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SoundexUtils$__CLR4_1_2fhfhjulvhr62</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (25/ 25)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.language;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import org.apache.commons.codec.EncoderException;
+<i>21</i>&nbsp;import org.apache.commons.codec.StringEncoder;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * Utility methods for {@link Soundex} and {@link RefinedSoundex} classes.
+<i>25</i>&nbsp; *
+<i>26</i>&nbsp; * &lt;p&gt;This class is immutable and thread-safe.&lt;/p&gt;
+<i>27</i>&nbsp; *
+<i>28</i>&nbsp; * @version $Id$
+<i>29</i>&nbsp; * @since 1.3
+<i>30</i>&nbsp; */
+<b class="fc"><i>31</i>&nbsp;final class SoundexUtils {</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Cleans up the input string before Soundex processing by only returning
+<i>35</i>&nbsp;     * upper case letters.
+<i>36</i>&nbsp;     *
+<i>37</i>&nbsp;     * @param str
+<i>38</i>&nbsp;     *                  The String to clean.
+<i>39</i>&nbsp;     * @return A clean String.
+<i>40</i>&nbsp;     */
+<b class="fc"><i>41</i>&nbsp;    static String clean(final String str) {</b>
+<b class="fc"><i>42</i>&nbsp;        if (str == null || str.length() == 0) {</b>
+<b class="fc"><i>43</i>&nbsp;            return str;</b>
+<i>44</i>&nbsp;        }
+<b class="fc"><i>45</i>&nbsp;        final int len = str.length();</b>
+<b class="fc"><i>46</i>&nbsp;        final char[] chars = new char[len];</b>
+<b class="fc"><i>47</i>&nbsp;        int count = 0;</b>
+<b class="fc"><i>48</i>&nbsp;        for (int i = 0; i &lt; len; i++) {</b>
+<b class="fc"><i>49</i>&nbsp;            if (Character.isLetter(str.charAt(i))) {</b>
+<b class="fc"><i>50</i>&nbsp;                chars[count++] = str.charAt(i);</b>
+<i>51</i>&nbsp;            }
+<i>52</i>&nbsp;        }
+<b class="fc"><i>53</i>&nbsp;        if (count == len) {</b>
+<b class="fc"><i>54</i>&nbsp;            return str.toUpperCase(java.util.Locale.ENGLISH);</b>
+<i>55</i>&nbsp;        }
+<b class="fc"><i>56</i>&nbsp;        return new String(chars, 0, count).toUpperCase(java.util.Locale.ENGLISH);</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Encodes the Strings and returns the number of characters in the two
+<i>61</i>&nbsp;     * encoded Strings that are the same.
+<i>62</i>&nbsp;     * &lt;ul&gt;
+<i>63</i>&nbsp;     * &lt;li&gt;For Soundex, this return value ranges from 0 through 4: 0 indicates
+<i>64</i>&nbsp;     * little or no similarity, and 4 indicates strong similarity or identical
+<i>65</i>&nbsp;     * values.&lt;/li&gt;
+<i>66</i>&nbsp;     * &lt;li&gt;For refined Soundex, the return value can be greater than 4.&lt;/li&gt;
+<i>67</i>&nbsp;     * &lt;/ul&gt;
+<i>68</i>&nbsp;     *
+<i>69</i>&nbsp;     * @param encoder
+<i>70</i>&nbsp;     *                  The encoder to use to encode the Strings.
+<i>71</i>&nbsp;     * @param s1
+<i>72</i>&nbsp;     *                  A String that will be encoded and compared.
+<i>73</i>&nbsp;     * @param s2
+<i>74</i>&nbsp;     *                  A String that will be encoded and compared.
+<i>75</i>&nbsp;     * @return The number of characters in the two Soundex encoded Strings that
+<i>76</i>&nbsp;     *             are the same.
+<i>77</i>&nbsp;     *
+<i>78</i>&nbsp;     * @see #differenceEncoded(String,String)
+<i>79</i>&nbsp;     * @see &lt;a href=&quot;http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tsqlref/ts_de-dz_8co5.asp&quot;&gt;
+<i>80</i>&nbsp;     *          MS T-SQL DIFFERENCE&lt;/a&gt;
+<i>81</i>&nbsp;     *
+<i>82</i>&nbsp;     * @throws EncoderException
+<i>83</i>&nbsp;     *                  if an error occurs encoding one of the strings
+<i>84</i>&nbsp;     */
+<b class="fc"><i>85</i>&nbsp;    static int difference(final StringEncoder encoder, final String s1, final String s2) throws EncoderException {</b>
+<b class="fc"><i>86</i>&nbsp;        return differenceEncoded(encoder.encode(s1), encoder.encode(s2));</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Returns the number of characters in the two Soundex encoded Strings that
+<i>91</i>&nbsp;     * are the same.
+<i>92</i>&nbsp;     * &lt;ul&gt;
+<i>93</i>&nbsp;     * &lt;li&gt;For Soundex, this return value ranges from 0 through 4: 0 indicates
+<i>94</i>&nbsp;     * little or no similarity, and 4 indicates strong similarity or identical
+<i>95</i>&nbsp;     * values.&lt;/li&gt;
+<i>96</i>&nbsp;     * &lt;li&gt;For refined Soundex, the return value can be greater than 4.&lt;/li&gt;
+<i>97</i>&nbsp;     * &lt;/ul&gt;
+<i>98</i>&nbsp;     *
+<i>99</i>&nbsp;     * @param es1
+<i>100</i>&nbsp;     *                  An encoded String.
+<i>101</i>&nbsp;     * @param es2
+<i>102</i>&nbsp;     *                  An encoded String.
+<i>103</i>&nbsp;     * @return The number of characters in the two Soundex encoded Strings that
+<i>104</i>&nbsp;     *             are the same.
+<i>105</i>&nbsp;     *
+<i>106</i>&nbsp;     * @see &lt;a href=&quot;http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tsqlref/ts_de-dz_8co5.asp&quot;&gt;
+<i>107</i>&nbsp;     *          MS T-SQL DIFFERENCE&lt;/a&gt;
+<i>108</i>&nbsp;     */
+<b class="fc"><i>109</i>&nbsp;    static int differenceEncoded(final String es1, final String es2) {</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;        if (es1 == null || es2 == null) {</b>
+<b class="fc"><i>112</i>&nbsp;            return 0;</b>
+<i>113</i>&nbsp;        }
+<b class="fc"><i>114</i>&nbsp;        final int lengthToMatch = Math.min(es1.length(), es2.length());</b>
+<b class="fc"><i>115</i>&nbsp;        int diff = 0;</b>
+<b class="fc"><i>116</i>&nbsp;        for (int i = 0; i &lt; lengthToMatch; i++) {</b>
+<b class="fc"><i>117</i>&nbsp;            if (es1.charAt(i) == es2.charAt(i)) {</b>
+<b class="fc"><i>118</i>&nbsp;                diff++;</b>
+<i>119</i>&nbsp;            }
+<i>120</i>&nbsp;        }
+<b class="fc"><i>121</i>&nbsp;        return diff;</b>
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 20:07</div>
+</div>
+</body>
+</html>

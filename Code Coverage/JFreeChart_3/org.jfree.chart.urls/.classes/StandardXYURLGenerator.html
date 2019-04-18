@@ -1,0 +1,256 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: StandardXYURLGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.urls</a> ]
+</div>
+
+<h1>Coverage Summary for Class: StandardXYURLGenerator (org.jfree.chart.urls)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StandardXYURLGenerator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69%
+  </span>
+  <span class="absValue">
+    (20/ 29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------------------
+<i>28</i>&nbsp; * StandardXYURLGenerator.java
+<i>29</i>&nbsp; * ---------------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2013, by Richard Atkinson and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Richard Atkinson;
+<i>33</i>&nbsp; * Contributors:     David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes:
+<i>36</i>&nbsp; * --------
+<i>37</i>&nbsp; * 05-Aug-2002 : Version 1, contributed by Richard Atkinson;
+<i>38</i>&nbsp; * 29-Aug-2002 : New constructor and member variables to customise series and
+<i>39</i>&nbsp; *               item parameter names (RA);
+<i>40</i>&nbsp; * 09-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+<i>41</i>&nbsp; * 23-Mar-2003 : Implemented Serializable (DG);
+<i>42</i>&nbsp; * 01-Mar-2004 : Added equals() method (DG);
+<i>43</i>&nbsp; * 13-Jan-2005 : Modified for XHTML 1.0 compliance (DG);
+<i>44</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>45</i>&nbsp; * 02-Feb-2007 : Removed author tags from all over JFreeChart sources (DG);
+<i>46</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; */
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;package org.jfree.chart.urls;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;import java.io.Serializable;
+<i>53</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>56</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;/**
+<i>59</i>&nbsp; * A URL generator.
+<i>60</i>&nbsp; */
+<i>61</i>&nbsp;public class StandardXYURLGenerator implements XYURLGenerator, Serializable {
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /** For serialization. */
+<i>64</i>&nbsp;    private static final long serialVersionUID = -1771624523496595382L;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /** The default prefix. */
+<i>67</i>&nbsp;    public static final String DEFAULT_PREFIX = &quot;index.html&quot;;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /** The default series parameter. */
+<i>70</i>&nbsp;    public static final String DEFAULT_SERIES_PARAMETER = &quot;series&quot;;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /** The default item parameter. */
+<i>73</i>&nbsp;    public static final String DEFAULT_ITEM_PARAMETER = &quot;item&quot;;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /** Prefix to the URL */
+<i>76</i>&nbsp;    private String prefix;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /** Series parameter name to go in each URL */
+<i>79</i>&nbsp;    private String seriesParameterName;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /** Item parameter name to go in each URL */
+<i>82</i>&nbsp;    private String itemParameterName;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /**
+<i>85</i>&nbsp;     * Creates a new default generator.  This constructor is equivalent to
+<i>86</i>&nbsp;     * calling &lt;code&gt;StandardXYURLGenerator(&quot;index.html&quot;, &quot;series&quot;, &quot;item&quot;);
+<i>87</i>&nbsp;     * &lt;/code&gt;.
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public StandardXYURLGenerator() {
+<b class="fc"><i>90</i>&nbsp;        this(DEFAULT_PREFIX, DEFAULT_SERIES_PARAMETER, DEFAULT_ITEM_PARAMETER);</b>
+<b class="fc"><i>91</i>&nbsp;    }</b>
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Creates a new generator with the specified prefix.  This constructor
+<i>95</i>&nbsp;     * is equivalent to calling
+<i>96</i>&nbsp;     * &lt;code&gt;StandardXYURLGenerator(prefix, &quot;series&quot;, &quot;item&quot;);&lt;/code&gt;.
+<i>97</i>&nbsp;     *
+<i>98</i>&nbsp;     * @param prefix  the prefix to the URL (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    public StandardXYURLGenerator(String prefix) {
+<b class="fc"><i>101</i>&nbsp;        this(prefix, DEFAULT_SERIES_PARAMETER, DEFAULT_ITEM_PARAMETER);</b>
+<b class="fc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Constructor that overrides all the defaults
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @param prefix  the prefix to the URL (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>108</i>&nbsp;     * @param seriesParameterName  the name of the series parameter to go in
+<i>109</i>&nbsp;     *                             each URL (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>110</i>&nbsp;     * @param itemParameterName  the name of the item parameter to go in each
+<i>111</i>&nbsp;     *                           URL (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    public StandardXYURLGenerator(String prefix, String seriesParameterName,
+<b class="fc"><i>114</i>&nbsp;            String itemParameterName) {</b>
+<b class="fc"><i>115</i>&nbsp;        ParamChecks.nullNotPermitted(prefix, &quot;prefix&quot;);</b>
+<b class="fc"><i>116</i>&nbsp;        ParamChecks.nullNotPermitted(seriesParameterName, &quot;seriesParameterName&quot;);</b>
+<b class="fc"><i>117</i>&nbsp;        ParamChecks.nullNotPermitted(itemParameterName, &quot;itemParameterName&quot;);</b>
+<b class="fc"><i>118</i>&nbsp;        this.prefix = prefix;</b>
+<b class="fc"><i>119</i>&nbsp;        this.seriesParameterName = seriesParameterName;</b>
+<b class="fc"><i>120</i>&nbsp;        this.itemParameterName = itemParameterName;</b>
+<b class="fc"><i>121</i>&nbsp;    }</b>
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * Generates a URL for a particular item within a series.
+<i>125</i>&nbsp;     *
+<i>126</i>&nbsp;     * @param dataset  the dataset.
+<i>127</i>&nbsp;     * @param series  the series number (zero-based index).
+<i>128</i>&nbsp;     * @param item  the item number (zero-based index).
+<i>129</i>&nbsp;     *
+<i>130</i>&nbsp;     * @return The generated URL.
+<i>131</i>&nbsp;     */
+<i>132</i>&nbsp;    @Override
+<i>133</i>&nbsp;    public String generateURL(XYDataset dataset, int series, int item) {
+<i>134</i>&nbsp;        // TODO: URLEncode?
+<b class="nc"><i>135</i>&nbsp;        String url = this.prefix;</b>
+<b class="nc"><i>136</i>&nbsp;        boolean firstParameter = url.indexOf(&quot;?&quot;) == -1;</b>
+<b class="nc"><i>137</i>&nbsp;        url += firstParameter ? &quot;?&quot; : &quot;&amp;amp;&quot;;</b>
+<b class="nc"><i>138</i>&nbsp;        url += this.seriesParameterName + &quot;=&quot; + series</b>
+<i>139</i>&nbsp;                + &quot;&amp;amp;&quot; + this.itemParameterName + &quot;=&quot; + item;
+<b class="nc"><i>140</i>&nbsp;        return url;</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * Tests this generator for equality with an arbitrary object.
+<i>145</i>&nbsp;     *
+<i>146</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>147</i>&nbsp;     *
+<i>148</i>&nbsp;     * @return A boolean.
+<i>149</i>&nbsp;     */
+<i>150</i>&nbsp;    @Override
+<i>151</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>152</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>153</i>&nbsp;            return true;</b>
+<i>154</i>&nbsp;        }
+<b class="fc"><i>155</i>&nbsp;        if (!(obj instanceof StandardXYURLGenerator)) {</b>
+<b class="fc"><i>156</i>&nbsp;            return false;</b>
+<i>157</i>&nbsp;        }
+<b class="fc"><i>158</i>&nbsp;        StandardXYURLGenerator that = (StandardXYURLGenerator) obj;</b>
+<b class="fc"><i>159</i>&nbsp;        if (!ObjectUtilities.equal(that.prefix, this.prefix)) {</b>
+<b class="nc"><i>160</i>&nbsp;            return false;</b>
+<i>161</i>&nbsp;        }
+<b class="fc"><i>162</i>&nbsp;        if (!ObjectUtilities.equal(that.seriesParameterName,</b>
+<i>163</i>&nbsp;                this.seriesParameterName)) {
+<b class="nc"><i>164</i>&nbsp;            return false;</b>
+<i>165</i>&nbsp;        }
+<b class="fc"><i>166</i>&nbsp;        if (!ObjectUtilities.equal(that.itemParameterName,</b>
+<i>167</i>&nbsp;                this.itemParameterName)) {
+<b class="nc"><i>168</i>&nbsp;            return false;</b>
+<i>169</i>&nbsp;        }
+<b class="fc"><i>170</i>&nbsp;        return true;</b>
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

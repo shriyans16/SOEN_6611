@@ -1,0 +1,531 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Millisecond</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.time</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Millisecond (org.jfree.data.time)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Millisecond</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.2%
+  </span>
+  <span class="absValue">
+    (16/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66%
+  </span>
+  <span class="absValue">
+    (64/ 97)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ----------------
+<i>28</i>&nbsp; * Millisecond.java
+<i>29</i>&nbsp; * ----------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2012, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 11-Oct-2001 : Version 1 (DG);
+<i>38</i>&nbsp; * 19-Dec-2001 : Added new constructors as suggested by Paul English (DG);
+<i>39</i>&nbsp; * 26-Feb-2002 : Added new getStart() and getEnd() methods (DG);
+<i>40</i>&nbsp; * 29-Mar-2002 : Fixed bug in getStart(), getEnd() and compareTo() methods (DG);
+<i>41</i>&nbsp; * 10-Sep-2002 : Added getSerialIndex() method (DG);
+<i>42</i>&nbsp; * 07-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+<i>43</i>&nbsp; * 10-Jan-2003 : Changed base class and method names (DG);
+<i>44</i>&nbsp; * 13-Mar-2003 : Moved to com.jrefinery.data.time package and implemented
+<i>45</i>&nbsp; *               Serializable (DG);
+<i>46</i>&nbsp; * 21-Oct-2003 : Added hashCode() method (DG);
+<i>47</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>48</i>&nbsp; * 05-Oct-2006 : Updated API docs (DG);
+<i>49</i>&nbsp; * 06-Oct-2006 : Refactored to cache first and last millisecond values (DG);
+<i>50</i>&nbsp; * 04-Apr-2007 : In Millisecond(Date, TimeZone), peg milliseconds to the
+<i>51</i>&nbsp; *               specified zone (DG);
+<i>52</i>&nbsp; * 06-Jun-2008 : Added handling for general RegularTimePeriod in compareTo()
+<i>53</i>&nbsp; *               method:
+<i>54</i>&nbsp; *               see http://www.jfree.org/phpBB2/viewtopic.php?t=24805 (DG);
+<i>55</i>&nbsp; * 16-Sep-2008 : Deprecated DEFAULT_TIME_ZONE (DG);
+<i>56</i>&nbsp; * 02-Mar-2009 : Added new constructor with Locale (DG);
+<i>57</i>&nbsp; * 05-Jul-2012 : Replaced getTime().getTime() with getTimeInMillis() (DG);
+<i>58</i>&nbsp; *
+<i>59</i>&nbsp; */
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;package org.jfree.data.time;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;import java.io.Serializable;
+<i>64</i>&nbsp;import java.util.Calendar;
+<i>65</i>&nbsp;import java.util.Date;
+<i>66</i>&nbsp;import java.util.Locale;
+<i>67</i>&nbsp;import java.util.TimeZone;
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;/**
+<i>70</i>&nbsp; * Represents a millisecond.  This class is immutable, which is a requirement
+<i>71</i>&nbsp; * for all {@link RegularTimePeriod} subclasses.
+<i>72</i>&nbsp; */
+<i>73</i>&nbsp;public class Millisecond extends RegularTimePeriod implements Serializable {
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /** For serialization. */
+<i>76</i>&nbsp;    static final long serialVersionUID = -5316836467277638485L;
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /** A constant for the first millisecond in a second. */
+<i>79</i>&nbsp;    public static final int FIRST_MILLISECOND_IN_SECOND = 0;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /** A constant for the last millisecond in a second. */
+<i>82</i>&nbsp;    public static final int LAST_MILLISECOND_IN_SECOND = 999;
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    /** The day. */
+<i>85</i>&nbsp;    private Day day;
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    /** The hour in the day. */
+<i>88</i>&nbsp;    private byte hour;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /** The minute. */
+<i>91</i>&nbsp;    private byte minute;
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /** The second. */
+<i>94</i>&nbsp;    private byte second;
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /** The millisecond. */
+<i>97</i>&nbsp;    private int millisecond;
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;    /**
+<i>100</i>&nbsp;     * The pegged millisecond.
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    private long firstMillisecond;
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Constructs a millisecond based on the current system time.
+<i>106</i>&nbsp;     */
+<i>107</i>&nbsp;    public Millisecond() {
+<b class="fc"><i>108</i>&nbsp;        this(new Date());</b>
+<b class="fc"><i>109</i>&nbsp;    }</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Constructs a millisecond.
+<i>113</i>&nbsp;     *
+<i>114</i>&nbsp;     * @param millisecond  the millisecond (0-999).
+<i>115</i>&nbsp;     * @param second  the second.
+<i>116</i>&nbsp;     */
+<b class="fc"><i>117</i>&nbsp;    public Millisecond(int millisecond, Second second) {</b>
+<b class="fc"><i>118</i>&nbsp;        this.millisecond = millisecond;</b>
+<b class="fc"><i>119</i>&nbsp;        this.second = (byte) second.getSecond();</b>
+<b class="fc"><i>120</i>&nbsp;        this.minute = (byte) second.getMinute().getMinute();</b>
+<b class="fc"><i>121</i>&nbsp;        this.hour = (byte) second.getMinute().getHourValue();</b>
+<b class="fc"><i>122</i>&nbsp;        this.day = second.getMinute().getDay();</b>
+<b class="fc"><i>123</i>&nbsp;        peg(Calendar.getInstance());</b>
+<b class="fc"><i>124</i>&nbsp;    }</b>
+<i>125</i>&nbsp;
+<i>126</i>&nbsp;    /**
+<i>127</i>&nbsp;     * Creates a new millisecond.
+<i>128</i>&nbsp;     *
+<i>129</i>&nbsp;     * @param millisecond  the millisecond (0-999).
+<i>130</i>&nbsp;     * @param second  the second (0-59).
+<i>131</i>&nbsp;     * @param minute  the minute (0-59).
+<i>132</i>&nbsp;     * @param hour  the hour (0-23).
+<i>133</i>&nbsp;     * @param day  the day (1-31).
+<i>134</i>&nbsp;     * @param month  the month (1-12).
+<i>135</i>&nbsp;     * @param year  the year (1900-9999).
+<i>136</i>&nbsp;     */
+<i>137</i>&nbsp;    public Millisecond(int millisecond, int second, int minute, int hour,
+<i>138</i>&nbsp;                       int day, int month, int year) {
+<i>139</i>&nbsp;
+<b class="fc"><i>140</i>&nbsp;        this(millisecond, new Second(second, minute, hour, day, month, year));</b>
+<i>141</i>&nbsp;
+<b class="fc"><i>142</i>&nbsp;    }</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * Constructs a new millisecond using the default time zone.
+<i>146</i>&nbsp;     *
+<i>147</i>&nbsp;     * @param time  the time.
+<i>148</i>&nbsp;     *
+<i>149</i>&nbsp;     * @see #Millisecond(Date, TimeZone)
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public Millisecond(Date time) {
+<b class="fc"><i>152</i>&nbsp;        this(time, TimeZone.getDefault(), Locale.getDefault());</b>
+<b class="fc"><i>153</i>&nbsp;    }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * Creates a millisecond.
+<i>157</i>&nbsp;     *
+<i>158</i>&nbsp;     * @param time  the instant in time.
+<i>159</i>&nbsp;     * @param zone  the time zone.
+<i>160</i>&nbsp;     *
+<i>161</i>&nbsp;     * @deprecated As of 1.0.13, use the constructor that specifies the locale
+<i>162</i>&nbsp;     *     also.
+<i>163</i>&nbsp;     */
+<i>164</i>&nbsp;    public Millisecond(Date time, TimeZone zone) {
+<b class="nc"><i>165</i>&nbsp;        this(time, zone, Locale.getDefault());</b>
+<b class="nc"><i>166</i>&nbsp;    }</b>
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * Creates a millisecond.
+<i>170</i>&nbsp;     *
+<i>171</i>&nbsp;     * @param time  the date-time (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>172</i>&nbsp;     * @param zone  the time zone (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>173</i>&nbsp;     * @param locale  the locale (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @since 1.0.13
+<i>176</i>&nbsp;     */
+<b class="fc"><i>177</i>&nbsp;    public Millisecond(Date time, TimeZone zone, Locale locale) {</b>
+<b class="fc"><i>178</i>&nbsp;        Calendar calendar = Calendar.getInstance(zone, locale);</b>
+<b class="fc"><i>179</i>&nbsp;        calendar.setTime(time);</b>
+<b class="fc"><i>180</i>&nbsp;        this.millisecond = calendar.get(Calendar.MILLISECOND);</b>
+<b class="fc"><i>181</i>&nbsp;        this.second = (byte) calendar.get(Calendar.SECOND);</b>
+<b class="fc"><i>182</i>&nbsp;        this.minute = (byte) calendar.get(Calendar.MINUTE);</b>
+<b class="fc"><i>183</i>&nbsp;        this.hour = (byte) calendar.get(Calendar.HOUR_OF_DAY);</b>
+<b class="fc"><i>184</i>&nbsp;        this.day = new Day(time, zone, locale);</b>
+<b class="fc"><i>185</i>&nbsp;        peg(calendar);</b>
+<b class="fc"><i>186</i>&nbsp;    }</b>
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * Returns the second.
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @return The second.
+<i>192</i>&nbsp;     */
+<i>193</i>&nbsp;    public Second getSecond() {
+<b class="fc"><i>194</i>&nbsp;        return new Second(this.second, this.minute, this.hour,</b>
+<b class="fc"><i>195</i>&nbsp;                this.day.getDayOfMonth(), this.day.getMonth(),</b>
+<b class="fc"><i>196</i>&nbsp;                this.day.getYear());</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Returns the millisecond.
+<i>201</i>&nbsp;     *
+<i>202</i>&nbsp;     * @return The millisecond.
+<i>203</i>&nbsp;     */
+<i>204</i>&nbsp;    public long getMillisecond() {
+<b class="fc"><i>205</i>&nbsp;        return this.millisecond;</b>
+<i>206</i>&nbsp;    }
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Returns the first millisecond of the second.  This will be determined
+<i>210</i>&nbsp;     * relative to the time zone specified in the constructor, or in the
+<i>211</i>&nbsp;     * calendar instance passed in the most recent call to the
+<i>212</i>&nbsp;     * {@link #peg(Calendar)} method.
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @return The first millisecond of the second.
+<i>215</i>&nbsp;     *
+<i>216</i>&nbsp;     * @see #getLastMillisecond()
+<i>217</i>&nbsp;     */
+<i>218</i>&nbsp;    @Override
+<i>219</i>&nbsp;    public long getFirstMillisecond() {
+<b class="fc"><i>220</i>&nbsp;        return this.firstMillisecond;</b>
+<i>221</i>&nbsp;    }
+<i>222</i>&nbsp;
+<i>223</i>&nbsp;    /**
+<i>224</i>&nbsp;     * Returns the last millisecond of the second.  This will be
+<i>225</i>&nbsp;     * determined relative to the time zone specified in the constructor, or
+<i>226</i>&nbsp;     * in the calendar instance passed in the most recent call to the
+<i>227</i>&nbsp;     * {@link #peg(Calendar)} method.
+<i>228</i>&nbsp;     *
+<i>229</i>&nbsp;     * @return The last millisecond of the second.
+<i>230</i>&nbsp;     *
+<i>231</i>&nbsp;     * @see #getFirstMillisecond()
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    @Override
+<i>234</i>&nbsp;    public long getLastMillisecond() {
+<b class="fc"><i>235</i>&nbsp;        return this.firstMillisecond;</b>
+<i>236</i>&nbsp;    }
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * Recalculates the start date/time and end date/time for this time period
+<i>240</i>&nbsp;     * relative to the supplied calendar (which incorporates a time zone).
+<i>241</i>&nbsp;     *
+<i>242</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>243</i>&nbsp;     *
+<i>244</i>&nbsp;     * @since 1.0.3
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    @Override
+<i>247</i>&nbsp;    public void peg(Calendar calendar) {
+<b class="fc"><i>248</i>&nbsp;        this.firstMillisecond = getFirstMillisecond(calendar);</b>
+<b class="fc"><i>249</i>&nbsp;    }</b>
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;    /**
+<i>252</i>&nbsp;     * Returns the millisecond preceding this one.
+<i>253</i>&nbsp;     *
+<i>254</i>&nbsp;     * @return The millisecond preceding this one.
+<i>255</i>&nbsp;     */
+<i>256</i>&nbsp;    @Override
+<i>257</i>&nbsp;    public RegularTimePeriod previous() {
+<b class="nc"><i>258</i>&nbsp;        RegularTimePeriod result = null;</b>
+<b class="nc"><i>259</i>&nbsp;        if (this.millisecond != FIRST_MILLISECOND_IN_SECOND) {</b>
+<b class="nc"><i>260</i>&nbsp;            result = new Millisecond(this.millisecond - 1, getSecond());</b>
+<i>261</i>&nbsp;        }
+<i>262</i>&nbsp;        else {
+<b class="nc"><i>263</i>&nbsp;            Second previous = (Second) getSecond().previous();</b>
+<b class="nc"><i>264</i>&nbsp;            if (previous != null) {</b>
+<b class="nc"><i>265</i>&nbsp;                result = new Millisecond(LAST_MILLISECOND_IN_SECOND, previous);</b>
+<i>266</i>&nbsp;            }
+<i>267</i>&nbsp;        }
+<b class="nc"><i>268</i>&nbsp;        return result;</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * Returns the millisecond following this one.
+<i>273</i>&nbsp;     *
+<i>274</i>&nbsp;     * @return The millisecond following this one.
+<i>275</i>&nbsp;     */
+<i>276</i>&nbsp;    @Override
+<i>277</i>&nbsp;    public RegularTimePeriod next() {
+<b class="fc"><i>278</i>&nbsp;        RegularTimePeriod result = null;</b>
+<b class="fc"><i>279</i>&nbsp;        if (this.millisecond != LAST_MILLISECOND_IN_SECOND) {</b>
+<b class="fc"><i>280</i>&nbsp;            result = new Millisecond(this.millisecond + 1, getSecond());</b>
+<i>281</i>&nbsp;        }
+<i>282</i>&nbsp;        else {
+<b class="fc"><i>283</i>&nbsp;            Second next = (Second) getSecond().next();</b>
+<b class="fc"><i>284</i>&nbsp;            if (next != null) {</b>
+<b class="nc"><i>285</i>&nbsp;                result = new Millisecond(FIRST_MILLISECOND_IN_SECOND, next);</b>
+<i>286</i>&nbsp;            }
+<i>287</i>&nbsp;        }
+<b class="fc"><i>288</i>&nbsp;        return result;</b>
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    /**
+<i>292</i>&nbsp;     * Returns a serial index number for the millisecond.
+<i>293</i>&nbsp;     *
+<i>294</i>&nbsp;     * @return The serial index number.
+<i>295</i>&nbsp;     */
+<i>296</i>&nbsp;    @Override
+<i>297</i>&nbsp;    public long getSerialIndex() {
+<b class="fc"><i>298</i>&nbsp;        long hourIndex = this.day.getSerialIndex() * 24L + this.hour;</b>
+<b class="fc"><i>299</i>&nbsp;        long minuteIndex = hourIndex * 60L + this.minute;</b>
+<b class="fc"><i>300</i>&nbsp;        long secondIndex = minuteIndex * 60L + this.second;</b>
+<b class="fc"><i>301</i>&nbsp;        return secondIndex * 1000L + this.millisecond;</b>
+<i>302</i>&nbsp;    }
+<i>303</i>&nbsp;
+<i>304</i>&nbsp;    /**
+<i>305</i>&nbsp;     * Tests the equality of this object against an arbitrary Object.
+<i>306</i>&nbsp;     * &lt;P&gt;
+<i>307</i>&nbsp;     * This method will return true ONLY if the object is a Millisecond object
+<i>308</i>&nbsp;     * representing the same millisecond as this instance.
+<i>309</i>&nbsp;     *
+<i>310</i>&nbsp;     * @param obj  the object to compare
+<i>311</i>&nbsp;     *
+<i>312</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if milliseconds and seconds of this and object
+<i>313</i>&nbsp;     *      are the same.
+<i>314</i>&nbsp;     */
+<i>315</i>&nbsp;    @Override
+<i>316</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>317</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>318</i>&nbsp;            return true;</b>
+<i>319</i>&nbsp;        }
+<b class="fc"><i>320</i>&nbsp;        if (!(obj instanceof Millisecond)) {</b>
+<b class="nc"><i>321</i>&nbsp;            return false;</b>
+<i>322</i>&nbsp;        }
+<b class="fc"><i>323</i>&nbsp;        Millisecond that = (Millisecond) obj;</b>
+<b class="fc"><i>324</i>&nbsp;        if (this.millisecond != that.millisecond) {</b>
+<b class="nc"><i>325</i>&nbsp;            return false;</b>
+<i>326</i>&nbsp;        }
+<b class="fc"><i>327</i>&nbsp;        if (this.second != that.second) {</b>
+<b class="nc"><i>328</i>&nbsp;            return false;</b>
+<i>329</i>&nbsp;        }
+<b class="fc"><i>330</i>&nbsp;        if (this.minute != that.minute) {</b>
+<b class="nc"><i>331</i>&nbsp;            return false;</b>
+<i>332</i>&nbsp;        }
+<b class="fc"><i>333</i>&nbsp;        if (this.hour != that.hour) {</b>
+<b class="nc"><i>334</i>&nbsp;            return false;</b>
+<i>335</i>&nbsp;        }
+<b class="fc"><i>336</i>&nbsp;        if (!this.day.equals(that.day)) {</b>
+<b class="nc"><i>337</i>&nbsp;            return false;</b>
+<i>338</i>&nbsp;        }
+<b class="fc"><i>339</i>&nbsp;        return true;</b>
+<i>340</i>&nbsp;    }
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;    /**
+<i>343</i>&nbsp;     * Returns a hash code for this object instance.  The approach described by
+<i>344</i>&nbsp;     * Joshua Bloch in &quot;Effective Java&quot; has been used here:
+<i>345</i>&nbsp;     * &lt;p&gt;
+<i>346</i>&nbsp;     * &lt;code&gt;http://developer.java.sun.com/developer/Books/effectivejava
+<i>347</i>&nbsp;     * /Chapter3.pdf&lt;/code&gt;
+<i>348</i>&nbsp;     *
+<i>349</i>&nbsp;     * @return A hashcode.
+<i>350</i>&nbsp;     */
+<i>351</i>&nbsp;    @Override
+<i>352</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>353</i>&nbsp;        int result = 17;</b>
+<b class="fc"><i>354</i>&nbsp;        result = 37 * result + this.millisecond;</b>
+<b class="fc"><i>355</i>&nbsp;        result = 37 * result + getSecond().hashCode();</b>
+<b class="fc"><i>356</i>&nbsp;        return result;</b>
+<i>357</i>&nbsp;    }
+<i>358</i>&nbsp;
+<i>359</i>&nbsp;    /**
+<i>360</i>&nbsp;     * Returns an integer indicating the order of this Millisecond object
+<i>361</i>&nbsp;     * relative to the specified object:
+<i>362</i>&nbsp;     *
+<i>363</i>&nbsp;     * negative == before, zero == same, positive == after.
+<i>364</i>&nbsp;     *
+<i>365</i>&nbsp;     * @param obj  the object to compare
+<i>366</i>&nbsp;     *
+<i>367</i>&nbsp;     * @return negative == before, zero == same, positive == after.
+<i>368</i>&nbsp;     */
+<i>369</i>&nbsp;    @Override
+<i>370</i>&nbsp;    public int compareTo(Object obj) {
+<i>371</i>&nbsp;        int result;
+<i>372</i>&nbsp;        long difference;
+<i>373</i>&nbsp;
+<i>374</i>&nbsp;        // CASE 1 : Comparing to another Second object
+<i>375</i>&nbsp;        // -------------------------------------------
+<b class="nc"><i>376</i>&nbsp;        if (obj instanceof Millisecond) {</b>
+<b class="nc"><i>377</i>&nbsp;            Millisecond ms = (Millisecond) obj;</b>
+<b class="nc"><i>378</i>&nbsp;            difference = getFirstMillisecond() - ms.getFirstMillisecond();</b>
+<b class="nc"><i>379</i>&nbsp;            if (difference &gt; 0) {</b>
+<b class="nc"><i>380</i>&nbsp;                result = 1;</b>
+<i>381</i>&nbsp;            }
+<i>382</i>&nbsp;            else {
+<b class="nc"><i>383</i>&nbsp;                if (difference &lt; 0) {</b>
+<b class="nc"><i>384</i>&nbsp;                    result = -1;</b>
+<i>385</i>&nbsp;                }
+<i>386</i>&nbsp;                else {
+<b class="nc"><i>387</i>&nbsp;                    result = 0;</b>
+<i>388</i>&nbsp;                }
+<i>389</i>&nbsp;            }
+<b class="nc"><i>390</i>&nbsp;        }</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;        // CASE 2 : Comparing to another TimePeriod object
+<i>393</i>&nbsp;        // -----------------------------------------------
+<b class="nc"><i>394</i>&nbsp;        else if (obj instanceof RegularTimePeriod) {</b>
+<b class="nc"><i>395</i>&nbsp;            RegularTimePeriod rtp = (RegularTimePeriod) obj;</b>
+<b class="nc"><i>396</i>&nbsp;            final long thisVal = this.getFirstMillisecond();</b>
+<b class="nc"><i>397</i>&nbsp;            final long anotherVal = rtp.getFirstMillisecond();</b>
+<b class="nc"><i>398</i>&nbsp;            result = (thisVal &lt; anotherVal ? -1</b>
+<i>399</i>&nbsp;                    : (thisVal == anotherVal ? 0 : 1));
+<b class="nc"><i>400</i>&nbsp;        }</b>
+<i>401</i>&nbsp;
+<i>402</i>&nbsp;        // CASE 3 : Comparing to a non-TimePeriod object
+<i>403</i>&nbsp;        // ---------------------------------------------
+<i>404</i>&nbsp;        else {
+<i>405</i>&nbsp;            // consider time periods to be ordered after general objects
+<b class="nc"><i>406</i>&nbsp;            result = 1;</b>
+<i>407</i>&nbsp;        }
+<i>408</i>&nbsp;
+<b class="nc"><i>409</i>&nbsp;        return result;</b>
+<i>410</i>&nbsp;    }
+<i>411</i>&nbsp;
+<i>412</i>&nbsp;    /**
+<i>413</i>&nbsp;     * Returns the first millisecond of the time period.
+<i>414</i>&nbsp;     *
+<i>415</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>416</i>&nbsp;     *
+<i>417</i>&nbsp;     * @return The first millisecond of the time period.
+<i>418</i>&nbsp;     *
+<i>419</i>&nbsp;     * @throws NullPointerException if &lt;code&gt;calendar&lt;/code&gt; is
+<i>420</i>&nbsp;     *     &lt;code&gt;null&lt;/code&gt;.
+<i>421</i>&nbsp;     */
+<i>422</i>&nbsp;    @Override
+<i>423</i>&nbsp;    public long getFirstMillisecond(Calendar calendar) {
+<b class="fc"><i>424</i>&nbsp;        int year = this.day.getYear();</b>
+<b class="fc"><i>425</i>&nbsp;        int month = this.day.getMonth() - 1;</b>
+<b class="fc"><i>426</i>&nbsp;        int d = this.day.getDayOfMonth();</b>
+<b class="fc"><i>427</i>&nbsp;        calendar.clear();</b>
+<b class="fc"><i>428</i>&nbsp;        calendar.set(year, month, d, this.hour, this.minute, this.second);</b>
+<b class="fc"><i>429</i>&nbsp;        calendar.set(Calendar.MILLISECOND, this.millisecond);</b>
+<b class="fc"><i>430</i>&nbsp;        return calendar.getTimeInMillis();</b>
+<i>431</i>&nbsp;    }
+<i>432</i>&nbsp;
+<i>433</i>&nbsp;    /**
+<i>434</i>&nbsp;     * Returns the last millisecond of the time period.
+<i>435</i>&nbsp;     *
+<i>436</i>&nbsp;     * @param calendar  the calendar (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>437</i>&nbsp;     *
+<i>438</i>&nbsp;     * @return The last millisecond of the time period.
+<i>439</i>&nbsp;     *
+<i>440</i>&nbsp;     * @throws NullPointerException if &lt;code&gt;calendar&lt;/code&gt; is
+<i>441</i>&nbsp;     *     &lt;code&gt;null&lt;/code&gt;.
+<i>442</i>&nbsp;     */
+<i>443</i>&nbsp;    @Override
+<i>444</i>&nbsp;    public long getLastMillisecond(Calendar calendar) {
+<b class="fc"><i>445</i>&nbsp;        return getFirstMillisecond(calendar);</b>
+<i>446</i>&nbsp;    }
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

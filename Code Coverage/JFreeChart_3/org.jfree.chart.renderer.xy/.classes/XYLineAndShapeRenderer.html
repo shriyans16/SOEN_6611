@@ -1,0 +1,1485 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: XYLineAndShapeRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: XYLineAndShapeRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">XYLineAndShapeRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.7%
+  </span>
+  <span class="absValue">
+    (43/ 52)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.2%
+  </span>
+  <span class="absValue">
+    (254/ 309)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">XYLineAndShapeRenderer$State</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/ 10)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    80.4%
+  </span>
+  <span class="absValue">
+    (45/ 56)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (261/ 319)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * ---------------------------
+<i>28</i>&nbsp; * XYLineAndShapeRenderer.java
+<i>29</i>&nbsp; * ---------------------------
+<i>30</i>&nbsp; * (C) Copyright 2004-2014, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes:
+<i>36</i>&nbsp; * --------
+<i>37</i>&nbsp; * 27-Jan-2004 : Version 1 (DG);
+<i>38</i>&nbsp; * 10-Feb-2004 : Minor change to drawItem() method to make cut-and-paste
+<i>39</i>&nbsp; *               overriding easier (DG);
+<i>40</i>&nbsp; * 25-Feb-2004 : Replaced CrosshairInfo with CrosshairState (DG);
+<i>41</i>&nbsp; * 25-Aug-2004 : Added support for chart entities (required for tooltips) (DG);
+<i>42</i>&nbsp; * 24-Sep-2004 : Added flag to allow whole series to be drawn as a path
+<i>43</i>&nbsp; *               (necessary when using a dashed stroke with many data
+<i>44</i>&nbsp; *               items) (DG);
+<i>45</i>&nbsp; * 04-Oct-2004 : Renamed BooleanUtils --&gt; BooleanUtilities (DG);
+<i>46</i>&nbsp; * 11-Nov-2004 : Now uses ShapeUtilities to translate shapes (DG);
+<i>47</i>&nbsp; * 27-Jan-2005 : The getLegendItem() method now omits hidden series (DG);
+<i>48</i>&nbsp; * 28-Jan-2005 : Added new constructor (DG);
+<i>49</i>&nbsp; * 09-Mar-2005 : Added fillPaint settings (DG);
+<i>50</i>&nbsp; * 20-Apr-2005 : Use generators for legend tooltips and URLs (DG);
+<i>51</i>&nbsp; * 22-Jul-2005 : Renamed defaultLinesVisible --&gt; baseLinesVisible,
+<i>52</i>&nbsp; *               defaultShapesVisible --&gt; baseShapesVisible and
+<i>53</i>&nbsp; *               defaultShapesFilled --&gt; baseShapesFilled (DG);
+<i>54</i>&nbsp; * 29-Jul-2005 : Added code to draw item labels (DG);
+<i>55</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>56</i>&nbsp; * 20-Jul-2006 : Set dataset and series indices in LegendItem (DG);
+<i>57</i>&nbsp; * 06-Feb-2007 : Fixed bug 1086307, crosshairs with multiple axes (DG);
+<i>58</i>&nbsp; * 21-Feb-2007 : Fixed bugs in clone() and equals() (DG);
+<i>59</i>&nbsp; * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
+<i>60</i>&nbsp; * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+<i>61</i>&nbsp; * 08-Jun-2007 : Fix for bug 1731912 where entities are created even for data
+<i>62</i>&nbsp; *               items that are not displayed (DG);
+<i>63</i>&nbsp; * 26-Oct-2007 : Deprecated override attributes (DG);
+<i>64</i>&nbsp; * 02-Jun-2008 : Fixed tooltips at lower edges of data area (DG);
+<i>65</i>&nbsp; * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
+<i>66</i>&nbsp; * 19-Sep-2008 : Fixed bug with drawSeriesLineAsPath - patch by Greg Darke (DG);
+<i>67</i>&nbsp; * 18-May-2009 : Clip lines in drawPrimaryLine() (DG);
+<i>68</i>&nbsp; * 05-Jul-2012 : Removed JDK 1.3.1 code (DG);
+<i>69</i>&nbsp; * 02-Jul-2013 : Use ParamChecks (DG);
+<i>70</i>&nbsp; *
+<i>71</i>&nbsp; */
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;import java.awt.Graphics2D;
+<i>76</i>&nbsp;import java.awt.Paint;
+<i>77</i>&nbsp;import java.awt.Shape;
+<i>78</i>&nbsp;import java.awt.Stroke;
+<i>79</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>80</i>&nbsp;import java.awt.geom.Line2D;
+<i>81</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>82</i>&nbsp;import java.io.IOException;
+<i>83</i>&nbsp;import java.io.ObjectInputStream;
+<i>84</i>&nbsp;import java.io.ObjectOutputStream;
+<i>85</i>&nbsp;import java.io.Serializable;
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;import org.jfree.chart.LegendItem;
+<i>88</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>89</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>90</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>91</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>92</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>93</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>94</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>95</i>&nbsp;import org.jfree.chart.util.LineUtilities;
+<i>96</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>97</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>98</i>&nbsp;import org.jfree.io.SerialUtilities;
+<i>99</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>100</i>&nbsp;import org.jfree.util.BooleanList;
+<i>101</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>102</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>103</i>&nbsp;import org.jfree.util.ShapeUtilities;
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;/**
+<i>106</i>&nbsp; * A renderer that connects data points with lines and/or draws shapes at each
+<i>107</i>&nbsp; * data point.  This renderer is designed for use with the {@link XYPlot}
+<i>108</i>&nbsp; * class.  The example shown here is generated by
+<i>109</i>&nbsp; * the &lt;code&gt;XYLineAndShapeRendererDemo2.java&lt;/code&gt; program included in the
+<i>110</i>&nbsp; * JFreeChart demo collection:
+<i>111</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>112</i>&nbsp; * &lt;img src=&quot;../../../../../images/XYLineAndShapeRendererSample.png&quot;
+<i>113</i>&nbsp; * alt=&quot;XYLineAndShapeRendererSample.png&quot;&gt;
+<i>114</i>&nbsp; *
+<i>115</i>&nbsp; */
+<i>116</i>&nbsp;public class XYLineAndShapeRenderer extends AbstractXYItemRenderer
+<i>117</i>&nbsp;        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /** For serialization. */
+<i>120</i>&nbsp;    private static final long serialVersionUID = -7435246895986425885L;
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * A flag that controls whether or not lines are visible for ALL series.
+<i>124</i>&nbsp;     *
+<i>125</i>&nbsp;     * @deprecated As of 1.0.7.
+<i>126</i>&nbsp;     */
+<i>127</i>&nbsp;    private Boolean linesVisible;
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     * A table of flags that control (per series) whether or not lines are
+<i>131</i>&nbsp;     * visible.
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    private BooleanList seriesLinesVisible;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /** The default value returned by the getLinesVisible() method. */
+<i>136</i>&nbsp;    private boolean baseLinesVisible;
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;    /** The shape that is used to represent a line in the legend. */
+<i>139</i>&nbsp;    private transient Shape legendLine;
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * A flag that controls whether or not shapes are visible for ALL series.
+<i>143</i>&nbsp;     *
+<i>144</i>&nbsp;     * @deprecated As of 1.0.7.
+<i>145</i>&nbsp;     */
+<i>146</i>&nbsp;    private Boolean shapesVisible;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /**
+<i>149</i>&nbsp;     * A table of flags that control (per series) whether or not shapes are
+<i>150</i>&nbsp;     * visible.
+<i>151</i>&nbsp;     */
+<i>152</i>&nbsp;    private BooleanList seriesShapesVisible;
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    /** The default value returned by the getShapeVisible() method. */
+<i>155</i>&nbsp;    private boolean baseShapesVisible;
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     * A flag that controls whether or not shapes are filled for ALL series.
+<i>159</i>&nbsp;     *
+<i>160</i>&nbsp;     * @deprecated As of 1.0.7.
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    private Boolean shapesFilled;
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * A table of flags that control (per series) whether or not shapes are
+<i>166</i>&nbsp;     * filled.
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    private BooleanList seriesShapesFilled;
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /** The default value returned by the getShapeFilled() method. */
+<i>171</i>&nbsp;    private boolean baseShapesFilled;
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /** A flag that controls whether outlines are drawn for shapes. */
+<i>174</i>&nbsp;    private boolean drawOutlines;
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * A flag that controls whether the fill paint is used for filling
+<i>178</i>&nbsp;     * shapes.
+<i>179</i>&nbsp;     */
+<i>180</i>&nbsp;    private boolean useFillPaint;
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * A flag that controls whether the outline paint is used for drawing shape
+<i>184</i>&nbsp;     * outlines.
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    private boolean useOutlinePaint;
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * A flag that controls whether or not each series is drawn as a single
+<i>190</i>&nbsp;     * path.
+<i>191</i>&nbsp;     */
+<i>192</i>&nbsp;    private boolean drawSeriesLineAsPath;
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;    /**
+<i>195</i>&nbsp;     * Creates a new renderer with both lines and shapes visible.
+<i>196</i>&nbsp;     */
+<i>197</i>&nbsp;    public XYLineAndShapeRenderer() {
+<b class="fc"><i>198</i>&nbsp;        this(true, true);</b>
+<b class="fc"><i>199</i>&nbsp;    }</b>
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    /**
+<i>202</i>&nbsp;     * Creates a new renderer.
+<i>203</i>&nbsp;     *
+<i>204</i>&nbsp;     * @param lines  lines visible?
+<i>205</i>&nbsp;     * @param shapes  shapes visible?
+<i>206</i>&nbsp;     */
+<b class="fc"><i>207</i>&nbsp;    public XYLineAndShapeRenderer(boolean lines, boolean shapes) {</b>
+<b class="fc"><i>208</i>&nbsp;        this.linesVisible = null;</b>
+<b class="fc"><i>209</i>&nbsp;        this.seriesLinesVisible = new BooleanList();</b>
+<b class="fc"><i>210</i>&nbsp;        this.baseLinesVisible = lines;</b>
+<b class="fc"><i>211</i>&nbsp;        this.legendLine = new Line2D.Double(-7.0, 0.0, 7.0, 0.0);</b>
+<i>212</i>&nbsp;
+<b class="fc"><i>213</i>&nbsp;        this.shapesVisible = null;</b>
+<b class="fc"><i>214</i>&nbsp;        this.seriesShapesVisible = new BooleanList();</b>
+<b class="fc"><i>215</i>&nbsp;        this.baseShapesVisible = shapes;</b>
+<i>216</i>&nbsp;
+<b class="fc"><i>217</i>&nbsp;        this.shapesFilled = null;</b>
+<b class="fc"><i>218</i>&nbsp;        this.useFillPaint = false;     // use item paint for fills by default</b>
+<b class="fc"><i>219</i>&nbsp;        this.seriesShapesFilled = new BooleanList();</b>
+<b class="fc"><i>220</i>&nbsp;        this.baseShapesFilled = true;</b>
+<i>221</i>&nbsp;
+<b class="fc"><i>222</i>&nbsp;        this.drawOutlines = true;</b>
+<b class="fc"><i>223</i>&nbsp;        this.useOutlinePaint = false;  // use item paint for outlines by</b>
+<i>224</i>&nbsp;                                       // default, not outline paint
+<i>225</i>&nbsp;
+<b class="fc"><i>226</i>&nbsp;        this.drawSeriesLineAsPath = false;</b>
+<b class="fc"><i>227</i>&nbsp;    }</b>
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Returns a flag that controls whether or not each series is drawn as a
+<i>231</i>&nbsp;     * single path.
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @return A boolean.
+<i>234</i>&nbsp;     *
+<i>235</i>&nbsp;     * @see #setDrawSeriesLineAsPath(boolean)
+<i>236</i>&nbsp;     */
+<i>237</i>&nbsp;    public boolean getDrawSeriesLineAsPath() {
+<b class="nc"><i>238</i>&nbsp;        return this.drawSeriesLineAsPath;</b>
+<i>239</i>&nbsp;    }
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Sets the flag that controls whether or not each series is drawn as a
+<i>243</i>&nbsp;     * single path and sends a {@link RendererChangeEvent} to all registered
+<i>244</i>&nbsp;     * listeners.
+<i>245</i>&nbsp;     *
+<i>246</i>&nbsp;     * @param flag  the flag.
+<i>247</i>&nbsp;     *
+<i>248</i>&nbsp;     * @see #getDrawSeriesLineAsPath()
+<i>249</i>&nbsp;     */
+<i>250</i>&nbsp;    public void setDrawSeriesLineAsPath(boolean flag) {
+<b class="fc"><i>251</i>&nbsp;        if (this.drawSeriesLineAsPath != flag) {</b>
+<b class="fc"><i>252</i>&nbsp;            this.drawSeriesLineAsPath = flag;</b>
+<b class="fc"><i>253</i>&nbsp;            fireChangeEvent();</b>
+<i>254</i>&nbsp;        }
+<b class="fc"><i>255</i>&nbsp;    }</b>
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Returns the number of passes through the data that the renderer requires
+<i>259</i>&nbsp;     * in order to draw the chart.  Most charts will require a single pass, but
+<i>260</i>&nbsp;     * some require two passes.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @return The pass count.
+<i>263</i>&nbsp;     */
+<i>264</i>&nbsp;    @Override
+<i>265</i>&nbsp;    public int getPassCount() {
+<b class="fc"><i>266</i>&nbsp;        return 2;</b>
+<i>267</i>&nbsp;    }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    // LINES VISIBLE
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * Returns the flag used to control whether or not the shape for an item is
+<i>273</i>&nbsp;     * visible.
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @param series  the series index (zero-based).
+<i>276</i>&nbsp;     * @param item  the item index (zero-based).
+<i>277</i>&nbsp;     *
+<i>278</i>&nbsp;     * @return A boolean.
+<i>279</i>&nbsp;     */
+<i>280</i>&nbsp;    public boolean getItemLineVisible(int series, int item) {
+<b class="fc"><i>281</i>&nbsp;        Boolean flag = this.linesVisible;</b>
+<b class="fc"><i>282</i>&nbsp;        if (flag == null) {</b>
+<b class="fc"><i>283</i>&nbsp;            flag = getSeriesLinesVisible(series);</b>
+<i>284</i>&nbsp;        }
+<b class="fc"><i>285</i>&nbsp;        if (flag != null) {</b>
+<b class="nc"><i>286</i>&nbsp;            return flag.booleanValue();</b>
+<i>287</i>&nbsp;        }
+<i>288</i>&nbsp;        else {
+<b class="fc"><i>289</i>&nbsp;            return this.baseLinesVisible;</b>
+<i>290</i>&nbsp;        }
+<i>291</i>&nbsp;    }
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /**
+<i>294</i>&nbsp;     * Returns a flag that controls whether or not lines are drawn for ALL
+<i>295</i>&nbsp;     * series.  If this flag is &lt;code&gt;null&lt;/code&gt;, then the &quot;per series&quot;
+<i>296</i>&nbsp;     * settings will apply.
+<i>297</i>&nbsp;     *
+<i>298</i>&nbsp;     * @return A flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>299</i>&nbsp;     *
+<i>300</i>&nbsp;     * @see #setLinesVisible(Boolean)
+<i>301</i>&nbsp;     *
+<i>302</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>303</i>&nbsp;     */
+<i>304</i>&nbsp;    public Boolean getLinesVisible() {
+<b class="nc"><i>305</i>&nbsp;        return this.linesVisible;</b>
+<i>306</i>&nbsp;    }
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;    /**
+<i>309</i>&nbsp;     * Sets a flag that controls whether or not lines are drawn between the
+<i>310</i>&nbsp;     * items in ALL series, and sends a {@link RendererChangeEvent} to all
+<i>311</i>&nbsp;     * registered listeners.  You need to set this to &lt;code&gt;null&lt;/code&gt; if you
+<i>312</i>&nbsp;     * want the &quot;per series&quot; settings to apply.
+<i>313</i>&nbsp;     *
+<i>314</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @see #getLinesVisible()
+<i>317</i>&nbsp;     *
+<i>318</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>319</i>&nbsp;     */
+<i>320</i>&nbsp;    public void setLinesVisible(Boolean visible) {
+<b class="fc"><i>321</i>&nbsp;        this.linesVisible = visible;</b>
+<b class="fc"><i>322</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>323</i>&nbsp;    }</b>
+<i>324</i>&nbsp;
+<i>325</i>&nbsp;    /**
+<i>326</i>&nbsp;     * Sets a flag that controls whether or not lines are drawn between the
+<i>327</i>&nbsp;     * items in ALL series, and sends a {@link RendererChangeEvent} to all
+<i>328</i>&nbsp;     * registered listeners.
+<i>329</i>&nbsp;     *
+<i>330</i>&nbsp;     * @param visible  the flag.
+<i>331</i>&nbsp;     *
+<i>332</i>&nbsp;     * @see #getLinesVisible()
+<i>333</i>&nbsp;     *
+<i>334</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>335</i>&nbsp;     */
+<i>336</i>&nbsp;    public void setLinesVisible(boolean visible) {
+<b class="fc"><i>337</i>&nbsp;        setLinesVisible(Boolean.valueOf(visible));</b>
+<b class="fc"><i>338</i>&nbsp;    }</b>
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;    /**
+<i>341</i>&nbsp;     * Returns the flag used to control whether or not the lines for a series
+<i>342</i>&nbsp;     * are visible.
+<i>343</i>&nbsp;     *
+<i>344</i>&nbsp;     * @param series  the series index (zero-based).
+<i>345</i>&nbsp;     *
+<i>346</i>&nbsp;     * @return The flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>347</i>&nbsp;     *
+<i>348</i>&nbsp;     * @see #setSeriesLinesVisible(int, Boolean)
+<i>349</i>&nbsp;     */
+<i>350</i>&nbsp;    public Boolean getSeriesLinesVisible(int series) {
+<b class="fc"><i>351</i>&nbsp;        return this.seriesLinesVisible.getBoolean(series);</b>
+<i>352</i>&nbsp;    }
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;    /**
+<i>355</i>&nbsp;     * Sets the &#39;lines visible&#39; flag for a series and sends a
+<i>356</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>357</i>&nbsp;     *
+<i>358</i>&nbsp;     * @param series  the series index (zero-based).
+<i>359</i>&nbsp;     * @param flag  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>360</i>&nbsp;     *
+<i>361</i>&nbsp;     * @see #getSeriesLinesVisible(int)
+<i>362</i>&nbsp;     */
+<i>363</i>&nbsp;    public void setSeriesLinesVisible(int series, Boolean flag) {
+<b class="fc"><i>364</i>&nbsp;        this.seriesLinesVisible.setBoolean(series, flag);</b>
+<b class="fc"><i>365</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>366</i>&nbsp;    }</b>
+<i>367</i>&nbsp;
+<i>368</i>&nbsp;    /**
+<i>369</i>&nbsp;     * Sets the &#39;lines visible&#39; flag for a series and sends a
+<i>370</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>371</i>&nbsp;     *
+<i>372</i>&nbsp;     * @param series  the series index (zero-based).
+<i>373</i>&nbsp;     * @param visible  the flag.
+<i>374</i>&nbsp;     *
+<i>375</i>&nbsp;     * @see #getSeriesLinesVisible(int)
+<i>376</i>&nbsp;     */
+<i>377</i>&nbsp;    public void setSeriesLinesVisible(int series, boolean visible) {
+<b class="fc"><i>378</i>&nbsp;        setSeriesLinesVisible(series, Boolean.valueOf(visible));</b>
+<b class="fc"><i>379</i>&nbsp;    }</b>
+<i>380</i>&nbsp;
+<i>381</i>&nbsp;    /**
+<i>382</i>&nbsp;     * Returns the base &#39;lines visible&#39; attribute.
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @return The base flag.
+<i>385</i>&nbsp;     *
+<i>386</i>&nbsp;     * @see #setBaseLinesVisible(boolean)
+<i>387</i>&nbsp;     */
+<i>388</i>&nbsp;    public boolean getBaseLinesVisible() {
+<b class="nc"><i>389</i>&nbsp;        return this.baseLinesVisible;</b>
+<i>390</i>&nbsp;    }
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    /**
+<i>393</i>&nbsp;     * Sets the base &#39;lines visible&#39; flag and sends a
+<i>394</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>395</i>&nbsp;     *
+<i>396</i>&nbsp;     * @param flag  the flag.
+<i>397</i>&nbsp;     *
+<i>398</i>&nbsp;     * @see #getBaseLinesVisible()
+<i>399</i>&nbsp;     */
+<i>400</i>&nbsp;    public void setBaseLinesVisible(boolean flag) {
+<b class="fc"><i>401</i>&nbsp;        this.baseLinesVisible = flag;</b>
+<b class="fc"><i>402</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>403</i>&nbsp;    }</b>
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    /**
+<i>406</i>&nbsp;     * Returns the shape used to represent a line in the legend.
+<i>407</i>&nbsp;     *
+<i>408</i>&nbsp;     * @return The legend line (never &lt;code&gt;null&lt;/code&gt;).
+<i>409</i>&nbsp;     *
+<i>410</i>&nbsp;     * @see #setLegendLine(Shape)
+<i>411</i>&nbsp;     */
+<i>412</i>&nbsp;    public Shape getLegendLine() {
+<b class="nc"><i>413</i>&nbsp;        return this.legendLine;</b>
+<i>414</i>&nbsp;    }
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;    /**
+<i>417</i>&nbsp;     * Sets the shape used as a line in each legend item and sends a
+<i>418</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>419</i>&nbsp;     *
+<i>420</i>&nbsp;     * @param line  the line (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>421</i>&nbsp;     *
+<i>422</i>&nbsp;     * @see #getLegendLine()
+<i>423</i>&nbsp;     */
+<i>424</i>&nbsp;    public void setLegendLine(Shape line) {
+<b class="fc"><i>425</i>&nbsp;        ParamChecks.nullNotPermitted(line, &quot;line&quot;);</b>
+<b class="fc"><i>426</i>&nbsp;        this.legendLine = line;</b>
+<b class="fc"><i>427</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>428</i>&nbsp;    }</b>
+<i>429</i>&nbsp;
+<i>430</i>&nbsp;    // SHAPES VISIBLE
+<i>431</i>&nbsp;
+<i>432</i>&nbsp;    /**
+<i>433</i>&nbsp;     * Returns the flag used to control whether or not the shape for an item is
+<i>434</i>&nbsp;     * visible.
+<i>435</i>&nbsp;     * &lt;p&gt;
+<i>436</i>&nbsp;     * The default implementation passes control to the
+<i>437</i>&nbsp;     * &lt;code&gt;getSeriesShapesVisible&lt;/code&gt; method. You can override this method
+<i>438</i>&nbsp;     * if you require different behaviour.
+<i>439</i>&nbsp;     *
+<i>440</i>&nbsp;     * @param series  the series index (zero-based).
+<i>441</i>&nbsp;     * @param item  the item index (zero-based).
+<i>442</i>&nbsp;     *
+<i>443</i>&nbsp;     * @return A boolean.
+<i>444</i>&nbsp;     */
+<i>445</i>&nbsp;    public boolean getItemShapeVisible(int series, int item) {
+<b class="fc"><i>446</i>&nbsp;        Boolean flag = this.shapesVisible;</b>
+<b class="fc"><i>447</i>&nbsp;        if (flag == null) {</b>
+<b class="fc"><i>448</i>&nbsp;            flag = getSeriesShapesVisible(series);</b>
+<i>449</i>&nbsp;        }
+<b class="fc"><i>450</i>&nbsp;        if (flag != null) {</b>
+<b class="nc"><i>451</i>&nbsp;            return flag.booleanValue();</b>
+<i>452</i>&nbsp;        }
+<i>453</i>&nbsp;        else {
+<b class="fc"><i>454</i>&nbsp;            return this.baseShapesVisible;</b>
+<i>455</i>&nbsp;        }
+<i>456</i>&nbsp;    }
+<i>457</i>&nbsp;
+<i>458</i>&nbsp;    /**
+<i>459</i>&nbsp;     * Returns the flag that controls whether the shapes are visible for the
+<i>460</i>&nbsp;     * items in ALL series.
+<i>461</i>&nbsp;     *
+<i>462</i>&nbsp;     * @return The flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>463</i>&nbsp;     *
+<i>464</i>&nbsp;     * @see #setShapesVisible(Boolean)
+<i>465</i>&nbsp;     *
+<i>466</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>467</i>&nbsp;     */
+<i>468</i>&nbsp;    public Boolean getShapesVisible() {
+<b class="nc"><i>469</i>&nbsp;        return this.shapesVisible;</b>
+<i>470</i>&nbsp;    }
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;    /**
+<i>473</i>&nbsp;     * Sets the &#39;shapes visible&#39; for ALL series and sends a
+<i>474</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>475</i>&nbsp;     *
+<i>476</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>477</i>&nbsp;     *
+<i>478</i>&nbsp;     * @see #getShapesVisible()
+<i>479</i>&nbsp;     *
+<i>480</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>481</i>&nbsp;     */
+<i>482</i>&nbsp;    public void setShapesVisible(Boolean visible) {
+<b class="fc"><i>483</i>&nbsp;        this.shapesVisible = visible;</b>
+<b class="fc"><i>484</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>485</i>&nbsp;    }</b>
+<i>486</i>&nbsp;
+<i>487</i>&nbsp;    /**
+<i>488</i>&nbsp;     * Sets the &#39;shapes visible&#39; for ALL series and sends a
+<i>489</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>490</i>&nbsp;     *
+<i>491</i>&nbsp;     * @param visible  the flag.
+<i>492</i>&nbsp;     *
+<i>493</i>&nbsp;     * @see #getShapesVisible()
+<i>494</i>&nbsp;     *
+<i>495</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>496</i>&nbsp;     */
+<i>497</i>&nbsp;    public void setShapesVisible(boolean visible) {
+<b class="fc"><i>498</i>&nbsp;        setShapesVisible(Boolean.valueOf(visible));</b>
+<b class="fc"><i>499</i>&nbsp;    }</b>
+<i>500</i>&nbsp;
+<i>501</i>&nbsp;    /**
+<i>502</i>&nbsp;     * Returns the flag used to control whether or not the shapes for a series
+<i>503</i>&nbsp;     * are visible.
+<i>504</i>&nbsp;     *
+<i>505</i>&nbsp;     * @param series  the series index (zero-based).
+<i>506</i>&nbsp;     *
+<i>507</i>&nbsp;     * @return A boolean.
+<i>508</i>&nbsp;     *
+<i>509</i>&nbsp;     * @see #setSeriesShapesVisible(int, Boolean)
+<i>510</i>&nbsp;     */
+<i>511</i>&nbsp;    public Boolean getSeriesShapesVisible(int series) {
+<b class="fc"><i>512</i>&nbsp;        return this.seriesShapesVisible.getBoolean(series);</b>
+<i>513</i>&nbsp;    }
+<i>514</i>&nbsp;
+<i>515</i>&nbsp;    /**
+<i>516</i>&nbsp;     * Sets the &#39;shapes visible&#39; flag for a series and sends a
+<i>517</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>518</i>&nbsp;     *
+<i>519</i>&nbsp;     * @param series  the series index (zero-based).
+<i>520</i>&nbsp;     * @param visible  the flag.
+<i>521</i>&nbsp;     *
+<i>522</i>&nbsp;     * @see #getSeriesShapesVisible(int)
+<i>523</i>&nbsp;     */
+<i>524</i>&nbsp;    public void setSeriesShapesVisible(int series, boolean visible) {
+<b class="fc"><i>525</i>&nbsp;        setSeriesShapesVisible(series, Boolean.valueOf(visible));</b>
+<b class="fc"><i>526</i>&nbsp;    }</b>
+<i>527</i>&nbsp;
+<i>528</i>&nbsp;    /**
+<i>529</i>&nbsp;     * Sets the &#39;shapes visible&#39; flag for a series and sends a
+<i>530</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>531</i>&nbsp;     *
+<i>532</i>&nbsp;     * @param series  the series index (zero-based).
+<i>533</i>&nbsp;     * @param flag  the flag.
+<i>534</i>&nbsp;     *
+<i>535</i>&nbsp;     * @see #getSeriesShapesVisible(int)
+<i>536</i>&nbsp;     */
+<i>537</i>&nbsp;    public void setSeriesShapesVisible(int series, Boolean flag) {
+<b class="fc"><i>538</i>&nbsp;        this.seriesShapesVisible.setBoolean(series, flag);</b>
+<b class="fc"><i>539</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>540</i>&nbsp;    }</b>
+<i>541</i>&nbsp;
+<i>542</i>&nbsp;    /**
+<i>543</i>&nbsp;     * Returns the base &#39;shape visible&#39; attribute.
+<i>544</i>&nbsp;     *
+<i>545</i>&nbsp;     * @return The base flag.
+<i>546</i>&nbsp;     *
+<i>547</i>&nbsp;     * @see #setBaseShapesVisible(boolean)
+<i>548</i>&nbsp;     */
+<i>549</i>&nbsp;    public boolean getBaseShapesVisible() {
+<b class="nc"><i>550</i>&nbsp;        return this.baseShapesVisible;</b>
+<i>551</i>&nbsp;    }
+<i>552</i>&nbsp;
+<i>553</i>&nbsp;    /**
+<i>554</i>&nbsp;     * Sets the base &#39;shapes visible&#39; flag and sends a
+<i>555</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>556</i>&nbsp;     *
+<i>557</i>&nbsp;     * @param flag  the flag.
+<i>558</i>&nbsp;     *
+<i>559</i>&nbsp;     * @see #getBaseShapesVisible()
+<i>560</i>&nbsp;     */
+<i>561</i>&nbsp;    public void setBaseShapesVisible(boolean flag) {
+<b class="fc"><i>562</i>&nbsp;        this.baseShapesVisible = flag;</b>
+<b class="fc"><i>563</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>564</i>&nbsp;    }</b>
+<i>565</i>&nbsp;
+<i>566</i>&nbsp;    // SHAPES FILLED
+<i>567</i>&nbsp;
+<i>568</i>&nbsp;    /**
+<i>569</i>&nbsp;     * Returns the flag used to control whether or not the shape for an item
+<i>570</i>&nbsp;     * is filled.
+<i>571</i>&nbsp;     * &lt;p&gt;
+<i>572</i>&nbsp;     * The default implementation passes control to the
+<i>573</i>&nbsp;     * &lt;code&gt;getSeriesShapesFilled&lt;/code&gt; method. You can override this method
+<i>574</i>&nbsp;     * if you require different behaviour.
+<i>575</i>&nbsp;     *
+<i>576</i>&nbsp;     * @param series  the series index (zero-based).
+<i>577</i>&nbsp;     * @param item  the item index (zero-based).
+<i>578</i>&nbsp;     *
+<i>579</i>&nbsp;     * @return A boolean.
+<i>580</i>&nbsp;     */
+<i>581</i>&nbsp;    public boolean getItemShapeFilled(int series, int item) {
+<b class="fc"><i>582</i>&nbsp;        Boolean flag = this.shapesFilled;</b>
+<b class="fc"><i>583</i>&nbsp;        if (flag == null) {</b>
+<b class="fc"><i>584</i>&nbsp;            flag = getSeriesShapesFilled(series);</b>
+<i>585</i>&nbsp;        }
+<b class="fc"><i>586</i>&nbsp;        if (flag != null) {</b>
+<b class="nc"><i>587</i>&nbsp;            return flag.booleanValue();</b>
+<i>588</i>&nbsp;        }
+<i>589</i>&nbsp;        else {
+<b class="fc"><i>590</i>&nbsp;            return this.baseShapesFilled;</b>
+<i>591</i>&nbsp;        }
+<i>592</i>&nbsp;    }
+<i>593</i>&nbsp;
+<i>594</i>&nbsp;    /**
+<i>595</i>&nbsp;     * Sets the &#39;shapes filled&#39; for ALL series and sends a
+<i>596</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>597</i>&nbsp;     *
+<i>598</i>&nbsp;     * @param filled  the flag.
+<i>599</i>&nbsp;     *
+<i>600</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>601</i>&nbsp;     */
+<i>602</i>&nbsp;    public void setShapesFilled(boolean filled) {
+<b class="fc"><i>603</i>&nbsp;        setShapesFilled(Boolean.valueOf(filled));</b>
+<b class="fc"><i>604</i>&nbsp;    }</b>
+<i>605</i>&nbsp;
+<i>606</i>&nbsp;    /**
+<i>607</i>&nbsp;     * Sets the &#39;shapes filled&#39; for ALL series and sends a
+<i>608</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>609</i>&nbsp;     *
+<i>610</i>&nbsp;     * @param filled  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>611</i>&nbsp;     *
+<i>612</i>&nbsp;     * @deprecated As of 1.0.7, use the per-series and base level settings.
+<i>613</i>&nbsp;     */
+<i>614</i>&nbsp;    public void setShapesFilled(Boolean filled) {
+<b class="fc"><i>615</i>&nbsp;        this.shapesFilled = filled;</b>
+<b class="fc"><i>616</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>617</i>&nbsp;    }</b>
+<i>618</i>&nbsp;
+<i>619</i>&nbsp;    /**
+<i>620</i>&nbsp;     * Returns the flag used to control whether or not the shapes for a series
+<i>621</i>&nbsp;     * are filled.
+<i>622</i>&nbsp;     *
+<i>623</i>&nbsp;     * @param series  the series index (zero-based).
+<i>624</i>&nbsp;     *
+<i>625</i>&nbsp;     * @return A boolean.
+<i>626</i>&nbsp;     *
+<i>627</i>&nbsp;     * @see #setSeriesShapesFilled(int, Boolean)
+<i>628</i>&nbsp;     */
+<i>629</i>&nbsp;    public Boolean getSeriesShapesFilled(int series) {
+<b class="fc"><i>630</i>&nbsp;        return this.seriesShapesFilled.getBoolean(series);</b>
+<i>631</i>&nbsp;    }
+<i>632</i>&nbsp;
+<i>633</i>&nbsp;    /**
+<i>634</i>&nbsp;     * Sets the &#39;shapes filled&#39; flag for a series and sends a
+<i>635</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>636</i>&nbsp;     *
+<i>637</i>&nbsp;     * @param series  the series index (zero-based).
+<i>638</i>&nbsp;     * @param flag  the flag.
+<i>639</i>&nbsp;     *
+<i>640</i>&nbsp;     * @see #getSeriesShapesFilled(int)
+<i>641</i>&nbsp;     */
+<i>642</i>&nbsp;    public void setSeriesShapesFilled(int series, boolean flag) {
+<b class="fc"><i>643</i>&nbsp;        setSeriesShapesFilled(series, Boolean.valueOf(flag));</b>
+<b class="fc"><i>644</i>&nbsp;    }</b>
+<i>645</i>&nbsp;
+<i>646</i>&nbsp;    /**
+<i>647</i>&nbsp;     * Sets the &#39;shapes filled&#39; flag for a series and sends a
+<i>648</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>649</i>&nbsp;     *
+<i>650</i>&nbsp;     * @param series  the series index (zero-based).
+<i>651</i>&nbsp;     * @param flag  the flag.
+<i>652</i>&nbsp;     *
+<i>653</i>&nbsp;     * @see #getSeriesShapesFilled(int)
+<i>654</i>&nbsp;     */
+<i>655</i>&nbsp;    public void setSeriesShapesFilled(int series, Boolean flag) {
+<b class="fc"><i>656</i>&nbsp;        this.seriesShapesFilled.setBoolean(series, flag);</b>
+<b class="fc"><i>657</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>658</i>&nbsp;    }</b>
+<i>659</i>&nbsp;
+<i>660</i>&nbsp;    /**
+<i>661</i>&nbsp;     * Returns the base &#39;shape filled&#39; attribute.
+<i>662</i>&nbsp;     *
+<i>663</i>&nbsp;     * @return The base flag.
+<i>664</i>&nbsp;     *
+<i>665</i>&nbsp;     * @see #setBaseShapesFilled(boolean)
+<i>666</i>&nbsp;     */
+<i>667</i>&nbsp;    public boolean getBaseShapesFilled() {
+<b class="nc"><i>668</i>&nbsp;        return this.baseShapesFilled;</b>
+<i>669</i>&nbsp;    }
+<i>670</i>&nbsp;
+<i>671</i>&nbsp;    /**
+<i>672</i>&nbsp;     * Sets the base &#39;shapes filled&#39; flag and sends a
+<i>673</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>674</i>&nbsp;     *
+<i>675</i>&nbsp;     * @param flag  the flag.
+<i>676</i>&nbsp;     *
+<i>677</i>&nbsp;     * @see #getBaseShapesFilled()
+<i>678</i>&nbsp;     */
+<i>679</i>&nbsp;    public void setBaseShapesFilled(boolean flag) {
+<b class="fc"><i>680</i>&nbsp;        this.baseShapesFilled = flag;</b>
+<b class="fc"><i>681</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>682</i>&nbsp;    }</b>
+<i>683</i>&nbsp;
+<i>684</i>&nbsp;    /**
+<i>685</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if outlines should be drawn for shapes, and
+<i>686</i>&nbsp;     * &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>687</i>&nbsp;     *
+<i>688</i>&nbsp;     * @return A boolean.
+<i>689</i>&nbsp;     *
+<i>690</i>&nbsp;     * @see #setDrawOutlines(boolean)
+<i>691</i>&nbsp;     */
+<i>692</i>&nbsp;    public boolean getDrawOutlines() {
+<b class="fc"><i>693</i>&nbsp;        return this.drawOutlines;</b>
+<i>694</i>&nbsp;    }
+<i>695</i>&nbsp;
+<i>696</i>&nbsp;    /**
+<i>697</i>&nbsp;     * Sets the flag that controls whether outlines are drawn for
+<i>698</i>&nbsp;     * shapes, and sends a {@link RendererChangeEvent} to all registered
+<i>699</i>&nbsp;     * listeners.
+<i>700</i>&nbsp;     * &lt;P&gt;
+<i>701</i>&nbsp;     * In some cases, shapes look better if they do NOT have an outline, but
+<i>702</i>&nbsp;     * this flag allows you to set your own preference.
+<i>703</i>&nbsp;     *
+<i>704</i>&nbsp;     * @param flag  the flag.
+<i>705</i>&nbsp;     *
+<i>706</i>&nbsp;     * @see #getDrawOutlines()
+<i>707</i>&nbsp;     */
+<i>708</i>&nbsp;    public void setDrawOutlines(boolean flag) {
+<b class="fc"><i>709</i>&nbsp;        this.drawOutlines = flag;</b>
+<b class="fc"><i>710</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>711</i>&nbsp;    }</b>
+<i>712</i>&nbsp;
+<i>713</i>&nbsp;    /**
+<i>714</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the renderer should use the fill paint
+<i>715</i>&nbsp;     * setting to fill shapes, and &lt;code&gt;false&lt;/code&gt; if it should just
+<i>716</i>&nbsp;     * use the regular paint.
+<i>717</i>&nbsp;     * &lt;p&gt;
+<i>718</i>&nbsp;     * Refer to &lt;code&gt;XYLineAndShapeRendererDemo2.java&lt;/code&gt; to see the
+<i>719</i>&nbsp;     * effect of this flag.
+<i>720</i>&nbsp;     *
+<i>721</i>&nbsp;     * @return A boolean.
+<i>722</i>&nbsp;     *
+<i>723</i>&nbsp;     * @see #setUseFillPaint(boolean)
+<i>724</i>&nbsp;     * @see #getUseOutlinePaint()
+<i>725</i>&nbsp;     */
+<i>726</i>&nbsp;    public boolean getUseFillPaint() {
+<b class="nc"><i>727</i>&nbsp;        return this.useFillPaint;</b>
+<i>728</i>&nbsp;    }
+<i>729</i>&nbsp;
+<i>730</i>&nbsp;    /**
+<i>731</i>&nbsp;     * Sets the flag that controls whether the fill paint is used to fill
+<i>732</i>&nbsp;     * shapes, and sends a {@link RendererChangeEvent} to all
+<i>733</i>&nbsp;     * registered listeners.
+<i>734</i>&nbsp;     *
+<i>735</i>&nbsp;     * @param flag  the flag.
+<i>736</i>&nbsp;     *
+<i>737</i>&nbsp;     * @see #getUseFillPaint()
+<i>738</i>&nbsp;     */
+<i>739</i>&nbsp;    public void setUseFillPaint(boolean flag) {
+<b class="fc"><i>740</i>&nbsp;        this.useFillPaint = flag;</b>
+<b class="fc"><i>741</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>742</i>&nbsp;    }</b>
+<i>743</i>&nbsp;
+<i>744</i>&nbsp;    /**
+<i>745</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the renderer should use the outline paint
+<i>746</i>&nbsp;     * setting to draw shape outlines, and &lt;code&gt;false&lt;/code&gt; if it should just
+<i>747</i>&nbsp;     * use the regular paint.
+<i>748</i>&nbsp;     *
+<i>749</i>&nbsp;     * @return A boolean.
+<i>750</i>&nbsp;     *
+<i>751</i>&nbsp;     * @see #setUseOutlinePaint(boolean)
+<i>752</i>&nbsp;     * @see #getUseFillPaint()
+<i>753</i>&nbsp;     */
+<i>754</i>&nbsp;    public boolean getUseOutlinePaint() {
+<b class="fc"><i>755</i>&nbsp;        return this.useOutlinePaint;</b>
+<i>756</i>&nbsp;    }
+<i>757</i>&nbsp;
+<i>758</i>&nbsp;    /**
+<i>759</i>&nbsp;     * Sets the flag that controls whether the outline paint is used to draw
+<i>760</i>&nbsp;     * shape outlines, and sends a {@link RendererChangeEvent} to all
+<i>761</i>&nbsp;     * registered listeners.
+<i>762</i>&nbsp;     * &lt;p&gt;
+<i>763</i>&nbsp;     * Refer to &lt;code&gt;XYLineAndShapeRendererDemo2.java&lt;/code&gt; to see the
+<i>764</i>&nbsp;     * effect of this flag.
+<i>765</i>&nbsp;     *
+<i>766</i>&nbsp;     * @param flag  the flag.
+<i>767</i>&nbsp;     *
+<i>768</i>&nbsp;     * @see #getUseOutlinePaint()
+<i>769</i>&nbsp;     */
+<i>770</i>&nbsp;    public void setUseOutlinePaint(boolean flag) {
+<b class="fc"><i>771</i>&nbsp;        this.useOutlinePaint = flag;</b>
+<b class="fc"><i>772</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>773</i>&nbsp;    }</b>
+<i>774</i>&nbsp;
+<i>775</i>&nbsp;    /**
+<i>776</i>&nbsp;     * Records the state for the renderer.  This is used to preserve state
+<i>777</i>&nbsp;     * information between calls to the drawItem() method for a single chart
+<i>778</i>&nbsp;     * drawing.
+<i>779</i>&nbsp;     */
+<i>780</i>&nbsp;    public static class State extends XYItemRendererState {
+<i>781</i>&nbsp;
+<i>782</i>&nbsp;        /** The path for the current series. */
+<i>783</i>&nbsp;        public GeneralPath seriesPath;
+<i>784</i>&nbsp;
+<i>785</i>&nbsp;        /**
+<i>786</i>&nbsp;         * A flag that indicates if the last (x, y) point was &#39;good&#39;
+<i>787</i>&nbsp;         * (non-null).
+<i>788</i>&nbsp;         */
+<i>789</i>&nbsp;        private boolean lastPointGood;
+<i>790</i>&nbsp;
+<i>791</i>&nbsp;        /**
+<i>792</i>&nbsp;         * Creates a new state instance.
+<i>793</i>&nbsp;         *
+<i>794</i>&nbsp;         * @param info  the plot rendering info.
+<i>795</i>&nbsp;         */
+<i>796</i>&nbsp;        public State(PlotRenderingInfo info) {
+<b class="fc"><i>797</i>&nbsp;            super(info);</b>
+<b class="fc"><i>798</i>&nbsp;            this.seriesPath = new GeneralPath();</b>
+<b class="fc"><i>799</i>&nbsp;        }</b>
+<i>800</i>&nbsp;
+<i>801</i>&nbsp;        /**
+<i>802</i>&nbsp;         * Returns a flag that indicates if the last point drawn (in the
+<i>803</i>&nbsp;         * current series) was &#39;good&#39; (non-null).
+<i>804</i>&nbsp;         *
+<i>805</i>&nbsp;         * @return A boolean.
+<i>806</i>&nbsp;         */
+<i>807</i>&nbsp;        public boolean isLastPointGood() {
+<b class="nc"><i>808</i>&nbsp;            return this.lastPointGood;</b>
+<i>809</i>&nbsp;        }
+<i>810</i>&nbsp;
+<i>811</i>&nbsp;        /**
+<i>812</i>&nbsp;         * Sets a flag that indicates if the last point drawn (in the current
+<i>813</i>&nbsp;         * series) was &#39;good&#39; (non-null).
+<i>814</i>&nbsp;         *
+<i>815</i>&nbsp;         * @param good  the flag.
+<i>816</i>&nbsp;         */
+<i>817</i>&nbsp;        public void setLastPointGood(boolean good) {
+<b class="nc"><i>818</i>&nbsp;            this.lastPointGood = good;</b>
+<b class="nc"><i>819</i>&nbsp;        }</b>
+<i>820</i>&nbsp;
+<i>821</i>&nbsp;        /**
+<i>822</i>&nbsp;         * This method is called by the {@link XYPlot} at the start of each
+<i>823</i>&nbsp;         * series pass.  We reset the state for the current series.
+<i>824</i>&nbsp;         *
+<i>825</i>&nbsp;         * @param dataset  the dataset.
+<i>826</i>&nbsp;         * @param series  the series index.
+<i>827</i>&nbsp;         * @param firstItem  the first item index for this pass.
+<i>828</i>&nbsp;         * @param lastItem  the last item index for this pass.
+<i>829</i>&nbsp;         * @param pass  the current pass index.
+<i>830</i>&nbsp;         * @param passCount  the number of passes.
+<i>831</i>&nbsp;         */
+<i>832</i>&nbsp;        @Override
+<i>833</i>&nbsp;        public void startSeriesPass(XYDataset dataset, int series,
+<i>834</i>&nbsp;                int firstItem, int lastItem, int pass, int passCount) {
+<b class="fc"><i>835</i>&nbsp;            this.seriesPath.reset();</b>
+<b class="fc"><i>836</i>&nbsp;            this.lastPointGood = false;</b>
+<b class="fc"><i>837</i>&nbsp;            super.startSeriesPass(dataset, series, firstItem, lastItem, pass,</b>
+<i>838</i>&nbsp;                    passCount);
+<b class="fc"><i>839</i>&nbsp;       }</b>
+<i>840</i>&nbsp;
+<i>841</i>&nbsp;    }
+<i>842</i>&nbsp;
+<i>843</i>&nbsp;    /**
+<i>844</i>&nbsp;     * Initialises the renderer.
+<i>845</i>&nbsp;     * &lt;P&gt;
+<i>846</i>&nbsp;     * This method will be called before the first item is rendered, giving the
+<i>847</i>&nbsp;     * renderer an opportunity to initialise any state information it wants to
+<i>848</i>&nbsp;     * maintain.  The renderer can do nothing if it chooses.
+<i>849</i>&nbsp;     *
+<i>850</i>&nbsp;     * @param g2  the graphics device.
+<i>851</i>&nbsp;     * @param dataArea  the area inside the axes.
+<i>852</i>&nbsp;     * @param plot  the plot.
+<i>853</i>&nbsp;     * @param data  the data.
+<i>854</i>&nbsp;     * @param info  an optional info collection object to return data back to
+<i>855</i>&nbsp;     *              the caller.
+<i>856</i>&nbsp;     *
+<i>857</i>&nbsp;     * @return The renderer state.
+<i>858</i>&nbsp;     */
+<i>859</i>&nbsp;    @Override
+<i>860</i>&nbsp;    public XYItemRendererState initialise(Graphics2D g2, Rectangle2D dataArea,
+<i>861</i>&nbsp;            XYPlot plot, XYDataset data, PlotRenderingInfo info) {
+<b class="fc"><i>862</i>&nbsp;        return new State(info);</b>
+<i>863</i>&nbsp;    }
+<i>864</i>&nbsp;
+<i>865</i>&nbsp;    /**
+<i>866</i>&nbsp;     * Draws the visual representation of a single data item.
+<i>867</i>&nbsp;     *
+<i>868</i>&nbsp;     * @param g2  the graphics device.
+<i>869</i>&nbsp;     * @param state  the renderer state.
+<i>870</i>&nbsp;     * @param dataArea  the area within which the data is being drawn.
+<i>871</i>&nbsp;     * @param info  collects information about the drawing.
+<i>872</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>873</i>&nbsp;     *              information etc).
+<i>874</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>875</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>876</i>&nbsp;     * @param dataset  the dataset.
+<i>877</i>&nbsp;     * @param series  the series index (zero-based).
+<i>878</i>&nbsp;     * @param item  the item index (zero-based).
+<i>879</i>&nbsp;     * @param crosshairState  crosshair information for the plot
+<i>880</i>&nbsp;     *                        (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>881</i>&nbsp;     * @param pass  the pass index.
+<i>882</i>&nbsp;     */
+<i>883</i>&nbsp;    @Override
+<i>884</i>&nbsp;    public void drawItem(Graphics2D g2, XYItemRendererState state,
+<i>885</i>&nbsp;            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
+<i>886</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
+<i>887</i>&nbsp;            int series, int item, CrosshairState crosshairState, int pass) {
+<i>888</i>&nbsp;
+<i>889</i>&nbsp;        // do nothing if item is not visible
+<b class="fc"><i>890</i>&nbsp;        if (!getItemVisible(series, item)) {</b>
+<b class="nc"><i>891</i>&nbsp;            return;</b>
+<i>892</i>&nbsp;        }
+<i>893</i>&nbsp;
+<i>894</i>&nbsp;        // first pass draws the background (lines, for instance)
+<b class="fc"><i>895</i>&nbsp;        if (isLinePass(pass)) {</b>
+<b class="fc"><i>896</i>&nbsp;            if (getItemLineVisible(series, item)) {</b>
+<b class="fc"><i>897</i>&nbsp;                if (this.drawSeriesLineAsPath) {</b>
+<b class="nc"><i>898</i>&nbsp;                    drawPrimaryLineAsPath(state, g2, plot, dataset, pass,</b>
+<i>899</i>&nbsp;                            series, item, domainAxis, rangeAxis, dataArea);
+<i>900</i>&nbsp;                }
+<i>901</i>&nbsp;                else {
+<b class="fc"><i>902</i>&nbsp;                    drawPrimaryLine(state, g2, plot, dataset, pass, series,</b>
+<i>903</i>&nbsp;                            item, domainAxis, rangeAxis, dataArea);
+<i>904</i>&nbsp;                }
+<i>905</i>&nbsp;            }
+<i>906</i>&nbsp;        }
+<i>907</i>&nbsp;        // second pass adds shapes where the items are ..
+<b class="fc"><i>908</i>&nbsp;        else if (isItemPass(pass)) {</b>
+<i>909</i>&nbsp;
+<i>910</i>&nbsp;            // setup for collecting optional entity info...
+<b class="fc"><i>911</i>&nbsp;            EntityCollection entities = null;</b>
+<b class="fc"><i>912</i>&nbsp;            if (info != null &amp;&amp; info.getOwner() != null) {</b>
+<b class="nc"><i>913</i>&nbsp;                entities = info.getOwner().getEntityCollection();</b>
+<i>914</i>&nbsp;            }
+<i>915</i>&nbsp;
+<b class="fc"><i>916</i>&nbsp;            drawSecondaryPass(g2, plot, dataset, pass, series, item,</b>
+<i>917</i>&nbsp;                    domainAxis, dataArea, rangeAxis, crosshairState, entities);
+<i>918</i>&nbsp;        }
+<b class="fc"><i>919</i>&nbsp;    }</b>
+<i>920</i>&nbsp;
+<i>921</i>&nbsp;    /**
+<i>922</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the specified pass is the one for drawing
+<i>923</i>&nbsp;     * lines.
+<i>924</i>&nbsp;     *
+<i>925</i>&nbsp;     * @param pass  the pass.
+<i>926</i>&nbsp;     *
+<i>927</i>&nbsp;     * @return A boolean.
+<i>928</i>&nbsp;     */
+<i>929</i>&nbsp;    protected boolean isLinePass(int pass) {
+<b class="fc"><i>930</i>&nbsp;        return pass == 0;</b>
+<i>931</i>&nbsp;    }
+<i>932</i>&nbsp;
+<i>933</i>&nbsp;    /**
+<i>934</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the specified pass is the one for drawing
+<i>935</i>&nbsp;     * items.
+<i>936</i>&nbsp;     *
+<i>937</i>&nbsp;     * @param pass  the pass.
+<i>938</i>&nbsp;     *
+<i>939</i>&nbsp;     * @return A boolean.
+<i>940</i>&nbsp;     */
+<i>941</i>&nbsp;    protected boolean isItemPass(int pass) {
+<b class="fc"><i>942</i>&nbsp;        return pass == 1;</b>
+<i>943</i>&nbsp;    }
+<i>944</i>&nbsp;
+<i>945</i>&nbsp;    /**
+<i>946</i>&nbsp;     * Draws the item (first pass). This method draws the lines
+<i>947</i>&nbsp;     * connecting the items.
+<i>948</i>&nbsp;     *
+<i>949</i>&nbsp;     * @param g2  the graphics device.
+<i>950</i>&nbsp;     * @param state  the renderer state.
+<i>951</i>&nbsp;     * @param dataArea  the area within which the data is being drawn.
+<i>952</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>953</i>&nbsp;     *              information etc).
+<i>954</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>955</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>956</i>&nbsp;     * @param dataset  the dataset.
+<i>957</i>&nbsp;     * @param pass  the pass.
+<i>958</i>&nbsp;     * @param series  the series index (zero-based).
+<i>959</i>&nbsp;     * @param item  the item index (zero-based).
+<i>960</i>&nbsp;     */
+<i>961</i>&nbsp;    protected void drawPrimaryLine(XYItemRendererState state,
+<i>962</i>&nbsp;                                   Graphics2D g2,
+<i>963</i>&nbsp;                                   XYPlot plot,
+<i>964</i>&nbsp;                                   XYDataset dataset,
+<i>965</i>&nbsp;                                   int pass,
+<i>966</i>&nbsp;                                   int series,
+<i>967</i>&nbsp;                                   int item,
+<i>968</i>&nbsp;                                   ValueAxis domainAxis,
+<i>969</i>&nbsp;                                   ValueAxis rangeAxis,
+<i>970</i>&nbsp;                                   Rectangle2D dataArea) {
+<b class="fc"><i>971</i>&nbsp;        if (item == 0) {</b>
+<b class="fc"><i>972</i>&nbsp;            return;</b>
+<i>973</i>&nbsp;        }
+<i>974</i>&nbsp;
+<i>975</i>&nbsp;        // get the data point...
+<b class="fc"><i>976</i>&nbsp;        double x1 = dataset.getXValue(series, item);</b>
+<b class="fc"><i>977</i>&nbsp;        double y1 = dataset.getYValue(series, item);</b>
+<b class="fc"><i>978</i>&nbsp;        if (Double.isNaN(y1) || Double.isNaN(x1)) {</b>
+<b class="nc"><i>979</i>&nbsp;            return;</b>
+<i>980</i>&nbsp;        }
+<i>981</i>&nbsp;
+<b class="fc"><i>982</i>&nbsp;        double x0 = dataset.getXValue(series, item - 1);</b>
+<b class="fc"><i>983</i>&nbsp;        double y0 = dataset.getYValue(series, item - 1);</b>
+<b class="fc"><i>984</i>&nbsp;        if (Double.isNaN(y0) || Double.isNaN(x0)) {</b>
+<b class="nc"><i>985</i>&nbsp;            return;</b>
+<i>986</i>&nbsp;        }
+<i>987</i>&nbsp;
+<b class="fc"><i>988</i>&nbsp;        RectangleEdge xAxisLocation = plot.getDomainAxisEdge();</b>
+<b class="fc"><i>989</i>&nbsp;        RectangleEdge yAxisLocation = plot.getRangeAxisEdge();</b>
+<i>990</i>&nbsp;
+<b class="fc"><i>991</i>&nbsp;        double transX0 = domainAxis.valueToJava2D(x0, dataArea, xAxisLocation);</b>
+<b class="fc"><i>992</i>&nbsp;        double transY0 = rangeAxis.valueToJava2D(y0, dataArea, yAxisLocation);</b>
+<i>993</i>&nbsp;
+<b class="fc"><i>994</i>&nbsp;        double transX1 = domainAxis.valueToJava2D(x1, dataArea, xAxisLocation);</b>
+<b class="fc"><i>995</i>&nbsp;        double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);</b>
+<i>996</i>&nbsp;
+<i>997</i>&nbsp;        // only draw if we have good values
+<b class="fc"><i>998</i>&nbsp;        if (Double.isNaN(transX0) || Double.isNaN(transY0)</b>
+<b class="fc"><i>999</i>&nbsp;            || Double.isNaN(transX1) || Double.isNaN(transY1)) {</b>
+<b class="nc"><i>1000</i>&nbsp;            return;</b>
+<i>1001</i>&nbsp;        }
+<i>1002</i>&nbsp;
+<b class="fc"><i>1003</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<i>1004</i>&nbsp;        boolean visible;
+<b class="fc"><i>1005</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1006</i>&nbsp;            state.workingLine.setLine(transY0, transX0, transY1, transX1);</b>
+<i>1007</i>&nbsp;        }
+<b class="fc"><i>1008</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1009</i>&nbsp;            state.workingLine.setLine(transX0, transY0, transX1, transY1);</b>
+<i>1010</i>&nbsp;        }
+<b class="fc"><i>1011</i>&nbsp;        visible = LineUtilities.clipLine(state.workingLine, dataArea);</b>
+<b class="fc"><i>1012</i>&nbsp;        if (visible) {</b>
+<b class="fc"><i>1013</i>&nbsp;            drawFirstPassShape(g2, pass, series, item, state.workingLine);</b>
+<i>1014</i>&nbsp;        }
+<b class="fc"><i>1015</i>&nbsp;    }</b>
+<i>1016</i>&nbsp;
+<i>1017</i>&nbsp;    /**
+<i>1018</i>&nbsp;     * Draws the first pass shape.
+<i>1019</i>&nbsp;     *
+<i>1020</i>&nbsp;     * @param g2  the graphics device.
+<i>1021</i>&nbsp;     * @param pass  the pass.
+<i>1022</i>&nbsp;     * @param series  the series index.
+<i>1023</i>&nbsp;     * @param item  the item index.
+<i>1024</i>&nbsp;     * @param shape  the shape.
+<i>1025</i>&nbsp;     */
+<i>1026</i>&nbsp;    protected void drawFirstPassShape(Graphics2D g2, int pass, int series,
+<i>1027</i>&nbsp;                                      int item, Shape shape) {
+<b class="fc"><i>1028</i>&nbsp;        g2.setStroke(getItemStroke(series, item));</b>
+<b class="fc"><i>1029</i>&nbsp;        g2.setPaint(getItemPaint(series, item));</b>
+<b class="fc"><i>1030</i>&nbsp;        g2.draw(shape);</b>
+<b class="fc"><i>1031</i>&nbsp;    }</b>
+<i>1032</i>&nbsp;
+<i>1033</i>&nbsp;
+<i>1034</i>&nbsp;    /**
+<i>1035</i>&nbsp;     * Draws the item (first pass). This method draws the lines
+<i>1036</i>&nbsp;     * connecting the items. Instead of drawing separate lines,
+<i>1037</i>&nbsp;     * a GeneralPath is constructed and drawn at the end of
+<i>1038</i>&nbsp;     * the series painting.
+<i>1039</i>&nbsp;     *
+<i>1040</i>&nbsp;     * @param g2  the graphics device.
+<i>1041</i>&nbsp;     * @param state  the renderer state.
+<i>1042</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color information
+<i>1043</i>&nbsp;     *              etc).
+<i>1044</i>&nbsp;     * @param dataset  the dataset.
+<i>1045</i>&nbsp;     * @param pass  the pass.
+<i>1046</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1047</i>&nbsp;     * @param item  the item index (zero-based).
+<i>1048</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1049</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1050</i>&nbsp;     * @param dataArea  the area within which the data is being drawn.
+<i>1051</i>&nbsp;     */
+<i>1052</i>&nbsp;    protected void drawPrimaryLineAsPath(XYItemRendererState state,
+<i>1053</i>&nbsp;            Graphics2D g2, XYPlot plot, XYDataset dataset, int pass,
+<i>1054</i>&nbsp;            int series, int item, ValueAxis domainAxis, ValueAxis rangeAxis,
+<i>1055</i>&nbsp;            Rectangle2D dataArea) {
+<i>1056</i>&nbsp;
+<b class="nc"><i>1057</i>&nbsp;        RectangleEdge xAxisLocation = plot.getDomainAxisEdge();</b>
+<b class="nc"><i>1058</i>&nbsp;        RectangleEdge yAxisLocation = plot.getRangeAxisEdge();</b>
+<i>1059</i>&nbsp;
+<i>1060</i>&nbsp;        // get the data point...
+<b class="nc"><i>1061</i>&nbsp;        double x1 = dataset.getXValue(series, item);</b>
+<b class="nc"><i>1062</i>&nbsp;        double y1 = dataset.getYValue(series, item);</b>
+<b class="nc"><i>1063</i>&nbsp;        double transX1 = domainAxis.valueToJava2D(x1, dataArea, xAxisLocation);</b>
+<b class="nc"><i>1064</i>&nbsp;        double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);</b>
+<i>1065</i>&nbsp;
+<b class="nc"><i>1066</i>&nbsp;        State s = (State) state;</b>
+<i>1067</i>&nbsp;        // update path to reflect latest point
+<b class="nc"><i>1068</i>&nbsp;        if (!Double.isNaN(transX1) &amp;&amp; !Double.isNaN(transY1)) {</b>
+<b class="nc"><i>1069</i>&nbsp;            float x = (float) transX1;</b>
+<b class="nc"><i>1070</i>&nbsp;            float y = (float) transY1;</b>
+<b class="nc"><i>1071</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>1072</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1073</i>&nbsp;                x = (float) transY1;</b>
+<b class="nc"><i>1074</i>&nbsp;                y = (float) transX1;</b>
+<i>1075</i>&nbsp;            }
+<b class="nc"><i>1076</i>&nbsp;            if (s.isLastPointGood()) {</b>
+<b class="nc"><i>1077</i>&nbsp;                s.seriesPath.lineTo(x, y);</b>
+<i>1078</i>&nbsp;            }
+<i>1079</i>&nbsp;            else {
+<b class="nc"><i>1080</i>&nbsp;                s.seriesPath.moveTo(x, y);</b>
+<i>1081</i>&nbsp;            }
+<b class="nc"><i>1082</i>&nbsp;            s.setLastPointGood(true);</b>
+<b class="nc"><i>1083</i>&nbsp;        }</b>
+<i>1084</i>&nbsp;        else {
+<b class="nc"><i>1085</i>&nbsp;            s.setLastPointGood(false);</b>
+<i>1086</i>&nbsp;        }
+<i>1087</i>&nbsp;        // if this is the last item, draw the path ...
+<b class="nc"><i>1088</i>&nbsp;        if (item == s.getLastItemIndex()) {</b>
+<i>1089</i>&nbsp;            // draw path
+<b class="nc"><i>1090</i>&nbsp;            drawFirstPassShape(g2, pass, series, item, s.seriesPath);</b>
+<i>1091</i>&nbsp;        }
+<b class="nc"><i>1092</i>&nbsp;    }</b>
+<i>1093</i>&nbsp;
+<i>1094</i>&nbsp;    /**
+<i>1095</i>&nbsp;     * Draws the item shapes and adds chart entities (second pass). This method
+<i>1096</i>&nbsp;     * draws the shapes which mark the item positions. If &lt;code&gt;entities&lt;/code&gt;
+<i>1097</i>&nbsp;     * is not &lt;code&gt;null&lt;/code&gt; it will be populated with entity information
+<i>1098</i>&nbsp;     * for points that fall within the data area.
+<i>1099</i>&nbsp;     *
+<i>1100</i>&nbsp;     * @param g2  the graphics device.
+<i>1101</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>1102</i>&nbsp;     *              information etc).
+<i>1103</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1104</i>&nbsp;     * @param dataArea  the area within which the data is being drawn.
+<i>1105</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1106</i>&nbsp;     * @param dataset  the dataset.
+<i>1107</i>&nbsp;     * @param pass  the pass.
+<i>1108</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1109</i>&nbsp;     * @param item  the item index (zero-based).
+<i>1110</i>&nbsp;     * @param crosshairState  the crosshair state.
+<i>1111</i>&nbsp;     * @param entities the entity collection.
+<i>1112</i>&nbsp;     */
+<i>1113</i>&nbsp;    protected void drawSecondaryPass(Graphics2D g2, XYPlot plot, 
+<i>1114</i>&nbsp;            XYDataset dataset, int pass, int series, int item,
+<i>1115</i>&nbsp;            ValueAxis domainAxis, Rectangle2D dataArea, ValueAxis rangeAxis,
+<i>1116</i>&nbsp;            CrosshairState crosshairState, EntityCollection entities) {
+<i>1117</i>&nbsp;
+<b class="fc"><i>1118</i>&nbsp;        Shape entityArea = null;</b>
+<i>1119</i>&nbsp;
+<i>1120</i>&nbsp;        // get the data point...
+<b class="fc"><i>1121</i>&nbsp;        double x1 = dataset.getXValue(series, item);</b>
+<b class="fc"><i>1122</i>&nbsp;        double y1 = dataset.getYValue(series, item);</b>
+<b class="fc"><i>1123</i>&nbsp;        if (Double.isNaN(y1) || Double.isNaN(x1)) {</b>
+<b class="nc"><i>1124</i>&nbsp;            return;</b>
+<i>1125</i>&nbsp;        }
+<i>1126</i>&nbsp;
+<b class="fc"><i>1127</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>1128</i>&nbsp;        RectangleEdge xAxisLocation = plot.getDomainAxisEdge();</b>
+<b class="fc"><i>1129</i>&nbsp;        RectangleEdge yAxisLocation = plot.getRangeAxisEdge();</b>
+<b class="fc"><i>1130</i>&nbsp;        double transX1 = domainAxis.valueToJava2D(x1, dataArea, xAxisLocation);</b>
+<b class="fc"><i>1131</i>&nbsp;        double transY1 = rangeAxis.valueToJava2D(y1, dataArea, yAxisLocation);</b>
+<i>1132</i>&nbsp;
+<b class="fc"><i>1133</i>&nbsp;        if (getItemShapeVisible(series, item)) {</b>
+<b class="fc"><i>1134</i>&nbsp;            Shape shape = getItemShape(series, item);</b>
+<b class="fc"><i>1135</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1136</i>&nbsp;                shape = ShapeUtilities.createTranslatedShape(shape, transY1,</b>
+<i>1137</i>&nbsp;                        transX1);
+<i>1138</i>&nbsp;            }
+<b class="fc"><i>1139</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>1140</i>&nbsp;                shape = ShapeUtilities.createTranslatedShape(shape, transX1,</b>
+<i>1141</i>&nbsp;                        transY1);
+<i>1142</i>&nbsp;            }
+<b class="fc"><i>1143</i>&nbsp;            entityArea = shape;</b>
+<b class="fc"><i>1144</i>&nbsp;            if (shape.intersects(dataArea)) {</b>
+<b class="fc"><i>1145</i>&nbsp;                if (getItemShapeFilled(series, item)) {</b>
+<b class="fc"><i>1146</i>&nbsp;                    if (this.useFillPaint) {</b>
+<b class="nc"><i>1147</i>&nbsp;                        g2.setPaint(getItemFillPaint(series, item));</b>
+<i>1148</i>&nbsp;                    }
+<i>1149</i>&nbsp;                    else {
+<b class="fc"><i>1150</i>&nbsp;                        g2.setPaint(getItemPaint(series, item));</b>
+<i>1151</i>&nbsp;                    }
+<b class="fc"><i>1152</i>&nbsp;                    g2.fill(shape);</b>
+<i>1153</i>&nbsp;                }
+<b class="fc"><i>1154</i>&nbsp;                if (this.drawOutlines) {</b>
+<b class="fc"><i>1155</i>&nbsp;                    if (getUseOutlinePaint()) {</b>
+<b class="nc"><i>1156</i>&nbsp;                        g2.setPaint(getItemOutlinePaint(series, item));</b>
+<i>1157</i>&nbsp;                    }
+<i>1158</i>&nbsp;                    else {
+<b class="fc"><i>1159</i>&nbsp;                        g2.setPaint(getItemPaint(series, item));</b>
+<i>1160</i>&nbsp;                    }
+<b class="fc"><i>1161</i>&nbsp;                    g2.setStroke(getItemOutlineStroke(series, item));</b>
+<b class="fc"><i>1162</i>&nbsp;                    g2.draw(shape);</b>
+<i>1163</i>&nbsp;                }
+<i>1164</i>&nbsp;            }
+<i>1165</i>&nbsp;        }
+<i>1166</i>&nbsp;
+<b class="fc"><i>1167</i>&nbsp;        double xx = transX1;</b>
+<b class="fc"><i>1168</i>&nbsp;        double yy = transY1;</b>
+<b class="fc"><i>1169</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>1170</i>&nbsp;            xx = transY1;</b>
+<b class="nc"><i>1171</i>&nbsp;            yy = transX1;</b>
+<i>1172</i>&nbsp;        }
+<i>1173</i>&nbsp;
+<i>1174</i>&nbsp;        // draw the item label if there is one...
+<b class="fc"><i>1175</i>&nbsp;        if (isItemLabelVisible(series, item)) {</b>
+<b class="nc"><i>1176</i>&nbsp;            drawItemLabel(g2, orientation, dataset, series, item, xx, yy,</b>
+<i>1177</i>&nbsp;                    (y1 &lt; 0.0));
+<i>1178</i>&nbsp;        }
+<i>1179</i>&nbsp;
+<b class="fc"><i>1180</i>&nbsp;        int domainAxisIndex = plot.getDomainAxisIndex(domainAxis);</b>
+<b class="fc"><i>1181</i>&nbsp;        int rangeAxisIndex = plot.getRangeAxisIndex(rangeAxis);</b>
+<b class="fc"><i>1182</i>&nbsp;        updateCrosshairValues(crosshairState, x1, y1, domainAxisIndex,</b>
+<i>1183</i>&nbsp;                rangeAxisIndex, transX1, transY1, orientation);
+<i>1184</i>&nbsp;
+<i>1185</i>&nbsp;        // add an entity for the item, but only if it falls within the data
+<i>1186</i>&nbsp;        // area...
+<b class="fc"><i>1187</i>&nbsp;        if (entities != null &amp;&amp; isPointInRect(dataArea, xx, yy)) {</b>
+<b class="nc"><i>1188</i>&nbsp;            addEntity(entities, entityArea, dataset, series, item, xx, yy);</b>
+<i>1189</i>&nbsp;        }
+<b class="fc"><i>1190</i>&nbsp;    }</b>
+<i>1191</i>&nbsp;
+<i>1192</i>&nbsp;
+<i>1193</i>&nbsp;    /**
+<i>1194</i>&nbsp;     * Returns a legend item for the specified series.
+<i>1195</i>&nbsp;     *
+<i>1196</i>&nbsp;     * @param datasetIndex  the dataset index (zero-based).
+<i>1197</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1198</i>&nbsp;     *
+<i>1199</i>&nbsp;     * @return A legend item for the series (possibly {@code null}).
+<i>1200</i>&nbsp;     */
+<i>1201</i>&nbsp;    @Override
+<i>1202</i>&nbsp;    public LegendItem getLegendItem(int datasetIndex, int series) {
+<b class="fc"><i>1203</i>&nbsp;        XYPlot plot = getPlot();</b>
+<b class="fc"><i>1204</i>&nbsp;        if (plot == null) {</b>
+<b class="nc"><i>1205</i>&nbsp;            return null;</b>
+<i>1206</i>&nbsp;        }
+<i>1207</i>&nbsp;
+<b class="fc"><i>1208</i>&nbsp;        XYDataset dataset = plot.getDataset(datasetIndex);</b>
+<b class="fc"><i>1209</i>&nbsp;        if (dataset == null) {</b>
+<b class="nc"><i>1210</i>&nbsp;            return null;</b>
+<i>1211</i>&nbsp;        }
+<i>1212</i>&nbsp;
+<b class="fc"><i>1213</i>&nbsp;        if (!getItemVisible(series, 0)) {</b>
+<b class="nc"><i>1214</i>&nbsp;            return null;</b>
+<i>1215</i>&nbsp;        }
+<b class="fc"><i>1216</i>&nbsp;        String label = getLegendItemLabelGenerator().generateLabel(dataset,</b>
+<i>1217</i>&nbsp;                series);
+<b class="fc"><i>1218</i>&nbsp;        String description = label;</b>
+<b class="fc"><i>1219</i>&nbsp;        String toolTipText = null;</b>
+<b class="fc"><i>1220</i>&nbsp;        if (getLegendItemToolTipGenerator() != null) {</b>
+<b class="nc"><i>1221</i>&nbsp;            toolTipText = getLegendItemToolTipGenerator().generateLabel(</b>
+<i>1222</i>&nbsp;                    dataset, series);
+<i>1223</i>&nbsp;        }
+<b class="fc"><i>1224</i>&nbsp;        String urlText = null;</b>
+<b class="fc"><i>1225</i>&nbsp;        if (getLegendItemURLGenerator() != null) {</b>
+<b class="nc"><i>1226</i>&nbsp;            urlText = getLegendItemURLGenerator().generateLabel(dataset,</b>
+<i>1227</i>&nbsp;                    series);
+<i>1228</i>&nbsp;        }
+<b class="fc"><i>1229</i>&nbsp;        boolean shapeIsVisible = getItemShapeVisible(series, 0);</b>
+<b class="fc"><i>1230</i>&nbsp;        Shape shape = lookupLegendShape(series);</b>
+<b class="fc"><i>1231</i>&nbsp;        boolean shapeIsFilled = getItemShapeFilled(series, 0);</b>
+<b class="fc"><i>1232</i>&nbsp;        Paint fillPaint = (this.useFillPaint ? lookupSeriesFillPaint(series)</b>
+<b class="fc"><i>1233</i>&nbsp;                : lookupSeriesPaint(series));</b>
+<b class="fc"><i>1234</i>&nbsp;        boolean shapeOutlineVisible = this.drawOutlines;</b>
+<b class="fc"><i>1235</i>&nbsp;        Paint outlinePaint = (this.useOutlinePaint ? lookupSeriesOutlinePaint(</b>
+<b class="fc"><i>1236</i>&nbsp;                series) : lookupSeriesPaint(series));</b>
+<b class="fc"><i>1237</i>&nbsp;        Stroke outlineStroke = lookupSeriesOutlineStroke(series);</b>
+<b class="fc"><i>1238</i>&nbsp;        boolean lineVisible = getItemLineVisible(series, 0);</b>
+<b class="fc"><i>1239</i>&nbsp;        Stroke lineStroke = lookupSeriesStroke(series);</b>
+<b class="fc"><i>1240</i>&nbsp;        Paint linePaint = lookupSeriesPaint(series);</b>
+<b class="fc"><i>1241</i>&nbsp;        LegendItem result = new LegendItem(label, description, toolTipText,</b>
+<i>1242</i>&nbsp;                urlText, shapeIsVisible, shape, shapeIsFilled, fillPaint,
+<i>1243</i>&nbsp;                shapeOutlineVisible, outlinePaint, outlineStroke, lineVisible,
+<i>1244</i>&nbsp;                this.legendLine, lineStroke, linePaint);
+<b class="fc"><i>1245</i>&nbsp;        result.setLabelFont(lookupLegendTextFont(series));</b>
+<b class="fc"><i>1246</i>&nbsp;        Paint labelPaint = lookupLegendTextPaint(series);</b>
+<b class="fc"><i>1247</i>&nbsp;        if (labelPaint != null) {</b>
+<b class="nc"><i>1248</i>&nbsp;            result.setLabelPaint(labelPaint);</b>
+<i>1249</i>&nbsp;        }
+<b class="fc"><i>1250</i>&nbsp;        result.setSeriesKey(dataset.getSeriesKey(series));</b>
+<b class="fc"><i>1251</i>&nbsp;        result.setSeriesIndex(series);</b>
+<b class="fc"><i>1252</i>&nbsp;        result.setDataset(dataset);</b>
+<b class="fc"><i>1253</i>&nbsp;        result.setDatasetIndex(datasetIndex);</b>
+<i>1254</i>&nbsp;
+<b class="fc"><i>1255</i>&nbsp;        return result;</b>
+<i>1256</i>&nbsp;    }
+<i>1257</i>&nbsp;
+<i>1258</i>&nbsp;    /**
+<i>1259</i>&nbsp;     * Returns a clone of the renderer.
+<i>1260</i>&nbsp;     *
+<i>1261</i>&nbsp;     * @return A clone.
+<i>1262</i>&nbsp;     *
+<i>1263</i>&nbsp;     * @throws CloneNotSupportedException if the clone cannot be created.
+<i>1264</i>&nbsp;     */
+<i>1265</i>&nbsp;    @Override
+<i>1266</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>1267</i>&nbsp;        XYLineAndShapeRenderer clone = (XYLineAndShapeRenderer) super.clone();</b>
+<b class="fc"><i>1268</i>&nbsp;        clone.seriesLinesVisible</b>
+<b class="fc"><i>1269</i>&nbsp;                = (BooleanList) this.seriesLinesVisible.clone();</b>
+<b class="fc"><i>1270</i>&nbsp;        if (this.legendLine != null) {</b>
+<b class="fc"><i>1271</i>&nbsp;            clone.legendLine = ShapeUtilities.clone(this.legendLine);</b>
+<i>1272</i>&nbsp;        }
+<b class="fc"><i>1273</i>&nbsp;        clone.seriesShapesVisible</b>
+<b class="fc"><i>1274</i>&nbsp;                = (BooleanList) this.seriesShapesVisible.clone();</b>
+<b class="fc"><i>1275</i>&nbsp;        clone.seriesShapesFilled</b>
+<b class="fc"><i>1276</i>&nbsp;                = (BooleanList) this.seriesShapesFilled.clone();</b>
+<b class="fc"><i>1277</i>&nbsp;        return clone;</b>
+<i>1278</i>&nbsp;    }
+<i>1279</i>&nbsp;
+<i>1280</i>&nbsp;    /**
+<i>1281</i>&nbsp;     * Tests this renderer for equality with an arbitrary object.
+<i>1282</i>&nbsp;     *
+<i>1283</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1284</i>&nbsp;     *
+<i>1285</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>1286</i>&nbsp;     */
+<i>1287</i>&nbsp;    @Override
+<i>1288</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1289</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>1290</i>&nbsp;            return true;</b>
+<i>1291</i>&nbsp;        }
+<b class="fc"><i>1292</i>&nbsp;        if (!(obj instanceof XYLineAndShapeRenderer)) {</b>
+<b class="fc"><i>1293</i>&nbsp;            return false;</b>
+<i>1294</i>&nbsp;        }
+<b class="fc"><i>1295</i>&nbsp;        if (!super.equals(obj)) {</b>
+<b class="fc"><i>1296</i>&nbsp;            return false;</b>
+<i>1297</i>&nbsp;        }
+<b class="fc"><i>1298</i>&nbsp;        XYLineAndShapeRenderer that = (XYLineAndShapeRenderer) obj;</b>
+<b class="fc"><i>1299</i>&nbsp;        if (!ObjectUtilities.equal(this.linesVisible, that.linesVisible)) {</b>
+<b class="fc"><i>1300</i>&nbsp;            return false;</b>
+<i>1301</i>&nbsp;        }
+<b class="fc"><i>1302</i>&nbsp;        if (!ObjectUtilities.equal(</b>
+<i>1303</i>&nbsp;            this.seriesLinesVisible, that.seriesLinesVisible)
+<i>1304</i>&nbsp;        ) {
+<b class="fc"><i>1305</i>&nbsp;            return false;</b>
+<i>1306</i>&nbsp;        }
+<b class="fc"><i>1307</i>&nbsp;        if (this.baseLinesVisible != that.baseLinesVisible) {</b>
+<b class="fc"><i>1308</i>&nbsp;            return false;</b>
+<i>1309</i>&nbsp;        }
+<b class="fc"><i>1310</i>&nbsp;        if (!ShapeUtilities.equal(this.legendLine, that.legendLine)) {</b>
+<b class="fc"><i>1311</i>&nbsp;            return false;</b>
+<i>1312</i>&nbsp;        }
+<b class="fc"><i>1313</i>&nbsp;        if (!ObjectUtilities.equal(this.shapesVisible, that.shapesVisible)) {</b>
+<b class="fc"><i>1314</i>&nbsp;            return false;</b>
+<i>1315</i>&nbsp;        }
+<b class="fc"><i>1316</i>&nbsp;        if (!ObjectUtilities.equal(</b>
+<i>1317</i>&nbsp;            this.seriesShapesVisible, that.seriesShapesVisible)
+<i>1318</i>&nbsp;        ) {
+<b class="fc"><i>1319</i>&nbsp;            return false;</b>
+<i>1320</i>&nbsp;        }
+<b class="fc"><i>1321</i>&nbsp;        if (this.baseShapesVisible != that.baseShapesVisible) {</b>
+<b class="fc"><i>1322</i>&nbsp;            return false;</b>
+<i>1323</i>&nbsp;        }
+<b class="fc"><i>1324</i>&nbsp;        if (!ObjectUtilities.equal(this.shapesFilled, that.shapesFilled)) {</b>
+<b class="fc"><i>1325</i>&nbsp;            return false;</b>
+<i>1326</i>&nbsp;        }
+<b class="fc"><i>1327</i>&nbsp;        if (!ObjectUtilities.equal(</b>
+<i>1328</i>&nbsp;            this.seriesShapesFilled, that.seriesShapesFilled)
+<i>1329</i>&nbsp;        ) {
+<b class="fc"><i>1330</i>&nbsp;            return false;</b>
+<i>1331</i>&nbsp;        }
+<b class="fc"><i>1332</i>&nbsp;        if (this.baseShapesFilled != that.baseShapesFilled) {</b>
+<b class="fc"><i>1333</i>&nbsp;            return false;</b>
+<i>1334</i>&nbsp;        }
+<b class="fc"><i>1335</i>&nbsp;        if (this.drawOutlines != that.drawOutlines) {</b>
+<b class="fc"><i>1336</i>&nbsp;            return false;</b>
+<i>1337</i>&nbsp;        }
+<b class="fc"><i>1338</i>&nbsp;        if (this.useOutlinePaint != that.useOutlinePaint) {</b>
+<b class="fc"><i>1339</i>&nbsp;            return false;</b>
+<i>1340</i>&nbsp;        }
+<b class="fc"><i>1341</i>&nbsp;        if (this.useFillPaint != that.useFillPaint) {</b>
+<b class="fc"><i>1342</i>&nbsp;            return false;</b>
+<i>1343</i>&nbsp;        }
+<b class="fc"><i>1344</i>&nbsp;        if (this.drawSeriesLineAsPath != that.drawSeriesLineAsPath) {</b>
+<b class="fc"><i>1345</i>&nbsp;            return false;</b>
+<i>1346</i>&nbsp;        }
+<b class="fc"><i>1347</i>&nbsp;        return true;</b>
+<i>1348</i>&nbsp;    }
+<i>1349</i>&nbsp;
+<i>1350</i>&nbsp;    /**
+<i>1351</i>&nbsp;     * Provides serialization support.
+<i>1352</i>&nbsp;     *
+<i>1353</i>&nbsp;     * @param stream  the input stream.
+<i>1354</i>&nbsp;     *
+<i>1355</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1356</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>1357</i>&nbsp;     */
+<i>1358</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>1359</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>1360</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>1361</i>&nbsp;        this.legendLine = SerialUtilities.readShape(stream);</b>
+<b class="fc"><i>1362</i>&nbsp;    }</b>
+<i>1363</i>&nbsp;
+<i>1364</i>&nbsp;    /**
+<i>1365</i>&nbsp;     * Provides serialization support.
+<i>1366</i>&nbsp;     *
+<i>1367</i>&nbsp;     * @param stream  the output stream.
+<i>1368</i>&nbsp;     *
+<i>1369</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1370</i>&nbsp;     */
+<i>1371</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>1372</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>1373</i>&nbsp;        SerialUtilities.writeShape(this.legendLine, stream);</b>
+<b class="fc"><i>1374</i>&nbsp;    }</b>
+<i>1375</i>&nbsp;
+<i>1376</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

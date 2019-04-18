@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Timeline</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.axis</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Timeline (org.jfree.chart.axis)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">Timeline</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------
+<i>28</i>&nbsp; * Timeline.java
+<i>29</i>&nbsp; * -------------
+<i>30</i>&nbsp; * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Bill Kelemen;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 23-May-2003 : Version 1 (BK);
+<i>38</i>&nbsp; * 09-Sep-2003 : Changed some method and parameter names (DG);
+<i>39</i>&nbsp; * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
+<i>40</i>&nbsp; *
+<i>41</i>&nbsp; */
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;package org.jfree.chart.axis;
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;import java.util.Date;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;/**
+<i>48</i>&nbsp; * An interface that defines the contract for a Timeline.
+<i>49</i>&nbsp; * &lt;P&gt;
+<i>50</i>&nbsp; * A Timeline will present a series of values to be used for an axis. Each
+<i>51</i>&nbsp; * Timeline must provide transformation methods between domain values and
+<i>52</i>&nbsp; * timeline values. In theory many transformations are possible.
+<i>53</i>&nbsp; * &lt;P&gt;
+<i>54</i>&nbsp; * A timeline can be used as parameter to a
+<i>55</i>&nbsp; * {@link org.jfree.chart.axis.DateAxis} to define the values that this axis
+<i>56</i>&nbsp; * supports.
+<i>57</i>&nbsp; * &lt;P&gt;
+<i>58</i>&nbsp; * Because Timelines were created mainly for Date related axis, values are
+<i>59</i>&nbsp; * represented as longs instead of doubles. In this case, the domain value is
+<i>60</i>&nbsp; * just the number of milliseconds since January 1, 1970, 00:00:00 GMT as
+<i>61</i>&nbsp; * defined by the getTime() method of {@link java.util.Date}.
+<i>62</i>&nbsp; *
+<i>63</i>&nbsp; * @see org.jfree.chart.axis.DateAxis
+<i>64</i>&nbsp; */
+<i>65</i>&nbsp;public interface Timeline {
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Translates a millisecond (as defined by java.util.Date) into an index
+<i>69</i>&nbsp;     * along this timeline.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param millisecond  the millisecond.
+<i>72</i>&nbsp;     *
+<i>73</i>&nbsp;     * @return A timeline value.
+<i>74</i>&nbsp;     */
+<i>75</i>&nbsp;    long toTimelineValue(long millisecond);
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * Translates a date into a value on this timeline.
+<i>79</i>&nbsp;     *
+<i>80</i>&nbsp;     * @param date  the date.
+<i>81</i>&nbsp;     *
+<i>82</i>&nbsp;     * @return A timeline value
+<i>83</i>&nbsp;     */
+<i>84</i>&nbsp;    long toTimelineValue(Date date);
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Translates a value relative to this timeline into a domain value. The
+<i>88</i>&nbsp;     * domain value obtained by this method is not always the same domain value
+<i>89</i>&nbsp;     * that could have been supplied to
+<i>90</i>&nbsp;     * translateDomainValueToTimelineValue(domainValue).
+<i>91</i>&nbsp;     * This is because the original transformation may not be complete
+<i>92</i>&nbsp;     * reversable.
+<i>93</i>&nbsp;     *
+<i>94</i>&nbsp;     * @param timelineValue  a timeline value.
+<i>95</i>&nbsp;     *
+<i>96</i>&nbsp;     * @return A domain value.
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    long toMillisecond(long timelineValue);
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * Returns {@code true} if a value is contained in the timeline values.
+<i>102</i>&nbsp;     *
+<i>103</i>&nbsp;     * @param millisecond  the millisecond.
+<i>104</i>&nbsp;     *
+<i>105</i>&nbsp;     * @return {@code true} if value is contained in the timeline and
+<i>106</i>&nbsp;     *         {@code false} otherwise.
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    boolean containsDomainValue(long millisecond);
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * Returns {@code true} if a date is contained in the timeline values.
+<i>112</i>&nbsp;     *
+<i>113</i>&nbsp;     * @param date  the date to verify.
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @return {@code true} if value is contained in the timeline and
+<i>116</i>&nbsp;     *         {@code false}  otherwise.
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    boolean containsDomainValue(Date date);
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    /**
+<i>121</i>&nbsp;     * Returns {@code true} if a range of values are contained in the
+<i>122</i>&nbsp;     * timeline.
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @param fromMillisecond  the start of the range to verify.
+<i>125</i>&nbsp;     * @param toMillisecond  the end of the range to verify.
+<i>126</i>&nbsp;     *
+<i>127</i>&nbsp;     * @return {@code true} if the range is contained in the timeline or
+<i>128</i>&nbsp;     *         {@code false} otherwise
+<i>129</i>&nbsp;     */
+<i>130</i>&nbsp;    boolean containsDomainRange(long fromMillisecond, long toMillisecond);
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * Returns {@code true} if a range of dates are contained in the
+<i>134</i>&nbsp;     * timeline.
+<i>135</i>&nbsp;     *
+<i>136</i>&nbsp;     * @param fromDate  the start of the range to verify.
+<i>137</i>&nbsp;     * @param toDate  the end of the range to verify.
+<i>138</i>&nbsp;     *
+<i>139</i>&nbsp;     * @return {@code true} if the range is contained in the timeline or
+<i>140</i>&nbsp;     *         {@code false} otherwise
+<i>141</i>&nbsp;     */
+<i>142</i>&nbsp;    boolean containsDomainRange(Date fromDate, Date toDate);
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:56</div>
+</div>
+</body>
+</html>

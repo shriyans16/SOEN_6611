@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SoundexTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">SoundexTest.java</span></div><h1>SoundexTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// (FYI: Formatted and sorted with Eclipse)
+
+package org.apache.commons.codec.language;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Tests {@link Soundex}.
+ *
+ * &lt;p&gt;Keep this file in UTF-8 encoding for proper Javadoc processing.&lt;/p&gt;
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L34" title="3 of 4 branches missed.">public class SoundexTest extends StringEncoderAbstractTest&lt;Soundex&gt; {</span>
+
+    @Override
+<span class="fc" id="L37">    protected Soundex createStringEncoder() {</span>
+<span class="fc" id="L38">        return new Soundex();</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L42" title="All 4 branches missed.">    public void testB650() throws EncoderException {</span>
+<span class="fc" id="L43">        this.checkEncodingVariations(&quot;B650&quot;, new String[]{</span>
+            &quot;BARHAM&quot;,
+            &quot;BARONE&quot;,
+            &quot;BARRON&quot;,
+            &quot;BERNA&quot;,
+            &quot;BIRNEY&quot;,
+            &quot;BIRNIE&quot;,
+            &quot;BOOROM&quot;,
+            &quot;BOREN&quot;,
+            &quot;BORN&quot;,
+            &quot;BOURN&quot;,
+            &quot;BOURNE&quot;,
+            &quot;BOWRON&quot;,
+            &quot;BRAIN&quot;,
+            &quot;BRAME&quot;,
+            &quot;BRANN&quot;,
+            &quot;BRAUN&quot;,
+            &quot;BREEN&quot;,
+            &quot;BRIEN&quot;,
+            &quot;BRIM&quot;,
+            &quot;BRIMM&quot;,
+            &quot;BRINN&quot;,
+            &quot;BRION&quot;,
+            &quot;BROOM&quot;,
+            &quot;BROOME&quot;,
+            &quot;BROWN&quot;,
+            &quot;BROWNE&quot;,
+            &quot;BRUEN&quot;,
+            &quot;BRUHN&quot;,
+            &quot;BRUIN&quot;,
+            &quot;BRUMM&quot;,
+            &quot;BRUN&quot;,
+            &quot;BRUNO&quot;,
+            &quot;BRYAN&quot;,
+            &quot;BURIAN&quot;,
+            &quot;BURN&quot;,
+            &quot;BURNEY&quot;,
+            &quot;BYRAM&quot;,
+            &quot;BYRNE&quot;,
+            &quot;BYRON&quot;,
+            &quot;BYRUM&quot;});
+<span class="fc" id="L84">    }</span>
+
+    @Test
+<span class="pc bnc" id="L87" title="All 4 branches missed.">    public void testBadCharacters() {</span>
+<span class="fc" id="L88">        Assert.assertEquals(&quot;H452&quot;, this.getStringEncoder().encode(&quot;HOL&gt;MES&quot;));</span>
+
+<span class="fc" id="L90">    }</span>
+
+    @Test
+<span class="pc bnc" id="L93" title="All 4 branches missed.">    public void testDifference() throws EncoderException {</span>
+        // Edge cases
+<span class="fc" id="L95">        Assert.assertEquals(0, this.getStringEncoder().difference(null, null));</span>
+<span class="fc" id="L96">        Assert.assertEquals(0, this.getStringEncoder().difference(&quot;&quot;, &quot;&quot;));</span>
+<span class="fc" id="L97">        Assert.assertEquals(0, this.getStringEncoder().difference(&quot; &quot;, &quot; &quot;));</span>
+        // Normal cases
+<span class="fc" id="L99">        Assert.assertEquals(4, this.getStringEncoder().difference(&quot;Smith&quot;, &quot;Smythe&quot;));</span>
+<span class="fc" id="L100">        Assert.assertEquals(2, this.getStringEncoder().difference(&quot;Ann&quot;, &quot;Andrew&quot;));</span>
+<span class="fc" id="L101">        Assert.assertEquals(1, this.getStringEncoder().difference(&quot;Margaret&quot;, &quot;Andrew&quot;));</span>
+<span class="fc" id="L102">        Assert.assertEquals(0, this.getStringEncoder().difference(&quot;Janet&quot;, &quot;Margaret&quot;));</span>
+        // Examples from http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tsqlref/ts_de-dz_8co5.asp
+<span class="fc" id="L104">        Assert.assertEquals(4, this.getStringEncoder().difference(&quot;Green&quot;, &quot;Greene&quot;));</span>
+<span class="fc" id="L105">        Assert.assertEquals(0, this.getStringEncoder().difference(&quot;Blotchet-Halls&quot;, &quot;Greene&quot;));</span>
+        // Examples from http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tsqlref/ts_setu-sus_3o6w.asp
+<span class="fc" id="L107">        Assert.assertEquals(4, this.getStringEncoder().difference(&quot;Smith&quot;, &quot;Smythe&quot;));</span>
+<span class="fc" id="L108">        Assert.assertEquals(4, this.getStringEncoder().difference(&quot;Smithers&quot;, &quot;Smythers&quot;));</span>
+<span class="fc" id="L109">        Assert.assertEquals(2, this.getStringEncoder().difference(&quot;Anothers&quot;, &quot;Brothers&quot;));</span>
+<span class="fc" id="L110">    }</span>
+
+    @Test
+<span class="pc bnc" id="L113" title="All 4 branches missed.">    public void testEncodeBasic() {</span>
+<span class="fc" id="L114">        Assert.assertEquals(&quot;T235&quot;, this.getStringEncoder().encode(&quot;testing&quot;));</span>
+<span class="fc" id="L115">        Assert.assertEquals(&quot;T000&quot;, this.getStringEncoder().encode(&quot;The&quot;));</span>
+<span class="fc" id="L116">        Assert.assertEquals(&quot;Q200&quot;, this.getStringEncoder().encode(&quot;quick&quot;));</span>
+<span class="fc" id="L117">        Assert.assertEquals(&quot;B650&quot;, this.getStringEncoder().encode(&quot;brown&quot;));</span>
+<span class="fc" id="L118">        Assert.assertEquals(&quot;F200&quot;, this.getStringEncoder().encode(&quot;fox&quot;));</span>
+<span class="fc" id="L119">        Assert.assertEquals(&quot;J513&quot;, this.getStringEncoder().encode(&quot;jumped&quot;));</span>
+<span class="fc" id="L120">        Assert.assertEquals(&quot;O160&quot;, this.getStringEncoder().encode(&quot;over&quot;));</span>
+<span class="fc" id="L121">        Assert.assertEquals(&quot;T000&quot;, this.getStringEncoder().encode(&quot;the&quot;));</span>
+<span class="fc" id="L122">        Assert.assertEquals(&quot;L200&quot;, this.getStringEncoder().encode(&quot;lazy&quot;));</span>
+<span class="fc" id="L123">        Assert.assertEquals(&quot;D200&quot;, this.getStringEncoder().encode(&quot;dogs&quot;));</span>
+<span class="fc" id="L124">    }</span>
+
+    /**
+     * Examples from http://www.bradandkathy.com/genealogy/overviewofsoundex.html
+     */
+    @Test
+<span class="pc bnc" id="L130" title="All 4 branches missed.">    public void testEncodeBatch2() {</span>
+<span class="fc" id="L131">        Assert.assertEquals(&quot;A462&quot;, this.getStringEncoder().encode(&quot;Allricht&quot;));</span>
+<span class="fc" id="L132">        Assert.assertEquals(&quot;E166&quot;, this.getStringEncoder().encode(&quot;Eberhard&quot;));</span>
+<span class="fc" id="L133">        Assert.assertEquals(&quot;E521&quot;, this.getStringEncoder().encode(&quot;Engebrethson&quot;));</span>
+<span class="fc" id="L134">        Assert.assertEquals(&quot;H512&quot;, this.getStringEncoder().encode(&quot;Heimbach&quot;));</span>
+<span class="fc" id="L135">        Assert.assertEquals(&quot;H524&quot;, this.getStringEncoder().encode(&quot;Hanselmann&quot;));</span>
+<span class="fc" id="L136">        Assert.assertEquals(&quot;H431&quot;, this.getStringEncoder().encode(&quot;Hildebrand&quot;));</span>
+<span class="fc" id="L137">        Assert.assertEquals(&quot;K152&quot;, this.getStringEncoder().encode(&quot;Kavanagh&quot;));</span>
+<span class="fc" id="L138">        Assert.assertEquals(&quot;L530&quot;, this.getStringEncoder().encode(&quot;Lind&quot;));</span>
+<span class="fc" id="L139">        Assert.assertEquals(&quot;L222&quot;, this.getStringEncoder().encode(&quot;Lukaschowsky&quot;));</span>
+<span class="fc" id="L140">        Assert.assertEquals(&quot;M235&quot;, this.getStringEncoder().encode(&quot;McDonnell&quot;));</span>
+<span class="fc" id="L141">        Assert.assertEquals(&quot;M200&quot;, this.getStringEncoder().encode(&quot;McGee&quot;));</span>
+<span class="fc" id="L142">        Assert.assertEquals(&quot;O155&quot;, this.getStringEncoder().encode(&quot;Opnian&quot;));</span>
+<span class="fc" id="L143">        Assert.assertEquals(&quot;O155&quot;, this.getStringEncoder().encode(&quot;Oppenheimer&quot;));</span>
+<span class="fc" id="L144">        Assert.assertEquals(&quot;R355&quot;, this.getStringEncoder().encode(&quot;Riedemanas&quot;));</span>
+<span class="fc" id="L145">        Assert.assertEquals(&quot;Z300&quot;, this.getStringEncoder().encode(&quot;Zita&quot;));</span>
+<span class="fc" id="L146">        Assert.assertEquals(&quot;Z325&quot;, this.getStringEncoder().encode(&quot;Zitzmeinn&quot;));</span>
+<span class="fc" id="L147">    }</span>
+
+    /**
+     * Examples from http://www.archives.gov/research_room/genealogy/census/soundex.html
+     */
+    @Test
+<span class="pc bnc" id="L153" title="All 4 branches missed.">    public void testEncodeBatch3() {</span>
+<span class="fc" id="L154">        Assert.assertEquals(&quot;W252&quot;, this.getStringEncoder().encode(&quot;Washington&quot;));</span>
+<span class="fc" id="L155">        Assert.assertEquals(&quot;L000&quot;, this.getStringEncoder().encode(&quot;Lee&quot;));</span>
+<span class="fc" id="L156">        Assert.assertEquals(&quot;G362&quot;, this.getStringEncoder().encode(&quot;Gutierrez&quot;));</span>
+<span class="fc" id="L157">        Assert.assertEquals(&quot;P236&quot;, this.getStringEncoder().encode(&quot;Pfister&quot;));</span>
+<span class="fc" id="L158">        Assert.assertEquals(&quot;J250&quot;, this.getStringEncoder().encode(&quot;Jackson&quot;));</span>
+<span class="fc" id="L159">        Assert.assertEquals(&quot;T522&quot;, this.getStringEncoder().encode(&quot;Tymczak&quot;));</span>
+        // For VanDeusen: D-250 (D, 2 for the S, 5 for the N, 0 added) is also
+        // possible.
+<span class="fc" id="L162">        Assert.assertEquals(&quot;V532&quot;, this.getStringEncoder().encode(&quot;VanDeusen&quot;));</span>
+<span class="fc" id="L163">    }</span>
+
+    /**
+     * Examples from: http://www.myatt.demon.co.uk/sxalg.htm
+     */
+    @Test
+<span class="pc bnc" id="L169" title="All 4 branches missed.">    public void testEncodeBatch4() {</span>
+<span class="fc" id="L170">        Assert.assertEquals(&quot;H452&quot;, this.getStringEncoder().encode(&quot;HOLMES&quot;));</span>
+<span class="fc" id="L171">        Assert.assertEquals(&quot;A355&quot;, this.getStringEncoder().encode(&quot;ADOMOMI&quot;));</span>
+<span class="fc" id="L172">        Assert.assertEquals(&quot;V536&quot;, this.getStringEncoder().encode(&quot;VONDERLEHR&quot;));</span>
+<span class="fc" id="L173">        Assert.assertEquals(&quot;B400&quot;, this.getStringEncoder().encode(&quot;BALL&quot;));</span>
+<span class="fc" id="L174">        Assert.assertEquals(&quot;S000&quot;, this.getStringEncoder().encode(&quot;SHAW&quot;));</span>
+<span class="fc" id="L175">        Assert.assertEquals(&quot;J250&quot;, this.getStringEncoder().encode(&quot;JACKSON&quot;));</span>
+<span class="fc" id="L176">        Assert.assertEquals(&quot;S545&quot;, this.getStringEncoder().encode(&quot;SCANLON&quot;));</span>
+<span class="fc" id="L177">        Assert.assertEquals(&quot;S532&quot;, this.getStringEncoder().encode(&quot;SAINTJOHN&quot;));</span>
+
+<span class="fc" id="L179">    }</span>
+
+    @Test
+<span class="pc bnc" id="L182" title="All 4 branches missed.">    public void testEncodeIgnoreApostrophes() throws EncoderException {</span>
+<span class="fc" id="L183">        this.checkEncodingVariations(&quot;O165&quot;, new String[]{</span>
+            &quot;OBrien&quot;,
+            &quot;'OBrien&quot;,
+            &quot;O'Brien&quot;,
+            &quot;OB'rien&quot;,
+            &quot;OBr'ien&quot;,
+            &quot;OBri'en&quot;,
+            &quot;OBrie'n&quot;,
+            &quot;OBrien'&quot;});
+<span class="fc" id="L192">    }</span>
+
+    /**
+     * Test data from http://www.myatt.demon.co.uk/sxalg.htm
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L200" title="All 4 branches missed.">    public void testEncodeIgnoreHyphens() throws EncoderException {</span>
+<span class="fc" id="L201">        this.checkEncodingVariations(&quot;K525&quot;, new String[]{</span>
+            &quot;KINGSMITH&quot;,
+            &quot;-KINGSMITH&quot;,
+            &quot;K-INGSMITH&quot;,
+            &quot;KI-NGSMITH&quot;,
+            &quot;KIN-GSMITH&quot;,
+            &quot;KING-SMITH&quot;,
+            &quot;KINGS-MITH&quot;,
+            &quot;KINGSM-ITH&quot;,
+            &quot;KINGSMI-TH&quot;,
+            &quot;KINGSMIT-H&quot;,
+            &quot;KINGSMITH-&quot;});
+<span class="fc" id="L213">    }</span>
+
+    @Test
+<span class="pc bnc" id="L216" title="All 4 branches missed.">    public void testEncodeIgnoreTrimmable() {</span>
+<span class="fc" id="L217">        Assert.assertEquals(&quot;W252&quot;, this.getStringEncoder().encode(&quot; \t\n\r Washington \t\n\r &quot;));</span>
+<span class="fc" id="L218">    }</span>
+
+    /**
+     * Consonants from the same code group separated by W or H are treated as one.
+     */
+    @Test
+<span class="pc bnc" id="L224" title="All 4 branches missed.">    public void testHWRuleEx1() {</span>
+        // From
+        // http://www.archives.gov/research_room/genealogy/census/soundex.html:
+        // Ashcraft is coded A-261 (A, 2 for the S, C ignored, 6 for the R, 1
+        // for the F). It is not coded A-226.
+<span class="fc" id="L229">        Assert.assertEquals(&quot;A261&quot;, this.getStringEncoder().encode(&quot;Ashcraft&quot;));</span>
+<span class="fc" id="L230">        Assert.assertEquals(&quot;A261&quot;, this.getStringEncoder().encode(&quot;Ashcroft&quot;));</span>
+<span class="fc" id="L231">        Assert.assertEquals(&quot;Y330&quot;, this.getStringEncoder().encode(&quot;yehudit&quot;));</span>
+<span class="fc" id="L232">        Assert.assertEquals(&quot;Y330&quot;, this.getStringEncoder().encode(&quot;yhwdyt&quot;));</span>
+<span class="fc" id="L233">    }</span>
+
+    /**
+     * Consonants from the same code group separated by W or H are treated as one.
+     *
+     * Test data from http://www.myatt.demon.co.uk/sxalg.htm
+     */
+    @Test
+<span class="pc bnc" id="L241" title="All 4 branches missed.">    public void testHWRuleEx2() {</span>
+<span class="fc" id="L242">        Assert.assertEquals(&quot;B312&quot;, this.getStringEncoder().encode(&quot;BOOTHDAVIS&quot;));</span>
+<span class="fc" id="L243">        Assert.assertEquals(&quot;B312&quot;, this.getStringEncoder().encode(&quot;BOOTH-DAVIS&quot;));</span>
+<span class="fc" id="L244">    }</span>
+
+    /**
+     * Consonants from the same code group separated by W or H are treated as one.
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L252" title="All 4 branches missed.">    public void testHWRuleEx3() throws EncoderException {</span>
+<span class="fc" id="L253">        Assert.assertEquals(&quot;S460&quot;, this.getStringEncoder().encode(&quot;Sgler&quot;));</span>
+<span class="fc" id="L254">        Assert.assertEquals(&quot;S460&quot;, this.getStringEncoder().encode(&quot;Swhgler&quot;));</span>
+        // Also S460:
+<span class="fc" id="L256">        this.checkEncodingVariations(&quot;S460&quot;, new String[]{</span>
+            &quot;SAILOR&quot;,
+            &quot;SALYER&quot;,
+            &quot;SAYLOR&quot;,
+            &quot;SCHALLER&quot;,
+            &quot;SCHELLER&quot;,
+            &quot;SCHILLER&quot;,
+            &quot;SCHOOLER&quot;,
+            &quot;SCHULER&quot;,
+            &quot;SCHUYLER&quot;,
+            &quot;SEILER&quot;,
+            &quot;SEYLER&quot;,
+            &quot;SHOLAR&quot;,
+            &quot;SHULER&quot;,
+            &quot;SILAR&quot;,
+            &quot;SILER&quot;,
+            &quot;SILLER&quot;});
+<span class="fc" id="L273">    }</span>
+
+    /**
+     * Examples for MS SQLServer from
+     * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tsqlref/ts_setu-sus_3o6w.asp
+     */
+    @Test
+<span class="pc bnc" id="L280" title="All 4 branches missed.">    public void testMsSqlServer1() {</span>
+<span class="fc" id="L281">        Assert.assertEquals(&quot;S530&quot;, this.getStringEncoder().encode(&quot;Smith&quot;));</span>
+<span class="fc" id="L282">        Assert.assertEquals(&quot;S530&quot;, this.getStringEncoder().encode(&quot;Smythe&quot;));</span>
+<span class="fc" id="L283">    }</span>
+
+    /**
+     * Examples for MS SQLServer from
+     * http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support
+     * /kb/articles/Q100/3/65.asp&amp;NoWebContent=1
+     *
+     * @throws EncoderException
+     */
+    @Test
+<span class="pc bnc" id="L293" title="All 4 branches missed.">    public void testMsSqlServer2() throws EncoderException {</span>
+<span class="fc" id="L294">        this.checkEncodingVariations(&quot;E625&quot;, new String[]{&quot;Erickson&quot;, &quot;Erickson&quot;, &quot;Erikson&quot;, &quot;Ericson&quot;, &quot;Ericksen&quot;, &quot;Ericsen&quot;});</span>
+<span class="fc" id="L295">    }</span>
+
+    /**
+     * Examples for MS SQLServer from http://databases.about.com/library/weekly/aa042901a.htm
+     */
+    @Test
+<span class="pc bnc" id="L301" title="All 4 branches missed.">    public void testMsSqlServer3() {</span>
+<span class="fc" id="L302">        Assert.assertEquals(&quot;A500&quot;, this.getStringEncoder().encode(&quot;Ann&quot;));</span>
+<span class="fc" id="L303">        Assert.assertEquals(&quot;A536&quot;, this.getStringEncoder().encode(&quot;Andrew&quot;));</span>
+<span class="fc" id="L304">        Assert.assertEquals(&quot;J530&quot;, this.getStringEncoder().encode(&quot;Janet&quot;));</span>
+<span class="fc" id="L305">        Assert.assertEquals(&quot;M626&quot;, this.getStringEncoder().encode(&quot;Margaret&quot;));</span>
+<span class="fc" id="L306">        Assert.assertEquals(&quot;S315&quot;, this.getStringEncoder().encode(&quot;Steven&quot;));</span>
+<span class="fc" id="L307">        Assert.assertEquals(&quot;M240&quot;, this.getStringEncoder().encode(&quot;Michael&quot;));</span>
+<span class="fc" id="L308">        Assert.assertEquals(&quot;R163&quot;, this.getStringEncoder().encode(&quot;Robert&quot;));</span>
+<span class="fc" id="L309">        Assert.assertEquals(&quot;L600&quot;, this.getStringEncoder().encode(&quot;Laura&quot;));</span>
+<span class="fc" id="L310">        Assert.assertEquals(&quot;A500&quot;, this.getStringEncoder().encode(&quot;Anne&quot;));</span>
+<span class="fc" id="L311">    }</span>
+
+    /**
+     * https://issues.apache.org/jira/browse/CODEC-54 https://issues.apache.org/jira/browse/CODEC-56
+     */
+    @Test
+<span class="pc bnc" id="L317" title="All 4 branches missed.">    public void testNewInstance() {</span>
+<span class="fc" id="L318">        Assert.assertEquals(&quot;W452&quot;, new Soundex().soundex(&quot;Williams&quot;));</span>
+<span class="fc" id="L319">    }</span>
+
+    @Test
+<span class="pc bnc" id="L322" title="All 4 branches missed.">    public void testNewInstance2() {</span>
+<span class="fc" id="L323">        Assert.assertEquals(&quot;W452&quot;, new Soundex(Soundex.US_ENGLISH_MAPPING_STRING.toCharArray()).soundex(&quot;Williams&quot;));</span>
+<span class="fc" id="L324">    }</span>
+
+    @Test
+<span class="pc bnc" id="L327" title="All 4 branches missed.">    public void testNewInstance3() {</span>
+<span class="fc" id="L328">        Assert.assertEquals(&quot;W452&quot;, new Soundex(Soundex.US_ENGLISH_MAPPING_STRING).soundex(&quot;Williams&quot;));</span>
+<span class="fc" id="L329">    }</span>
+
+    @Test
+<span class="pc bnc" id="L332" title="All 4 branches missed.">    public void testSoundexUtilsConstructable() {</span>
+<span class="fc" id="L333">        new SoundexUtils();</span>
+<span class="fc" id="L334">    }</span>
+
+    @Test
+<span class="pc bnc" id="L337" title="All 4 branches missed.">    public void testSoundexUtilsNullBehaviour() {</span>
+<span class="fc" id="L338">        Assert.assertEquals(null, SoundexUtils.clean(null));</span>
+<span class="fc" id="L339">        Assert.assertEquals(&quot;&quot;, SoundexUtils.clean(&quot;&quot;));</span>
+<span class="fc" id="L340">        Assert.assertEquals(0, SoundexUtils.differenceEncoded(null, &quot;&quot;));</span>
+<span class="fc" id="L341">        Assert.assertEquals(0, SoundexUtils.differenceEncoded(&quot;&quot;, null));</span>
+<span class="fc" id="L342">    }</span>
+
+    /**
+     * https://issues.apache.org/jira/browse/CODEC-54 https://issues.apache.org/jira/browse/CODEC-56
+     */
+    @Test
+<span class="pc bnc" id="L348" title="All 4 branches missed.">    public void testUsEnglishStatic() {</span>
+<span class="fc" id="L349">        Assert.assertEquals(&quot;W452&quot;, Soundex.US_ENGLISH.soundex(&quot;Williams&quot;));</span>
+<span class="fc" id="L350">    }</span>
+
+    /**
+     * Fancy characters are not mapped by the default US mapping.
+     *
+     * https://issues.apache.org/jira/browse/CODEC-30
+     */
+    @Test
+<span class="pc bnc" id="L358" title="All 4 branches missed.">    public void testUsMappingEWithAcute() {</span>
+<span class="fc" id="L359">        Assert.assertEquals(&quot;E000&quot;, this.getStringEncoder().encode(&quot;e&quot;));</span>
+<span class="pc bpc" id="L360" title="7 of 10 branches missed.">        if (Character.isLetter('\u00e9')) { // e-acute</span>
+<span class="fc" id="L361">            try {</span>
+                //         uppercase E-acute
+<span class="nc" id="L363">                Assert.assertEquals(&quot;\u00c9000&quot;, this.getStringEncoder().encode(&quot;\u00e9&quot;));</span>
+<span class="nc" id="L364">                Assert.fail(&quot;Expected IllegalArgumentException not thrown&quot;);</span>
+<span class="fc" id="L365">            } catch (final IllegalArgumentException e) {</span>
+                // expected
+<span class="pc" id="L367">            }</span>
+        } else {
+<span class="nc" id="L369">            Assert.assertEquals(&quot;&quot;, this.getStringEncoder().encode(&quot;\u00e9&quot;));</span>
+        }
+<span class="fc" id="L371">    }</span>
+
+    /**
+     * Fancy characters are not mapped by the default US mapping.
+     *
+     * https://issues.apache.org/jira/browse/CODEC-30
+     */
+    @Test
+<span class="pc bnc" id="L379" title="All 4 branches missed.">    public void testUsMappingOWithDiaeresis() {</span>
+<span class="fc" id="L380">        Assert.assertEquals(&quot;O000&quot;, this.getStringEncoder().encode(&quot;o&quot;));</span>
+<span class="pc bpc" id="L381" title="7 of 10 branches missed.">        if (Character.isLetter('\u00f6')) { // o-umlaut</span>
+<span class="fc" id="L382">            try {</span>
+                //         uppercase O-umlaut
+<span class="nc" id="L384">                Assert.assertEquals(&quot;\u00d6000&quot;, this.getStringEncoder().encode(&quot;\u00f6&quot;));</span>
+<span class="nc" id="L385">                Assert.fail(&quot;Expected IllegalArgumentException not thrown&quot;);</span>
+<span class="fc" id="L386">            } catch (final IllegalArgumentException e) {</span>
+                // expected
+<span class="pc" id="L388">            }</span>
+        } else {
+<span class="nc" id="L390">            Assert.assertEquals(&quot;&quot;, this.getStringEncoder().encode(&quot;\u00f6&quot;));</span>
+        }
+<span class="fc" id="L392">    }</span>
+
+    /**
+     * Tests example from http://en.wikipedia.org/wiki/Soundex#American_Soundex as of 2015-03-22.
+     */
+    @Test
+<span class="pc bnc" id="L398" title="All 4 branches missed.">    public void testWikipediaAmericanSoundex() {</span>
+<span class="fc" id="L399">        Assert.assertEquals(&quot;R163&quot;, this.getStringEncoder().encode(&quot;Robert&quot;));</span>
+<span class="fc" id="L400">        Assert.assertEquals(&quot;R163&quot;, this.getStringEncoder().encode(&quot;Rupert&quot;));</span>
+<span class="fc" id="L401">        Assert.assertEquals(&quot;A261&quot;, this.getStringEncoder().encode(&quot;Ashcraft&quot;));</span>
+<span class="fc" id="L402">        Assert.assertEquals(&quot;A261&quot;, this.getStringEncoder().encode(&quot;Ashcroft&quot;));</span>
+<span class="fc" id="L403">        Assert.assertEquals(&quot;T522&quot;, this.getStringEncoder().encode(&quot;Tymczak&quot;));</span>
+<span class="fc" id="L404">        Assert.assertEquals(&quot;P236&quot;, this.getStringEncoder().encode(&quot;Pfister&quot;));</span>
+<span class="fc" id="L405">    }</span>
+
+    @Test
+// examples and algorithm rules from:  http://www.genealogy.com/articles/research/00000060.html
+<span class="pc bnc" id="L409" title="All 4 branches missed.">    public void testGenealogy() { // treat vowels and HW as silent</span>
+<span class="fc" id="L410">        final Soundex s = Soundex.US_ENGLISH_GENEALOGY;</span>
+<span class="fc" id="L411">        Assert.assertEquals(&quot;H251&quot;, s.encode(&quot;Heggenburger&quot;));</span>
+<span class="fc" id="L412">        Assert.assertEquals(&quot;B425&quot;, s.encode(&quot;Blackman&quot;));</span>
+<span class="fc" id="L413">        Assert.assertEquals(&quot;S530&quot;, s.encode(&quot;Schmidt&quot;));</span>
+<span class="fc" id="L414">        Assert.assertEquals(&quot;L150&quot;, s.encode(&quot;Lippmann&quot;));</span>
+        // Additional local example
+<span class="fc" id="L416">        Assert.assertEquals(&quot;D200&quot;, s.encode(&quot;Dodds&quot;)); // 'o' is not a separator here - it is silent</span>
+<span class="fc" id="L417">        Assert.assertEquals(&quot;D200&quot;, s.encode(&quot;Dhdds&quot;)); // 'h' is silent</span>
+<span class="fc" id="L418">        Assert.assertEquals(&quot;D200&quot;, s.encode(&quot;Dwdds&quot;)); // 'w' is silent</span>
+<span class="fc" id="L419">    }</span>
+
+    @Test
+// examples and algorithm rules from:  http://west-penwith.org.uk/misc/soundex.htm
+<span class="pc bnc" id="L423" title="All 4 branches missed.">    public void testSimplifiedSoundex() { // treat vowels and HW as separators</span>
+<span class="fc" id="L424">        final Soundex s = Soundex.US_ENGLISH_SIMPLIFIED;</span>
+<span class="fc" id="L425">        Assert.assertEquals(&quot;W452&quot;, s.encode(&quot;WILLIAMS&quot;));</span>
+<span class="fc" id="L426">        Assert.assertEquals(&quot;B625&quot;, s.encode(&quot;BARAGWANATH&quot;));</span>
+<span class="fc" id="L427">        Assert.assertEquals(&quot;D540&quot;, s.encode(&quot;DONNELL&quot;));</span>
+<span class="fc" id="L428">        Assert.assertEquals(&quot;L300&quot;, s.encode(&quot;LLOYD&quot;));</span>
+<span class="fc" id="L429">        Assert.assertEquals(&quot;W422&quot;, s.encode(&quot;WOOLCOCK&quot;));</span>
+        // Additional local examples
+<span class="fc" id="L431">        Assert.assertEquals(&quot;D320&quot;, s.encode(&quot;Dodds&quot;));</span>
+<span class="fc" id="L432">        Assert.assertEquals(&quot;D320&quot;, s.encode(&quot;Dwdds&quot;)); // w is a separator</span>
+<span class="fc" id="L433">        Assert.assertEquals(&quot;D320&quot;, s.encode(&quot;Dhdds&quot;)); // h is a separator</span>
+<span class="fc" id="L434">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

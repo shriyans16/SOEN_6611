@@ -1,0 +1,877 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CombinedDomainXYPlot</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CombinedDomainXYPlot (org.jfree.chart.plot)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CombinedDomainXYPlot</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.2%
+  </span>
+  <span class="absValue">
+    (16/ 29)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60.6%
+  </span>
+  <span class="absValue">
+    (149/ 246)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------------
+<i>28</i>&nbsp; * CombinedDomainXYPlot.java
+<i>29</i>&nbsp; * -------------------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2014, by Bill Kelemen and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Bill Kelemen;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *                   Anthony Boulestreau;
+<i>35</i>&nbsp; *                   David Basten;
+<i>36</i>&nbsp; *                   Kevin Frechette (for ISTI);
+<i>37</i>&nbsp; *                   Nicolas Brodu;
+<i>38</i>&nbsp; *                   Petr Kubanek (bug 1606205);
+<i>39</i>&nbsp; *
+<i>40</i>&nbsp; * Changes:
+<i>41</i>&nbsp; * --------
+<i>42</i>&nbsp; * 06-Dec-2001 : Version 1 (BK);
+<i>43</i>&nbsp; * 12-Dec-2001 : Removed unnecessary &#39;throws&#39; clause from constructor (DG);
+<i>44</i>&nbsp; * 18-Dec-2001 : Added plotArea attribute and get/set methods (BK);
+<i>45</i>&nbsp; * 22-Dec-2001 : Fixed bug in chartChanged with multiple combinations of
+<i>46</i>&nbsp; *               CombinedPlots (BK);
+<i>47</i>&nbsp; * 08-Jan-2002 : Moved to new package com.jrefinery.chart.combination (DG);
+<i>48</i>&nbsp; * 25-Feb-2002 : Updated import statements (DG);
+<i>49</i>&nbsp; * 28-Feb-2002 : Readded &quot;this.plotArea = plotArea&quot; that was deleted from
+<i>50</i>&nbsp; *               draw() method (BK);
+<i>51</i>&nbsp; * 26-Mar-2002 : Added an empty zoom method (this method needs to be written so
+<i>52</i>&nbsp; *               that combined plots will support zooming (DG);
+<i>53</i>&nbsp; * 29-Mar-2002 : Changed the method createCombinedAxis adding the creation of
+<i>54</i>&nbsp; *               OverlaidSymbolicAxis and CombinedSymbolicAxis(AB);
+<i>55</i>&nbsp; * 23-Apr-2002 : Renamed CombinedPlot--&gt;MultiXYPlot, and simplified the
+<i>56</i>&nbsp; *               structure (DG);
+<i>57</i>&nbsp; * 23-May-2002 : Renamed (again) MultiXYPlot--&gt;CombinedXYPlot (DG);
+<i>58</i>&nbsp; * 19-Jun-2002 : Added get/setGap() methods suggested by David Basten (DG);
+<i>59</i>&nbsp; * 25-Jun-2002 : Removed redundant imports (DG);
+<i>60</i>&nbsp; * 16-Jul-2002 : Draws shared axis after subplots (to fix missing gridlines),
+<i>61</i>&nbsp; *               added overrides of &#39;setSeriesPaint()&#39; and &#39;setXYItemRenderer()&#39;
+<i>62</i>&nbsp; *               that pass changes down to subplots (KF);
+<i>63</i>&nbsp; * 09-Oct-2002 : Added add(XYPlot) method (DG);
+<i>64</i>&nbsp; * 26-Mar-2003 : Implemented Serializable (DG);
+<i>65</i>&nbsp; * 16-May-2003 : Renamed CombinedXYPlot --&gt; CombinedDomainXYPlot (DG);
+<i>66</i>&nbsp; * 04-Aug-2003 : Removed leftover code that was causing domain axis drawing
+<i>67</i>&nbsp; *               problem (DG);
+<i>68</i>&nbsp; * 08-Aug-2003 : Adjusted totalWeight in remove() method (DG);
+<i>69</i>&nbsp; * 21-Aug-2003 : Implemented Cloneable (DG);
+<i>70</i>&nbsp; * 11-Sep-2003 : Fix cloning support (subplots) (NB);
+<i>71</i>&nbsp; * 15-Sep-2003 : Fixed error in cloning (DG);
+<i>72</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>73</i>&nbsp; * 17-Sep-2003 : Updated handling of &#39;clicks&#39; (DG);
+<i>74</i>&nbsp; * 12-Nov-2004 : Implemented the new Zoomable interface (DG);
+<i>75</i>&nbsp; * 25-Nov-2004 : Small update to clone() implementation (DG);
+<i>76</i>&nbsp; * 21-Feb-2005 : The getLegendItems() method now returns the fixed legend
+<i>77</i>&nbsp; *               items if set (DG);
+<i>78</i>&nbsp; * 05-May-2005 : Removed unused draw() method (DG);
+<i>79</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>80</i>&nbsp; * 23-Aug-2006 : Override setFixedRangeAxisSpace() to update subplots (DG);
+<i>81</i>&nbsp; * 06-Feb-2007 : Fixed bug 1606205, draw shared axis after subplots (DG);
+<i>82</i>&nbsp; * 23-Mar-2007 : Reverted previous patch (bug fix 1606205) (DG);
+<i>83</i>&nbsp; * 17-Apr-2007 : Added null argument checks to findSubplot() (DG);
+<i>84</i>&nbsp; * 27-Nov-2007 : Modified setFixedRangeAxisSpaceForSubplots() so as not to
+<i>85</i>&nbsp; *               trigger change event in subplots (DG);
+<i>86</i>&nbsp; * 28-Jan-2008 : Reset fixed range axis space in subplots for each call to
+<i>87</i>&nbsp; *               draw() (DG);
+<i>88</i>&nbsp; * 27-Mar-2008 : Add documentation for getDataRange() method (DG);
+<i>89</i>&nbsp; * 31-Mar-2008 : Updated getSubplots() to return EMPTY_LIST for null
+<i>90</i>&nbsp; *               subplots, as suggested by Richard West (DG);
+<i>91</i>&nbsp; * 28-Apr-2008 : Fixed zooming problem (see bug 1950037) (DG);
+<i>92</i>&nbsp; * 11-Aug-2008 : Don&#39;t store totalWeight of subplots, calculate it as
+<i>93</i>&nbsp; *               required (DG);
+<i>94</i>&nbsp; * 21-Dec-2011 : Apply patch 3447161 by Ulrich Voigt and Martin Hoeller (MH);
+<i>95</i>&nbsp; * 21-Jul-2014 : Override isRangePannable() and setRangePannable() - motivated 
+<i>96</i>&nbsp; *               by patch #304 by Ulrich Voigt (DG);
+<i>97</i>&nbsp; */
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;package org.jfree.chart.plot;
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;import java.awt.Graphics2D;
+<i>102</i>&nbsp;import java.awt.geom.Point2D;
+<i>103</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>104</i>&nbsp;import java.util.Collections;
+<i>105</i>&nbsp;import java.util.Iterator;
+<i>106</i>&nbsp;import java.util.List;
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;import org.jfree.chart.LegendItemCollection;
+<i>109</i>&nbsp;import org.jfree.chart.axis.AxisSpace;
+<i>110</i>&nbsp;import org.jfree.chart.axis.AxisState;
+<i>111</i>&nbsp;import org.jfree.chart.axis.NumberAxis;
+<i>112</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>113</i>&nbsp;import org.jfree.chart.event.PlotChangeEvent;
+<i>114</i>&nbsp;import org.jfree.chart.event.PlotChangeListener;
+<i>115</i>&nbsp;import org.jfree.chart.renderer.xy.XYItemRenderer;
+<i>116</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>117</i>&nbsp;import org.jfree.chart.util.ShadowGenerator;
+<i>118</i>&nbsp;import org.jfree.data.Range;
+<i>119</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>120</i>&nbsp;import org.jfree.ui.RectangleInsets;
+<i>121</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;/**
+<i>124</i>&nbsp; * An extension of {@link XYPlot} that contains multiple subplots that share a
+<i>125</i>&nbsp; * common domain axis.
+<i>126</i>&nbsp; */
+<i>127</i>&nbsp;public class CombinedDomainXYPlot extends XYPlot
+<i>128</i>&nbsp;        implements PlotChangeListener {
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /** For serialization. */
+<i>131</i>&nbsp;    private static final long serialVersionUID = -7765545541261907383L;
+<i>132</i>&nbsp;
+<i>133</i>&nbsp;    /** Storage for the subplot references. */
+<i>134</i>&nbsp;    private List&lt;XYPlot&gt; subplots;
+<i>135</i>&nbsp;
+<i>136</i>&nbsp;    /** The gap between subplots. */
+<b class="fc"><i>137</i>&nbsp;    private double gap = 5.0;</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /** Temporary storage for the subplot areas. */
+<i>140</i>&nbsp;    private transient Rectangle2D[] subplotAreas;
+<i>141</i>&nbsp;    // TODO:  the subplot areas needs to be moved out of the plot into the plot
+<i>142</i>&nbsp;    //        state
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * Default constructor.
+<i>146</i>&nbsp;     */
+<i>147</i>&nbsp;    public CombinedDomainXYPlot() {
+<b class="fc"><i>148</i>&nbsp;        this(new NumberAxis());</b>
+<b class="fc"><i>149</i>&nbsp;    }</b>
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /**
+<i>152</i>&nbsp;     * Creates a new combined plot that shares a domain axis among multiple
+<i>153</i>&nbsp;     * subplots.
+<i>154</i>&nbsp;     *
+<i>155</i>&nbsp;     * @param domainAxis  the shared axis.
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    public CombinedDomainXYPlot(ValueAxis domainAxis) {
+<b class="fc"><i>158</i>&nbsp;        super(null,        // no data in the parent plot</b>
+<i>159</i>&nbsp;              domainAxis,
+<i>160</i>&nbsp;              null,        // no range axis
+<i>161</i>&nbsp;              null);       // no renderer
+<b class="fc"><i>162</i>&nbsp;        this.subplots = new java.util.ArrayList&lt;XYPlot&gt;();</b>
+<b class="fc"><i>163</i>&nbsp;    }</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    /**
+<i>166</i>&nbsp;     * Returns a string describing the type of plot.
+<i>167</i>&nbsp;     *
+<i>168</i>&nbsp;     * @return The type of plot.
+<i>169</i>&nbsp;     */
+<i>170</i>&nbsp;    @Override
+<i>171</i>&nbsp;    public String getPlotType() {
+<b class="nc"><i>172</i>&nbsp;        return &quot;Combined_Domain_XYPlot&quot;;</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Returns the gap between subplots, measured in Java2D units.
+<i>177</i>&nbsp;     *
+<i>178</i>&nbsp;     * @return The gap (in Java2D units).
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @see #setGap(double)
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public double getGap() {
+<b class="nc"><i>183</i>&nbsp;        return this.gap;</b>
+<i>184</i>&nbsp;    }
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * Sets the amount of space between subplots and sends a
+<i>188</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>189</i>&nbsp;     *
+<i>190</i>&nbsp;     * @param gap  the gap between subplots (in Java2D units).
+<i>191</i>&nbsp;     *
+<i>192</i>&nbsp;     * @see #getGap()
+<i>193</i>&nbsp;     */
+<i>194</i>&nbsp;    public void setGap(double gap) {
+<b class="fc"><i>195</i>&nbsp;        this.gap = gap;</b>
+<b class="fc"><i>196</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>197</i>&nbsp;    }</b>
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Returns {@code true} if the range is pannable for at least one subplot,
+<i>201</i>&nbsp;     * and {@code false} otherwise.
+<i>202</i>&nbsp;     * 
+<i>203</i>&nbsp;     * @return A boolean. 
+<i>204</i>&nbsp;     */
+<i>205</i>&nbsp;    @Override
+<i>206</i>&nbsp;    public boolean isRangePannable() {
+<b class="nc"><i>207</i>&nbsp;        for (XYPlot subplot : this.subplots) {</b>
+<b class="nc"><i>208</i>&nbsp;            if (subplot.isRangePannable()) {</b>
+<b class="nc"><i>209</i>&nbsp;                return true;</b>
+<i>210</i>&nbsp;            }
+<b class="nc"><i>211</i>&nbsp;        }</b>
+<b class="nc"><i>212</i>&nbsp;        return false;</b>
+<i>213</i>&nbsp;    }
+<i>214</i>&nbsp;    
+<i>215</i>&nbsp;    /**
+<i>216</i>&nbsp;     * Sets the flag, on each of the subplots, that controls whether or not the 
+<i>217</i>&nbsp;     * range is pannable.
+<i>218</i>&nbsp;     * 
+<i>219</i>&nbsp;     * @param pannable  the new flag value. 
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;    @Override
+<i>222</i>&nbsp;    public void setRangePannable(boolean pannable) {
+<b class="nc"><i>223</i>&nbsp;        for (XYPlot subplot : this.subplots) {</b>
+<b class="nc"><i>224</i>&nbsp;            subplot.setRangePannable(pannable);</b>
+<b class="nc"><i>225</i>&nbsp;        }        </b>
+<b class="nc"><i>226</i>&nbsp;    }</b>
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     * Sets the orientation for the plot (also changes the orientation for all
+<i>230</i>&nbsp;     * the subplots to match).
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @param orientation  the orientation (&lt;code&gt;null&lt;/code&gt; not allowed).
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    @Override
+<i>235</i>&nbsp;    public void setOrientation(PlotOrientation orientation) {
+<b class="fc"><i>236</i>&nbsp;        super.setOrientation(orientation);</b>
+<b class="fc"><i>237</i>&nbsp;        Iterator iterator = this.subplots.iterator();</b>
+<b class="fc"><i>238</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>239</i>&nbsp;            XYPlot plot = (XYPlot) iterator.next();</b>
+<b class="fc"><i>240</i>&nbsp;            plot.setOrientation(orientation);</b>
+<b class="fc"><i>241</i>&nbsp;        }</b>
+<b class="fc"><i>242</i>&nbsp;    }</b>
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /**
+<i>245</i>&nbsp;     * Sets the shadow generator for the plot (and all subplots) and sends
+<i>246</i>&nbsp;     * a {@link PlotChangeEvent} to all registered listeners.
+<i>247</i>&nbsp;     * 
+<i>248</i>&nbsp;     * @param generator  the new generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>249</i>&nbsp;     */
+<i>250</i>&nbsp;    @Override
+<i>251</i>&nbsp;    public void setShadowGenerator(ShadowGenerator generator) {
+<b class="nc"><i>252</i>&nbsp;        setNotify(false);</b>
+<b class="nc"><i>253</i>&nbsp;        super.setShadowGenerator(generator);</b>
+<b class="nc"><i>254</i>&nbsp;        Iterator iterator = this.subplots.iterator();</b>
+<b class="nc"><i>255</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>256</i>&nbsp;            XYPlot plot = (XYPlot) iterator.next();</b>
+<b class="nc"><i>257</i>&nbsp;            plot.setShadowGenerator(generator);</b>
+<b class="nc"><i>258</i>&nbsp;        }</b>
+<b class="nc"><i>259</i>&nbsp;        setNotify(true);</b>
+<b class="nc"><i>260</i>&nbsp;    }</b>
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    /**
+<i>263</i>&nbsp;     * Returns a range representing the extent of the data values in this plot
+<i>264</i>&nbsp;     * (obtained from the subplots) that will be rendered against the specified
+<i>265</i>&nbsp;     * axis.  NOTE: This method is intended for internal JFreeChart use, and
+<i>266</i>&nbsp;     * is public only so that code in the axis classes can call it.  Since
+<i>267</i>&nbsp;     * only the domain axis is shared between subplots, the JFreeChart code
+<i>268</i>&nbsp;     * will only call this method for the domain values (although this is not
+<i>269</i>&nbsp;     * checked/enforced).
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @param axis  the axis.
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @return The range (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>274</i>&nbsp;     */
+<i>275</i>&nbsp;    @Override
+<i>276</i>&nbsp;    public Range getDataRange(ValueAxis axis) {
+<b class="fc"><i>277</i>&nbsp;        Range result = null;</b>
+<b class="fc"><i>278</i>&nbsp;        if (this.subplots != null) {</b>
+<b class="fc"><i>279</i>&nbsp;            Iterator iterator = this.subplots.iterator();</b>
+<b class="fc"><i>280</i>&nbsp;            while (iterator.hasNext()) {</b>
+<b class="fc"><i>281</i>&nbsp;                XYPlot subplot = (XYPlot) iterator.next();</b>
+<b class="fc"><i>282</i>&nbsp;                result = Range.combine(result, subplot.getDataRange(axis));</b>
+<b class="fc"><i>283</i>&nbsp;            }</b>
+<i>284</i>&nbsp;        }
+<b class="fc"><i>285</i>&nbsp;        return result;</b>
+<i>286</i>&nbsp;    }
+<i>287</i>&nbsp;
+<i>288</i>&nbsp;    /**
+<i>289</i>&nbsp;     * Adds a subplot (with a default &#39;weight&#39; of 1) and sends a
+<i>290</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>291</i>&nbsp;     * &lt;P&gt;
+<i>292</i>&nbsp;     * The domain axis for the subplot will be set to &lt;code&gt;null&lt;/code&gt;.  You
+<i>293</i>&nbsp;     * must ensure that the subplot has a non-null range axis.
+<i>294</i>&nbsp;     *
+<i>295</i>&nbsp;     * @param subplot  the subplot (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>296</i>&nbsp;     */
+<i>297</i>&nbsp;    public void add(XYPlot subplot) {
+<i>298</i>&nbsp;        // defer argument checking
+<b class="fc"><i>299</i>&nbsp;        add(subplot, 1);</b>
+<b class="fc"><i>300</i>&nbsp;    }</b>
+<i>301</i>&nbsp;
+<i>302</i>&nbsp;    /**
+<i>303</i>&nbsp;     * Adds a subplot with the specified weight and sends a
+<i>304</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.  The weight
+<i>305</i>&nbsp;     * determines how much space is allocated to the subplot relative to all
+<i>306</i>&nbsp;     * the other subplots.
+<i>307</i>&nbsp;     * &lt;P&gt;
+<i>308</i>&nbsp;     * The domain axis for the subplot will be set to &lt;code&gt;null&lt;/code&gt;.  You
+<i>309</i>&nbsp;     * must ensure that the subplot has a non-null range axis.
+<i>310</i>&nbsp;     *
+<i>311</i>&nbsp;     * @param subplot  the subplot (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>312</i>&nbsp;     * @param weight  the weight (must be &amp;gt;= 1).
+<i>313</i>&nbsp;     */
+<i>314</i>&nbsp;    public void add(XYPlot subplot, int weight) {
+<b class="fc"><i>315</i>&nbsp;        ParamChecks.nullNotPermitted(subplot, &quot;subplot&quot;);</b>
+<b class="fc"><i>316</i>&nbsp;        if (weight &lt;= 0) {</b>
+<b class="nc"><i>317</i>&nbsp;            throw new IllegalArgumentException(&quot;Require weight &gt;= 1.&quot;);</b>
+<i>318</i>&nbsp;        }
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;        // store the plot and its weight
+<b class="fc"><i>321</i>&nbsp;        subplot.setParent(this);</b>
+<b class="fc"><i>322</i>&nbsp;        subplot.setWeight(weight);</b>
+<b class="fc"><i>323</i>&nbsp;        subplot.setInsets(RectangleInsets.ZERO_INSETS, false);</b>
+<b class="fc"><i>324</i>&nbsp;        subplot.setDomainAxis(null);</b>
+<b class="fc"><i>325</i>&nbsp;        subplot.addChangeListener(this);</b>
+<b class="fc"><i>326</i>&nbsp;        this.subplots.add(subplot);</b>
+<i>327</i>&nbsp;
+<b class="fc"><i>328</i>&nbsp;        ValueAxis axis = getDomainAxis();</b>
+<b class="fc"><i>329</i>&nbsp;        if (axis != null) {</b>
+<b class="fc"><i>330</i>&nbsp;            axis.configure();</b>
+<i>331</i>&nbsp;        }
+<b class="fc"><i>332</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>333</i>&nbsp;    }</b>
+<i>334</i>&nbsp;
+<i>335</i>&nbsp;    /**
+<i>336</i>&nbsp;     * Removes a subplot from the combined chart and sends a
+<i>337</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>338</i>&nbsp;     *
+<i>339</i>&nbsp;     * @param subplot  the subplot (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>340</i>&nbsp;     */
+<i>341</i>&nbsp;    public void remove(XYPlot subplot) {
+<b class="fc"><i>342</i>&nbsp;        ParamChecks.nullNotPermitted(subplot, &quot;subplot&quot;);</b>
+<b class="fc"><i>343</i>&nbsp;        int position = -1;</b>
+<b class="fc"><i>344</i>&nbsp;        int size = this.subplots.size();</b>
+<b class="fc"><i>345</i>&nbsp;        int i = 0;</b>
+<b class="fc"><i>346</i>&nbsp;        while (position == -1 &amp;&amp; i &lt; size) {</b>
+<b class="fc"><i>347</i>&nbsp;            if (this.subplots.get(i) == subplot) {</b>
+<b class="fc"><i>348</i>&nbsp;                position = i;</b>
+<i>349</i>&nbsp;            }
+<b class="fc"><i>350</i>&nbsp;            i++;</b>
+<i>351</i>&nbsp;        }
+<b class="fc"><i>352</i>&nbsp;        if (position != -1) {</b>
+<b class="fc"><i>353</i>&nbsp;            this.subplots.remove(position);</b>
+<b class="fc"><i>354</i>&nbsp;            subplot.setParent(null);</b>
+<b class="fc"><i>355</i>&nbsp;            subplot.removeChangeListener(this);</b>
+<b class="fc"><i>356</i>&nbsp;            ValueAxis domain = getDomainAxis();</b>
+<b class="fc"><i>357</i>&nbsp;            if (domain != null) {</b>
+<b class="fc"><i>358</i>&nbsp;                domain.configure();</b>
+<i>359</i>&nbsp;            }
+<b class="fc"><i>360</i>&nbsp;            fireChangeEvent();</b>
+<i>361</i>&nbsp;        }
+<b class="fc"><i>362</i>&nbsp;    }</b>
+<i>363</i>&nbsp;
+<i>364</i>&nbsp;    /**
+<i>365</i>&nbsp;     * Returns the list of subplots.  The returned list may be empty, but is
+<i>366</i>&nbsp;     * never &lt;code&gt;null&lt;/code&gt;.
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @return An unmodifiable list of subplots.
+<i>369</i>&nbsp;     */
+<i>370</i>&nbsp;    public List getSubplots() {
+<b class="fc"><i>371</i>&nbsp;        if (this.subplots != null) {</b>
+<b class="fc"><i>372</i>&nbsp;            return Collections.unmodifiableList(this.subplots);</b>
+<i>373</i>&nbsp;        }
+<i>374</i>&nbsp;        else {
+<b class="nc"><i>375</i>&nbsp;            return Collections.EMPTY_LIST;</b>
+<i>376</i>&nbsp;        }
+<i>377</i>&nbsp;    }
+<i>378</i>&nbsp;
+<i>379</i>&nbsp;    /**
+<i>380</i>&nbsp;     * Calculates the axis space required.
+<i>381</i>&nbsp;     *
+<i>382</i>&nbsp;     * @param g2  the graphics device.
+<i>383</i>&nbsp;     * @param plotArea  the plot area.
+<i>384</i>&nbsp;     *
+<i>385</i>&nbsp;     * @return The space.
+<i>386</i>&nbsp;     */
+<i>387</i>&nbsp;    @Override
+<i>388</i>&nbsp;    protected AxisSpace calculateAxisSpace(Graphics2D g2,
+<i>389</i>&nbsp;                                           Rectangle2D plotArea) {
+<i>390</i>&nbsp;
+<b class="fc"><i>391</i>&nbsp;        AxisSpace space = new AxisSpace();</b>
+<b class="fc"><i>392</i>&nbsp;        PlotOrientation orientation = getOrientation();</b>
+<i>393</i>&nbsp;
+<i>394</i>&nbsp;        // work out the space required by the domain axis...
+<b class="fc"><i>395</i>&nbsp;        AxisSpace fixed = getFixedDomainAxisSpace();</b>
+<b class="fc"><i>396</i>&nbsp;        if (fixed != null) {</b>
+<b class="nc"><i>397</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>398</i>&nbsp;                space.setLeft(fixed.getLeft());</b>
+<b class="nc"><i>399</i>&nbsp;                space.setRight(fixed.getRight());</b>
+<i>400</i>&nbsp;            }
+<b class="nc"><i>401</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>402</i>&nbsp;                space.setTop(fixed.getTop());</b>
+<b class="nc"><i>403</i>&nbsp;                space.setBottom(fixed.getBottom());</b>
+<i>404</i>&nbsp;            }
+<i>405</i>&nbsp;        }
+<i>406</i>&nbsp;        else {
+<b class="fc"><i>407</i>&nbsp;            ValueAxis xAxis = getDomainAxis();</b>
+<b class="fc"><i>408</i>&nbsp;            RectangleEdge xEdge = Plot.resolveDomainAxisLocation(</b>
+<b class="fc"><i>409</i>&nbsp;                    getDomainAxisLocation(), orientation);</b>
+<b class="fc"><i>410</i>&nbsp;            if (xAxis != null) {</b>
+<b class="fc"><i>411</i>&nbsp;                space = xAxis.reserveSpace(g2, this, plotArea, xEdge, space);</b>
+<i>412</i>&nbsp;            }
+<i>413</i>&nbsp;        }
+<i>414</i>&nbsp;
+<b class="fc"><i>415</i>&nbsp;        Rectangle2D adjustedPlotArea = space.shrink(plotArea, null);</b>
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;        // work out the maximum height or width of the non-shared axes...
+<b class="fc"><i>418</i>&nbsp;        int n = this.subplots.size();</b>
+<b class="fc"><i>419</i>&nbsp;        int totalWeight = 0;</b>
+<b class="fc"><i>420</i>&nbsp;        for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc"><i>421</i>&nbsp;            XYPlot sub = (XYPlot) this.subplots.get(i);</b>
+<b class="fc"><i>422</i>&nbsp;            totalWeight += sub.getWeight();</b>
+<i>423</i>&nbsp;        }
+<b class="fc"><i>424</i>&nbsp;        this.subplotAreas = new Rectangle2D[n];</b>
+<b class="fc"><i>425</i>&nbsp;        double x = adjustedPlotArea.getX();</b>
+<b class="fc"><i>426</i>&nbsp;        double y = adjustedPlotArea.getY();</b>
+<b class="fc"><i>427</i>&nbsp;        double usableSize = 0.0;</b>
+<b class="fc"><i>428</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>429</i>&nbsp;            usableSize = adjustedPlotArea.getWidth() - this.gap * (n - 1);</b>
+<i>430</i>&nbsp;        }
+<b class="fc"><i>431</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>432</i>&nbsp;            usableSize = adjustedPlotArea.getHeight() - this.gap * (n - 1);</b>
+<i>433</i>&nbsp;        }
+<i>434</i>&nbsp;
+<b class="fc"><i>435</i>&nbsp;        for (int i = 0; i &lt; n; i++) {</b>
+<b class="fc"><i>436</i>&nbsp;            XYPlot plot = (XYPlot) this.subplots.get(i);</b>
+<i>437</i>&nbsp;
+<i>438</i>&nbsp;            // calculate sub-plot area
+<b class="fc"><i>439</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>440</i>&nbsp;                double w = usableSize * plot.getWeight() / totalWeight;</b>
+<b class="nc"><i>441</i>&nbsp;                this.subplotAreas[i] = new Rectangle2D.Double(x, y, w,</b>
+<b class="nc"><i>442</i>&nbsp;                        adjustedPlotArea.getHeight());</b>
+<b class="nc"><i>443</i>&nbsp;                x = x + w + this.gap;</b>
+<b class="nc"><i>444</i>&nbsp;            }</b>
+<b class="fc"><i>445</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>446</i>&nbsp;                double h = usableSize * plot.getWeight() / totalWeight;</b>
+<b class="fc"><i>447</i>&nbsp;                this.subplotAreas[i] = new Rectangle2D.Double(x, y,</b>
+<b class="fc"><i>448</i>&nbsp;                        adjustedPlotArea.getWidth(), h);</b>
+<b class="fc"><i>449</i>&nbsp;                y = y + h + this.gap;</b>
+<i>450</i>&nbsp;            }
+<i>451</i>&nbsp;
+<b class="fc"><i>452</i>&nbsp;            AxisSpace subSpace = plot.calculateRangeAxisSpace(g2,</b>
+<i>453</i>&nbsp;                    this.subplotAreas[i], null);
+<b class="fc"><i>454</i>&nbsp;            space.ensureAtLeast(subSpace);</b>
+<i>455</i>&nbsp;
+<i>456</i>&nbsp;        }
+<i>457</i>&nbsp;
+<b class="fc"><i>458</i>&nbsp;        return space;</b>
+<i>459</i>&nbsp;    }
+<i>460</i>&nbsp;
+<i>461</i>&nbsp;    /**
+<i>462</i>&nbsp;     * Draws the plot within the specified area on a graphics device.
+<i>463</i>&nbsp;     *
+<i>464</i>&nbsp;     * @param g2  the graphics device.
+<i>465</i>&nbsp;     * @param area  the plot area (in Java2D space).
+<i>466</i>&nbsp;     * @param anchor  an anchor point in Java2D space (&lt;code&gt;null&lt;/code&gt;
+<i>467</i>&nbsp;     *                permitted).
+<i>468</i>&nbsp;     * @param parentState  the state from the parent plot, if there is one
+<i>469</i>&nbsp;     *                     (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>470</i>&nbsp;     * @param info  collects chart drawing information (&lt;code&gt;null&lt;/code&gt;
+<i>471</i>&nbsp;     *              permitted).
+<i>472</i>&nbsp;     */
+<i>473</i>&nbsp;    @Override
+<i>474</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
+<i>475</i>&nbsp;            PlotState parentState, PlotRenderingInfo info) {
+<i>476</i>&nbsp;
+<i>477</i>&nbsp;        // set up info collection...
+<b class="fc"><i>478</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>479</i>&nbsp;            info.setPlotArea(area);</b>
+<i>480</i>&nbsp;        }
+<i>481</i>&nbsp;
+<i>482</i>&nbsp;        // adjust the drawing area for plot insets (if any)...
+<b class="fc"><i>483</i>&nbsp;        RectangleInsets insets = getInsets();</b>
+<b class="fc"><i>484</i>&nbsp;        insets.trim(area);</b>
+<i>485</i>&nbsp;
+<b class="fc"><i>486</i>&nbsp;        setFixedRangeAxisSpaceForSubplots(null);</b>
+<b class="fc"><i>487</i>&nbsp;        AxisSpace space = calculateAxisSpace(g2, area);</b>
+<b class="fc"><i>488</i>&nbsp;        Rectangle2D dataArea = space.shrink(area, null);</b>
+<i>489</i>&nbsp;
+<i>490</i>&nbsp;        // set the width and height of non-shared axis of all sub-plots
+<b class="fc"><i>491</i>&nbsp;        setFixedRangeAxisSpaceForSubplots(space);</b>
+<i>492</i>&nbsp;
+<i>493</i>&nbsp;        // draw the shared axis
+<b class="fc"><i>494</i>&nbsp;        ValueAxis axis = getDomainAxis();</b>
+<b class="fc"><i>495</i>&nbsp;        RectangleEdge edge = getDomainAxisEdge();</b>
+<b class="fc"><i>496</i>&nbsp;        double cursor = RectangleEdge.coordinate(dataArea, edge);</b>
+<b class="fc"><i>497</i>&nbsp;        AxisState axisState = axis.draw(g2, cursor, area, dataArea, edge, info);</b>
+<b class="fc"><i>498</i>&nbsp;        if (parentState == null) {</b>
+<b class="fc"><i>499</i>&nbsp;            parentState = new PlotState();</b>
+<i>500</i>&nbsp;        }
+<b class="fc"><i>501</i>&nbsp;        parentState.getSharedAxisStates().put(axis, axisState);</b>
+<i>502</i>&nbsp;
+<i>503</i>&nbsp;        // draw all the subplots
+<b class="fc"><i>504</i>&nbsp;        for (int i = 0; i &lt; this.subplots.size(); i++) {</b>
+<b class="fc"><i>505</i>&nbsp;            XYPlot plot = (XYPlot) this.subplots.get(i);</b>
+<b class="fc"><i>506</i>&nbsp;            PlotRenderingInfo subplotInfo = null;</b>
+<b class="fc"><i>507</i>&nbsp;            if (info != null) {</b>
+<b class="nc"><i>508</i>&nbsp;                subplotInfo = new PlotRenderingInfo(info.getOwner());</b>
+<b class="nc"><i>509</i>&nbsp;                info.addSubplotInfo(subplotInfo);</b>
+<i>510</i>&nbsp;            }
+<b class="fc"><i>511</i>&nbsp;            plot.draw(g2, this.subplotAreas[i], anchor, parentState,</b>
+<i>512</i>&nbsp;                    subplotInfo);
+<i>513</i>&nbsp;        }
+<i>514</i>&nbsp;
+<b class="fc"><i>515</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>516</i>&nbsp;            info.setDataArea(dataArea);</b>
+<i>517</i>&nbsp;        }
+<i>518</i>&nbsp;
+<b class="fc"><i>519</i>&nbsp;    }</b>
+<i>520</i>&nbsp;
+<i>521</i>&nbsp;    /**
+<i>522</i>&nbsp;     * Returns a collection of legend items for the plot.
+<i>523</i>&nbsp;     *
+<i>524</i>&nbsp;     * @return The legend items.
+<i>525</i>&nbsp;     */
+<i>526</i>&nbsp;    @Override
+<i>527</i>&nbsp;    public LegendItemCollection getLegendItems() {
+<b class="fc"><i>528</i>&nbsp;        LegendItemCollection result = getFixedLegendItems();</b>
+<b class="fc"><i>529</i>&nbsp;        if (result == null) {</b>
+<b class="fc"><i>530</i>&nbsp;            result = new LegendItemCollection();</b>
+<b class="fc"><i>531</i>&nbsp;            if (this.subplots != null) {</b>
+<b class="fc"><i>532</i>&nbsp;                Iterator iterator = this.subplots.iterator();</b>
+<b class="fc"><i>533</i>&nbsp;                while (iterator.hasNext()) {</b>
+<b class="fc"><i>534</i>&nbsp;                    XYPlot plot = (XYPlot) iterator.next();</b>
+<b class="fc"><i>535</i>&nbsp;                    LegendItemCollection more = plot.getLegendItems();</b>
+<b class="fc"><i>536</i>&nbsp;                    result.addAll(more);</b>
+<b class="fc"><i>537</i>&nbsp;                }</b>
+<i>538</i>&nbsp;            }
+<i>539</i>&nbsp;        }
+<b class="fc"><i>540</i>&nbsp;        return result;</b>
+<i>541</i>&nbsp;    }
+<i>542</i>&nbsp;
+<i>543</i>&nbsp;    /**
+<i>544</i>&nbsp;     * Multiplies the range on the range axis/axes by the specified factor.
+<i>545</i>&nbsp;     *
+<i>546</i>&nbsp;     * @param factor  the zoom factor.
+<i>547</i>&nbsp;     * @param info  the plot rendering info (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>548</i>&nbsp;     * @param source  the source point (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>549</i>&nbsp;     */
+<i>550</i>&nbsp;    @Override
+<i>551</i>&nbsp;    public void zoomRangeAxes(double factor, PlotRenderingInfo info,
+<i>552</i>&nbsp;                              Point2D source) {
+<b class="nc"><i>553</i>&nbsp;        zoomRangeAxes(factor, info, source, false);</b>
+<b class="nc"><i>554</i>&nbsp;    }</b>
+<i>555</i>&nbsp;
+<i>556</i>&nbsp;    /**
+<i>557</i>&nbsp;     * Multiplies the range on the range axis/axes by the specified factor.
+<i>558</i>&nbsp;     *
+<i>559</i>&nbsp;     * @param factor  the zoom factor.
+<i>560</i>&nbsp;     * @param state  the plot state.
+<i>561</i>&nbsp;     * @param source  the source point (in Java2D coordinates).
+<i>562</i>&nbsp;     * @param useAnchor  use source point as zoom anchor?
+<i>563</i>&nbsp;     */
+<i>564</i>&nbsp;    @Override
+<i>565</i>&nbsp;    public void zoomRangeAxes(double factor, PlotRenderingInfo state,
+<i>566</i>&nbsp;                              Point2D source, boolean useAnchor) {
+<i>567</i>&nbsp;        // delegate &#39;state&#39; and &#39;source&#39; argument checks...
+<b class="nc"><i>568</i>&nbsp;        XYPlot subplot = findSubplot(state, source);</b>
+<b class="nc"><i>569</i>&nbsp;        if (subplot != null) {</b>
+<b class="nc"><i>570</i>&nbsp;            subplot.zoomRangeAxes(factor, state, source, useAnchor);</b>
+<i>571</i>&nbsp;        }
+<i>572</i>&nbsp;        else {
+<i>573</i>&nbsp;            // if the source point doesn&#39;t fall within a subplot, we do the
+<i>574</i>&nbsp;            // zoom on all subplots...
+<b class="nc"><i>575</i>&nbsp;            Iterator iterator = getSubplots().iterator();</b>
+<b class="nc"><i>576</i>&nbsp;            while (iterator.hasNext()) {</b>
+<b class="nc"><i>577</i>&nbsp;                subplot = (XYPlot) iterator.next();</b>
+<b class="nc"><i>578</i>&nbsp;                subplot.zoomRangeAxes(factor, state, source, useAnchor);</b>
+<i>579</i>&nbsp;            }
+<i>580</i>&nbsp;        }
+<b class="nc"><i>581</i>&nbsp;    }</b>
+<i>582</i>&nbsp;
+<i>583</i>&nbsp;    /**
+<i>584</i>&nbsp;     * Zooms in on the range axes.
+<i>585</i>&nbsp;     *
+<i>586</i>&nbsp;     * @param lowerPercent  the lower bound.
+<i>587</i>&nbsp;     * @param upperPercent  the upper bound.
+<i>588</i>&nbsp;     * @param info  the plot rendering info (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>589</i>&nbsp;     * @param source  the source point (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>590</i>&nbsp;     */
+<i>591</i>&nbsp;    @Override
+<i>592</i>&nbsp;    public void zoomRangeAxes(double lowerPercent, double upperPercent,
+<i>593</i>&nbsp;                              PlotRenderingInfo info, Point2D source) {
+<i>594</i>&nbsp;        // delegate &#39;info&#39; and &#39;source&#39; argument checks...
+<b class="nc"><i>595</i>&nbsp;        XYPlot subplot = findSubplot(info, source);</b>
+<b class="nc"><i>596</i>&nbsp;        if (subplot != null) {</b>
+<b class="nc"><i>597</i>&nbsp;            subplot.zoomRangeAxes(lowerPercent, upperPercent, info, source);</b>
+<i>598</i>&nbsp;        }
+<i>599</i>&nbsp;        else {
+<i>600</i>&nbsp;            // if the source point doesn&#39;t fall within a subplot, we do the
+<i>601</i>&nbsp;            // zoom on all subplots...
+<b class="nc"><i>602</i>&nbsp;            Iterator iterator = getSubplots().iterator();</b>
+<b class="nc"><i>603</i>&nbsp;            while (iterator.hasNext()) {</b>
+<b class="nc"><i>604</i>&nbsp;                subplot = (XYPlot) iterator.next();</b>
+<b class="nc"><i>605</i>&nbsp;                subplot.zoomRangeAxes(lowerPercent, upperPercent, info, source);</b>
+<i>606</i>&nbsp;            }
+<i>607</i>&nbsp;        }
+<b class="nc"><i>608</i>&nbsp;    }</b>
+<i>609</i>&nbsp;
+<i>610</i>&nbsp;    /**
+<i>611</i>&nbsp;     * Pans all range axes by the specified percentage.
+<i>612</i>&nbsp;     *
+<i>613</i>&nbsp;     * @param panRange the distance to pan (as a percentage of the axis length).
+<i>614</i>&nbsp;     * @param info  the plot info ({@code null} not permitted).
+<i>615</i>&nbsp;     * @param source the source point where the pan action started.
+<i>616</i>&nbsp;     *
+<i>617</i>&nbsp;     * @since 1.0.15
+<i>618</i>&nbsp;     */
+<i>619</i>&nbsp;    @Override
+<i>620</i>&nbsp;    public void panRangeAxes(double panRange, PlotRenderingInfo info,
+<i>621</i>&nbsp;            Point2D source) {
+<b class="nc"><i>622</i>&nbsp;        XYPlot subplot = findSubplot(info, source);</b>
+<b class="nc"><i>623</i>&nbsp;        if (subplot == null) {</b>
+<b class="nc"><i>624</i>&nbsp;            return;</b>
+<i>625</i>&nbsp;        }
+<b class="nc"><i>626</i>&nbsp;        if (!subplot.isRangePannable()) {</b>
+<b class="nc"><i>627</i>&nbsp;            return;</b>
+<i>628</i>&nbsp;        }
+<b class="nc"><i>629</i>&nbsp;        PlotRenderingInfo subplotInfo = info.getSubplotInfo(</b>
+<b class="nc"><i>630</i>&nbsp;                info.getSubplotIndex(source));</b>
+<b class="nc"><i>631</i>&nbsp;        if (subplotInfo == null) {</b>
+<b class="nc"><i>632</i>&nbsp;            return;</b>
+<i>633</i>&nbsp;        }
+<b class="nc"><i>634</i>&nbsp;        for (int i = 0; i &lt; subplot.getRangeAxisCount(); i++) {</b>
+<b class="nc"><i>635</i>&nbsp;            ValueAxis rangeAxis = subplot.getRangeAxis(i);</b>
+<b class="nc"><i>636</i>&nbsp;            if (rangeAxis != null) {</b>
+<b class="nc"><i>637</i>&nbsp;                rangeAxis.pan(panRange);</b>
+<i>638</i>&nbsp;            }
+<i>639</i>&nbsp;        }
+<b class="nc"><i>640</i>&nbsp;    }</b>
+<i>641</i>&nbsp;
+<i>642</i>&nbsp;    /**
+<i>643</i>&nbsp;     * Returns the subplot (if any) that contains the (x, y) point (specified
+<i>644</i>&nbsp;     * in Java2D space).
+<i>645</i>&nbsp;     *
+<i>646</i>&nbsp;     * @param info  the chart rendering info (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>647</i>&nbsp;     * @param source  the source point (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>648</i>&nbsp;     *
+<i>649</i>&nbsp;     * @return A subplot (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>650</i>&nbsp;     */
+<i>651</i>&nbsp;    public XYPlot findSubplot(PlotRenderingInfo info, Point2D source) {
+<b class="nc"><i>652</i>&nbsp;        ParamChecks.nullNotPermitted(info, &quot;info&quot;);</b>
+<b class="nc"><i>653</i>&nbsp;        ParamChecks.nullNotPermitted(source, &quot;source&quot;);</b>
+<b class="nc"><i>654</i>&nbsp;        XYPlot result = null;</b>
+<b class="nc"><i>655</i>&nbsp;        int subplotIndex = info.getSubplotIndex(source);</b>
+<b class="nc"><i>656</i>&nbsp;        if (subplotIndex &gt;= 0) {</b>
+<b class="nc"><i>657</i>&nbsp;            result =  (XYPlot) this.subplots.get(subplotIndex);</b>
+<i>658</i>&nbsp;        }
+<b class="nc"><i>659</i>&nbsp;        return result;</b>
+<i>660</i>&nbsp;    }
+<i>661</i>&nbsp;
+<i>662</i>&nbsp;    /**
+<i>663</i>&nbsp;     * Sets the item renderer FOR ALL SUBPLOTS.  Registered listeners are
+<i>664</i>&nbsp;     * notified that the plot has been modified.
+<i>665</i>&nbsp;     * &lt;P&gt;
+<i>666</i>&nbsp;     * Note: usually you will want to set the renderer independently for each
+<i>667</i>&nbsp;     * subplot, which is NOT what this method does.
+<i>668</i>&nbsp;     *
+<i>669</i>&nbsp;     * @param renderer the new renderer.
+<i>670</i>&nbsp;     */
+<i>671</i>&nbsp;    @Override
+<i>672</i>&nbsp;    public void setRenderer(XYItemRenderer renderer) {
+<b class="nc"><i>673</i>&nbsp;        super.setRenderer(renderer);  // not strictly necessary, since the</b>
+<i>674</i>&nbsp;                                      // renderer set for the
+<i>675</i>&nbsp;                                      // parent plot is not used
+<b class="nc"><i>676</i>&nbsp;        Iterator iterator = this.subplots.iterator();</b>
+<b class="nc"><i>677</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>678</i>&nbsp;            XYPlot plot = (XYPlot) iterator.next();</b>
+<b class="nc"><i>679</i>&nbsp;            plot.setRenderer(renderer);</b>
+<b class="nc"><i>680</i>&nbsp;        }</b>
+<b class="nc"><i>681</i>&nbsp;    }</b>
+<i>682</i>&nbsp;
+<i>683</i>&nbsp;    /**
+<i>684</i>&nbsp;     * Sets the fixed range axis space and sends a {@link PlotChangeEvent} to
+<i>685</i>&nbsp;     * all registered listeners.
+<i>686</i>&nbsp;     *
+<i>687</i>&nbsp;     * @param space  the space (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>688</i>&nbsp;     */
+<i>689</i>&nbsp;    @Override
+<i>690</i>&nbsp;    public void setFixedRangeAxisSpace(AxisSpace space) {
+<b class="nc"><i>691</i>&nbsp;        super.setFixedRangeAxisSpace(space);</b>
+<b class="nc"><i>692</i>&nbsp;        setFixedRangeAxisSpaceForSubplots(space);</b>
+<b class="nc"><i>693</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>694</i>&nbsp;    }</b>
+<i>695</i>&nbsp;
+<i>696</i>&nbsp;    /**
+<i>697</i>&nbsp;     * Sets the size (width or height, depending on the orientation of the
+<i>698</i>&nbsp;     * plot) for the domain axis of each subplot.
+<i>699</i>&nbsp;     *
+<i>700</i>&nbsp;     * @param space  the space.
+<i>701</i>&nbsp;     */
+<i>702</i>&nbsp;    protected void setFixedRangeAxisSpaceForSubplots(AxisSpace space) {
+<b class="fc"><i>703</i>&nbsp;        Iterator iterator = this.subplots.iterator();</b>
+<b class="fc"><i>704</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="fc"><i>705</i>&nbsp;            XYPlot plot = (XYPlot) iterator.next();</b>
+<b class="fc"><i>706</i>&nbsp;            plot.setFixedRangeAxisSpace(space, false);</b>
+<b class="fc"><i>707</i>&nbsp;        }</b>
+<b class="fc"><i>708</i>&nbsp;    }</b>
+<i>709</i>&nbsp;
+<i>710</i>&nbsp;    /**
+<i>711</i>&nbsp;     * Handles a &#39;click&#39; on the plot by updating the anchor values.
+<i>712</i>&nbsp;     *
+<i>713</i>&nbsp;     * @param x  x-coordinate, where the click occured.
+<i>714</i>&nbsp;     * @param y  y-coordinate, where the click occured.
+<i>715</i>&nbsp;     * @param info  object containing information about the plot dimensions.
+<i>716</i>&nbsp;     */
+<i>717</i>&nbsp;    @Override
+<i>718</i>&nbsp;    public void handleClick(int x, int y, PlotRenderingInfo info) {
+<b class="nc"><i>719</i>&nbsp;        Rectangle2D dataArea = info.getDataArea();</b>
+<b class="nc"><i>720</i>&nbsp;        if (dataArea.contains(x, y)) {</b>
+<b class="nc"><i>721</i>&nbsp;            for (int i = 0; i &lt; this.subplots.size(); i++) {</b>
+<b class="nc"><i>722</i>&nbsp;                XYPlot subplot = (XYPlot) this.subplots.get(i);</b>
+<b class="nc"><i>723</i>&nbsp;                PlotRenderingInfo subplotInfo = info.getSubplotInfo(i);</b>
+<b class="nc"><i>724</i>&nbsp;                subplot.handleClick(x, y, subplotInfo);</b>
+<i>725</i>&nbsp;            }
+<i>726</i>&nbsp;        }
+<b class="nc"><i>727</i>&nbsp;    }</b>
+<i>728</i>&nbsp;
+<i>729</i>&nbsp;    /**
+<i>730</i>&nbsp;     * Receives a {@link PlotChangeEvent} and responds by notifying all
+<i>731</i>&nbsp;     * listeners.
+<i>732</i>&nbsp;     *
+<i>733</i>&nbsp;     * @param event  the event.
+<i>734</i>&nbsp;     */
+<i>735</i>&nbsp;    @Override
+<i>736</i>&nbsp;    public void plotChanged(PlotChangeEvent event) {
+<b class="fc"><i>737</i>&nbsp;        notifyListeners(event);</b>
+<b class="fc"><i>738</i>&nbsp;    }</b>
+<i>739</i>&nbsp;
+<i>740</i>&nbsp;    /**
+<i>741</i>&nbsp;     * Tests this plot for equality with another object.
+<i>742</i>&nbsp;     *
+<i>743</i>&nbsp;     * @param obj  the other object.
+<i>744</i>&nbsp;     *
+<i>745</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>746</i>&nbsp;     */
+<i>747</i>&nbsp;    @Override
+<i>748</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>749</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>750</i>&nbsp;            return true;</b>
+<i>751</i>&nbsp;        }
+<b class="fc"><i>752</i>&nbsp;        if (!(obj instanceof CombinedDomainXYPlot)) {</b>
+<b class="fc"><i>753</i>&nbsp;            return false;</b>
+<i>754</i>&nbsp;        }
+<b class="fc"><i>755</i>&nbsp;        CombinedDomainXYPlot that = (CombinedDomainXYPlot) obj;</b>
+<b class="fc"><i>756</i>&nbsp;        if (this.gap != that.gap) {</b>
+<b class="nc"><i>757</i>&nbsp;            return false;</b>
+<i>758</i>&nbsp;        }
+<b class="fc"><i>759</i>&nbsp;        if (!ObjectUtilities.equal(this.subplots, that.subplots)) {</b>
+<b class="nc"><i>760</i>&nbsp;            return false;</b>
+<i>761</i>&nbsp;        }
+<b class="fc"><i>762</i>&nbsp;        return super.equals(obj);</b>
+<i>763</i>&nbsp;    }
+<i>764</i>&nbsp;
+<i>765</i>&nbsp;    /**
+<i>766</i>&nbsp;     * Returns a clone of the annotation.
+<i>767</i>&nbsp;     *
+<i>768</i>&nbsp;     * @return A clone.
+<i>769</i>&nbsp;     *
+<i>770</i>&nbsp;     * @throws CloneNotSupportedException  this class will not throw this
+<i>771</i>&nbsp;     *         exception, but subclasses (if any) might.
+<i>772</i>&nbsp;     */
+<i>773</i>&nbsp;    @Override
+<i>774</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<i>775</i>&nbsp;
+<b class="fc"><i>776</i>&nbsp;        CombinedDomainXYPlot result = (CombinedDomainXYPlot) super.clone();</b>
+<b class="fc"><i>777</i>&nbsp;        result.subplots = (List) ObjectUtilities.deepClone(this.subplots);</b>
+<b class="fc"><i>778</i>&nbsp;        for (Iterator it = result.subplots.iterator(); it.hasNext();) {</b>
+<b class="fc"><i>779</i>&nbsp;            Plot child = (Plot) it.next();</b>
+<b class="fc"><i>780</i>&nbsp;            child.setParent(result);</b>
+<b class="fc"><i>781</i>&nbsp;        }</b>
+<i>782</i>&nbsp;
+<i>783</i>&nbsp;        // after setting up all the subplots, the shared domain axis may need
+<i>784</i>&nbsp;        // reconfiguring
+<b class="fc"><i>785</i>&nbsp;        ValueAxis domainAxis = result.getDomainAxis();</b>
+<b class="fc"><i>786</i>&nbsp;        if (domainAxis != null) {</b>
+<b class="fc"><i>787</i>&nbsp;            domainAxis.configure();</b>
+<i>788</i>&nbsp;        }
+<i>789</i>&nbsp;
+<b class="fc"><i>790</i>&nbsp;        return result;</b>
+<i>791</i>&nbsp;
+<i>792</i>&nbsp;    }
+<i>793</i>&nbsp;
+<i>794</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

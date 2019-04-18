@@ -1,0 +1,401 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Nysiis</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Nysiis (org.apache.commons.codec.language)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Nysiis</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (86/ 86)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.language;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.regex.Pattern;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;import org.apache.commons.codec.EncoderException;
+<i>23</i>&nbsp;import org.apache.commons.codec.StringEncoder;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * Encodes a string into a NYSIIS value. NYSIIS is an encoding used to relate similar names, but can also be used as a
+<i>27</i>&nbsp; * general purpose scheme to find word with similar phonemes.
+<i>28</i>&nbsp; * &lt;p&gt;
+<i>29</i>&nbsp; * NYSIIS features an accuracy increase of 2.7% over the traditional Soundex algorithm.
+<i>30</i>&nbsp; * &lt;p&gt;
+<i>31</i>&nbsp; * Algorithm description:
+<i>32</i>&nbsp; * &lt;pre&gt;
+<i>33</i>&nbsp; * 1. Transcode first characters of name
+<i>34</i>&nbsp; *   1a. MAC -&amp;gt;   MCC
+<i>35</i>&nbsp; *   1b. KN  -&amp;gt;   NN
+<i>36</i>&nbsp; *   1c. K   -&amp;gt;   C
+<i>37</i>&nbsp; *   1d. PH  -&amp;gt;   FF
+<i>38</i>&nbsp; *   1e. PF  -&amp;gt;   FF
+<i>39</i>&nbsp; *   1f. SCH -&amp;gt;   SSS
+<i>40</i>&nbsp; * 2. Transcode last characters of name
+<i>41</i>&nbsp; *   2a. EE, IE          -&amp;gt;   Y
+<i>42</i>&nbsp; *   2b. DT,RT,RD,NT,ND  -&amp;gt;   D
+<i>43</i>&nbsp; * 3. First character of key = first character of name
+<i>44</i>&nbsp; * 4. Transcode remaining characters by following these rules, incrementing by one character each time
+<i>45</i>&nbsp; *   4a. EV  -&amp;gt;   AF  else A,E,I,O,U -&amp;gt; A
+<i>46</i>&nbsp; *   4b. Q   -&amp;gt;   G
+<i>47</i>&nbsp; *   4c. Z   -&amp;gt;   S
+<i>48</i>&nbsp; *   4d. M   -&amp;gt;   N
+<i>49</i>&nbsp; *   4e. KN  -&amp;gt;   N   else K -&amp;gt; C
+<i>50</i>&nbsp; *   4f. SCH -&amp;gt;   SSS
+<i>51</i>&nbsp; *   4g. PH  -&amp;gt;   FF
+<i>52</i>&nbsp; *   4h. H   -&amp;gt;   If previous or next is nonvowel, previous
+<i>53</i>&nbsp; *   4i. W   -&amp;gt;   If previous is vowel, previous
+<i>54</i>&nbsp; *   4j. Add current to key if current != last key character
+<i>55</i>&nbsp; * 5. If last character is S, remove it
+<i>56</i>&nbsp; * 6. If last characters are AY, replace with Y
+<i>57</i>&nbsp; * 7. If last character is A, remove it
+<i>58</i>&nbsp; * 8. Collapse all strings of repeated characters
+<i>59</i>&nbsp; * 9. Add original first character of name as first character of key
+<i>60</i>&nbsp; * &lt;/pre&gt;
+<i>61</i>&nbsp; * &lt;p&gt;
+<i>62</i>&nbsp; * This class is immutable and thread-safe.
+<i>63</i>&nbsp; *
+<i>64</i>&nbsp; * @see &lt;a href=&quot;http://en.wikipedia.org/wiki/NYSIIS&quot;&gt;NYSIIS on Wikipedia&lt;/a&gt;
+<i>65</i>&nbsp; * @see &lt;a href=&quot;http://www.dropby.com/NYSIIS.html&quot;&gt;NYSIIS on dropby.com&lt;/a&gt;
+<i>66</i>&nbsp; * @see Soundex
+<i>67</i>&nbsp; * @since 1.7
+<i>68</i>&nbsp; * @version $Id$
+<i>69</i>&nbsp; */
+<i>70</i>&nbsp;public class Nysiis implements StringEncoder {
+<i>71</i>&nbsp;
+<b class="fc"><i>72</i>&nbsp;    private static final char[] CHARS_A   = new char[] { &#39;A&#39; };</b>
+<b class="fc"><i>73</i>&nbsp;    private static final char[] CHARS_AF  = new char[] { &#39;A&#39;, &#39;F&#39; };</b>
+<b class="fc"><i>74</i>&nbsp;    private static final char[] CHARS_C   = new char[] { &#39;C&#39; };</b>
+<b class="fc"><i>75</i>&nbsp;    private static final char[] CHARS_FF  = new char[] { &#39;F&#39;, &#39;F&#39; };</b>
+<b class="fc"><i>76</i>&nbsp;    private static final char[] CHARS_G   = new char[] { &#39;G&#39; };</b>
+<b class="fc"><i>77</i>&nbsp;    private static final char[] CHARS_N   = new char[] { &#39;N&#39; };</b>
+<b class="fc"><i>78</i>&nbsp;    private static final char[] CHARS_NN  = new char[] { &#39;N&#39;, &#39;N&#39; };</b>
+<b class="fc"><i>79</i>&nbsp;    private static final char[] CHARS_S   = new char[] { &#39;S&#39; };</b>
+<b class="fc"><i>80</i>&nbsp;    private static final char[] CHARS_SSS = new char[] { &#39;S&#39;, &#39;S&#39;, &#39;S&#39; };</b>
+<i>81</i>&nbsp;
+<b class="fc"><i>82</i>&nbsp;    private static final Pattern PAT_MAC    = Pattern.compile(&quot;^MAC&quot;);</b>
+<b class="fc"><i>83</i>&nbsp;    private static final Pattern PAT_KN     = Pattern.compile(&quot;^KN&quot;);</b>
+<b class="fc"><i>84</i>&nbsp;    private static final Pattern PAT_K      = Pattern.compile(&quot;^K&quot;);</b>
+<b class="fc"><i>85</i>&nbsp;    private static final Pattern PAT_PH_PF  = Pattern.compile(&quot;^(PH|PF)&quot;);</b>
+<b class="fc"><i>86</i>&nbsp;    private static final Pattern PAT_SCH    = Pattern.compile(&quot;^SCH&quot;);</b>
+<b class="fc"><i>87</i>&nbsp;    private static final Pattern PAT_EE_IE  = Pattern.compile(&quot;(EE|IE)$&quot;);</b>
+<b class="fc"><i>88</i>&nbsp;    private static final Pattern PAT_DT_ETC = Pattern.compile(&quot;(DT|RT|RD|NT|ND)$&quot;);</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    private static final char SPACE = &#39; &#39;;
+<i>91</i>&nbsp;    private static final int TRUE_LENGTH = 6;
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * Tests if the given character is a vowel.
+<i>95</i>&nbsp;     *
+<i>96</i>&nbsp;     * @param c
+<i>97</i>&nbsp;     *            the character to test
+<i>98</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if the character is a vowel, &lt;code&gt;false&lt;/code&gt; otherwise
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    private static boolean isVowel(final char c) {
+<b class="fc"><i>101</i>&nbsp;        return c == &#39;A&#39; || c == &#39;E&#39; || c == &#39;I&#39; || c == &#39;O&#39; || c == &#39;U&#39;;</b>
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Transcodes the remaining parts of the String. The method operates on a sliding window, looking at 4 characters at
+<i>106</i>&nbsp;     * a time: [i-1, i, i+1, i+2].
+<i>107</i>&nbsp;     *
+<i>108</i>&nbsp;     * @param prev
+<i>109</i>&nbsp;     *            the previous character
+<i>110</i>&nbsp;     * @param curr
+<i>111</i>&nbsp;     *            the current character
+<i>112</i>&nbsp;     * @param next
+<i>113</i>&nbsp;     *            the next character
+<i>114</i>&nbsp;     * @param aNext
+<i>115</i>&nbsp;     *            the after next character
+<i>116</i>&nbsp;     * @return a transcoded array of characters, starting from the current position
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    private static char[] transcodeRemaining(final char prev, final char curr, final char next, final char aNext) {
+<i>119</i>&nbsp;        // 1. EV -&gt; AF
+<b class="fc"><i>120</i>&nbsp;        if (curr == &#39;E&#39; &amp;&amp; next == &#39;V&#39;) {</b>
+<b class="fc"><i>121</i>&nbsp;            return CHARS_AF;</b>
+<i>122</i>&nbsp;        }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;        // A, E, I, O, U -&gt; A
+<b class="fc"><i>125</i>&nbsp;        if (isVowel(curr)) {</b>
+<b class="fc"><i>126</i>&nbsp;            return CHARS_A;</b>
+<i>127</i>&nbsp;        }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;        // 2. Q -&gt; G, Z -&gt; S, M -&gt; N
+<b class="fc"><i>130</i>&nbsp;        if (curr == &#39;Q&#39;) {</b>
+<b class="fc"><i>131</i>&nbsp;            return CHARS_G;</b>
+<b class="fc"><i>132</i>&nbsp;        } else if (curr == &#39;Z&#39;) {</b>
+<b class="fc"><i>133</i>&nbsp;            return CHARS_S;</b>
+<b class="fc"><i>134</i>&nbsp;        } else if (curr == &#39;M&#39;) {</b>
+<b class="fc"><i>135</i>&nbsp;            return CHARS_N;</b>
+<i>136</i>&nbsp;        }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;        // 3. KN -&gt; NN else K -&gt; C
+<b class="fc"><i>139</i>&nbsp;        if (curr == &#39;K&#39;) {</b>
+<b class="fc"><i>140</i>&nbsp;            if (next == &#39;N&#39;) {</b>
+<b class="fc"><i>141</i>&nbsp;                return CHARS_NN;</b>
+<i>142</i>&nbsp;            }
+<b class="fc"><i>143</i>&nbsp;            return CHARS_C;</b>
+<i>144</i>&nbsp;        }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;        // 4. SCH -&gt; SSS
+<b class="fc"><i>147</i>&nbsp;        if (curr == &#39;S&#39; &amp;&amp; next == &#39;C&#39; &amp;&amp; aNext == &#39;H&#39;) {</b>
+<b class="fc"><i>148</i>&nbsp;            return CHARS_SSS;</b>
+<i>149</i>&nbsp;        }
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;        // PH -&gt; FF
+<b class="fc"><i>152</i>&nbsp;        if (curr == &#39;P&#39; &amp;&amp; next == &#39;H&#39;) {</b>
+<b class="fc"><i>153</i>&nbsp;            return CHARS_FF;</b>
+<i>154</i>&nbsp;        }
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;        // 5. H -&gt; If previous or next is a non vowel, previous.
+<b class="fc"><i>157</i>&nbsp;        if (curr == &#39;H&#39; &amp;&amp; (!isVowel(prev) || !isVowel(next))) {</b>
+<b class="fc"><i>158</i>&nbsp;            return new char[] { prev };</b>
+<i>159</i>&nbsp;        }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;        // 6. W -&gt; If previous is vowel, previous.
+<b class="fc"><i>162</i>&nbsp;        if (curr == &#39;W&#39; &amp;&amp; isVowel(prev)) {</b>
+<b class="fc"><i>163</i>&nbsp;            return new char[] { prev };</b>
+<i>164</i>&nbsp;        }
+<i>165</i>&nbsp;
+<b class="fc"><i>166</i>&nbsp;        return new char[] { curr };</b>
+<i>167</i>&nbsp;    }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    /** Indicates the strict mode. */
+<i>170</i>&nbsp;    private final boolean strict;
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    /**
+<i>173</i>&nbsp;     * Creates an instance of the {@link Nysiis} encoder with strict mode (original form),
+<i>174</i>&nbsp;     * i.e. encoded strings have a maximum length of 6.
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public Nysiis() {
+<b class="fc"><i>177</i>&nbsp;        this(true);</b>
+<b class="fc"><i>178</i>&nbsp;    }</b>
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    /**
+<i>181</i>&nbsp;     * Create an instance of the {@link Nysiis} encoder with the specified strict mode:
+<i>182</i>&nbsp;     *
+<i>183</i>&nbsp;     * &lt;ul&gt;
+<i>184</i>&nbsp;     *  &lt;li&gt;&lt;code&gt;true&lt;/code&gt;: encoded strings have a maximum length of 6&lt;/li&gt;
+<i>185</i>&nbsp;     *  &lt;li&gt;&lt;code&gt;false&lt;/code&gt;: encoded strings may have arbitrary length&lt;/li&gt;
+<i>186</i>&nbsp;     * &lt;/ul&gt;
+<i>187</i>&nbsp;     *
+<i>188</i>&nbsp;     * @param strict
+<i>189</i>&nbsp;     *            the strict mode
+<i>190</i>&nbsp;     */
+<b class="fc"><i>191</i>&nbsp;    public Nysiis(final boolean strict) {</b>
+<b class="fc"><i>192</i>&nbsp;        this.strict = strict;</b>
+<b class="fc"><i>193</i>&nbsp;    }</b>
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;    /**
+<i>196</i>&nbsp;     * Encodes an Object using the NYSIIS algorithm. This method is provided in order to satisfy the requirements of the
+<i>197</i>&nbsp;     * Encoder interface, and will throw an {@link EncoderException} if the supplied object is not of type
+<i>198</i>&nbsp;     * {@link String}.
+<i>199</i>&nbsp;     *
+<i>200</i>&nbsp;     * @param obj
+<i>201</i>&nbsp;     *            Object to encode
+<i>202</i>&nbsp;     * @return An object (or a {@link String}) containing the NYSIIS code which corresponds to the given String.
+<i>203</i>&nbsp;     * @throws EncoderException
+<i>204</i>&nbsp;     *            if the parameter supplied is not of a {@link String}
+<i>205</i>&nbsp;     * @throws IllegalArgumentException
+<i>206</i>&nbsp;     *            if a character is not mapped
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    @Override
+<i>209</i>&nbsp;    public Object encode(final Object obj) throws EncoderException {
+<b class="fc"><i>210</i>&nbsp;        if (!(obj instanceof String)) {</b>
+<b class="fc"><i>211</i>&nbsp;            throw new EncoderException(&quot;Parameter supplied to Nysiis encode is not of type java.lang.String&quot;);</b>
+<i>212</i>&nbsp;        }
+<b class="fc"><i>213</i>&nbsp;        return this.nysiis((String) obj);</b>
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    /**
+<i>217</i>&nbsp;     * Encodes a String using the NYSIIS algorithm.
+<i>218</i>&nbsp;     *
+<i>219</i>&nbsp;     * @param str
+<i>220</i>&nbsp;     *            A String object to encode
+<i>221</i>&nbsp;     * @return A Nysiis code corresponding to the String supplied
+<i>222</i>&nbsp;     * @throws IllegalArgumentException
+<i>223</i>&nbsp;     *            if a character is not mapped
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    @Override
+<i>226</i>&nbsp;    public String encode(final String str) {
+<b class="fc"><i>227</i>&nbsp;        return this.nysiis(str);</b>
+<i>228</i>&nbsp;    }
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;    /**
+<i>231</i>&nbsp;     * Indicates the strict mode for this {@link Nysiis} encoder.
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; if the encoder is configured for strict mode, &lt;code&gt;false&lt;/code&gt; otherwise
+<i>234</i>&nbsp;     */
+<i>235</i>&nbsp;    public boolean isStrict() {
+<b class="fc"><i>236</i>&nbsp;        return this.strict;</b>
+<i>237</i>&nbsp;    }
+<i>238</i>&nbsp;
+<i>239</i>&nbsp;    /**
+<i>240</i>&nbsp;     * Retrieves the NYSIIS code for a given String object.
+<i>241</i>&nbsp;     *
+<i>242</i>&nbsp;     * @param str
+<i>243</i>&nbsp;     *            String to encode using the NYSIIS algorithm
+<i>244</i>&nbsp;     * @return A NYSIIS code for the String supplied
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    public String nysiis(String str) {
+<b class="fc"><i>247</i>&nbsp;        if (str == null) {</b>
+<b class="fc"><i>248</i>&nbsp;            return null;</b>
+<i>249</i>&nbsp;        }
+<i>250</i>&nbsp;
+<i>251</i>&nbsp;        // Use the same clean rules as Soundex
+<b class="fc"><i>252</i>&nbsp;        str = SoundexUtils.clean(str);</b>
+<i>253</i>&nbsp;
+<b class="fc"><i>254</i>&nbsp;        if (str.length() == 0) {</b>
+<b class="fc"><i>255</i>&nbsp;            return str;</b>
+<i>256</i>&nbsp;        }
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;        // Translate first characters of name:
+<i>259</i>&nbsp;        // MAC -&gt; MCC, KN -&gt; NN, K -&gt; C, PH | PF -&gt; FF, SCH -&gt; SSS
+<b class="fc"><i>260</i>&nbsp;        str = PAT_MAC.matcher(str).replaceFirst(&quot;MCC&quot;);</b>
+<b class="fc"><i>261</i>&nbsp;        str = PAT_KN.matcher(str).replaceFirst(&quot;NN&quot;);</b>
+<b class="fc"><i>262</i>&nbsp;        str = PAT_K.matcher(str).replaceFirst(&quot;C&quot;);</b>
+<b class="fc"><i>263</i>&nbsp;        str = PAT_PH_PF.matcher(str).replaceFirst(&quot;FF&quot;);</b>
+<b class="fc"><i>264</i>&nbsp;        str = PAT_SCH.matcher(str).replaceFirst(&quot;SSS&quot;);</b>
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;        // Translate last characters of name:
+<i>267</i>&nbsp;        // EE -&gt; Y, IE -&gt; Y, DT | RT | RD | NT | ND -&gt; D
+<b class="fc"><i>268</i>&nbsp;        str = PAT_EE_IE.matcher(str).replaceFirst(&quot;Y&quot;);</b>
+<b class="fc"><i>269</i>&nbsp;        str = PAT_DT_ETC.matcher(str).replaceFirst(&quot;D&quot;);</b>
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;        // First character of key = first character of name.
+<b class="fc"><i>272</i>&nbsp;        final StringBuilder key = new StringBuilder(str.length());</b>
+<b class="fc"><i>273</i>&nbsp;        key.append(str.charAt(0));</b>
+<i>274</i>&nbsp;
+<i>275</i>&nbsp;        // Transcode remaining characters, incrementing by one character each time
+<b class="fc"><i>276</i>&nbsp;        final char[] chars = str.toCharArray();</b>
+<b class="fc"><i>277</i>&nbsp;        final int len = chars.length;</b>
+<i>278</i>&nbsp;
+<b class="fc"><i>279</i>&nbsp;        for (int i = 1; i &lt; len; i++) {</b>
+<b class="fc"><i>280</i>&nbsp;            final char next = i &lt; len - 1 ? chars[i + 1] : SPACE;</b>
+<b class="fc"><i>281</i>&nbsp;            final char aNext = i &lt; len - 2 ? chars[i + 2] : SPACE;</b>
+<b class="fc"><i>282</i>&nbsp;            final char[] transcoded = transcodeRemaining(chars[i - 1], chars[i], next, aNext);</b>
+<b class="fc"><i>283</i>&nbsp;            System.arraycopy(transcoded, 0, chars, i, transcoded.length);</b>
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;            // only append the current char to the key if it is different from the last one
+<b class="fc"><i>286</i>&nbsp;            if (chars[i] != chars[i - 1]) {</b>
+<b class="fc"><i>287</i>&nbsp;                key.append(chars[i]);</b>
+<i>288</i>&nbsp;            }
+<i>289</i>&nbsp;        }
+<i>290</i>&nbsp;
+<b class="fc"><i>291</i>&nbsp;        if (key.length() &gt; 1) {</b>
+<b class="fc"><i>292</i>&nbsp;            char lastChar = key.charAt(key.length() - 1);</b>
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;            // If last character is S, remove it.
+<b class="fc"><i>295</i>&nbsp;            if (lastChar == &#39;S&#39;) {</b>
+<b class="fc"><i>296</i>&nbsp;                key.deleteCharAt(key.length() - 1);</b>
+<b class="fc"><i>297</i>&nbsp;                lastChar = key.charAt(key.length() - 1);</b>
+<i>298</i>&nbsp;            }
+<i>299</i>&nbsp;
+<b class="fc"><i>300</i>&nbsp;            if (key.length() &gt; 2) {</b>
+<b class="fc"><i>301</i>&nbsp;                final char last2Char = key.charAt(key.length() - 2);</b>
+<i>302</i>&nbsp;                // If last characters are AY, replace with Y.
+<b class="fc"><i>303</i>&nbsp;                if (last2Char == &#39;A&#39; &amp;&amp; lastChar == &#39;Y&#39;) {</b>
+<b class="fc"><i>304</i>&nbsp;                    key.deleteCharAt(key.length() - 2);</b>
+<i>305</i>&nbsp;                }
+<i>306</i>&nbsp;            }
+<i>307</i>&nbsp;
+<i>308</i>&nbsp;            // If last character is A, remove it.
+<b class="fc"><i>309</i>&nbsp;            if (lastChar == &#39;A&#39;) {</b>
+<b class="fc"><i>310</i>&nbsp;                key.deleteCharAt(key.length() - 1);</b>
+<i>311</i>&nbsp;            }
+<i>312</i>&nbsp;        }
+<i>313</i>&nbsp;
+<b class="fc"><i>314</i>&nbsp;        final String string = key.toString();</b>
+<b class="fc"><i>315</i>&nbsp;        return this.isStrict() ? string.substring(0, Math.min(TRUE_LENGTH, string.length())) : string;</b>
+<i>316</i>&nbsp;    }
+<i>317</i>&nbsp;
+<i>318</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:19</div>
+</div>
+</body>
+</html>

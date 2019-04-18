@@ -1,0 +1,1302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Base64Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">Base64Test.java</span></div><h1>Base64Test.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.binary;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Random;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.lang3.ArrayUtils;
+import org.junit.Ignore;
+import org.junit.Test;
+
+/**
+ * Test cases for Base64 class.
+ *
+ * @see &lt;a href=&quot;http://www.ietf.org/rfc/rfc2045.txt&quot;&gt;RFC 2045&lt;/a&gt;
+ * @version $Id$
+ */
+<span class="pc bpc" id="L44" title="3 of 4 branches missed.">public class Base64Test {</span>
+
+<span class="fc" id="L46">    private static final Charset CHARSET_UTF8 = Charsets.UTF_8;</span>
+
+<span class="fc" id="L48">    private final Random random = new Random();</span>
+
+    /**
+     * @return Returns the random.
+     */
+<span class="fc" id="L53">    public Random getRandom() {</span>
+<span class="fc" id="L54">        return this.random;</span>
+    }
+
+    /**
+     * Test the isStringBase64 method.
+     */
+    @Test
+<span class="pc bnc" id="L61" title="All 4 branches missed.">    public void testIsStringBase64() {</span>
+<span class="fc" id="L62">        final String nullString = null;</span>
+<span class="fc" id="L63">        final String emptyString = &quot;&quot;;</span>
+<span class="fc" id="L64">        final String validString = &quot;abc===defg\n\r123456\r789\r\rABC\n\nDEF==GHI\r\nJKL==============&quot;;</span>
+<span class="fc" id="L65">        final String invalidString = validString + (char) 0; // append null</span>
+                                                                // character
+
+<span class="fc" id="L68">        try {</span>
+<span class="nc" id="L69">            Base64.isBase64(nullString);</span>
+<span class="nc" id="L70">            fail(&quot;Base64.isStringBase64() should not be null-safe.&quot;);</span>
+<span class="fc" id="L71">        } catch (final NullPointerException npe) {</span>
+<span class="fc" id="L72">            assertNotNull(&quot;Base64.isStringBase64() should not be null-safe.&quot;, npe);</span>
+<span class="nc" id="L73">        }</span>
+
+<span class="fc" id="L75">        assertTrue(&quot;Base64.isStringBase64(empty-string) is true&quot;, Base64.isBase64(emptyString));</span>
+<span class="fc" id="L76">        assertTrue(&quot;Base64.isStringBase64(valid-string) is true&quot;, Base64.isBase64(validString));</span>
+<span class="fc" id="L77">        assertFalse(&quot;Base64.isStringBase64(invalid-string) is false&quot;, Base64.isBase64(invalidString));</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Test the Base64 implementation
+     */
+    @Test
+<span class="pc bnc" id="L84" title="All 4 branches missed.">    public void testBase64() {</span>
+<span class="fc" id="L85">        final String content = &quot;Hello World&quot;;</span>
+<span class="fc" id="L86">        String encodedContent;</span>
+<span class="fc" id="L87">        byte[] encodedBytes = Base64.encodeBase64(StringUtils.getBytesUtf8(content));</span>
+<span class="fc" id="L88">        encodedContent = StringUtils.newStringUtf8(encodedBytes);</span>
+<span class="fc" id="L89">        assertEquals(&quot;encoding hello world&quot;, &quot;SGVsbG8gV29ybGQ=&quot;, encodedContent);</span>
+
+<span class="fc" id="L91">        Base64 b64 = new Base64(BaseNCodec.MIME_CHUNK_SIZE, null); // null</span>
+                                                                    // lineSeparator
+                                                                    // same as
+                                                                    // saying
+                                                                    // no-chunking
+<span class="fc" id="L96">        encodedBytes = b64.encode(StringUtils.getBytesUtf8(content));</span>
+<span class="fc" id="L97">        encodedContent = StringUtils.newStringUtf8(encodedBytes);</span>
+<span class="fc" id="L98">        assertEquals(&quot;encoding hello world&quot;, &quot;SGVsbG8gV29ybGQ=&quot;, encodedContent);</span>
+
+<span class="fc" id="L100">        b64 = new Base64(0, null); // null lineSeparator same as saying</span>
+                                    // no-chunking
+<span class="fc" id="L102">        encodedBytes = b64.encode(StringUtils.getBytesUtf8(content));</span>
+<span class="fc" id="L103">        encodedContent = StringUtils.newStringUtf8(encodedBytes);</span>
+<span class="fc" id="L104">        assertEquals(&quot;encoding hello world&quot;, &quot;SGVsbG8gV29ybGQ=&quot;, encodedContent);</span>
+
+        // bogus characters to decode (to skip actually) {e-acute*6}
+<span class="fc" id="L107">        final byte[] decode = b64.decode(&quot;SGVsbG{\u00e9\u00e9\u00e9\u00e9\u00e9\u00e9}8gV29ybGQ=&quot;);</span>
+<span class="fc" id="L108">        final String decodeString = StringUtils.newStringUtf8(decode);</span>
+<span class="fc" id="L109">        assertEquals(&quot;decode hello world&quot;, &quot;Hello World&quot;, decodeString);</span>
+<span class="fc" id="L110">    }</span>
+
+    @Test
+<span class="pc bnc" id="L113" title="All 4 branches missed.">    public void testBase64AtBufferStart() {</span>
+<span class="fc" id="L114">        testBase64InBuffer(0, 100);</span>
+<span class="fc" id="L115">    }</span>
+
+    @Test
+<span class="pc bnc" id="L118" title="All 4 branches missed.">    public void testBase64AtBufferEnd() {</span>
+<span class="fc" id="L119">        testBase64InBuffer(100, 0);</span>
+<span class="fc" id="L120">    }</span>
+
+    @Test
+<span class="pc bnc" id="L123" title="All 4 branches missed.">    public void testBase64AtBufferMiddle() {</span>
+<span class="fc" id="L124">        testBase64InBuffer(100, 100);</span>
+<span class="fc" id="L125">    }</span>
+
+<span class="fc" id="L127">    private void testBase64InBuffer(final int startPasSize, final int endPadSize) {</span>
+<span class="fc" id="L128">        final String content = &quot;Hello World&quot;;</span>
+<span class="fc" id="L129">        String encodedContent;</span>
+<span class="fc" id="L130">        final byte[] bytesUtf8 = StringUtils.getBytesUtf8(content);</span>
+<span class="fc" id="L131">        byte[] buffer = ArrayUtils.addAll(bytesUtf8, new byte[endPadSize]);</span>
+<span class="fc" id="L132">        buffer = ArrayUtils.addAll(new byte[startPasSize], buffer);</span>
+<span class="fc" id="L133">        final byte[] encodedBytes = new Base64().encode(buffer, startPasSize, bytesUtf8.length);</span>
+<span class="fc" id="L134">        encodedContent = StringUtils.newStringUtf8(encodedBytes);</span>
+<span class="fc" id="L135">        assertEquals(&quot;encoding hello world&quot;, &quot;SGVsbG8gV29ybGQ=&quot;, encodedContent);</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Test our decode with pad character in the middle. (Our current
+     * implementation: halt decode and return what we've got so far).
+     *
+     * The point of this test is not to say
+     * &quot;this is the correct way to decode base64.&quot; The point is simply to keep
+     * us aware of the current logic since 1.4 so we don't accidentally break it
+     * without realizing.
+     *
+     * Note for historians. The 1.3 logic would decode to:
+     * &quot;Hello World\u0000Hello World&quot; -- null in the middle --- and 1.4
+     * unwittingly changed it to current logic.
+     */
+    @Test
+<span class="pc bnc" id="L152" title="All 4 branches missed.">    public void testDecodeWithInnerPad() {</span>
+<span class="fc" id="L153">        final String content = &quot;SGVsbG8gV29ybGQ=SGVsbG8gV29ybGQ=&quot;;</span>
+<span class="fc" id="L154">        final byte[] result = Base64.decodeBase64(content);</span>
+<span class="fc" id="L155">        final byte[] shouldBe = StringUtils.getBytesUtf8(&quot;Hello World&quot;);</span>
+<span class="fc" id="L156">        assertTrue(&quot;decode should halt at pad (=)&quot;, Arrays.equals(result, shouldBe));</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Tests Base64.encodeBase64().
+     */
+    @Test
+<span class="pc bnc" id="L163" title="All 4 branches missed.">    public void testChunkedEncodeMultipleOf76() {</span>
+<span class="fc" id="L164">        final byte[] expectedEncode = Base64.encodeBase64(Base64TestData.DECODED, true);</span>
+        // convert to &quot;\r\n&quot; so we're equal to the old openssl encoding test
+        // stored
+        // in Base64TestData.ENCODED_76_CHARS_PER_LINE:
+<span class="fc" id="L168">        final String actualResult = Base64TestData.ENCODED_76_CHARS_PER_LINE.replaceAll(&quot;\n&quot;, &quot;\r\n&quot;);</span>
+<span class="fc" id="L169">        final byte[] actualEncode = StringUtils.getBytesUtf8(actualResult);</span>
+<span class="fc" id="L170">        assertTrue(&quot;chunkedEncodeMultipleOf76&quot;, Arrays.equals(expectedEncode, actualEncode));</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * CODEC-68: isBase64 throws ArrayIndexOutOfBoundsException on some
+     * non-BASE64 bytes
+     */
+    @Test
+<span class="pc bnc" id="L178" title="All 4 branches missed.">    public void testCodec68() {</span>
+<span class="fc" id="L179">        final byte[] x = new byte[] { 'n', 'A', '=', '=', (byte) 0x9c };</span>
+<span class="fc" id="L180">        Base64.decodeBase64(x);</span>
+<span class="fc" id="L181">    }</span>
+
+    @Test
+<span class="pc bnc" id="L184" title="All 4 branches missed.">    public void testCodeInteger1() {</span>
+<span class="fc" id="L185">        final String encodedInt1 = &quot;li7dzDacuo67Jg7mtqEm2TRuOMU=&quot;;</span>
+<span class="fc" id="L186">        final BigInteger bigInt1 = new BigInteger(&quot;85739377120809420210425962799&quot; + &quot;0318636601332086981&quot;);</span>
+
+<span class="fc" id="L188">        assertEquals(encodedInt1, new String(Base64.encodeInteger(bigInt1)));</span>
+<span class="fc" id="L189">        assertEquals(bigInt1, Base64.decodeInteger(encodedInt1.getBytes(CHARSET_UTF8)));</span>
+<span class="fc" id="L190">    }</span>
+
+    @Test
+<span class="pc bnc" id="L193" title="All 4 branches missed.">    public void testCodeInteger2() {</span>
+<span class="fc" id="L194">        final String encodedInt2 = &quot;9B5ypLY9pMOmtxCeTDHgwdNFeGs=&quot;;</span>
+<span class="fc" id="L195">        final BigInteger bigInt2 = new BigInteger(&quot;13936727572861167254666467268&quot; + &quot;91466679477132949611&quot;);</span>
+
+<span class="fc" id="L197">        assertEquals(encodedInt2, new String(Base64.encodeInteger(bigInt2)));</span>
+<span class="fc" id="L198">        assertEquals(bigInt2, Base64.decodeInteger(encodedInt2.getBytes(CHARSET_UTF8)));</span>
+<span class="fc" id="L199">    }</span>
+
+    @Test
+<span class="pc bnc" id="L202" title="All 4 branches missed.">    public void testCodeInteger3() {</span>
+<span class="fc" id="L203">        final String encodedInt3 = &quot;FKIhdgaG5LGKiEtF1vHy4f3y700zaD6QwDS3IrNVGzNp2&quot;</span>
+                + &quot;rY+1LFWTK6D44AyiC1n8uWz1itkYMZF0/aKDK0Yjg==&quot;;
+<span class="fc" id="L205">        final BigInteger bigInt3 = new BigInteger(</span>
+                &quot;10806548154093873461951748545&quot; + &quot;1196989136416448805819079363524309897749044958112417136240557&quot;
+                        + &quot;4495062430572478766856090958495998158114332651671116876320938126&quot;);
+
+<span class="fc" id="L209">        assertEquals(encodedInt3, new String(Base64.encodeInteger(bigInt3)));</span>
+<span class="fc" id="L210">        assertEquals(bigInt3, Base64.decodeInteger(encodedInt3.getBytes(CHARSET_UTF8)));</span>
+<span class="fc" id="L211">    }</span>
+
+    @Test
+<span class="pc bnc" id="L214" title="All 4 branches missed.">    public void testCodeInteger4() {</span>
+<span class="fc" id="L215">        final String encodedInt4 = &quot;ctA8YGxrtngg/zKVvqEOefnwmViFztcnPBYPlJsvh6yKI&quot;</span>
+                + &quot;4iDm68fnp4Mi3RrJ6bZAygFrUIQLxLjV+OJtgJAEto0xAs+Mehuq1DkSFEpP3o&quot;
+                + &quot;DzCTOsrOiS1DwQe4oIb7zVk/9l7aPtJMHW0LVlMdwZNFNNJoqMcT2ZfCPrfvYv&quot; + &quot;Q0=&quot;;
+<span class="fc" id="L218">        final BigInteger bigInt4 = new BigInteger(</span>
+                &quot;80624726256040348115552042320&quot; + &quot;6968135001872753709424419772586693950232350200555646471175944&quot;
+                        + &quot;519297087885987040810778908507262272892702303774422853675597&quot;
+                        + &quot;748008534040890923814202286633163248086055216976551456088015&quot;
+                        + &quot;338880713818192088877057717530169381044092839402438015097654&quot;
+                        + &quot;53542091716518238707344493641683483917&quot;);
+
+<span class="fc" id="L225">        assertEquals(encodedInt4, new String(Base64.encodeInteger(bigInt4)));</span>
+<span class="fc" id="L226">        assertEquals(bigInt4, Base64.decodeInteger(encodedInt4.getBytes(CHARSET_UTF8)));</span>
+<span class="fc" id="L227">    }</span>
+
+    @Test
+<span class="pc bnc" id="L230" title="All 4 branches missed.">    public void testCodeIntegerEdgeCases() {</span>
+        // TODO
+<span class="fc" id="L232">    }</span>
+
+    @Test
+<span class="pc bnc" id="L235" title="All 4 branches missed.">    public void testCodeIntegerNull() {</span>
+<span class="fc" id="L236">        try {</span>
+<span class="nc" id="L237">            Base64.encodeInteger(null);</span>
+<span class="nc" id="L238">            fail(&quot;Exception not thrown when passing in null to encodeInteger(BigInteger)&quot;);</span>
+<span class="fc" id="L239">        } catch (final NullPointerException npe) {</span>
+            // expected
+<span class="nc" id="L241">        } catch (final Exception e) {</span>
+<span class="nc" id="L242">            fail(&quot;Incorrect Exception caught when passing in null to encodeInteger(BigInteger)&quot;);</span>
+<span class="pc" id="L243">        }</span>
+<span class="fc" id="L244">    }</span>
+
+    @Test
+<span class="pc bnc" id="L247" title="All 4 branches missed.">    public void testConstructors() {</span>
+<span class="fc" id="L248">        Base64 base64;</span>
+<span class="fc" id="L249">        base64 = new Base64();</span>
+<span class="fc" id="L250">        base64 = new Base64(-1);</span>
+<span class="fc" id="L251">        base64 = new Base64(-1, new byte[] {});</span>
+<span class="fc" id="L252">        base64 = new Base64(64, new byte[] {});</span>
+<span class="fc" id="L253">        try {</span>
+<span class="nc" id="L254">            base64 = new Base64(-1, new byte[] { 'A' }); // TODO do we need to</span>
+                                                            // check sep if len
+                                                            // = -1?
+<span class="nc" id="L257">            fail(&quot;Should have rejected attempt to use 'A' as a line separator&quot;);</span>
+<span class="fc" id="L258">        } catch (final IllegalArgumentException ignored) {</span>
+            // Expected
+<span class="nc" id="L260">        }</span>
+<span class="fc" id="L261">        try {</span>
+<span class="nc" id="L262">            base64 = new Base64(64, new byte[] { 'A' });</span>
+<span class="nc" id="L263">            fail(&quot;Should have rejected attempt to use 'A' as a line separator&quot;);</span>
+<span class="fc" id="L264">        } catch (final IllegalArgumentException ignored) {</span>
+            // Expected
+<span class="nc" id="L266">        }</span>
+<span class="fc" id="L267">        try {</span>
+<span class="nc" id="L268">            base64 = new Base64(64, new byte[] { '=' });</span>
+<span class="nc" id="L269">            fail(&quot;Should have rejected attempt to use '=' as a line separator&quot;);</span>
+<span class="fc" id="L270">        } catch (final IllegalArgumentException ignored) {</span>
+            // Expected
+<span class="nc" id="L272">        }</span>
+<span class="fc" id="L273">        base64 = new Base64(64, new byte[] { '$' }); // OK</span>
+<span class="fc" id="L274">        try {</span>
+<span class="nc" id="L275">            base64 = new Base64(64, new byte[] { 'A', '$' });</span>
+<span class="nc" id="L276">            fail(&quot;Should have rejected attempt to use 'A$' as a line separator&quot;);</span>
+<span class="fc" id="L277">        } catch (final IllegalArgumentException ignored) {</span>
+            // Expected
+<span class="nc" id="L279">        }</span>
+<span class="fc" id="L280">        base64 = new Base64(64, new byte[] { ' ', '$', '\n', '\r', '\t' }); // OK</span>
+<span class="fc" id="L281">        assertNotNull(base64);</span>
+<span class="fc" id="L282">    }</span>
+
+    @Test
+<span class="pc bnc" id="L285" title="All 4 branches missed.">    public void testConstructor_Int_ByteArray_Boolean() {</span>
+<span class="fc" id="L286">        final Base64 base64 = new Base64(65, new byte[] { '\t' }, false);</span>
+<span class="fc" id="L287">        final byte[] encoded = base64.encode(Base64TestData.DECODED);</span>
+<span class="fc" id="L288">        String expectedResult = Base64TestData.ENCODED_64_CHARS_PER_LINE;</span>
+<span class="fc" id="L289">        expectedResult = expectedResult.replace('\n', '\t');</span>
+<span class="fc" id="L290">        final String result = StringUtils.newStringUtf8(encoded);</span>
+<span class="fc" id="L291">        assertEquals(&quot;new Base64(65, \\t, false)&quot;, expectedResult, result);</span>
+<span class="fc" id="L292">    }</span>
+
+    @Test
+<span class="pc bnc" id="L295" title="All 4 branches missed.">    public void testConstructor_Int_ByteArray_Boolean_UrlSafe() {</span>
+        // url-safe variation
+<span class="fc" id="L297">        final Base64 base64 = new Base64(64, new byte[] { '\t' }, true);</span>
+<span class="fc" id="L298">        final byte[] encoded = base64.encode(Base64TestData.DECODED);</span>
+<span class="fc" id="L299">        String expectedResult = Base64TestData.ENCODED_64_CHARS_PER_LINE;</span>
+<span class="fc" id="L300">        expectedResult = expectedResult.replaceAll(&quot;=&quot;, &quot;&quot;); // url-safe has no</span>
+                                                                // == padding.
+<span class="fc" id="L302">        expectedResult = expectedResult.replace('\n', '\t');</span>
+<span class="fc" id="L303">        expectedResult = expectedResult.replace('+', '-');</span>
+<span class="fc" id="L304">        expectedResult = expectedResult.replace('/', '_');</span>
+<span class="fc" id="L305">        final String result = StringUtils.newStringUtf8(encoded);</span>
+<span class="fc" id="L306">        assertEquals(&quot;new Base64(64, \\t, true)&quot;, result, expectedResult);</span>
+<span class="fc" id="L307">    }</span>
+
+    /**
+     * Tests conditional true branch for &quot;marker0&quot; test.
+     */
+    @Test
+<span class="pc bnc" id="L313" title="All 4 branches missed.">    public void testDecodePadMarkerIndex2() {</span>
+<span class="fc" id="L314">        assertEquals(&quot;A&quot;, new String(Base64.decodeBase64(&quot;QQ==&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L315">    }</span>
+
+    /**
+     * Tests conditional branches for &quot;marker1&quot; test.
+     */
+    @Test
+<span class="pc bnc" id="L321" title="All 4 branches missed.">    public void testDecodePadMarkerIndex3() {</span>
+<span class="fc" id="L322">        assertEquals(&quot;AA&quot;, new String(Base64.decodeBase64(&quot;QUE=&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L323">        assertEquals(&quot;AAA&quot;, new String(Base64.decodeBase64(&quot;QUFB&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L324">    }</span>
+
+    @Test
+<span class="pc bnc" id="L327" title="All 4 branches missed.">    public void testDecodePadOnly() {</span>
+<span class="fc" id="L328">        assertEquals(0, Base64.decodeBase64(&quot;====&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L329">        assertEquals(&quot;&quot;, new String(Base64.decodeBase64(&quot;====&quot;.getBytes(CHARSET_UTF8))));</span>
+        // Test truncated padding
+<span class="fc" id="L331">        assertEquals(0, Base64.decodeBase64(&quot;===&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L332">        assertEquals(0, Base64.decodeBase64(&quot;==&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L333">        assertEquals(0, Base64.decodeBase64(&quot;=&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L334">        assertEquals(0, Base64.decodeBase64(&quot;&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L335">    }</span>
+
+    @Test
+<span class="pc bnc" id="L338" title="All 4 branches missed.">    public void testDecodePadOnlyChunked() {</span>
+<span class="fc" id="L339">        assertEquals(0, Base64.decodeBase64(&quot;====\n&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L340">        assertEquals(&quot;&quot;, new String(Base64.decodeBase64(&quot;====\n&quot;.getBytes(CHARSET_UTF8))));</span>
+        // Test truncated padding
+<span class="fc" id="L342">        assertEquals(0, Base64.decodeBase64(&quot;===\n&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L343">        assertEquals(0, Base64.decodeBase64(&quot;==\n&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L344">        assertEquals(0, Base64.decodeBase64(&quot;=\n&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L345">        assertEquals(0, Base64.decodeBase64(&quot;\n&quot;.getBytes(CHARSET_UTF8)).length);</span>
+<span class="fc" id="L346">    }</span>
+
+    @Test
+<span class="pc bnc" id="L349" title="All 4 branches missed.">    public void testDecodeWithWhitespace() throws Exception {</span>
+
+<span class="fc" id="L351">        final String orig = &quot;I am a late night coder.&quot;;</span>
+
+<span class="fc" id="L353">        final byte[] encodedArray = Base64.encodeBase64(orig.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L354">        final StringBuilder intermediate = new StringBuilder(new String(encodedArray));</span>
+
+<span class="fc" id="L356">        intermediate.insert(2, ' ');</span>
+<span class="fc" id="L357">        intermediate.insert(5, '\t');</span>
+<span class="fc" id="L358">        intermediate.insert(10, '\r');</span>
+<span class="fc" id="L359">        intermediate.insert(15, '\n');</span>
+
+<span class="fc" id="L361">        final byte[] encodedWithWS = intermediate.toString().getBytes(CHARSET_UTF8);</span>
+<span class="fc" id="L362">        final byte[] decodedWithWS = Base64.decodeBase64(encodedWithWS);</span>
+
+<span class="fc" id="L364">        final String dest = new String(decodedWithWS);</span>
+
+<span class="fc" id="L366">        assertEquals(&quot;Dest string doesn't equal the original&quot;, orig, dest);</span>
+<span class="fc" id="L367">    }</span>
+
+    /**
+     * Test encode and decode of empty byte array.
+     */
+    @Test
+<span class="pc bnc" id="L373" title="All 4 branches missed.">    public void testEmptyBase64() {</span>
+<span class="fc" id="L374">        byte[] empty = new byte[0];</span>
+<span class="fc" id="L375">        byte[] result = Base64.encodeBase64(empty);</span>
+<span class="fc" id="L376">        assertEquals(&quot;empty base64 encode&quot;, 0, result.length);</span>
+<span class="fc" id="L377">        assertEquals(&quot;empty base64 encode&quot;, null, Base64.encodeBase64(null));</span>
+
+<span class="fc" id="L379">        empty = new byte[0];</span>
+<span class="fc" id="L380">        result = Base64.decodeBase64(empty);</span>
+<span class="fc" id="L381">        assertEquals(&quot;empty base64 decode&quot;, 0, result.length);</span>
+<span class="fc" id="L382">        assertEquals(&quot;empty base64 encode&quot;, null, Base64.decodeBase64((byte[]) null));</span>
+<span class="fc" id="L383">    }</span>
+
+    // encode/decode a large random array
+    @Test
+<span class="pc bnc" id="L387" title="All 4 branches missed.">    public void testEncodeDecodeRandom() {</span>
+<span class="pc bpc" id="L388" title="4 of 10 branches missed.">        for (int i = 1; i &lt; 5; i++) {</span>
+<span class="fc" id="L389">            final byte[] data = new byte[this.getRandom().nextInt(10000) + 1];</span>
+<span class="fc" id="L390">            this.getRandom().nextBytes(data);</span>
+<span class="fc" id="L391">            final byte[] enc = Base64.encodeBase64(data);</span>
+<span class="fc" id="L392">            assertTrue(Base64.isBase64(enc));</span>
+<span class="fc" id="L393">            final byte[] data2 = Base64.decodeBase64(enc);</span>
+<span class="fc" id="L394">            assertTrue(Arrays.equals(data, data2));</span>
+        }
+<span class="fc" id="L396">    }</span>
+
+    // encode/decode random arrays from size 0 to size 11
+    @Test
+<span class="pc bnc" id="L400" title="All 4 branches missed.">    public void testEncodeDecodeSmall() {</span>
+<span class="pc bpc" id="L401" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 12; i++) {</span>
+<span class="fc" id="L402">            final byte[] data = new byte[i];</span>
+<span class="fc" id="L403">            this.getRandom().nextBytes(data);</span>
+<span class="fc" id="L404">            final byte[] enc = Base64.encodeBase64(data);</span>
+<span class="fc" id="L405">            assertTrue(&quot;\&quot;&quot; + new String(enc) + &quot;\&quot; is Base64 data.&quot;, Base64.isBase64(enc));</span>
+<span class="fc" id="L406">            final byte[] data2 = Base64.decodeBase64(enc);</span>
+<span class="fc" id="L407">            assertTrue(toString(data) + &quot; equals &quot; + toString(data2), Arrays.equals(data, data2));</span>
+        }
+<span class="fc" id="L409">    }</span>
+
+    @Test
+<span class="pc bnc" id="L412" title="All 4 branches missed.">    public void testEncodeOverMaxSize() throws Exception {</span>
+<span class="fc" id="L413">        testEncodeOverMaxSize(-1);</span>
+<span class="fc" id="L414">        testEncodeOverMaxSize(0);</span>
+<span class="fc" id="L415">        testEncodeOverMaxSize(1);</span>
+<span class="fc" id="L416">        testEncodeOverMaxSize(2);</span>
+<span class="fc" id="L417">    }</span>
+
+    @Test
+<span class="pc bnc" id="L420" title="All 4 branches missed.">    public void testCodec112() { // size calculation assumes always chunked</span>
+<span class="fc" id="L421">        final byte[] in = new byte[] { 0 };</span>
+<span class="fc" id="L422">        final byte[] out = Base64.encodeBase64(in);</span>
+<span class="fc" id="L423">        Base64.encodeBase64(in, false, false, out.length);</span>
+<span class="fc" id="L424">    }</span>
+
+<span class="fc" id="L426">    private void testEncodeOverMaxSize(final int maxSize) throws Exception {</span>
+<span class="fc" id="L427">        try {</span>
+<span class="nc" id="L428">            Base64.encodeBase64(Base64TestData.DECODED, true, false, maxSize);</span>
+<span class="nc" id="L429">            fail(&quot;Expected &quot; + IllegalArgumentException.class.getName());</span>
+<span class="fc" id="L430">        } catch (final IllegalArgumentException e) {</span>
+            // Expected
+<span class="nc" id="L432">        }</span>
+<span class="fc" id="L433">    }</span>
+
+    @Test
+<span class="pc bnc" id="L436" title="All 4 branches missed.">    public void testIgnoringNonBase64InDecode() throws Exception {</span>
+<span class="fc" id="L437">        assertEquals(&quot;The quick brown fox jumped over the lazy dogs.&quot;,</span>
+<span class="fc" id="L438">                new String(Base64.decodeBase64(</span>
+                        &quot;VGhlIH@$#$@%F1aWN@#@#@@rIGJyb3duIGZve\n\r\t%#%#%#%CBqd##$#$W1wZWQgb3ZlciB0aGUgbGF6eSBkb2dzLg==&quot;
+<span class="fc" id="L440">                                .getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L441">    }</span>
+
+    @Test
+<span class="pc bnc" id="L444" title="All 4 branches missed.">    public void testIsArrayByteBase64() {</span>
+<span class="fc" id="L445">        assertFalse(Base64.isBase64(new byte[] { Byte.MIN_VALUE }));</span>
+<span class="fc" id="L446">        assertFalse(Base64.isBase64(new byte[] { -125 }));</span>
+<span class="fc" id="L447">        assertFalse(Base64.isBase64(new byte[] { -10 }));</span>
+<span class="fc" id="L448">        assertFalse(Base64.isBase64(new byte[] { 0 }));</span>
+<span class="fc" id="L449">        assertFalse(Base64.isBase64(new byte[] { 64, Byte.MAX_VALUE }));</span>
+<span class="fc" id="L450">        assertFalse(Base64.isBase64(new byte[] { Byte.MAX_VALUE }));</span>
+<span class="fc" id="L451">        assertTrue(Base64.isBase64(new byte[] { 'A' }));</span>
+<span class="fc" id="L452">        assertFalse(Base64.isBase64(new byte[] { 'A', Byte.MIN_VALUE }));</span>
+<span class="fc" id="L453">        assertTrue(Base64.isBase64(new byte[] { 'A', 'Z', 'a' }));</span>
+<span class="fc" id="L454">        assertTrue(Base64.isBase64(new byte[] { '/', '=', '+' }));</span>
+<span class="fc" id="L455">        assertFalse(Base64.isBase64(new byte[] { '$' }));</span>
+<span class="fc" id="L456">    }</span>
+
+    /**
+     * Tests isUrlSafe.
+     */
+    @Test
+<span class="pc bnc" id="L462" title="All 4 branches missed.">    public void testIsUrlSafe() {</span>
+<span class="fc" id="L463">        final Base64 base64Standard = new Base64(false);</span>
+<span class="fc" id="L464">        final Base64 base64URLSafe = new Base64(true);</span>
+
+<span class="fc" id="L466">        assertFalse(&quot;Base64.isUrlSafe=false&quot;, base64Standard.isUrlSafe());</span>
+<span class="fc" id="L467">        assertTrue(&quot;Base64.isUrlSafe=true&quot;, base64URLSafe.isUrlSafe());</span>
+
+<span class="fc" id="L469">        final byte[] whiteSpace = { ' ', '\n', '\r', '\t' };</span>
+<span class="fc" id="L470">        assertTrue(&quot;Base64.isBase64(whiteSpace)=true&quot;, Base64.isBase64(whiteSpace));</span>
+<span class="fc" id="L471">    }</span>
+
+    @Test
+<span class="pc bnc" id="L474" title="All 4 branches missed.">    public void testKnownDecodings() {</span>
+<span class="fc" id="L475">        assertEquals(&quot;The quick brown fox jumped over the lazy dogs.&quot;, new String(Base64.decodeBase64(</span>
+<span class="fc" id="L476">                &quot;VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wZWQgb3ZlciB0aGUgbGF6eSBkb2dzLg==&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L477">        assertEquals(&quot;It was the best of times, it was the worst of times.&quot;, new String(Base64.decodeBase64(</span>
+<span class="fc" id="L478">                &quot;SXQgd2FzIHRoZSBiZXN0IG9mIHRpbWVzLCBpdCB3YXMgdGhlIHdvcnN0IG9mIHRpbWVzLg==&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L479">        assertEquals(&quot;http://jakarta.apache.org/commmons&quot;, new String(</span>
+<span class="fc" id="L480">                Base64.decodeBase64(&quot;aHR0cDovL2pha2FydGEuYXBhY2hlLm9yZy9jb21tbW9ucw==&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L481">        assertEquals(&quot;AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz&quot;, new String(Base64.decodeBase64(</span>
+<span class="fc" id="L482">                &quot;QWFCYkNjRGRFZUZmR2dIaElpSmpLa0xsTW1Obk9vUHBRcVJyU3NUdFV1VnZXd1h4WXlaeg==&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L483">        assertEquals(&quot;{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }&quot;,</span>
+<span class="fc" id="L484">                new String(Base64.decodeBase64(&quot;eyAwLCAxLCAyLCAzLCA0LCA1LCA2LCA3LCA4LCA5IH0=&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L485">        assertEquals(&quot;xyzzy!&quot;, new String(Base64.decodeBase64(&quot;eHl6enkh&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L486">    }</span>
+
+    @Test
+<span class="pc bnc" id="L489" title="All 4 branches missed.">    public void testKnownEncodings() {</span>
+<span class="fc" id="L490">        assertEquals(&quot;VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wZWQgb3ZlciB0aGUgbGF6eSBkb2dzLg==&quot;, new String(</span>
+<span class="fc" id="L491">                Base64.encodeBase64(&quot;The quick brown fox jumped over the lazy dogs.&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L492">        assertEquals(</span>
+                &quot;YmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJs\r\nYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFo\r\nIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBibGFoIGJsYWggYmxhaCBi\r\nbGFoIGJsYWg=\r\n&quot;,
+<span class="fc" id="L494">                new String(Base64.encodeBase64Chunked(</span>
+                        &quot;blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah&quot;
+<span class="fc" id="L496">                                .getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L497">        assertEquals(&quot;SXQgd2FzIHRoZSBiZXN0IG9mIHRpbWVzLCBpdCB3YXMgdGhlIHdvcnN0IG9mIHRpbWVzLg==&quot;, new String(</span>
+<span class="fc" id="L498">                Base64.encodeBase64(&quot;It was the best of times, it was the worst of times.&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L499">        assertEquals(&quot;aHR0cDovL2pha2FydGEuYXBhY2hlLm9yZy9jb21tbW9ucw==&quot;,</span>
+<span class="fc" id="L500">                new String(Base64.encodeBase64(&quot;http://jakarta.apache.org/commmons&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L501">        assertEquals(&quot;QWFCYkNjRGRFZUZmR2dIaElpSmpLa0xsTW1Obk9vUHBRcVJyU3NUdFV1VnZXd1h4WXlaeg==&quot;, new String(</span>
+<span class="fc" id="L502">                Base64.encodeBase64(&quot;AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L503">        assertEquals(&quot;eyAwLCAxLCAyLCAzLCA0LCA1LCA2LCA3LCA4LCA5IH0=&quot;,</span>
+<span class="fc" id="L504">                new String(Base64.encodeBase64(&quot;{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L505">        assertEquals(&quot;eHl6enkh&quot;, new String(Base64.encodeBase64(&quot;xyzzy!&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L506">    }</span>
+
+    @Test
+<span class="pc bnc" id="L509" title="All 4 branches missed.">    public void testNonBase64Test() throws Exception {</span>
+
+<span class="fc" id="L511">        final byte[] bArray = { '%' };</span>
+
+<span class="fc" id="L513">        assertFalse(&quot;Invalid Base64 array was incorrectly validated as &quot; + &quot;an array of Base64 encoded data&quot;,</span>
+<span class="fc" id="L514">                Base64.isBase64(bArray));</span>
+
+<span class="fc" id="L516">        try {</span>
+<span class="fc" id="L517">            final Base64 b64 = new Base64();</span>
+<span class="fc" id="L518">            final byte[] result = b64.decode(bArray);</span>
+
+<span class="fc" id="L520">            assertEquals(&quot;The result should be empty as the test encoded content did &quot;</span>
+                    + &quot;not contain any valid base 64 characters&quot;, 0, result.length);
+<span class="nc" id="L522">        } catch (final Exception e) {</span>
+<span class="nc" id="L523">            fail(&quot;Exception was thrown when trying to decode &quot;</span>
+                    + &quot;invalid base64 encoded data - RFC 2045 requires that all &quot;
+                    + &quot;non base64 character be discarded, an exception should not&quot; + &quot; have been thrown&quot;);
+<span class="fc" id="L526">        }</span>
+<span class="fc" id="L527">    }</span>
+
+    @Test
+<span class="pc bnc" id="L530" title="All 4 branches missed.">    public void testObjectDecodeWithInvalidParameter() throws Exception {</span>
+<span class="fc" id="L531">        final Base64 b64 = new Base64();</span>
+
+<span class="fc" id="L533">        try {</span>
+<span class="nc" id="L534">            b64.decode(Integer.valueOf(5));</span>
+<span class="nc" id="L535">            fail(&quot;decode(Object) didn't throw an exception when passed an Integer object&quot;);</span>
+<span class="fc" id="L536">        } catch (final DecoderException e) {</span>
+            // ignored
+<span class="nc" id="L538">        }</span>
+
+<span class="fc" id="L540">    }</span>
+
+    @Test
+<span class="pc bnc" id="L543" title="All 4 branches missed.">    public void testObjectDecodeWithValidParameter() throws Exception {</span>
+
+<span class="fc" id="L545">        final String original = &quot;Hello World!&quot;;</span>
+<span class="fc" id="L546">        final Object o = Base64.encodeBase64(original.getBytes(CHARSET_UTF8));</span>
+
+<span class="fc" id="L548">        final Base64 b64 = new Base64();</span>
+<span class="fc" id="L549">        final Object oDecoded = b64.decode(o);</span>
+<span class="fc" id="L550">        final byte[] baDecoded = (byte[]) oDecoded;</span>
+<span class="fc" id="L551">        final String dest = new String(baDecoded);</span>
+
+<span class="fc" id="L553">        assertEquals(&quot;dest string does not equal original&quot;, original, dest);</span>
+<span class="fc" id="L554">    }</span>
+
+    @Test
+<span class="pc bnc" id="L557" title="All 4 branches missed.">    public void testObjectEncodeWithInvalidParameter() throws Exception {</span>
+<span class="fc" id="L558">        final Base64 b64 = new Base64();</span>
+<span class="fc" id="L559">        try {</span>
+<span class="nc" id="L560">            b64.encode(&quot;Yadayadayada&quot;);</span>
+<span class="nc" id="L561">            fail(&quot;encode(Object) didn't throw an exception when passed a String object&quot;);</span>
+<span class="fc" id="L562">        } catch (final EncoderException e) {</span>
+            // Expected
+<span class="nc" id="L564">        }</span>
+<span class="fc" id="L565">    }</span>
+
+    @Test
+<span class="pc bnc" id="L568" title="All 4 branches missed.">    public void testObjectEncodeWithValidParameter() throws Exception {</span>
+
+<span class="fc" id="L570">        final String original = &quot;Hello World!&quot;;</span>
+<span class="fc" id="L571">        final Object origObj = original.getBytes(CHARSET_UTF8);</span>
+
+<span class="fc" id="L573">        final Base64 b64 = new Base64();</span>
+<span class="fc" id="L574">        final Object oEncoded = b64.encode(origObj);</span>
+<span class="fc" id="L575">        final byte[] bArray = Base64.decodeBase64((byte[]) oEncoded);</span>
+<span class="fc" id="L576">        final String dest = new String(bArray);</span>
+
+<span class="fc" id="L578">        assertEquals(&quot;dest string does not equal original&quot;, original, dest);</span>
+<span class="fc" id="L579">    }</span>
+
+    @Test
+<span class="pc bnc" id="L582" title="All 4 branches missed.">    public void testObjectEncode() throws Exception {</span>
+<span class="fc" id="L583">        final Base64 b64 = new Base64();</span>
+<span class="fc" id="L584">        assertEquals(&quot;SGVsbG8gV29ybGQ=&quot;, new String(b64.encode(&quot;Hello World&quot;.getBytes(CHARSET_UTF8))));</span>
+<span class="fc" id="L585">    }</span>
+
+    @Test
+<span class="pc bnc" id="L588" title="All 4 branches missed.">    public void testPairs() {</span>
+<span class="fc" id="L589">        assertEquals(&quot;AAA=&quot;, new String(Base64.encodeBase64(new byte[] { 0, 0 })));</span>
+<span class="pc bpc" id="L590" title="4 of 10 branches missed.">        for (int i = -128; i &lt;= 127; i++) {</span>
+<span class="fc" id="L591">            final byte test[] = { (byte) i, (byte) i };</span>
+<span class="fc" id="L592">            assertTrue(Arrays.equals(test, Base64.decodeBase64(Base64.encodeBase64(test))));</span>
+        }
+<span class="fc" id="L594">    }</span>
+
+    /**
+     * Tests RFC 2045 section 2.1 CRLF definition.
+     */
+    @Test
+<span class="pc bnc" id="L600" title="All 4 branches missed.">    public void testRfc2045Section2Dot1CrLfDefinition() {</span>
+<span class="fc" id="L601">        assertTrue(Arrays.equals(new byte[] { 13, 10 }, Base64.CHUNK_SEPARATOR));</span>
+<span class="fc" id="L602">    }</span>
+
+    /**
+     * Tests RFC 2045 section 6.8 chuck size definition.
+     */
+    @Test
+<span class="pc bnc" id="L608" title="All 4 branches missed.">    public void testRfc2045Section6Dot8ChunkSizeDefinition() {</span>
+<span class="fc" id="L609">        assertEquals(76, BaseNCodec.MIME_CHUNK_SIZE);</span>
+<span class="fc" id="L610">    }</span>
+
+    /**
+     * Tests RFC 1421 section 4.3.2.4 chuck size definition.
+     */
+    @Test
+<span class="pc bnc" id="L616" title="All 4 branches missed.">    public void testRfc1421Section6Dot8ChunkSizeDefinition() {</span>
+<span class="fc" id="L617">        assertEquals(64, BaseNCodec.PEM_CHUNK_SIZE);</span>
+<span class="fc" id="L618">    }</span>
+
+    /**
+     * Tests RFC 4648 section 10 test vectors.
+     * &lt;ul&gt;
+     * &lt;li&gt;BASE64(&quot;&quot;) = &quot;&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;f&quot;) = &quot;Zg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fo&quot;) = &quot;Zm8=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foo&quot;) = &quot;Zm9v&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foob&quot;) = &quot;Zm9vYg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fooba&quot;) = &quot;Zm9vYmE=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foobar&quot;) = &quot;Zm9vYmFy&quot;&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc4648&quot;&gt;http://tools.ietf.org/
+     *      html/rfc4648&lt;/a&gt;
+     */
+    @Test
+<span class="pc bnc" id="L636" title="All 4 branches missed.">    public void testRfc4648Section10Decode() {</span>
+<span class="fc" id="L637">        assertEquals(&quot;&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;&quot;)));</span>
+<span class="fc" id="L638">        assertEquals(&quot;f&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zg==&quot;)));</span>
+<span class="fc" id="L639">        assertEquals(&quot;fo&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm8=&quot;)));</span>
+<span class="fc" id="L640">        assertEquals(&quot;foo&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9v&quot;)));</span>
+<span class="fc" id="L641">        assertEquals(&quot;foob&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9vYg==&quot;)));</span>
+<span class="fc" id="L642">        assertEquals(&quot;fooba&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9vYmE=&quot;)));</span>
+<span class="fc" id="L643">        assertEquals(&quot;foobar&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9vYmFy&quot;)));</span>
+<span class="fc" id="L644">    }</span>
+
+    /**
+     * Tests RFC 4648 section 10 test vectors.
+     * &lt;ul&gt;
+     * &lt;li&gt;BASE64(&quot;&quot;) = &quot;&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;f&quot;) = &quot;Zg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fo&quot;) = &quot;Zm8=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foo&quot;) = &quot;Zm9v&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foob&quot;) = &quot;Zm9vYg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fooba&quot;) = &quot;Zm9vYmE=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foobar&quot;) = &quot;Zm9vYmFy&quot;&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc4648&quot;&gt;http://tools.ietf.org/
+     *      html/rfc4648&lt;/a&gt;
+     */
+    @Test
+<span class="pc bnc" id="L662" title="All 4 branches missed.">    public void testRfc4648Section10DecodeWithCrLf() {</span>
+<span class="fc" id="L663">        final String CRLF = StringUtils.newStringUsAscii(Base64.CHUNK_SEPARATOR);</span>
+<span class="fc" id="L664">        assertEquals(&quot;&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;&quot; + CRLF)));</span>
+<span class="fc" id="L665">        assertEquals(&quot;f&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zg==&quot; + CRLF)));</span>
+<span class="fc" id="L666">        assertEquals(&quot;fo&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm8=&quot; + CRLF)));</span>
+<span class="fc" id="L667">        assertEquals(&quot;foo&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9v&quot; + CRLF)));</span>
+<span class="fc" id="L668">        assertEquals(&quot;foob&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9vYg==&quot; + CRLF)));</span>
+<span class="fc" id="L669">        assertEquals(&quot;fooba&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9vYmE=&quot; + CRLF)));</span>
+<span class="fc" id="L670">        assertEquals(&quot;foobar&quot;, StringUtils.newStringUsAscii(Base64.decodeBase64(&quot;Zm9vYmFy&quot; + CRLF)));</span>
+<span class="fc" id="L671">    }</span>
+
+    /**
+     * Tests RFC 4648 section 10 test vectors.
+     * &lt;ul&gt;
+     * &lt;li&gt;BASE64(&quot;&quot;) = &quot;&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;f&quot;) = &quot;Zg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fo&quot;) = &quot;Zm8=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foo&quot;) = &quot;Zm9v&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foob&quot;) = &quot;Zm9vYg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fooba&quot;) = &quot;Zm9vYmE=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foobar&quot;) = &quot;Zm9vYmFy&quot;&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc4648&quot;&gt;http://tools.ietf.org/
+     *      html/rfc4648&lt;/a&gt;
+     */
+    @Test
+<span class="pc bnc" id="L689" title="All 4 branches missed.">    public void testRfc4648Section10Encode() {</span>
+<span class="fc" id="L690">        assertEquals(&quot;&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;&quot;)));</span>
+<span class="fc" id="L691">        assertEquals(&quot;Zg==&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;f&quot;)));</span>
+<span class="fc" id="L692">        assertEquals(&quot;Zm8=&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;fo&quot;)));</span>
+<span class="fc" id="L693">        assertEquals(&quot;Zm9v&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;foo&quot;)));</span>
+<span class="fc" id="L694">        assertEquals(&quot;Zm9vYg==&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;foob&quot;)));</span>
+<span class="fc" id="L695">        assertEquals(&quot;Zm9vYmE=&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;fooba&quot;)));</span>
+<span class="fc" id="L696">        assertEquals(&quot;Zm9vYmFy&quot;, Base64.encodeBase64String(StringUtils.getBytesUtf8(&quot;foobar&quot;)));</span>
+<span class="fc" id="L697">    }</span>
+
+    /**
+     * Tests RFC 4648 section 10 test vectors.
+     * &lt;ul&gt;
+     * &lt;li&gt;BASE64(&quot;&quot;) = &quot;&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;f&quot;) = &quot;Zg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fo&quot;) = &quot;Zm8=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foo&quot;) = &quot;Zm9v&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foob&quot;) = &quot;Zm9vYg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fooba&quot;) = &quot;Zm9vYmE=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foobar&quot;) = &quot;Zm9vYmFy&quot;&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc4648&quot;&gt;http://tools.ietf.org/
+     *      html/rfc4648&lt;/a&gt;
+     */
+    @Test
+<span class="pc bnc" id="L715" title="All 4 branches missed.">    public void testRfc4648Section10DecodeEncode() {</span>
+<span class="fc" id="L716">        testDecodeEncode(&quot;&quot;);</span>
+<span class="fc" id="L717">        testDecodeEncode(&quot;Zg==&quot;);</span>
+<span class="fc" id="L718">        testDecodeEncode(&quot;Zm8=&quot;);</span>
+<span class="fc" id="L719">        testDecodeEncode(&quot;Zm9v&quot;);</span>
+<span class="fc" id="L720">        testDecodeEncode(&quot;Zm9vYg==&quot;);</span>
+<span class="fc" id="L721">        testDecodeEncode(&quot;Zm9vYmE=&quot;);</span>
+<span class="fc" id="L722">        testDecodeEncode(&quot;Zm9vYmFy&quot;);</span>
+<span class="fc" id="L723">    }</span>
+
+<span class="fc" id="L725">    private void testDecodeEncode(final String encodedText) {</span>
+<span class="fc" id="L726">        final String decodedText = StringUtils.newStringUsAscii(Base64.decodeBase64(encodedText));</span>
+<span class="fc" id="L727">        final String encodedText2 = Base64.encodeBase64String(StringUtils.getBytesUtf8(decodedText));</span>
+<span class="fc" id="L728">        assertEquals(encodedText, encodedText2);</span>
+<span class="fc" id="L729">    }</span>
+
+    /**
+     * Tests RFC 4648 section 10 test vectors.
+     * &lt;ul&gt;
+     * &lt;li&gt;BASE64(&quot;&quot;) = &quot;&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;f&quot;) = &quot;Zg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fo&quot;) = &quot;Zm8=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foo&quot;) = &quot;Zm9v&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foob&quot;) = &quot;Zm9vYg==&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;fooba&quot;) = &quot;Zm9vYmE=&quot;&lt;/li&gt;
+     * &lt;li&gt;BASE64(&quot;foobar&quot;) = &quot;Zm9vYmFy&quot;&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @see &lt;a href=&quot;http://tools.ietf.org/html/rfc4648&quot;&gt;http://tools.ietf.org/
+     *      html/rfc4648&lt;/a&gt;
+     */
+    @Test
+<span class="pc bnc" id="L747" title="All 4 branches missed.">    public void testRfc4648Section10EncodeDecode() {</span>
+<span class="fc" id="L748">        testEncodeDecode(&quot;&quot;);</span>
+<span class="fc" id="L749">        testEncodeDecode(&quot;f&quot;);</span>
+<span class="fc" id="L750">        testEncodeDecode(&quot;fo&quot;);</span>
+<span class="fc" id="L751">        testEncodeDecode(&quot;foo&quot;);</span>
+<span class="fc" id="L752">        testEncodeDecode(&quot;foob&quot;);</span>
+<span class="fc" id="L753">        testEncodeDecode(&quot;fooba&quot;);</span>
+<span class="fc" id="L754">        testEncodeDecode(&quot;foobar&quot;);</span>
+<span class="fc" id="L755">    }</span>
+
+<span class="fc" id="L757">    private void testEncodeDecode(final String plainText) {</span>
+<span class="fc" id="L758">        final String encodedText = Base64.encodeBase64String(StringUtils.getBytesUtf8(plainText));</span>
+<span class="fc" id="L759">        final String decodedText = StringUtils.newStringUsAscii(Base64.decodeBase64(encodedText));</span>
+<span class="fc" id="L760">        assertEquals(plainText, decodedText);</span>
+<span class="fc" id="L761">    }</span>
+
+    @Test
+<span class="pc bnc" id="L764" title="All 4 branches missed.">    public void testSingletons() {</span>
+<span class="fc" id="L765">        assertEquals(&quot;AA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0 })));</span>
+<span class="fc" id="L766">        assertEquals(&quot;AQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 1 })));</span>
+<span class="fc" id="L767">        assertEquals(&quot;Ag==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 2 })));</span>
+<span class="fc" id="L768">        assertEquals(&quot;Aw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 3 })));</span>
+<span class="fc" id="L769">        assertEquals(&quot;BA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 4 })));</span>
+<span class="fc" id="L770">        assertEquals(&quot;BQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 5 })));</span>
+<span class="fc" id="L771">        assertEquals(&quot;Bg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 6 })));</span>
+<span class="fc" id="L772">        assertEquals(&quot;Bw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 7 })));</span>
+<span class="fc" id="L773">        assertEquals(&quot;CA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 8 })));</span>
+<span class="fc" id="L774">        assertEquals(&quot;CQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 9 })));</span>
+<span class="fc" id="L775">        assertEquals(&quot;Cg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 10 })));</span>
+<span class="fc" id="L776">        assertEquals(&quot;Cw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 11 })));</span>
+<span class="fc" id="L777">        assertEquals(&quot;DA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 12 })));</span>
+<span class="fc" id="L778">        assertEquals(&quot;DQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 13 })));</span>
+<span class="fc" id="L779">        assertEquals(&quot;Dg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 14 })));</span>
+<span class="fc" id="L780">        assertEquals(&quot;Dw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 15 })));</span>
+<span class="fc" id="L781">        assertEquals(&quot;EA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 16 })));</span>
+<span class="fc" id="L782">        assertEquals(&quot;EQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 17 })));</span>
+<span class="fc" id="L783">        assertEquals(&quot;Eg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 18 })));</span>
+<span class="fc" id="L784">        assertEquals(&quot;Ew==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 19 })));</span>
+<span class="fc" id="L785">        assertEquals(&quot;FA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 20 })));</span>
+<span class="fc" id="L786">        assertEquals(&quot;FQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 21 })));</span>
+<span class="fc" id="L787">        assertEquals(&quot;Fg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 22 })));</span>
+<span class="fc" id="L788">        assertEquals(&quot;Fw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 23 })));</span>
+<span class="fc" id="L789">        assertEquals(&quot;GA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 24 })));</span>
+<span class="fc" id="L790">        assertEquals(&quot;GQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 25 })));</span>
+<span class="fc" id="L791">        assertEquals(&quot;Gg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 26 })));</span>
+<span class="fc" id="L792">        assertEquals(&quot;Gw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 27 })));</span>
+<span class="fc" id="L793">        assertEquals(&quot;HA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 28 })));</span>
+<span class="fc" id="L794">        assertEquals(&quot;HQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 29 })));</span>
+<span class="fc" id="L795">        assertEquals(&quot;Hg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 30 })));</span>
+<span class="fc" id="L796">        assertEquals(&quot;Hw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 31 })));</span>
+<span class="fc" id="L797">        assertEquals(&quot;IA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 32 })));</span>
+<span class="fc" id="L798">        assertEquals(&quot;IQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 33 })));</span>
+<span class="fc" id="L799">        assertEquals(&quot;Ig==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 34 })));</span>
+<span class="fc" id="L800">        assertEquals(&quot;Iw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 35 })));</span>
+<span class="fc" id="L801">        assertEquals(&quot;JA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 36 })));</span>
+<span class="fc" id="L802">        assertEquals(&quot;JQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 37 })));</span>
+<span class="fc" id="L803">        assertEquals(&quot;Jg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 38 })));</span>
+<span class="fc" id="L804">        assertEquals(&quot;Jw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 39 })));</span>
+<span class="fc" id="L805">        assertEquals(&quot;KA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 40 })));</span>
+<span class="fc" id="L806">        assertEquals(&quot;KQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 41 })));</span>
+<span class="fc" id="L807">        assertEquals(&quot;Kg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 42 })));</span>
+<span class="fc" id="L808">        assertEquals(&quot;Kw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 43 })));</span>
+<span class="fc" id="L809">        assertEquals(&quot;LA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 44 })));</span>
+<span class="fc" id="L810">        assertEquals(&quot;LQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 45 })));</span>
+<span class="fc" id="L811">        assertEquals(&quot;Lg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 46 })));</span>
+<span class="fc" id="L812">        assertEquals(&quot;Lw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 47 })));</span>
+<span class="fc" id="L813">        assertEquals(&quot;MA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 48 })));</span>
+<span class="fc" id="L814">        assertEquals(&quot;MQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 49 })));</span>
+<span class="fc" id="L815">        assertEquals(&quot;Mg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 50 })));</span>
+<span class="fc" id="L816">        assertEquals(&quot;Mw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 51 })));</span>
+<span class="fc" id="L817">        assertEquals(&quot;NA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 52 })));</span>
+<span class="fc" id="L818">        assertEquals(&quot;NQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 53 })));</span>
+<span class="fc" id="L819">        assertEquals(&quot;Ng==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 54 })));</span>
+<span class="fc" id="L820">        assertEquals(&quot;Nw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 55 })));</span>
+<span class="fc" id="L821">        assertEquals(&quot;OA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 56 })));</span>
+<span class="fc" id="L822">        assertEquals(&quot;OQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 57 })));</span>
+<span class="fc" id="L823">        assertEquals(&quot;Og==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 58 })));</span>
+<span class="fc" id="L824">        assertEquals(&quot;Ow==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 59 })));</span>
+<span class="fc" id="L825">        assertEquals(&quot;PA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 60 })));</span>
+<span class="fc" id="L826">        assertEquals(&quot;PQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 61 })));</span>
+<span class="fc" id="L827">        assertEquals(&quot;Pg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 62 })));</span>
+<span class="fc" id="L828">        assertEquals(&quot;Pw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 63 })));</span>
+<span class="fc" id="L829">        assertEquals(&quot;QA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 64 })));</span>
+<span class="fc" id="L830">        assertEquals(&quot;QQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 65 })));</span>
+<span class="fc" id="L831">        assertEquals(&quot;Qg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 66 })));</span>
+<span class="fc" id="L832">        assertEquals(&quot;Qw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 67 })));</span>
+<span class="fc" id="L833">        assertEquals(&quot;RA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 68 })));</span>
+<span class="fc" id="L834">        assertEquals(&quot;RQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 69 })));</span>
+<span class="fc" id="L835">        assertEquals(&quot;Rg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 70 })));</span>
+<span class="fc" id="L836">        assertEquals(&quot;Rw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 71 })));</span>
+<span class="fc" id="L837">        assertEquals(&quot;SA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 72 })));</span>
+<span class="fc" id="L838">        assertEquals(&quot;SQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 73 })));</span>
+<span class="fc" id="L839">        assertEquals(&quot;Sg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 74 })));</span>
+<span class="fc" id="L840">        assertEquals(&quot;Sw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 75 })));</span>
+<span class="fc" id="L841">        assertEquals(&quot;TA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 76 })));</span>
+<span class="fc" id="L842">        assertEquals(&quot;TQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 77 })));</span>
+<span class="fc" id="L843">        assertEquals(&quot;Tg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 78 })));</span>
+<span class="fc" id="L844">        assertEquals(&quot;Tw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 79 })));</span>
+<span class="fc" id="L845">        assertEquals(&quot;UA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 80 })));</span>
+<span class="fc" id="L846">        assertEquals(&quot;UQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 81 })));</span>
+<span class="fc" id="L847">        assertEquals(&quot;Ug==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 82 })));</span>
+<span class="fc" id="L848">        assertEquals(&quot;Uw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 83 })));</span>
+<span class="fc" id="L849">        assertEquals(&quot;VA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 84 })));</span>
+<span class="fc" id="L850">        assertEquals(&quot;VQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 85 })));</span>
+<span class="fc" id="L851">        assertEquals(&quot;Vg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 86 })));</span>
+<span class="fc" id="L852">        assertEquals(&quot;Vw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 87 })));</span>
+<span class="fc" id="L853">        assertEquals(&quot;WA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 88 })));</span>
+<span class="fc" id="L854">        assertEquals(&quot;WQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 89 })));</span>
+<span class="fc" id="L855">        assertEquals(&quot;Wg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 90 })));</span>
+<span class="fc" id="L856">        assertEquals(&quot;Ww==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 91 })));</span>
+<span class="fc" id="L857">        assertEquals(&quot;XA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 92 })));</span>
+<span class="fc" id="L858">        assertEquals(&quot;XQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 93 })));</span>
+<span class="fc" id="L859">        assertEquals(&quot;Xg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 94 })));</span>
+<span class="fc" id="L860">        assertEquals(&quot;Xw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 95 })));</span>
+<span class="fc" id="L861">        assertEquals(&quot;YA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 96 })));</span>
+<span class="fc" id="L862">        assertEquals(&quot;YQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 97 })));</span>
+<span class="fc" id="L863">        assertEquals(&quot;Yg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 98 })));</span>
+<span class="fc" id="L864">        assertEquals(&quot;Yw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 99 })));</span>
+<span class="fc" id="L865">        assertEquals(&quot;ZA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 100 })));</span>
+<span class="fc" id="L866">        assertEquals(&quot;ZQ==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 101 })));</span>
+<span class="fc" id="L867">        assertEquals(&quot;Zg==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 102 })));</span>
+<span class="fc" id="L868">        assertEquals(&quot;Zw==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 103 })));</span>
+<span class="fc" id="L869">        assertEquals(&quot;aA==&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 104 })));</span>
+<span class="pc bpc" id="L870" title="4 of 10 branches missed.">        for (int i = -128; i &lt;= 127; i++) {</span>
+<span class="fc" id="L871">            final byte test[] = { (byte) i };</span>
+<span class="fc" id="L872">            assertTrue(Arrays.equals(test, Base64.decodeBase64(Base64.encodeBase64(test))));</span>
+        }
+<span class="fc" id="L874">    }</span>
+
+    @Test
+<span class="pc bnc" id="L877" title="All 4 branches missed.">    public void testSingletonsChunked() {</span>
+<span class="fc" id="L878">        assertEquals(&quot;AA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0 })));</span>
+<span class="fc" id="L879">        assertEquals(&quot;AQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 1 })));</span>
+<span class="fc" id="L880">        assertEquals(&quot;Ag==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 2 })));</span>
+<span class="fc" id="L881">        assertEquals(&quot;Aw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 3 })));</span>
+<span class="fc" id="L882">        assertEquals(&quot;BA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 4 })));</span>
+<span class="fc" id="L883">        assertEquals(&quot;BQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 5 })));</span>
+<span class="fc" id="L884">        assertEquals(&quot;Bg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 6 })));</span>
+<span class="fc" id="L885">        assertEquals(&quot;Bw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 7 })));</span>
+<span class="fc" id="L886">        assertEquals(&quot;CA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 8 })));</span>
+<span class="fc" id="L887">        assertEquals(&quot;CQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 9 })));</span>
+<span class="fc" id="L888">        assertEquals(&quot;Cg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 10 })));</span>
+<span class="fc" id="L889">        assertEquals(&quot;Cw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 11 })));</span>
+<span class="fc" id="L890">        assertEquals(&quot;DA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 12 })));</span>
+<span class="fc" id="L891">        assertEquals(&quot;DQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 13 })));</span>
+<span class="fc" id="L892">        assertEquals(&quot;Dg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 14 })));</span>
+<span class="fc" id="L893">        assertEquals(&quot;Dw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 15 })));</span>
+<span class="fc" id="L894">        assertEquals(&quot;EA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 16 })));</span>
+<span class="fc" id="L895">        assertEquals(&quot;EQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 17 })));</span>
+<span class="fc" id="L896">        assertEquals(&quot;Eg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 18 })));</span>
+<span class="fc" id="L897">        assertEquals(&quot;Ew==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 19 })));</span>
+<span class="fc" id="L898">        assertEquals(&quot;FA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 20 })));</span>
+<span class="fc" id="L899">        assertEquals(&quot;FQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 21 })));</span>
+<span class="fc" id="L900">        assertEquals(&quot;Fg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 22 })));</span>
+<span class="fc" id="L901">        assertEquals(&quot;Fw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 23 })));</span>
+<span class="fc" id="L902">        assertEquals(&quot;GA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 24 })));</span>
+<span class="fc" id="L903">        assertEquals(&quot;GQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 25 })));</span>
+<span class="fc" id="L904">        assertEquals(&quot;Gg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 26 })));</span>
+<span class="fc" id="L905">        assertEquals(&quot;Gw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 27 })));</span>
+<span class="fc" id="L906">        assertEquals(&quot;HA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 28 })));</span>
+<span class="fc" id="L907">        assertEquals(&quot;HQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 29 })));</span>
+<span class="fc" id="L908">        assertEquals(&quot;Hg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 30 })));</span>
+<span class="fc" id="L909">        assertEquals(&quot;Hw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 31 })));</span>
+<span class="fc" id="L910">        assertEquals(&quot;IA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 32 })));</span>
+<span class="fc" id="L911">        assertEquals(&quot;IQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 33 })));</span>
+<span class="fc" id="L912">        assertEquals(&quot;Ig==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 34 })));</span>
+<span class="fc" id="L913">        assertEquals(&quot;Iw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 35 })));</span>
+<span class="fc" id="L914">        assertEquals(&quot;JA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 36 })));</span>
+<span class="fc" id="L915">        assertEquals(&quot;JQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 37 })));</span>
+<span class="fc" id="L916">        assertEquals(&quot;Jg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 38 })));</span>
+<span class="fc" id="L917">        assertEquals(&quot;Jw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 39 })));</span>
+<span class="fc" id="L918">        assertEquals(&quot;KA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 40 })));</span>
+<span class="fc" id="L919">        assertEquals(&quot;KQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 41 })));</span>
+<span class="fc" id="L920">        assertEquals(&quot;Kg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 42 })));</span>
+<span class="fc" id="L921">        assertEquals(&quot;Kw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 43 })));</span>
+<span class="fc" id="L922">        assertEquals(&quot;LA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 44 })));</span>
+<span class="fc" id="L923">        assertEquals(&quot;LQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 45 })));</span>
+<span class="fc" id="L924">        assertEquals(&quot;Lg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 46 })));</span>
+<span class="fc" id="L925">        assertEquals(&quot;Lw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 47 })));</span>
+<span class="fc" id="L926">        assertEquals(&quot;MA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 48 })));</span>
+<span class="fc" id="L927">        assertEquals(&quot;MQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 49 })));</span>
+<span class="fc" id="L928">        assertEquals(&quot;Mg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 50 })));</span>
+<span class="fc" id="L929">        assertEquals(&quot;Mw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 51 })));</span>
+<span class="fc" id="L930">        assertEquals(&quot;NA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 52 })));</span>
+<span class="fc" id="L931">        assertEquals(&quot;NQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 53 })));</span>
+<span class="fc" id="L932">        assertEquals(&quot;Ng==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 54 })));</span>
+<span class="fc" id="L933">        assertEquals(&quot;Nw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 55 })));</span>
+<span class="fc" id="L934">        assertEquals(&quot;OA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 56 })));</span>
+<span class="fc" id="L935">        assertEquals(&quot;OQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 57 })));</span>
+<span class="fc" id="L936">        assertEquals(&quot;Og==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 58 })));</span>
+<span class="fc" id="L937">        assertEquals(&quot;Ow==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 59 })));</span>
+<span class="fc" id="L938">        assertEquals(&quot;PA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 60 })));</span>
+<span class="fc" id="L939">        assertEquals(&quot;PQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 61 })));</span>
+<span class="fc" id="L940">        assertEquals(&quot;Pg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 62 })));</span>
+<span class="fc" id="L941">        assertEquals(&quot;Pw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 63 })));</span>
+<span class="fc" id="L942">        assertEquals(&quot;QA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 64 })));</span>
+<span class="fc" id="L943">        assertEquals(&quot;QQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 65 })));</span>
+<span class="fc" id="L944">        assertEquals(&quot;Qg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 66 })));</span>
+<span class="fc" id="L945">        assertEquals(&quot;Qw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 67 })));</span>
+<span class="fc" id="L946">        assertEquals(&quot;RA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 68 })));</span>
+<span class="fc" id="L947">        assertEquals(&quot;RQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 69 })));</span>
+<span class="fc" id="L948">        assertEquals(&quot;Rg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 70 })));</span>
+<span class="fc" id="L949">        assertEquals(&quot;Rw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 71 })));</span>
+<span class="fc" id="L950">        assertEquals(&quot;SA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 72 })));</span>
+<span class="fc" id="L951">        assertEquals(&quot;SQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 73 })));</span>
+<span class="fc" id="L952">        assertEquals(&quot;Sg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 74 })));</span>
+<span class="fc" id="L953">        assertEquals(&quot;Sw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 75 })));</span>
+<span class="fc" id="L954">        assertEquals(&quot;TA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 76 })));</span>
+<span class="fc" id="L955">        assertEquals(&quot;TQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 77 })));</span>
+<span class="fc" id="L956">        assertEquals(&quot;Tg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 78 })));</span>
+<span class="fc" id="L957">        assertEquals(&quot;Tw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 79 })));</span>
+<span class="fc" id="L958">        assertEquals(&quot;UA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 80 })));</span>
+<span class="fc" id="L959">        assertEquals(&quot;UQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 81 })));</span>
+<span class="fc" id="L960">        assertEquals(&quot;Ug==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 82 })));</span>
+<span class="fc" id="L961">        assertEquals(&quot;Uw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 83 })));</span>
+<span class="fc" id="L962">        assertEquals(&quot;VA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 84 })));</span>
+<span class="fc" id="L963">        assertEquals(&quot;VQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 85 })));</span>
+<span class="fc" id="L964">        assertEquals(&quot;Vg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 86 })));</span>
+<span class="fc" id="L965">        assertEquals(&quot;Vw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 87 })));</span>
+<span class="fc" id="L966">        assertEquals(&quot;WA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 88 })));</span>
+<span class="fc" id="L967">        assertEquals(&quot;WQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 89 })));</span>
+<span class="fc" id="L968">        assertEquals(&quot;Wg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 90 })));</span>
+<span class="fc" id="L969">        assertEquals(&quot;Ww==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 91 })));</span>
+<span class="fc" id="L970">        assertEquals(&quot;XA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 92 })));</span>
+<span class="fc" id="L971">        assertEquals(&quot;XQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 93 })));</span>
+<span class="fc" id="L972">        assertEquals(&quot;Xg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 94 })));</span>
+<span class="fc" id="L973">        assertEquals(&quot;Xw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 95 })));</span>
+<span class="fc" id="L974">        assertEquals(&quot;YA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 96 })));</span>
+<span class="fc" id="L975">        assertEquals(&quot;YQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 97 })));</span>
+<span class="fc" id="L976">        assertEquals(&quot;Yg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 98 })));</span>
+<span class="fc" id="L977">        assertEquals(&quot;Yw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 99 })));</span>
+<span class="fc" id="L978">        assertEquals(&quot;ZA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 100 })));</span>
+<span class="fc" id="L979">        assertEquals(&quot;ZQ==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 101 })));</span>
+<span class="fc" id="L980">        assertEquals(&quot;Zg==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 102 })));</span>
+<span class="fc" id="L981">        assertEquals(&quot;Zw==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 103 })));</span>
+<span class="fc" id="L982">        assertEquals(&quot;aA==\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 104 })));</span>
+<span class="fc" id="L983">    }</span>
+
+    @Test
+<span class="pc bnc" id="L986" title="All 4 branches missed.">    public void testTriplets() {</span>
+<span class="fc" id="L987">        assertEquals(&quot;AAAA&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 0 })));</span>
+<span class="fc" id="L988">        assertEquals(&quot;AAAB&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 1 })));</span>
+<span class="fc" id="L989">        assertEquals(&quot;AAAC&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 2 })));</span>
+<span class="fc" id="L990">        assertEquals(&quot;AAAD&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 3 })));</span>
+<span class="fc" id="L991">        assertEquals(&quot;AAAE&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 4 })));</span>
+<span class="fc" id="L992">        assertEquals(&quot;AAAF&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 5 })));</span>
+<span class="fc" id="L993">        assertEquals(&quot;AAAG&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 6 })));</span>
+<span class="fc" id="L994">        assertEquals(&quot;AAAH&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 7 })));</span>
+<span class="fc" id="L995">        assertEquals(&quot;AAAI&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 8 })));</span>
+<span class="fc" id="L996">        assertEquals(&quot;AAAJ&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 9 })));</span>
+<span class="fc" id="L997">        assertEquals(&quot;AAAK&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 10 })));</span>
+<span class="fc" id="L998">        assertEquals(&quot;AAAL&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 11 })));</span>
+<span class="fc" id="L999">        assertEquals(&quot;AAAM&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 12 })));</span>
+<span class="fc" id="L1000">        assertEquals(&quot;AAAN&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 13 })));</span>
+<span class="fc" id="L1001">        assertEquals(&quot;AAAO&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 14 })));</span>
+<span class="fc" id="L1002">        assertEquals(&quot;AAAP&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 15 })));</span>
+<span class="fc" id="L1003">        assertEquals(&quot;AAAQ&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 16 })));</span>
+<span class="fc" id="L1004">        assertEquals(&quot;AAAR&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 17 })));</span>
+<span class="fc" id="L1005">        assertEquals(&quot;AAAS&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 18 })));</span>
+<span class="fc" id="L1006">        assertEquals(&quot;AAAT&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 19 })));</span>
+<span class="fc" id="L1007">        assertEquals(&quot;AAAU&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 20 })));</span>
+<span class="fc" id="L1008">        assertEquals(&quot;AAAV&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 21 })));</span>
+<span class="fc" id="L1009">        assertEquals(&quot;AAAW&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 22 })));</span>
+<span class="fc" id="L1010">        assertEquals(&quot;AAAX&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 23 })));</span>
+<span class="fc" id="L1011">        assertEquals(&quot;AAAY&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 24 })));</span>
+<span class="fc" id="L1012">        assertEquals(&quot;AAAZ&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 25 })));</span>
+<span class="fc" id="L1013">        assertEquals(&quot;AAAa&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 26 })));</span>
+<span class="fc" id="L1014">        assertEquals(&quot;AAAb&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 27 })));</span>
+<span class="fc" id="L1015">        assertEquals(&quot;AAAc&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 28 })));</span>
+<span class="fc" id="L1016">        assertEquals(&quot;AAAd&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 29 })));</span>
+<span class="fc" id="L1017">        assertEquals(&quot;AAAe&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 30 })));</span>
+<span class="fc" id="L1018">        assertEquals(&quot;AAAf&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 31 })));</span>
+<span class="fc" id="L1019">        assertEquals(&quot;AAAg&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 32 })));</span>
+<span class="fc" id="L1020">        assertEquals(&quot;AAAh&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 33 })));</span>
+<span class="fc" id="L1021">        assertEquals(&quot;AAAi&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 34 })));</span>
+<span class="fc" id="L1022">        assertEquals(&quot;AAAj&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 35 })));</span>
+<span class="fc" id="L1023">        assertEquals(&quot;AAAk&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 36 })));</span>
+<span class="fc" id="L1024">        assertEquals(&quot;AAAl&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 37 })));</span>
+<span class="fc" id="L1025">        assertEquals(&quot;AAAm&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 38 })));</span>
+<span class="fc" id="L1026">        assertEquals(&quot;AAAn&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 39 })));</span>
+<span class="fc" id="L1027">        assertEquals(&quot;AAAo&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 40 })));</span>
+<span class="fc" id="L1028">        assertEquals(&quot;AAAp&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 41 })));</span>
+<span class="fc" id="L1029">        assertEquals(&quot;AAAq&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 42 })));</span>
+<span class="fc" id="L1030">        assertEquals(&quot;AAAr&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 43 })));</span>
+<span class="fc" id="L1031">        assertEquals(&quot;AAAs&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 44 })));</span>
+<span class="fc" id="L1032">        assertEquals(&quot;AAAt&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 45 })));</span>
+<span class="fc" id="L1033">        assertEquals(&quot;AAAu&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 46 })));</span>
+<span class="fc" id="L1034">        assertEquals(&quot;AAAv&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 47 })));</span>
+<span class="fc" id="L1035">        assertEquals(&quot;AAAw&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 48 })));</span>
+<span class="fc" id="L1036">        assertEquals(&quot;AAAx&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 49 })));</span>
+<span class="fc" id="L1037">        assertEquals(&quot;AAAy&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 50 })));</span>
+<span class="fc" id="L1038">        assertEquals(&quot;AAAz&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 51 })));</span>
+<span class="fc" id="L1039">        assertEquals(&quot;AAA0&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 52 })));</span>
+<span class="fc" id="L1040">        assertEquals(&quot;AAA1&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 53 })));</span>
+<span class="fc" id="L1041">        assertEquals(&quot;AAA2&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 54 })));</span>
+<span class="fc" id="L1042">        assertEquals(&quot;AAA3&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 55 })));</span>
+<span class="fc" id="L1043">        assertEquals(&quot;AAA4&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 56 })));</span>
+<span class="fc" id="L1044">        assertEquals(&quot;AAA5&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 57 })));</span>
+<span class="fc" id="L1045">        assertEquals(&quot;AAA6&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 58 })));</span>
+<span class="fc" id="L1046">        assertEquals(&quot;AAA7&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 59 })));</span>
+<span class="fc" id="L1047">        assertEquals(&quot;AAA8&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 60 })));</span>
+<span class="fc" id="L1048">        assertEquals(&quot;AAA9&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 61 })));</span>
+<span class="fc" id="L1049">        assertEquals(&quot;AAA+&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 62 })));</span>
+<span class="fc" id="L1050">        assertEquals(&quot;AAA/&quot;, new String(Base64.encodeBase64(new byte[] { (byte) 0, (byte) 0, (byte) 63 })));</span>
+<span class="fc" id="L1051">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1054" title="All 4 branches missed.">    public void testTripletsChunked() {</span>
+<span class="fc" id="L1055">        assertEquals(&quot;AAAA\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 0 })));</span>
+<span class="fc" id="L1056">        assertEquals(&quot;AAAB\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 1 })));</span>
+<span class="fc" id="L1057">        assertEquals(&quot;AAAC\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 2 })));</span>
+<span class="fc" id="L1058">        assertEquals(&quot;AAAD\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 3 })));</span>
+<span class="fc" id="L1059">        assertEquals(&quot;AAAE\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 4 })));</span>
+<span class="fc" id="L1060">        assertEquals(&quot;AAAF\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 5 })));</span>
+<span class="fc" id="L1061">        assertEquals(&quot;AAAG\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 6 })));</span>
+<span class="fc" id="L1062">        assertEquals(&quot;AAAH\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 7 })));</span>
+<span class="fc" id="L1063">        assertEquals(&quot;AAAI\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 8 })));</span>
+<span class="fc" id="L1064">        assertEquals(&quot;AAAJ\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 9 })));</span>
+<span class="fc" id="L1065">        assertEquals(&quot;AAAK\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 10 })));</span>
+<span class="fc" id="L1066">        assertEquals(&quot;AAAL\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 11 })));</span>
+<span class="fc" id="L1067">        assertEquals(&quot;AAAM\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 12 })));</span>
+<span class="fc" id="L1068">        assertEquals(&quot;AAAN\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 13 })));</span>
+<span class="fc" id="L1069">        assertEquals(&quot;AAAO\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 14 })));</span>
+<span class="fc" id="L1070">        assertEquals(&quot;AAAP\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 15 })));</span>
+<span class="fc" id="L1071">        assertEquals(&quot;AAAQ\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 16 })));</span>
+<span class="fc" id="L1072">        assertEquals(&quot;AAAR\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 17 })));</span>
+<span class="fc" id="L1073">        assertEquals(&quot;AAAS\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 18 })));</span>
+<span class="fc" id="L1074">        assertEquals(&quot;AAAT\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 19 })));</span>
+<span class="fc" id="L1075">        assertEquals(&quot;AAAU\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 20 })));</span>
+<span class="fc" id="L1076">        assertEquals(&quot;AAAV\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 21 })));</span>
+<span class="fc" id="L1077">        assertEquals(&quot;AAAW\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 22 })));</span>
+<span class="fc" id="L1078">        assertEquals(&quot;AAAX\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 23 })));</span>
+<span class="fc" id="L1079">        assertEquals(&quot;AAAY\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 24 })));</span>
+<span class="fc" id="L1080">        assertEquals(&quot;AAAZ\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 25 })));</span>
+<span class="fc" id="L1081">        assertEquals(&quot;AAAa\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 26 })));</span>
+<span class="fc" id="L1082">        assertEquals(&quot;AAAb\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 27 })));</span>
+<span class="fc" id="L1083">        assertEquals(&quot;AAAc\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 28 })));</span>
+<span class="fc" id="L1084">        assertEquals(&quot;AAAd\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 29 })));</span>
+<span class="fc" id="L1085">        assertEquals(&quot;AAAe\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 30 })));</span>
+<span class="fc" id="L1086">        assertEquals(&quot;AAAf\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 31 })));</span>
+<span class="fc" id="L1087">        assertEquals(&quot;AAAg\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 32 })));</span>
+<span class="fc" id="L1088">        assertEquals(&quot;AAAh\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 33 })));</span>
+<span class="fc" id="L1089">        assertEquals(&quot;AAAi\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 34 })));</span>
+<span class="fc" id="L1090">        assertEquals(&quot;AAAj\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 35 })));</span>
+<span class="fc" id="L1091">        assertEquals(&quot;AAAk\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 36 })));</span>
+<span class="fc" id="L1092">        assertEquals(&quot;AAAl\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 37 })));</span>
+<span class="fc" id="L1093">        assertEquals(&quot;AAAm\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 38 })));</span>
+<span class="fc" id="L1094">        assertEquals(&quot;AAAn\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 39 })));</span>
+<span class="fc" id="L1095">        assertEquals(&quot;AAAo\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 40 })));</span>
+<span class="fc" id="L1096">        assertEquals(&quot;AAAp\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 41 })));</span>
+<span class="fc" id="L1097">        assertEquals(&quot;AAAq\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 42 })));</span>
+<span class="fc" id="L1098">        assertEquals(&quot;AAAr\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 43 })));</span>
+<span class="fc" id="L1099">        assertEquals(&quot;AAAs\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 44 })));</span>
+<span class="fc" id="L1100">        assertEquals(&quot;AAAt\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 45 })));</span>
+<span class="fc" id="L1101">        assertEquals(&quot;AAAu\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 46 })));</span>
+<span class="fc" id="L1102">        assertEquals(&quot;AAAv\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 47 })));</span>
+<span class="fc" id="L1103">        assertEquals(&quot;AAAw\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 48 })));</span>
+<span class="fc" id="L1104">        assertEquals(&quot;AAAx\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 49 })));</span>
+<span class="fc" id="L1105">        assertEquals(&quot;AAAy\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 50 })));</span>
+<span class="fc" id="L1106">        assertEquals(&quot;AAAz\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 51 })));</span>
+<span class="fc" id="L1107">        assertEquals(&quot;AAA0\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 52 })));</span>
+<span class="fc" id="L1108">        assertEquals(&quot;AAA1\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 53 })));</span>
+<span class="fc" id="L1109">        assertEquals(&quot;AAA2\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 54 })));</span>
+<span class="fc" id="L1110">        assertEquals(&quot;AAA3\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 55 })));</span>
+<span class="fc" id="L1111">        assertEquals(&quot;AAA4\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 56 })));</span>
+<span class="fc" id="L1112">        assertEquals(&quot;AAA5\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 57 })));</span>
+<span class="fc" id="L1113">        assertEquals(&quot;AAA6\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 58 })));</span>
+<span class="fc" id="L1114">        assertEquals(&quot;AAA7\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 59 })));</span>
+<span class="fc" id="L1115">        assertEquals(&quot;AAA8\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 60 })));</span>
+<span class="fc" id="L1116">        assertEquals(&quot;AAA9\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 61 })));</span>
+<span class="fc" id="L1117">        assertEquals(&quot;AAA+\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 62 })));</span>
+<span class="fc" id="L1118">        assertEquals(&quot;AAA/\r\n&quot;, new String(Base64.encodeBase64Chunked(new byte[] { (byte) 0, (byte) 0, (byte) 63 })));</span>
+<span class="fc" id="L1119">    }</span>
+
+    /**
+     * Tests url-safe Base64 against random data, sizes 0 to 150.
+     */
+    @Test
+<span class="pc bnc" id="L1125" title="All 4 branches missed.">    public void testUrlSafe() {</span>
+        // test random data of sizes 0 thru 150
+<span class="pc bpc" id="L1127" title="4 of 10 branches missed.">        for (int i = 0; i &lt;= 150; i++) {</span>
+<span class="fc" id="L1128">            final byte[][] randomData = Base64TestData.randomData(i, true);</span>
+<span class="fc" id="L1129">            final byte[] encoded = randomData[1];</span>
+<span class="fc" id="L1130">            final byte[] decoded = randomData[0];</span>
+<span class="fc" id="L1131">            final byte[] result = Base64.decodeBase64(encoded);</span>
+<span class="fc" id="L1132">            assertTrue(&quot;url-safe i=&quot; + i, Arrays.equals(decoded, result));</span>
+<span class="fc" id="L1133">            assertFalse(&quot;url-safe i=&quot; + i + &quot; no '='&quot;, Base64TestData.bytesContain(encoded, (byte) '='));</span>
+<span class="fc" id="L1134">            assertFalse(&quot;url-safe i=&quot; + i + &quot; no '\\'&quot;, Base64TestData.bytesContain(encoded, (byte) '\\'));</span>
+<span class="fc" id="L1135">            assertFalse(&quot;url-safe i=&quot; + i + &quot; no '+'&quot;, Base64TestData.bytesContain(encoded, (byte) '+'));</span>
+        }
+
+<span class="fc" id="L1138">    }</span>
+
+    /**
+     * Base64 encoding of UUID's is a common use-case, especially in URL-SAFE
+     * mode. This test case ends up being the &quot;URL-SAFE&quot; JUnit's.
+     *
+     * @throws DecoderException
+     *             if Hex.decode() fails - a serious problem since Hex comes
+     *             from our own commons-codec!
+     */
+    @Test
+<span class="pc bnc" id="L1149" title="All 4 branches missed.">    public void testUUID() throws DecoderException {</span>
+        // The 4 UUID's below contains mixtures of + and / to help us test the
+        // URL-SAFE encoding mode.
+<span class="fc" id="L1152">        final byte[][] ids = new byte[4][];</span>
+
+        // ids[0] was chosen so that it encodes with at least one +.
+<span class="fc" id="L1155">        ids[0] = Hex.decodeHex(&quot;94ed8d0319e4493399560fb67404d370&quot;);</span>
+
+        // ids[1] was chosen so that it encodes with both / and +.
+<span class="fc" id="L1158">        ids[1] = Hex.decodeHex(&quot;2bf7cc2701fe4397b49ebeed5acc7090&quot;);</span>
+
+        // ids[2] was chosen so that it encodes with at least one /.
+<span class="fc" id="L1161">        ids[2] = Hex.decodeHex(&quot;64be154b6ffa40258d1a01288e7c31ca&quot;);</span>
+
+        // ids[3] was chosen so that it encodes with both / and +, with /
+        // right at the beginning.
+<span class="fc" id="L1165">        ids[3] = Hex.decodeHex(&quot;ff7f8fc01cdb471a8c8b5a9306183fe8&quot;);</span>
+
+<span class="fc" id="L1167">        final byte[][] standard = new byte[4][];</span>
+<span class="fc" id="L1168">        standard[0] = StringUtils.getBytesUtf8(&quot;lO2NAxnkSTOZVg+2dATTcA==&quot;);</span>
+<span class="fc" id="L1169">        standard[1] = StringUtils.getBytesUtf8(&quot;K/fMJwH+Q5e0nr7tWsxwkA==&quot;);</span>
+<span class="fc" id="L1170">        standard[2] = StringUtils.getBytesUtf8(&quot;ZL4VS2/6QCWNGgEojnwxyg==&quot;);</span>
+<span class="fc" id="L1171">        standard[3] = StringUtils.getBytesUtf8(&quot;/3+PwBzbRxqMi1qTBhg/6A==&quot;);</span>
+
+<span class="fc" id="L1173">        final byte[][] urlSafe1 = new byte[4][];</span>
+        // regular padding (two '==' signs).
+<span class="fc" id="L1175">        urlSafe1[0] = StringUtils.getBytesUtf8(&quot;lO2NAxnkSTOZVg-2dATTcA==&quot;);</span>
+<span class="fc" id="L1176">        urlSafe1[1] = StringUtils.getBytesUtf8(&quot;K_fMJwH-Q5e0nr7tWsxwkA==&quot;);</span>
+<span class="fc" id="L1177">        urlSafe1[2] = StringUtils.getBytesUtf8(&quot;ZL4VS2_6QCWNGgEojnwxyg==&quot;);</span>
+<span class="fc" id="L1178">        urlSafe1[3] = StringUtils.getBytesUtf8(&quot;_3-PwBzbRxqMi1qTBhg_6A==&quot;);</span>
+
+<span class="fc" id="L1180">        final byte[][] urlSafe2 = new byte[4][];</span>
+        // single padding (only one '=' sign).
+<span class="fc" id="L1182">        urlSafe2[0] = StringUtils.getBytesUtf8(&quot;lO2NAxnkSTOZVg-2dATTcA=&quot;);</span>
+<span class="fc" id="L1183">        urlSafe2[1] = StringUtils.getBytesUtf8(&quot;K_fMJwH-Q5e0nr7tWsxwkA=&quot;);</span>
+<span class="fc" id="L1184">        urlSafe2[2] = StringUtils.getBytesUtf8(&quot;ZL4VS2_6QCWNGgEojnwxyg=&quot;);</span>
+<span class="fc" id="L1185">        urlSafe2[3] = StringUtils.getBytesUtf8(&quot;_3-PwBzbRxqMi1qTBhg_6A=&quot;);</span>
+
+<span class="fc" id="L1187">        final byte[][] urlSafe3 = new byte[4][];</span>
+        // no padding (no '=' signs).
+<span class="fc" id="L1189">        urlSafe3[0] = StringUtils.getBytesUtf8(&quot;lO2NAxnkSTOZVg-2dATTcA&quot;);</span>
+<span class="fc" id="L1190">        urlSafe3[1] = StringUtils.getBytesUtf8(&quot;K_fMJwH-Q5e0nr7tWsxwkA&quot;);</span>
+<span class="fc" id="L1191">        urlSafe3[2] = StringUtils.getBytesUtf8(&quot;ZL4VS2_6QCWNGgEojnwxyg&quot;);</span>
+<span class="fc" id="L1192">        urlSafe3[3] = StringUtils.getBytesUtf8(&quot;_3-PwBzbRxqMi1qTBhg_6A&quot;);</span>
+
+<span class="pc bpc" id="L1194" title="4 of 10 branches missed.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="fc" id="L1195">            final byte[] encodedStandard = Base64.encodeBase64(ids[i]);</span>
+<span class="fc" id="L1196">            final byte[] encodedUrlSafe = Base64.encodeBase64URLSafe(ids[i]);</span>
+<span class="fc" id="L1197">            final byte[] decodedStandard = Base64.decodeBase64(standard[i]);</span>
+<span class="fc" id="L1198">            final byte[] decodedUrlSafe1 = Base64.decodeBase64(urlSafe1[i]);</span>
+<span class="fc" id="L1199">            final byte[] decodedUrlSafe2 = Base64.decodeBase64(urlSafe2[i]);</span>
+<span class="fc" id="L1200">            final byte[] decodedUrlSafe3 = Base64.decodeBase64(urlSafe3[i]);</span>
+
+            // Very important debugging output should anyone
+            // ever need to delve closely into this stuff.
+//            {
+//                System.out.println(&quot;reference: [&quot; + Hex.encodeHexString(ids[i]) + &quot;]&quot;);
+//                System.out.println(&quot;standard:  [&quot; + Hex.encodeHexString(decodedStandard) + &quot;] From: [&quot;
+//                        + StringUtils.newStringUtf8(standard[i]) + &quot;]&quot;);
+//                System.out.println(&quot;safe1:     [&quot; + Hex.encodeHexString(decodedUrlSafe1) + &quot;] From: [&quot;
+//                        + StringUtils.newStringUtf8(urlSafe1[i]) + &quot;]&quot;);
+//                System.out.println(&quot;safe2:     [&quot; + Hex.encodeHexString(decodedUrlSafe2) + &quot;] From: [&quot;
+//                        + StringUtils.newStringUtf8(urlSafe2[i]) + &quot;]&quot;);
+//                System.out.println(&quot;safe3:     [&quot; + Hex.encodeHexString(decodedUrlSafe3) + &quot;] From: [&quot;
+//                        + StringUtils.newStringUtf8(urlSafe3[i]) + &quot;]&quot;);
+//            }
+
+<span class="fc" id="L1216">            assertTrue(&quot;standard encode uuid&quot;, Arrays.equals(encodedStandard, standard[i]));</span>
+<span class="fc" id="L1217">            assertTrue(&quot;url-safe encode uuid&quot;, Arrays.equals(encodedUrlSafe, urlSafe3[i]));</span>
+<span class="fc" id="L1218">            assertTrue(&quot;standard decode uuid&quot;, Arrays.equals(decodedStandard, ids[i]));</span>
+<span class="fc" id="L1219">            assertTrue(&quot;url-safe1 decode uuid&quot;, Arrays.equals(decodedUrlSafe1, ids[i]));</span>
+<span class="fc" id="L1220">            assertTrue(&quot;url-safe2 decode uuid&quot;, Arrays.equals(decodedUrlSafe2, ids[i]));</span>
+<span class="fc" id="L1221">            assertTrue(&quot;url-safe3 decode uuid&quot;, Arrays.equals(decodedUrlSafe3, ids[i]));</span>
+        }
+<span class="fc" id="L1223">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1226" title="All 4 branches missed.">    public void testByteToStringVariations() throws DecoderException {</span>
+<span class="fc" id="L1227">        final Base64 base64 = new Base64(0);</span>
+<span class="fc" id="L1228">        final byte[] b1 = StringUtils.getBytesUtf8(&quot;Hello World&quot;);</span>
+<span class="fc" id="L1229">        final byte[] b2 = new byte[0];</span>
+<span class="fc" id="L1230">        final byte[] b3 = null;</span>
+<span class="fc" id="L1231">        final byte[] b4 = Hex.decodeHex(&quot;2bf7cc2701fe4397b49ebeed5acc7090&quot;); // for</span>
+                                                                                            // url-safe
+                                                                                            // tests
+
+<span class="fc" id="L1235">        assertEquals(&quot;byteToString Hello World&quot;, &quot;SGVsbG8gV29ybGQ=&quot;, base64.encodeToString(b1));</span>
+<span class="fc" id="L1236">        assertEquals(&quot;byteToString static Hello World&quot;, &quot;SGVsbG8gV29ybGQ=&quot;, Base64.encodeBase64String(b1));</span>
+<span class="fc" id="L1237">        assertEquals(&quot;byteToString \&quot;\&quot;&quot;, &quot;&quot;, base64.encodeToString(b2));</span>
+<span class="fc" id="L1238">        assertEquals(&quot;byteToString static \&quot;\&quot;&quot;, &quot;&quot;, Base64.encodeBase64String(b2));</span>
+<span class="fc" id="L1239">        assertEquals(&quot;byteToString null&quot;, null, base64.encodeToString(b3));</span>
+<span class="fc" id="L1240">        assertEquals(&quot;byteToString static null&quot;, null, Base64.encodeBase64String(b3));</span>
+<span class="fc" id="L1241">        assertEquals(&quot;byteToString UUID&quot;, &quot;K/fMJwH+Q5e0nr7tWsxwkA==&quot;, base64.encodeToString(b4));</span>
+<span class="fc" id="L1242">        assertEquals(&quot;byteToString static UUID&quot;, &quot;K/fMJwH+Q5e0nr7tWsxwkA==&quot;, Base64.encodeBase64String(b4));</span>
+<span class="fc" id="L1243">        assertEquals(&quot;byteToString static-url-safe UUID&quot;, &quot;K_fMJwH-Q5e0nr7tWsxwkA&quot;,</span>
+<span class="fc" id="L1244">                Base64.encodeBase64URLSafeString(b4));</span>
+<span class="fc" id="L1245">    }</span>
+
+    @Test
+<span class="pc bnc" id="L1248" title="All 4 branches missed.">    public void testStringToByteVariations() throws DecoderException {</span>
+<span class="fc" id="L1249">        final Base64 base64 = new Base64();</span>
+<span class="fc" id="L1250">        final String s1 = &quot;SGVsbG8gV29ybGQ=\r\n&quot;;</span>
+<span class="fc" id="L1251">        final String s2 = &quot;&quot;;</span>
+<span class="fc" id="L1252">        final String s3 = null;</span>
+<span class="fc" id="L1253">        final String s4a = &quot;K/fMJwH+Q5e0nr7tWsxwkA==\r\n&quot;;</span>
+<span class="fc" id="L1254">        final String s4b = &quot;K_fMJwH-Q5e0nr7tWsxwkA&quot;;</span>
+<span class="fc" id="L1255">        final byte[] b4 = Hex.decodeHex(&quot;2bf7cc2701fe4397b49ebeed5acc7090&quot;); // for</span>
+                                                                                            // url-safe
+                                                                                            // tests
+
+<span class="fc" id="L1259">        assertEquals(&quot;StringToByte Hello World&quot;, &quot;Hello World&quot;, StringUtils.newStringUtf8(base64.decode(s1)));</span>
+<span class="fc" id="L1260">        assertEquals(&quot;StringToByte Hello World&quot;, &quot;Hello World&quot;,</span>
+<span class="fc" id="L1261">                StringUtils.newStringUtf8((byte[]) base64.decode((Object) s1)));</span>
+<span class="fc" id="L1262">        assertEquals(&quot;StringToByte static Hello World&quot;, &quot;Hello World&quot;,</span>
+<span class="fc" id="L1263">                StringUtils.newStringUtf8(Base64.decodeBase64(s1)));</span>
+<span class="fc" id="L1264">        assertEquals(&quot;StringToByte \&quot;\&quot;&quot;, &quot;&quot;, StringUtils.newStringUtf8(base64.decode(s2)));</span>
+<span class="fc" id="L1265">        assertEquals(&quot;StringToByte static \&quot;\&quot;&quot;, &quot;&quot;, StringUtils.newStringUtf8(Base64.decodeBase64(s2)));</span>
+<span class="fc" id="L1266">        assertEquals(&quot;StringToByte null&quot;, null, StringUtils.newStringUtf8(base64.decode(s3)));</span>
+<span class="fc" id="L1267">        assertEquals(&quot;StringToByte static null&quot;, null, StringUtils.newStringUtf8(Base64.decodeBase64(s3)));</span>
+<span class="fc" id="L1268">        assertTrue(&quot;StringToByte UUID&quot;, Arrays.equals(b4, base64.decode(s4b)));</span>
+<span class="fc" id="L1269">        assertTrue(&quot;StringToByte static UUID&quot;, Arrays.equals(b4, Base64.decodeBase64(s4a)));</span>
+<span class="fc" id="L1270">        assertTrue(&quot;StringToByte static-url-safe UUID&quot;, Arrays.equals(b4, Base64.decodeBase64(s4b)));</span>
+<span class="fc" id="L1271">    }</span>
+
+<span class="fc" id="L1273">    private String toString(final byte[] data) {</span>
+<span class="fc" id="L1274">        final StringBuilder buf = new StringBuilder();</span>
+<span class="pc bpc" id="L1275" title="4 of 10 branches missed.">        for (int i = 0; i &lt; data.length; i++) {</span>
+<span class="fc" id="L1276">            buf.append(data[i]);</span>
+<span class="pc bpc" id="L1277" title="4 of 10 branches missed.">            if (i != data.length - 1) {</span>
+<span class="fc" id="L1278">                buf.append(&quot;,&quot;);</span>
+            }
+        }
+<span class="fc" id="L1281">        return buf.toString();</span>
+    }
+
+    /**
+     * Tests a lineSeparator much bigger than DEFAULT_BUFFER_SIZE.
+     *
+     * @see &quot;&lt;a href='http://mail-archives.apache.org/mod_mbox/commons-dev/201202.mbox/%3C4F3C85D7.5060706@snafu.de%3E'&gt;dev@commons.apache.org&lt;/a&gt;&quot;
+     */
+    @Test
+    @Ignore
+<span class="nc bnc" id="L1291" title="All 4 branches missed.">    public void testHugeLineSeparator() {</span>
+<span class="nc" id="L1292">        final int BaseNCodec_DEFAULT_BUFFER_SIZE = 8192;</span>
+<span class="nc" id="L1293">        final int Base64_BYTES_PER_ENCODED_BLOCK = 4;</span>
+<span class="nc" id="L1294">        final byte[] baLineSeparator = new byte[BaseNCodec_DEFAULT_BUFFER_SIZE * 4 - 3];</span>
+<span class="nc" id="L1295">        final Base64 b64 = new Base64(Base64_BYTES_PER_ENCODED_BLOCK, baLineSeparator);</span>
+<span class="nc" id="L1296">        final String strOriginal = &quot;Hello World&quot;;</span>
+<span class="nc" id="L1297">        final String strDecoded = new String(b64.decode(b64.encode(StringUtils.getBytesUtf8(strOriginal))));</span>
+<span class="nc" id="L1298">        assertEquals(&quot;testDEFAULT_BUFFER_SIZE&quot;, strOriginal, strDecoded);</span>
+<span class="nc" id="L1299">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

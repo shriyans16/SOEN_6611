@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Md5CryptTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">Md5CryptTest.java</span></div><h1>Md5CryptTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.digest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import org.apache.commons.codec.Charsets;
+import org.junit.Test;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+<span class="pc bpc" id="L28" title="3 of 4 branches missed.">public class Md5CryptTest {</span>
+
+    @Test
+<span class="pc bnc" id="L31" title="All 4 branches missed.">    public void testCtor() {</span>
+<span class="fc" id="L32">        assertNotNull(new Md5Crypt()); // for code-coverage</span>
+<span class="fc" id="L33">    }</span>
+
+    @Test
+<span class="pc bnc" id="L36" title="All 4 branches missed.">    public void testMd5CryptStrings() {</span>
+        // empty data
+<span class="fc" id="L38">        assertEquals(&quot;$1$foo$9mS5ExwgIECGE5YKlD5o91&quot;, Crypt.crypt(&quot;&quot;, &quot;$1$foo&quot;));</span>
+        // salt gets cut at dollar sign
+<span class="fc" id="L40">        assertEquals(&quot;$1$1234$ImZYBLmYC.rbBKg9ERxX70&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$1$1234&quot;));</span>
+<span class="fc" id="L41">        assertEquals(&quot;$1$1234$ImZYBLmYC.rbBKg9ERxX70&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$1$1234$567&quot;));</span>
+<span class="fc" id="L42">        assertEquals(&quot;$1$1234$ImZYBLmYC.rbBKg9ERxX70&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$1$1234$567$890&quot;));</span>
+        // salt gets cut at maximum length
+<span class="fc" id="L44">        assertEquals(&quot;$1$12345678$hj0uLpdidjPhbMMZeno8X/&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$1$1234567890123456&quot;));</span>
+<span class="fc" id="L45">        assertEquals(&quot;$1$12345678$hj0uLpdidjPhbMMZeno8X/&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$1$123456789012345678&quot;));</span>
+<span class="fc" id="L46">    }</span>
+
+    @Test
+<span class="pc bnc" id="L49" title="All 4 branches missed.">    public void testMd5CryptBytes() {</span>
+        // An empty Bytearray equals an empty String
+<span class="fc" id="L51">        assertEquals(&quot;$1$foo$9mS5ExwgIECGE5YKlD5o91&quot;, Crypt.crypt(new byte[0], &quot;$1$foo&quot;));</span>
+        // UTF-8 stores \u00e4 &quot;a with diaeresis&quot; as two bytes 0xc3 0xa4.
+<span class="fc" id="L53">        assertEquals(&quot;$1$./$52agTEQZs877L9jyJnCNZ1&quot;, Crypt.crypt(&quot;t\u00e4st&quot;, &quot;$1$./$&quot;));</span>
+        // ISO-8859-1 stores &quot;a with diaeresis&quot; as single byte 0xe4.
+<span class="fc" id="L55">        assertEquals(&quot;$1$./$J2UbKzGe0Cpe63WZAt6p//&quot;, Crypt.crypt(&quot;t\u00e4st&quot;.getBytes(Charsets.ISO_8859_1), &quot;$1$./$&quot;));</span>
+<span class="fc" id="L56">    }</span>
+
+    @Test
+<span class="pc bnc" id="L59" title="All 4 branches missed.">    public void testMd5CryptExplicitCall() {</span>
+<span class="fc" id="L60">        assertTrue(Md5Crypt.md5Crypt(&quot;secret&quot;.getBytes()).matches(&quot;^\\$1\\$[a-zA-Z0-9./]{0,8}\\$.{1,}$&quot;));</span>
+<span class="fc" id="L61">        assertTrue(Md5Crypt.md5Crypt(&quot;secret&quot;.getBytes(), (String) null).matches(&quot;^\\$1\\$[a-zA-Z0-9./]{0,8}\\$.{1,}$&quot;));</span>
+<span class="fc" id="L62">    }</span>
+
+    @Test
+<span class="pc bnc" id="L65" title="All 4 branches missed.">    public void testMd5CryptExplicitCallWithThreadLocalRandom() {</span>
+<span class="fc" id="L66">        ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();</span>
+<span class="fc" id="L67">        assertTrue(Md5Crypt.md5Crypt(&quot;secret&quot;.getBytes(), threadLocalRandom).matches(&quot;^\\$1\\$[a-zA-Z0-9./]{0,8}\\$.{1,}$&quot;));</span>
+<span class="fc" id="L68">        assertTrue(Md5Crypt.md5Crypt(&quot;secret&quot;.getBytes(), (String) null).matches(&quot;^\\$1\\$[a-zA-Z0-9./]{0,8}\\$.{1,}$&quot;));</span>
+<span class="fc" id="L69">    }</span>
+
+    @Test
+<span class="pc bnc" id="L72" title="All 4 branches missed.">    public void testMd5CryptLongInput() {</span>
+<span class="fc" id="L73">        assertEquals(&quot;$1$1234$MoxekaNNUgfPRVqoeYjCD/&quot;, Crypt.crypt(&quot;12345678901234567890&quot;, &quot;$1$1234&quot;));</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test(expected = NullPointerException.class)
+<span class="pc bpc" id="L77" title="4 of 6 branches missed.">    public void testMd5CryptNullData() {</span>
+<span class="nc" id="L78">        Md5Crypt.md5Crypt((byte[]) null);</span>
+<span class="nc" id="L79">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L82" title="4 of 6 branches missed.">    public void testMd5CryptWithEmptySalt() {</span>
+<span class="nc" id="L83">        Md5Crypt.md5Crypt(&quot;secret&quot;.getBytes(), &quot;&quot;);</span>
+<span class="nc" id="L84">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

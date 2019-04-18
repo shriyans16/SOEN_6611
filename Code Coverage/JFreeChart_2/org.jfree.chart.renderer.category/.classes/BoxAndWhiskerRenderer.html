@@ -1,0 +1,1201 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BoxAndWhiskerRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BoxAndWhiskerRenderer (org.jfree.chart.renderer.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BoxAndWhiskerRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (18/ 30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.8%
+  </span>
+  <span class="absValue">
+    (237/ 355)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2017, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------------------
+<i>28</i>&nbsp; * BoxAndWhiskerRenderer.java
+<i>29</i>&nbsp; * --------------------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2017, by David Browning and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Browning (for the Australian Institute of Marine
+<i>33</i>&nbsp; *                   Science);
+<i>34</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>35</i>&nbsp; *                   Tim Bardzil;
+<i>36</i>&nbsp; *                   Rob Van der Sanden (patches 1866446 and 1888422);
+<i>37</i>&nbsp; *                   Peter Becker (patches 2868585 and 2868608);
+<i>38</i>&nbsp; *                   Martin Krauskopf (patch 3421088);
+<i>39</i>&nbsp; *                   Martin Hoeller;
+<i>40</i>&nbsp; *                   John Matthews;
+<i>41</i>&nbsp; *
+<i>42</i>&nbsp; * Changes
+<i>43</i>&nbsp; * -------
+<i>44</i>&nbsp; * 21-Aug-2003 : Version 1, contributed by David Browning (for the Australian
+<i>45</i>&nbsp; *               Institute of Marine Science);
+<i>46</i>&nbsp; * 01-Sep-2003 : Incorporated outlier and farout symbols for low values
+<i>47</i>&nbsp; *               also (DG);
+<i>48</i>&nbsp; * 08-Sep-2003 : Changed ValueAxis API (DG);
+<i>49</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>50</i>&nbsp; * 07-Oct-2003 : Added renderer state (DG);
+<i>51</i>&nbsp; * 12-Nov-2003 : Fixed casting bug reported by Tim Bardzil (DG);
+<i>52</i>&nbsp; * 13-Nov-2003 : Added drawHorizontalItem() method contributed by Tim
+<i>53</i>&nbsp; *               Bardzil (DG);
+<i>54</i>&nbsp; * 25-Apr-2004 : Added fillBox attribute, equals() method and added
+<i>55</i>&nbsp; *               serialization code (DG);
+<i>56</i>&nbsp; * 29-Apr-2004 : Changed drawing of upper and lower shadows - see bug report
+<i>57</i>&nbsp; *               944011 (DG);
+<i>58</i>&nbsp; * 05-Nov-2004 : Modified drawItem() signature (DG);
+<i>59</i>&nbsp; * 09-Mar-2005 : Override getLegendItem() method so that legend item shapes
+<i>60</i>&nbsp; *               are shown as blocks (DG);
+<i>61</i>&nbsp; * 20-Apr-2005 : Generate legend labels, tooltips and URLs (DG);
+<i>62</i>&nbsp; * 09-Jun-2005 : Updated equals() to handle GradientPaint (DG);
+<i>63</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>64</i>&nbsp; * 12-Oct-2006 : Source reformatting and API doc updates (DG);
+<i>65</i>&nbsp; * 12-Oct-2006 : Fixed bug 1572478, potential NullPointerException (DG);
+<i>66</i>&nbsp; * 05-Feb-2006 : Added event notifications to a couple of methods (DG);
+<i>67</i>&nbsp; * 20-Apr-2007 : Updated getLegendItem() for renderer change (DG);
+<i>68</i>&nbsp; * 11-May-2007 : Added check for visibility in getLegendItem() (DG);
+<i>69</i>&nbsp; * 17-May-2007 : Set datasetIndex and seriesIndex in getLegendItem() (DG);
+<i>70</i>&nbsp; * 18-May-2007 : Set dataset and seriesKey for LegendItem (DG);
+<i>71</i>&nbsp; * 03-Jan-2008 : Check visibility of average marker before drawing it (DG);
+<i>72</i>&nbsp; * 15-Jan-2008 : Add getMaximumBarWidth() and setMaximumBarWidth()
+<i>73</i>&nbsp; *               methods (RVdS);
+<i>74</i>&nbsp; * 14-Feb-2008 : Fix bar position for horizontal chart, see patch
+<i>75</i>&nbsp; *               1888422 (RVdS);
+<i>76</i>&nbsp; * 27-Mar-2008 : Boxes should use outlinePaint/Stroke settings (DG);
+<i>77</i>&nbsp; * 17-Jun-2008 : Apply legend shape, font and paint attributes (DG);
+<i>78</i>&nbsp; * 02-Oct-2008 : Check item visibility in drawItem() method (DG);
+<i>79</i>&nbsp; * 21-Jan-2009 : Added flags to control visibility of mean and median
+<i>80</i>&nbsp; *               indicators (DG);
+<i>81</i>&nbsp; * 28-Sep-2009 : Added fireChangeEvent() to setMedianVisible (DG);
+<i>82</i>&nbsp; * 28-Sep-2009 : Added useOutlinePaintForWhiskers flag, see patch 2868585
+<i>83</i>&nbsp; *               by Peter Becker (DG);
+<i>84</i>&nbsp; * 28-Sep-2009 : Added whiskerWidth attribute, see patch 2868608 by Peter
+<i>85</i>&nbsp; *               Becker (DG);
+<i>86</i>&nbsp; * 11-Oct-2011 : applied patch #3421088 from Martin Krauskopf to fix bug (MH);
+<i>87</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>88</i>&nbsp; * 18-Jul-2016 : Fix drawing issue with horizontal orientation (JM);
+<i>89</i>&nbsp; *
+<i>90</i>&nbsp; */
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;package org.jfree.chart.renderer.category;
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;import java.awt.Color;
+<i>95</i>&nbsp;import java.awt.Graphics2D;
+<i>96</i>&nbsp;import java.awt.Paint;
+<i>97</i>&nbsp;import java.awt.Shape;
+<i>98</i>&nbsp;import java.awt.Stroke;
+<i>99</i>&nbsp;import java.awt.geom.Ellipse2D;
+<i>100</i>&nbsp;import java.awt.geom.Line2D;
+<i>101</i>&nbsp;import java.awt.geom.Point2D;
+<i>102</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>103</i>&nbsp;import java.io.IOException;
+<i>104</i>&nbsp;import java.io.ObjectInputStream;
+<i>105</i>&nbsp;import java.io.ObjectOutputStream;
+<i>106</i>&nbsp;import java.io.Serializable;
+<i>107</i>&nbsp;import java.util.ArrayList;
+<i>108</i>&nbsp;import java.util.Collections;
+<i>109</i>&nbsp;import java.util.Iterator;
+<i>110</i>&nbsp;import java.util.List;
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;import org.jfree.chart.LegendItem;
+<i>113</i>&nbsp;import org.jfree.chart.axis.CategoryAxis;
+<i>114</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>115</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>116</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>117</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>118</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>119</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>120</i>&nbsp;import org.jfree.chart.renderer.Outlier;
+<i>121</i>&nbsp;import org.jfree.chart.renderer.OutlierList;
+<i>122</i>&nbsp;import org.jfree.chart.renderer.OutlierListCollection;
+<i>123</i>&nbsp;import org.jfree.chart.ui.RectangleEdge;
+<i>124</i>&nbsp;import org.jfree.chart.util.PaintUtils;
+<i>125</i>&nbsp;import org.jfree.chart.util.Args;
+<i>126</i>&nbsp;import org.jfree.chart.util.PublicCloneable;
+<i>127</i>&nbsp;import org.jfree.chart.util.SerialUtils;
+<i>128</i>&nbsp;import org.jfree.data.Range;
+<i>129</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>130</i>&nbsp;import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;/**
+<i>133</i>&nbsp; * A box-and-whisker renderer.  This renderer requires a
+<i>134</i>&nbsp; * {@link BoxAndWhiskerCategoryDataset} and is for use with the
+<i>135</i>&nbsp; * {@link CategoryPlot} class.  The example shown here is generated
+<i>136</i>&nbsp; * by the {@code BoxAndWhiskerChartDemo1.java} program included in the
+<i>137</i>&nbsp; * JFreeChart Demo Collection:
+<i>138</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>139</i>&nbsp; * &lt;img src=&quot;../../../../../images/BoxAndWhiskerRendererSample.png&quot;
+<i>140</i>&nbsp; * alt=&quot;BoxAndWhiskerRendererSample.png&quot;&gt;
+<i>141</i>&nbsp; */
+<i>142</i>&nbsp;public class BoxAndWhiskerRenderer extends AbstractCategoryItemRenderer
+<i>143</i>&nbsp;        implements Cloneable, PublicCloneable, Serializable {
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /** For serialization. */
+<i>146</i>&nbsp;    private static final long serialVersionUID = 632027470694481177L;
+<i>147</i>&nbsp;
+<i>148</i>&nbsp;    /** The color used to paint the median line and average marker. */
+<i>149</i>&nbsp;    private transient Paint artifactPaint;
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /** A flag that controls whether or not the box is filled. */
+<i>152</i>&nbsp;    private boolean fillBox;
+<i>153</i>&nbsp;
+<i>154</i>&nbsp;    /** The margin between items (boxes) within a category. */
+<i>155</i>&nbsp;    private double itemMargin;
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     * The maximum bar width as percentage of the available space in the plot.
+<i>159</i>&nbsp;     * Take care with the encoding - for example, 0.05 is five percent.
+<i>160</i>&nbsp;     */
+<i>161</i>&nbsp;    private double maximumBarWidth;
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    /**
+<i>164</i>&nbsp;     * A flag that controls whether or not the median indicator is drawn.
+<i>165</i>&nbsp;     * 
+<i>166</i>&nbsp;     * @since 1.0.13
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    private boolean medianVisible;
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * A flag that controls whether or not the mean indicator is drawn.
+<i>172</i>&nbsp;     *
+<i>173</i>&nbsp;     * @since 1.0.13
+<i>174</i>&nbsp;     */
+<i>175</i>&nbsp;    private boolean meanVisible;
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * A flag that, if {@code true}, causes the whiskers to be drawn
+<i>179</i>&nbsp;     * using the outline paint for the series.  The default value is
+<i>180</i>&nbsp;     * {@code false} and in that case the regular series paint is used.
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @since 1.0.14
+<i>183</i>&nbsp;     */
+<i>184</i>&nbsp;    private boolean useOutlinePaintForWhiskers;
+<i>185</i>&nbsp;
+<i>186</i>&nbsp;    /**
+<i>187</i>&nbsp;     * The width of the whiskers as fraction of the bar width.
+<i>188</i>&nbsp;     *
+<i>189</i>&nbsp;     * @since 1.0.14
+<i>190</i>&nbsp;     */
+<i>191</i>&nbsp;    private double whiskerWidth;
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    /**
+<i>194</i>&nbsp;     * Default constructor.
+<i>195</i>&nbsp;     */
+<b class="fc"><i>196</i>&nbsp;    public BoxAndWhiskerRenderer() {</b>
+<b class="fc"><i>197</i>&nbsp;        this.artifactPaint = Color.BLACK;</b>
+<b class="fc"><i>198</i>&nbsp;        this.fillBox = true;</b>
+<b class="fc"><i>199</i>&nbsp;        this.itemMargin = 0.20;</b>
+<b class="fc"><i>200</i>&nbsp;        this.maximumBarWidth = 1.0;</b>
+<b class="fc"><i>201</i>&nbsp;        this.medianVisible = true;</b>
+<b class="fc"><i>202</i>&nbsp;        this.meanVisible = true;</b>
+<b class="fc"><i>203</i>&nbsp;        this.useOutlinePaintForWhiskers = false;</b>
+<b class="fc"><i>204</i>&nbsp;        this.whiskerWidth = 1.0;</b>
+<b class="fc"><i>205</i>&nbsp;        setDefaultLegendShape(new Rectangle2D.Double(-4.0, -4.0, 8.0, 8.0));</b>
+<b class="fc"><i>206</i>&nbsp;    }</b>
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Returns the paint used to color the median and average markers.
+<i>210</i>&nbsp;     *
+<i>211</i>&nbsp;     * @return The paint used to draw the median and average markers (never
+<i>212</i>&nbsp;     *     {@code null}).
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @see #setArtifactPaint(Paint)
+<i>215</i>&nbsp;     */
+<i>216</i>&nbsp;    public Paint getArtifactPaint() {
+<b class="nc"><i>217</i>&nbsp;        return this.artifactPaint;</b>
+<i>218</i>&nbsp;    }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;    /**
+<i>221</i>&nbsp;     * Sets the paint used to color the median and average markers and sends
+<i>222</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>223</i>&nbsp;     *
+<i>224</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>225</i>&nbsp;     *
+<i>226</i>&nbsp;     * @see #getArtifactPaint()
+<i>227</i>&nbsp;     */
+<i>228</i>&nbsp;    public void setArtifactPaint(Paint paint) {
+<b class="fc"><i>229</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>230</i>&nbsp;        this.artifactPaint = paint;</b>
+<b class="fc"><i>231</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>232</i>&nbsp;    }</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;    /**
+<i>235</i>&nbsp;     * Returns the flag that controls whether or not the box is filled.
+<i>236</i>&nbsp;     *
+<i>237</i>&nbsp;     * @return A boolean.
+<i>238</i>&nbsp;     *
+<i>239</i>&nbsp;     * @see #setFillBox(boolean)
+<i>240</i>&nbsp;     */
+<i>241</i>&nbsp;    public boolean getFillBox() {
+<b class="fc"><i>242</i>&nbsp;        return this.fillBox;</b>
+<i>243</i>&nbsp;    }
+<i>244</i>&nbsp;
+<i>245</i>&nbsp;    /**
+<i>246</i>&nbsp;     * Sets the flag that controls whether or not the box is filled and sends a
+<i>247</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @param flag  the flag.
+<i>250</i>&nbsp;     *
+<i>251</i>&nbsp;     * @see #getFillBox()
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    public void setFillBox(boolean flag) {
+<b class="fc"><i>254</i>&nbsp;        this.fillBox = flag;</b>
+<b class="fc"><i>255</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>256</i>&nbsp;    }</b>
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /**
+<i>259</i>&nbsp;     * Returns the item margin.  This is a percentage of the available space
+<i>260</i>&nbsp;     * that is allocated to the space between items in the chart.
+<i>261</i>&nbsp;     *
+<i>262</i>&nbsp;     * @return The margin.
+<i>263</i>&nbsp;     *
+<i>264</i>&nbsp;     * @see #setItemMargin(double)
+<i>265</i>&nbsp;     */
+<i>266</i>&nbsp;    public double getItemMargin() {
+<b class="nc"><i>267</i>&nbsp;        return this.itemMargin;</b>
+<i>268</i>&nbsp;    }
+<i>269</i>&nbsp;
+<i>270</i>&nbsp;    /**
+<i>271</i>&nbsp;     * Sets the item margin and sends a {@link RendererChangeEvent} to all
+<i>272</i>&nbsp;     * registered listeners.
+<i>273</i>&nbsp;     *
+<i>274</i>&nbsp;     * @param margin  the margin (a percentage).
+<i>275</i>&nbsp;     *
+<i>276</i>&nbsp;     * @see #getItemMargin()
+<i>277</i>&nbsp;     */
+<i>278</i>&nbsp;    public void setItemMargin(double margin) {
+<b class="fc"><i>279</i>&nbsp;        this.itemMargin = margin;</b>
+<b class="fc"><i>280</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>281</i>&nbsp;    }</b>
+<i>282</i>&nbsp;
+<i>283</i>&nbsp;    /**
+<i>284</i>&nbsp;     * Returns the maximum bar width as a percentage of the available drawing
+<i>285</i>&nbsp;     * space.  Take care with the encoding, for example 0.10 is ten percent.
+<i>286</i>&nbsp;     *
+<i>287</i>&nbsp;     * @return The maximum bar width.
+<i>288</i>&nbsp;     *
+<i>289</i>&nbsp;     * @see #setMaximumBarWidth(double)
+<i>290</i>&nbsp;     *
+<i>291</i>&nbsp;     * @since 1.0.10
+<i>292</i>&nbsp;     */
+<i>293</i>&nbsp;    public double getMaximumBarWidth() {
+<b class="fc"><i>294</i>&nbsp;        return this.maximumBarWidth;</b>
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    /**
+<i>298</i>&nbsp;     * Sets the maximum bar width, which is specified as a percentage of the
+<i>299</i>&nbsp;     * available space for all bars, and sends a {@link RendererChangeEvent}
+<i>300</i>&nbsp;     * to all registered listeners.
+<i>301</i>&nbsp;     *
+<i>302</i>&nbsp;     * @param percent  the maximum bar width (a percentage, where 0.10 is ten
+<i>303</i>&nbsp;     *     percent).
+<i>304</i>&nbsp;     *
+<i>305</i>&nbsp;     * @see #getMaximumBarWidth()
+<i>306</i>&nbsp;     *
+<i>307</i>&nbsp;     * @since 1.0.10
+<i>308</i>&nbsp;     */
+<i>309</i>&nbsp;    public void setMaximumBarWidth(double percent) {
+<b class="fc"><i>310</i>&nbsp;        this.maximumBarWidth = percent;</b>
+<b class="fc"><i>311</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>312</i>&nbsp;    }</b>
+<i>313</i>&nbsp;
+<i>314</i>&nbsp;    /**
+<i>315</i>&nbsp;     * Returns the flag that controls whether or not the mean indicator is
+<i>316</i>&nbsp;     * draw for each item.
+<i>317</i>&nbsp;     *
+<i>318</i>&nbsp;     * @return A boolean.
+<i>319</i>&nbsp;     *
+<i>320</i>&nbsp;     * @see #setMeanVisible(boolean)
+<i>321</i>&nbsp;     *
+<i>322</i>&nbsp;     * @since 1.0.13
+<i>323</i>&nbsp;     */
+<i>324</i>&nbsp;    public boolean isMeanVisible() {
+<b class="nc"><i>325</i>&nbsp;        return this.meanVisible;</b>
+<i>326</i>&nbsp;    }
+<i>327</i>&nbsp;
+<i>328</i>&nbsp;    /**
+<i>329</i>&nbsp;     * Sets the flag that controls whether or not the mean indicator is drawn
+<i>330</i>&nbsp;     * for each item, and sends a {@link RendererChangeEvent} to all
+<i>331</i>&nbsp;     * registered listeners.
+<i>332</i>&nbsp;     *
+<i>333</i>&nbsp;     * @param visible  the new flag value.
+<i>334</i>&nbsp;     *
+<i>335</i>&nbsp;     * @see #isMeanVisible()
+<i>336</i>&nbsp;     *
+<i>337</i>&nbsp;     * @since 1.0.13
+<i>338</i>&nbsp;     */
+<i>339</i>&nbsp;    public void setMeanVisible(boolean visible) {
+<b class="fc"><i>340</i>&nbsp;        if (this.meanVisible == visible) {</b>
+<b class="nc"><i>341</i>&nbsp;            return;</b>
+<i>342</i>&nbsp;        }
+<b class="fc"><i>343</i>&nbsp;        this.meanVisible = visible;</b>
+<b class="fc"><i>344</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>345</i>&nbsp;    }</b>
+<i>346</i>&nbsp;
+<i>347</i>&nbsp;    /**
+<i>348</i>&nbsp;     * Returns the flag that controls whether or not the median indicator is
+<i>349</i>&nbsp;     * draw for each item.
+<i>350</i>&nbsp;     *
+<i>351</i>&nbsp;     * @return A boolean.
+<i>352</i>&nbsp;     *
+<i>353</i>&nbsp;     * @see #setMedianVisible(boolean)
+<i>354</i>&nbsp;     *
+<i>355</i>&nbsp;     * @since 1.0.13
+<i>356</i>&nbsp;     */
+<i>357</i>&nbsp;    public boolean isMedianVisible() {
+<b class="nc"><i>358</i>&nbsp;        return this.medianVisible;</b>
+<i>359</i>&nbsp;    }
+<i>360</i>&nbsp;
+<i>361</i>&nbsp;    /**
+<i>362</i>&nbsp;     * Sets the flag that controls whether or not the median indicator is drawn
+<i>363</i>&nbsp;     * for each item, and sends a {@link RendererChangeEvent} to all
+<i>364</i>&nbsp;     * registered listeners.
+<i>365</i>&nbsp;     *
+<i>366</i>&nbsp;     * @param visible  the new flag value.
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @see #isMedianVisible()
+<i>369</i>&nbsp;     *
+<i>370</i>&nbsp;     * @since 1.0.13
+<i>371</i>&nbsp;     */
+<i>372</i>&nbsp;    public void setMedianVisible(boolean visible) {
+<b class="fc"><i>373</i>&nbsp;        if (this.medianVisible == visible) {</b>
+<b class="nc"><i>374</i>&nbsp;            return;</b>
+<i>375</i>&nbsp;        }
+<b class="fc"><i>376</i>&nbsp;        this.medianVisible = visible;</b>
+<b class="fc"><i>377</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>378</i>&nbsp;    }</b>
+<i>379</i>&nbsp;
+<i>380</i>&nbsp;    /**
+<i>381</i>&nbsp;     * Returns the flag that, if {@code true}, causes the whiskers to
+<i>382</i>&nbsp;     * be drawn using the series outline paint.
+<i>383</i>&nbsp;     *
+<i>384</i>&nbsp;     * @return A boolean.
+<i>385</i>&nbsp;     *
+<i>386</i>&nbsp;     * @since 1.0.14
+<i>387</i>&nbsp;     */
+<i>388</i>&nbsp;    public boolean getUseOutlinePaintForWhiskers() {
+<b class="nc"><i>389</i>&nbsp;        return this.useOutlinePaintForWhiskers;</b>
+<i>390</i>&nbsp;    }
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    /**
+<i>393</i>&nbsp;     * Sets the flag that, if {@code true}, causes the whiskers to
+<i>394</i>&nbsp;     * be drawn using the series outline paint, and sends a
+<i>395</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>396</i>&nbsp;     *
+<i>397</i>&nbsp;     * @param flag  the new flag value.
+<i>398</i>&nbsp;     *
+<i>399</i>&nbsp;     * @since 1.0.14
+<i>400</i>&nbsp;     */
+<i>401</i>&nbsp;    public void setUseOutlinePaintForWhiskers(boolean flag) {
+<b class="nc"><i>402</i>&nbsp;        if (this.useOutlinePaintForWhiskers == flag) {</b>
+<b class="nc"><i>403</i>&nbsp;            return;</b>
+<i>404</i>&nbsp;        }
+<b class="nc"><i>405</i>&nbsp;        this.useOutlinePaintForWhiskers = flag;</b>
+<b class="nc"><i>406</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>407</i>&nbsp;    }</b>
+<i>408</i>&nbsp;
+<i>409</i>&nbsp;    /**
+<i>410</i>&nbsp;     * Returns the width of the whiskers as fraction of the bar width.
+<i>411</i>&nbsp;     *
+<i>412</i>&nbsp;     * @return The width of the whiskers.
+<i>413</i>&nbsp;     *
+<i>414</i>&nbsp;     * @see #setWhiskerWidth(double)
+<i>415</i>&nbsp;     *
+<i>416</i>&nbsp;     * @since 1.0.14
+<i>417</i>&nbsp;     */
+<i>418</i>&nbsp;    public double getWhiskerWidth() {
+<b class="nc"><i>419</i>&nbsp;        return this.whiskerWidth;</b>
+<i>420</i>&nbsp;    }
+<i>421</i>&nbsp;
+<i>422</i>&nbsp;    /**
+<i>423</i>&nbsp;     * Sets the width of the whiskers as a fraction of the bar width and sends
+<i>424</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>425</i>&nbsp;     *
+<i>426</i>&nbsp;     * @param width  a value between 0 and 1 indicating how wide the
+<i>427</i>&nbsp;     *     whisker is supposed to be compared to the bar.
+<i>428</i>&nbsp;     * @see #getWhiskerWidth()
+<i>429</i>&nbsp;     * @see CategoryItemRendererState#getBarWidth()
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @since 1.0.14
+<i>432</i>&nbsp;     */
+<i>433</i>&nbsp;    public void setWhiskerWidth(double width) {
+<b class="nc"><i>434</i>&nbsp;        if (width &lt; 0 || width &gt; 1) {</b>
+<b class="nc"><i>435</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>436</i>&nbsp;                    &quot;Value for whisker width out of range&quot;);
+<i>437</i>&nbsp;        }
+<b class="nc"><i>438</i>&nbsp;        if (width == this.whiskerWidth) {</b>
+<b class="nc"><i>439</i>&nbsp;            return;</b>
+<i>440</i>&nbsp;        }
+<b class="nc"><i>441</i>&nbsp;        this.whiskerWidth = width;</b>
+<b class="nc"><i>442</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>443</i>&nbsp;    }</b>
+<i>444</i>&nbsp;
+<i>445</i>&nbsp;    /**
+<i>446</i>&nbsp;     * Returns a legend item for a series.
+<i>447</i>&nbsp;     *
+<i>448</i>&nbsp;     * @param datasetIndex  the dataset index (zero-based).
+<i>449</i>&nbsp;     * @param series  the series index (zero-based).
+<i>450</i>&nbsp;     *
+<i>451</i>&nbsp;     * @return The legend item (possibly {@code null}).
+<i>452</i>&nbsp;     */
+<i>453</i>&nbsp;    @Override
+<i>454</i>&nbsp;    public LegendItem getLegendItem(int datasetIndex, int series) {
+<i>455</i>&nbsp;
+<b class="fc"><i>456</i>&nbsp;        CategoryPlot cp = getPlot();</b>
+<b class="fc"><i>457</i>&nbsp;        if (cp == null) {</b>
+<b class="nc"><i>458</i>&nbsp;            return null;</b>
+<i>459</i>&nbsp;        }
+<i>460</i>&nbsp;
+<i>461</i>&nbsp;        // check that a legend item needs to be displayed...
+<b class="fc"><i>462</i>&nbsp;        if (!isSeriesVisible(series) || !isSeriesVisibleInLegend(series)) {</b>
+<b class="fc"><i>463</i>&nbsp;            return null;</b>
+<i>464</i>&nbsp;        }
+<i>465</i>&nbsp;
+<b class="fc"><i>466</i>&nbsp;        CategoryDataset dataset = cp.getDataset(datasetIndex);</b>
+<b class="fc"><i>467</i>&nbsp;        String label = getLegendItemLabelGenerator().generateLabel(dataset,</b>
+<i>468</i>&nbsp;                series);
+<b class="fc"><i>469</i>&nbsp;        String description = label;</b>
+<b class="fc"><i>470</i>&nbsp;        String toolTipText = null;</b>
+<b class="fc"><i>471</i>&nbsp;        if (getLegendItemToolTipGenerator() != null) {</b>
+<b class="nc"><i>472</i>&nbsp;            toolTipText = getLegendItemToolTipGenerator().generateLabel(</b>
+<i>473</i>&nbsp;                    dataset, series);
+<i>474</i>&nbsp;        }
+<b class="fc"><i>475</i>&nbsp;        String urlText = null;</b>
+<b class="fc"><i>476</i>&nbsp;        if (getLegendItemURLGenerator() != null) {</b>
+<b class="nc"><i>477</i>&nbsp;            urlText = getLegendItemURLGenerator().generateLabel(dataset,</b>
+<i>478</i>&nbsp;                    series);
+<i>479</i>&nbsp;        }
+<b class="fc"><i>480</i>&nbsp;        Shape shape = lookupLegendShape(series);</b>
+<b class="fc"><i>481</i>&nbsp;        Paint paint = lookupSeriesPaint(series);</b>
+<b class="fc"><i>482</i>&nbsp;        Paint outlinePaint = lookupSeriesOutlinePaint(series);</b>
+<b class="fc"><i>483</i>&nbsp;        Stroke outlineStroke = lookupSeriesOutlineStroke(series);</b>
+<b class="fc"><i>484</i>&nbsp;        LegendItem result = new LegendItem(label, description, toolTipText,</b>
+<i>485</i>&nbsp;                urlText, shape, paint, outlineStroke, outlinePaint);
+<b class="fc"><i>486</i>&nbsp;        result.setLabelFont(lookupLegendTextFont(series));</b>
+<b class="fc"><i>487</i>&nbsp;        Paint labelPaint = lookupLegendTextPaint(series);</b>
+<b class="fc"><i>488</i>&nbsp;        if (labelPaint != null) {</b>
+<b class="nc"><i>489</i>&nbsp;            result.setLabelPaint(labelPaint);</b>
+<i>490</i>&nbsp;        }
+<b class="fc"><i>491</i>&nbsp;        result.setDataset(dataset);</b>
+<b class="fc"><i>492</i>&nbsp;        result.setDatasetIndex(datasetIndex);</b>
+<b class="fc"><i>493</i>&nbsp;        result.setSeriesKey(dataset.getRowKey(series));</b>
+<b class="fc"><i>494</i>&nbsp;        result.setSeriesIndex(series);</b>
+<b class="fc"><i>495</i>&nbsp;        return result;</b>
+<i>496</i>&nbsp;
+<i>497</i>&nbsp;    }
+<i>498</i>&nbsp;
+<i>499</i>&nbsp;    /**
+<i>500</i>&nbsp;     * Returns the range of values from the specified dataset that the
+<i>501</i>&nbsp;     * renderer will require to display all the data.
+<i>502</i>&nbsp;     *
+<i>503</i>&nbsp;     * @param dataset  the dataset.
+<i>504</i>&nbsp;     *
+<i>505</i>&nbsp;     * @return The range.
+<i>506</i>&nbsp;     */
+<i>507</i>&nbsp;    @Override
+<i>508</i>&nbsp;    public Range findRangeBounds(CategoryDataset dataset) {
+<b class="fc"><i>509</i>&nbsp;        return super.findRangeBounds(dataset, true);</b>
+<i>510</i>&nbsp;    }
+<i>511</i>&nbsp;
+<i>512</i>&nbsp;    /**
+<i>513</i>&nbsp;     * Initialises the renderer.  This method gets called once at the start of
+<i>514</i>&nbsp;     * the process of drawing a chart.
+<i>515</i>&nbsp;     *
+<i>516</i>&nbsp;     * @param g2  the graphics device.
+<i>517</i>&nbsp;     * @param dataArea  the area in which the data is to be plotted.
+<i>518</i>&nbsp;     * @param plot  the plot.
+<i>519</i>&nbsp;     * @param rendererIndex  the renderer index.
+<i>520</i>&nbsp;     * @param info  collects chart rendering information for return to caller.
+<i>521</i>&nbsp;     *
+<i>522</i>&nbsp;     * @return The renderer state.
+<i>523</i>&nbsp;     */
+<i>524</i>&nbsp;    @Override
+<i>525</i>&nbsp;    public CategoryItemRendererState initialise(Graphics2D g2, 
+<i>526</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, int rendererIndex,
+<i>527</i>&nbsp;            PlotRenderingInfo info) {
+<i>528</i>&nbsp;
+<b class="fc"><i>529</i>&nbsp;        CategoryItemRendererState state = super.initialise(g2, dataArea, plot,</b>
+<i>530</i>&nbsp;                rendererIndex, info);
+<i>531</i>&nbsp;        // calculate the box width
+<b class="fc"><i>532</i>&nbsp;        CategoryAxis domainAxis = getDomainAxis(plot, rendererIndex);</b>
+<b class="fc"><i>533</i>&nbsp;        CategoryDataset dataset = plot.getDataset(rendererIndex);</b>
+<b class="fc"><i>534</i>&nbsp;        if (dataset != null) {</b>
+<b class="fc"><i>535</i>&nbsp;            int columns = dataset.getColumnCount();</b>
+<b class="fc"><i>536</i>&nbsp;            int rows = dataset.getRowCount();</b>
+<b class="fc"><i>537</i>&nbsp;            double space = 0.0;</b>
+<b class="fc"><i>538</i>&nbsp;            PlotOrientation orientation = plot.getOrientation();</b>
+<b class="fc"><i>539</i>&nbsp;            if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="fc"><i>540</i>&nbsp;                space = dataArea.getHeight();</b>
+<i>541</i>&nbsp;            }
+<b class="fc"><i>542</i>&nbsp;            else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>543</i>&nbsp;                space = dataArea.getWidth();</b>
+<i>544</i>&nbsp;            }
+<b class="fc"><i>545</i>&nbsp;            double maxWidth = space * getMaximumBarWidth();</b>
+<b class="fc"><i>546</i>&nbsp;            double categoryMargin = 0.0;</b>
+<b class="fc"><i>547</i>&nbsp;            double currentItemMargin = 0.0;</b>
+<b class="fc"><i>548</i>&nbsp;            if (columns &gt; 1) {</b>
+<b class="nc"><i>549</i>&nbsp;                categoryMargin = domainAxis.getCategoryMargin();</b>
+<i>550</i>&nbsp;            }
+<b class="fc"><i>551</i>&nbsp;            if (rows &gt; 1) {</b>
+<b class="nc"><i>552</i>&nbsp;                currentItemMargin = getItemMargin();</b>
+<i>553</i>&nbsp;            }
+<b class="fc"><i>554</i>&nbsp;            double used = space * (1 - domainAxis.getLowerMargin()</b>
+<b class="fc"><i>555</i>&nbsp;                                     - domainAxis.getUpperMargin()</b>
+<i>556</i>&nbsp;                                     - categoryMargin - currentItemMargin);
+<b class="fc"><i>557</i>&nbsp;            if ((rows * columns) &gt; 0) {</b>
+<b class="fc"><i>558</i>&nbsp;                state.setBarWidth(Math.min(used / (dataset.getColumnCount()</b>
+<b class="fc"><i>559</i>&nbsp;                        * dataset.getRowCount()), maxWidth));</b>
+<i>560</i>&nbsp;            }
+<i>561</i>&nbsp;            else {
+<b class="nc"><i>562</i>&nbsp;                state.setBarWidth(Math.min(used, maxWidth));</b>
+<i>563</i>&nbsp;            }
+<i>564</i>&nbsp;        }
+<b class="fc"><i>565</i>&nbsp;        return state;</b>
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;    }
+<i>568</i>&nbsp;
+<i>569</i>&nbsp;    /**
+<i>570</i>&nbsp;     * Draw a single data item.
+<i>571</i>&nbsp;     *
+<i>572</i>&nbsp;     * @param g2  the graphics device.
+<i>573</i>&nbsp;     * @param state  the renderer state.
+<i>574</i>&nbsp;     * @param dataArea  the area in which the data is drawn.
+<i>575</i>&nbsp;     * @param plot  the plot.
+<i>576</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>577</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>578</i>&nbsp;     * @param dataset  the data (must be an instance of
+<i>579</i>&nbsp;     *                 {@link BoxAndWhiskerCategoryDataset}).
+<i>580</i>&nbsp;     * @param row  the row index (zero-based).
+<i>581</i>&nbsp;     * @param column  the column index (zero-based).
+<i>582</i>&nbsp;     * @param pass  the pass index.
+<i>583</i>&nbsp;     */
+<i>584</i>&nbsp;    @Override
+<i>585</i>&nbsp;    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+<i>586</i>&nbsp;        Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>587</i>&nbsp;        ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+<i>588</i>&nbsp;        int pass) {
+<i>589</i>&nbsp;
+<i>590</i>&nbsp;        // do nothing if item is not visible
+<b class="fc"><i>591</i>&nbsp;        if (!getItemVisible(row, column)) {</b>
+<b class="nc"><i>592</i>&nbsp;            return;</b>
+<i>593</i>&nbsp;        }
+<i>594</i>&nbsp;
+<b class="fc"><i>595</i>&nbsp;        if (!(dataset instanceof BoxAndWhiskerCategoryDataset)) {</b>
+<b class="nc"><i>596</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>597</i>&nbsp;                    &quot;BoxAndWhiskerRenderer.drawItem() : the data should be &quot;
+<i>598</i>&nbsp;                    + &quot;of type BoxAndWhiskerCategoryDataset only.&quot;);
+<i>599</i>&nbsp;        }
+<i>600</i>&nbsp;
+<b class="fc"><i>601</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<i>602</i>&nbsp;
+<b class="fc"><i>603</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="fc"><i>604</i>&nbsp;            drawHorizontalItem(g2, state, dataArea, plot, domainAxis,</b>
+<i>605</i>&nbsp;                    rangeAxis, dataset, row, column);
+<i>606</i>&nbsp;        }
+<b class="fc"><i>607</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="fc"><i>608</i>&nbsp;            drawVerticalItem(g2, state, dataArea, plot, domainAxis,</b>
+<i>609</i>&nbsp;                    rangeAxis, dataset, row, column);
+<i>610</i>&nbsp;        }
+<i>611</i>&nbsp;
+<b class="fc"><i>612</i>&nbsp;    }</b>
+<i>613</i>&nbsp;
+<i>614</i>&nbsp;    /**
+<i>615</i>&nbsp;     * Draws the visual representation of a single data item when the plot has
+<i>616</i>&nbsp;     * a horizontal orientation.
+<i>617</i>&nbsp;     *
+<i>618</i>&nbsp;     * @param g2  the graphics device.
+<i>619</i>&nbsp;     * @param state  the renderer state.
+<i>620</i>&nbsp;     * @param dataArea  the area within which the plot is being drawn.
+<i>621</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color
+<i>622</i>&nbsp;     *              information etc).
+<i>623</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>624</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>625</i>&nbsp;     * @param dataset  the dataset (must be an instance of
+<i>626</i>&nbsp;     *                 {@link BoxAndWhiskerCategoryDataset}).
+<i>627</i>&nbsp;     * @param row  the row index (zero-based).
+<i>628</i>&nbsp;     * @param column  the column index (zero-based).
+<i>629</i>&nbsp;     */
+<i>630</i>&nbsp;    public void drawHorizontalItem(Graphics2D g2, 
+<i>631</i>&nbsp;            CategoryItemRendererState state, Rectangle2D dataArea,
+<i>632</i>&nbsp;            CategoryPlot plot, CategoryAxis domainAxis, ValueAxis rangeAxis,
+<i>633</i>&nbsp;            CategoryDataset dataset, int row, int column) {
+<i>634</i>&nbsp;
+<b class="fc"><i>635</i>&nbsp;        BoxAndWhiskerCategoryDataset bawDataset</b>
+<i>636</i>&nbsp;                = (BoxAndWhiskerCategoryDataset) dataset;
+<i>637</i>&nbsp;
+<b class="fc"><i>638</i>&nbsp;        double categoryEnd = domainAxis.getCategoryEnd(column,</b>
+<b class="fc"><i>639</i>&nbsp;                getColumnCount(), dataArea, plot.getDomainAxisEdge());</b>
+<b class="fc"><i>640</i>&nbsp;        double categoryStart = domainAxis.getCategoryStart(column,</b>
+<b class="fc"><i>641</i>&nbsp;                getColumnCount(), dataArea, plot.getDomainAxisEdge());</b>
+<b class="fc"><i>642</i>&nbsp;        double categoryWidth = Math.abs(categoryEnd - categoryStart);</b>
+<i>643</i>&nbsp;
+<b class="fc"><i>644</i>&nbsp;        double yy = categoryStart;</b>
+<b class="fc"><i>645</i>&nbsp;        int seriesCount = getRowCount();</b>
+<b class="fc"><i>646</i>&nbsp;        int categoryCount = getColumnCount();</b>
+<i>647</i>&nbsp;
+<b class="fc"><i>648</i>&nbsp;        if (seriesCount &gt; 1) {</b>
+<b class="nc"><i>649</i>&nbsp;            double seriesGap = dataArea.getHeight() * getItemMargin()</b>
+<i>650</i>&nbsp;                               / (categoryCount * (seriesCount - 1));
+<b class="nc"><i>651</i>&nbsp;            double usedWidth = (state.getBarWidth() * seriesCount)</b>
+<i>652</i>&nbsp;                               + (seriesGap * (seriesCount - 1));
+<i>653</i>&nbsp;            // offset the start of the boxes if the total width used is smaller
+<i>654</i>&nbsp;            // than the category width
+<b class="nc"><i>655</i>&nbsp;            double offset = (categoryWidth - usedWidth) / 2;</b>
+<b class="nc"><i>656</i>&nbsp;            yy = yy + offset + (row * (state.getBarWidth() + seriesGap));</b>
+<b class="nc"><i>657</i>&nbsp;        }</b>
+<i>658</i>&nbsp;        else {
+<i>659</i>&nbsp;            // offset the start of the box if the box width is smaller than
+<i>660</i>&nbsp;            // the category width
+<b class="fc"><i>661</i>&nbsp;            double offset = (categoryWidth - state.getBarWidth()) / 2;</b>
+<b class="fc"><i>662</i>&nbsp;            yy = yy + offset;</b>
+<i>663</i>&nbsp;        }
+<i>664</i>&nbsp;
+<b class="fc"><i>665</i>&nbsp;        g2.setPaint(getItemPaint(row, column));</b>
+<b class="fc"><i>666</i>&nbsp;        Stroke s = getItemStroke(row, column);</b>
+<b class="fc"><i>667</i>&nbsp;        g2.setStroke(s);</b>
+<i>668</i>&nbsp;
+<b class="fc"><i>669</i>&nbsp;        RectangleEdge location = plot.getRangeAxisEdge();</b>
+<i>670</i>&nbsp;
+<b class="fc"><i>671</i>&nbsp;        Number xQ1 = bawDataset.getQ1Value(row, column);</b>
+<b class="fc"><i>672</i>&nbsp;        Number xQ3 = bawDataset.getQ3Value(row, column);</b>
+<b class="fc"><i>673</i>&nbsp;        Number xMax = bawDataset.getMaxRegularValue(row, column);</b>
+<b class="fc"><i>674</i>&nbsp;        Number xMin = bawDataset.getMinRegularValue(row, column);</b>
+<i>675</i>&nbsp;
+<b class="fc"><i>676</i>&nbsp;        Shape box = null;</b>
+<b class="fc"><i>677</i>&nbsp;        if (xQ1 != null &amp;&amp; xQ3 != null &amp;&amp; xMax != null &amp;&amp; xMin != null) {</b>
+<i>678</i>&nbsp;
+<b class="nc"><i>679</i>&nbsp;            double xxQ1 = rangeAxis.valueToJava2D(xQ1.doubleValue(), dataArea,</b>
+<i>680</i>&nbsp;                    location);
+<b class="nc"><i>681</i>&nbsp;            double xxQ3 = rangeAxis.valueToJava2D(xQ3.doubleValue(), dataArea,</b>
+<i>682</i>&nbsp;                    location);
+<b class="nc"><i>683</i>&nbsp;            double xxMax = rangeAxis.valueToJava2D(xMax.doubleValue(), dataArea,</b>
+<i>684</i>&nbsp;                    location);
+<b class="nc"><i>685</i>&nbsp;            double xxMin = rangeAxis.valueToJava2D(xMin.doubleValue(), dataArea,</b>
+<i>686</i>&nbsp;                    location);
+<b class="nc"><i>687</i>&nbsp;            double yymid = yy + state.getBarWidth() / 2.0;</b>
+<b class="nc"><i>688</i>&nbsp;            double halfW = (state.getBarWidth() / 2.0) * this.whiskerWidth;</b>
+<i>689</i>&nbsp;
+<i>690</i>&nbsp;            // draw the box...
+<b class="nc"><i>691</i>&nbsp;            box = new Rectangle2D.Double(Math.min(xxQ1, xxQ3), yy,</b>
+<b class="nc"><i>692</i>&nbsp;                    Math.abs(xxQ1 - xxQ3), state.getBarWidth());</b>
+<b class="nc"><i>693</i>&nbsp;            if (this.fillBox) {</b>
+<b class="nc"><i>694</i>&nbsp;                g2.fill(box);</b>
+<i>695</i>&nbsp;            }
+<i>696</i>&nbsp;
+<b class="nc"><i>697</i>&nbsp;            Paint outlinePaint = getItemOutlinePaint(row, column);</b>
+<b class="nc"><i>698</i>&nbsp;            if (this.useOutlinePaintForWhiskers) {</b>
+<b class="nc"><i>699</i>&nbsp;                g2.setPaint(outlinePaint);</b>
+<i>700</i>&nbsp;            }
+<i>701</i>&nbsp;            // draw the upper shadow...
+<b class="nc"><i>702</i>&nbsp;            g2.draw(new Line2D.Double(xxMax, yymid, xxQ3, yymid));</b>
+<b class="nc"><i>703</i>&nbsp;            g2.draw(new Line2D.Double(xxMax, yymid - halfW, xxMax,</b>
+<i>704</i>&nbsp;                    yymid + halfW));
+<i>705</i>&nbsp;
+<i>706</i>&nbsp;            // draw the lower shadow...
+<b class="nc"><i>707</i>&nbsp;            g2.draw(new Line2D.Double(xxMin, yymid, xxQ1, yymid));</b>
+<b class="nc"><i>708</i>&nbsp;            g2.draw(new Line2D.Double(xxMin, yymid - halfW, xxMin,</b>
+<i>709</i>&nbsp;                    yymid + halfW));
+<i>710</i>&nbsp;
+<b class="nc"><i>711</i>&nbsp;            g2.setStroke(getItemOutlineStroke(row, column));</b>
+<b class="nc"><i>712</i>&nbsp;            g2.setPaint(outlinePaint);</b>
+<b class="nc"><i>713</i>&nbsp;            g2.draw(box);</b>
+<i>714</i>&nbsp;        }
+<i>715</i>&nbsp;
+<i>716</i>&nbsp;        // draw mean - SPECIAL AIMS REQUIREMENT...
+<b class="fc"><i>717</i>&nbsp;        g2.setPaint(this.artifactPaint);</b>
+<i>718</i>&nbsp;        double aRadius;                 // average radius
+<b class="fc"><i>719</i>&nbsp;        if (this.meanVisible) {</b>
+<b class="fc"><i>720</i>&nbsp;            Number xMean = bawDataset.getMeanValue(row, column);</b>
+<b class="fc"><i>721</i>&nbsp;            if (xMean != null) {</b>
+<b class="fc"><i>722</i>&nbsp;                double xxMean = rangeAxis.valueToJava2D(xMean.doubleValue(),</b>
+<i>723</i>&nbsp;                        dataArea, location);
+<b class="fc"><i>724</i>&nbsp;                aRadius = state.getBarWidth() / 4;</b>
+<i>725</i>&nbsp;                // here we check that the average marker will in fact be
+<i>726</i>&nbsp;                // visible before drawing it...
+<b class="fc"><i>727</i>&nbsp;                if ((xxMean &gt; (dataArea.getMinX() - aRadius))</b>
+<b class="fc"><i>728</i>&nbsp;                        &amp;&amp; (xxMean &lt; (dataArea.getMaxX() + aRadius))) {</b>
+<b class="fc"><i>729</i>&nbsp;                    Ellipse2D.Double avgEllipse = new Ellipse2D.Double(xxMean</b>
+<i>730</i>&nbsp;                            - aRadius, yy + aRadius, aRadius * 2, aRadius * 2);
+<b class="fc"><i>731</i>&nbsp;                    g2.fill(avgEllipse);</b>
+<b class="fc"><i>732</i>&nbsp;                    g2.draw(avgEllipse);</b>
+<i>733</i>&nbsp;                }
+<i>734</i>&nbsp;            }
+<i>735</i>&nbsp;        }
+<i>736</i>&nbsp;
+<i>737</i>&nbsp;        // draw median...
+<b class="fc"><i>738</i>&nbsp;        if (this.medianVisible) {</b>
+<b class="fc"><i>739</i>&nbsp;            Number xMedian = bawDataset.getMedianValue(row, column);</b>
+<b class="fc"><i>740</i>&nbsp;            if (xMedian != null) {</b>
+<b class="fc"><i>741</i>&nbsp;                double xxMedian = rangeAxis.valueToJava2D(xMedian.doubleValue(),</b>
+<i>742</i>&nbsp;                        dataArea, location);
+<b class="fc"><i>743</i>&nbsp;                g2.draw(new Line2D.Double(xxMedian, yy, xxMedian,</b>
+<b class="fc"><i>744</i>&nbsp;                        yy + state.getBarWidth()));</b>
+<i>745</i>&nbsp;            }
+<i>746</i>&nbsp;        }
+<i>747</i>&nbsp;
+<i>748</i>&nbsp;        // collect entity and tool tip information...
+<b class="fc"><i>749</i>&nbsp;        if (state.getInfo() != null &amp;&amp; box != null) {</b>
+<b class="nc"><i>750</i>&nbsp;            EntityCollection entities = state.getEntityCollection();</b>
+<b class="nc"><i>751</i>&nbsp;            if (entities != null) {</b>
+<b class="nc"><i>752</i>&nbsp;                addItemEntity(entities, dataset, row, column, box);</b>
+<i>753</i>&nbsp;            }
+<i>754</i>&nbsp;        }
+<i>755</i>&nbsp;
+<b class="fc"><i>756</i>&nbsp;    }</b>
+<i>757</i>&nbsp;
+<i>758</i>&nbsp;    /**
+<i>759</i>&nbsp;     * Draws the visual representation of a single data item when the plot has
+<i>760</i>&nbsp;     * a vertical orientation.
+<i>761</i>&nbsp;     *
+<i>762</i>&nbsp;     * @param g2  the graphics device.
+<i>763</i>&nbsp;     * @param state  the renderer state.
+<i>764</i>&nbsp;     * @param dataArea  the area within which the plot is being drawn.
+<i>765</i>&nbsp;     * @param plot  the plot (can be used to obtain standard color information
+<i>766</i>&nbsp;     *              etc).
+<i>767</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>768</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>769</i>&nbsp;     * @param dataset  the dataset (must be an instance of
+<i>770</i>&nbsp;     *                 {@link BoxAndWhiskerCategoryDataset}).
+<i>771</i>&nbsp;     * @param row  the row index (zero-based).
+<i>772</i>&nbsp;     * @param column  the column index (zero-based).
+<i>773</i>&nbsp;     */
+<i>774</i>&nbsp;    public void drawVerticalItem(Graphics2D g2, CategoryItemRendererState state,
+<i>775</i>&nbsp;        Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>776</i>&nbsp;        ValueAxis rangeAxis, CategoryDataset dataset, int row, int column) {
+<i>777</i>&nbsp;
+<b class="fc"><i>778</i>&nbsp;        BoxAndWhiskerCategoryDataset bawDataset</b>
+<i>779</i>&nbsp;                = (BoxAndWhiskerCategoryDataset) dataset;
+<i>780</i>&nbsp;
+<b class="fc"><i>781</i>&nbsp;        double categoryEnd = domainAxis.getCategoryEnd(column,</b>
+<b class="fc"><i>782</i>&nbsp;                getColumnCount(), dataArea, plot.getDomainAxisEdge());</b>
+<b class="fc"><i>783</i>&nbsp;        double categoryStart = domainAxis.getCategoryStart(column,</b>
+<b class="fc"><i>784</i>&nbsp;                getColumnCount(), dataArea, plot.getDomainAxisEdge());</b>
+<b class="fc"><i>785</i>&nbsp;        double categoryWidth = categoryEnd - categoryStart;</b>
+<i>786</i>&nbsp;
+<b class="fc"><i>787</i>&nbsp;        double xx = categoryStart;</b>
+<b class="fc"><i>788</i>&nbsp;        int seriesCount = getRowCount();</b>
+<b class="fc"><i>789</i>&nbsp;        int categoryCount = getColumnCount();</b>
+<i>790</i>&nbsp;
+<b class="fc"><i>791</i>&nbsp;        if (seriesCount &gt; 1) {</b>
+<b class="nc"><i>792</i>&nbsp;            double seriesGap = dataArea.getWidth() * getItemMargin()</b>
+<i>793</i>&nbsp;                               / (categoryCount * (seriesCount - 1));
+<b class="nc"><i>794</i>&nbsp;            double usedWidth = (state.getBarWidth() * seriesCount)</b>
+<i>795</i>&nbsp;                               + (seriesGap * (seriesCount - 1));
+<i>796</i>&nbsp;            // offset the start of the boxes if the total width used is smaller
+<i>797</i>&nbsp;            // than the category width
+<b class="nc"><i>798</i>&nbsp;            double offset = (categoryWidth - usedWidth) / 2;</b>
+<b class="nc"><i>799</i>&nbsp;            xx = xx + offset + (row * (state.getBarWidth() + seriesGap));</b>
+<b class="nc"><i>800</i>&nbsp;        }</b>
+<i>801</i>&nbsp;        else {
+<i>802</i>&nbsp;            // offset the start of the box if the box width is smaller than the
+<i>803</i>&nbsp;            // category width
+<b class="fc"><i>804</i>&nbsp;            double offset = (categoryWidth - state.getBarWidth()) / 2;</b>
+<b class="fc"><i>805</i>&nbsp;            xx = xx + offset;</b>
+<i>806</i>&nbsp;        }
+<i>807</i>&nbsp;
+<i>808</i>&nbsp;        double yyAverage;
+<i>809</i>&nbsp;        double yyOutlier;
+<i>810</i>&nbsp;
+<b class="fc"><i>811</i>&nbsp;        Paint itemPaint = getItemPaint(row, column);</b>
+<b class="fc"><i>812</i>&nbsp;        g2.setPaint(itemPaint);</b>
+<b class="fc"><i>813</i>&nbsp;        Stroke s = getItemStroke(row, column);</b>
+<b class="fc"><i>814</i>&nbsp;        g2.setStroke(s);</b>
+<i>815</i>&nbsp;
+<b class="fc"><i>816</i>&nbsp;        double aRadius = 0;                 // average radius</b>
+<i>817</i>&nbsp;
+<b class="fc"><i>818</i>&nbsp;        RectangleEdge location = plot.getRangeAxisEdge();</b>
+<i>819</i>&nbsp;
+<b class="fc"><i>820</i>&nbsp;        Number yQ1 = bawDataset.getQ1Value(row, column);</b>
+<b class="fc"><i>821</i>&nbsp;        Number yQ3 = bawDataset.getQ3Value(row, column);</b>
+<b class="fc"><i>822</i>&nbsp;        Number yMax = bawDataset.getMaxRegularValue(row, column);</b>
+<b class="fc"><i>823</i>&nbsp;        Number yMin = bawDataset.getMinRegularValue(row, column);</b>
+<b class="fc"><i>824</i>&nbsp;        Shape box = null;</b>
+<b class="fc"><i>825</i>&nbsp;        if (yQ1 != null &amp;&amp; yQ3 != null &amp;&amp; yMax != null &amp;&amp; yMin != null) {</b>
+<i>826</i>&nbsp;
+<b class="fc"><i>827</i>&nbsp;            double yyQ1 = rangeAxis.valueToJava2D(yQ1.doubleValue(), dataArea,</b>
+<i>828</i>&nbsp;                    location);
+<b class="fc"><i>829</i>&nbsp;            double yyQ3 = rangeAxis.valueToJava2D(yQ3.doubleValue(), dataArea,</b>
+<i>830</i>&nbsp;                    location);
+<b class="fc"><i>831</i>&nbsp;            double yyMax = rangeAxis.valueToJava2D(yMax.doubleValue(),</b>
+<i>832</i>&nbsp;                    dataArea, location);
+<b class="fc"><i>833</i>&nbsp;            double yyMin = rangeAxis.valueToJava2D(yMin.doubleValue(),</b>
+<i>834</i>&nbsp;                    dataArea, location);
+<b class="fc"><i>835</i>&nbsp;            double xxmid = xx + state.getBarWidth() / 2.0;</b>
+<b class="fc"><i>836</i>&nbsp;            double halfW = (state.getBarWidth() / 2.0) * this.whiskerWidth;</b>
+<i>837</i>&nbsp;
+<i>838</i>&nbsp;            // draw the body...
+<b class="fc"><i>839</i>&nbsp;            box = new Rectangle2D.Double(xx, Math.min(yyQ1, yyQ3),</b>
+<b class="fc"><i>840</i>&nbsp;                    state.getBarWidth(), Math.abs(yyQ1 - yyQ3));</b>
+<b class="fc"><i>841</i>&nbsp;            if (this.fillBox) {</b>
+<b class="fc"><i>842</i>&nbsp;                g2.fill(box);</b>
+<i>843</i>&nbsp;            }
+<i>844</i>&nbsp;
+<b class="fc"><i>845</i>&nbsp;            Paint outlinePaint = getItemOutlinePaint(row, column);</b>
+<b class="fc"><i>846</i>&nbsp;            if (this.useOutlinePaintForWhiskers) {</b>
+<b class="nc"><i>847</i>&nbsp;                g2.setPaint(outlinePaint);</b>
+<i>848</i>&nbsp;            }
+<i>849</i>&nbsp;            // draw the upper shadow...
+<b class="fc"><i>850</i>&nbsp;            g2.draw(new Line2D.Double(xxmid, yyMax, xxmid, yyQ3));</b>
+<b class="fc"><i>851</i>&nbsp;            g2.draw(new Line2D.Double(xxmid - halfW, yyMax, xxmid + halfW, yyMax));</b>
+<i>852</i>&nbsp;
+<i>853</i>&nbsp;            // draw the lower shadow...
+<b class="fc"><i>854</i>&nbsp;            g2.draw(new Line2D.Double(xxmid, yyMin, xxmid, yyQ1));</b>
+<b class="fc"><i>855</i>&nbsp;            g2.draw(new Line2D.Double(xxmid - halfW, yyMin, xxmid + halfW, yyMin));</b>
+<i>856</i>&nbsp;
+<b class="fc"><i>857</i>&nbsp;            g2.setStroke(getItemOutlineStroke(row, column));</b>
+<b class="fc"><i>858</i>&nbsp;            g2.setPaint(outlinePaint);</b>
+<b class="fc"><i>859</i>&nbsp;            g2.draw(box);</b>
+<i>860</i>&nbsp;        }
+<i>861</i>&nbsp;
+<b class="fc"><i>862</i>&nbsp;        g2.setPaint(this.artifactPaint);</b>
+<i>863</i>&nbsp;
+<i>864</i>&nbsp;        // draw mean - SPECIAL AIMS REQUIREMENT...
+<b class="fc"><i>865</i>&nbsp;        if (this.meanVisible) {</b>
+<b class="fc"><i>866</i>&nbsp;            Number yMean = bawDataset.getMeanValue(row, column);</b>
+<b class="fc"><i>867</i>&nbsp;            if (yMean != null) {</b>
+<b class="fc"><i>868</i>&nbsp;                yyAverage = rangeAxis.valueToJava2D(yMean.doubleValue(),</b>
+<i>869</i>&nbsp;                        dataArea, location);
+<b class="fc"><i>870</i>&nbsp;                aRadius = state.getBarWidth() / 4;</b>
+<i>871</i>&nbsp;                // here we check that the average marker will in fact be
+<i>872</i>&nbsp;                // visible before drawing it...
+<b class="fc"><i>873</i>&nbsp;                if ((yyAverage &gt; (dataArea.getMinY() - aRadius))</b>
+<b class="fc"><i>874</i>&nbsp;                        &amp;&amp; (yyAverage &lt; (dataArea.getMaxY() + aRadius))) {</b>
+<b class="fc"><i>875</i>&nbsp;                    Ellipse2D.Double avgEllipse = new Ellipse2D.Double(</b>
+<i>876</i>&nbsp;                            xx + aRadius, yyAverage - aRadius, aRadius * 2,
+<i>877</i>&nbsp;                            aRadius * 2);
+<b class="fc"><i>878</i>&nbsp;                    g2.fill(avgEllipse);</b>
+<b class="fc"><i>879</i>&nbsp;                    g2.draw(avgEllipse);</b>
+<i>880</i>&nbsp;                }
+<i>881</i>&nbsp;            }
+<i>882</i>&nbsp;        }
+<i>883</i>&nbsp;
+<i>884</i>&nbsp;        // draw median...
+<b class="fc"><i>885</i>&nbsp;        if (this.medianVisible) {</b>
+<b class="fc"><i>886</i>&nbsp;            Number yMedian = bawDataset.getMedianValue(row, column);</b>
+<b class="fc"><i>887</i>&nbsp;            if (yMedian != null) {</b>
+<b class="fc"><i>888</i>&nbsp;                double yyMedian = rangeAxis.valueToJava2D(</b>
+<b class="fc"><i>889</i>&nbsp;                        yMedian.doubleValue(), dataArea, location);</b>
+<b class="fc"><i>890</i>&nbsp;                g2.draw(new Line2D.Double(xx, yyMedian, </b>
+<b class="fc"><i>891</i>&nbsp;                        xx + state.getBarWidth(), yyMedian));</b>
+<i>892</i>&nbsp;            }
+<i>893</i>&nbsp;        }
+<i>894</i>&nbsp;
+<i>895</i>&nbsp;        // draw yOutliers...
+<b class="fc"><i>896</i>&nbsp;        double maxAxisValue = rangeAxis.valueToJava2D(</b>
+<b class="fc"><i>897</i>&nbsp;                rangeAxis.getUpperBound(), dataArea, location) + aRadius;</b>
+<b class="fc"><i>898</i>&nbsp;        double minAxisValue = rangeAxis.valueToJava2D(</b>
+<b class="fc"><i>899</i>&nbsp;                rangeAxis.getLowerBound(), dataArea, location) - aRadius;</b>
+<i>900</i>&nbsp;
+<b class="fc"><i>901</i>&nbsp;        g2.setPaint(itemPaint);</b>
+<i>902</i>&nbsp;
+<i>903</i>&nbsp;        // draw outliers
+<b class="fc"><i>904</i>&nbsp;        double oRadius = state.getBarWidth() / 3;    // outlier radius</b>
+<b class="fc"><i>905</i>&nbsp;        List outliers = new ArrayList();</b>
+<b class="fc"><i>906</i>&nbsp;        OutlierListCollection outlierListCollection</b>
+<i>907</i>&nbsp;                = new OutlierListCollection();
+<i>908</i>&nbsp;
+<i>909</i>&nbsp;        // From outlier array sort out which are outliers and put these into a
+<i>910</i>&nbsp;        // list If there are any farouts, set the flag on the
+<i>911</i>&nbsp;        // OutlierListCollection
+<b class="fc"><i>912</i>&nbsp;        List yOutliers = bawDataset.getOutliers(row, column);</b>
+<b class="fc"><i>913</i>&nbsp;        if (yOutliers != null) {</b>
+<b class="fc"><i>914</i>&nbsp;            for (int i = 0; i &lt; yOutliers.size(); i++) {</b>
+<b class="nc"><i>915</i>&nbsp;                double outlier = ((Number) yOutliers.get(i)).doubleValue();</b>
+<b class="nc"><i>916</i>&nbsp;                Number minOutlier = bawDataset.getMinOutlier(row, column);</b>
+<b class="nc"><i>917</i>&nbsp;                Number maxOutlier = bawDataset.getMaxOutlier(row, column);</b>
+<b class="nc"><i>918</i>&nbsp;                Number minRegular = bawDataset.getMinRegularValue(row, column);</b>
+<b class="nc"><i>919</i>&nbsp;                Number maxRegular = bawDataset.getMaxRegularValue(row, column);</b>
+<b class="nc"><i>920</i>&nbsp;                if (outlier &gt; maxOutlier.doubleValue()) {</b>
+<b class="nc"><i>921</i>&nbsp;                    outlierListCollection.setHighFarOut(true);</b>
+<i>922</i>&nbsp;                }
+<b class="nc"><i>923</i>&nbsp;                else if (outlier &lt; minOutlier.doubleValue()) {</b>
+<b class="nc"><i>924</i>&nbsp;                    outlierListCollection.setLowFarOut(true);</b>
+<i>925</i>&nbsp;                }
+<b class="nc"><i>926</i>&nbsp;                else if (outlier &gt; maxRegular.doubleValue()) {</b>
+<b class="nc"><i>927</i>&nbsp;                    yyOutlier = rangeAxis.valueToJava2D(outlier, dataArea,</b>
+<i>928</i>&nbsp;                            location);
+<b class="nc"><i>929</i>&nbsp;                    outliers.add(new Outlier(xx + state.getBarWidth() / 2.0,</b>
+<i>930</i>&nbsp;                            yyOutlier, oRadius));
+<i>931</i>&nbsp;                }
+<b class="nc"><i>932</i>&nbsp;                else if (outlier &lt; minRegular.doubleValue()) {</b>
+<b class="nc"><i>933</i>&nbsp;                    yyOutlier = rangeAxis.valueToJava2D(outlier, dataArea,</b>
+<i>934</i>&nbsp;                            location);
+<b class="nc"><i>935</i>&nbsp;                    outliers.add(new Outlier(xx + state.getBarWidth() / 2.0,</b>
+<i>936</i>&nbsp;                            yyOutlier, oRadius));
+<i>937</i>&nbsp;                }
+<b class="nc"><i>938</i>&nbsp;                Collections.sort(outliers);</b>
+<i>939</i>&nbsp;            }
+<i>940</i>&nbsp;
+<i>941</i>&nbsp;            // Process outliers. Each outlier is either added to the
+<i>942</i>&nbsp;            // appropriate outlier list or a new outlier list is made
+<b class="fc"><i>943</i>&nbsp;            for (Iterator iterator = outliers.iterator(); iterator.hasNext();) {</b>
+<b class="nc"><i>944</i>&nbsp;                Outlier outlier = (Outlier) iterator.next();</b>
+<b class="nc"><i>945</i>&nbsp;                outlierListCollection.add(outlier);</b>
+<b class="nc"><i>946</i>&nbsp;            }</b>
+<i>947</i>&nbsp;
+<b class="fc"><i>948</i>&nbsp;            for (Iterator iterator = outlierListCollection.iterator();</b>
+<b class="fc"><i>949</i>&nbsp;                     iterator.hasNext();) {</b>
+<b class="nc"><i>950</i>&nbsp;                OutlierList list = (OutlierList) iterator.next();</b>
+<b class="nc"><i>951</i>&nbsp;                Outlier outlier = list.getAveragedOutlier();</b>
+<b class="nc"><i>952</i>&nbsp;                Point2D point = outlier.getPoint();</b>
+<i>953</i>&nbsp;
+<b class="nc"><i>954</i>&nbsp;                if (list.isMultiple()) {</b>
+<b class="nc"><i>955</i>&nbsp;                    drawMultipleEllipse(point, state.getBarWidth(), oRadius,</b>
+<i>956</i>&nbsp;                            g2);
+<i>957</i>&nbsp;                }
+<i>958</i>&nbsp;                else {
+<b class="nc"><i>959</i>&nbsp;                    drawEllipse(point, oRadius, g2);</b>
+<i>960</i>&nbsp;                }
+<b class="nc"><i>961</i>&nbsp;            }</b>
+<i>962</i>&nbsp;
+<i>963</i>&nbsp;            // draw farout indicators
+<b class="fc"><i>964</i>&nbsp;            if (outlierListCollection.isHighFarOut()) {</b>
+<b class="nc"><i>965</i>&nbsp;                drawHighFarOut(aRadius / 2.0, g2,</b>
+<b class="nc"><i>966</i>&nbsp;                        xx + state.getBarWidth() / 2.0, maxAxisValue);</b>
+<i>967</i>&nbsp;            }
+<i>968</i>&nbsp;
+<b class="fc"><i>969</i>&nbsp;            if (outlierListCollection.isLowFarOut()) {</b>
+<b class="nc"><i>970</i>&nbsp;                drawLowFarOut(aRadius / 2.0, g2,</b>
+<b class="nc"><i>971</i>&nbsp;                        xx + state.getBarWidth() / 2.0, minAxisValue);</b>
+<i>972</i>&nbsp;            }
+<i>973</i>&nbsp;        }
+<i>974</i>&nbsp;        // collect entity and tool tip information...
+<b class="fc"><i>975</i>&nbsp;        if (state.getInfo() != null &amp;&amp; box != null) {</b>
+<b class="fc"><i>976</i>&nbsp;            EntityCollection entities = state.getEntityCollection();</b>
+<b class="fc"><i>977</i>&nbsp;            if (entities != null) {</b>
+<b class="fc"><i>978</i>&nbsp;                addItemEntity(entities, dataset, row, column, box);</b>
+<i>979</i>&nbsp;            }
+<i>980</i>&nbsp;        }
+<i>981</i>&nbsp;
+<b class="fc"><i>982</i>&nbsp;    }</b>
+<i>983</i>&nbsp;
+<i>984</i>&nbsp;    /**
+<i>985</i>&nbsp;     * Draws a dot to represent an outlier.
+<i>986</i>&nbsp;     *
+<i>987</i>&nbsp;     * @param point  the location.
+<i>988</i>&nbsp;     * @param oRadius  the radius.
+<i>989</i>&nbsp;     * @param g2  the graphics device.
+<i>990</i>&nbsp;     */
+<i>991</i>&nbsp;    private void drawEllipse(Point2D point, double oRadius, Graphics2D g2) {
+<b class="nc"><i>992</i>&nbsp;        Ellipse2D dot = new Ellipse2D.Double(point.getX() + oRadius / 2,</b>
+<b class="nc"><i>993</i>&nbsp;                point.getY(), oRadius, oRadius);</b>
+<b class="nc"><i>994</i>&nbsp;        g2.draw(dot);</b>
+<b class="nc"><i>995</i>&nbsp;    }</b>
+<i>996</i>&nbsp;
+<i>997</i>&nbsp;    /**
+<i>998</i>&nbsp;     * Draws two dots to represent the average value of more than one outlier.
+<i>999</i>&nbsp;     *
+<i>1000</i>&nbsp;     * @param point  the location
+<i>1001</i>&nbsp;     * @param boxWidth  the box width.
+<i>1002</i>&nbsp;     * @param oRadius  the radius.
+<i>1003</i>&nbsp;     * @param g2  the graphics device.
+<i>1004</i>&nbsp;     */
+<i>1005</i>&nbsp;    private void drawMultipleEllipse(Point2D point, double boxWidth,
+<i>1006</i>&nbsp;                                     double oRadius, Graphics2D g2)  {
+<i>1007</i>&nbsp;
+<b class="nc"><i>1008</i>&nbsp;        Ellipse2D dot1 = new Ellipse2D.Double(point.getX() - (boxWidth / 2)</b>
+<b class="nc"><i>1009</i>&nbsp;                + oRadius, point.getY(), oRadius, oRadius);</b>
+<b class="nc"><i>1010</i>&nbsp;        Ellipse2D dot2 = new Ellipse2D.Double(point.getX() + (boxWidth / 2),</b>
+<b class="nc"><i>1011</i>&nbsp;                point.getY(), oRadius, oRadius);</b>
+<b class="nc"><i>1012</i>&nbsp;        g2.draw(dot1);</b>
+<b class="nc"><i>1013</i>&nbsp;        g2.draw(dot2);</b>
+<b class="nc"><i>1014</i>&nbsp;    }</b>
+<i>1015</i>&nbsp;
+<i>1016</i>&nbsp;    /**
+<i>1017</i>&nbsp;     * Draws a triangle to indicate the presence of far-out values.
+<i>1018</i>&nbsp;     *
+<i>1019</i>&nbsp;     * @param aRadius  the radius.
+<i>1020</i>&nbsp;     * @param g2  the graphics device.
+<i>1021</i>&nbsp;     * @param xx  the x coordinate.
+<i>1022</i>&nbsp;     * @param m  the y coordinate.
+<i>1023</i>&nbsp;     */
+<i>1024</i>&nbsp;    private void drawHighFarOut(double aRadius, Graphics2D g2, double xx,
+<i>1025</i>&nbsp;                                double m) {
+<b class="nc"><i>1026</i>&nbsp;        double side = aRadius * 2;</b>
+<b class="nc"><i>1027</i>&nbsp;        g2.draw(new Line2D.Double(xx - side, m + side, xx + side, m + side));</b>
+<b class="nc"><i>1028</i>&nbsp;        g2.draw(new Line2D.Double(xx - side, m + side, xx, m));</b>
+<b class="nc"><i>1029</i>&nbsp;        g2.draw(new Line2D.Double(xx + side, m + side, xx, m));</b>
+<b class="nc"><i>1030</i>&nbsp;    }</b>
+<i>1031</i>&nbsp;
+<i>1032</i>&nbsp;    /**
+<i>1033</i>&nbsp;     * Draws a triangle to indicate the presence of far-out values.
+<i>1034</i>&nbsp;     *
+<i>1035</i>&nbsp;     * @param aRadius  the radius.
+<i>1036</i>&nbsp;     * @param g2  the graphics device.
+<i>1037</i>&nbsp;     * @param xx  the x coordinate.
+<i>1038</i>&nbsp;     * @param m  the y coordinate.
+<i>1039</i>&nbsp;     */
+<i>1040</i>&nbsp;    private void drawLowFarOut(double aRadius, Graphics2D g2, double xx,
+<i>1041</i>&nbsp;                               double m) {
+<b class="nc"><i>1042</i>&nbsp;        double side = aRadius * 2;</b>
+<b class="nc"><i>1043</i>&nbsp;        g2.draw(new Line2D.Double(xx - side, m - side, xx + side, m - side));</b>
+<b class="nc"><i>1044</i>&nbsp;        g2.draw(new Line2D.Double(xx - side, m - side, xx, m));</b>
+<b class="nc"><i>1045</i>&nbsp;        g2.draw(new Line2D.Double(xx + side, m - side, xx, m));</b>
+<b class="nc"><i>1046</i>&nbsp;    }</b>
+<i>1047</i>&nbsp;
+<i>1048</i>&nbsp;    /**
+<i>1049</i>&nbsp;     * Tests this renderer for equality with an arbitrary object.
+<i>1050</i>&nbsp;     *
+<i>1051</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>1052</i>&nbsp;     *
+<i>1053</i>&nbsp;     * @return {@code true} or {@code false}.
+<i>1054</i>&nbsp;     */
+<i>1055</i>&nbsp;    @Override
+<i>1056</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>1057</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>1058</i>&nbsp;            return true;</b>
+<i>1059</i>&nbsp;        }
+<b class="fc"><i>1060</i>&nbsp;        if (!(obj instanceof BoxAndWhiskerRenderer)) {</b>
+<b class="nc"><i>1061</i>&nbsp;            return false;</b>
+<i>1062</i>&nbsp;        }
+<b class="fc"><i>1063</i>&nbsp;        BoxAndWhiskerRenderer that = (BoxAndWhiskerRenderer) obj;</b>
+<b class="fc"><i>1064</i>&nbsp;        if (this.fillBox != that.fillBox) {</b>
+<b class="fc"><i>1065</i>&nbsp;            return false;</b>
+<i>1066</i>&nbsp;        }
+<b class="fc"><i>1067</i>&nbsp;        if (this.itemMargin != that.itemMargin) {</b>
+<b class="fc"><i>1068</i>&nbsp;            return false;</b>
+<i>1069</i>&nbsp;        }
+<b class="fc"><i>1070</i>&nbsp;        if (this.maximumBarWidth != that.maximumBarWidth) {</b>
+<b class="fc"><i>1071</i>&nbsp;            return false;</b>
+<i>1072</i>&nbsp;        }
+<b class="fc"><i>1073</i>&nbsp;        if (this.meanVisible != that.meanVisible) {</b>
+<b class="fc"><i>1074</i>&nbsp;            return false;</b>
+<i>1075</i>&nbsp;        }
+<b class="fc"><i>1076</i>&nbsp;        if (this.medianVisible != that.medianVisible) {</b>
+<b class="fc"><i>1077</i>&nbsp;            return false;</b>
+<i>1078</i>&nbsp;        }
+<b class="fc"><i>1079</i>&nbsp;        if (this.useOutlinePaintForWhiskers</b>
+<i>1080</i>&nbsp;                != that.useOutlinePaintForWhiskers) {
+<b class="nc"><i>1081</i>&nbsp;            return false;</b>
+<i>1082</i>&nbsp;        }
+<b class="fc"><i>1083</i>&nbsp;        if (this.whiskerWidth != that.whiskerWidth) {</b>
+<b class="nc"><i>1084</i>&nbsp;            return false;</b>
+<i>1085</i>&nbsp;        }
+<b class="fc"><i>1086</i>&nbsp;        if (!PaintUtils.equal(this.artifactPaint, that.artifactPaint)) {</b>
+<b class="fc"><i>1087</i>&nbsp;            return false;</b>
+<i>1088</i>&nbsp;        }
+<b class="fc"><i>1089</i>&nbsp;        return super.equals(obj);</b>
+<i>1090</i>&nbsp;    }
+<i>1091</i>&nbsp;
+<i>1092</i>&nbsp;    /**
+<i>1093</i>&nbsp;     * Provides serialization support.
+<i>1094</i>&nbsp;     *
+<i>1095</i>&nbsp;     * @param stream  the output stream.
+<i>1096</i>&nbsp;     *
+<i>1097</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1098</i>&nbsp;     */
+<i>1099</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>1100</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>1101</i>&nbsp;        SerialUtils.writePaint(this.artifactPaint, stream);</b>
+<b class="fc"><i>1102</i>&nbsp;    }</b>
+<i>1103</i>&nbsp;
+<i>1104</i>&nbsp;    /**
+<i>1105</i>&nbsp;     * Provides serialization support.
+<i>1106</i>&nbsp;     *
+<i>1107</i>&nbsp;     * @param stream  the input stream.
+<i>1108</i>&nbsp;     *
+<i>1109</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>1110</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>1111</i>&nbsp;     */
+<i>1112</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>1113</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>1114</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>1115</i>&nbsp;        this.artifactPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>1116</i>&nbsp;    }</b>
+<i>1117</i>&nbsp;
+<i>1118</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

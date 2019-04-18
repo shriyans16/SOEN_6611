@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sha256CryptTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">Sha256CryptTest.java</span></div><h1>Sha256CryptTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.digest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.apache.commons.codec.Charsets;
+import org.junit.Test;
+
+<span class="pc bpc" id="L28" title="3 of 4 branches missed.">public class Sha256CryptTest {</span>
+
+    @Test
+<span class="pc bnc" id="L31" title="All 4 branches missed.">    public void testSha256CryptStrings() {</span>
+        // empty data
+<span class="fc" id="L33">        assertEquals(&quot;$5$foo$Fq9CX624QIfnCAmlGiPKLlAasdacKCRxZztPoeo7o0B&quot;, Crypt.crypt(&quot;&quot;, &quot;$5$foo&quot;));</span>
+        // salt gets cut at dollar sign
+<span class="fc" id="L35">        assertEquals(&quot;$5$45678$LulJuUIJIn.1uU.KPV9x92umMYFopzVDD.o2ZqA1i2/&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$5$45678&quot;));</span>
+<span class="fc" id="L36">        assertEquals(&quot;$5$45678$LulJuUIJIn.1uU.KPV9x92umMYFopzVDD.o2ZqA1i2/&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$5$45678$012&quot;));</span>
+<span class="fc" id="L37">        assertEquals(&quot;$5$45678$LulJuUIJIn.1uU.KPV9x92umMYFopzVDD.o2ZqA1i2/&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$5$45678$012$456&quot;));</span>
+        // salt gets cut at maximum length
+<span class="fc" id="L39">        assertEquals(&quot;$5$1234567890123456$GUiFKBSTUAGvcK772ulTDPltkTOLtFvPOmp9o.9FNPB&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$5$1234567890123456&quot;));</span>
+<span class="fc" id="L40">        assertEquals(&quot;$5$1234567890123456$GUiFKBSTUAGvcK772ulTDPltkTOLtFvPOmp9o.9FNPB&quot;, Crypt.crypt(&quot;secret&quot;, &quot;$5$1234567890123456789&quot;));</span>
+<span class="fc" id="L41">    }</span>
+
+    @Test
+<span class="pc bnc" id="L44" title="All 4 branches missed.">    public void testSha256CryptBytes() {</span>
+        // An empty Bytearray equals an empty String
+<span class="fc" id="L46">        assertEquals(&quot;$5$foo$Fq9CX624QIfnCAmlGiPKLlAasdacKCRxZztPoeo7o0B&quot;, Crypt.crypt(new byte[0], &quot;$5$foo&quot;));</span>
+        // UTF-8 stores \u00e4 &quot;a with diaeresis&quot; as two bytes 0xc3 0xa4.
+<span class="fc" id="L48">        assertEquals(&quot;$5$./$iH66LwY5sTDTdHeOxq5nvNDVAxuoCcyH/y6Ptte82P8&quot;, Crypt.crypt(&quot;t\u00e4st&quot;, &quot;$5$./$&quot;));</span>
+        // ISO-8859-1 stores &quot;a with diaeresis&quot; as single byte 0xe4.
+<span class="fc" id="L50">        assertEquals(&quot;$5$./$qx5gFfCzjuWUOvsDDy.5Nor3UULPIqLVBZhgGNS0c14&quot;, Crypt.crypt(&quot;t\u00e4st&quot;.getBytes(Charsets.ISO_8859_1), &quot;$5$./$&quot;));</span>
+<span class="fc" id="L51">    }</span>
+
+    @Test
+<span class="pc bnc" id="L54" title="All 4 branches missed.">    public void testSha2CryptRounds() {</span>
+        // minimum rounds?
+<span class="fc" id="L56">        assertEquals(&quot;$5$rounds=1000$abcd$b8MCU4GEeZIekOy5ahQ8EWfT330hvYGVeDYkBxXBva.&quot;, Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(Charsets.UTF_8), &quot;$5$rounds=50$abcd$&quot;));</span>
+<span class="fc" id="L57">        assertEquals(&quot;$5$rounds=1001$abcd$SQsJZs7KXKdd2DtklI3TY3tkD7UYA99RD0FBLm4Sk48&quot;, Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(Charsets.UTF_8), &quot;$5$rounds=1001$abcd$&quot;));</span>
+<span class="fc" id="L58">        assertEquals(&quot;$5$rounds=9999$abcd$Rh/8ngVh9oyuS6lL3.fsq.9xbvXJsfyKWxSjO2mPIa7&quot;, Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(Charsets.UTF_8), &quot;$5$rounds=9999$abcd&quot;));</span>
+<span class="fc" id="L59">    }</span>
+
+    @Test
+<span class="pc bnc" id="L62" title="All 4 branches missed.">    public void testSha2CryptRoundsThreadLocalRandom() {</span>
+<span class="fc" id="L63">        ThreadLocalRandom random = ThreadLocalRandom.current();</span>
+        // minimum rounds?
+<span class="fc" id="L65">        assertEquals(&quot;$5$rounds=1000$abcd$b8MCU4GEeZIekOy5ahQ8EWfT330hvYGVeDYkBxXBva.&quot;, Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(Charsets.UTF_8), &quot;$5$rounds=50$abcd$&quot;, random));</span>
+<span class="fc" id="L66">        assertEquals(&quot;$5$rounds=1001$abcd$SQsJZs7KXKdd2DtklI3TY3tkD7UYA99RD0FBLm4Sk48&quot;, Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(Charsets.UTF_8), &quot;$5$rounds=1001$abcd$&quot;, random));</span>
+<span class="fc" id="L67">        assertEquals(&quot;$5$rounds=9999$abcd$Rh/8ngVh9oyuS6lL3.fsq.9xbvXJsfyKWxSjO2mPIa7&quot;, Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(Charsets.UTF_8), &quot;$5$rounds=9999$abcd&quot;, random));</span>
+<span class="fc" id="L68">    }</span>
+
+    @Test
+<span class="pc bnc" id="L71" title="All 4 branches missed.">    public void testSha256CryptExplicitCall() {</span>
+<span class="fc" id="L72">        assertTrue(Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes()).matches(&quot;^\\$5\\$[a-zA-Z0-9./]{0,16}\\$.{1,}$&quot;));</span>
+<span class="fc" id="L73">        assertTrue(Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(), null).matches(&quot;^\\$5\\$[a-zA-Z0-9./]{0,16}\\$.{1,}$&quot;));</span>
+<span class="fc" id="L74">    }</span>
+
+    @Test(expected = NullPointerException.class)
+<span class="pc bpc" id="L77" title="4 of 6 branches missed.">    public void testSha256CryptNullData() {</span>
+<span class="nc" id="L78">        Sha2Crypt.sha256Crypt((byte[]) null);</span>
+<span class="nc" id="L79">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L82" title="4 of 6 branches missed.">    public void testSha256CryptWithEmptySalt() {</span>
+<span class="nc" id="L83">        Sha2Crypt.sha256Crypt(&quot;secret&quot;.getBytes(), &quot;&quot;);</span>
+<span class="nc" id="L84">    }</span>
+
+    @Test
+<span class="pc bnc" id="L87" title="All 4 branches missed.">    public void testSha256LargetThanBlocksize() {</span>
+<span class="fc" id="L88">        final byte[] buffer = new byte[200];</span>
+<span class="fc" id="L89">        Arrays.fill(buffer, 0, 200, (byte)'A');</span>
+<span class="fc" id="L90">        assertEquals(&quot;$5$abc$HbF3RRc15OwNKB/RZZ5F.1I6zsLcKXHQoSdB9Owx/Q8&quot;, Sha2Crypt.sha256Crypt(buffer, &quot;$5$abc&quot;));</span>
+<span class="fc" id="L91">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

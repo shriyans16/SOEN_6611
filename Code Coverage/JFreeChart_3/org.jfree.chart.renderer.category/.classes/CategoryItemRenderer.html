@@ -1,0 +1,1917 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CategoryItemRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CategoryItemRenderer (org.jfree.chart.renderer.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">CategoryItemRenderer</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------------
+<i>28</i>&nbsp; * CategoryItemRenderer.java
+<i>29</i>&nbsp; * -------------------------
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * (C) Copyright 2001-2011, by Object Refinery Limited and Contributors.
+<i>32</i>&nbsp; *
+<i>33</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; * Contributor(s):   Mark Watson (www.markwatson.com);
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * Changes
+<i>37</i>&nbsp; * -------
+<i>38</i>&nbsp; * 23-Oct-2001 : Version 1 (DG);
+<i>39</i>&nbsp; * 16-Jan-2002 : Renamed HorizontalCategoryItemRenderer.java
+<i>40</i>&nbsp; *               --&gt; CategoryItemRenderer.java (DG);
+<i>41</i>&nbsp; * 05-Feb-2002 : Changed return type of the drawCategoryItem method from void
+<i>42</i>&nbsp; *               to Shape, as part of the tooltips implementation (DG)
+<i>43</i>&nbsp; *
+<i>44</i>&nbsp; *               NOTE (30-May-2002) : this has subsequently been changed back
+<i>45</i>&nbsp; *               to void, tooltips are now collected along with entities in
+<i>46</i>&nbsp; *               ChartRenderingInfo (DG);
+<i>47</i>&nbsp; *
+<i>48</i>&nbsp; * 14-Mar-2002 : Added the initialise method, and changed all bar plots to use
+<i>49</i>&nbsp; *               this renderer (DG);
+<i>50</i>&nbsp; * 23-May-2002 : Added ChartRenderingInfo to the initialise method (DG);
+<i>51</i>&nbsp; * 29-May-2002 : Added the getAxisArea(Rectangle2D) method (DG);
+<i>52</i>&nbsp; * 06-Jun-2002 : Updated Javadoc comments (DG);
+<i>53</i>&nbsp; * 26-Jun-2002 : Added range axis to the initialise method (DG);
+<i>54</i>&nbsp; * 24-Sep-2002 : Added getLegendItem() method (DG);
+<i>55</i>&nbsp; * 23-Oct-2002 : Added methods to get/setToolTipGenerator (DG);
+<i>56</i>&nbsp; * 05-Nov-2002 : Replaced references to CategoryDataset with TableDataset (DG);
+<i>57</i>&nbsp; * 06-Nov-2002 : Added the domain axis to the drawCategoryItem method.  Renamed
+<i>58</i>&nbsp; *               drawCategoryItem() --&gt; drawItem() (DG);
+<i>59</i>&nbsp; * 20-Nov-2002 : Changed signature of drawItem() method to reflect use of
+<i>60</i>&nbsp; *               TableDataset (DG);
+<i>61</i>&nbsp; * 26-Nov-2002 : Replaced the isStacked() method with the getRangeType()
+<i>62</i>&nbsp; *               method (DG);
+<i>63</i>&nbsp; * 08-Jan-2003 : Changed getSeriesCount() --&gt; getRowCount() and
+<i>64</i>&nbsp; *               getCategoryCount() --&gt; getColumnCount() (DG);
+<i>65</i>&nbsp; * 09-Jan-2003 : Changed name of grid-line methods (DG);
+<i>66</i>&nbsp; * 21-Jan-2003 : Merged TableDataset with CategoryDataset (DG);
+<i>67</i>&nbsp; * 10-Apr-2003 : Changed CategoryDataset to KeyedValues2DDataset in
+<i>68</i>&nbsp; *               drawItem() method (DG);
+<i>69</i>&nbsp; * 29-Apr-2003 : Eliminated Renderer interface (DG);
+<i>70</i>&nbsp; * 02-Sep-2003 : Fix for bug 790407 (DG);
+<i>71</i>&nbsp; * 16-Sep-2003 : Changed ChartRenderingInfo --&gt; PlotRenderingInfo (DG);
+<i>72</i>&nbsp; * 20-Oct-2003 : Added setOutlinePaint() method (DG);
+<i>73</i>&nbsp; * 06-Feb-2004 : Added missing methods, and moved deprecated methods (DG);
+<i>74</i>&nbsp; * 19-Feb-2004 : Added extra setXXXLabelsVisible() methods (DG);
+<i>75</i>&nbsp; * 29-Apr-2004 : Changed Integer --&gt; int in initialise() method (DG);
+<i>76</i>&nbsp; * 18-May-2004 : Added methods for item label paint (DG);
+<i>77</i>&nbsp; * 05-Nov-2004 : Added getPassCount() method and &#39;pass&#39; parameter to drawItem()
+<i>78</i>&nbsp; *               method (DG);
+<i>79</i>&nbsp; * 07-Jan-2005 : Renamed getRangeExtent() --&gt; findRangeBounds (DG);
+<i>80</i>&nbsp; * 11-Jan-2005 : Removed deprecated code in preparation for 1.0.0 release (DG);
+<i>81</i>&nbsp; * 23-Feb-2005 : Now extends LegendItemSource (DG);
+<i>82</i>&nbsp; * 20-Apr-2005 : Renamed CategoryLabelGenerator
+<i>83</i>&nbsp; *               --&gt; CategoryItemLabelGenerator (DG);
+<i>84</i>&nbsp; * 20-May-2005 : Added drawDomainMarker() method (DG);
+<i>85</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>86</i>&nbsp; * 20-Feb-2007 : Updated API docs (DG);
+<i>87</i>&nbsp; * 19-Apr-2007 : Deprecated seriesVisible and seriesVisibleInLegend flags (DG);
+<i>88</i>&nbsp; * 20-Apr-2007 : Deprecated paint, fillPaint, outlinePaint, stroke,
+<i>89</i>&nbsp; *               outlineStroke, shape, itemLabelsVisible, itemLabelFont,
+<i>90</i>&nbsp; *               itemLabelPaint, positiveItemLabelPosition,
+<i>91</i>&nbsp; *               negativeItemLabelPosition and createEntities override
+<i>92</i>&nbsp; *               fields (DG);
+<i>93</i>&nbsp; * 26-Jun-2008 : Added new method required for crosshair support - THIS CHANGES
+<i>94</i>&nbsp; *               THE API as of version 1.0.11 (DG);
+<i>95</i>&nbsp; *
+<i>96</i>&nbsp; */
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;package org.jfree.chart.renderer.category;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;import java.awt.Font;
+<i>101</i>&nbsp;import java.awt.Graphics2D;
+<i>102</i>&nbsp;import java.awt.Paint;
+<i>103</i>&nbsp;import java.awt.Shape;
+<i>104</i>&nbsp;import java.awt.Stroke;
+<i>105</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;import org.jfree.chart.LegendItem;
+<i>108</i>&nbsp;import org.jfree.chart.LegendItemSource;
+<i>109</i>&nbsp;import org.jfree.chart.axis.CategoryAxis;
+<i>110</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>111</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>112</i>&nbsp;import org.jfree.chart.event.RendererChangeListener;
+<i>113</i>&nbsp;import org.jfree.chart.labels.CategoryItemLabelGenerator;
+<i>114</i>&nbsp;import org.jfree.chart.labels.CategoryToolTipGenerator;
+<i>115</i>&nbsp;import org.jfree.chart.labels.ItemLabelPosition;
+<i>116</i>&nbsp;import org.jfree.chart.plot.CategoryMarker;
+<i>117</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>118</i>&nbsp;import org.jfree.chart.plot.Marker;
+<i>119</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>120</i>&nbsp;import org.jfree.chart.urls.CategoryURLGenerator;
+<i>121</i>&nbsp;import org.jfree.data.Range;
+<i>122</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>123</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;/**
+<i>126</i>&nbsp; * A plug-in object that is used by the {@link CategoryPlot} class to display
+<i>127</i>&nbsp; * individual data items from a {@link CategoryDataset}.
+<i>128</i>&nbsp; * &lt;p&gt;
+<i>129</i>&nbsp; * This interface defines the methods that must be provided by all renderers.
+<i>130</i>&nbsp; * If you are implementing a custom renderer, you should consider extending the
+<i>131</i>&nbsp; * {@link AbstractCategoryItemRenderer} class.
+<i>132</i>&nbsp; * &lt;p&gt;
+<i>133</i>&nbsp; * Most renderer attributes are defined using a &quot;three layer&quot; approach.  When
+<i>134</i>&nbsp; * looking up an attribute (for example, the outline paint) the renderer first
+<i>135</i>&nbsp; * checks to see if there is a setting (in layer 0) that applies to ALL items
+<i>136</i>&nbsp; * that the renderer draws.  If there is, that setting is used, but if it is
+<i>137</i>&nbsp; * &lt;code&gt;null&lt;/code&gt; the renderer looks up the next layer, which contains
+<i>138</i>&nbsp; * &quot;per series&quot; settings for the attribute (many attributes are defined on a
+<i>139</i>&nbsp; * per series basis, so this is the layer that is most commonly used).  If the
+<i>140</i>&nbsp; * layer 1 setting is &lt;code&gt;null&lt;/code&gt;, the renderer will look up the final
+<i>141</i>&nbsp; * layer, which provides a default or &quot;base&quot; setting.  Some attributes allow
+<i>142</i>&nbsp; * the base setting to be &lt;code&gt;null&lt;/code&gt;, while other attributes enforce
+<i>143</i>&nbsp; * non-&lt;code&gt;null&lt;/code&gt; values.
+<i>144</i>&nbsp; */
+<i>145</i>&nbsp;public interface CategoryItemRenderer extends LegendItemSource {
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Returns the number of passes through the dataset required by the
+<i>149</i>&nbsp;     * renderer.  Usually this will be one, but some renderers may use
+<i>150</i>&nbsp;     * a second or third pass to overlay items on top of things that were
+<i>151</i>&nbsp;     * drawn in an earlier pass.
+<i>152</i>&nbsp;     *
+<i>153</i>&nbsp;     * @return The pass count.
+<i>154</i>&nbsp;     */
+<i>155</i>&nbsp;    public int getPassCount();
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     * Returns the plot that the renderer has been assigned to (where
+<i>159</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt; indicates that the renderer is not currently assigned
+<i>160</i>&nbsp;     * to a plot).
+<i>161</i>&nbsp;     *
+<i>162</i>&nbsp;     * @return The plot (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>163</i>&nbsp;     *
+<i>164</i>&nbsp;     * @see #setPlot(CategoryPlot)
+<i>165</i>&nbsp;     */
+<i>166</i>&nbsp;    public CategoryPlot getPlot();
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * Sets the plot that the renderer has been assigned to.  This method is
+<i>170</i>&nbsp;     * usually called by the {@link CategoryPlot}, in normal usage you
+<i>171</i>&nbsp;     * shouldn&#39;t need to call this method directly.
+<i>172</i>&nbsp;     *
+<i>173</i>&nbsp;     * @param plot  the plot (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @see #getPlot()
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;    public void setPlot(CategoryPlot plot);
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    /**
+<i>180</i>&nbsp;     * Adds a change listener.
+<i>181</i>&nbsp;     *
+<i>182</i>&nbsp;     * @param listener  the listener.
+<i>183</i>&nbsp;     *
+<i>184</i>&nbsp;     * @see #removeChangeListener(RendererChangeListener)
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    public void addChangeListener(RendererChangeListener listener);
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * Removes a change listener.
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @param listener  the listener.
+<i>192</i>&nbsp;     *
+<i>193</i>&nbsp;     * @see #addChangeListener(RendererChangeListener)
+<i>194</i>&nbsp;     */
+<i>195</i>&nbsp;    public void removeChangeListener(RendererChangeListener listener);
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>199</i>&nbsp;     * items from the specified dataset.
+<i>200</i>&nbsp;     *
+<i>201</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>202</i>&nbsp;     *
+<i>203</i>&nbsp;     * @return The range (or &lt;code&gt;null&lt;/code&gt; if the dataset is
+<i>204</i>&nbsp;     *         &lt;code&gt;null&lt;/code&gt; or empty).
+<i>205</i>&nbsp;     */
+<i>206</i>&nbsp;    public Range findRangeBounds(CategoryDataset dataset);
+<i>207</i>&nbsp;
+<i>208</i>&nbsp;    /**
+<i>209</i>&nbsp;     * Initialises the renderer.  This method will be called before the first
+<i>210</i>&nbsp;     * item is rendered, giving the renderer an opportunity to initialise any
+<i>211</i>&nbsp;     * state information it wants to maintain. The renderer can do nothing if
+<i>212</i>&nbsp;     * it chooses.
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @param g2  the graphics device.
+<i>215</i>&nbsp;     * @param dataArea  the area inside the axes.
+<i>216</i>&nbsp;     * @param plot  the plot.
+<i>217</i>&nbsp;     * @param rendererIndex  the renderer index.
+<i>218</i>&nbsp;     * @param info  collects chart rendering information for return to caller.
+<i>219</i>&nbsp;     *
+<i>220</i>&nbsp;     * @return A state object (maintains state information relevant to one
+<i>221</i>&nbsp;     *         chart drawing).
+<i>222</i>&nbsp;     */
+<i>223</i>&nbsp;    public CategoryItemRendererState initialise(Graphics2D g2,
+<i>224</i>&nbsp;                                                Rectangle2D dataArea,
+<i>225</i>&nbsp;                                                CategoryPlot plot,
+<i>226</i>&nbsp;                                                int rendererIndex,
+<i>227</i>&nbsp;                                                PlotRenderingInfo info);
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Returns a boolean that indicates whether or not the specified item
+<i>231</i>&nbsp;     * should be drawn (this is typically used to hide an entire series).
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @param series  the series index.
+<i>234</i>&nbsp;     * @param item  the item index.
+<i>235</i>&nbsp;     *
+<i>236</i>&nbsp;     * @return A boolean.
+<i>237</i>&nbsp;     */
+<i>238</i>&nbsp;    public boolean getItemVisible(int series, int item);
+<i>239</i>&nbsp;
+<i>240</i>&nbsp;    /**
+<i>241</i>&nbsp;     * Returns a boolean that indicates whether or not the specified series
+<i>242</i>&nbsp;     * should be drawn (this is typically used to hide an entire series).
+<i>243</i>&nbsp;     *
+<i>244</i>&nbsp;     * @param series  the series index.
+<i>245</i>&nbsp;     *
+<i>246</i>&nbsp;     * @return A boolean.
+<i>247</i>&nbsp;     */
+<i>248</i>&nbsp;    public boolean isSeriesVisible(int series);
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * Returns the flag that controls the visibility of ALL series.  This flag
+<i>252</i>&nbsp;     * overrides the per series and default settings - you must set it to
+<i>253</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt; if you want the other settings to apply.
+<i>254</i>&nbsp;     *
+<i>255</i>&nbsp;     * @return The flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>256</i>&nbsp;     *
+<i>257</i>&nbsp;     * @see #setSeriesVisible(Boolean)
+<i>258</i>&nbsp;     *
+<i>259</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>260</i>&nbsp;     *     It is sufficient to rely on {@link #getSeriesVisible(int)} and
+<i>261</i>&nbsp;     *     {@link #getBaseSeriesVisible()}.
+<i>262</i>&nbsp;     */
+<i>263</i>&nbsp;    public Boolean getSeriesVisible();
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;    /**
+<i>266</i>&nbsp;     * Sets the flag that controls the visibility of ALL series and sends a
+<i>267</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  This flag
+<i>268</i>&nbsp;     * overrides the per series and default settings - you must set it to
+<i>269</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt; if you want the other settings to apply.
+<i>270</i>&nbsp;     *
+<i>271</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @see #getSeriesVisible()
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>276</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesVisible(int, Boolean)}
+<i>277</i>&nbsp;     *     and {@link #setBaseSeriesVisible(boolean)}.
+<i>278</i>&nbsp;     */
+<i>279</i>&nbsp;    public void setSeriesVisible(Boolean visible);
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Sets the flag that controls the visibility of ALL series and sends a
+<i>283</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  This flag
+<i>284</i>&nbsp;     * overrides the per series and default settings - you must set it to
+<i>285</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt; if you want the other settings to apply.
+<i>286</i>&nbsp;     *
+<i>287</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>288</i>&nbsp;     * @param notify  notify listeners?
+<i>289</i>&nbsp;     *
+<i>290</i>&nbsp;     * @see #getSeriesVisible()
+<i>291</i>&nbsp;     *
+<i>292</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>293</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesVisible(int, Boolean,
+<i>294</i>&nbsp;     *     boolean)} and {@link #setBaseSeriesVisible(boolean, boolean)}.
+<i>295</i>&nbsp;     */
+<i>296</i>&nbsp;    public void setSeriesVisible(Boolean visible, boolean notify);
+<i>297</i>&nbsp;
+<i>298</i>&nbsp;    /**
+<i>299</i>&nbsp;     * Returns the flag that controls whether a series is visible.
+<i>300</i>&nbsp;     *
+<i>301</i>&nbsp;     * @param series  the series index (zero-based).
+<i>302</i>&nbsp;     *
+<i>303</i>&nbsp;     * @return The flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>304</i>&nbsp;     *
+<i>305</i>&nbsp;     * @see #setSeriesVisible(int, Boolean)
+<i>306</i>&nbsp;     */
+<i>307</i>&nbsp;    public Boolean getSeriesVisible(int series);
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;    /**
+<i>310</i>&nbsp;     * Sets the flag that controls whether a series is visible and sends a
+<i>311</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>312</i>&nbsp;     *
+<i>313</i>&nbsp;     * @param series  the series index (zero-based).
+<i>314</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @see #getSeriesVisible(int)
+<i>317</i>&nbsp;     */
+<i>318</i>&nbsp;    public void setSeriesVisible(int series, Boolean visible);
+<i>319</i>&nbsp;
+<i>320</i>&nbsp;    /**
+<i>321</i>&nbsp;     * Sets the flag that controls whether a series is visible and, if
+<i>322</i>&nbsp;     * requested, sends a {@link RendererChangeEvent} to all registered
+<i>323</i>&nbsp;     * listeners.
+<i>324</i>&nbsp;     *
+<i>325</i>&nbsp;     * @param series  the series index.
+<i>326</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>327</i>&nbsp;     * @param notify  notify listeners?
+<i>328</i>&nbsp;     *
+<i>329</i>&nbsp;     * @see #getSeriesVisible(int)
+<i>330</i>&nbsp;     */
+<i>331</i>&nbsp;    public void setSeriesVisible(int series, Boolean visible, boolean notify);
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;    /**
+<i>334</i>&nbsp;     * Returns the base visibility for all series.
+<i>335</i>&nbsp;     *
+<i>336</i>&nbsp;     * @return The base visibility.
+<i>337</i>&nbsp;     *
+<i>338</i>&nbsp;     * @see #setBaseSeriesVisible(boolean)
+<i>339</i>&nbsp;     */
+<i>340</i>&nbsp;    public boolean getBaseSeriesVisible();
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;    /**
+<i>343</i>&nbsp;     * Sets the base visibility and sends a {@link RendererChangeEvent} to all
+<i>344</i>&nbsp;     * registered listeners.
+<i>345</i>&nbsp;     *
+<i>346</i>&nbsp;     * @param visible  the flag.
+<i>347</i>&nbsp;     *
+<i>348</i>&nbsp;     * @see #getBaseSeriesVisible()
+<i>349</i>&nbsp;     */
+<i>350</i>&nbsp;    public void setBaseSeriesVisible(boolean visible);
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    /**
+<i>353</i>&nbsp;     * Sets the base visibility and, if requested, sends
+<i>354</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>355</i>&nbsp;     *
+<i>356</i>&nbsp;     * @param visible  the visibility.
+<i>357</i>&nbsp;     * @param notify  notify listeners?
+<i>358</i>&nbsp;     *
+<i>359</i>&nbsp;     * @see #getBaseSeriesVisible()
+<i>360</i>&nbsp;     */
+<i>361</i>&nbsp;    public void setBaseSeriesVisible(boolean visible, boolean notify);
+<i>362</i>&nbsp;
+<i>363</i>&nbsp;    // SERIES VISIBLE IN LEGEND (not yet respected by all renderers)
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;    /**
+<i>366</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the series should be shown in the legend,
+<i>367</i>&nbsp;     * and &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>368</i>&nbsp;     *
+<i>369</i>&nbsp;     * @param series  the series index.
+<i>370</i>&nbsp;     *
+<i>371</i>&nbsp;     * @return A boolean.
+<i>372</i>&nbsp;     */
+<i>373</i>&nbsp;    public boolean isSeriesVisibleInLegend(int series);
+<i>374</i>&nbsp;
+<i>375</i>&nbsp;    /**
+<i>376</i>&nbsp;     * Returns the flag that controls the visibility of ALL series in the
+<i>377</i>&nbsp;     * legend.  This flag overrides the per series and default settings - you
+<i>378</i>&nbsp;     * must set it to &lt;code&gt;null&lt;/code&gt; if you want the other settings to
+<i>379</i>&nbsp;     * apply.
+<i>380</i>&nbsp;     *
+<i>381</i>&nbsp;     * @return The flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>382</i>&nbsp;     *
+<i>383</i>&nbsp;     * @see #setSeriesVisibleInLegend(Boolean)
+<i>384</i>&nbsp;     *
+<i>385</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>386</i>&nbsp;     *     It is sufficient to rely on {@link #getSeriesVisibleInLegend(int)}
+<i>387</i>&nbsp;     *     and {@link #getBaseSeriesVisibleInLegend()}.
+<i>388</i>&nbsp;     */
+<i>389</i>&nbsp;    public Boolean getSeriesVisibleInLegend();
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;    /**
+<i>392</i>&nbsp;     * Sets the flag that controls the visibility of ALL series in the legend
+<i>393</i>&nbsp;     * and sends a {@link RendererChangeEvent} to all registered listeners.
+<i>394</i>&nbsp;     * This flag overrides the per series and default settings - you must set
+<i>395</i>&nbsp;     * it to &lt;code&gt;null&lt;/code&gt; if you want the other settings to apply.
+<i>396</i>&nbsp;     *
+<i>397</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>398</i>&nbsp;     *
+<i>399</i>&nbsp;     * @see #getSeriesVisibleInLegend()
+<i>400</i>&nbsp;     *
+<i>401</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>402</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesVisibleInLegend(int,
+<i>403</i>&nbsp;     *     Boolean)} and {@link #setBaseSeriesVisibleInLegend(boolean)}.
+<i>404</i>&nbsp;     */
+<i>405</i>&nbsp;    public void setSeriesVisibleInLegend(Boolean visible);
+<i>406</i>&nbsp;
+<i>407</i>&nbsp;    /**
+<i>408</i>&nbsp;     * Sets the flag that controls the visibility of ALL series in the legend
+<i>409</i>&nbsp;     * and sends a {@link RendererChangeEvent} to all registered listeners.
+<i>410</i>&nbsp;     * This flag overrides the per series and default settings - you must set
+<i>411</i>&nbsp;     * it to &lt;code&gt;null&lt;/code&gt; if you want the other settings to apply.
+<i>412</i>&nbsp;     *
+<i>413</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>414</i>&nbsp;     * @param notify  notify listeners?
+<i>415</i>&nbsp;     *
+<i>416</i>&nbsp;     * @see #getSeriesVisibleInLegend()
+<i>417</i>&nbsp;     *
+<i>418</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>419</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesVisibleInLegend(int,
+<i>420</i>&nbsp;     *     Boolean, boolean)} and {@link #setBaseSeriesVisibleInLegend(boolean,
+<i>421</i>&nbsp;     *     boolean)}.
+<i>422</i>&nbsp;     */
+<i>423</i>&nbsp;    public void setSeriesVisibleInLegend(Boolean visible, boolean notify);
+<i>424</i>&nbsp;
+<i>425</i>&nbsp;    /**
+<i>426</i>&nbsp;     * Returns the flag that controls whether a series is visible in the
+<i>427</i>&nbsp;     * legend.  This method returns only the &quot;per series&quot; settings - to
+<i>428</i>&nbsp;     * incorporate the override and base settings as well, you need to use the
+<i>429</i>&nbsp;     * {@link #isSeriesVisibleInLegend(int)} method.
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @param series  the series index (zero-based).
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     * @return The flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>434</i>&nbsp;     *
+<i>435</i>&nbsp;     * @see #setSeriesVisibleInLegend(int, Boolean)
+<i>436</i>&nbsp;     */
+<i>437</i>&nbsp;    public Boolean getSeriesVisibleInLegend(int series);
+<i>438</i>&nbsp;
+<i>439</i>&nbsp;    /**
+<i>440</i>&nbsp;     * Sets the flag that controls whether a series is visible in the legend
+<i>441</i>&nbsp;     * and sends a {@link RendererChangeEvent} to all registered listeners.
+<i>442</i>&nbsp;     *
+<i>443</i>&nbsp;     * @param series  the series index (zero-based).
+<i>444</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>445</i>&nbsp;     *
+<i>446</i>&nbsp;     * @see #getSeriesVisibleInLegend(int)
+<i>447</i>&nbsp;     */
+<i>448</i>&nbsp;    public void setSeriesVisibleInLegend(int series, Boolean visible);
+<i>449</i>&nbsp;
+<i>450</i>&nbsp;    /**
+<i>451</i>&nbsp;     * Sets the flag that controls whether a series is visible in the legend
+<i>452</i>&nbsp;     * and, if requested, sends a {@link RendererChangeEvent} to all registered
+<i>453</i>&nbsp;     * listeners.
+<i>454</i>&nbsp;     *
+<i>455</i>&nbsp;     * @param series  the series index.
+<i>456</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>457</i>&nbsp;     * @param notify  notify listeners?
+<i>458</i>&nbsp;     *
+<i>459</i>&nbsp;     * @see #getSeriesVisibleInLegend(int)
+<i>460</i>&nbsp;     */
+<i>461</i>&nbsp;    public void setSeriesVisibleInLegend(int series, Boolean visible,
+<i>462</i>&nbsp;                                         boolean notify);
+<i>463</i>&nbsp;
+<i>464</i>&nbsp;    /**
+<i>465</i>&nbsp;     * Returns the base visibility in the legend for all series.
+<i>466</i>&nbsp;     *
+<i>467</i>&nbsp;     * @return The base visibility.
+<i>468</i>&nbsp;     *
+<i>469</i>&nbsp;     * @see #setBaseSeriesVisibleInLegend(boolean)
+<i>470</i>&nbsp;     */
+<i>471</i>&nbsp;    public boolean getBaseSeriesVisibleInLegend();
+<i>472</i>&nbsp;
+<i>473</i>&nbsp;    /**
+<i>474</i>&nbsp;     * Sets the base visibility in the legend and sends a
+<i>475</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>476</i>&nbsp;     *
+<i>477</i>&nbsp;     * @param visible  the flag.
+<i>478</i>&nbsp;     *
+<i>479</i>&nbsp;     * @see #getBaseSeriesVisibleInLegend()
+<i>480</i>&nbsp;     */
+<i>481</i>&nbsp;    public void setBaseSeriesVisibleInLegend(boolean visible);
+<i>482</i>&nbsp;
+<i>483</i>&nbsp;    /**
+<i>484</i>&nbsp;     * Sets the base visibility in the legend and, if requested, sends
+<i>485</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>486</i>&nbsp;     *
+<i>487</i>&nbsp;     * @param visible  the visibility.
+<i>488</i>&nbsp;     * @param notify  notify listeners?
+<i>489</i>&nbsp;     *
+<i>490</i>&nbsp;     * @see #getBaseSeriesVisibleInLegend()
+<i>491</i>&nbsp;     */
+<i>492</i>&nbsp;    public void setBaseSeriesVisibleInLegend(boolean visible, boolean notify);
+<i>493</i>&nbsp;
+<i>494</i>&nbsp;
+<i>495</i>&nbsp;    //// PAINT /////////////////////////////////////////////////////////////////
+<i>496</i>&nbsp;
+<i>497</i>&nbsp;    /**
+<i>498</i>&nbsp;     * Returns the paint used to fill data items as they are drawn.
+<i>499</i>&nbsp;     *
+<i>500</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>501</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>502</i>&nbsp;     *
+<i>503</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>504</i>&nbsp;     */
+<i>505</i>&nbsp;    public Paint getItemPaint(int row, int column);
+<i>506</i>&nbsp;
+<i>507</i>&nbsp;    /**
+<i>508</i>&nbsp;     * Sets the paint to be used for ALL series, and sends a
+<i>509</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  If this is
+<i>510</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;, the renderer will use the paint for the series.
+<i>511</i>&nbsp;     *
+<i>512</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>513</i>&nbsp;     *
+<i>514</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>515</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesPaint(int, Paint)} and
+<i>516</i>&nbsp;     *     {@link #setBasePaint(Paint)}.
+<i>517</i>&nbsp;     */
+<i>518</i>&nbsp;    public void setPaint(Paint paint);
+<i>519</i>&nbsp;
+<i>520</i>&nbsp;    /**
+<i>521</i>&nbsp;     * Returns the paint used to fill an item drawn by the renderer.
+<i>522</i>&nbsp;     *
+<i>523</i>&nbsp;     * @param series  the series index (zero-based).
+<i>524</i>&nbsp;     *
+<i>525</i>&nbsp;     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>526</i>&nbsp;     *
+<i>527</i>&nbsp;     * @see #setSeriesPaint(int, Paint)
+<i>528</i>&nbsp;     */
+<i>529</i>&nbsp;    public Paint getSeriesPaint(int series);
+<i>530</i>&nbsp;
+<i>531</i>&nbsp;    /**
+<i>532</i>&nbsp;     * Sets the paint used for a series and sends a {@link RendererChangeEvent}
+<i>533</i>&nbsp;     * to all registered listeners.
+<i>534</i>&nbsp;     *
+<i>535</i>&nbsp;     * @param series  the series index (zero-based).
+<i>536</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>537</i>&nbsp;     *
+<i>538</i>&nbsp;     * @see #getSeriesPaint(int)
+<i>539</i>&nbsp;     */
+<i>540</i>&nbsp;    public void setSeriesPaint(int series, Paint paint);
+<i>541</i>&nbsp;
+<i>542</i>&nbsp;    // FIXME: add setSeriesPaint(int, Paint, boolean)?
+<i>543</i>&nbsp;
+<i>544</i>&nbsp;    /**
+<i>545</i>&nbsp;     * Returns the base paint.
+<i>546</i>&nbsp;     *
+<i>547</i>&nbsp;     * @return The base paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>548</i>&nbsp;     *
+<i>549</i>&nbsp;     * @see #setBasePaint(Paint)
+<i>550</i>&nbsp;     */
+<i>551</i>&nbsp;    public Paint getBasePaint();
+<i>552</i>&nbsp;
+<i>553</i>&nbsp;    /**
+<i>554</i>&nbsp;     * Sets the base paint and sends a {@link RendererChangeEvent} to all
+<i>555</i>&nbsp;     * registered listeners.
+<i>556</i>&nbsp;     *
+<i>557</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>558</i>&nbsp;     *
+<i>559</i>&nbsp;     * @see #getBasePaint()
+<i>560</i>&nbsp;     */
+<i>561</i>&nbsp;    public void setBasePaint(Paint paint);
+<i>562</i>&nbsp;
+<i>563</i>&nbsp;    // FIXME: add setBasePaint(int, Paint, boolean)?
+<i>564</i>&nbsp;
+<i>565</i>&nbsp;    //// FILL PAINT /////////////////////////////////////////////////////////
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;//    /**
+<i>568</i>&nbsp;//     * Returns the paint used to fill data items as they are drawn.
+<i>569</i>&nbsp;//     *
+<i>570</i>&nbsp;//     * @param row  the row (or series) index (zero-based).
+<i>571</i>&nbsp;//     * @param column  the column (or category) index (zero-based).
+<i>572</i>&nbsp;//     *
+<i>573</i>&nbsp;//     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>574</i>&nbsp;//     */
+<i>575</i>&nbsp;//    public Paint getItemFillPaint(int row, int column);
+<i>576</i>&nbsp;//
+<i>577</i>&nbsp;//    /**
+<i>578</i>&nbsp;//     * Returns the paint used to fill an item drawn by the renderer.
+<i>579</i>&nbsp;//     *
+<i>580</i>&nbsp;//     * @param series  the series (zero-based index).
+<i>581</i>&nbsp;//     *
+<i>582</i>&nbsp;//     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>583</i>&nbsp;//     *
+<i>584</i>&nbsp;//     * @see #setSeriesFillPaint(int, Paint)
+<i>585</i>&nbsp;//     */
+<i>586</i>&nbsp;//    public Paint getSeriesFillPaint(int series);
+<i>587</i>&nbsp;//
+<i>588</i>&nbsp;//    /**
+<i>589</i>&nbsp;//     * Sets the paint used for a series outline and sends a
+<i>590</i>&nbsp;//     * {@link RendererChangeEvent} to all registered listeners.
+<i>591</i>&nbsp;//     *
+<i>592</i>&nbsp;//     * @param series  the series index (zero-based).
+<i>593</i>&nbsp;//     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>594</i>&nbsp;//     *
+<i>595</i>&nbsp;//     * @see #getSeriesFillPaint(int)
+<i>596</i>&nbsp;//     */
+<i>597</i>&nbsp;//    public void setSeriesFillPaint(int series, Paint paint);
+<i>598</i>&nbsp;//
+<i>599</i>&nbsp;//    /**
+<i>600</i>&nbsp;//     * Returns the base outline paint.
+<i>601</i>&nbsp;//     *
+<i>602</i>&nbsp;//     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>603</i>&nbsp;//     *
+<i>604</i>&nbsp;//     * @see #setBaseFillPaint(Paint)
+<i>605</i>&nbsp;//     */
+<i>606</i>&nbsp;//    public Paint getBaseFillPaint();
+<i>607</i>&nbsp;//
+<i>608</i>&nbsp;//    /**
+<i>609</i>&nbsp;//     * Sets the base outline paint and sends a {@link RendererChangeEvent} to
+<i>610</i>&nbsp;//     * all registered listeners.
+<i>611</i>&nbsp;//     *
+<i>612</i>&nbsp;//     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>613</i>&nbsp;//     *
+<i>614</i>&nbsp;//     * @see #getBaseFillPaint()
+<i>615</i>&nbsp;//     */
+<i>616</i>&nbsp;//    public void setBaseFillPaint(Paint paint);
+<i>617</i>&nbsp;
+<i>618</i>&nbsp;    //// OUTLINE PAINT /////////////////////////////////////////////////////////
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;    /**
+<i>621</i>&nbsp;     * Returns the paint used to outline data items as they are drawn.
+<i>622</i>&nbsp;     *
+<i>623</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>624</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>625</i>&nbsp;     *
+<i>626</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>627</i>&nbsp;     */
+<i>628</i>&nbsp;    public Paint getItemOutlinePaint(int row, int column);
+<i>629</i>&nbsp;
+<i>630</i>&nbsp;    /**
+<i>631</i>&nbsp;     * Sets the outline paint for ALL series (optional).
+<i>632</i>&nbsp;     *
+<i>633</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>634</i>&nbsp;     *
+<i>635</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>636</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesOutlinePaint(int,
+<i>637</i>&nbsp;     *     Paint)} and {@link #setBaseOutlinePaint(Paint)}.
+<i>638</i>&nbsp;     */
+<i>639</i>&nbsp;    public void setOutlinePaint(Paint paint);
+<i>640</i>&nbsp;
+<i>641</i>&nbsp;    /**
+<i>642</i>&nbsp;     * Returns the paint used to outline an item drawn by the renderer.
+<i>643</i>&nbsp;     *
+<i>644</i>&nbsp;     * @param series  the series (zero-based index).
+<i>645</i>&nbsp;     *
+<i>646</i>&nbsp;     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>647</i>&nbsp;     *
+<i>648</i>&nbsp;     * @see #setSeriesOutlinePaint(int, Paint)
+<i>649</i>&nbsp;     */
+<i>650</i>&nbsp;    public Paint getSeriesOutlinePaint(int series);
+<i>651</i>&nbsp;
+<i>652</i>&nbsp;    /**
+<i>653</i>&nbsp;     * Sets the paint used for a series outline and sends a
+<i>654</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>655</i>&nbsp;     *
+<i>656</i>&nbsp;     * @param series  the series index (zero-based).
+<i>657</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>658</i>&nbsp;     *
+<i>659</i>&nbsp;     * @see #getSeriesOutlinePaint(int)
+<i>660</i>&nbsp;     */
+<i>661</i>&nbsp;    public void setSeriesOutlinePaint(int series, Paint paint);
+<i>662</i>&nbsp;
+<i>663</i>&nbsp;    // FIXME: add setSeriesOutlinePaint(int, Paint, boolean)?
+<i>664</i>&nbsp;
+<i>665</i>&nbsp;    /**
+<i>666</i>&nbsp;     * Returns the base outline paint.
+<i>667</i>&nbsp;     *
+<i>668</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>669</i>&nbsp;     *
+<i>670</i>&nbsp;     * @see #setBaseOutlinePaint(Paint)
+<i>671</i>&nbsp;     */
+<i>672</i>&nbsp;    public Paint getBaseOutlinePaint();
+<i>673</i>&nbsp;
+<i>674</i>&nbsp;    /**
+<i>675</i>&nbsp;     * Sets the base outline paint and sends a {@link RendererChangeEvent} to
+<i>676</i>&nbsp;     * all registered listeners.
+<i>677</i>&nbsp;     *
+<i>678</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>679</i>&nbsp;     *
+<i>680</i>&nbsp;     * @see #getBaseOutlinePaint()
+<i>681</i>&nbsp;     */
+<i>682</i>&nbsp;    public void setBaseOutlinePaint(Paint paint);
+<i>683</i>&nbsp;
+<i>684</i>&nbsp;    // FIXME: add setBaseOutlinePaint(Paint, boolean)?
+<i>685</i>&nbsp;
+<i>686</i>&nbsp;    //// STROKE ////////////////////////////////////////////////////////////////
+<i>687</i>&nbsp;
+<i>688</i>&nbsp;    /**
+<i>689</i>&nbsp;     * Returns the stroke used to draw data items.
+<i>690</i>&nbsp;     *
+<i>691</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>692</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>693</i>&nbsp;     *
+<i>694</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>695</i>&nbsp;     */
+<i>696</i>&nbsp;    public Stroke getItemStroke(int row, int column);
+<i>697</i>&nbsp;
+<i>698</i>&nbsp;    /**
+<i>699</i>&nbsp;     * Sets the stroke for ALL series and sends a {@link RendererChangeEvent}
+<i>700</i>&nbsp;     * to all registered listeners.
+<i>701</i>&nbsp;     *
+<i>702</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>703</i>&nbsp;     *
+<i>704</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>705</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesStroke(int, Stroke)}
+<i>706</i>&nbsp;     *     and {@link #setBaseStroke(Stroke)}.
+<i>707</i>&nbsp;     */
+<i>708</i>&nbsp;    public void setStroke(Stroke stroke);
+<i>709</i>&nbsp;
+<i>710</i>&nbsp;    /**
+<i>711</i>&nbsp;     * Returns the stroke used to draw the items in a series.
+<i>712</i>&nbsp;     *
+<i>713</i>&nbsp;     * @param series  the series (zero-based index).
+<i>714</i>&nbsp;     *
+<i>715</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>716</i>&nbsp;     *
+<i>717</i>&nbsp;     * @see #setSeriesStroke(int, Stroke)
+<i>718</i>&nbsp;     */
+<i>719</i>&nbsp;    public Stroke getSeriesStroke(int series);
+<i>720</i>&nbsp;
+<i>721</i>&nbsp;    /**
+<i>722</i>&nbsp;     * Sets the stroke used for a series and sends a
+<i>723</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>724</i>&nbsp;     *
+<i>725</i>&nbsp;     * @param series  the series index (zero-based).
+<i>726</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>727</i>&nbsp;     *
+<i>728</i>&nbsp;     * @see #getSeriesStroke(int)
+<i>729</i>&nbsp;     */
+<i>730</i>&nbsp;    public void setSeriesStroke(int series, Stroke stroke);
+<i>731</i>&nbsp;
+<i>732</i>&nbsp;    // FIXME: add setSeriesStroke(int, Stroke, boolean) ?
+<i>733</i>&nbsp;
+<i>734</i>&nbsp;    /**
+<i>735</i>&nbsp;     * Returns the base stroke.
+<i>736</i>&nbsp;     *
+<i>737</i>&nbsp;     * @return The base stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>738</i>&nbsp;     *
+<i>739</i>&nbsp;     * @see #setBaseStroke(Stroke)
+<i>740</i>&nbsp;     */
+<i>741</i>&nbsp;    public Stroke getBaseStroke();
+<i>742</i>&nbsp;
+<i>743</i>&nbsp;    /**
+<i>744</i>&nbsp;     * Sets the base stroke and sends a {@link RendererChangeEvent} to all
+<i>745</i>&nbsp;     * registered listeners.
+<i>746</i>&nbsp;     *
+<i>747</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>748</i>&nbsp;     *
+<i>749</i>&nbsp;     * @see #getBaseStroke()
+<i>750</i>&nbsp;     */
+<i>751</i>&nbsp;    public void setBaseStroke(Stroke stroke);
+<i>752</i>&nbsp;
+<i>753</i>&nbsp;    // FIXME: add setBaseStroke(Stroke, boolean) ?
+<i>754</i>&nbsp;
+<i>755</i>&nbsp;    //// OUTLINE STROKE ////////////////////////////////////////////////////////
+<i>756</i>&nbsp;
+<i>757</i>&nbsp;    /**
+<i>758</i>&nbsp;     * Returns the stroke used to outline data items.
+<i>759</i>&nbsp;     * &lt;p&gt;
+<i>760</i>&nbsp;     * The default implementation passes control to the
+<i>761</i>&nbsp;     * lookupSeriesOutlineStroke method.  You can override this method if you
+<i>762</i>&nbsp;     * require different behaviour.
+<i>763</i>&nbsp;     *
+<i>764</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>765</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>766</i>&nbsp;     *
+<i>767</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>768</i>&nbsp;     */
+<i>769</i>&nbsp;    public Stroke getItemOutlineStroke(int row, int column);
+<i>770</i>&nbsp;
+<i>771</i>&nbsp;    /**
+<i>772</i>&nbsp;     * Sets the outline stroke for ALL series and sends a
+<i>773</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>774</i>&nbsp;     *
+<i>775</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>776</i>&nbsp;     *
+<i>777</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>778</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesOutlineStroke(int,
+<i>779</i>&nbsp;     *     Stroke)} and {@link #setBaseOutlineStroke(Stroke)}.
+<i>780</i>&nbsp;     */
+<i>781</i>&nbsp;    public void setOutlineStroke(Stroke stroke);
+<i>782</i>&nbsp;
+<i>783</i>&nbsp;    /**
+<i>784</i>&nbsp;     * Returns the stroke used to outline the items in a series.
+<i>785</i>&nbsp;     *
+<i>786</i>&nbsp;     * @param series  the series (zero-based index).
+<i>787</i>&nbsp;     *
+<i>788</i>&nbsp;     * @return The stroke (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>789</i>&nbsp;     *
+<i>790</i>&nbsp;     * @see #setSeriesOutlineStroke(int, Stroke)
+<i>791</i>&nbsp;     */
+<i>792</i>&nbsp;    public Stroke getSeriesOutlineStroke(int series);
+<i>793</i>&nbsp;
+<i>794</i>&nbsp;    /**
+<i>795</i>&nbsp;     * Sets the outline stroke used for a series and sends a
+<i>796</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>797</i>&nbsp;     *
+<i>798</i>&nbsp;     * @param series  the series index (zero-based).
+<i>799</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>800</i>&nbsp;     *
+<i>801</i>&nbsp;     * @see #getSeriesOutlineStroke(int)
+<i>802</i>&nbsp;     */
+<i>803</i>&nbsp;    public void setSeriesOutlineStroke(int series, Stroke stroke);
+<i>804</i>&nbsp;
+<i>805</i>&nbsp;    // FIXME: add setSeriesOutlineStroke(int, Stroke, boolean) ?
+<i>806</i>&nbsp;
+<i>807</i>&nbsp;    /**
+<i>808</i>&nbsp;     * Returns the base outline stroke.
+<i>809</i>&nbsp;     *
+<i>810</i>&nbsp;     * @return The stroke (never &lt;code&gt;null&lt;/code&gt;).
+<i>811</i>&nbsp;     *
+<i>812</i>&nbsp;     * @see #setBaseOutlineStroke(Stroke)
+<i>813</i>&nbsp;     */
+<i>814</i>&nbsp;    public Stroke getBaseOutlineStroke();
+<i>815</i>&nbsp;
+<i>816</i>&nbsp;    /**
+<i>817</i>&nbsp;     * Sets the base outline stroke and sends a {@link RendererChangeEvent} to
+<i>818</i>&nbsp;     * all registered listeners.
+<i>819</i>&nbsp;     *
+<i>820</i>&nbsp;     * @param stroke  the stroke (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>821</i>&nbsp;     *
+<i>822</i>&nbsp;     * @see #getBaseOutlineStroke()
+<i>823</i>&nbsp;     */
+<i>824</i>&nbsp;    public void setBaseOutlineStroke(Stroke stroke);
+<i>825</i>&nbsp;
+<i>826</i>&nbsp;    // FIXME: add setBaseOutlineStroke(Stroke, boolean) ?
+<i>827</i>&nbsp;
+<i>828</i>&nbsp;    //// SHAPE /////////////////////////////////////////////////////////////////
+<i>829</i>&nbsp;
+<i>830</i>&nbsp;    /**
+<i>831</i>&nbsp;     * Returns a shape used to represent a data item.
+<i>832</i>&nbsp;     *
+<i>833</i>&nbsp;     * @param row  the row (or series) index (zero-based).
+<i>834</i>&nbsp;     * @param column  the column (or category) index (zero-based).
+<i>835</i>&nbsp;     *
+<i>836</i>&nbsp;     * @return The shape (never &lt;code&gt;null&lt;/code&gt;).
+<i>837</i>&nbsp;     */
+<i>838</i>&nbsp;    public Shape getItemShape(int row, int column);
+<i>839</i>&nbsp;
+<i>840</i>&nbsp;    /**
+<i>841</i>&nbsp;     * Sets the shape for ALL series (optional) and sends a
+<i>842</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>843</i>&nbsp;     *
+<i>844</i>&nbsp;     * @param shape  the shape (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>845</i>&nbsp;     *
+<i>846</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>847</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesShape(int, Shape)} and
+<i>848</i>&nbsp;     *     {@link #setBaseShape(Shape)}.
+<i>849</i>&nbsp;     */
+<i>850</i>&nbsp;    public void setShape(Shape shape);
+<i>851</i>&nbsp;
+<i>852</i>&nbsp;    /**
+<i>853</i>&nbsp;     * Returns a shape used to represent the items in a series.
+<i>854</i>&nbsp;     *
+<i>855</i>&nbsp;     * @param series  the series (zero-based index).
+<i>856</i>&nbsp;     *
+<i>857</i>&nbsp;     * @return The shape (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>858</i>&nbsp;     *
+<i>859</i>&nbsp;     * @see #setSeriesShape(int, Shape)
+<i>860</i>&nbsp;     */
+<i>861</i>&nbsp;    public Shape getSeriesShape(int series);
+<i>862</i>&nbsp;
+<i>863</i>&nbsp;    /**
+<i>864</i>&nbsp;     * Sets the shape used for a series and sends a {@link RendererChangeEvent}
+<i>865</i>&nbsp;     * to all registered listeners.
+<i>866</i>&nbsp;     *
+<i>867</i>&nbsp;     * @param series  the series index (zero-based).
+<i>868</i>&nbsp;     * @param shape  the shape (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>869</i>&nbsp;     *
+<i>870</i>&nbsp;     * @see #getSeriesShape(int)
+<i>871</i>&nbsp;     */
+<i>872</i>&nbsp;    public void setSeriesShape(int series, Shape shape);
+<i>873</i>&nbsp;
+<i>874</i>&nbsp;    // FIXME: add setSeriesShape(int, Shape, boolean) ?
+<i>875</i>&nbsp;
+<i>876</i>&nbsp;    /**
+<i>877</i>&nbsp;     * Returns the base shape.
+<i>878</i>&nbsp;     *
+<i>879</i>&nbsp;     * @return The shape (never &lt;code&gt;null&lt;/code&gt;).
+<i>880</i>&nbsp;     *
+<i>881</i>&nbsp;     * @see #setBaseShape(Shape)
+<i>882</i>&nbsp;     */
+<i>883</i>&nbsp;    public Shape getBaseShape();
+<i>884</i>&nbsp;
+<i>885</i>&nbsp;    /**
+<i>886</i>&nbsp;     * Sets the base shape and sends a {@link RendererChangeEvent} to all
+<i>887</i>&nbsp;     * registered listeners.
+<i>888</i>&nbsp;     *
+<i>889</i>&nbsp;     * @param shape  the shape (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>890</i>&nbsp;     *
+<i>891</i>&nbsp;     * @see #getBaseShape()
+<i>892</i>&nbsp;     */
+<i>893</i>&nbsp;    public void setBaseShape(Shape shape);
+<i>894</i>&nbsp;
+<i>895</i>&nbsp;    // FIXME: add setBaseShape(Shape, boolean) ?
+<i>896</i>&nbsp;
+<i>897</i>&nbsp;    // ITEM LABELS VISIBLE
+<i>898</i>&nbsp;
+<i>899</i>&nbsp;    /**
+<i>900</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if an item label is visible, and
+<i>901</i>&nbsp;     * &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>902</i>&nbsp;     *
+<i>903</i>&nbsp;     * @param row  the row index (zero-based).
+<i>904</i>&nbsp;     * @param column  the column index (zero-based).
+<i>905</i>&nbsp;     *
+<i>906</i>&nbsp;     * @return A boolean.
+<i>907</i>&nbsp;     */
+<i>908</i>&nbsp;    public boolean isItemLabelVisible(int row, int column);
+<i>909</i>&nbsp;
+<i>910</i>&nbsp;    /**
+<i>911</i>&nbsp;     * Sets a flag that controls whether or not the item labels for ALL series
+<i>912</i>&nbsp;     * are visible.
+<i>913</i>&nbsp;     *
+<i>914</i>&nbsp;     * @param visible  the flag.
+<i>915</i>&nbsp;     *
+<i>916</i>&nbsp;     * @see #setItemLabelsVisible(Boolean)
+<i>917</i>&nbsp;     *
+<i>918</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>919</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemLabelsVisible(int,
+<i>920</i>&nbsp;     *     Boolean)} and {@link #setBaseItemLabelsVisible(boolean)}.
+<i>921</i>&nbsp;     */
+<i>922</i>&nbsp;    public void setItemLabelsVisible(boolean visible);
+<i>923</i>&nbsp;
+<i>924</i>&nbsp;    /**
+<i>925</i>&nbsp;     * Sets a flag that controls whether or not the item labels for ALL series
+<i>926</i>&nbsp;     * are visible.
+<i>927</i>&nbsp;     *
+<i>928</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>929</i>&nbsp;     *
+<i>930</i>&nbsp;     * @see #setItemLabelsVisible(boolean)
+<i>931</i>&nbsp;     *
+<i>932</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>933</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemLabelsVisible(int,
+<i>934</i>&nbsp;     *     Boolean)} and {@link #setBaseItemLabelsVisible(boolean)}.
+<i>935</i>&nbsp;     */
+<i>936</i>&nbsp;    public void setItemLabelsVisible(Boolean visible);
+<i>937</i>&nbsp;
+<i>938</i>&nbsp;    /**
+<i>939</i>&nbsp;     * Sets the visibility of item labels for ALL series and, if requested,
+<i>940</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>941</i>&nbsp;     *
+<i>942</i>&nbsp;     * @param visible  a flag that controls whether or not the item labels are
+<i>943</i>&nbsp;     *                 visible (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>944</i>&nbsp;     * @param notify  a flag that controls whether or not listeners are
+<i>945</i>&nbsp;     *                notified.
+<i>946</i>&nbsp;     *
+<i>947</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>948</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemLabelsVisible(int,
+<i>949</i>&nbsp;     *     Boolean, boolean)} and {@link #setBaseItemLabelsVisible(Boolean,
+<i>950</i>&nbsp;     *     boolean)}.
+<i>951</i>&nbsp;     */
+<i>952</i>&nbsp;    public void setItemLabelsVisible(Boolean visible, boolean notify);
+<i>953</i>&nbsp;
+<i>954</i>&nbsp;    /**
+<i>955</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if the item labels for a series are visible,
+<i>956</i>&nbsp;     * and &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>957</i>&nbsp;     *
+<i>958</i>&nbsp;     * @param series  the series index (zero-based).
+<i>959</i>&nbsp;     *
+<i>960</i>&nbsp;     * @return A boolean.
+<i>961</i>&nbsp;     *
+<i>962</i>&nbsp;     * @see #setSeriesItemLabelsVisible(int, Boolean)
+<i>963</i>&nbsp;     */
+<i>964</i>&nbsp;    public boolean isSeriesItemLabelsVisible(int series);
+<i>965</i>&nbsp;
+<i>966</i>&nbsp;    /**
+<i>967</i>&nbsp;     * Sets a flag that controls the visibility of the item labels for a series.
+<i>968</i>&nbsp;     *
+<i>969</i>&nbsp;     * @param series  the series index (zero-based).
+<i>970</i>&nbsp;     * @param visible  the flag.
+<i>971</i>&nbsp;     *
+<i>972</i>&nbsp;     * @see #isSeriesItemLabelsVisible(int)
+<i>973</i>&nbsp;     */
+<i>974</i>&nbsp;    public void setSeriesItemLabelsVisible(int series, boolean visible);
+<i>975</i>&nbsp;
+<i>976</i>&nbsp;    /**
+<i>977</i>&nbsp;     * Sets a flag that controls the visibility of the item labels for a series.
+<i>978</i>&nbsp;     *
+<i>979</i>&nbsp;     * @param series  the series index (zero-based).
+<i>980</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>981</i>&nbsp;     *
+<i>982</i>&nbsp;     * @see #isSeriesItemLabelsVisible(int)
+<i>983</i>&nbsp;     */
+<i>984</i>&nbsp;    public void setSeriesItemLabelsVisible(int series, Boolean visible);
+<i>985</i>&nbsp;
+<i>986</i>&nbsp;    /**
+<i>987</i>&nbsp;     * Sets the visibility of item labels for a series and, if requested, sends
+<i>988</i>&nbsp;     * a {@link RendererChangeEvent} to all registered listeners.
+<i>989</i>&nbsp;     *
+<i>990</i>&nbsp;     * @param series  the series index (zero-based).
+<i>991</i>&nbsp;     * @param visible  the visible flag.
+<i>992</i>&nbsp;     * @param notify  a flag that controls whether or not listeners are
+<i>993</i>&nbsp;     *                notified.
+<i>994</i>&nbsp;     *
+<i>995</i>&nbsp;     * @see #isSeriesItemLabelsVisible(int)
+<i>996</i>&nbsp;     */
+<i>997</i>&nbsp;    public void setSeriesItemLabelsVisible(int series, Boolean visible,
+<i>998</i>&nbsp;                                           boolean notify);
+<i>999</i>&nbsp;
+<i>1000</i>&nbsp;    /**
+<i>1001</i>&nbsp;     * Returns the base setting for item label visibility.  A &lt;code&gt;null&lt;/code&gt;
+<i>1002</i>&nbsp;     * result should be interpreted as equivalent to &lt;code&gt;Boolean.FALSE&lt;/code&gt;
+<i>1003</i>&nbsp;     * (this is an error in the API design, the return value should have been
+<i>1004</i>&nbsp;     * a boolean primitive).
+<i>1005</i>&nbsp;     *
+<i>1006</i>&nbsp;     * @return A flag (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1007</i>&nbsp;     *
+<i>1008</i>&nbsp;     * @see #setBaseItemLabelsVisible(Boolean)
+<i>1009</i>&nbsp;     */
+<i>1010</i>&nbsp;    public Boolean getBaseItemLabelsVisible();
+<i>1011</i>&nbsp;
+<i>1012</i>&nbsp;    /**
+<i>1013</i>&nbsp;     * Sets the base flag that controls whether or not item labels are visible
+<i>1014</i>&nbsp;     * and sends a {@link RendererChangeEvent} to all registered listeners.
+<i>1015</i>&nbsp;     *
+<i>1016</i>&nbsp;     * @param visible  the flag.
+<i>1017</i>&nbsp;     *
+<i>1018</i>&nbsp;     * @see #getBaseItemLabelsVisible()
+<i>1019</i>&nbsp;     */
+<i>1020</i>&nbsp;    public void setBaseItemLabelsVisible(boolean visible);
+<i>1021</i>&nbsp;
+<i>1022</i>&nbsp;    /**
+<i>1023</i>&nbsp;     * Sets the base setting for item label visibility and sends a
+<i>1024</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1025</i>&nbsp;     *
+<i>1026</i>&nbsp;     * @param visible  the flag (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1027</i>&nbsp;     *
+<i>1028</i>&nbsp;     * @see #getBaseItemLabelsVisible()
+<i>1029</i>&nbsp;     */
+<i>1030</i>&nbsp;    public void setBaseItemLabelsVisible(Boolean visible);
+<i>1031</i>&nbsp;
+<i>1032</i>&nbsp;    /**
+<i>1033</i>&nbsp;     * Sets the base visibility for item labels and, if requested, sends a
+<i>1034</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1035</i>&nbsp;     *
+<i>1036</i>&nbsp;     * @param visible  the visibility flag.
+<i>1037</i>&nbsp;     * @param notify  a flag that controls whether or not listeners are
+<i>1038</i>&nbsp;     *                notified.
+<i>1039</i>&nbsp;     *
+<i>1040</i>&nbsp;     * @see #getBaseItemLabelsVisible()
+<i>1041</i>&nbsp;     */
+<i>1042</i>&nbsp;    public void setBaseItemLabelsVisible(Boolean visible, boolean notify);
+<i>1043</i>&nbsp;
+<i>1044</i>&nbsp;    // ITEM LABEL GENERATOR
+<i>1045</i>&nbsp;
+<i>1046</i>&nbsp;    /**
+<i>1047</i>&nbsp;     * Returns the item label generator for the specified data item.
+<i>1048</i>&nbsp;     *
+<i>1049</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1050</i>&nbsp;     * @param item  the item index (zero-based).
+<i>1051</i>&nbsp;     *
+<i>1052</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1053</i>&nbsp;     */
+<i>1054</i>&nbsp;    public CategoryItemLabelGenerator getItemLabelGenerator(int series,
+<i>1055</i>&nbsp;            int item);
+<i>1056</i>&nbsp;
+<i>1057</i>&nbsp;    /**
+<i>1058</i>&nbsp;     * Sets the item label generator for ALL series and sends a
+<i>1059</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  This overrides
+<i>1060</i>&nbsp;     * the per-series settings.
+<i>1061</i>&nbsp;     *
+<i>1062</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1063</i>&nbsp;     *
+<i>1064</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1065</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemLabelGenerator(int,
+<i>1066</i>&nbsp;     *     CategoryItemLabelGenerator)} and
+<i>1067</i>&nbsp;     *     {@link #setBaseItemLabelGenerator(CategoryItemLabelGenerator)}.
+<i>1068</i>&nbsp;     */
+<i>1069</i>&nbsp;    public void setItemLabelGenerator(CategoryItemLabelGenerator generator);
+<i>1070</i>&nbsp;
+<i>1071</i>&nbsp;    /**
+<i>1072</i>&nbsp;     * Returns the item label generator for a series.
+<i>1073</i>&nbsp;     *
+<i>1074</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1075</i>&nbsp;     *
+<i>1076</i>&nbsp;     * @return The label generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1077</i>&nbsp;     *
+<i>1078</i>&nbsp;     * @see #setSeriesItemLabelGenerator(int, CategoryItemLabelGenerator)
+<i>1079</i>&nbsp;     */
+<i>1080</i>&nbsp;    public CategoryItemLabelGenerator getSeriesItemLabelGenerator(int series);
+<i>1081</i>&nbsp;
+<i>1082</i>&nbsp;    /**
+<i>1083</i>&nbsp;     * Sets the item label generator for a series and sends a
+<i>1084</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1085</i>&nbsp;     *
+<i>1086</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1087</i>&nbsp;     * @param generator  the generator.
+<i>1088</i>&nbsp;     *
+<i>1089</i>&nbsp;     * @see #getSeriesItemLabelGenerator(int)
+<i>1090</i>&nbsp;     */
+<i>1091</i>&nbsp;    public void setSeriesItemLabelGenerator(int series,
+<i>1092</i>&nbsp;            CategoryItemLabelGenerator generator);
+<i>1093</i>&nbsp;
+<i>1094</i>&nbsp;    // FIXME: add setSeriesItemLabelGenerator(int, CategoryItemLabelGenerator,
+<i>1095</i>&nbsp;    //            boolean)
+<i>1096</i>&nbsp;
+<i>1097</i>&nbsp;    /**
+<i>1098</i>&nbsp;     * Returns the base item label generator.
+<i>1099</i>&nbsp;     *
+<i>1100</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1101</i>&nbsp;     *
+<i>1102</i>&nbsp;     * @see #setBaseItemLabelGenerator(CategoryItemLabelGenerator)
+<i>1103</i>&nbsp;     */
+<i>1104</i>&nbsp;    public CategoryItemLabelGenerator getBaseItemLabelGenerator();
+<i>1105</i>&nbsp;
+<i>1106</i>&nbsp;    /**
+<i>1107</i>&nbsp;     * Sets the base item label generator and sends a
+<i>1108</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1109</i>&nbsp;     *
+<i>1110</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1111</i>&nbsp;     *
+<i>1112</i>&nbsp;     * @see #getBaseItemLabelGenerator()
+<i>1113</i>&nbsp;     */
+<i>1114</i>&nbsp;    public void setBaseItemLabelGenerator(CategoryItemLabelGenerator generator);
+<i>1115</i>&nbsp;
+<i>1116</i>&nbsp;    // FIXME: add setBaseItemLabelGenerator(CategoryItemLabelGenerator,
+<i>1117</i>&nbsp;    //            boolean) ?
+<i>1118</i>&nbsp;
+<i>1119</i>&nbsp;    // TOOL TIP GENERATOR
+<i>1120</i>&nbsp;
+<i>1121</i>&nbsp;    /**
+<i>1122</i>&nbsp;     * Returns the tool tip generator that should be used for the specified
+<i>1123</i>&nbsp;     * item.  This method looks up the generator using the &quot;three-layer&quot;
+<i>1124</i>&nbsp;     * approach outlined in the general description of this interface.
+<i>1125</i>&nbsp;     *
+<i>1126</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1127</i>&nbsp;     * @param column  the column index (zero-based).
+<i>1128</i>&nbsp;     *
+<i>1129</i>&nbsp;     * @return The generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1130</i>&nbsp;     */
+<i>1131</i>&nbsp;    public CategoryToolTipGenerator getToolTipGenerator(int row, int column);
+<i>1132</i>&nbsp;
+<i>1133</i>&nbsp;    /**
+<i>1134</i>&nbsp;     * Returns the tool tip generator that will be used for ALL items in the
+<i>1135</i>&nbsp;     * dataset (the &quot;layer 0&quot; generator).
+<i>1136</i>&nbsp;     *
+<i>1137</i>&nbsp;     * @return A tool tip generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1138</i>&nbsp;     *
+<i>1139</i>&nbsp;     * @see #setToolTipGenerator(CategoryToolTipGenerator)
+<i>1140</i>&nbsp;     *
+<i>1141</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1142</i>&nbsp;     *     It is sufficient to rely on {@link #getSeriesToolTipGenerator(int)}
+<i>1143</i>&nbsp;     *     and {@link #getBaseToolTipGenerator()}.
+<i>1144</i>&nbsp;     */
+<i>1145</i>&nbsp;    public CategoryToolTipGenerator getToolTipGenerator();
+<i>1146</i>&nbsp;
+<i>1147</i>&nbsp;    /**
+<i>1148</i>&nbsp;     * Sets the tool tip generator for ALL series and sends a
+<i>1149</i>&nbsp;     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered
+<i>1150</i>&nbsp;     * listeners.
+<i>1151</i>&nbsp;     *
+<i>1152</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1153</i>&nbsp;     *
+<i>1154</i>&nbsp;     * @see #getToolTipGenerator()
+<i>1155</i>&nbsp;     *
+<i>1156</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1157</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesToolTipGenerator(int,
+<i>1158</i>&nbsp;     *     CategoryToolTipGenerator)} and
+<i>1159</i>&nbsp;     *     {@link #setBaseToolTipGenerator(CategoryToolTipGenerator)}.
+<i>1160</i>&nbsp;     */
+<i>1161</i>&nbsp;    public void setToolTipGenerator(CategoryToolTipGenerator generator);
+<i>1162</i>&nbsp;
+<i>1163</i>&nbsp;    /**
+<i>1164</i>&nbsp;     * Returns the tool tip generator for the specified series (a &quot;layer 1&quot;
+<i>1165</i>&nbsp;     * generator).
+<i>1166</i>&nbsp;     *
+<i>1167</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1168</i>&nbsp;     *
+<i>1169</i>&nbsp;     * @return The tool tip generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1170</i>&nbsp;     *
+<i>1171</i>&nbsp;     * @see #setSeriesToolTipGenerator(int, CategoryToolTipGenerator)
+<i>1172</i>&nbsp;     */
+<i>1173</i>&nbsp;    public CategoryToolTipGenerator getSeriesToolTipGenerator(int series);
+<i>1174</i>&nbsp;
+<i>1175</i>&nbsp;    /**
+<i>1176</i>&nbsp;     * Sets the tool tip generator for a series and sends a
+<i>1177</i>&nbsp;     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered
+<i>1178</i>&nbsp;     * listeners.
+<i>1179</i>&nbsp;     *
+<i>1180</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1181</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1182</i>&nbsp;     *
+<i>1183</i>&nbsp;     * @see #getSeriesToolTipGenerator(int)
+<i>1184</i>&nbsp;     */
+<i>1185</i>&nbsp;    public void setSeriesToolTipGenerator(int series,
+<i>1186</i>&nbsp;                                          CategoryToolTipGenerator generator);
+<i>1187</i>&nbsp;
+<i>1188</i>&nbsp;    // FIXME: add setSeriesToolTipGenerator(int, CategoryToolTipGenerator,
+<i>1189</i>&nbsp;    //            boolean) ?
+<i>1190</i>&nbsp;
+<i>1191</i>&nbsp;    /**
+<i>1192</i>&nbsp;     * Returns the base tool tip generator (the &quot;layer 2&quot; generator).
+<i>1193</i>&nbsp;     *
+<i>1194</i>&nbsp;     * @return The tool tip generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1195</i>&nbsp;     *
+<i>1196</i>&nbsp;     * @see #setBaseToolTipGenerator(CategoryToolTipGenerator)
+<i>1197</i>&nbsp;     */
+<i>1198</i>&nbsp;    public CategoryToolTipGenerator getBaseToolTipGenerator();
+<i>1199</i>&nbsp;
+<i>1200</i>&nbsp;    /**
+<i>1201</i>&nbsp;     * Sets the base tool tip generator and sends a
+<i>1202</i>&nbsp;     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered
+<i>1203</i>&nbsp;     * listeners.
+<i>1204</i>&nbsp;     *
+<i>1205</i>&nbsp;     * @param generator  the generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1206</i>&nbsp;     *
+<i>1207</i>&nbsp;     * @see #getBaseToolTipGenerator()
+<i>1208</i>&nbsp;     */
+<i>1209</i>&nbsp;    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator);
+<i>1210</i>&nbsp;
+<i>1211</i>&nbsp;    // FIXME: add setBaseToolTipGenerator(CategoryToolTipGenerator, boolean) ?
+<i>1212</i>&nbsp;
+<i>1213</i>&nbsp;    //// ITEM LABEL FONT  //////////////////////////////////////////////////////
+<i>1214</i>&nbsp;
+<i>1215</i>&nbsp;    /**
+<i>1216</i>&nbsp;     * Returns the font for an item label.
+<i>1217</i>&nbsp;     *
+<i>1218</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1219</i>&nbsp;     * @param column  the column index (zero-based).
+<i>1220</i>&nbsp;     *
+<i>1221</i>&nbsp;     * @return The font (never &lt;code&gt;null&lt;/code&gt;).
+<i>1222</i>&nbsp;     */
+<i>1223</i>&nbsp;    public Font getItemLabelFont(int row, int column);
+<i>1224</i>&nbsp;
+<i>1225</i>&nbsp;    /**
+<i>1226</i>&nbsp;     * Returns the font used for all item labels.  This may be
+<i>1227</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;, in which case the per series font settings will apply.
+<i>1228</i>&nbsp;     *
+<i>1229</i>&nbsp;     * @return The font (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1230</i>&nbsp;     *
+<i>1231</i>&nbsp;     * @see #setItemLabelFont(Font)
+<i>1232</i>&nbsp;     *
+<i>1233</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1234</i>&nbsp;     *     It is sufficient to rely on {@link #getSeriesItemLabelFont(int)} and
+<i>1235</i>&nbsp;     *     {@link #getBaseItemLabelFont()}.
+<i>1236</i>&nbsp;     */
+<i>1237</i>&nbsp;    public Font getItemLabelFont();
+<i>1238</i>&nbsp;
+<i>1239</i>&nbsp;    /**
+<i>1240</i>&nbsp;     * Sets the item label font for ALL series and sends a
+<i>1241</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.  You can set
+<i>1242</i>&nbsp;     * this to &lt;code&gt;null&lt;/code&gt; if you prefer to set the font on a per series
+<i>1243</i>&nbsp;     * basis.
+<i>1244</i>&nbsp;     *
+<i>1245</i>&nbsp;     * @param font  the font (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1246</i>&nbsp;     *
+<i>1247</i>&nbsp;     * @see #getItemLabelFont()
+<i>1248</i>&nbsp;     *
+<i>1249</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1250</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemLabelFont(int,
+<i>1251</i>&nbsp;     *     Font)} and {@link #setBaseItemLabelFont(Font)}.
+<i>1252</i>&nbsp;     */
+<i>1253</i>&nbsp;    public void setItemLabelFont(Font font);
+<i>1254</i>&nbsp;
+<i>1255</i>&nbsp;    /**
+<i>1256</i>&nbsp;     * Returns the font for all the item labels in a series.
+<i>1257</i>&nbsp;     *
+<i>1258</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1259</i>&nbsp;     *
+<i>1260</i>&nbsp;     * @return The font (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1261</i>&nbsp;     *
+<i>1262</i>&nbsp;     * @see #setSeriesItemLabelFont(int, Font)
+<i>1263</i>&nbsp;     */
+<i>1264</i>&nbsp;    public Font getSeriesItemLabelFont(int series);
+<i>1265</i>&nbsp;
+<i>1266</i>&nbsp;    /**
+<i>1267</i>&nbsp;     * Sets the item label font for a series and sends a
+<i>1268</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1269</i>&nbsp;     *
+<i>1270</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1271</i>&nbsp;     * @param font  the font (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1272</i>&nbsp;     *
+<i>1273</i>&nbsp;     * @see #getSeriesItemLabelFont(int)
+<i>1274</i>&nbsp;     */
+<i>1275</i>&nbsp;    public void setSeriesItemLabelFont(int series, Font font);
+<i>1276</i>&nbsp;
+<i>1277</i>&nbsp;    // FIXME: add setSeriesItemLabelFont(int, Font, boolean) ?
+<i>1278</i>&nbsp;
+<i>1279</i>&nbsp;    /**
+<i>1280</i>&nbsp;     * Returns the base item label font (this is used when no other font
+<i>1281</i>&nbsp;     * setting is available).
+<i>1282</i>&nbsp;     *
+<i>1283</i>&nbsp;     * @return The font (&lt;code&gt;never&lt;/code&gt; null).
+<i>1284</i>&nbsp;     *
+<i>1285</i>&nbsp;     * @see #setBaseItemLabelFont(Font)
+<i>1286</i>&nbsp;     */
+<i>1287</i>&nbsp;    public Font getBaseItemLabelFont();
+<i>1288</i>&nbsp;
+<i>1289</i>&nbsp;    /**
+<i>1290</i>&nbsp;     * Sets the base item label font and sends a {@link RendererChangeEvent}
+<i>1291</i>&nbsp;     * to all registered listeners.
+<i>1292</i>&nbsp;     *
+<i>1293</i>&nbsp;     * @param font  the font (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1294</i>&nbsp;     *
+<i>1295</i>&nbsp;     * @see #getBaseItemLabelFont()
+<i>1296</i>&nbsp;     */
+<i>1297</i>&nbsp;    public void setBaseItemLabelFont(Font font);
+<i>1298</i>&nbsp;
+<i>1299</i>&nbsp;    // FIXME: add setBaseItemLabelFont(Font, boolean) ?
+<i>1300</i>&nbsp;
+<i>1301</i>&nbsp;    //// ITEM LABEL PAINT  /////////////////////////////////////////////////////
+<i>1302</i>&nbsp;
+<i>1303</i>&nbsp;    /**
+<i>1304</i>&nbsp;     * Returns the paint used to draw an item label.
+<i>1305</i>&nbsp;     *
+<i>1306</i>&nbsp;     * @param row  the row index (zero based).
+<i>1307</i>&nbsp;     * @param column  the column index (zero based).
+<i>1308</i>&nbsp;     *
+<i>1309</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>1310</i>&nbsp;     */
+<i>1311</i>&nbsp;    public Paint getItemLabelPaint(int row, int column);
+<i>1312</i>&nbsp;
+<i>1313</i>&nbsp;    /**
+<i>1314</i>&nbsp;     * Returns the paint used for all item labels.  This may be
+<i>1315</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;, in which case the per series paint settings will
+<i>1316</i>&nbsp;     * apply.
+<i>1317</i>&nbsp;     *
+<i>1318</i>&nbsp;     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1319</i>&nbsp;     *
+<i>1320</i>&nbsp;     * @see #setItemLabelPaint(Paint)
+<i>1321</i>&nbsp;     *
+<i>1322</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1323</i>&nbsp;     *     It is sufficient to rely on {@link #getSeriesItemLabelPaint(int)}
+<i>1324</i>&nbsp;     *     and {@link #getBaseItemLabelPaint()}.
+<i>1325</i>&nbsp;     */
+<i>1326</i>&nbsp;    public Paint getItemLabelPaint();
+<i>1327</i>&nbsp;
+<i>1328</i>&nbsp;    /**
+<i>1329</i>&nbsp;     * Sets the item label paint for ALL series and sends a
+<i>1330</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1331</i>&nbsp;     *
+<i>1332</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1333</i>&nbsp;     *
+<i>1334</i>&nbsp;     * @see #getItemLabelPaint()
+<i>1335</i>&nbsp;     *
+<i>1336</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1337</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemLabelPaint(int,
+<i>1338</i>&nbsp;     *     Paint)} and {@link #setBaseItemLabelPaint(Paint)}.
+<i>1339</i>&nbsp;     */
+<i>1340</i>&nbsp;    public void setItemLabelPaint(Paint paint);
+<i>1341</i>&nbsp;
+<i>1342</i>&nbsp;    /**
+<i>1343</i>&nbsp;     * Returns the paint used to draw the item labels for a series.
+<i>1344</i>&nbsp;     *
+<i>1345</i>&nbsp;     * @param series  the series index (zero based).
+<i>1346</i>&nbsp;     *
+<i>1347</i>&nbsp;     * @return The paint (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1348</i>&nbsp;     *
+<i>1349</i>&nbsp;     * @see #setSeriesItemLabelPaint(int, Paint)
+<i>1350</i>&nbsp;     */
+<i>1351</i>&nbsp;    public Paint getSeriesItemLabelPaint(int series);
+<i>1352</i>&nbsp;
+<i>1353</i>&nbsp;    /**
+<i>1354</i>&nbsp;     * Sets the item label paint for a series and sends a
+<i>1355</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1356</i>&nbsp;     *
+<i>1357</i>&nbsp;     * @param series  the series (zero based index).
+<i>1358</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1359</i>&nbsp;     *
+<i>1360</i>&nbsp;     * @see #getSeriesItemLabelPaint(int)
+<i>1361</i>&nbsp;     */
+<i>1362</i>&nbsp;    public void setSeriesItemLabelPaint(int series, Paint paint);
+<i>1363</i>&nbsp;
+<i>1364</i>&nbsp;    // FIXME: add setSeriesItemLabelPaint(int, Paint, boolean) ?
+<i>1365</i>&nbsp;
+<i>1366</i>&nbsp;    /**
+<i>1367</i>&nbsp;     * Returns the base item label paint.
+<i>1368</i>&nbsp;     *
+<i>1369</i>&nbsp;     * @return The paint (never &lt;code&gt;null&lt;/code&gt;).
+<i>1370</i>&nbsp;     *
+<i>1371</i>&nbsp;     * @see #setBaseItemLabelPaint(Paint)
+<i>1372</i>&nbsp;     */
+<i>1373</i>&nbsp;    public Paint getBaseItemLabelPaint();
+<i>1374</i>&nbsp;
+<i>1375</i>&nbsp;    /**
+<i>1376</i>&nbsp;     * Sets the base item label paint and sends a {@link RendererChangeEvent}
+<i>1377</i>&nbsp;     * to all registered listeners.
+<i>1378</i>&nbsp;     *
+<i>1379</i>&nbsp;     * @param paint  the paint (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>1380</i>&nbsp;     *
+<i>1381</i>&nbsp;     * @see #getBaseItemLabelPaint()
+<i>1382</i>&nbsp;     */
+<i>1383</i>&nbsp;    public void setBaseItemLabelPaint(Paint paint);
+<i>1384</i>&nbsp;
+<i>1385</i>&nbsp;    // FIXME: add setBaseItemLabelPaint(Paint, boolean) ?
+<i>1386</i>&nbsp;
+<i>1387</i>&nbsp;    // POSITIVE ITEM LABEL POSITION...
+<i>1388</i>&nbsp;
+<i>1389</i>&nbsp;    /**
+<i>1390</i>&nbsp;     * Returns the item label position for positive values.
+<i>1391</i>&nbsp;     *
+<i>1392</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1393</i>&nbsp;     * @param column  the column index (zero-based).
+<i>1394</i>&nbsp;     *
+<i>1395</i>&nbsp;     * @return The item label position (never &lt;code&gt;null&lt;/code&gt;).
+<i>1396</i>&nbsp;     */
+<i>1397</i>&nbsp;    public ItemLabelPosition getPositiveItemLabelPosition(int row, int column);
+<i>1398</i>&nbsp;
+<i>1399</i>&nbsp;    /**
+<i>1400</i>&nbsp;     * Returns the item label position for positive values in ALL series.
+<i>1401</i>&nbsp;     *
+<i>1402</i>&nbsp;     * @return The item label position (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1403</i>&nbsp;     *
+<i>1404</i>&nbsp;     * @see #setPositiveItemLabelPosition(ItemLabelPosition)
+<i>1405</i>&nbsp;     *
+<i>1406</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1407</i>&nbsp;     *     It is sufficient to rely on
+<i>1408</i>&nbsp;     *     {@link #getSeriesPositiveItemLabelPosition(int)}
+<i>1409</i>&nbsp;     *     and {@link #getBasePositiveItemLabelPosition()}.
+<i>1410</i>&nbsp;     */
+<i>1411</i>&nbsp;    public ItemLabelPosition getPositiveItemLabelPosition();
+<i>1412</i>&nbsp;
+<i>1413</i>&nbsp;    /**
+<i>1414</i>&nbsp;     * Sets the item label position for positive values in ALL series, and
+<i>1415</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.  You
+<i>1416</i>&nbsp;     * need to set this to &lt;code&gt;null&lt;/code&gt; to expose the settings for
+<i>1417</i>&nbsp;     * individual series.
+<i>1418</i>&nbsp;     *
+<i>1419</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1420</i>&nbsp;     *
+<i>1421</i>&nbsp;     * @see #getPositiveItemLabelPosition()
+<i>1422</i>&nbsp;     *
+<i>1423</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1424</i>&nbsp;     *     It is sufficient to rely on
+<i>1425</i>&nbsp;     *     {@link #setSeriesPositiveItemLabelPosition(int, ItemLabelPosition)}
+<i>1426</i>&nbsp;     *     and {@link #setBasePositiveItemLabelPosition(ItemLabelPosition)}.
+<i>1427</i>&nbsp;     */
+<i>1428</i>&nbsp;    public void setPositiveItemLabelPosition(ItemLabelPosition position);
+<i>1429</i>&nbsp;
+<i>1430</i>&nbsp;    /**
+<i>1431</i>&nbsp;     * Sets the positive item label position for ALL series and (if requested)
+<i>1432</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>1433</i>&nbsp;     *
+<i>1434</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1435</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1436</i>&nbsp;     *
+<i>1437</i>&nbsp;     * @see #getPositiveItemLabelPosition()
+<i>1438</i>&nbsp;     *
+<i>1439</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1440</i>&nbsp;     *     It is sufficient to rely on
+<i>1441</i>&nbsp;     *     {@link #setSeriesPositiveItemLabelPosition(int, ItemLabelPosition,
+<i>1442</i>&nbsp;     *     boolean)} and {@link #setBasePositiveItemLabelPosition(
+<i>1443</i>&nbsp;     *     ItemLabelPosition, boolean)}.
+<i>1444</i>&nbsp;     */
+<i>1445</i>&nbsp;    public void setPositiveItemLabelPosition(ItemLabelPosition position,
+<i>1446</i>&nbsp;                                             boolean notify);
+<i>1447</i>&nbsp;
+<i>1448</i>&nbsp;    /**
+<i>1449</i>&nbsp;     * Returns the item label position for all positive values in a series.
+<i>1450</i>&nbsp;     *
+<i>1451</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1452</i>&nbsp;     *
+<i>1453</i>&nbsp;     * @return The item label position.
+<i>1454</i>&nbsp;     *
+<i>1455</i>&nbsp;     * @see #setSeriesPositiveItemLabelPosition(int, ItemLabelPosition)
+<i>1456</i>&nbsp;     */
+<i>1457</i>&nbsp;    public ItemLabelPosition getSeriesPositiveItemLabelPosition(int series);
+<i>1458</i>&nbsp;
+<i>1459</i>&nbsp;    /**
+<i>1460</i>&nbsp;     * Sets the item label position for all positive values in a series and
+<i>1461</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>1462</i>&nbsp;     *
+<i>1463</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1464</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1465</i>&nbsp;     *
+<i>1466</i>&nbsp;     * @see #getSeriesPositiveItemLabelPosition(int)
+<i>1467</i>&nbsp;     */
+<i>1468</i>&nbsp;    public void setSeriesPositiveItemLabelPosition(int series,
+<i>1469</i>&nbsp;                                                   ItemLabelPosition position);
+<i>1470</i>&nbsp;
+<i>1471</i>&nbsp;    /**
+<i>1472</i>&nbsp;     * Sets the item label position for all positive values in a series and (if
+<i>1473</i>&nbsp;     * requested) sends a {@link RendererChangeEvent} to all registered
+<i>1474</i>&nbsp;     * listeners.
+<i>1475</i>&nbsp;     *
+<i>1476</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1477</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1478</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1479</i>&nbsp;     *
+<i>1480</i>&nbsp;     * @see #getSeriesPositiveItemLabelPosition(int)
+<i>1481</i>&nbsp;     */
+<i>1482</i>&nbsp;    public void setSeriesPositiveItemLabelPosition(int series,
+<i>1483</i>&nbsp;            ItemLabelPosition position, boolean notify);
+<i>1484</i>&nbsp;
+<i>1485</i>&nbsp;    /**
+<i>1486</i>&nbsp;     * Returns the base positive item label position.
+<i>1487</i>&nbsp;     *
+<i>1488</i>&nbsp;     * @return The position.
+<i>1489</i>&nbsp;     *
+<i>1490</i>&nbsp;     * @see #setBasePositiveItemLabelPosition(ItemLabelPosition)
+<i>1491</i>&nbsp;     */
+<i>1492</i>&nbsp;    public ItemLabelPosition getBasePositiveItemLabelPosition();
+<i>1493</i>&nbsp;
+<i>1494</i>&nbsp;    /**
+<i>1495</i>&nbsp;     * Sets the base positive item label position.
+<i>1496</i>&nbsp;     *
+<i>1497</i>&nbsp;     * @param position  the position.
+<i>1498</i>&nbsp;     *
+<i>1499</i>&nbsp;     * @see #getBasePositiveItemLabelPosition()
+<i>1500</i>&nbsp;     */
+<i>1501</i>&nbsp;    public void setBasePositiveItemLabelPosition(ItemLabelPosition position);
+<i>1502</i>&nbsp;
+<i>1503</i>&nbsp;    /**
+<i>1504</i>&nbsp;     * Sets the base positive item label position and, if requested, sends a
+<i>1505</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1506</i>&nbsp;     *
+<i>1507</i>&nbsp;     * @param position  the position.
+<i>1508</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1509</i>&nbsp;     *
+<i>1510</i>&nbsp;     * @see #getBasePositiveItemLabelPosition()
+<i>1511</i>&nbsp;     */
+<i>1512</i>&nbsp;    public void setBasePositiveItemLabelPosition(ItemLabelPosition position,
+<i>1513</i>&nbsp;                                                 boolean notify);
+<i>1514</i>&nbsp;
+<i>1515</i>&nbsp;
+<i>1516</i>&nbsp;    // NEGATIVE ITEM LABEL POSITION...
+<i>1517</i>&nbsp;
+<i>1518</i>&nbsp;    /**
+<i>1519</i>&nbsp;     * Returns the item label position for negative values.  This method can be
+<i>1520</i>&nbsp;     * overridden to provide customisation of the item label position for
+<i>1521</i>&nbsp;     * individual data items.
+<i>1522</i>&nbsp;     *
+<i>1523</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1524</i>&nbsp;     * @param column  the column (zero-based).
+<i>1525</i>&nbsp;     *
+<i>1526</i>&nbsp;     * @return The item label position.
+<i>1527</i>&nbsp;     */
+<i>1528</i>&nbsp;    public ItemLabelPosition getNegativeItemLabelPosition(int row, int column);
+<i>1529</i>&nbsp;
+<i>1530</i>&nbsp;    /**
+<i>1531</i>&nbsp;     * Returns the item label position for negative values in ALL series.
+<i>1532</i>&nbsp;     *
+<i>1533</i>&nbsp;     * @return The item label position (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1534</i>&nbsp;     *
+<i>1535</i>&nbsp;     * @see #setNegativeItemLabelPosition(ItemLabelPosition)
+<i>1536</i>&nbsp;     *
+<i>1537</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1538</i>&nbsp;     *     It is sufficient to rely on
+<i>1539</i>&nbsp;     *     {@link #getSeriesNegativeItemLabelPosition(int)}
+<i>1540</i>&nbsp;     *     and {@link #getBaseNegativeItemLabelPosition()}.
+<i>1541</i>&nbsp;     */
+<i>1542</i>&nbsp;    public ItemLabelPosition getNegativeItemLabelPosition();
+<i>1543</i>&nbsp;
+<i>1544</i>&nbsp;    /**
+<i>1545</i>&nbsp;     * Sets the item label position for negative values in ALL series, and
+<i>1546</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.  You
+<i>1547</i>&nbsp;     * need to set this to &lt;code&gt;null&lt;/code&gt; to expose the settings for
+<i>1548</i>&nbsp;     * individual series.
+<i>1549</i>&nbsp;     *
+<i>1550</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1551</i>&nbsp;     *
+<i>1552</i>&nbsp;     * @see #getNegativeItemLabelPosition()
+<i>1553</i>&nbsp;     *
+<i>1554</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1555</i>&nbsp;     *     It is sufficient to rely on
+<i>1556</i>&nbsp;     *     {@link #setSeriesNegativeItemLabelPosition(int, ItemLabelPosition)}
+<i>1557</i>&nbsp;     *     and {@link #setBaseNegativeItemLabelPosition(ItemLabelPosition)}.
+<i>1558</i>&nbsp;     */
+<i>1559</i>&nbsp;    public void setNegativeItemLabelPosition(ItemLabelPosition position);
+<i>1560</i>&nbsp;
+<i>1561</i>&nbsp;    /**
+<i>1562</i>&nbsp;     * Sets the item label position for negative values in ALL series and (if
+<i>1563</i>&nbsp;     * requested) sends a {@link RendererChangeEvent} to all registered
+<i>1564</i>&nbsp;     * listeners.
+<i>1565</i>&nbsp;     *
+<i>1566</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1567</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1568</i>&nbsp;     *
+<i>1569</i>&nbsp;     * @see #getNegativeItemLabelPosition()
+<i>1570</i>&nbsp;     *
+<i>1571</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1572</i>&nbsp;     *     It is sufficient to rely on
+<i>1573</i>&nbsp;     *     {@link #setSeriesNegativeItemLabelPosition(int, ItemLabelPosition,
+<i>1574</i>&nbsp;     *     boolean)} and {@link #setBaseNegativeItemLabelPosition(
+<i>1575</i>&nbsp;     *     ItemLabelPosition, boolean)}.
+<i>1576</i>&nbsp;     */
+<i>1577</i>&nbsp;    public void setNegativeItemLabelPosition(ItemLabelPosition position,
+<i>1578</i>&nbsp;                                             boolean notify);
+<i>1579</i>&nbsp;
+<i>1580</i>&nbsp;    /**
+<i>1581</i>&nbsp;     * Returns the item label position for all negative values in a series.
+<i>1582</i>&nbsp;     *
+<i>1583</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1584</i>&nbsp;     *
+<i>1585</i>&nbsp;     * @return The item label position.
+<i>1586</i>&nbsp;     *
+<i>1587</i>&nbsp;     * @see #setSeriesNegativeItemLabelPosition(int, ItemLabelPosition)
+<i>1588</i>&nbsp;     */
+<i>1589</i>&nbsp;    public ItemLabelPosition getSeriesNegativeItemLabelPosition(int series);
+<i>1590</i>&nbsp;
+<i>1591</i>&nbsp;    /**
+<i>1592</i>&nbsp;     * Sets the item label position for negative values in a series and sends a
+<i>1593</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1594</i>&nbsp;     *
+<i>1595</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1596</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1597</i>&nbsp;     *
+<i>1598</i>&nbsp;     * @see #getSeriesNegativeItemLabelPosition(int)
+<i>1599</i>&nbsp;     */
+<i>1600</i>&nbsp;    public void setSeriesNegativeItemLabelPosition(int series,
+<i>1601</i>&nbsp;                                                   ItemLabelPosition position);
+<i>1602</i>&nbsp;
+<i>1603</i>&nbsp;    /**
+<i>1604</i>&nbsp;     * Sets the item label position for negative values in a series and (if
+<i>1605</i>&nbsp;     * requested) sends a {@link RendererChangeEvent} to all registered
+<i>1606</i>&nbsp;     * listeners.
+<i>1607</i>&nbsp;     *
+<i>1608</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1609</i>&nbsp;     * @param position  the position (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1610</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1611</i>&nbsp;     *
+<i>1612</i>&nbsp;     * @see #getSeriesNegativeItemLabelPosition(int)
+<i>1613</i>&nbsp;     */
+<i>1614</i>&nbsp;    public void setSeriesNegativeItemLabelPosition(int series,
+<i>1615</i>&nbsp;                                                   ItemLabelPosition position,
+<i>1616</i>&nbsp;                                                   boolean notify);
+<i>1617</i>&nbsp;
+<i>1618</i>&nbsp;    /**
+<i>1619</i>&nbsp;     * Returns the base item label position for negative values.
+<i>1620</i>&nbsp;     *
+<i>1621</i>&nbsp;     * @return The position.
+<i>1622</i>&nbsp;     *
+<i>1623</i>&nbsp;     * @see #setBaseNegativeItemLabelPosition(ItemLabelPosition)
+<i>1624</i>&nbsp;     */
+<i>1625</i>&nbsp;    public ItemLabelPosition getBaseNegativeItemLabelPosition();
+<i>1626</i>&nbsp;
+<i>1627</i>&nbsp;    /**
+<i>1628</i>&nbsp;     * Sets the base item label position for negative values and sends a
+<i>1629</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1630</i>&nbsp;     *
+<i>1631</i>&nbsp;     * @param position  the position.
+<i>1632</i>&nbsp;     *
+<i>1633</i>&nbsp;     * @see #getBaseNegativeItemLabelPosition()
+<i>1634</i>&nbsp;     */
+<i>1635</i>&nbsp;    public void setBaseNegativeItemLabelPosition(ItemLabelPosition position);
+<i>1636</i>&nbsp;
+<i>1637</i>&nbsp;    /**
+<i>1638</i>&nbsp;     * Sets the base negative item label position and, if requested, sends a
+<i>1639</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>1640</i>&nbsp;     *
+<i>1641</i>&nbsp;     * @param position  the position.
+<i>1642</i>&nbsp;     * @param notify  notify registered listeners?
+<i>1643</i>&nbsp;     *
+<i>1644</i>&nbsp;     * @see #getBaseNegativeItemLabelPosition()
+<i>1645</i>&nbsp;     */
+<i>1646</i>&nbsp;    public void setBaseNegativeItemLabelPosition(ItemLabelPosition position,
+<i>1647</i>&nbsp;                                                 boolean notify);
+<i>1648</i>&nbsp;
+<i>1649</i>&nbsp;    // CREATE ENTITIES
+<i>1650</i>&nbsp;    // FIXME:  these methods should be defined
+<i>1651</i>&nbsp;
+<i>1652</i>&nbsp;//    public boolean getItemCreateEntity(int series, int item);
+<i>1653</i>&nbsp;//
+<i>1654</i>&nbsp;//    public Boolean getSeriesCreateEntities(int series);
+<i>1655</i>&nbsp;//
+<i>1656</i>&nbsp;//    public void setSeriesCreateEntities(int series, Boolean create);
+<i>1657</i>&nbsp;//
+<i>1658</i>&nbsp;//    public void setSeriesCreateEntities(int series, Boolean create,
+<i>1659</i>&nbsp;//            boolean notify);
+<i>1660</i>&nbsp;//
+<i>1661</i>&nbsp;//    public boolean getBaseCreateEntities();
+<i>1662</i>&nbsp;//
+<i>1663</i>&nbsp;//    public void setBaseCreateEntities(boolean create);
+<i>1664</i>&nbsp;//
+<i>1665</i>&nbsp;//    public void setBaseCreateEntities(boolean create, boolean notify);
+<i>1666</i>&nbsp;
+<i>1667</i>&nbsp;
+<i>1668</i>&nbsp;    // ITEM URL GENERATOR
+<i>1669</i>&nbsp;
+<i>1670</i>&nbsp;    /**
+<i>1671</i>&nbsp;     * Returns the URL generator for an item.
+<i>1672</i>&nbsp;     *
+<i>1673</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1674</i>&nbsp;     * @param item  the item index (zero-based).
+<i>1675</i>&nbsp;     *
+<i>1676</i>&nbsp;     * @return The item URL generator.
+<i>1677</i>&nbsp;     */
+<i>1678</i>&nbsp;    public CategoryURLGenerator getItemURLGenerator(int series, int item);
+<i>1679</i>&nbsp;
+<i>1680</i>&nbsp;    /**
+<i>1681</i>&nbsp;     * Sets the item URL generator for ALL series.
+<i>1682</i>&nbsp;     *
+<i>1683</i>&nbsp;     * @param generator  the generator.
+<i>1684</i>&nbsp;     *
+<i>1685</i>&nbsp;     * @see #getSeriesItemURLGenerator(int)
+<i>1686</i>&nbsp;     *
+<i>1687</i>&nbsp;     * @deprecated This method should no longer be used (as of version 1.0.6).
+<i>1688</i>&nbsp;     *     It is sufficient to rely on {@link #setSeriesItemURLGenerator(int,
+<i>1689</i>&nbsp;     *     CategoryURLGenerator)} and
+<i>1690</i>&nbsp;     *     {@link #setBaseItemURLGenerator(CategoryURLGenerator)}.
+<i>1691</i>&nbsp;     */
+<i>1692</i>&nbsp;    public void setItemURLGenerator(CategoryURLGenerator generator);
+<i>1693</i>&nbsp;
+<i>1694</i>&nbsp;    /**
+<i>1695</i>&nbsp;     * Returns the item URL generator for a series.
+<i>1696</i>&nbsp;     *
+<i>1697</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1698</i>&nbsp;     *
+<i>1699</i>&nbsp;     * @return The URL generator.
+<i>1700</i>&nbsp;     *
+<i>1701</i>&nbsp;     * @see #setSeriesItemURLGenerator(int, CategoryURLGenerator)
+<i>1702</i>&nbsp;     */
+<i>1703</i>&nbsp;    public CategoryURLGenerator getSeriesItemURLGenerator(int series);
+<i>1704</i>&nbsp;
+<i>1705</i>&nbsp;    /**
+<i>1706</i>&nbsp;     * Sets the item URL generator for a series.
+<i>1707</i>&nbsp;     *
+<i>1708</i>&nbsp;     * @param series  the series index (zero-based).
+<i>1709</i>&nbsp;     * @param generator  the generator.
+<i>1710</i>&nbsp;     *
+<i>1711</i>&nbsp;     * @see #getSeriesItemURLGenerator(int)
+<i>1712</i>&nbsp;     */
+<i>1713</i>&nbsp;    public void setSeriesItemURLGenerator(int series,
+<i>1714</i>&nbsp;                                          CategoryURLGenerator generator);
+<i>1715</i>&nbsp;
+<i>1716</i>&nbsp;    // FIXME: add setSeriesItemURLGenerator(int, CategoryURLGenerator, boolean)?
+<i>1717</i>&nbsp;
+<i>1718</i>&nbsp;    /**
+<i>1719</i>&nbsp;     * Returns the base item URL generator.
+<i>1720</i>&nbsp;     *
+<i>1721</i>&nbsp;     * @return The item URL generator (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1722</i>&nbsp;     *
+<i>1723</i>&nbsp;     * @see #setBaseItemURLGenerator(CategoryURLGenerator)
+<i>1724</i>&nbsp;     */
+<i>1725</i>&nbsp;    public CategoryURLGenerator getBaseItemURLGenerator();
+<i>1726</i>&nbsp;
+<i>1727</i>&nbsp;    /**
+<i>1728</i>&nbsp;     * Sets the base item URL generator and sends a {@link RendererChangeEvent}
+<i>1729</i>&nbsp;     * to all registered listeners.
+<i>1730</i>&nbsp;     *
+<i>1731</i>&nbsp;     * @param generator  the item URL generator (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>1732</i>&nbsp;     *
+<i>1733</i>&nbsp;     * @see #getBaseItemURLGenerator()
+<i>1734</i>&nbsp;     */
+<i>1735</i>&nbsp;    public void setBaseItemURLGenerator(CategoryURLGenerator generator);
+<i>1736</i>&nbsp;
+<i>1737</i>&nbsp;    // FIXME: add setBaseItemURLGenerator(CategoryURLGenerator, boolean) ?
+<i>1738</i>&nbsp;
+<i>1739</i>&nbsp;    /**
+<i>1740</i>&nbsp;     * Returns a legend item for a series.  This method can return
+<i>1741</i>&nbsp;     * &lt;code&gt;null&lt;/code&gt;, in which case the series will have no entry in the
+<i>1742</i>&nbsp;     * legend.
+<i>1743</i>&nbsp;     *
+<i>1744</i>&nbsp;     * @param datasetIndex  the dataset index (zero-based).
+<i>1745</i>&nbsp;     * @param series  the series (zero-based index).
+<i>1746</i>&nbsp;     *
+<i>1747</i>&nbsp;     * @return The legend item (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>1748</i>&nbsp;     */
+<i>1749</i>&nbsp;    public LegendItem getLegendItem(int datasetIndex, int series);
+<i>1750</i>&nbsp;
+<i>1751</i>&nbsp;    /**
+<i>1752</i>&nbsp;     * Draws a background for the data area.
+<i>1753</i>&nbsp;     *
+<i>1754</i>&nbsp;     * @param g2  the graphics device.
+<i>1755</i>&nbsp;     * @param plot  the plot.
+<i>1756</i>&nbsp;     * @param dataArea  the data area.
+<i>1757</i>&nbsp;     */
+<i>1758</i>&nbsp;    public void drawBackground(Graphics2D g2, CategoryPlot plot,
+<i>1759</i>&nbsp;            Rectangle2D dataArea);
+<i>1760</i>&nbsp;
+<i>1761</i>&nbsp;    /**
+<i>1762</i>&nbsp;     * Draws an outline for the data area.
+<i>1763</i>&nbsp;     *
+<i>1764</i>&nbsp;     * @param g2  the graphics device.
+<i>1765</i>&nbsp;     * @param plot  the plot.
+<i>1766</i>&nbsp;     * @param dataArea  the data area.
+<i>1767</i>&nbsp;     */
+<i>1768</i>&nbsp;    public void drawOutline(Graphics2D g2, CategoryPlot plot,
+<i>1769</i>&nbsp;            Rectangle2D dataArea);
+<i>1770</i>&nbsp;
+<i>1771</i>&nbsp;    /**
+<i>1772</i>&nbsp;     * Draws a single data item.
+<i>1773</i>&nbsp;     *
+<i>1774</i>&nbsp;     * @param g2  the graphics device.
+<i>1775</i>&nbsp;     * @param state  state information for one chart.
+<i>1776</i>&nbsp;     * @param dataArea  the data plot area.
+<i>1777</i>&nbsp;     * @param plot  the plot.
+<i>1778</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>1779</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>1780</i>&nbsp;     * @param dataset  the data.
+<i>1781</i>&nbsp;     * @param row  the row index (zero-based).
+<i>1782</i>&nbsp;     * @param column  the column index (zero-based).
+<i>1783</i>&nbsp;     * @param pass  the pass index.
+<i>1784</i>&nbsp;     */
+<i>1785</i>&nbsp;    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+<i>1786</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>1787</i>&nbsp;            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+<i>1788</i>&nbsp;            int pass);
+<i>1789</i>&nbsp;
+<i>1790</i>&nbsp;    /**
+<i>1791</i>&nbsp;     * Draws a grid line against the domain axis.
+<i>1792</i>&nbsp;     *
+<i>1793</i>&nbsp;     * @param g2  the graphics device.
+<i>1794</i>&nbsp;     * @param plot  the plot.
+<i>1795</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any
+<i>1796</i>&nbsp;     *                  3D effect).
+<i>1797</i>&nbsp;     * @param value  the value.
+<i>1798</i>&nbsp;     *
+<i>1799</i>&nbsp;     * @see #drawRangeGridline(Graphics2D, CategoryPlot, ValueAxis,
+<i>1800</i>&nbsp;     *     Rectangle2D, double)
+<i>1801</i>&nbsp;     */
+<i>1802</i>&nbsp;    public void drawDomainGridline(Graphics2D g2, CategoryPlot plot,
+<i>1803</i>&nbsp;            Rectangle2D dataArea, double value);
+<i>1804</i>&nbsp;
+<i>1805</i>&nbsp;    /**
+<i>1806</i>&nbsp;     * Draws a grid line against the range axis.
+<i>1807</i>&nbsp;     *
+<i>1808</i>&nbsp;     * @param g2  the graphics device.
+<i>1809</i>&nbsp;     * @param plot  the plot.
+<i>1810</i>&nbsp;     * @param axis  the value axis.
+<i>1811</i>&nbsp;     * @param dataArea  the area for plotting data (not yet adjusted for any
+<i>1812</i>&nbsp;     *                  3D effect).
+<i>1813</i>&nbsp;     * @param value  the value.
+<i>1814</i>&nbsp;     *
+<i>1815</i>&nbsp;     * @see #drawDomainGridline(Graphics2D, CategoryPlot, Rectangle2D, double)
+<i>1816</i>&nbsp;     */
+<i>1817</i>&nbsp;    public void drawRangeGridline(Graphics2D g2, CategoryPlot plot,
+<i>1818</i>&nbsp;            ValueAxis axis, Rectangle2D dataArea, double value);
+<i>1819</i>&nbsp;
+<i>1820</i>&nbsp;    /**
+<i>1821</i>&nbsp;     * Draws a line (or some other marker) to indicate a particular category on
+<i>1822</i>&nbsp;     * the domain axis.
+<i>1823</i>&nbsp;     *
+<i>1824</i>&nbsp;     * @param g2  the graphics device.
+<i>1825</i>&nbsp;     * @param plot  the plot.
+<i>1826</i>&nbsp;     * @param axis  the category axis.
+<i>1827</i>&nbsp;     * @param marker  the marker.
+<i>1828</i>&nbsp;     * @param dataArea  the area for plotting data (not including 3D effect).
+<i>1829</i>&nbsp;     *
+<i>1830</i>&nbsp;     * @see #drawRangeMarker(Graphics2D, CategoryPlot, ValueAxis, Marker,
+<i>1831</i>&nbsp;     *     Rectangle2D)
+<i>1832</i>&nbsp;     */
+<i>1833</i>&nbsp;    public void drawDomainMarker(Graphics2D g2, CategoryPlot plot,
+<i>1834</i>&nbsp;            CategoryAxis axis, CategoryMarker marker, Rectangle2D dataArea);
+<i>1835</i>&nbsp;
+<i>1836</i>&nbsp;    /**
+<i>1837</i>&nbsp;     * Draws a line (or some other marker) to indicate a particular value on
+<i>1838</i>&nbsp;     * the range axis.
+<i>1839</i>&nbsp;     *
+<i>1840</i>&nbsp;     * @param g2  the graphics device.
+<i>1841</i>&nbsp;     * @param plot  the plot.
+<i>1842</i>&nbsp;     * @param axis  the value axis.
+<i>1843</i>&nbsp;     * @param marker  the marker.
+<i>1844</i>&nbsp;     * @param dataArea  the area for plotting data (not including 3D effect).
+<i>1845</i>&nbsp;     *
+<i>1846</i>&nbsp;     * @see #drawDomainMarker(Graphics2D, CategoryPlot, CategoryAxis,
+<i>1847</i>&nbsp;     *     CategoryMarker, Rectangle2D)
+<i>1848</i>&nbsp;     */
+<i>1849</i>&nbsp;    public void drawRangeMarker(Graphics2D g2, CategoryPlot plot,
+<i>1850</i>&nbsp;            ValueAxis axis, Marker marker, Rectangle2D dataArea);
+<i>1851</i>&nbsp;
+<i>1852</i>&nbsp;    /**
+<i>1853</i>&nbsp;     * Returns the Java2D coordinate for the middle of the specified data item.
+<i>1854</i>&nbsp;     *
+<i>1855</i>&nbsp;     * @param rowKey  the row key.
+<i>1856</i>&nbsp;     * @param columnKey  the column key.
+<i>1857</i>&nbsp;     * @param dataset  the dataset.
+<i>1858</i>&nbsp;     * @param axis  the axis.
+<i>1859</i>&nbsp;     * @param area  the data area.
+<i>1860</i>&nbsp;     * @param edge  the edge along which the axis lies.
+<i>1861</i>&nbsp;     *
+<i>1862</i>&nbsp;     * @return The Java2D coordinate for the middle of the item.
+<i>1863</i>&nbsp;     *
+<i>1864</i>&nbsp;     * @since 1.0.11
+<i>1865</i>&nbsp;     */
+<i>1866</i>&nbsp;    public double getItemMiddle(Comparable rowKey, Comparable columnKey,
+<i>1867</i>&nbsp;            CategoryDataset dataset, CategoryAxis axis, Rectangle2D area,
+<i>1868</i>&nbsp;            RectangleEdge edge);
+<i>1869</i>&nbsp;
+<i>1870</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

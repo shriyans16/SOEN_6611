@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Base32TestData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">Base32TestData.java</span></div><h1>Base32TestData.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.binary;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Random;
+
+/**
+ * This random data was encoded by OpenSSL. Java had nothing to do with it. This data helps us test interop between
+ * Commons-Codec and OpenSSL. Notice that OpenSSL creates 64 character lines instead of the 76 of Commons-Codec.
+ *
+ * @see &lt;a href=&quot;http://www.ietf.org/rfc/rfc2045.txt&quot;&gt;RFC 2045&lt;/a&gt;
+ * @version $Id $
+ * @since 1.4
+ */
+<span class="pc bpc" id="L32" title="3 of 4 branches missed.">public class Base32TestData {</span>
+
+    static final String STRING_FIXTURE = &quot;Hello World&quot;;
+
+    static final String BASE32_FIXTURE = &quot;JBSWY3DPEBLW64TMMQ======\r\n&quot;;
+//  static final String BASE32HEX_FIXTURE = &quot;91IMOR3F41BMUSJCCG======&quot;;
+
+    // Some utility code to help test chunked reads of the InputStream.
+
+    private final static int SIZE_KEY = 0;
+    private final static int LAST_READ_KEY = 1;
+
+<span class="fc" id="L44">    static byte[] streamToBytes(final InputStream in) throws IOException {</span>
+        // new byte[7] is obviously quite slow, but helps exercise the code.
+<span class="fc" id="L46">        return streamToBytes(in, new byte[7]);</span>
+    }
+
+<span class="fc" id="L49">    static byte[] streamToBytes(final InputStream in, byte[] buf) throws IOException {</span>
+<span class="fc" id="L50">        try {</span>
+<span class="fc" id="L51">            int[] status = fill(buf, 0, in);</span>
+<span class="fc" id="L52">            int size = status[SIZE_KEY];</span>
+<span class="fc" id="L53">            int lastRead = status[LAST_READ_KEY];</span>
+<span class="pc bpc" id="L54" title="4 of 10 branches missed.">            while (lastRead != -1) {</span>
+<span class="fc" id="L55">                buf = resizeArray(buf);</span>
+<span class="fc" id="L56">                status = fill(buf, size, in);</span>
+<span class="fc" id="L57">                size = status[SIZE_KEY];</span>
+<span class="fc" id="L58">                lastRead = status[LAST_READ_KEY];</span>
+            }
+<span class="pc bpc" id="L60" title="7 of 10 branches missed.">            if (buf.length != size) {</span>
+<span class="fc" id="L61">                final byte[] smallerBuf = new byte[size];</span>
+<span class="fc" id="L62">                System.arraycopy(buf, 0, smallerBuf, 0, size);</span>
+<span class="fc" id="L63">                buf = smallerBuf;</span>
+            }
+        }
+        finally {
+<span class="fc" id="L67">            in.close();</span>
+        }
+<span class="fc" id="L69">        return buf;</span>
+    }
+
+    private static int[] fill(final byte[] buf, final int offset, final InputStream in)
+<span class="fc" id="L73">            throws IOException {</span>
+<span class="fc" id="L74">        int read = in.read(buf, offset, buf.length - offset);</span>
+<span class="fc" id="L75">        int lastRead = read;</span>
+<span class="pc bpc" id="L76" title="4 of 10 branches missed.">        if (read == -1) {</span>
+<span class="fc" id="L77">            read = 0;</span>
+        }
+<span class="pc bpc" id="L79" title="4 of 12 branches missed.">        while (lastRead != -1 &amp;&amp; read + offset &lt; buf.length) {</span>
+<span class="fc" id="L80">            lastRead = in.read(buf, offset + read, buf.length - read - offset);</span>
+<span class="pc bpc" id="L81" title="4 of 10 branches missed.">            if (lastRead != -1) {</span>
+<span class="fc" id="L82">                read += lastRead;</span>
+            }
+        }
+<span class="fc" id="L85">        return new int[]{offset + read, lastRead};</span>
+    }
+
+<span class="fc" id="L88">    private static byte[] resizeArray(final byte[] bytes) {</span>
+<span class="fc" id="L89">        final byte[] biggerBytes = new byte[bytes.length * 2];</span>
+<span class="fc" id="L90">        System.arraycopy(bytes, 0, biggerBytes, 0, bytes.length);</span>
+<span class="fc" id="L91">        return biggerBytes;</span>
+    }
+
+
+    /**
+     * Returns an encoded and decoded copy of the same random data.
+     *
+     * @param codec the codec to use
+     * @param size amount of random data to generate and encode
+     * @return two byte[] arrays:  [0] = decoded, [1] = encoded
+     */
+<span class="fc" id="L102">    static byte[][] randomData(final BaseNCodec codec, final int size) {</span>
+<span class="fc" id="L103">        final Random r = new Random();</span>
+<span class="fc" id="L104">        final byte[] decoded = new byte[size];</span>
+<span class="fc" id="L105">        r.nextBytes(decoded);</span>
+<span class="fc" id="L106">        final byte[] encoded = codec.encode(decoded);</span>
+<span class="fc" id="L107">        return new byte[][] {decoded, encoded};</span>
+    }
+
+    /**
+     * Tests the supplied byte[] array to see if it contains the specified byte c.
+     *
+     * @param bytes byte[] array to test
+     * @param c byte to look for
+     * @return true if bytes contains c, false otherwise
+     */
+<span class="nc" id="L117">    static boolean bytesContain(final byte[] bytes, final byte c) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        for (final byte b : bytes) {</span>
+<span class="nc bnc" id="L119" title="All 10 branches missed.">            if (b == c) { return true; }</span>
+        }
+<span class="nc" id="L121">        return false;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

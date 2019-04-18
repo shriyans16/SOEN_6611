@@ -1,0 +1,175 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Base64OutputStream</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.binary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Base64OutputStream (org.apache.commons.codec.binary)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Base64OutputStream</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.binary;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.OutputStream;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Provides Base64 encoding and decoding in a streaming fashion (unlimited size). When encoding the default lineLength
+<i>24</i>&nbsp; * is 76 characters and the default lineEnding is CRLF, but these can be overridden by using the appropriate
+<i>25</i>&nbsp; * constructor.
+<i>26</i>&nbsp; * &lt;p&gt;
+<i>27</i>&nbsp; * The default behaviour of the Base64OutputStream is to ENCODE, whereas the default behaviour of the Base64InputStream
+<i>28</i>&nbsp; * is to DECODE. But this behaviour can be overridden by using a different constructor.
+<i>29</i>&nbsp; * &lt;/p&gt;
+<i>30</i>&nbsp; * &lt;p&gt;
+<i>31</i>&nbsp; * This class implements section &lt;cite&gt;6.8. Base64 Content-Transfer-Encoding&lt;/cite&gt; from RFC 2045 &lt;cite&gt;Multipurpose
+<i>32</i>&nbsp; * Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies&lt;/cite&gt; by Freed and Borenstein.
+<i>33</i>&nbsp; * &lt;/p&gt;
+<i>34</i>&nbsp; * &lt;p&gt;
+<i>35</i>&nbsp; * Since this class operates directly on byte streams, and not character streams, it is hard-coded to only encode/decode
+<i>36</i>&nbsp; * character encodings which are compatible with the lower 127 ASCII chart (ISO-8859-1, Windows-1252, UTF-8, etc).
+<i>37</i>&nbsp; * &lt;/p&gt;
+<i>38</i>&nbsp; * &lt;p&gt;
+<i>39</i>&nbsp; * &lt;b&gt;Note:&lt;/b&gt; It is mandatory to close the stream after the last byte has been written to it, otherwise the
+<i>40</i>&nbsp; * final padding will be omitted and the resulting data will be incomplete/inconsistent.
+<i>41</i>&nbsp; * &lt;/p&gt;
+<i>42</i>&nbsp; *
+<i>43</i>&nbsp; * @version $Id$
+<i>44</i>&nbsp; * @see &lt;a href=&quot;http://www.ietf.org/rfc/rfc2045.txt&quot;&gt;RFC 2045&lt;/a&gt;
+<i>45</i>&nbsp; * @since 1.4
+<i>46</i>&nbsp; */
+<i>47</i>&nbsp;public class Base64OutputStream extends BaseNCodecOutputStream {
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Creates a Base64OutputStream such that all data written is Base64-encoded to the original provided OutputStream.
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @param out
+<i>53</i>&nbsp;     *            OutputStream to wrap.
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    public Base64OutputStream(final OutputStream out) {
+<b class="fc"><i>56</i>&nbsp;        this(out, true);</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Creates a Base64OutputStream such that all data written is either Base64-encoded or Base64-decoded to the
+<i>61</i>&nbsp;     * original provided OutputStream.
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @param out
+<i>64</i>&nbsp;     *            OutputStream to wrap.
+<i>65</i>&nbsp;     * @param doEncode
+<i>66</i>&nbsp;     *            true if we should encode all data written to us, false if we should decode.
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public Base64OutputStream(final OutputStream out, final boolean doEncode) {
+<b class="fc"><i>69</i>&nbsp;        super(out,new Base64(false), doEncode);</b>
+<b class="fc"><i>70</i>&nbsp;    }</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Creates a Base64OutputStream such that all data written is either Base64-encoded or Base64-decoded to the
+<i>74</i>&nbsp;     * original provided OutputStream.
+<i>75</i>&nbsp;     *
+<i>76</i>&nbsp;     * @param out
+<i>77</i>&nbsp;     *            OutputStream to wrap.
+<i>78</i>&nbsp;     * @param doEncode
+<i>79</i>&nbsp;     *            true if we should encode all data written to us, false if we should decode.
+<i>80</i>&nbsp;     * @param lineLength
+<i>81</i>&nbsp;     *            If doEncode is true, each line of encoded data will contain lineLength characters (rounded down to
+<i>82</i>&nbsp;     *            nearest multiple of 4). If lineLength &amp;lt;= 0, the encoded data is not divided into lines. If doEncode
+<i>83</i>&nbsp;     *            is false, lineLength is ignored.
+<i>84</i>&nbsp;     * @param lineSeparator
+<i>85</i>&nbsp;     *            If doEncode is true, each line of encoded data will be terminated with this byte sequence (e.g. \r\n).
+<i>86</i>&nbsp;     *            If lineLength &amp;lt;= 0, the lineSeparator is not used. If doEncode is false lineSeparator is ignored.
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public Base64OutputStream(final OutputStream out, final boolean doEncode,
+<i>89</i>&nbsp;                              final int lineLength, final byte[] lineSeparator) {
+<b class="fc"><i>90</i>&nbsp;        super(out, new Base64(lineLength, lineSeparator), doEncode);</b>
+<b class="fc"><i>91</i>&nbsp;    }</b>
+<i>92</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:19</div>
+</div>
+</body>
+</html>

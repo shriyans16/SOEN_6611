@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DecoderException</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DecoderException (org.apache.commons.codec)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DecoderException</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/ 9)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">DecoderException$__CLR4_1_22f02f0julvhrsl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * Thrown when there is a failure condition during the decoding process. This exception is thrown when a {@link Decoder}
+<i>22</i>&nbsp; * encounters a decoding specific exception such as invalid data, or characters outside of the expected range.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * @version $Id$
+<i>25</i>&nbsp; */
+<b class="fc"><i>26</i>&nbsp;public class DecoderException extends Exception {</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Declares the Serial Version Uid.
+<i>30</i>&nbsp;     *
+<i>31</i>&nbsp;     * @see &lt;a href=&quot;http://c2.com/cgi/wiki?AlwaysDeclareSerialVersionUid&quot;&gt;Always Declare Serial Version Uid&lt;/a&gt;
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    private static final long serialVersionUID = 1L;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Constructs a new exception with {@code null} as its detail message. The cause is not initialized, and may
+<i>37</i>&nbsp;     * subsequently be initialized by a call to {@link #initCause}.
+<i>38</i>&nbsp;     *
+<i>39</i>&nbsp;     * @since 1.4
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public DecoderException() {
+<b class="fc"><i>42</i>&nbsp;        super();</b>
+<b class="fc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    /**
+<i>46</i>&nbsp;     * Constructs a new exception with the specified detail message. The cause is not initialized, and may subsequently
+<i>47</i>&nbsp;     * be initialized by a call to {@link #initCause}.
+<i>48</i>&nbsp;     *
+<i>49</i>&nbsp;     * @param message
+<i>50</i>&nbsp;     *            The detail message which is saved for later retrieval by the {@link #getMessage()} method.
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public DecoderException(final String message) {
+<b class="fc"><i>53</i>&nbsp;        super(message);</b>
+<b class="fc"><i>54</i>&nbsp;    }</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Constructs a new exception with the specified detail message and cause.
+<i>58</i>&nbsp;     * &lt;p&gt;
+<i>59</i>&nbsp;     * Note that the detail message associated with &lt;code&gt;cause&lt;/code&gt; is not automatically incorporated into this
+<i>60</i>&nbsp;     * exception&#39;s detail message.
+<i>61</i>&nbsp;     *
+<i>62</i>&nbsp;     * @param message
+<i>63</i>&nbsp;     *            The detail message which is saved for later retrieval by the {@link #getMessage()} method.
+<i>64</i>&nbsp;     * @param cause
+<i>65</i>&nbsp;     *            The cause which is saved for later retrieval by the {@link #getCause()} method. A {@code null}
+<i>66</i>&nbsp;     *            value is permitted, and indicates that the cause is nonexistent or unknown.
+<i>67</i>&nbsp;     * @since 1.4
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    public DecoderException(final String message, final Throwable cause) {
+<b class="fc"><i>70</i>&nbsp;        super(message, cause);</b>
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    /**
+<i>74</i>&nbsp;     * Constructs a new exception with the specified cause and a detail message of &lt;code&gt;(cause==null ?
+<i>75</i>&nbsp;     * null : cause.toString())&lt;/code&gt; (which typically contains the class and detail message of &lt;code&gt;cause&lt;/code&gt;).
+<i>76</i>&nbsp;     * This constructor is useful for exceptions that are little more than wrappers for other throwables.
+<i>77</i>&nbsp;     *
+<i>78</i>&nbsp;     * @param cause
+<i>79</i>&nbsp;     *            The cause which is saved for later retrieval by the {@link #getCause()} method. A {@code null}
+<i>80</i>&nbsp;     *            value is permitted, and indicates that the cause is nonexistent or unknown.
+<i>81</i>&nbsp;     * @since 1.4
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    public DecoderException(final Throwable cause) {
+<b class="fc"><i>84</i>&nbsp;        super(cause);</b>
+<b class="fc"><i>85</i>&nbsp;    }</b>
+<i>86</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 20:07</div>
+</div>
+</body>
+</html>

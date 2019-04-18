@@ -1,0 +1,731 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PhoneticEngine</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.language.bm</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PhoneticEngine (org.apache.commons.codec.language.bm)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PhoneticEngine</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.3%
+  </span>
+  <span class="absValue">
+    (12/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.6%
+  </span>
+  <span class="absValue">
+    (113/ 122)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PhoneticEngine$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/ 13)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PhoneticEngine$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PhoneticEngine$__CLR4_1_214v14vjuluj48p</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PhoneticEngine$PhonemeBuilder</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (31/ 31)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">PhoneticEngine$RulesApplication</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.7%
+  </span>
+  <span class="absValue">
+    (29/ 30)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    93.5%
+  </span>
+  <span class="absValue">
+    (29/ 31)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.9%
+  </span>
+  <span class="absValue">
+    (186/ 198)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.language.bm;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.ArrayList;
+<i>21</i>&nbsp;import java.util.Arrays;
+<i>22</i>&nbsp;import java.util.Collections;
+<i>23</i>&nbsp;import java.util.EnumMap;
+<i>24</i>&nbsp;import java.util.HashSet;
+<i>25</i>&nbsp;import java.util.Iterator;
+<i>26</i>&nbsp;import java.util.LinkedHashSet;
+<i>27</i>&nbsp;import java.util.List;
+<i>28</i>&nbsp;import java.util.Locale;
+<i>29</i>&nbsp;import java.util.Map;
+<i>30</i>&nbsp;import java.util.Set;
+<i>31</i>&nbsp;import java.util.TreeSet;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;/**
+<i>34</i>&nbsp; * Converts words into potential phonetic representations.
+<i>35</i>&nbsp; * &lt;p&gt;
+<i>36</i>&nbsp; * This is a two-stage process. Firstly, the word is converted into a phonetic representation that takes
+<i>37</i>&nbsp; * into account the likely source language. Next, this phonetic representation is converted into a
+<i>38</i>&nbsp; * pan-european &#39;average&#39; representation, allowing comparison between different versions of essentially
+<i>39</i>&nbsp; * the same word from different languages.
+<i>40</i>&nbsp; * &lt;p&gt;
+<i>41</i>&nbsp; * This class is intentionally immutable. If you wish to alter the settings for a PhoneticEngine, you
+<i>42</i>&nbsp; * must make a new one with the updated settings. This makes the class thread-safe.
+<i>43</i>&nbsp; * &lt;p&gt;
+<i>44</i>&nbsp; * Ported from phoneticengine.php
+<i>45</i>&nbsp; *
+<i>46</i>&nbsp; * @since 1.6
+<i>47</i>&nbsp; * @version $Id$
+<i>48</i>&nbsp; */
+<b class="fc"><i>49</i>&nbsp;public class PhoneticEngine {</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * Utility for manipulating a set of phonemes as they are being built up. Not intended for use outside
+<i>53</i>&nbsp;     * this package, and probably not outside the {@link PhoneticEngine} class.
+<i>54</i>&nbsp;     *
+<i>55</i>&nbsp;     * @since 1.6
+<i>56</i>&nbsp;     */
+<b class="fc"><i>57</i>&nbsp;    static final class PhonemeBuilder {</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;        /**
+<i>60</i>&nbsp;         * An empty builder where all phonemes must come from some set of languages. This will contain a single
+<i>61</i>&nbsp;         * phoneme of zero characters. This can then be appended to. This should be the only way to create a new
+<i>62</i>&nbsp;         * phoneme from scratch.
+<i>63</i>&nbsp;         *
+<i>64</i>&nbsp;         * @param languages the set of languages
+<i>65</i>&nbsp;         * @return  a new, empty phoneme builder
+<i>66</i>&nbsp;         */
+<b class="fc"><i>67</i>&nbsp;        public static PhonemeBuilder empty(Languages.LanguageSet languages) {</b>
+<b class="fc"><i>68</i>&nbsp;            return new PhonemeBuilder(Collections.singleton(new Rule.Phoneme(&quot;&quot;, languages)));</b>
+<i>69</i>&nbsp;        }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;        private final Set&lt;Rule.Phoneme&gt; phonemes;
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;        private PhonemeBuilder(Set&lt;Rule.Phoneme&gt; phonemes) {</b>
+<b class="fc"><i>74</i>&nbsp;            this.phonemes = phonemes;</b>
+<b class="fc"><i>75</i>&nbsp;        }</b>
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;        /**
+<i>78</i>&nbsp;         * Creates a new phoneme builder containing all phonemes in this one extended by &lt;code&gt;str&lt;/code&gt;.
+<i>79</i>&nbsp;         *
+<i>80</i>&nbsp;         * @param str   the characters to append to the phonemes
+<i>81</i>&nbsp;         * @return  a new phoneme builder lenghtened by &lt;code&gt;str&lt;/code&gt;
+<i>82</i>&nbsp;         */
+<b class="fc"><i>83</i>&nbsp;        public PhonemeBuilder append(CharSequence str) {</b>
+<b class="fc"><i>84</i>&nbsp;            Set&lt;Rule.Phoneme&gt; newPhonemes = new LinkedHashSet&lt;Rule.Phoneme&gt;();</b>
+<i>85</i>&nbsp;
+<b class="fc"><i>86</i>&nbsp;            for (Rule.Phoneme ph : this.phonemes) {</b>
+<b class="fc"><i>87</i>&nbsp;                newPhonemes.add(ph.append(str));</b>
+<i>88</i>&nbsp;            }
+<i>89</i>&nbsp;
+<b class="fc"><i>90</i>&nbsp;            return new PhonemeBuilder(newPhonemes);</b>
+<i>91</i>&nbsp;        }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;        /**
+<i>94</i>&nbsp;         * Creates a new phoneme builder containing the application of the expression to all phonemes in this builder.
+<i>95</i>&nbsp;         * &lt;p&gt;
+<i>96</i>&nbsp;         * This will lengthen phonemes that have compatible language sets to the expression, and drop those that are
+<i>97</i>&nbsp;         * incompatible.
+<i>98</i>&nbsp;         *
+<i>99</i>&nbsp;         * @param phonemeExpr   the expression to apply
+<i>100</i>&nbsp;         * @param maxPhonemes   the maximum number of phonemes to build up
+<i>101</i>&nbsp;         * @return  a new phoneme builder containing the results of &lt;code&gt;phonemeExpr&lt;/code&gt; applied to each phoneme
+<i>102</i>&nbsp;         *      in turn
+<i>103</i>&nbsp;         */
+<b class="fc"><i>104</i>&nbsp;        public PhonemeBuilder apply(Rule.PhonemeExpr phonemeExpr, int maxPhonemes) {</b>
+<b class="fc"><i>105</i>&nbsp;            Set&lt;Rule.Phoneme&gt; newPhonemes = new LinkedHashSet&lt;Rule.Phoneme&gt;();</b>
+<i>106</i>&nbsp;
+<b class="fc"><i>107</i>&nbsp;            EXPR: for (Rule.Phoneme left : this.phonemes) {</b>
+<b class="fc"><i>108</i>&nbsp;                for (Rule.Phoneme right : phonemeExpr.getPhonemes()) {</b>
+<b class="fc"><i>109</i>&nbsp;                    Rule.Phoneme join = left.join(right);</b>
+<b class="fc"><i>110</i>&nbsp;                    if (!join.getLanguages().isEmpty()) {</b>
+<b class="fc"><i>111</i>&nbsp;                        if (newPhonemes.size() &lt; maxPhonemes) {</b>
+<b class="fc"><i>112</i>&nbsp;                            newPhonemes.add(join);</b>
+<i>113</i>&nbsp;                        } else {
+<b class="fc"><i>114</i>&nbsp;                            break EXPR;</b>
+<i>115</i>&nbsp;                        }
+<i>116</i>&nbsp;                    }
+<i>117</i>&nbsp;                }
+<b class="fc"><i>118</i>&nbsp;            }</b>
+<i>119</i>&nbsp;
+<b class="fc"><i>120</i>&nbsp;            return new PhonemeBuilder(newPhonemes);</b>
+<i>121</i>&nbsp;        }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;        /**
+<i>124</i>&nbsp;         * Gets underlying phoneme set. Please don&#39;t mutate.
+<i>125</i>&nbsp;         *
+<i>126</i>&nbsp;         * @return  the phoneme set
+<i>127</i>&nbsp;         */
+<b class="fc"><i>128</i>&nbsp;        public Set&lt;Rule.Phoneme&gt; getPhonemes() {</b>
+<b class="fc"><i>129</i>&nbsp;            return this.phonemes;</b>
+<i>130</i>&nbsp;        }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;        /**
+<i>133</i>&nbsp;         * Stringifies the phoneme set. This produces a single string of the strings of each phoneme,
+<i>134</i>&nbsp;         * joined with a pipe. This is explicitly provided in place of toString as it is a potentially
+<i>135</i>&nbsp;         * expensive operation, which should be avoided when debugging.
+<i>136</i>&nbsp;         *
+<i>137</i>&nbsp;         * @return  the stringified phoneme set
+<i>138</i>&nbsp;         */
+<b class="fc"><i>139</i>&nbsp;        public String makeString() {</b>
+<b class="fc"><i>140</i>&nbsp;            final StringBuilder sb = new StringBuilder();</b>
+<i>141</i>&nbsp;
+<b class="fc"><i>142</i>&nbsp;            for (Rule.Phoneme ph : this.phonemes) {</b>
+<b class="fc"><i>143</i>&nbsp;                if (sb.length() &gt; 0) {</b>
+<b class="fc"><i>144</i>&nbsp;                    sb.append(&quot;|&quot;);</b>
+<i>145</i>&nbsp;                }
+<b class="fc"><i>146</i>&nbsp;                sb.append(ph.getPhonemeText());</b>
+<i>147</i>&nbsp;            }
+<i>148</i>&nbsp;
+<b class="fc"><i>149</i>&nbsp;            return sb.toString();</b>
+<i>150</i>&nbsp;        }
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * A function closure capturing the application of a list of rules to an input sequence at a particular offset.
+<i>155</i>&nbsp;     * After invocation, the values &lt;code&gt;i&lt;/code&gt; and &lt;code&gt;found&lt;/code&gt; are updated. &lt;code&gt;i&lt;/code&gt; points to the
+<i>156</i>&nbsp;     * index of the next char in &lt;code&gt;input&lt;/code&gt; that must be processed next (the input up to that index having been
+<i>157</i>&nbsp;     * processed already), and &lt;code&gt;found&lt;/code&gt; indicates if a matching rule was found or not. In the case where a
+<i>158</i>&nbsp;     * matching rule was found, &lt;code&gt;phonemeBuilder&lt;/code&gt; is replaced with a new builder containing the phonemes
+<i>159</i>&nbsp;     * updated by the matching rule.
+<i>160</i>&nbsp;     *
+<i>161</i>&nbsp;     * Although this class is not thread-safe (it has mutable unprotected fields), it is not shared between threads
+<i>162</i>&nbsp;     * as it is constructed as needed by the calling methods.
+<i>163</i>&nbsp;     * @since 1.6
+<i>164</i>&nbsp;     */
+<i>165</i>&nbsp;    private static final class RulesApplication {
+<i>166</i>&nbsp;        private final List&lt;Rule&gt; finalRules;
+<i>167</i>&nbsp;        private final CharSequence input;
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;        private PhonemeBuilder phonemeBuilder;
+<i>170</i>&nbsp;        private int i;
+<i>171</i>&nbsp;        private int maxPhonemes;
+<i>172</i>&nbsp;        private boolean found;
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;        public RulesApplication(List&lt;Rule&gt; finalRules, CharSequence input,
+<b class="fc"><i>175</i>&nbsp;                                PhonemeBuilder phonemeBuilder, int i, int maxPhonemes) {</b>
+<b class="fc"><i>176</i>&nbsp;            if (finalRules == null) {</b>
+<b class="nc"><i>177</i>&nbsp;                throw new NullPointerException(&quot;The finalRules argument must not be null&quot;);</b>
+<i>178</i>&nbsp;            }
+<b class="fc"><i>179</i>&nbsp;            this.finalRules = finalRules;</b>
+<b class="fc"><i>180</i>&nbsp;            this.phonemeBuilder = phonemeBuilder;</b>
+<b class="fc"><i>181</i>&nbsp;            this.input = input;</b>
+<b class="fc"><i>182</i>&nbsp;            this.i = i;</b>
+<b class="fc"><i>183</i>&nbsp;            this.maxPhonemes = maxPhonemes;</b>
+<b class="fc"><i>184</i>&nbsp;        }</b>
+<i>185</i>&nbsp;
+<b class="fc"><i>186</i>&nbsp;        public int getI() {</b>
+<b class="fc"><i>187</i>&nbsp;            return this.i;</b>
+<i>188</i>&nbsp;        }
+<i>189</i>&nbsp;
+<b class="fc"><i>190</i>&nbsp;        public PhonemeBuilder getPhonemeBuilder() {</b>
+<b class="fc"><i>191</i>&nbsp;            return this.phonemeBuilder;</b>
+<i>192</i>&nbsp;        }
+<i>193</i>&nbsp;
+<i>194</i>&nbsp;        /**
+<i>195</i>&nbsp;         * Invokes the rules. Loops over the rules list, stopping at the first one that has a matching context
+<i>196</i>&nbsp;         * and pattern. Then applies this rule to the phoneme builder to produce updated phonemes. If there was no
+<i>197</i>&nbsp;         * match, &lt;code&gt;i&lt;/code&gt; is advanced one and the character is silently dropped from the phonetic spelling.
+<i>198</i>&nbsp;         *
+<i>199</i>&nbsp;         * @return &lt;code&gt;this&lt;/code&gt;
+<i>200</i>&nbsp;         */
+<b class="fc"><i>201</i>&nbsp;        public RulesApplication invoke() {</b>
+<b class="fc"><i>202</i>&nbsp;            this.found = false;</b>
+<b class="fc"><i>203</i>&nbsp;            int patternLength = 0;</b>
+<b class="fc"><i>204</i>&nbsp;            for (Rule rule : this.finalRules) {</b>
+<b class="fc"><i>205</i>&nbsp;                String pattern = rule.getPattern();</b>
+<b class="fc"><i>206</i>&nbsp;                patternLength = pattern.length();</b>
+<i>207</i>&nbsp;
+<b class="fc"><i>208</i>&nbsp;                if (!rule.patternAndContextMatches(this.input, this.i)) {</b>
+<b class="fc"><i>209</i>&nbsp;                    continue;</b>
+<i>210</i>&nbsp;                }
+<i>211</i>&nbsp;
+<b class="fc"><i>212</i>&nbsp;                this.phonemeBuilder = this.phonemeBuilder.apply(rule.getPhoneme(), maxPhonemes);</b>
+<b class="fc"><i>213</i>&nbsp;                this.found = true;</b>
+<b class="fc"><i>214</i>&nbsp;                break;</b>
+<i>215</i>&nbsp;            }
+<i>216</i>&nbsp;
+<b class="fc"><i>217</i>&nbsp;            if (!this.found) {</b>
+<b class="fc"><i>218</i>&nbsp;                patternLength = 1;</b>
+<i>219</i>&nbsp;            }
+<i>220</i>&nbsp;
+<b class="fc"><i>221</i>&nbsp;            this.i += patternLength;</b>
+<b class="fc"><i>222</i>&nbsp;            return this;</b>
+<i>223</i>&nbsp;        }
+<i>224</i>&nbsp;
+<b class="fc"><i>225</i>&nbsp;        public boolean isFound() {</b>
+<b class="fc"><i>226</i>&nbsp;            return this.found;</b>
+<i>227</i>&nbsp;        }
+<i>228</i>&nbsp;    }
+<i>229</i>&nbsp;
+<b class="fc"><i>230</i>&nbsp;    private static final Map&lt;NameType, Set&lt;String&gt;&gt; NAME_PREFIXES = new EnumMap&lt;NameType, Set&lt;String&gt;&gt;(NameType.class);</b>
+<i>231</i>&nbsp;
+<b class="fc"><i>232</i>&nbsp;    static {</b>
+<b class="fc"><i>233</i>&nbsp;        NAME_PREFIXES.put(NameType.ASHKENAZI,</b>
+<b class="fc"><i>234</i>&nbsp;                Collections.unmodifiableSet(</b>
+<b class="fc"><i>235</i>&nbsp;                        new HashSet&lt;String&gt;(Arrays.asList(&quot;bar&quot;, &quot;ben&quot;, &quot;da&quot;, &quot;de&quot;, &quot;van&quot;, &quot;von&quot;))));</b>
+<b class="fc"><i>236</i>&nbsp;        NAME_PREFIXES.put(NameType.SEPHARDIC,</b>
+<b class="fc"><i>237</i>&nbsp;                Collections.unmodifiableSet(</b>
+<b class="fc"><i>238</i>&nbsp;                        new HashSet&lt;String&gt;(Arrays.asList(&quot;al&quot;, &quot;el&quot;, &quot;da&quot;, &quot;dal&quot;, &quot;de&quot;, &quot;del&quot;, &quot;dela&quot;, &quot;de la&quot;,</b>
+<i>239</i>&nbsp;                                                          &quot;della&quot;, &quot;des&quot;, &quot;di&quot;, &quot;do&quot;, &quot;dos&quot;, &quot;du&quot;, &quot;van&quot;, &quot;von&quot;))));
+<b class="fc"><i>240</i>&nbsp;        NAME_PREFIXES.put(NameType.GENERIC,</b>
+<b class="fc"><i>241</i>&nbsp;                Collections.unmodifiableSet(</b>
+<b class="fc"><i>242</i>&nbsp;                        new HashSet&lt;String&gt;(Arrays.asList(&quot;da&quot;, &quot;dal&quot;, &quot;de&quot;, &quot;del&quot;, &quot;dela&quot;, &quot;de la&quot;, &quot;della&quot;,</b>
+<i>243</i>&nbsp;                                                          &quot;des&quot;, &quot;di&quot;, &quot;do&quot;, &quot;dos&quot;, &quot;du&quot;, &quot;van&quot;, &quot;von&quot;))));
+<b class="fc"><i>244</i>&nbsp;    }</b>
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    /**
+<i>247</i>&nbsp;     * This is a performance hack to avoid overhead associated with very frequent CharSequence.subSequence calls.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @param cached the character sequence to cache
+<i>250</i>&nbsp;     * @return a &lt;code&gt;CharSequence&lt;/code&gt; that internally caches subSequence values
+<i>251</i>&nbsp;     */
+<b class="fc"><i>252</i>&nbsp;    private static CharSequence cacheSubSequence(final CharSequence cached) {</b>
+<i>253</i>&nbsp;        // return cached;
+<b class="fc"><i>254</i>&nbsp;        final CharSequence[][] cache = new CharSequence[cached.length()][cached.length()];</b>
+<b class="fc"><i>255</i>&nbsp;        return new CharSequence() {</b>
+<i>256</i>&nbsp;            @Override
+<b class="nc"><i>257</i>&nbsp;            public char charAt(int index) {</b>
+<b class="nc"><i>258</i>&nbsp;                return cached.charAt(index);</b>
+<i>259</i>&nbsp;            }
+<i>260</i>&nbsp;
+<i>261</i>&nbsp;            @Override
+<b class="fc"><i>262</i>&nbsp;            public int length() {</b>
+<b class="fc"><i>263</i>&nbsp;                return cached.length();</b>
+<i>264</i>&nbsp;            }
+<i>265</i>&nbsp;
+<i>266</i>&nbsp;            @Override
+<b class="fc"><i>267</i>&nbsp;            public CharSequence subSequence(int start, int end) {</b>
+<b class="fc"><i>268</i>&nbsp;                if (start == end) {</b>
+<b class="fc"><i>269</i>&nbsp;                    return &quot;&quot;;</b>
+<i>270</i>&nbsp;                }
+<i>271</i>&nbsp;
+<b class="fc"><i>272</i>&nbsp;                CharSequence res = cache[start][end - 1];</b>
+<b class="fc"><i>273</i>&nbsp;                if (res == null) {</b>
+<b class="fc"><i>274</i>&nbsp;                    res = cached.subSequence(start, end);</b>
+<b class="fc"><i>275</i>&nbsp;                    cache[start][end - 1] = res;</b>
+<i>276</i>&nbsp;                }
+<b class="fc"><i>277</i>&nbsp;                return res;</b>
+<i>278</i>&nbsp;            }
+<i>279</i>&nbsp;        };
+<i>280</i>&nbsp;    }
+<i>281</i>&nbsp;
+<i>282</i>&nbsp;    /**
+<i>283</i>&nbsp;     * Joins some strings with an internal separator.
+<i>284</i>&nbsp;     * @param strings   Strings to join
+<i>285</i>&nbsp;     * @param sep       String to separate them with
+<i>286</i>&nbsp;     * @return a single String consisting of each element of &lt;code&gt;strings&lt;/code&gt; interleaved by &lt;code&gt;sep&lt;/code&gt;
+<i>287</i>&nbsp;     */
+<b class="fc"><i>288</i>&nbsp;    private static String join(Iterable&lt;String&gt; strings, String sep) {</b>
+<b class="fc"><i>289</i>&nbsp;        StringBuilder sb = new StringBuilder();</b>
+<b class="fc"><i>290</i>&nbsp;        Iterator&lt;String&gt; si = strings.iterator();</b>
+<b class="fc"><i>291</i>&nbsp;        if (si.hasNext()) {</b>
+<b class="fc"><i>292</i>&nbsp;            sb.append(si.next());</b>
+<i>293</i>&nbsp;        }
+<b class="fc"><i>294</i>&nbsp;        while (si.hasNext()) {</b>
+<b class="fc"><i>295</i>&nbsp;            sb.append(sep).append(si.next());</b>
+<i>296</i>&nbsp;        }
+<i>297</i>&nbsp;
+<b class="fc"><i>298</i>&nbsp;        return sb.toString();</b>
+<i>299</i>&nbsp;    }
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    private static final int DEFAULT_MAX_PHONEMES = 20;
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    private final Lang lang;
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    private final NameType nameType;
+<i>306</i>&nbsp;
+<i>307</i>&nbsp;    private final RuleType ruleType;
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;    private final boolean concat;
+<i>310</i>&nbsp;
+<i>311</i>&nbsp;    private final int maxPhonemes;
+<i>312</i>&nbsp;
+<i>313</i>&nbsp;    /**
+<i>314</i>&nbsp;     * Generates a new, fully-configured phonetic engine.
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @param nameType
+<i>317</i>&nbsp;     *            the type of names it will use
+<i>318</i>&nbsp;     * @param ruleType
+<i>319</i>&nbsp;     *            the type of rules it will apply
+<i>320</i>&nbsp;     * @param concat
+<i>321</i>&nbsp;     *            if it will concatenate multiple encodings
+<i>322</i>&nbsp;     */
+<i>323</i>&nbsp;    public PhoneticEngine(NameType nameType, RuleType ruleType, boolean concat) {
+<b class="fc"><i>324</i>&nbsp;        this(nameType, ruleType, concat, DEFAULT_MAX_PHONEMES);</b>
+<b class="fc"><i>325</i>&nbsp;    }</b>
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    /**
+<i>328</i>&nbsp;     * Generates a new, fully-configured phonetic engine.
+<i>329</i>&nbsp;     *
+<i>330</i>&nbsp;     * @param nameType
+<i>331</i>&nbsp;     *            the type of names it will use
+<i>332</i>&nbsp;     * @param ruleType
+<i>333</i>&nbsp;     *            the type of rules it will apply
+<i>334</i>&nbsp;     * @param concat
+<i>335</i>&nbsp;     *            if it will concatenate multiple encodings
+<i>336</i>&nbsp;     * @param maxPhonemes
+<i>337</i>&nbsp;     *            the maximum number of phonemes that will be handled
+<i>338</i>&nbsp;     * @since 1.7
+<i>339</i>&nbsp;     */
+<b class="fc"><i>340</i>&nbsp;    public PhoneticEngine(NameType nameType, RuleType ruleType, boolean concat, int maxPhonemes) {</b>
+<b class="fc"><i>341</i>&nbsp;        if (ruleType == RuleType.RULES) {</b>
+<b class="fc"><i>342</i>&nbsp;            throw new IllegalArgumentException(&quot;ruleType must not be &quot; + RuleType.RULES);</b>
+<i>343</i>&nbsp;        }
+<b class="fc"><i>344</i>&nbsp;        this.nameType = nameType;</b>
+<b class="fc"><i>345</i>&nbsp;        this.ruleType = ruleType;</b>
+<b class="fc"><i>346</i>&nbsp;        this.concat = concat;</b>
+<b class="fc"><i>347</i>&nbsp;        this.lang = Lang.instance(nameType);</b>
+<b class="fc"><i>348</i>&nbsp;        this.maxPhonemes = maxPhonemes;</b>
+<b class="fc"><i>349</i>&nbsp;    }</b>
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;    /**
+<i>352</i>&nbsp;     * Applies the final rules to convert from a language-specific phonetic representation to a
+<i>353</i>&nbsp;     * language-independent representation.
+<i>354</i>&nbsp;     *
+<i>355</i>&nbsp;     * @param phonemeBuilder the current phonemes
+<i>356</i>&nbsp;     * @param finalRules the final rules to apply
+<i>357</i>&nbsp;     * @return the resulting phonemes
+<i>358</i>&nbsp;     */
+<b class="fc"><i>359</i>&nbsp;    private PhonemeBuilder applyFinalRules(PhonemeBuilder phonemeBuilder, List&lt;Rule&gt; finalRules) {</b>
+<b class="fc"><i>360</i>&nbsp;        if (finalRules == null) {</b>
+<b class="nc"><i>361</i>&nbsp;            throw new NullPointerException(&quot;finalRules can not be null&quot;);</b>
+<i>362</i>&nbsp;        }
+<b class="fc"><i>363</i>&nbsp;        if (finalRules.isEmpty()) {</b>
+<b class="fc"><i>364</i>&nbsp;            return phonemeBuilder;</b>
+<i>365</i>&nbsp;        }
+<i>366</i>&nbsp;
+<b class="fc"><i>367</i>&nbsp;        Set&lt;Rule.Phoneme&gt; phonemes = new TreeSet&lt;Rule.Phoneme&gt;(Rule.Phoneme.COMPARATOR);</b>
+<i>368</i>&nbsp;
+<b class="fc"><i>369</i>&nbsp;        for (Rule.Phoneme phoneme : phonemeBuilder.getPhonemes()) {</b>
+<b class="fc"><i>370</i>&nbsp;            PhonemeBuilder subBuilder = PhonemeBuilder.empty(phoneme.getLanguages());</b>
+<b class="fc"><i>371</i>&nbsp;            CharSequence phonemeText = cacheSubSequence(phoneme.getPhonemeText());</b>
+<i>372</i>&nbsp;
+<b class="fc"><i>373</i>&nbsp;            for (int i = 0; i &lt; phonemeText.length();) {</b>
+<b class="fc"><i>374</i>&nbsp;                RulesApplication rulesApplication =</b>
+<b class="fc"><i>375</i>&nbsp;                        new RulesApplication(finalRules, phonemeText, subBuilder, i, maxPhonemes).invoke();</b>
+<b class="fc"><i>376</i>&nbsp;                boolean found = rulesApplication.isFound();</b>
+<b class="fc"><i>377</i>&nbsp;                subBuilder = rulesApplication.getPhonemeBuilder();</b>
+<i>378</i>&nbsp;
+<b class="fc"><i>379</i>&nbsp;                if (!found) {</b>
+<i>380</i>&nbsp;                    // not found, appending as-is
+<b class="fc"><i>381</i>&nbsp;                    subBuilder = subBuilder.append(phonemeText.subSequence(i, i + 1));</b>
+<i>382</i>&nbsp;                }
+<i>383</i>&nbsp;
+<b class="fc"><i>384</i>&nbsp;                i = rulesApplication.getI();</b>
+<b class="fc"><i>385</i>&nbsp;            }</b>
+<i>386</i>&nbsp;
+<b class="fc"><i>387</i>&nbsp;            phonemes.addAll(subBuilder.getPhonemes());</b>
+<i>388</i>&nbsp;        }
+<i>389</i>&nbsp;
+<b class="fc"><i>390</i>&nbsp;        return new PhonemeBuilder(phonemes);</b>
+<i>391</i>&nbsp;    }
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    /**
+<i>394</i>&nbsp;     * Encodes a string to its phonetic representation.
+<i>395</i>&nbsp;     *
+<i>396</i>&nbsp;     * @param input
+<i>397</i>&nbsp;     *            the String to encode
+<i>398</i>&nbsp;     * @return the encoding of the input
+<i>399</i>&nbsp;     */
+<b class="fc"><i>400</i>&nbsp;    public String encode(String input) {</b>
+<b class="fc"><i>401</i>&nbsp;        Languages.LanguageSet languageSet = this.lang.guessLanguages(input);</b>
+<b class="fc"><i>402</i>&nbsp;        return encode(input, languageSet);</b>
+<i>403</i>&nbsp;    }
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    /**
+<i>406</i>&nbsp;     * Encodes an input string into an output phonetic representation, given a set of possible origin languages.
+<i>407</i>&nbsp;     *
+<i>408</i>&nbsp;     * @param input
+<i>409</i>&nbsp;     *            String to phoneticise; a String with dashes or spaces separating each word
+<i>410</i>&nbsp;     * @param languageSet
+<i>411</i>&nbsp;     * @return a phonetic representation of the input; a String containing &#39;-&#39;-separated phonetic representations
+<i>412</i>&nbsp;     *   of the input
+<i>413</i>&nbsp;     */
+<b class="fc"><i>414</i>&nbsp;    public String encode(String input, final Languages.LanguageSet languageSet) {</b>
+<b class="fc"><i>415</i>&nbsp;        final List&lt;Rule&gt; rules = Rule.getInstance(this.nameType, RuleType.RULES, languageSet);</b>
+<i>416</i>&nbsp;        // rules common across many (all) languages
+<b class="fc"><i>417</i>&nbsp;        final List&lt;Rule&gt; finalRules1 = Rule.getInstance(this.nameType, this.ruleType, &quot;common&quot;);</b>
+<i>418</i>&nbsp;        // rules that apply to a specific language that may be ambiguous or wrong if applied to other languages
+<b class="fc"><i>419</i>&nbsp;        final List&lt;Rule&gt; finalRules2 = Rule.getInstance(this.nameType, this.ruleType, languageSet);</b>
+<i>420</i>&nbsp;
+<i>421</i>&nbsp;        // tidy the input
+<i>422</i>&nbsp;        // lower case is a locale-dependent operation
+<b class="fc"><i>423</i>&nbsp;        input = input.toLowerCase(Locale.ENGLISH).replace(&#39;-&#39;, &#39; &#39;).trim();</b>
+<i>424</i>&nbsp;
+<b class="fc"><i>425</i>&nbsp;        if (this.nameType == NameType.GENERIC) {</b>
+<b class="fc"><i>426</i>&nbsp;            if (input.length() &gt;= 2 &amp;&amp; input.substring(0, 2).equals(&quot;d&#39;&quot;)) { // check for d&#39;</b>
+<b class="fc"><i>427</i>&nbsp;                String remainder = input.substring(2);</b>
+<b class="fc"><i>428</i>&nbsp;                String combined = &quot;d&quot; + remainder;</b>
+<b class="fc"><i>429</i>&nbsp;                return &quot;(&quot; + encode(remainder) + &quot;)-(&quot; + encode(combined) + &quot;)&quot;;</b>
+<i>430</i>&nbsp;            }
+<b class="fc"><i>431</i>&nbsp;            for (String l : NAME_PREFIXES.get(this.nameType)) {</b>
+<i>432</i>&nbsp;                // handle generic prefixes
+<b class="fc"><i>433</i>&nbsp;                if (input.startsWith(l + &quot; &quot;)) {</b>
+<i>434</i>&nbsp;                    // check for any prefix in the words list
+<b class="fc"><i>435</i>&nbsp;                    String remainder = input.substring(l.length() + 1); // input without the prefix</b>
+<b class="fc"><i>436</i>&nbsp;                    String combined = l + remainder; // input with prefix without space</b>
+<b class="fc"><i>437</i>&nbsp;                    return &quot;(&quot; + encode(remainder) + &quot;)-(&quot; + encode(combined) + &quot;)&quot;;</b>
+<i>438</i>&nbsp;                }
+<i>439</i>&nbsp;            }
+<b class="fc"><i>440</i>&nbsp;        }</b>
+<i>441</i>&nbsp;
+<b class="fc"><i>442</i>&nbsp;        final List&lt;String&gt; words = Arrays.asList(input.split(&quot;\\s+&quot;));</b>
+<b class="fc"><i>443</i>&nbsp;        final List&lt;String&gt; words2 = new ArrayList&lt;String&gt;();</b>
+<i>444</i>&nbsp;
+<i>445</i>&nbsp;        // special-case handling of word prefixes based upon the name type
+<b class="fc"><i>446</i>&nbsp;        switch (this.nameType) {</b>
+<b class="fc"><i>447</i>&nbsp;        case SEPHARDIC:</b>
+<b class="fc"><i>448</i>&nbsp;            for (String aWord : words) {</b>
+<b class="fc"><i>449</i>&nbsp;                String[] parts = aWord.split(&quot;&#39;&quot;);</b>
+<b class="fc"><i>450</i>&nbsp;                String lastPart = parts[parts.length - 1];</b>
+<b class="fc"><i>451</i>&nbsp;                words2.add(lastPart);</b>
+<i>452</i>&nbsp;            }
+<b class="fc"><i>453</i>&nbsp;            words2.removeAll(NAME_PREFIXES.get(this.nameType));</b>
+<b class="fc"><i>454</i>&nbsp;            break;</b>
+<b class="fc"><i>455</i>&nbsp;        case ASHKENAZI:</b>
+<b class="fc"><i>456</i>&nbsp;            words2.addAll(words);</b>
+<b class="fc"><i>457</i>&nbsp;            words2.removeAll(NAME_PREFIXES.get(this.nameType));</b>
+<b class="fc"><i>458</i>&nbsp;            break;</b>
+<b class="fc"><i>459</i>&nbsp;        case GENERIC:</b>
+<b class="fc"><i>460</i>&nbsp;            words2.addAll(words);</b>
+<b class="fc"><i>461</i>&nbsp;            break;</b>
+<b class="nc"><i>462</i>&nbsp;        default:</b>
+<b class="nc"><i>463</i>&nbsp;            throw new IllegalStateException(&quot;Unreachable case: &quot; + this.nameType);</b>
+<i>464</i>&nbsp;        }
+<i>465</i>&nbsp;
+<b class="fc"><i>466</i>&nbsp;        if (this.concat) {</b>
+<i>467</i>&nbsp;            // concat mode enabled
+<b class="fc"><i>468</i>&nbsp;            input = join(words2, &quot; &quot;);</b>
+<b class="fc"><i>469</i>&nbsp;        } else if (words2.size() == 1) {</b>
+<i>470</i>&nbsp;            // not a multi-word name
+<b class="fc"><i>471</i>&nbsp;            input = words.iterator().next();</b>
+<i>472</i>&nbsp;        } else {
+<i>473</i>&nbsp;            // encode each word in a multi-word name separately (normally used for approx matches)
+<b class="nc"><i>474</i>&nbsp;            StringBuilder result = new StringBuilder();</b>
+<b class="nc"><i>475</i>&nbsp;            for (String word : words2) {</b>
+<b class="nc"><i>476</i>&nbsp;                result.append(&quot;-&quot;).append(encode(word));</b>
+<i>477</i>&nbsp;            }
+<i>478</i>&nbsp;            // return the result without the leading &quot;-&quot;
+<b class="nc"><i>479</i>&nbsp;            return result.substring(1);</b>
+<i>480</i>&nbsp;        }
+<i>481</i>&nbsp;
+<b class="fc"><i>482</i>&nbsp;        PhonemeBuilder phonemeBuilder = PhonemeBuilder.empty(languageSet);</b>
+<i>483</i>&nbsp;
+<i>484</i>&nbsp;        // loop over each char in the input - we will handle the increment manually
+<b class="fc"><i>485</i>&nbsp;        CharSequence inputCache = cacheSubSequence(input);</b>
+<b class="fc"><i>486</i>&nbsp;        for (int i = 0; i &lt; inputCache.length();) {</b>
+<b class="fc"><i>487</i>&nbsp;            RulesApplication rulesApplication =</b>
+<b class="fc"><i>488</i>&nbsp;                    new RulesApplication(rules, inputCache, phonemeBuilder, i, maxPhonemes).invoke();</b>
+<b class="fc"><i>489</i>&nbsp;            i = rulesApplication.getI();</b>
+<b class="fc"><i>490</i>&nbsp;            phonemeBuilder = rulesApplication.getPhonemeBuilder();</b>
+<b class="fc"><i>491</i>&nbsp;        }</b>
+<i>492</i>&nbsp;
+<i>493</i>&nbsp;        // Apply the general rules
+<b class="fc"><i>494</i>&nbsp;        phonemeBuilder = applyFinalRules(phonemeBuilder, finalRules1);</b>
+<i>495</i>&nbsp;        // Apply the language-specific rules
+<b class="fc"><i>496</i>&nbsp;        phonemeBuilder = applyFinalRules(phonemeBuilder, finalRules2);</b>
+<i>497</i>&nbsp;
+<b class="fc"><i>498</i>&nbsp;        return phonemeBuilder.makeString();</b>
+<i>499</i>&nbsp;    }
+<i>500</i>&nbsp;
+<i>501</i>&nbsp;    /**
+<i>502</i>&nbsp;     * Gets the Lang language guessing rules being used.
+<i>503</i>&nbsp;     *
+<i>504</i>&nbsp;     * @return the Lang in use
+<i>505</i>&nbsp;     */
+<b class="nc"><i>506</i>&nbsp;    public Lang getLang() {</b>
+<b class="nc"><i>507</i>&nbsp;        return this.lang;</b>
+<i>508</i>&nbsp;    }
+<i>509</i>&nbsp;
+<i>510</i>&nbsp;    /**
+<i>511</i>&nbsp;     * Gets the NameType being used.
+<i>512</i>&nbsp;     *
+<i>513</i>&nbsp;     * @return the NameType in use
+<i>514</i>&nbsp;     */
+<b class="fc"><i>515</i>&nbsp;    public NameType getNameType() {</b>
+<b class="fc"><i>516</i>&nbsp;        return this.nameType;</b>
+<i>517</i>&nbsp;    }
+<i>518</i>&nbsp;
+<i>519</i>&nbsp;    /**
+<i>520</i>&nbsp;     * Gets the RuleType being used.
+<i>521</i>&nbsp;     *
+<i>522</i>&nbsp;     * @return the RuleType in use
+<i>523</i>&nbsp;     */
+<b class="fc"><i>524</i>&nbsp;    public RuleType getRuleType() {</b>
+<b class="fc"><i>525</i>&nbsp;        return this.ruleType;</b>
+<i>526</i>&nbsp;    }
+<i>527</i>&nbsp;
+<i>528</i>&nbsp;    /**
+<i>529</i>&nbsp;     * Gets if multiple phonetic encodings are concatenated or if just the first one is kept.
+<i>530</i>&nbsp;     *
+<i>531</i>&nbsp;     * @return true if multiple phonetic encodings are returned, false if just the first is
+<i>532</i>&nbsp;     */
+<b class="fc"><i>533</i>&nbsp;    public boolean isConcat() {</b>
+<b class="fc"><i>534</i>&nbsp;        return this.concat;</b>
+<i>535</i>&nbsp;    }
+<i>536</i>&nbsp;
+<i>537</i>&nbsp;    /**
+<i>538</i>&nbsp;     * Gets the maximum number of phonemes the engine will calculate for a given input.
+<i>539</i>&nbsp;     *
+<i>540</i>&nbsp;     * @return the maximum number of phonemes
+<i>541</i>&nbsp;     * @since 1.7
+<i>542</i>&nbsp;     */
+<b class="fc"><i>543</i>&nbsp;    public int getMaxPhonemes() {</b>
+<b class="fc"><i>544</i>&nbsp;        return this.maxPhonemes;</b>
+<i>545</i>&nbsp;    }
+<i>546</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:33</div>
+</div>
+</body>
+</html>

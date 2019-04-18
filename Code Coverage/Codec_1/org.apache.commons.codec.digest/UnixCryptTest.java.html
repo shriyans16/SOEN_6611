@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UnixCryptTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">UnixCryptTest.java</span></div><h1>UnixCryptTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.digest;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
+import org.apache.commons.codec.Charsets;
+import org.junit.Test;
+
+<span class="pc bpc" id="L27" title="3 of 4 branches missed.">public class UnixCryptTest {</span>
+
+    @Test
+<span class="pc bnc" id="L30" title="All 4 branches missed.">    public void testCtor() {</span>
+<span class="fc" id="L31">        assertNotNull(new UnixCrypt());</span>
+<span class="fc" id="L32">    }</span>
+
+    @Test
+<span class="pc bnc" id="L35" title="All 4 branches missed.">    public void testUnixCryptStrings() {</span>
+        // trivial test
+<span class="fc" id="L37">        assertEquals(&quot;xxWAum7tHdIUw&quot;, Crypt.crypt(&quot;secret&quot;, &quot;xx&quot;));</span>
+        // empty data
+<span class="fc" id="L39">        assertEquals(&quot;12UFlHxel6uMM&quot;, Crypt.crypt(&quot;&quot;, &quot;12&quot;));</span>
+        // salt gets cut at maximum length
+<span class="fc" id="L41">        assertEquals(&quot;12FJgqDtVOg7Q&quot;, Crypt.crypt(&quot;secret&quot;, &quot;12&quot;));</span>
+<span class="fc" id="L42">        assertEquals(&quot;12FJgqDtVOg7Q&quot;, Crypt.crypt(&quot;secret&quot;, &quot;12345678&quot;));</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+<span class="pc bnc" id="L46" title="All 4 branches missed.">    public void testUnixCryptBytes() {</span>
+        // An empty Bytearray equals an empty String
+<span class="fc" id="L48">        assertEquals(&quot;12UFlHxel6uMM&quot;, Crypt.crypt(new byte[0], &quot;12&quot;));</span>
+        // UTF-8 stores \u00e4 &quot;a with diaeresis&quot; as two bytes 0xc3 0xa4.
+<span class="fc" id="L50">        assertEquals(&quot;./287bds2PjVw&quot;, Crypt.crypt(&quot;t\u00e4st&quot;, &quot;./&quot;));</span>
+        // ISO-8859-1 stores &quot;a with diaeresis&quot; as single byte 0xe4.
+<span class="fc" id="L52">        assertEquals(&quot;./bLIFNqo9XKQ&quot;, Crypt.crypt(&quot;t\u00e4st&quot;.getBytes(Charsets.ISO_8859_1), &quot;./&quot;));</span>
+<span class="fc" id="L53">        assertEquals(&quot;./bLIFNqo9XKQ&quot;, Crypt.crypt(new byte[]{(byte) 0x74, (byte) 0xe4, (byte) 0x73, (byte) 0x74}, &quot;./&quot;));</span>
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * Some salts are invalid for crypt(3) but not for unixCrypt().
+     */
+    @Test
+<span class="pc bnc" id="L60" title="All 4 branches missed.">    public void testUnixCryptExplicitCall() {</span>
+        // A call to crypt() with an empty salt would result in a &quot;$6$&quot; hash.
+        // Using unixCrypt() explicitly results in a random salt.
+<span class="fc" id="L63">        assertTrue(UnixCrypt.crypt(&quot;secret&quot;.getBytes()).matches(&quot;^[a-zA-Z0-9./]{13}$&quot;));</span>
+<span class="fc" id="L64">        assertTrue(UnixCrypt.crypt(&quot;secret&quot;.getBytes(), null).matches(&quot;^[a-zA-Z0-9./]{13}$&quot;));</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Single character salts are illegal!
+     * E.g. with glibc 2.13, crypt(&quot;secret&quot;, &quot;x&quot;) = &quot;xxZREZpkHZpkI&quot; but
+     * crypt(&quot;secret&quot;, &quot;xx&quot;) = &quot;xxWAum7tHdIUw&quot; which makes it unverifyable.
+     */
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L73" title="4 of 6 branches missed.">    public void testUnixCryptWithHalfSalt() {</span>
+<span class="nc" id="L74">        UnixCrypt.crypt(&quot;secret&quot;, &quot;x&quot;);</span>
+<span class="nc" id="L75">    }</span>
+
+    /**
+     * Unimplemented &quot;$foo$&quot; salt prefixes would be threated as UnixCrypt salt.
+     */
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L81" title="4 of 6 branches missed.">    public void testUnicCryptInvalidSalt() {</span>
+<span class="nc" id="L82">        UnixCrypt.crypt(&quot;secret&quot;, &quot;$a&quot;);</span>
+<span class="nc" id="L83">    }</span>
+
+    @Test(expected = NullPointerException.class)
+<span class="pc bpc" id="L86" title="4 of 6 branches missed.">    public void testUnixCryptNullData() {</span>
+<span class="nc" id="L87">        UnixCrypt.crypt((byte[]) null);</span>
+<span class="nc" id="L88">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L91" title="4 of 6 branches missed.">    public void testUnixCryptWithEmptySalt() {</span>
+<span class="nc" id="L92">        UnixCrypt.crypt(&quot;secret&quot;, &quot;&quot;);</span>
+<span class="nc" id="L93">    }</span>
+
+    @Test
+<span class="pc bnc" id="L96" title="All 4 branches missed.">    public void testUnixCryptWithoutSalt() {</span>
+<span class="fc" id="L97">        final String hash = UnixCrypt.crypt(&quot;foo&quot;);</span>
+<span class="fc" id="L98">        assertTrue(hash.matches(&quot;^[a-zA-Z0-9./]{13}$&quot;));</span>
+<span class="fc" id="L99">        final String hash2 = UnixCrypt.crypt(&quot;foo&quot;);</span>
+<span class="fc" id="L100">        assertNotSame(hash, hash2);</span>
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

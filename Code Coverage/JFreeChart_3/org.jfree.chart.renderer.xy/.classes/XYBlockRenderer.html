@@ -1,0 +1,531 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: XYBlockRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: XYBlockRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">XYBlockRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (10/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.4%
+  </span>
+  <span class="absValue">
+    (58/ 125)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * --------------------
+<i>28</i>&nbsp; * XYBlockRenderer.java
+<i>29</i>&nbsp; * --------------------
+<i>30</i>&nbsp; * (C) Copyright 2006-2014, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 05-Jul-2006 : Version 1 (DG);
+<i>38</i>&nbsp; * 02-Feb-2007 : Added getPaintScale() method (DG);
+<i>39</i>&nbsp; * 09-Mar-2007 : Fixed cloning (DG);
+<i>40</i>&nbsp; * 03-Aug-2007 : Fix for bug 1766646 (DG);
+<i>41</i>&nbsp; * 07-Apr-2008 : Added entity collection code (DG);
+<i>42</i>&nbsp; * 22-Apr-2008 : Implemented PublicCloneable (DG);
+<i>43</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>44</i>&nbsp; *
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;import java.awt.BasicStroke;
+<i>50</i>&nbsp;import java.awt.Graphics2D;
+<i>51</i>&nbsp;import java.awt.Paint;
+<i>52</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>53</i>&nbsp;import java.io.Serializable;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>56</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>57</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>58</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>59</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>60</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>61</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>62</i>&nbsp;import org.jfree.chart.renderer.LookupPaintScale;
+<i>63</i>&nbsp;import org.jfree.chart.renderer.PaintScale;
+<i>64</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>65</i>&nbsp;import org.jfree.data.Range;
+<i>66</i>&nbsp;import org.jfree.data.general.DatasetUtilities;
+<i>67</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>68</i>&nbsp;import org.jfree.data.xy.XYZDataset;
+<i>69</i>&nbsp;import org.jfree.ui.RectangleAnchor;
+<i>70</i>&nbsp;import org.jfree.util.PublicCloneable;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;/**
+<i>73</i>&nbsp; * A renderer that represents data from an {@link XYZDataset} by drawing a
+<i>74</i>&nbsp; * color block at each (x, y) point, where the color is a function of the
+<i>75</i>&nbsp; * z-value from the dataset.  The example shown here is generated by the
+<i>76</i>&nbsp; * &lt;code&gt;XYBlockChartDemo1.java&lt;/code&gt; program included in the JFreeChart
+<i>77</i>&nbsp; * demo collection:
+<i>78</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>79</i>&nbsp; * &lt;img src=&quot;../../../../../images/XYBlockRendererSample.png&quot;
+<i>80</i>&nbsp; * alt=&quot;XYBlockRendererSample.png&quot;&gt;
+<i>81</i>&nbsp; *
+<i>82</i>&nbsp; * @since 1.0.4
+<i>83</i>&nbsp; */
+<i>84</i>&nbsp;public class XYBlockRenderer extends AbstractXYItemRenderer
+<i>85</i>&nbsp;        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    /**
+<i>88</i>&nbsp;     * The block width (defaults to 1.0).
+<i>89</i>&nbsp;     */
+<b class="fc"><i>90</i>&nbsp;    private double blockWidth = 1.0;</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    /**
+<i>93</i>&nbsp;     * The block height (defaults to 1.0).
+<i>94</i>&nbsp;     */
+<b class="fc"><i>95</i>&nbsp;    private double blockHeight = 1.0;</b>
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * The anchor point used to align each block to its (x, y) location.  The
+<i>99</i>&nbsp;     * default value is &lt;code&gt;RectangleAnchor.CENTER&lt;/code&gt;.
+<i>100</i>&nbsp;     */
+<b class="fc"><i>101</i>&nbsp;    private RectangleAnchor blockAnchor = RectangleAnchor.CENTER;</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /** Temporary storage for the x-offset used to align the block anchor. */
+<i>104</i>&nbsp;    private double xOffset;
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    /** Temporary storage for the y-offset used to align the block anchor. */
+<i>107</i>&nbsp;    private double yOffset;
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    /** The paint scale. */
+<i>110</i>&nbsp;    private PaintScale paintScale;
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * Creates a new &lt;code&gt;XYBlockRenderer&lt;/code&gt; instance with default
+<i>114</i>&nbsp;     * attributes.
+<i>115</i>&nbsp;     */
+<b class="fc"><i>116</i>&nbsp;    public XYBlockRenderer() {</b>
+<b class="fc"><i>117</i>&nbsp;        updateOffsets();</b>
+<b class="fc"><i>118</i>&nbsp;        this.paintScale = new LookupPaintScale();</b>
+<b class="fc"><i>119</i>&nbsp;    }</b>
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Returns the block width, in data/axis units.
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @return The block width.
+<i>125</i>&nbsp;     *
+<i>126</i>&nbsp;     * @see #setBlockWidth(double)
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    public double getBlockWidth() {
+<b class="nc"><i>129</i>&nbsp;        return this.blockWidth;</b>
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * Sets the width of the blocks used to represent each data item and
+<i>134</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>135</i>&nbsp;     *
+<i>136</i>&nbsp;     * @param width  the new width, in data/axis units (must be &amp;gt; 0.0).
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @see #getBlockWidth()
+<i>139</i>&nbsp;     */
+<i>140</i>&nbsp;    public void setBlockWidth(double width) {
+<b class="fc"><i>141</i>&nbsp;        if (width &lt;= 0.0) {</b>
+<b class="nc"><i>142</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>143</i>&nbsp;                    &quot;The &#39;width&#39; argument must be &gt; 0.0&quot;);
+<i>144</i>&nbsp;        }
+<b class="fc"><i>145</i>&nbsp;        this.blockWidth = width;</b>
+<b class="fc"><i>146</i>&nbsp;        updateOffsets();</b>
+<b class="fc"><i>147</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>148</i>&nbsp;    }</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    /**
+<i>151</i>&nbsp;     * Returns the block height, in data/axis units.
+<i>152</i>&nbsp;     *
+<i>153</i>&nbsp;     * @return The block height.
+<i>154</i>&nbsp;     *
+<i>155</i>&nbsp;     * @see #setBlockHeight(double)
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    public double getBlockHeight() {
+<b class="nc"><i>158</i>&nbsp;        return this.blockHeight;</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    /**
+<i>162</i>&nbsp;     * Sets the height of the blocks used to represent each data item and
+<i>163</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>164</i>&nbsp;     *
+<i>165</i>&nbsp;     * @param height  the new height, in data/axis units (must be &amp;gt; 0.0).
+<i>166</i>&nbsp;     *
+<i>167</i>&nbsp;     * @see #getBlockHeight()
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public void setBlockHeight(double height) {
+<b class="fc"><i>170</i>&nbsp;        if (height &lt;= 0.0) {</b>
+<b class="nc"><i>171</i>&nbsp;            throw new IllegalArgumentException(</b>
+<i>172</i>&nbsp;                    &quot;The &#39;height&#39; argument must be &gt; 0.0&quot;);
+<i>173</i>&nbsp;        }
+<b class="fc"><i>174</i>&nbsp;        this.blockHeight = height;</b>
+<b class="fc"><i>175</i>&nbsp;        updateOffsets();</b>
+<b class="fc"><i>176</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>177</i>&nbsp;    }</b>
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    /**
+<i>180</i>&nbsp;     * Returns the anchor point used to align a block at its (x, y) location.
+<i>181</i>&nbsp;     * The default values is {@link RectangleAnchor#CENTER}.
+<i>182</i>&nbsp;     *
+<i>183</i>&nbsp;     * @return The anchor point (never &lt;code&gt;null&lt;/code&gt;).
+<i>184</i>&nbsp;     *
+<i>185</i>&nbsp;     * @see #setBlockAnchor(RectangleAnchor)
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    public RectangleAnchor getBlockAnchor() {
+<b class="nc"><i>188</i>&nbsp;        return this.blockAnchor;</b>
+<i>189</i>&nbsp;    }
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    /**
+<i>192</i>&nbsp;     * Sets the anchor point used to align a block at its (x, y) location and
+<i>193</i>&nbsp;     * sends a {@link RendererChangeEvent} to all registered listeners.
+<i>194</i>&nbsp;     *
+<i>195</i>&nbsp;     * @param anchor  the anchor.
+<i>196</i>&nbsp;     *
+<i>197</i>&nbsp;     * @see #getBlockAnchor()
+<i>198</i>&nbsp;     */
+<i>199</i>&nbsp;    public void setBlockAnchor(RectangleAnchor anchor) {
+<b class="nc"><i>200</i>&nbsp;        ParamChecks.nullNotPermitted(anchor, &quot;anchor&quot;);</b>
+<b class="nc"><i>201</i>&nbsp;        if (this.blockAnchor.equals(anchor)) {</b>
+<b class="nc"><i>202</i>&nbsp;            return;  // no change</b>
+<i>203</i>&nbsp;        }
+<b class="nc"><i>204</i>&nbsp;        this.blockAnchor = anchor;</b>
+<b class="nc"><i>205</i>&nbsp;        updateOffsets();</b>
+<b class="nc"><i>206</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>207</i>&nbsp;    }</b>
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * Returns the paint scale used by the renderer.
+<i>211</i>&nbsp;     *
+<i>212</i>&nbsp;     * @return The paint scale (never &lt;code&gt;null&lt;/code&gt;).
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @see #setPaintScale(PaintScale)
+<i>215</i>&nbsp;     * @since 1.0.4
+<i>216</i>&nbsp;     */
+<i>217</i>&nbsp;    public PaintScale getPaintScale() {
+<b class="fc"><i>218</i>&nbsp;        return this.paintScale;</b>
+<i>219</i>&nbsp;    }
+<i>220</i>&nbsp;
+<i>221</i>&nbsp;    /**
+<i>222</i>&nbsp;     * Sets the paint scale used by the renderer and sends a
+<i>223</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>224</i>&nbsp;     *
+<i>225</i>&nbsp;     * @param scale  the scale (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>226</i>&nbsp;     *
+<i>227</i>&nbsp;     * @see #getPaintScale()
+<i>228</i>&nbsp;     * @since 1.0.4
+<i>229</i>&nbsp;     */
+<i>230</i>&nbsp;    public void setPaintScale(PaintScale scale) {
+<b class="fc"><i>231</i>&nbsp;        ParamChecks.nullNotPermitted(scale, &quot;scale&quot;);</b>
+<b class="fc"><i>232</i>&nbsp;        this.paintScale = scale;</b>
+<b class="fc"><i>233</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>234</i>&nbsp;    }</b>
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /**
+<i>237</i>&nbsp;     * Updates the offsets to take into account the block width, height and
+<i>238</i>&nbsp;     * anchor.
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    private void updateOffsets() {
+<b class="fc"><i>241</i>&nbsp;        if (this.blockAnchor.equals(RectangleAnchor.BOTTOM_LEFT)) {</b>
+<b class="nc"><i>242</i>&nbsp;            this.xOffset = 0.0;</b>
+<b class="nc"><i>243</i>&nbsp;            this.yOffset = 0.0;</b>
+<i>244</i>&nbsp;        }
+<b class="fc"><i>245</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.BOTTOM)) {</b>
+<b class="nc"><i>246</i>&nbsp;            this.xOffset = -this.blockWidth / 2.0;</b>
+<b class="nc"><i>247</i>&nbsp;            this.yOffset = 0.0;</b>
+<i>248</i>&nbsp;        }
+<b class="fc"><i>249</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.BOTTOM_RIGHT)) {</b>
+<b class="nc"><i>250</i>&nbsp;            this.xOffset = -this.blockWidth;</b>
+<b class="nc"><i>251</i>&nbsp;            this.yOffset = 0.0;</b>
+<i>252</i>&nbsp;        }
+<b class="fc"><i>253</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.LEFT)) {</b>
+<b class="nc"><i>254</i>&nbsp;            this.xOffset = 0.0;</b>
+<b class="nc"><i>255</i>&nbsp;            this.yOffset = -this.blockHeight / 2.0;</b>
+<i>256</i>&nbsp;        }
+<b class="fc"><i>257</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.CENTER)) {</b>
+<b class="fc"><i>258</i>&nbsp;            this.xOffset = -this.blockWidth / 2.0;</b>
+<b class="fc"><i>259</i>&nbsp;            this.yOffset = -this.blockHeight / 2.0;</b>
+<i>260</i>&nbsp;        }
+<b class="nc"><i>261</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.RIGHT)) {</b>
+<b class="nc"><i>262</i>&nbsp;            this.xOffset = -this.blockWidth;</b>
+<b class="nc"><i>263</i>&nbsp;            this.yOffset = -this.blockHeight / 2.0;</b>
+<i>264</i>&nbsp;        }
+<b class="nc"><i>265</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.TOP_LEFT)) {</b>
+<b class="nc"><i>266</i>&nbsp;            this.xOffset = 0.0;</b>
+<b class="nc"><i>267</i>&nbsp;            this.yOffset = -this.blockHeight;</b>
+<i>268</i>&nbsp;        }
+<b class="nc"><i>269</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.TOP)) {</b>
+<b class="nc"><i>270</i>&nbsp;            this.xOffset = -this.blockWidth / 2.0;</b>
+<b class="nc"><i>271</i>&nbsp;            this.yOffset = -this.blockHeight;</b>
+<i>272</i>&nbsp;        }
+<b class="nc"><i>273</i>&nbsp;        else if (this.blockAnchor.equals(RectangleAnchor.TOP_RIGHT)) {</b>
+<b class="nc"><i>274</i>&nbsp;            this.xOffset = -this.blockWidth;</b>
+<b class="nc"><i>275</i>&nbsp;            this.yOffset = -this.blockHeight;</b>
+<i>276</i>&nbsp;        }
+<b class="fc"><i>277</i>&nbsp;    }</b>
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    /**
+<i>280</i>&nbsp;     * Returns the lower and upper bounds (range) of the x-values in the
+<i>281</i>&nbsp;     * specified dataset.
+<i>282</i>&nbsp;     *
+<i>283</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>286</i>&nbsp;     *         or empty).
+<i>287</i>&nbsp;     *
+<i>288</i>&nbsp;     * @see #findRangeBounds(XYDataset)
+<i>289</i>&nbsp;     */
+<i>290</i>&nbsp;    @Override
+<i>291</i>&nbsp;    public Range findDomainBounds(XYDataset dataset) {
+<b class="fc"><i>292</i>&nbsp;        if (dataset == null) {</b>
+<b class="fc"><i>293</i>&nbsp;            return null;</b>
+<i>294</i>&nbsp;        }
+<b class="fc"><i>295</i>&nbsp;        Range r = DatasetUtilities.findDomainBounds(dataset, false);</b>
+<b class="fc"><i>296</i>&nbsp;        if (r == null) {</b>
+<b class="fc"><i>297</i>&nbsp;            return null;</b>
+<i>298</i>&nbsp;        }
+<b class="fc"><i>299</i>&nbsp;        return new Range(r.getLowerBound() + this.xOffset,</b>
+<b class="fc"><i>300</i>&nbsp;                         r.getUpperBound() + this.blockWidth + this.xOffset);</b>
+<i>301</i>&nbsp;    }
+<i>302</i>&nbsp;
+<i>303</i>&nbsp;    /**
+<i>304</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>305</i>&nbsp;     * items from the specified dataset.
+<i>306</i>&nbsp;     *
+<i>307</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>308</i>&nbsp;     *
+<i>309</i>&nbsp;     * @return The range (&lt;code&gt;null&lt;/code&gt; if the dataset is &lt;code&gt;null&lt;/code&gt;
+<i>310</i>&nbsp;     *         or empty).
+<i>311</i>&nbsp;     *
+<i>312</i>&nbsp;     * @see #findDomainBounds(XYDataset)
+<i>313</i>&nbsp;     */
+<i>314</i>&nbsp;    @Override
+<i>315</i>&nbsp;    public Range findRangeBounds(XYDataset dataset) {
+<b class="fc"><i>316</i>&nbsp;        if (dataset != null) {</b>
+<b class="fc"><i>317</i>&nbsp;            Range r = DatasetUtilities.findRangeBounds(dataset, false);</b>
+<b class="fc"><i>318</i>&nbsp;            if (r == null) {</b>
+<b class="fc"><i>319</i>&nbsp;                return null;</b>
+<i>320</i>&nbsp;            }
+<i>321</i>&nbsp;            else {
+<b class="nc"><i>322</i>&nbsp;                return new Range(r.getLowerBound() + this.yOffset,</b>
+<b class="nc"><i>323</i>&nbsp;                        r.getUpperBound() + this.blockHeight + this.yOffset);</b>
+<i>324</i>&nbsp;            }
+<i>325</i>&nbsp;        }
+<i>326</i>&nbsp;        else {
+<b class="fc"><i>327</i>&nbsp;            return null;</b>
+<i>328</i>&nbsp;        }
+<i>329</i>&nbsp;    }
+<i>330</i>&nbsp;
+<i>331</i>&nbsp;    /**
+<i>332</i>&nbsp;     * Draws the block representing the specified item.
+<i>333</i>&nbsp;     *
+<i>334</i>&nbsp;     * @param g2  the graphics device.
+<i>335</i>&nbsp;     * @param state  the state.
+<i>336</i>&nbsp;     * @param dataArea  the data area.
+<i>337</i>&nbsp;     * @param info  the plot rendering info.
+<i>338</i>&nbsp;     * @param plot  the plot.
+<i>339</i>&nbsp;     * @param domainAxis  the x-axis.
+<i>340</i>&nbsp;     * @param rangeAxis  the y-axis.
+<i>341</i>&nbsp;     * @param dataset  the dataset.
+<i>342</i>&nbsp;     * @param series  the series index.
+<i>343</i>&nbsp;     * @param item  the item index.
+<i>344</i>&nbsp;     * @param crosshairState  the crosshair state.
+<i>345</i>&nbsp;     * @param pass  the pass index.
+<i>346</i>&nbsp;     */
+<i>347</i>&nbsp;    @Override
+<i>348</i>&nbsp;    public void drawItem(Graphics2D g2, XYItemRendererState state,
+<i>349</i>&nbsp;            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
+<i>350</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
+<i>351</i>&nbsp;            int series, int item, CrosshairState crosshairState, int pass) {
+<i>352</i>&nbsp;
+<b class="nc"><i>353</i>&nbsp;        double x = dataset.getXValue(series, item);</b>
+<b class="nc"><i>354</i>&nbsp;        double y = dataset.getYValue(series, item);</b>
+<b class="nc"><i>355</i>&nbsp;        double z = 0.0;</b>
+<b class="nc"><i>356</i>&nbsp;        if (dataset instanceof XYZDataset) {</b>
+<b class="nc"><i>357</i>&nbsp;            z = ((XYZDataset) dataset).getZValue(series, item);</b>
+<i>358</i>&nbsp;        }
+<b class="nc"><i>359</i>&nbsp;        Paint p = this.paintScale.getPaint(z);</b>
+<b class="nc"><i>360</i>&nbsp;        double xx0 = domainAxis.valueToJava2D(x + this.xOffset, dataArea,</b>
+<b class="nc"><i>361</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<b class="nc"><i>362</i>&nbsp;        double yy0 = rangeAxis.valueToJava2D(y + this.yOffset, dataArea,</b>
+<b class="nc"><i>363</i>&nbsp;                plot.getRangeAxisEdge());</b>
+<b class="nc"><i>364</i>&nbsp;        double xx1 = domainAxis.valueToJava2D(x + this.blockWidth</b>
+<b class="nc"><i>365</i>&nbsp;                + this.xOffset, dataArea, plot.getDomainAxisEdge());</b>
+<b class="nc"><i>366</i>&nbsp;        double yy1 = rangeAxis.valueToJava2D(y + this.blockHeight</b>
+<b class="nc"><i>367</i>&nbsp;                + this.yOffset, dataArea, plot.getRangeAxisEdge());</b>
+<i>368</i>&nbsp;        Rectangle2D block;
+<b class="nc"><i>369</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>370</i>&nbsp;        if (orientation.equals(PlotOrientation.HORIZONTAL)) {</b>
+<b class="nc"><i>371</i>&nbsp;            block = new Rectangle2D.Double(Math.min(yy0, yy1),</b>
+<b class="nc"><i>372</i>&nbsp;                    Math.min(xx0, xx1), Math.abs(yy1 - yy0),</b>
+<b class="nc"><i>373</i>&nbsp;                    Math.abs(xx0 - xx1));</b>
+<i>374</i>&nbsp;        }
+<i>375</i>&nbsp;        else {
+<b class="nc"><i>376</i>&nbsp;            block = new Rectangle2D.Double(Math.min(xx0, xx1),</b>
+<b class="nc"><i>377</i>&nbsp;                    Math.min(yy0, yy1), Math.abs(xx1 - xx0),</b>
+<b class="nc"><i>378</i>&nbsp;                    Math.abs(yy1 - yy0));</b>
+<i>379</i>&nbsp;        }
+<b class="nc"><i>380</i>&nbsp;        g2.setPaint(p);</b>
+<b class="nc"><i>381</i>&nbsp;        g2.fill(block);</b>
+<b class="nc"><i>382</i>&nbsp;        g2.setStroke(new BasicStroke(1.0f));</b>
+<b class="nc"><i>383</i>&nbsp;        g2.draw(block);</b>
+<i>384</i>&nbsp;
+<b class="nc"><i>385</i>&nbsp;        EntityCollection entities = state.getEntityCollection();</b>
+<b class="nc"><i>386</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>387</i>&nbsp;            addEntity(entities, block, dataset, series, item, 0.0, 0.0);</b>
+<i>388</i>&nbsp;        }
+<i>389</i>&nbsp;
+<b class="nc"><i>390</i>&nbsp;    }</b>
+<i>391</i>&nbsp;
+<i>392</i>&nbsp;    /**
+<i>393</i>&nbsp;     * Tests this &lt;code&gt;XYBlockRenderer&lt;/code&gt; for equality with an arbitrary
+<i>394</i>&nbsp;     * object.  This method returns &lt;code&gt;true&lt;/code&gt; if and only if:
+<i>395</i>&nbsp;     * &lt;ul&gt;
+<i>396</i>&nbsp;     * &lt;li&gt;&lt;code&gt;obj&lt;/code&gt; is an instance of &lt;code&gt;XYBlockRenderer&lt;/code&gt; (not
+<i>397</i>&nbsp;     *     &lt;code&gt;null&lt;/code&gt;);&lt;/li&gt;
+<i>398</i>&nbsp;     * &lt;li&gt;&lt;code&gt;obj&lt;/code&gt; has the same field values as this
+<i>399</i>&nbsp;     *     &lt;code&gt;XYBlockRenderer&lt;/code&gt;;&lt;/li&gt;
+<i>400</i>&nbsp;     * &lt;/ul&gt;
+<i>401</i>&nbsp;     *
+<i>402</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>403</i>&nbsp;     *
+<i>404</i>&nbsp;     * @return A boolean.
+<i>405</i>&nbsp;     */
+<i>406</i>&nbsp;    @Override
+<i>407</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>408</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>409</i>&nbsp;            return true;</b>
+<i>410</i>&nbsp;        }
+<b class="fc"><i>411</i>&nbsp;        if (!(obj instanceof XYBlockRenderer)) {</b>
+<b class="nc"><i>412</i>&nbsp;            return false;</b>
+<i>413</i>&nbsp;        }
+<b class="fc"><i>414</i>&nbsp;        XYBlockRenderer that = (XYBlockRenderer) obj;</b>
+<b class="fc"><i>415</i>&nbsp;        if (this.blockHeight != that.blockHeight) {</b>
+<b class="fc"><i>416</i>&nbsp;            return false;</b>
+<i>417</i>&nbsp;        }
+<b class="fc"><i>418</i>&nbsp;        if (this.blockWidth != that.blockWidth) {</b>
+<b class="fc"><i>419</i>&nbsp;            return false;</b>
+<i>420</i>&nbsp;        }
+<b class="fc"><i>421</i>&nbsp;        if (!this.blockAnchor.equals(that.blockAnchor)) {</b>
+<b class="nc"><i>422</i>&nbsp;            return false;</b>
+<i>423</i>&nbsp;        }
+<b class="fc"><i>424</i>&nbsp;        if (!this.paintScale.equals(that.paintScale)) {</b>
+<b class="fc"><i>425</i>&nbsp;            return false;</b>
+<i>426</i>&nbsp;        }
+<b class="fc"><i>427</i>&nbsp;        return super.equals(obj);</b>
+<i>428</i>&nbsp;    }
+<i>429</i>&nbsp;
+<i>430</i>&nbsp;    /**
+<i>431</i>&nbsp;     * Returns a clone of this renderer.
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     * @return A clone of this renderer.
+<i>434</i>&nbsp;     *
+<i>435</i>&nbsp;     * @throws CloneNotSupportedException if there is a problem creating the
+<i>436</i>&nbsp;     *     clone.
+<i>437</i>&nbsp;     */
+<i>438</i>&nbsp;    @Override
+<i>439</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>440</i>&nbsp;        XYBlockRenderer clone = (XYBlockRenderer) super.clone();</b>
+<b class="fc"><i>441</i>&nbsp;        if (this.paintScale instanceof PublicCloneable) {</b>
+<b class="fc"><i>442</i>&nbsp;            PublicCloneable pc = (PublicCloneable) this.paintScale;</b>
+<b class="fc"><i>443</i>&nbsp;            clone.paintScale = (PaintScale) pc.clone();</b>
+<i>444</i>&nbsp;        }
+<b class="fc"><i>445</i>&nbsp;        return clone;</b>
+<i>446</i>&nbsp;    }
+<i>447</i>&nbsp;
+<i>448</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

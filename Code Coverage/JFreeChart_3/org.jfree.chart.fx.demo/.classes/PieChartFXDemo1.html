@@ -1,0 +1,257 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PieChartFXDemo1</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.fx.demo</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PieChartFXDemo1 (org.jfree.chart.fx.demo)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PieChartFXDemo1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ====================
+<i>2</i>&nbsp; * PieChartFXDemo1.java
+<i>3</i>&nbsp; * ====================
+<i>4</i>&nbsp; * 
+<i>5</i>&nbsp; * Copyright (c) 2014, Object Refinery Limited.
+<i>6</i>&nbsp; * All rights reserved.
+<i>7</i>&nbsp; *
+<i>8</i>&nbsp; * http://www.jfree.org/jfreechart/index.html
+<i>9</i>&nbsp; *
+<i>10</i>&nbsp; * Redistribution and use in source and binary forms, with or without
+<i>11</i>&nbsp; * modification, are permitted provided that the following conditions are met:
+<i>12</i>&nbsp; *   - Redistributions of source code must retain the above copyright
+<i>13</i>&nbsp; *     notice, this list of conditions and the following disclaimer.
+<i>14</i>&nbsp; *   - Redistributions in binary form must reproduce the above copyright
+<i>15</i>&nbsp; *     notice, this list of conditions and the following disclaimer in the
+<i>16</i>&nbsp; *     documentation and/or other materials provided with the distribution.
+<i>17</i>&nbsp; *   - Neither the name of the Object Refinery Limited nor the
+<i>18</i>&nbsp; *     names of its contributors may be used to endorse or promote products
+<i>19</i>&nbsp; *     derived from this software without specific prior written permission.
+<i>20</i>&nbsp; *
+<i>21</i>&nbsp; * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; 
+<i>22</i>&nbsp; * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+<i>23</i>&nbsp; * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+<i>24</i>&nbsp; * ARE DISCLAIMED. IN NO EVENT SHALL OBJECT REFINERY LIMITED BE LIABLE FOR ANY
+<i>25</i>&nbsp; * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+<i>26</i>&nbsp; * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+<i>27</i>&nbsp; * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+<i>28</i>&nbsp; * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+<i>29</i>&nbsp; * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+<i>30</i>&nbsp; * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<i>31</i>&nbsp; * 
+<i>32</i>&nbsp; */
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;package org.jfree.chart.fx.demo;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;import static javafx.application.Application.launch;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;import java.awt.BasicStroke;
+<i>39</i>&nbsp;import java.awt.Color;
+<i>40</i>&nbsp;import java.awt.Font;
+<i>41</i>&nbsp;import java.awt.GradientPaint;
+<i>42</i>&nbsp;import java.awt.Point;
+<i>43</i>&nbsp;import java.awt.RadialGradientPaint;
+<i>44</i>&nbsp;import java.awt.geom.Point2D;
+<i>45</i>&nbsp;import javafx.application.Application;
+<i>46</i>&nbsp;import javafx.scene.Scene;
+<i>47</i>&nbsp;import javafx.stage.Stage;
+<i>48</i>&nbsp;import org.jfree.chart.ChartFactory;
+<i>49</i>&nbsp;import org.jfree.chart.JFreeChart;
+<i>50</i>&nbsp;import org.jfree.chart.fx.ChartViewer;
+<i>51</i>&nbsp;import org.jfree.chart.plot.PiePlot;
+<i>52</i>&nbsp;import org.jfree.chart.title.TextTitle;
+<i>53</i>&nbsp;import org.jfree.data.general.DefaultPieDataset;
+<i>54</i>&nbsp;import org.jfree.data.general.PieDataset;
+<i>55</i>&nbsp;import org.jfree.ui.HorizontalAlignment;
+<i>56</i>&nbsp;import org.jfree.ui.RectangleEdge;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;/**
+<i>59</i>&nbsp; * A pie chart demo in JavaFX.
+<i>60</i>&nbsp; */
+<b class="nc"><i>61</i>&nbsp;public class PieChartFXDemo1 extends Application {</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Creates a sample dataset.
+<i>65</i>&nbsp;     * 
+<i>66</i>&nbsp;     * Source: http://www.bbc.co.uk/news/business-15489523
+<i>67</i>&nbsp;     *
+<i>68</i>&nbsp;     * @return A sample dataset.
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    private static PieDataset createDataset() {
+<b class="nc"><i>71</i>&nbsp;        DefaultPieDataset dataset = new DefaultPieDataset();</b>
+<b class="nc"><i>72</i>&nbsp;        dataset.setValue(&quot;Samsung&quot;, new Double(27.8));</b>
+<b class="nc"><i>73</i>&nbsp;        dataset.setValue(&quot;Others&quot;, new Double(55.3));</b>
+<b class="nc"><i>74</i>&nbsp;        dataset.setValue(&quot;Nokia&quot;, new Double(16.8));</b>
+<b class="nc"><i>75</i>&nbsp;        dataset.setValue(&quot;Apple&quot;, new Double(17.1));</b>
+<b class="nc"><i>76</i>&nbsp;        return dataset;</b>
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;    
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Creates a chart.
+<i>81</i>&nbsp;     *
+<i>82</i>&nbsp;     * @param dataset  the dataset.
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @return A chart.
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    private static JFreeChart createChart(PieDataset dataset) {
+<i>87</i>&nbsp;
+<b class="nc"><i>88</i>&nbsp;        JFreeChart chart = ChartFactory.createPieChart(</b>
+<i>89</i>&nbsp;            &quot;Smart Phones Manufactured / Q3 2011&quot;,  // chart title
+<i>90</i>&nbsp;            dataset,            // data
+<i>91</i>&nbsp;            false,              // no legend
+<i>92</i>&nbsp;            true,               // tooltips
+<i>93</i>&nbsp;            false               // no URL generation
+<i>94</i>&nbsp;        );
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;        // set a custom background for the chart
+<b class="nc"><i>97</i>&nbsp;        chart.setBackgroundPaint(new GradientPaint(new Point(0, 0), </b>
+<i>98</i>&nbsp;                new Color(20, 20, 20), new Point(400, 200), Color.DARK_GRAY));
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;        // customise the title position and font
+<b class="nc"><i>101</i>&nbsp;        TextTitle t = chart.getTitle();</b>
+<b class="nc"><i>102</i>&nbsp;        t.setHorizontalAlignment(HorizontalAlignment.LEFT);</b>
+<b class="nc"><i>103</i>&nbsp;        t.setPaint(new Color(240, 240, 240));</b>
+<b class="nc"><i>104</i>&nbsp;        t.setFont(new Font(&quot;Arial&quot;, Font.BOLD, 26));</b>
+<i>105</i>&nbsp;
+<b class="nc"><i>106</i>&nbsp;        PiePlot plot = (PiePlot) chart.getPlot();</b>
+<b class="nc"><i>107</i>&nbsp;        plot.setBackgroundPaint(null);</b>
+<b class="nc"><i>108</i>&nbsp;        plot.setInteriorGap(0.04);</b>
+<b class="nc"><i>109</i>&nbsp;        plot.setOutlineVisible(false);</b>
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;        // use gradients and white borders for the section colours
+<b class="nc"><i>112</i>&nbsp;        plot.setSectionPaint(&quot;Others&quot;, createGradientPaint(new Color(200, 200, 255), Color.BLUE));</b>
+<b class="nc"><i>113</i>&nbsp;        plot.setSectionPaint(&quot;Samsung&quot;, createGradientPaint(new Color(255, 200, 200), Color.RED));</b>
+<b class="nc"><i>114</i>&nbsp;        plot.setSectionPaint(&quot;Apple&quot;, createGradientPaint(new Color(200, 255, 200), Color.GREEN));</b>
+<b class="nc"><i>115</i>&nbsp;        plot.setSectionPaint(&quot;Nokia&quot;, createGradientPaint(new Color(200, 255, 200), Color.YELLOW));</b>
+<b class="nc"><i>116</i>&nbsp;        plot.setBaseSectionOutlinePaint(Color.WHITE);</b>
+<b class="nc"><i>117</i>&nbsp;        plot.setSectionOutlinesVisible(true);</b>
+<b class="nc"><i>118</i>&nbsp;        plot.setBaseSectionOutlineStroke(new BasicStroke(2.0f));</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;        // customise the section label appearance
+<b class="nc"><i>121</i>&nbsp;        plot.setLabelFont(new Font(&quot;Courier New&quot;, Font.BOLD, 20));</b>
+<b class="nc"><i>122</i>&nbsp;        plot.setLabelLinkPaint(Color.WHITE);</b>
+<b class="nc"><i>123</i>&nbsp;        plot.setLabelLinkStroke(new BasicStroke(2.0f));</b>
+<b class="nc"><i>124</i>&nbsp;        plot.setLabelOutlineStroke(null);</b>
+<b class="nc"><i>125</i>&nbsp;        plot.setLabelPaint(Color.WHITE);</b>
+<b class="nc"><i>126</i>&nbsp;        plot.setLabelBackgroundPaint(null);</b>
+<i>127</i>&nbsp;        
+<i>128</i>&nbsp;        // add a subtitle giving the data source
+<b class="nc"><i>129</i>&nbsp;        TextTitle source = new TextTitle(&quot;Source: http://www.bbc.co.uk/news/business-15489523&quot;, </b>
+<i>130</i>&nbsp;                new Font(&quot;Courier New&quot;, Font.PLAIN, 12));
+<b class="nc"><i>131</i>&nbsp;        source.setPaint(Color.WHITE);</b>
+<b class="nc"><i>132</i>&nbsp;        source.setPosition(RectangleEdge.BOTTOM);</b>
+<b class="nc"><i>133</i>&nbsp;        source.setHorizontalAlignment(HorizontalAlignment.RIGHT);</b>
+<b class="nc"><i>134</i>&nbsp;        chart.addSubtitle(source);</b>
+<b class="nc"><i>135</i>&nbsp;        return chart;</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /**
+<i>140</i>&nbsp;     * A utility method for creating gradient paints.
+<i>141</i>&nbsp;     * 
+<i>142</i>&nbsp;     * @param c1  color 1.
+<i>143</i>&nbsp;     * @param c2  color 2.
+<i>144</i>&nbsp;     * 
+<i>145</i>&nbsp;     * @return A radial gradient paint.
+<i>146</i>&nbsp;     */
+<i>147</i>&nbsp;    private static RadialGradientPaint createGradientPaint(Color c1, Color c2) {
+<b class="nc"><i>148</i>&nbsp;        Point2D center = new Point2D.Float(0, 0);</b>
+<b class="nc"><i>149</i>&nbsp;        float radius = 200;</b>
+<b class="nc"><i>150</i>&nbsp;        float[] dist = {0.0f, 1.0f};</b>
+<b class="nc"><i>151</i>&nbsp;        return new RadialGradientPaint(center, radius, dist,</b>
+<i>152</i>&nbsp;                new Color[] {c1, c2});
+<i>153</i>&nbsp;    }
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    @Override 
+<i>156</i>&nbsp;    public void start(Stage stage) throws Exception {
+<b class="nc"><i>157</i>&nbsp;        PieDataset dataset = createDataset();</b>
+<b class="nc"><i>158</i>&nbsp;        JFreeChart chart = createChart(dataset); </b>
+<b class="nc"><i>159</i>&nbsp;        ChartViewer viewer = new ChartViewer(chart);  </b>
+<b class="nc"><i>160</i>&nbsp;        stage.setScene(new Scene(viewer)); </b>
+<b class="nc"><i>161</i>&nbsp;        stage.setTitle(&quot;JFreeChart: PieChartFXDemo1.java&quot;); </b>
+<b class="nc"><i>162</i>&nbsp;        stage.setWidth(700);</b>
+<b class="nc"><i>163</i>&nbsp;        stage.setHeight(390);</b>
+<b class="nc"><i>164</i>&nbsp;        stage.show(); </b>
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;    
+<i>167</i>&nbsp;    /**
+<i>168</i>&nbsp;     * @param args the command line arguments
+<i>169</i>&nbsp;     */
+<i>170</i>&nbsp;    public static void main(String[] args) {
+<b class="nc"><i>171</i>&nbsp;        launch(args);</b>
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;  
+<i>174</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

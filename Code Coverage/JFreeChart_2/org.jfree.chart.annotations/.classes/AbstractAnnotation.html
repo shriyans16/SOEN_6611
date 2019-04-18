@@ -1,0 +1,308 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AbstractAnnotation</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.annotations</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AbstractAnnotation (org.jfree.chart.annotations)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AbstractAnnotation</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    72.7%
+  </span>
+  <span class="absValue">
+    (8/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    77.4%
+  </span>
+  <span class="absValue">
+    (24/ 31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------------
+<i>28</i>&nbsp; * AbstractAnnotation.java
+<i>29</i>&nbsp; * -----------------------
+<i>30</i>&nbsp; * (C) Copyright 2009-2016, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Peter Kolb (see patch 2809117);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes:
+<i>36</i>&nbsp; * --------
+<i>37</i>&nbsp; * 20-Jun-2009 : Version 1 (PK);
+<i>38</i>&nbsp; *
+<i>39</i>&nbsp; */
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;package org.jfree.chart.annotations;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;import java.io.IOException;
+<i>44</i>&nbsp;import java.io.ObjectInputStream;
+<i>45</i>&nbsp;import java.io.ObjectOutputStream;
+<i>46</i>&nbsp;import java.io.Serializable;
+<i>47</i>&nbsp;import java.util.Arrays;
+<i>48</i>&nbsp;import java.util.EventListener;
+<i>49</i>&nbsp;import java.util.List;
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;import javax.swing.event.EventListenerList;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;import org.jfree.chart.event.AnnotationChangeEvent;
+<i>54</i>&nbsp;import org.jfree.chart.event.AnnotationChangeListener;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;/**
+<i>57</i>&nbsp; * An abstract implementation of the {@link Annotation} interface, containing a
+<i>58</i>&nbsp; * mechanism for registering change listeners.
+<i>59</i>&nbsp; *
+<i>60</i>&nbsp; * @since 1.0.14
+<i>61</i>&nbsp; */
+<i>62</i>&nbsp;public abstract class AbstractAnnotation implements Annotation, Cloneable,
+<i>63</i>&nbsp;        Serializable {
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /** Storage for registered change listeners. */
+<i>66</i>&nbsp;    private transient EventListenerList listenerList;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * A flag that indicates whether listeners should be notified
+<i>70</i>&nbsp;     * about changes of the annotation.
+<i>71</i>&nbsp;     */
+<b class="fc"><i>72</i>&nbsp;    private boolean notify = true;</b>
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * Constructs an annotation.
+<i>76</i>&nbsp;     */
+<b class="fc"><i>77</i>&nbsp;    protected AbstractAnnotation() {</b>
+<b class="fc"><i>78</i>&nbsp;        this.listenerList = new EventListenerList();</b>
+<b class="fc"><i>79</i>&nbsp;    }</b>
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /**
+<i>82</i>&nbsp;     * Registers an object to receive notification of changes to the
+<i>83</i>&nbsp;     * annotation.
+<i>84</i>&nbsp;     *
+<i>85</i>&nbsp;     * @param listener  the object to register.
+<i>86</i>&nbsp;     *
+<i>87</i>&nbsp;     * @see #removeChangeListener(AnnotationChangeListener)
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    @Override
+<i>90</i>&nbsp;    public void addChangeListener(AnnotationChangeListener listener) {
+<b class="fc"><i>91</i>&nbsp;        this.listenerList.add(AnnotationChangeListener.class, listener);</b>
+<b class="fc"><i>92</i>&nbsp;    }</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     * Deregisters an object so that it no longer receives notification of
+<i>96</i>&nbsp;     * changes to the annotation.
+<i>97</i>&nbsp;     *
+<i>98</i>&nbsp;     * @param listener  the object to deregister.
+<i>99</i>&nbsp;     *
+<i>100</i>&nbsp;     * @see #addChangeListener(AnnotationChangeListener)
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    @Override
+<i>103</i>&nbsp;    public void removeChangeListener(AnnotationChangeListener listener) {
+<b class="fc"><i>104</i>&nbsp;        this.listenerList.remove(AnnotationChangeListener.class, listener);</b>
+<b class="fc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * Returns {@code true} if the specified object is registered with
+<i>109</i>&nbsp;     * the annotation as a listener.  Most applications won&#39;t need to call this
+<i>110</i>&nbsp;     * method, it exists mainly for use by unit testing code.
+<i>111</i>&nbsp;     *
+<i>112</i>&nbsp;     * @param listener  the listener.
+<i>113</i>&nbsp;     *
+<i>114</i>&nbsp;     * @return A boolean.
+<i>115</i>&nbsp;     *
+<i>116</i>&nbsp;     * @see #addChangeListener(AnnotationChangeListener)
+<i>117</i>&nbsp;     * @see #removeChangeListener(AnnotationChangeListener)
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    public boolean hasListener(EventListener listener) {
+<b class="nc"><i>120</i>&nbsp;        List list = Arrays.asList(this.listenerList.getListenerList());</b>
+<b class="nc"><i>121</i>&nbsp;        return list.contains(listener);</b>
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;
+<i>124</i>&nbsp;    /**
+<i>125</i>&nbsp;     * Notifies all registered listeners that the annotation has changed.
+<i>126</i>&nbsp;     *
+<i>127</i>&nbsp;     * @see #addChangeListener(AnnotationChangeListener)
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    protected void fireAnnotationChanged() {
+<b class="fc"><i>130</i>&nbsp;        if (notify) {</b>
+<b class="fc"><i>131</i>&nbsp;            notifyListeners(new AnnotationChangeEvent(this, this));</b>
+<i>132</i>&nbsp;        }
+<b class="fc"><i>133</i>&nbsp;    }</b>
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * Notifies all registered listeners that the annotation has changed.
+<i>137</i>&nbsp;     *
+<i>138</i>&nbsp;     * @param event  contains information about the event that triggered the
+<i>139</i>&nbsp;     *               notification.
+<i>140</i>&nbsp;     *
+<i>141</i>&nbsp;     * @see #addChangeListener(AnnotationChangeListener)
+<i>142</i>&nbsp;     * @see #removeChangeListener(AnnotationChangeListener)
+<i>143</i>&nbsp;     */
+<i>144</i>&nbsp;    protected void notifyListeners(AnnotationChangeEvent event) {
+<i>145</i>&nbsp;
+<b class="fc"><i>146</i>&nbsp;        Object[] listeners = this.listenerList.getListenerList();</b>
+<b class="fc"><i>147</i>&nbsp;        for (int i = listeners.length - 2; i &gt;= 0; i -= 2) {</b>
+<b class="fc"><i>148</i>&nbsp;            if (listeners[i] == AnnotationChangeListener.class) {</b>
+<b class="fc"><i>149</i>&nbsp;                ((AnnotationChangeListener) listeners[i + 1]).annotationChanged(</b>
+<i>150</i>&nbsp;                        event);
+<i>151</i>&nbsp;            }
+<i>152</i>&nbsp;        }
+<i>153</i>&nbsp;
+<b class="fc"><i>154</i>&nbsp;    }</b>
+<i>155</i>&nbsp;
+<i>156</i>&nbsp;    /**
+<i>157</i>&nbsp;     * Returns a flag that indicates whether listeners should be 
+<i>158</i>&nbsp;     * notified about changes to the annotation.
+<i>159</i>&nbsp;     *
+<i>160</i>&nbsp;     * @return  the flag.
+<i>161</i>&nbsp;     *
+<i>162</i>&nbsp;     * @see #setNotify(boolean)
+<i>163</i>&nbsp;     */
+<i>164</i>&nbsp;    public boolean getNotify(){
+<b class="nc"><i>165</i>&nbsp;        return this.notify;</b>
+<i>166</i>&nbsp;    }
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * Sets a flag that indicates whether listeners should be notified about
+<i>170</i>&nbsp;     * changes of an annotation.
+<i>171</i>&nbsp;     *
+<i>172</i>&nbsp;     * @param flag  the flag
+<i>173</i>&nbsp;     *
+<i>174</i>&nbsp;     * @see #getNotify()
+<i>175</i>&nbsp;     */
+<i>176</i>&nbsp;    public void setNotify(boolean flag){
+<b class="nc"><i>177</i>&nbsp;        this.notify = flag;</b>
+<b class="nc"><i>178</i>&nbsp;        if (notify) {</b>
+<b class="nc"><i>179</i>&nbsp;            fireAnnotationChanged();</b>
+<i>180</i>&nbsp;        }
+<b class="nc"><i>181</i>&nbsp;    }</b>
+<i>182</i>&nbsp;
+<i>183</i>&nbsp;    /**
+<i>184</i>&nbsp;     * Returns a clone of the annotation. The cloned annotation will NOT 
+<i>185</i>&nbsp;     * include the {@link AnnotationChangeListener} references that have been
+<i>186</i>&nbsp;     * registered with this annotation.
+<i>187</i>&nbsp;     *
+<i>188</i>&nbsp;     * @return A clone.
+<i>189</i>&nbsp;     *
+<i>190</i>&nbsp;     * @throws CloneNotSupportedException  if the annotation does not support
+<i>191</i>&nbsp;     *                                     cloning.
+<i>192</i>&nbsp;     */
+<i>193</i>&nbsp;    @Override
+<i>194</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>195</i>&nbsp;        AbstractAnnotation clone = (AbstractAnnotation) super.clone();</b>
+<b class="fc"><i>196</i>&nbsp;        clone.listenerList = new EventListenerList();</b>
+<b class="fc"><i>197</i>&nbsp;        return clone;</b>
+<i>198</i>&nbsp;    }
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /**
+<i>201</i>&nbsp;     * Handles serialization.
+<i>202</i>&nbsp;     *
+<i>203</i>&nbsp;     * @param stream  the output stream.
+<i>204</i>&nbsp;     *
+<i>205</i>&nbsp;     * @throws IOException if there is an I/O problem.
+<i>206</i>&nbsp;     */
+<i>207</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>208</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>209</i>&nbsp;    }</b>
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    /**
+<i>212</i>&nbsp;     * Restores a serialized object.
+<i>213</i>&nbsp;     *
+<i>214</i>&nbsp;     * @param stream  the input stream.
+<i>215</i>&nbsp;     *
+<i>216</i>&nbsp;     * @throws IOException if there is an I/O problem.
+<i>217</i>&nbsp;     * @throws ClassNotFoundException if there is a problem loading a class.
+<i>218</i>&nbsp;     */
+<i>219</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>220</i>&nbsp;        throws IOException, ClassNotFoundException {
+<b class="fc"><i>221</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>222</i>&nbsp;        this.listenerList = new EventListenerList();</b>
+<b class="fc"><i>223</i>&nbsp;    }</b>
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

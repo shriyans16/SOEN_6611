@@ -1,0 +1,280 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: AxisLocation</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.axis</a> ]
+</div>
+
+<h1>Coverage Summary for Class: AxisLocation (org.jfree.chart.axis)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AxisLocation</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    61%
+  </span>
+  <span class="absValue">
+    (25/ 41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------
+<i>28</i>&nbsp; * AxisLocation.java
+<i>29</i>&nbsp; * -----------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2013, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   Nick Guenther;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes:
+<i>36</i>&nbsp; * --------
+<i>37</i>&nbsp; * 02-May-2003 : Version 1 (DG);
+<i>38</i>&nbsp; * 03-Jul-2003 : Added isTopOrBottom() and isLeftOrRight() methods (DG);
+<i>39</i>&nbsp; * 13-Aug-2003 : Fixed readResolve() bug (id=788202) (DG);
+<i>40</i>&nbsp; * 24-Mar-2004 : Added static getOpposite() method (DG);
+<i>41</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>42</i>&nbsp; * 22-Mar-2007 : Added getOpposite() method, suggested by Nick Guenther (DG);
+<i>43</i>&nbsp; * 02-Jul-2013 : Use ParamChecks (DG);
+<i>44</i>&nbsp; *
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;package org.jfree.chart.axis;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;import java.io.ObjectStreamException;
+<i>50</i>&nbsp;import java.io.Serializable;
+<i>51</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;/**
+<i>54</i>&nbsp; * Used to indicate the location of an axis on a 2D plot, prior to knowing the
+<i>55</i>&nbsp; * orientation of the plot.
+<i>56</i>&nbsp; */
+<i>57</i>&nbsp;public final class AxisLocation implements Serializable {
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /** For serialization. */
+<i>60</i>&nbsp;    private static final long serialVersionUID = -3276922179323563410L;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /** Axis at the top or left. */
+<b class="fc"><i>63</i>&nbsp;    public static final AxisLocation TOP_OR_LEFT = new AxisLocation(</b>
+<i>64</i>&nbsp;            &quot;AxisLocation.TOP_OR_LEFT&quot;);
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /** Axis at the top or right. */
+<b class="fc"><i>67</i>&nbsp;    public static final AxisLocation TOP_OR_RIGHT = new AxisLocation(</b>
+<i>68</i>&nbsp;            &quot;AxisLocation.TOP_OR_RIGHT&quot;);
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /** Axis at the bottom or left. */
+<b class="fc"><i>71</i>&nbsp;    public static final AxisLocation BOTTOM_OR_LEFT = new AxisLocation(</b>
+<i>72</i>&nbsp;            &quot;AxisLocation.BOTTOM_OR_LEFT&quot;);
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /** Axis at the bottom or right. */
+<b class="fc"><i>75</i>&nbsp;    public static final AxisLocation BOTTOM_OR_RIGHT = new AxisLocation(</b>
+<i>76</i>&nbsp;            &quot;AxisLocation.BOTTOM_OR_RIGHT&quot;);
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /** The name. */
+<i>79</i>&nbsp;    private String name;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /**
+<i>82</i>&nbsp;     * Private constructor.
+<i>83</i>&nbsp;     *
+<i>84</i>&nbsp;     * @param name  the name.
+<i>85</i>&nbsp;     */
+<b class="fc"><i>86</i>&nbsp;    private AxisLocation(String name) {</b>
+<b class="fc"><i>87</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>88</i>&nbsp;    }</b>
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Returns the location that is opposite to this location.
+<i>92</i>&nbsp;     *
+<i>93</i>&nbsp;     * @return The opposite location.
+<i>94</i>&nbsp;     *
+<i>95</i>&nbsp;     * @since 1.0.5
+<i>96</i>&nbsp;     */
+<i>97</i>&nbsp;    public AxisLocation getOpposite() {
+<b class="nc"><i>98</i>&nbsp;        return getOpposite(this);</b>
+<i>99</i>&nbsp;    }
+<i>100</i>&nbsp;
+<i>101</i>&nbsp;    /**
+<i>102</i>&nbsp;     * Returns a string representing the object.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @return The string.
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    @Override
+<i>107</i>&nbsp;    public String toString() {
+<b class="fc"><i>108</i>&nbsp;        return this.name;</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Returns &lt;code&gt;true&lt;/code&gt; if this object is equal to the specified
+<i>113</i>&nbsp;     * object, and &lt;code&gt;false&lt;/code&gt; otherwise.
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @param obj  the other object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>116</i>&nbsp;     *
+<i>117</i>&nbsp;     * @return A boolean.
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    @Override
+<i>120</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>121</i>&nbsp;        if (this == obj) {</b>
+<b class="fc"><i>122</i>&nbsp;            return true;</b>
+<i>123</i>&nbsp;        }
+<b class="fc"><i>124</i>&nbsp;        if (!(obj instanceof AxisLocation)) {</b>
+<b class="nc"><i>125</i>&nbsp;            return false;</b>
+<i>126</i>&nbsp;        }
+<b class="fc"><i>127</i>&nbsp;        AxisLocation location = (AxisLocation) obj;</b>
+<b class="fc"><i>128</i>&nbsp;        if (!this.name.equals(location.toString())) {</b>
+<b class="fc"><i>129</i>&nbsp;            return false;</b>
+<i>130</i>&nbsp;        }
+<b class="fc"><i>131</i>&nbsp;        return true;</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Returns a hash code for this instance.
+<i>136</i>&nbsp;     * 
+<i>137</i>&nbsp;     * @return A hash code.
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    @Override
+<i>140</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>141</i>&nbsp;        int hash = 5;</b>
+<b class="fc"><i>142</i>&nbsp;        hash = 83 * hash + this.name.hashCode();</b>
+<b class="fc"><i>143</i>&nbsp;        return hash;</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    /**
+<i>147</i>&nbsp;     * Returns the location that is opposite to the supplied location.
+<i>148</i>&nbsp;     *
+<i>149</i>&nbsp;     * @param location  the location (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>150</i>&nbsp;     *
+<i>151</i>&nbsp;     * @return The opposite location.
+<i>152</i>&nbsp;     */
+<i>153</i>&nbsp;    public static AxisLocation getOpposite(AxisLocation location) {
+<b class="nc"><i>154</i>&nbsp;        ParamChecks.nullNotPermitted(location, &quot;location&quot;);</b>
+<b class="nc"><i>155</i>&nbsp;        AxisLocation result = null;</b>
+<b class="nc"><i>156</i>&nbsp;        if (location == AxisLocation.TOP_OR_LEFT) {</b>
+<b class="nc"><i>157</i>&nbsp;            result = AxisLocation.BOTTOM_OR_RIGHT;</b>
+<i>158</i>&nbsp;        }
+<b class="nc"><i>159</i>&nbsp;        else if (location == AxisLocation.TOP_OR_RIGHT) {</b>
+<b class="nc"><i>160</i>&nbsp;            result = AxisLocation.BOTTOM_OR_LEFT;</b>
+<i>161</i>&nbsp;        }
+<b class="nc"><i>162</i>&nbsp;        else if (location == AxisLocation.BOTTOM_OR_LEFT) {</b>
+<b class="nc"><i>163</i>&nbsp;            result = AxisLocation.TOP_OR_RIGHT;</b>
+<i>164</i>&nbsp;        }
+<b class="nc"><i>165</i>&nbsp;        else if (location == AxisLocation.BOTTOM_OR_RIGHT) {</b>
+<b class="nc"><i>166</i>&nbsp;            result = AxisLocation.TOP_OR_LEFT;</b>
+<i>167</i>&nbsp;        }
+<i>168</i>&nbsp;        else {
+<b class="nc"><i>169</i>&nbsp;            throw new IllegalStateException(&quot;AxisLocation not recognised.&quot;);</b>
+<i>170</i>&nbsp;        }
+<b class="nc"><i>171</i>&nbsp;        return result;</b>
+<i>172</i>&nbsp;    }
+<i>173</i>&nbsp;
+<i>174</i>&nbsp;    /**
+<i>175</i>&nbsp;     * Ensures that serialization returns the unique instances.
+<i>176</i>&nbsp;     *
+<i>177</i>&nbsp;     * @return The object.
+<i>178</i>&nbsp;     *
+<i>179</i>&nbsp;     * @throws ObjectStreamException if there is a problem.
+<i>180</i>&nbsp;     */
+<i>181</i>&nbsp;    private Object readResolve() throws ObjectStreamException {
+<b class="fc"><i>182</i>&nbsp;        if (this.equals(AxisLocation.TOP_OR_RIGHT)) {</b>
+<b class="nc"><i>183</i>&nbsp;            return AxisLocation.TOP_OR_RIGHT;</b>
+<i>184</i>&nbsp;        }
+<b class="fc"><i>185</i>&nbsp;        else if (this.equals(AxisLocation.BOTTOM_OR_RIGHT)) {</b>
+<b class="fc"><i>186</i>&nbsp;            return AxisLocation.BOTTOM_OR_RIGHT;</b>
+<i>187</i>&nbsp;        }
+<b class="fc"><i>188</i>&nbsp;        else if (this.equals(AxisLocation.TOP_OR_LEFT)) {</b>
+<b class="fc"><i>189</i>&nbsp;            return AxisLocation.TOP_OR_LEFT;</b>
+<i>190</i>&nbsp;        }
+<b class="fc"><i>191</i>&nbsp;        else if (this.equals(AxisLocation.BOTTOM_OR_LEFT)) {</b>
+<b class="fc"><i>192</i>&nbsp;            return AxisLocation.BOTTOM_OR_LEFT;</b>
+<i>193</i>&nbsp;        }
+<b class="nc"><i>194</i>&nbsp;        return null;</b>
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

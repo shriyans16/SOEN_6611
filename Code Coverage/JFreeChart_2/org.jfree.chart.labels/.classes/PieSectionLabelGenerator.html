@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PieSectionLabelGenerator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.labels</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PieSectionLabelGenerator (org.jfree.chart.labels)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">PieSectionLabelGenerator</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -----------------------------
+<i>28</i>&nbsp; * PieSectionLabelGenerator.java
+<i>29</i>&nbsp; * -----------------------------
+<i>30</i>&nbsp; * (C) Copyright 2001-2008, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 13-Dec-2001 : Version 1 (DG);
+<i>38</i>&nbsp; * 16-Jan-2002 : Completed Javadocs (DG);
+<i>39</i>&nbsp; * 26-Sep-2002 : Fixed errors reported by Checkstyle (DG);
+<i>40</i>&nbsp; * 30-Oct-2002 : Category is now a Comparable instance (DG);
+<i>41</i>&nbsp; * 07-Mar-2003 : Changed to KeyedValuesDataset and added pieIndex
+<i>42</i>&nbsp; *               parameter (DG);
+<i>43</i>&nbsp; * 21-Mar-2003 : Updated Javadocs (DG);
+<i>44</i>&nbsp; * 24-Apr-2003 : Switched around PieDataset and KeyedValuesDataset (DG);
+<i>45</i>&nbsp; * 13-Aug-2003 : Added clone() method (DG);
+<i>46</i>&nbsp; * 19-Aug-2003 : Renamed PieToolTipGenerator --&gt; PieItemLabelGenerator (DG);
+<i>47</i>&nbsp; * 11-Nov-2003 : Removed clone() method (DG);
+<i>48</i>&nbsp; * 30-Jan-2004 : Added generateSectionLabel() method (DG);
+<i>49</i>&nbsp; * 15-Apr-2004 : Moved generateToolTip() method into separate interface and
+<i>50</i>&nbsp; *               renamed this interface PieSectionLabelGenerator (DG);
+<i>51</i>&nbsp; *
+<i>52</i>&nbsp; */
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;package org.jfree.chart.labels;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;import java.awt.Font;
+<i>57</i>&nbsp;import java.awt.Paint;
+<i>58</i>&nbsp;import java.awt.font.TextAttribute;
+<i>59</i>&nbsp;import java.text.AttributedString;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;import org.jfree.data.general.PieDataset;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;/**
+<i>64</i>&nbsp; * Interface for a label generator for plots that use data from
+<i>65</i>&nbsp; * a {@link PieDataset}.
+<i>66</i>&nbsp; */
+<i>67</i>&nbsp;public interface PieSectionLabelGenerator {
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * Generates a label for a pie section.
+<i>71</i>&nbsp;     *
+<i>72</i>&nbsp;     * @param dataset  the dataset ({@code null} not permitted).
+<i>73</i>&nbsp;     * @param key  the section key ({@code null} not permitted).
+<i>74</i>&nbsp;     *
+<i>75</i>&nbsp;     * @return The label (possibly {@code null}).
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    public String generateSectionLabel(PieDataset dataset, Comparable key);
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Generates an attributed label for the specified series, or
+<i>81</i>&nbsp;     * {@code null} if no attributed label is available (in which case,
+<i>82</i>&nbsp;     * the string returned by
+<i>83</i>&nbsp;     * {@link #generateSectionLabel(PieDataset, Comparable)} will
+<i>84</i>&nbsp;     * provide the fallback).  Only certain attributes are recognised by the
+<i>85</i>&nbsp;     * code that ultimately displays the labels:
+<i>86</i>&nbsp;     * &lt;ul&gt;
+<i>87</i>&nbsp;     * &lt;li&gt;{@link TextAttribute#FONT}: will set the font;&lt;/li&gt;
+<i>88</i>&nbsp;     * &lt;li&gt;{@link TextAttribute#POSTURE}: a value of
+<i>89</i>&nbsp;     *     {@link TextAttribute#POSTURE_OBLIQUE} will add {@link Font#ITALIC} to
+<i>90</i>&nbsp;     *     the current font;&lt;/li&gt;
+<i>91</i>&nbsp;     * &lt;li&gt;{@link TextAttribute#WEIGHT}: a value of
+<i>92</i>&nbsp;     *     {@link TextAttribute#WEIGHT_BOLD} will add {@link Font#BOLD} to the
+<i>93</i>&nbsp;     *     current font;&lt;/li&gt;
+<i>94</i>&nbsp;     * &lt;li&gt;{@link TextAttribute#FOREGROUND}: this will set the {@link Paint}
+<i>95</i>&nbsp;     *     for the current&lt;/li&gt;
+<i>96</i>&nbsp;     * &lt;li&gt;{@link TextAttribute#SUPERSCRIPT}: the values
+<i>97</i>&nbsp;     *     {@link TextAttribute#SUPERSCRIPT_SUB} and
+<i>98</i>&nbsp;     *     {@link TextAttribute#SUPERSCRIPT_SUPER} are recognised.&lt;/li&gt;
+<i>99</i>&nbsp;     * &lt;/ul&gt;
+<i>100</i>&nbsp;     *
+<i>101</i>&nbsp;     * @param dataset  the dataset.
+<i>102</i>&nbsp;     * @param key  the key.
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @return An attributed label (possibly {@code null}).
+<i>105</i>&nbsp;     */
+<i>106</i>&nbsp;    public AttributedString generateAttributedSectionLabel(PieDataset dataset,
+<i>107</i>&nbsp;                                                           Comparable key);
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:56</div>
+</div>
+</body>
+</html>

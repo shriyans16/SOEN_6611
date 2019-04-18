@@ -1,0 +1,432 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: VectorRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.xy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: VectorRenderer (org.jfree.chart.renderer.xy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">VectorRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    8.8%
+  </span>
+  <span class="absValue">
+    (11/ 125)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------
+<i>28</i>&nbsp; * VectorRenderer.java
+<i>29</i>&nbsp; * -------------------
+<i>30</i>&nbsp; * (C) Copyright 2007-2016, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 30-Jan-2007 : Version 1 (DG);
+<i>38</i>&nbsp; * 24-May-2007 : Updated for method name changes (DG);
+<i>39</i>&nbsp; * 25-May-2007 : Moved from experimental to the main source tree (DG);
+<i>40</i>&nbsp; * 18-Feb-2008 : Fixed bug 1880114, arrows for horizontal plot
+<i>41</i>&nbsp; *               orientation (DG);
+<i>42</i>&nbsp; * 22-Apr-2008 : Implemented PublicCloneable (DG);
+<i>43</i>&nbsp; * 26-Sep-2008 : Added chart entity support (tooltips etc) (DG);
+<i>44</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>45</i>&nbsp; *
+<i>46</i>&nbsp; */
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;package org.jfree.chart.renderer.xy;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;import java.awt.Graphics2D;
+<i>51</i>&nbsp;import java.awt.geom.GeneralPath;
+<i>52</i>&nbsp;import java.awt.geom.Line2D;
+<i>53</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>54</i>&nbsp;import java.io.Serializable;
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>57</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>58</i>&nbsp;import org.jfree.chart.plot.CrosshairState;
+<i>59</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>60</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>61</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>62</i>&nbsp;import org.jfree.chart.util.Args;
+<i>63</i>&nbsp;import org.jfree.chart.util.PublicCloneable;
+<i>64</i>&nbsp;import org.jfree.data.Range;
+<i>65</i>&nbsp;import org.jfree.data.xy.VectorXYDataset;
+<i>66</i>&nbsp;import org.jfree.data.xy.XYDataset;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;/**
+<i>69</i>&nbsp; * A renderer that represents data from an {@link VectorXYDataset} by drawing a
+<i>70</i>&nbsp; * line with an arrow at each (x, y) point.
+<i>71</i>&nbsp; * The example shown here is generated by the {@code VectorPlotDemo1.java}
+<i>72</i>&nbsp; * program included in the JFreeChart demo collection:
+<i>73</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>74</i>&nbsp; * &lt;img src=&quot;../../../../../images/VectorRendererSample.png&quot;
+<i>75</i>&nbsp; * alt=&quot;VectorRendererSample.png&quot;&gt;
+<i>76</i>&nbsp; *
+<i>77</i>&nbsp; * @since 1.0.6
+<i>78</i>&nbsp; */
+<i>79</i>&nbsp;public class VectorRenderer extends AbstractXYItemRenderer
+<i>80</i>&nbsp;        implements XYItemRenderer, Cloneable, PublicCloneable, Serializable {
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /** The length of the base. */
+<b class="fc"><i>83</i>&nbsp;    private double baseLength = 0.10;</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /** The length of the head. */
+<b class="fc"><i>86</i>&nbsp;    private double headLength = 0.14;</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Creates a new {@code VectorRenderer} instance with default
+<i>90</i>&nbsp;     * attributes.
+<i>91</i>&nbsp;     */
+<b class="fc"><i>92</i>&nbsp;    public VectorRenderer() {</b>
+<b class="fc"><i>93</i>&nbsp;    }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * Returns the lower and upper bounds (range) of the x-values in the
+<i>97</i>&nbsp;     * specified dataset.
+<i>98</i>&nbsp;     *
+<i>99</i>&nbsp;     * @param dataset  the dataset ({@code null} permitted).
+<i>100</i>&nbsp;     *
+<i>101</i>&nbsp;     * @return The range ({@code null} if the dataset is {@code null}
+<i>102</i>&nbsp;     *         or empty).
+<i>103</i>&nbsp;     */
+<i>104</i>&nbsp;    @Override
+<i>105</i>&nbsp;    public Range findDomainBounds(XYDataset dataset) {
+<b class="nc"><i>106</i>&nbsp;        Args.nullNotPermitted(dataset, &quot;dataset&quot;);</b>
+<b class="nc"><i>107</i>&nbsp;        double minimum = Double.POSITIVE_INFINITY;</b>
+<b class="nc"><i>108</i>&nbsp;        double maximum = Double.NEGATIVE_INFINITY;</b>
+<b class="nc"><i>109</i>&nbsp;        int seriesCount = dataset.getSeriesCount();</b>
+<i>110</i>&nbsp;        double lvalue;
+<i>111</i>&nbsp;        double uvalue;
+<b class="nc"><i>112</i>&nbsp;        if (dataset instanceof VectorXYDataset) {</b>
+<b class="nc"><i>113</i>&nbsp;            VectorXYDataset vdataset = (VectorXYDataset) dataset;</b>
+<b class="nc"><i>114</i>&nbsp;            for (int series = 0; series &lt; seriesCount; series++) {</b>
+<b class="nc"><i>115</i>&nbsp;                int itemCount = dataset.getItemCount(series);</b>
+<b class="nc"><i>116</i>&nbsp;                for (int item = 0; item &lt; itemCount; item++) {</b>
+<b class="nc"><i>117</i>&nbsp;                    double delta = vdataset.getVectorXValue(series, item);</b>
+<b class="nc"><i>118</i>&nbsp;                    if (delta &lt; 0.0) {</b>
+<b class="nc"><i>119</i>&nbsp;                        uvalue = vdataset.getXValue(series, item);</b>
+<b class="nc"><i>120</i>&nbsp;                        lvalue = uvalue + delta;</b>
+<i>121</i>&nbsp;                    }
+<i>122</i>&nbsp;                    else {
+<b class="nc"><i>123</i>&nbsp;                        lvalue = vdataset.getXValue(series, item);</b>
+<b class="nc"><i>124</i>&nbsp;                        uvalue = lvalue + delta;</b>
+<i>125</i>&nbsp;                    }
+<b class="nc"><i>126</i>&nbsp;                    minimum = Math.min(minimum, lvalue);</b>
+<b class="nc"><i>127</i>&nbsp;                    maximum = Math.max(maximum, uvalue);</b>
+<i>128</i>&nbsp;                }
+<i>129</i>&nbsp;            }
+<b class="nc"><i>130</i>&nbsp;        }</b>
+<i>131</i>&nbsp;        else {
+<b class="nc"><i>132</i>&nbsp;            for (int series = 0; series &lt; seriesCount; series++) {</b>
+<b class="nc"><i>133</i>&nbsp;                int itemCount = dataset.getItemCount(series);</b>
+<b class="nc"><i>134</i>&nbsp;                for (int item = 0; item &lt; itemCount; item++) {</b>
+<b class="nc"><i>135</i>&nbsp;                    lvalue = dataset.getXValue(series, item);</b>
+<b class="nc"><i>136</i>&nbsp;                    uvalue = lvalue;</b>
+<b class="nc"><i>137</i>&nbsp;                    minimum = Math.min(minimum, lvalue);</b>
+<b class="nc"><i>138</i>&nbsp;                    maximum = Math.max(maximum, uvalue);</b>
+<i>139</i>&nbsp;                }
+<i>140</i>&nbsp;            }
+<i>141</i>&nbsp;        }
+<b class="nc"><i>142</i>&nbsp;        if (minimum &gt; maximum) {</b>
+<b class="nc"><i>143</i>&nbsp;            return null;</b>
+<i>144</i>&nbsp;        }
+<i>145</i>&nbsp;        else {
+<b class="nc"><i>146</i>&nbsp;            return new Range(minimum, maximum);</b>
+<i>147</i>&nbsp;        }
+<i>148</i>&nbsp;    }
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;    /**
+<i>151</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>152</i>&nbsp;     * items from the specified dataset.
+<i>153</i>&nbsp;     *
+<i>154</i>&nbsp;     * @param dataset  the dataset ({@code null} permitted).
+<i>155</i>&nbsp;     *
+<i>156</i>&nbsp;     * @return The range ({@code null} if the dataset is {@code null}
+<i>157</i>&nbsp;     *         or empty).
+<i>158</i>&nbsp;     */
+<i>159</i>&nbsp;    @Override
+<i>160</i>&nbsp;    public Range findRangeBounds(XYDataset dataset) {
+<b class="nc"><i>161</i>&nbsp;        Args.nullNotPermitted(dataset, &quot;dataset&quot;);</b>
+<b class="nc"><i>162</i>&nbsp;        double minimum = Double.POSITIVE_INFINITY;</b>
+<b class="nc"><i>163</i>&nbsp;        double maximum = Double.NEGATIVE_INFINITY;</b>
+<b class="nc"><i>164</i>&nbsp;        int seriesCount = dataset.getSeriesCount();</b>
+<i>165</i>&nbsp;        double lvalue;
+<i>166</i>&nbsp;        double uvalue;
+<b class="nc"><i>167</i>&nbsp;        if (dataset instanceof VectorXYDataset) {</b>
+<b class="nc"><i>168</i>&nbsp;            VectorXYDataset vdataset = (VectorXYDataset) dataset;</b>
+<b class="nc"><i>169</i>&nbsp;            for (int series = 0; series &lt; seriesCount; series++) {</b>
+<b class="nc"><i>170</i>&nbsp;                int itemCount = dataset.getItemCount(series);</b>
+<b class="nc"><i>171</i>&nbsp;                for (int item = 0; item &lt; itemCount; item++) {</b>
+<b class="nc"><i>172</i>&nbsp;                    double delta = vdataset.getVectorYValue(series, item);</b>
+<b class="nc"><i>173</i>&nbsp;                    if (delta &lt; 0.0) {</b>
+<b class="nc"><i>174</i>&nbsp;                        uvalue = vdataset.getYValue(series, item);</b>
+<b class="nc"><i>175</i>&nbsp;                        lvalue = uvalue + delta;</b>
+<i>176</i>&nbsp;                    }
+<i>177</i>&nbsp;                    else {
+<b class="nc"><i>178</i>&nbsp;                        lvalue = vdataset.getYValue(series, item);</b>
+<b class="nc"><i>179</i>&nbsp;                        uvalue = lvalue + delta;</b>
+<i>180</i>&nbsp;                    }
+<b class="nc"><i>181</i>&nbsp;                    minimum = Math.min(minimum, lvalue);</b>
+<b class="nc"><i>182</i>&nbsp;                    maximum = Math.max(maximum, uvalue);</b>
+<i>183</i>&nbsp;                }
+<i>184</i>&nbsp;            }
+<b class="nc"><i>185</i>&nbsp;        }</b>
+<i>186</i>&nbsp;        else {
+<b class="nc"><i>187</i>&nbsp;            for (int series = 0; series &lt; seriesCount; series++) {</b>
+<b class="nc"><i>188</i>&nbsp;                int itemCount = dataset.getItemCount(series);</b>
+<b class="nc"><i>189</i>&nbsp;                for (int item = 0; item &lt; itemCount; item++) {</b>
+<b class="nc"><i>190</i>&nbsp;                    lvalue = dataset.getYValue(series, item);</b>
+<b class="nc"><i>191</i>&nbsp;                    uvalue = lvalue;</b>
+<b class="nc"><i>192</i>&nbsp;                    minimum = Math.min(minimum, lvalue);</b>
+<b class="nc"><i>193</i>&nbsp;                    maximum = Math.max(maximum, uvalue);</b>
+<i>194</i>&nbsp;                }
+<i>195</i>&nbsp;            }
+<i>196</i>&nbsp;        }
+<b class="nc"><i>197</i>&nbsp;        if (minimum &gt; maximum) {</b>
+<b class="nc"><i>198</i>&nbsp;            return null;</b>
+<i>199</i>&nbsp;        }
+<i>200</i>&nbsp;        else {
+<b class="nc"><i>201</i>&nbsp;            return new Range(minimum, maximum);</b>
+<i>202</i>&nbsp;        }
+<i>203</i>&nbsp;    }
+<i>204</i>&nbsp;
+<i>205</i>&nbsp;    /**
+<i>206</i>&nbsp;     * Draws the block representing the specified item.
+<i>207</i>&nbsp;     *
+<i>208</i>&nbsp;     * @param g2  the graphics device.
+<i>209</i>&nbsp;     * @param state  the state.
+<i>210</i>&nbsp;     * @param dataArea  the data area.
+<i>211</i>&nbsp;     * @param info  the plot rendering info.
+<i>212</i>&nbsp;     * @param plot  the plot.
+<i>213</i>&nbsp;     * @param domainAxis  the x-axis.
+<i>214</i>&nbsp;     * @param rangeAxis  the y-axis.
+<i>215</i>&nbsp;     * @param dataset  the dataset.
+<i>216</i>&nbsp;     * @param series  the series index.
+<i>217</i>&nbsp;     * @param item  the item index.
+<i>218</i>&nbsp;     * @param crosshairState  the crosshair state.
+<i>219</i>&nbsp;     * @param pass  the pass index.
+<i>220</i>&nbsp;     */
+<i>221</i>&nbsp;    @Override
+<i>222</i>&nbsp;    public void drawItem(Graphics2D g2, XYItemRendererState state,
+<i>223</i>&nbsp;            Rectangle2D dataArea, PlotRenderingInfo info, XYPlot plot,
+<i>224</i>&nbsp;            ValueAxis domainAxis, ValueAxis rangeAxis, XYDataset dataset,
+<i>225</i>&nbsp;            int series, int item, CrosshairState crosshairState, int pass) {
+<i>226</i>&nbsp;
+<b class="nc"><i>227</i>&nbsp;        double x = dataset.getXValue(series, item);</b>
+<b class="nc"><i>228</i>&nbsp;        double y = dataset.getYValue(series, item);</b>
+<b class="nc"><i>229</i>&nbsp;        double dx = 0.0;</b>
+<b class="nc"><i>230</i>&nbsp;        double dy = 0.0;</b>
+<b class="nc"><i>231</i>&nbsp;        if (dataset instanceof VectorXYDataset) {</b>
+<b class="nc"><i>232</i>&nbsp;            dx = ((VectorXYDataset) dataset).getVectorXValue(series, item);</b>
+<b class="nc"><i>233</i>&nbsp;            dy = ((VectorXYDataset) dataset).getVectorYValue(series, item);</b>
+<i>234</i>&nbsp;        }
+<b class="nc"><i>235</i>&nbsp;        double xx0 = domainAxis.valueToJava2D(x, dataArea,</b>
+<b class="nc"><i>236</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<b class="nc"><i>237</i>&nbsp;        double yy0 = rangeAxis.valueToJava2D(y, dataArea,</b>
+<b class="nc"><i>238</i>&nbsp;                plot.getRangeAxisEdge());</b>
+<b class="nc"><i>239</i>&nbsp;        double xx1 = domainAxis.valueToJava2D(x + dx, dataArea,</b>
+<b class="nc"><i>240</i>&nbsp;                plot.getDomainAxisEdge());</b>
+<b class="nc"><i>241</i>&nbsp;        double yy1 = rangeAxis.valueToJava2D(y + dy, dataArea,</b>
+<b class="nc"><i>242</i>&nbsp;                plot.getRangeAxisEdge());</b>
+<i>243</i>&nbsp;        Line2D line;
+<b class="nc"><i>244</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<b class="nc"><i>245</i>&nbsp;        if (orientation.equals(PlotOrientation.HORIZONTAL)) {</b>
+<b class="nc"><i>246</i>&nbsp;            line = new Line2D.Double(yy0, xx0, yy1, xx1);</b>
+<i>247</i>&nbsp;        }
+<i>248</i>&nbsp;        else {
+<b class="nc"><i>249</i>&nbsp;            line = new Line2D.Double(xx0, yy0, xx1, yy1);</b>
+<i>250</i>&nbsp;        }
+<b class="nc"><i>251</i>&nbsp;        g2.setPaint(getItemPaint(series, item));</b>
+<b class="nc"><i>252</i>&nbsp;        g2.setStroke(getItemStroke(series, item));</b>
+<b class="nc"><i>253</i>&nbsp;        g2.draw(line);</b>
+<i>254</i>&nbsp;
+<i>255</i>&nbsp;        // calculate the arrow head and draw it...
+<b class="nc"><i>256</i>&nbsp;        double dxx = (xx1 - xx0);</b>
+<b class="nc"><i>257</i>&nbsp;        double dyy = (yy1 - yy0);</b>
+<b class="nc"><i>258</i>&nbsp;        double bx = xx0 + (1.0 - this.baseLength) * dxx;</b>
+<b class="nc"><i>259</i>&nbsp;        double by = yy0 + (1.0 - this.baseLength) * dyy;</b>
+<i>260</i>&nbsp;
+<b class="nc"><i>261</i>&nbsp;        double cx = xx0 + (1.0 - this.headLength) * dxx;</b>
+<b class="nc"><i>262</i>&nbsp;        double cy = yy0 + (1.0 - this.headLength) * dyy;</b>
+<i>263</i>&nbsp;
+<b class="nc"><i>264</i>&nbsp;        double angle = 0.0;</b>
+<b class="nc"><i>265</i>&nbsp;        if (dxx != 0.0) {</b>
+<b class="nc"><i>266</i>&nbsp;            angle = Math.PI / 2.0 - Math.atan(dyy / dxx);</b>
+<i>267</i>&nbsp;        }
+<b class="nc"><i>268</i>&nbsp;        double deltaX = 2.0 * Math.cos(angle);</b>
+<b class="nc"><i>269</i>&nbsp;        double deltaY = 2.0 * Math.sin(angle);</b>
+<i>270</i>&nbsp;
+<b class="nc"><i>271</i>&nbsp;        double leftx = cx + deltaX;</b>
+<b class="nc"><i>272</i>&nbsp;        double lefty = cy - deltaY;</b>
+<b class="nc"><i>273</i>&nbsp;        double rightx = cx - deltaX;</b>
+<b class="nc"><i>274</i>&nbsp;        double righty = cy + deltaY;</b>
+<i>275</i>&nbsp;
+<b class="nc"><i>276</i>&nbsp;        GeneralPath p = new GeneralPath();</b>
+<b class="nc"><i>277</i>&nbsp;        if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>278</i>&nbsp;            p.moveTo((float) xx1, (float) yy1);</b>
+<b class="nc"><i>279</i>&nbsp;            p.lineTo((float) rightx, (float) righty);</b>
+<b class="nc"><i>280</i>&nbsp;            p.lineTo((float) bx, (float) by);</b>
+<b class="nc"><i>281</i>&nbsp;            p.lineTo((float) leftx, (float) lefty);</b>
+<i>282</i>&nbsp;        }
+<i>283</i>&nbsp;        else {  // orientation is HORIZONTAL
+<b class="nc"><i>284</i>&nbsp;            p.moveTo((float) yy1, (float) xx1);</b>
+<b class="nc"><i>285</i>&nbsp;            p.lineTo((float) righty, (float) rightx);</b>
+<b class="nc"><i>286</i>&nbsp;            p.lineTo((float) by, (float) bx);</b>
+<b class="nc"><i>287</i>&nbsp;            p.lineTo((float) lefty, (float) leftx);</b>
+<i>288</i>&nbsp;        }
+<b class="nc"><i>289</i>&nbsp;        p.closePath();</b>
+<b class="nc"><i>290</i>&nbsp;        g2.draw(p);</b>
+<i>291</i>&nbsp;
+<i>292</i>&nbsp;        // setup for collecting optional entity info...
+<i>293</i>&nbsp;        EntityCollection entities;
+<b class="nc"><i>294</i>&nbsp;        if (info != null) {</b>
+<b class="nc"><i>295</i>&nbsp;            entities = info.getOwner().getEntityCollection();</b>
+<b class="nc"><i>296</i>&nbsp;            if (entities != null) {</b>
+<b class="nc"><i>297</i>&nbsp;                addEntity(entities, line.getBounds(), dataset, series, item,</b>
+<i>298</i>&nbsp;                        0.0, 0.0);
+<i>299</i>&nbsp;            }
+<i>300</i>&nbsp;        }
+<i>301</i>&nbsp;
+<b class="nc"><i>302</i>&nbsp;    }</b>
+<i>303</i>&nbsp;
+<i>304</i>&nbsp;    /**
+<i>305</i>&nbsp;     * Tests this {@code VectorRenderer} for equality with an arbitrary
+<i>306</i>&nbsp;     * object.  This method returns {@code true} if and only if:
+<i>307</i>&nbsp;     * &lt;ul&gt;
+<i>308</i>&nbsp;     * &lt;li&gt;{@code obj} is an instance of {@code VectorRenderer} (not
+<i>309</i>&nbsp;     *     {@code null});&lt;/li&gt;
+<i>310</i>&nbsp;     * &lt;li&gt;{@code obj} has the same field values as this
+<i>311</i>&nbsp;     *     {@code VectorRenderer};&lt;/li&gt;
+<i>312</i>&nbsp;     * &lt;/ul&gt;
+<i>313</i>&nbsp;     *
+<i>314</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @return A boolean.
+<i>317</i>&nbsp;     */
+<i>318</i>&nbsp;    @Override
+<i>319</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>320</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>321</i>&nbsp;            return true;</b>
+<i>322</i>&nbsp;        }
+<b class="fc"><i>323</i>&nbsp;        if (!(obj instanceof VectorRenderer)) {</b>
+<b class="nc"><i>324</i>&nbsp;            return false;</b>
+<i>325</i>&nbsp;        }
+<b class="fc"><i>326</i>&nbsp;        VectorRenderer that = (VectorRenderer) obj;</b>
+<b class="fc"><i>327</i>&nbsp;        if (this.baseLength != that.baseLength) {</b>
+<b class="nc"><i>328</i>&nbsp;            return false;</b>
+<i>329</i>&nbsp;        }
+<b class="fc"><i>330</i>&nbsp;        if (this.headLength != that.headLength) {</b>
+<b class="nc"><i>331</i>&nbsp;            return false;</b>
+<i>332</i>&nbsp;        }
+<b class="fc"><i>333</i>&nbsp;        return super.equals(obj);</b>
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    /**
+<i>337</i>&nbsp;     * Returns a clone of this renderer.
+<i>338</i>&nbsp;     *
+<i>339</i>&nbsp;     * @return A clone of this renderer.
+<i>340</i>&nbsp;     *
+<i>341</i>&nbsp;     * @throws CloneNotSupportedException if there is a problem creating the
+<i>342</i>&nbsp;     *     clone.
+<i>343</i>&nbsp;     */
+<i>344</i>&nbsp;    @Override
+<i>345</i>&nbsp;    public Object clone() throws CloneNotSupportedException {
+<b class="fc"><i>346</i>&nbsp;        return super.clone();</b>
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>

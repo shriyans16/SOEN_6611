@@ -1,0 +1,918 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DialPlot</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.plot.dial</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DialPlot (org.jfree.chart.plot.dial)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DialPlot</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    39%
+  </span>
+  <span class="absValue">
+    (16/ 41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    44.5%
+  </span>
+  <span class="absValue">
+    (105/ 236)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2014, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------
+<i>28</i>&nbsp; * DialPlot.java
+<i>29</i>&nbsp; * -------------
+<i>30</i>&nbsp; * (C) Copyright 2006-2014, by Object Refinery Limited.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David Gilbert (for Object Refinery Limited);
+<i>33</i>&nbsp; * Contributor(s):   -;
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 03-Nov-2006 : Version 1 (DG);
+<i>38</i>&nbsp; * 08-Mar-2007 : Fix in hashCode() (DG);
+<i>39</i>&nbsp; * 17-Oct-2007 : Fixed listener registration/deregistration bugs (DG);
+<i>40</i>&nbsp; * 24-Oct-2007 : Maintain pointers in their own list, so they can be
+<i>41</i>&nbsp; *               drawn after other layers (DG);
+<i>42</i>&nbsp; * 15-Feb-2008 : Fixed clipping bug (1873160) (DG);
+<i>43</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>44</i>&nbsp; *
+<i>45</i>&nbsp; */
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;package org.jfree.chart.plot.dial;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;import java.awt.Graphics2D;
+<i>50</i>&nbsp;import java.awt.Shape;
+<i>51</i>&nbsp;import java.awt.geom.Point2D;
+<i>52</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>53</i>&nbsp;import java.io.IOException;
+<i>54</i>&nbsp;import java.io.ObjectInputStream;
+<i>55</i>&nbsp;import java.io.ObjectOutputStream;
+<i>56</i>&nbsp;import java.util.Iterator;
+<i>57</i>&nbsp;import java.util.List;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;import org.jfree.chart.JFreeChart;
+<i>60</i>&nbsp;import org.jfree.chart.event.PlotChangeEvent;
+<i>61</i>&nbsp;import org.jfree.chart.plot.Plot;
+<i>62</i>&nbsp;import org.jfree.chart.plot.PlotRenderingInfo;
+<i>63</i>&nbsp;import org.jfree.chart.plot.PlotState;
+<i>64</i>&nbsp;import org.jfree.chart.util.ParamChecks;
+<i>65</i>&nbsp;import org.jfree.data.general.DatasetChangeEvent;
+<i>66</i>&nbsp;import org.jfree.data.general.ValueDataset;
+<i>67</i>&nbsp;import org.jfree.util.ObjectList;
+<i>68</i>&nbsp;import org.jfree.util.ObjectUtilities;
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;/**
+<i>71</i>&nbsp; * A dial plot composed of user-definable layers.
+<i>72</i>&nbsp; * The example shown here is generated by the &lt;code&gt;DialDemo2.java&lt;/code&gt;
+<i>73</i>&nbsp; * program included in the JFreeChart Demo Collection:
+<i>74</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>75</i>&nbsp; * &lt;img src=&quot;../../../../../images/DialPlotSample.png&quot;
+<i>76</i>&nbsp; * alt=&quot;DialPlotSample.png&quot;&gt;
+<i>77</i>&nbsp; *
+<i>78</i>&nbsp; * @since 1.0.7
+<i>79</i>&nbsp; */
+<i>80</i>&nbsp;public class DialPlot extends Plot implements DialLayerChangeListener {
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * The background layer (optional).
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    private DialLayer background;
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    /**
+<i>88</i>&nbsp;     * The needle cap (optional).
+<i>89</i>&nbsp;     */
+<i>90</i>&nbsp;    private DialLayer cap;
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;    /**
+<i>93</i>&nbsp;     * The dial frame.
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    private DialFrame dialFrame;
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * The dataset(s) for the dial plot.
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    private ObjectList datasets;
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;    /**
+<i>103</i>&nbsp;     * The scale(s) for the dial plot.
+<i>104</i>&nbsp;     */
+<i>105</i>&nbsp;    private ObjectList scales;
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /** Storage for keys that map datasets to scales. */
+<i>108</i>&nbsp;    private ObjectList datasetToScaleMap;
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /**
+<i>111</i>&nbsp;     * The drawing layers for the dial plot.
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    private List layers;
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    /**
+<i>116</i>&nbsp;     * The pointer(s) for the dial.
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    private List pointers;
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    /**
+<i>121</i>&nbsp;     * The x-coordinate for the view window.
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    private double viewX;
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * The y-coordinate for the view window.
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    private double viewY;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * The width of the view window, expressed as a percentage.
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    private double viewW;
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    /**
+<i>136</i>&nbsp;     * The height of the view window, expressed as a percentage.
+<i>137</i>&nbsp;     */
+<i>138</i>&nbsp;    private double viewH;
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;    /**
+<i>141</i>&nbsp;     * Creates a new instance of &lt;code&gt;DialPlot&lt;/code&gt;.
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    public DialPlot() {
+<b class="fc"><i>144</i>&nbsp;        this(null);</b>
+<b class="fc"><i>145</i>&nbsp;    }</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;    /**
+<i>148</i>&nbsp;     * Creates a new instance of &lt;code&gt;DialPlot&lt;/code&gt;.
+<i>149</i>&nbsp;     *
+<i>150</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>151</i>&nbsp;     */
+<b class="fc"><i>152</i>&nbsp;    public DialPlot(ValueDataset dataset) {</b>
+<b class="fc"><i>153</i>&nbsp;        this.background = null;</b>
+<b class="fc"><i>154</i>&nbsp;        this.cap = null;</b>
+<b class="fc"><i>155</i>&nbsp;        this.dialFrame = new ArcDialFrame();</b>
+<b class="fc"><i>156</i>&nbsp;        this.datasets = new ObjectList();</b>
+<b class="fc"><i>157</i>&nbsp;        if (dataset != null) {</b>
+<b class="nc"><i>158</i>&nbsp;            setDataset(dataset);</b>
+<i>159</i>&nbsp;        }
+<b class="fc"><i>160</i>&nbsp;        this.scales = new ObjectList();</b>
+<b class="fc"><i>161</i>&nbsp;        this.datasetToScaleMap = new ObjectList();</b>
+<b class="fc"><i>162</i>&nbsp;        this.layers = new java.util.ArrayList();</b>
+<b class="fc"><i>163</i>&nbsp;        this.pointers = new java.util.ArrayList();</b>
+<b class="fc"><i>164</i>&nbsp;        this.viewX = 0.0;</b>
+<b class="fc"><i>165</i>&nbsp;        this.viewY = 0.0;</b>
+<b class="fc"><i>166</i>&nbsp;        this.viewW = 1.0;</b>
+<b class="fc"><i>167</i>&nbsp;        this.viewH = 1.0;</b>
+<b class="fc"><i>168</i>&nbsp;    }</b>
+<i>169</i>&nbsp;
+<i>170</i>&nbsp;    /**
+<i>171</i>&nbsp;     * Returns the background.
+<i>172</i>&nbsp;     *
+<i>173</i>&nbsp;     * @return The background (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>174</i>&nbsp;     *
+<i>175</i>&nbsp;     * @see #setBackground(DialLayer)
+<i>176</i>&nbsp;     */
+<i>177</i>&nbsp;    public DialLayer getBackground() {
+<b class="nc"><i>178</i>&nbsp;        return this.background;</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /**
+<i>182</i>&nbsp;     * Sets the background layer and sends a {@link PlotChangeEvent} to all
+<i>183</i>&nbsp;     * registered listeners.
+<i>184</i>&nbsp;     *
+<i>185</i>&nbsp;     * @param background  the background layer (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>186</i>&nbsp;     *
+<i>187</i>&nbsp;     * @see #getBackground()
+<i>188</i>&nbsp;     */
+<i>189</i>&nbsp;    public void setBackground(DialLayer background) {
+<b class="fc"><i>190</i>&nbsp;        if (this.background != null) {</b>
+<b class="fc"><i>191</i>&nbsp;            this.background.removeChangeListener(this);</b>
+<i>192</i>&nbsp;        }
+<b class="fc"><i>193</i>&nbsp;        this.background = background;</b>
+<b class="fc"><i>194</i>&nbsp;        if (background != null) {</b>
+<b class="fc"><i>195</i>&nbsp;            background.addChangeListener(this);</b>
+<i>196</i>&nbsp;        }
+<b class="fc"><i>197</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>198</i>&nbsp;    }</b>
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    /**
+<i>201</i>&nbsp;     * Returns the cap.
+<i>202</i>&nbsp;     *
+<i>203</i>&nbsp;     * @return The cap (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>204</i>&nbsp;     *
+<i>205</i>&nbsp;     * @see #setCap(DialLayer)
+<i>206</i>&nbsp;     */
+<i>207</i>&nbsp;    public DialLayer getCap() {
+<b class="nc"><i>208</i>&nbsp;        return this.cap;</b>
+<i>209</i>&nbsp;    }
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    /**
+<i>212</i>&nbsp;     * Sets the cap and sends a {@link PlotChangeEvent} to all registered
+<i>213</i>&nbsp;     * listeners.
+<i>214</i>&nbsp;     *
+<i>215</i>&nbsp;     * @param cap  the cap (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>216</i>&nbsp;     *
+<i>217</i>&nbsp;     * @see #getCap()
+<i>218</i>&nbsp;     */
+<i>219</i>&nbsp;    public void setCap(DialLayer cap) {
+<b class="fc"><i>220</i>&nbsp;        if (this.cap != null) {</b>
+<b class="fc"><i>221</i>&nbsp;            this.cap.removeChangeListener(this);</b>
+<i>222</i>&nbsp;        }
+<b class="fc"><i>223</i>&nbsp;        this.cap = cap;</b>
+<b class="fc"><i>224</i>&nbsp;        if (cap != null) {</b>
+<b class="fc"><i>225</i>&nbsp;            cap.addChangeListener(this);</b>
+<i>226</i>&nbsp;        }
+<b class="fc"><i>227</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>228</i>&nbsp;    }</b>
+<i>229</i>&nbsp;
+<i>230</i>&nbsp;    /**
+<i>231</i>&nbsp;     * Returns the dial&#39;s frame.
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @return The dial&#39;s frame (never &lt;code&gt;null&lt;/code&gt;).
+<i>234</i>&nbsp;     *
+<i>235</i>&nbsp;     * @see #setDialFrame(DialFrame)
+<i>236</i>&nbsp;     */
+<i>237</i>&nbsp;    public DialFrame getDialFrame() {
+<b class="nc"><i>238</i>&nbsp;        return this.dialFrame;</b>
+<i>239</i>&nbsp;    }
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Sets the dial&#39;s frame and sends a {@link PlotChangeEvent} to all
+<i>243</i>&nbsp;     * registered listeners.
+<i>244</i>&nbsp;     *
+<i>245</i>&nbsp;     * @param frame  the frame (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>246</i>&nbsp;     *
+<i>247</i>&nbsp;     * @see #getDialFrame()
+<i>248</i>&nbsp;     */
+<i>249</i>&nbsp;    public void setDialFrame(DialFrame frame) {
+<b class="fc"><i>250</i>&nbsp;        ParamChecks.nullNotPermitted(frame, &quot;frame&quot;);</b>
+<b class="fc"><i>251</i>&nbsp;        this.dialFrame.removeChangeListener(this);</b>
+<b class="fc"><i>252</i>&nbsp;        this.dialFrame = frame;</b>
+<b class="fc"><i>253</i>&nbsp;        frame.addChangeListener(this);</b>
+<b class="fc"><i>254</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>255</i>&nbsp;    }</b>
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Returns the x-coordinate of the viewing rectangle.  This is specified
+<i>259</i>&nbsp;     * in the range 0.0 to 1.0, relative to the dial&#39;s framing rectangle.
+<i>260</i>&nbsp;     *
+<i>261</i>&nbsp;     * @return The x-coordinate of the viewing rectangle.
+<i>262</i>&nbsp;     *
+<i>263</i>&nbsp;     * @see #setView(double, double, double, double)
+<i>264</i>&nbsp;     */
+<i>265</i>&nbsp;    public double getViewX() {
+<b class="nc"><i>266</i>&nbsp;        return this.viewX;</b>
+<i>267</i>&nbsp;    }
+<i>268</i>&nbsp;
+<i>269</i>&nbsp;    /**
+<i>270</i>&nbsp;     * Returns the y-coordinate of the viewing rectangle.  This is specified
+<i>271</i>&nbsp;     * in the range 0.0 to 1.0, relative to the dial&#39;s framing rectangle.
+<i>272</i>&nbsp;     *
+<i>273</i>&nbsp;     * @return The y-coordinate of the viewing rectangle.
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @see #setView(double, double, double, double)
+<i>276</i>&nbsp;     */
+<i>277</i>&nbsp;    public double getViewY() {
+<b class="nc"><i>278</i>&nbsp;        return this.viewY;</b>
+<i>279</i>&nbsp;    }
+<i>280</i>&nbsp;
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * Returns the width of the viewing rectangle.  This is specified
+<i>283</i>&nbsp;     * in the range 0.0 to 1.0, relative to the dial&#39;s framing rectangle.
+<i>284</i>&nbsp;     *
+<i>285</i>&nbsp;     * @return The width of the viewing rectangle.
+<i>286</i>&nbsp;     *
+<i>287</i>&nbsp;     * @see #setView(double, double, double, double)
+<i>288</i>&nbsp;     */
+<i>289</i>&nbsp;    public double getViewWidth() {
+<b class="nc"><i>290</i>&nbsp;        return this.viewW;</b>
+<i>291</i>&nbsp;    }
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /**
+<i>294</i>&nbsp;     * Returns the height of the viewing rectangle.  This is specified
+<i>295</i>&nbsp;     * in the range 0.0 to 1.0, relative to the dial&#39;s framing rectangle.
+<i>296</i>&nbsp;     *
+<i>297</i>&nbsp;     * @return The height of the viewing rectangle.
+<i>298</i>&nbsp;     *
+<i>299</i>&nbsp;     * @see #setView(double, double, double, double)
+<i>300</i>&nbsp;     */
+<i>301</i>&nbsp;    public double getViewHeight() {
+<b class="nc"><i>302</i>&nbsp;        return this.viewH;</b>
+<i>303</i>&nbsp;    }
+<i>304</i>&nbsp;
+<i>305</i>&nbsp;    /**
+<i>306</i>&nbsp;     * Sets the viewing rectangle, relative to the dial&#39;s framing rectangle,
+<i>307</i>&nbsp;     * and sends a {@link PlotChangeEvent} to all registered listeners.
+<i>308</i>&nbsp;     *
+<i>309</i>&nbsp;     * @param x  the x-coordinate (in the range 0.0 to 1.0).
+<i>310</i>&nbsp;     * @param y  the y-coordinate (in the range 0.0 to 1.0).
+<i>311</i>&nbsp;     * @param w  the width (in the range 0.0 to 1.0).
+<i>312</i>&nbsp;     * @param h  the height (in the range 0.0 to 1.0).
+<i>313</i>&nbsp;     *
+<i>314</i>&nbsp;     * @see #getViewX()
+<i>315</i>&nbsp;     * @see #getViewY()
+<i>316</i>&nbsp;     * @see #getViewWidth()
+<i>317</i>&nbsp;     * @see #getViewHeight()
+<i>318</i>&nbsp;     */
+<i>319</i>&nbsp;    public void setView(double x, double y, double w, double h) {
+<b class="fc"><i>320</i>&nbsp;        this.viewX = x;</b>
+<b class="fc"><i>321</i>&nbsp;        this.viewY = y;</b>
+<b class="fc"><i>322</i>&nbsp;        this.viewW = w;</b>
+<b class="fc"><i>323</i>&nbsp;        this.viewH = h;</b>
+<b class="fc"><i>324</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>325</i>&nbsp;    }</b>
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    /**
+<i>328</i>&nbsp;     * Adds a layer to the plot and sends a {@link PlotChangeEvent} to all
+<i>329</i>&nbsp;     * registered listeners.
+<i>330</i>&nbsp;     *
+<i>331</i>&nbsp;     * @param layer  the layer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>332</i>&nbsp;     */
+<i>333</i>&nbsp;    public void addLayer(DialLayer layer) {
+<b class="fc"><i>334</i>&nbsp;        ParamChecks.nullNotPermitted(layer, &quot;layer&quot;);</b>
+<b class="fc"><i>335</i>&nbsp;        this.layers.add(layer);</b>
+<b class="fc"><i>336</i>&nbsp;        layer.addChangeListener(this);</b>
+<b class="fc"><i>337</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>338</i>&nbsp;    }</b>
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;    /**
+<i>341</i>&nbsp;     * Returns the index for the specified layer.
+<i>342</i>&nbsp;     *
+<i>343</i>&nbsp;     * @param layer  the layer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>344</i>&nbsp;     *
+<i>345</i>&nbsp;     * @return The layer index.
+<i>346</i>&nbsp;     */
+<i>347</i>&nbsp;    public int getLayerIndex(DialLayer layer) {
+<b class="fc"><i>348</i>&nbsp;        ParamChecks.nullNotPermitted(layer, &quot;layer&quot;);</b>
+<b class="fc"><i>349</i>&nbsp;        return this.layers.indexOf(layer);</b>
+<i>350</i>&nbsp;    }
+<i>351</i>&nbsp;
+<i>352</i>&nbsp;    /**
+<i>353</i>&nbsp;     * Removes the layer at the specified index and sends a
+<i>354</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>355</i>&nbsp;     *
+<i>356</i>&nbsp;     * @param index  the index.
+<i>357</i>&nbsp;     */
+<i>358</i>&nbsp;    public void removeLayer(int index) {
+<b class="fc"><i>359</i>&nbsp;        DialLayer layer = (DialLayer) this.layers.get(index);</b>
+<b class="fc"><i>360</i>&nbsp;        if (layer != null) {</b>
+<b class="fc"><i>361</i>&nbsp;            layer.removeChangeListener(this);</b>
+<i>362</i>&nbsp;        }
+<b class="fc"><i>363</i>&nbsp;        this.layers.remove(index);</b>
+<b class="fc"><i>364</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>365</i>&nbsp;    }</b>
+<i>366</i>&nbsp;
+<i>367</i>&nbsp;    /**
+<i>368</i>&nbsp;     * Removes the specified layer and sends a {@link PlotChangeEvent} to all
+<i>369</i>&nbsp;     * registered listeners.
+<i>370</i>&nbsp;     *
+<i>371</i>&nbsp;     * @param layer  the layer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>372</i>&nbsp;     */
+<i>373</i>&nbsp;    public void removeLayer(DialLayer layer) {
+<i>374</i>&nbsp;        // defer argument checking
+<b class="fc"><i>375</i>&nbsp;        removeLayer(getLayerIndex(layer));</b>
+<b class="fc"><i>376</i>&nbsp;    }</b>
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;    /**
+<i>379</i>&nbsp;     * Adds a pointer to the plot and sends a {@link PlotChangeEvent} to all
+<i>380</i>&nbsp;     * registered listeners.
+<i>381</i>&nbsp;     *
+<i>382</i>&nbsp;     * @param pointer  the pointer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>383</i>&nbsp;     */
+<i>384</i>&nbsp;    public void addPointer(DialPointer pointer) {
+<b class="nc"><i>385</i>&nbsp;        ParamChecks.nullNotPermitted(pointer, &quot;pointer&quot;);</b>
+<b class="nc"><i>386</i>&nbsp;        this.pointers.add(pointer);</b>
+<b class="nc"><i>387</i>&nbsp;        pointer.addChangeListener(this);</b>
+<b class="nc"><i>388</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>389</i>&nbsp;    }</b>
+<i>390</i>&nbsp;
+<i>391</i>&nbsp;    /**
+<i>392</i>&nbsp;     * Returns the index for the specified pointer.
+<i>393</i>&nbsp;     *
+<i>394</i>&nbsp;     * @param pointer  the pointer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>395</i>&nbsp;     *
+<i>396</i>&nbsp;     * @return The pointer index.
+<i>397</i>&nbsp;     */
+<i>398</i>&nbsp;    public int getPointerIndex(DialPointer pointer) {
+<b class="nc"><i>399</i>&nbsp;        ParamChecks.nullNotPermitted(pointer, &quot;pointer&quot;);</b>
+<b class="nc"><i>400</i>&nbsp;        return this.pointers.indexOf(pointer);</b>
+<i>401</i>&nbsp;    }
+<i>402</i>&nbsp;
+<i>403</i>&nbsp;    /**
+<i>404</i>&nbsp;     * Removes the pointer at the specified index and sends a
+<i>405</i>&nbsp;     * {@link PlotChangeEvent} to all registered listeners.
+<i>406</i>&nbsp;     *
+<i>407</i>&nbsp;     * @param index  the index.
+<i>408</i>&nbsp;     */
+<i>409</i>&nbsp;    public void removePointer(int index) {
+<b class="nc"><i>410</i>&nbsp;        DialPointer pointer = (DialPointer) this.pointers.get(index);</b>
+<b class="nc"><i>411</i>&nbsp;        if (pointer != null) {</b>
+<b class="nc"><i>412</i>&nbsp;            pointer.removeChangeListener(this);</b>
+<i>413</i>&nbsp;        }
+<b class="nc"><i>414</i>&nbsp;        this.pointers.remove(index);</b>
+<b class="nc"><i>415</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>416</i>&nbsp;    }</b>
+<i>417</i>&nbsp;
+<i>418</i>&nbsp;    /**
+<i>419</i>&nbsp;     * Removes the specified pointer and sends a {@link PlotChangeEvent} to all
+<i>420</i>&nbsp;     * registered listeners.
+<i>421</i>&nbsp;     *
+<i>422</i>&nbsp;     * @param pointer  the pointer (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>423</i>&nbsp;     */
+<i>424</i>&nbsp;    public void removePointer(DialPointer pointer) {
+<i>425</i>&nbsp;        // defer argument checking
+<b class="nc"><i>426</i>&nbsp;        removeLayer(getPointerIndex(pointer));</b>
+<b class="nc"><i>427</i>&nbsp;    }</b>
+<i>428</i>&nbsp;
+<i>429</i>&nbsp;    /**
+<i>430</i>&nbsp;     * Returns the dial pointer that is associated with the specified
+<i>431</i>&nbsp;     * dataset, or &lt;code&gt;null&lt;/code&gt;.
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     * @param datasetIndex  the dataset index.
+<i>434</i>&nbsp;     *
+<i>435</i>&nbsp;     * @return The pointer.
+<i>436</i>&nbsp;     */
+<i>437</i>&nbsp;    public DialPointer getPointerForDataset(int datasetIndex) {
+<b class="nc"><i>438</i>&nbsp;        DialPointer result = null;</b>
+<b class="nc"><i>439</i>&nbsp;        Iterator iterator = this.pointers.iterator();</b>
+<b class="nc"><i>440</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>441</i>&nbsp;            DialPointer p = (DialPointer) iterator.next();</b>
+<b class="nc"><i>442</i>&nbsp;            if (p.getDatasetIndex() == datasetIndex) {</b>
+<b class="nc"><i>443</i>&nbsp;                return p;</b>
+<i>444</i>&nbsp;            }
+<b class="nc"><i>445</i>&nbsp;        }</b>
+<b class="nc"><i>446</i>&nbsp;        return result;</b>
+<i>447</i>&nbsp;    }
+<i>448</i>&nbsp;
+<i>449</i>&nbsp;    /**
+<i>450</i>&nbsp;     * Returns the primary dataset for the plot.
+<i>451</i>&nbsp;     *
+<i>452</i>&nbsp;     * @return The primary dataset (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>453</i>&nbsp;     */
+<i>454</i>&nbsp;    public ValueDataset getDataset() {
+<b class="nc"><i>455</i>&nbsp;        return getDataset(0);</b>
+<i>456</i>&nbsp;    }
+<i>457</i>&nbsp;
+<i>458</i>&nbsp;    /**
+<i>459</i>&nbsp;     * Returns the dataset at the given index.
+<i>460</i>&nbsp;     *
+<i>461</i>&nbsp;     * @param index  the dataset index.
+<i>462</i>&nbsp;     *
+<i>463</i>&nbsp;     * @return The dataset (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>464</i>&nbsp;     */
+<i>465</i>&nbsp;    public ValueDataset getDataset(int index) {
+<b class="nc"><i>466</i>&nbsp;        ValueDataset result = null;</b>
+<b class="nc"><i>467</i>&nbsp;        if (this.datasets.size() &gt; index) {</b>
+<b class="nc"><i>468</i>&nbsp;            result = (ValueDataset) this.datasets.get(index);</b>
+<i>469</i>&nbsp;        }
+<b class="nc"><i>470</i>&nbsp;        return result;</b>
+<i>471</i>&nbsp;    }
+<i>472</i>&nbsp;
+<i>473</i>&nbsp;    /**
+<i>474</i>&nbsp;     * Sets the dataset for the plot, replacing the existing dataset, if there
+<i>475</i>&nbsp;     * is one, and sends a {@link PlotChangeEvent} to all registered
+<i>476</i>&nbsp;     * listeners.
+<i>477</i>&nbsp;     *
+<i>478</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>479</i>&nbsp;     */
+<i>480</i>&nbsp;    public void setDataset(ValueDataset dataset) {
+<b class="nc"><i>481</i>&nbsp;        setDataset(0, dataset);</b>
+<b class="nc"><i>482</i>&nbsp;    }</b>
+<i>483</i>&nbsp;
+<i>484</i>&nbsp;    /**
+<i>485</i>&nbsp;     * Sets a dataset for the plot.
+<i>486</i>&nbsp;     *
+<i>487</i>&nbsp;     * @param index  the dataset index.
+<i>488</i>&nbsp;     * @param dataset  the dataset (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>489</i>&nbsp;     */
+<i>490</i>&nbsp;    public void setDataset(int index, ValueDataset dataset) {
+<i>491</i>&nbsp;
+<b class="nc"><i>492</i>&nbsp;        ValueDataset existing = (ValueDataset) this.datasets.get(index);</b>
+<b class="nc"><i>493</i>&nbsp;        if (existing != null) {</b>
+<b class="nc"><i>494</i>&nbsp;            existing.removeChangeListener(this);</b>
+<i>495</i>&nbsp;        }
+<b class="nc"><i>496</i>&nbsp;        this.datasets.set(index, dataset);</b>
+<b class="nc"><i>497</i>&nbsp;        if (dataset != null) {</b>
+<b class="nc"><i>498</i>&nbsp;            dataset.addChangeListener(this);</b>
+<i>499</i>&nbsp;        }
+<i>500</i>&nbsp;
+<i>501</i>&nbsp;        // send a dataset change event to self...
+<b class="nc"><i>502</i>&nbsp;        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);</b>
+<b class="nc"><i>503</i>&nbsp;        datasetChanged(event);</b>
+<i>504</i>&nbsp;
+<b class="nc"><i>505</i>&nbsp;    }</b>
+<i>506</i>&nbsp;
+<i>507</i>&nbsp;    /**
+<i>508</i>&nbsp;     * Returns the number of datasets.
+<i>509</i>&nbsp;     *
+<i>510</i>&nbsp;     * @return The number of datasets.
+<i>511</i>&nbsp;     */
+<i>512</i>&nbsp;    public int getDatasetCount() {
+<b class="nc"><i>513</i>&nbsp;        return this.datasets.size();</b>
+<i>514</i>&nbsp;    }
+<i>515</i>&nbsp;
+<i>516</i>&nbsp;    /**
+<i>517</i>&nbsp;     * Draws the plot.  This method is usually called by the {@link JFreeChart}
+<i>518</i>&nbsp;     * instance that manages the plot.
+<i>519</i>&nbsp;     *
+<i>520</i>&nbsp;     * @param g2  the graphics target.
+<i>521</i>&nbsp;     * @param area  the area in which the plot should be drawn.
+<i>522</i>&nbsp;     * @param anchor  the anchor point (typically the last point that the
+<i>523</i>&nbsp;     *     mouse clicked on, &lt;code&gt;null&lt;/code&gt; is permitted).
+<i>524</i>&nbsp;     * @param parentState  the state for the parent plot (if any).
+<i>525</i>&nbsp;     * @param info  used to collect plot rendering info (&lt;code&gt;null&lt;/code&gt;
+<i>526</i>&nbsp;     *     permitted).
+<i>527</i>&nbsp;     */
+<i>528</i>&nbsp;    @Override
+<i>529</i>&nbsp;    public void draw(Graphics2D g2, Rectangle2D area, Point2D anchor,
+<i>530</i>&nbsp;            PlotState parentState, PlotRenderingInfo info) {
+<i>531</i>&nbsp;
+<b class="nc"><i>532</i>&nbsp;        Shape origClip = g2.getClip();</b>
+<b class="nc"><i>533</i>&nbsp;        g2.setClip(area);</b>
+<i>534</i>&nbsp;
+<i>535</i>&nbsp;        // first, expand the viewing area into a drawing frame
+<b class="nc"><i>536</i>&nbsp;        Rectangle2D frame = viewToFrame(area);</b>
+<i>537</i>&nbsp;
+<i>538</i>&nbsp;        // draw the background if there is one...
+<b class="nc"><i>539</i>&nbsp;        if (this.background != null &amp;&amp; this.background.isVisible()) {</b>
+<b class="nc"><i>540</i>&nbsp;            if (this.background.isClippedToWindow()) {</b>
+<b class="nc"><i>541</i>&nbsp;                Shape savedClip = g2.getClip();</b>
+<b class="nc"><i>542</i>&nbsp;                g2.clip(this.dialFrame.getWindow(frame));</b>
+<b class="nc"><i>543</i>&nbsp;                this.background.draw(g2, this, frame, area);</b>
+<b class="nc"><i>544</i>&nbsp;                g2.setClip(savedClip);</b>
+<b class="nc"><i>545</i>&nbsp;            }</b>
+<i>546</i>&nbsp;            else {
+<b class="nc"><i>547</i>&nbsp;                this.background.draw(g2, this, frame, area);</b>
+<i>548</i>&nbsp;            }
+<i>549</i>&nbsp;        }
+<i>550</i>&nbsp;
+<b class="nc"><i>551</i>&nbsp;        Iterator iterator = this.layers.iterator();</b>
+<b class="nc"><i>552</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>553</i>&nbsp;            DialLayer current = (DialLayer) iterator.next();</b>
+<b class="nc"><i>554</i>&nbsp;            if (current.isVisible()) {</b>
+<b class="nc"><i>555</i>&nbsp;                if (current.isClippedToWindow()) {</b>
+<b class="nc"><i>556</i>&nbsp;                    Shape savedClip = g2.getClip();</b>
+<b class="nc"><i>557</i>&nbsp;                    g2.clip(this.dialFrame.getWindow(frame));</b>
+<b class="nc"><i>558</i>&nbsp;                    current.draw(g2, this, frame, area);</b>
+<b class="nc"><i>559</i>&nbsp;                    g2.setClip(savedClip);</b>
+<b class="nc"><i>560</i>&nbsp;                }</b>
+<i>561</i>&nbsp;                else {
+<b class="nc"><i>562</i>&nbsp;                    current.draw(g2, this, frame, area);</b>
+<i>563</i>&nbsp;                }
+<i>564</i>&nbsp;            }
+<b class="nc"><i>565</i>&nbsp;        }</b>
+<i>566</i>&nbsp;
+<i>567</i>&nbsp;        // draw the pointers
+<b class="nc"><i>568</i>&nbsp;        iterator = this.pointers.iterator();</b>
+<b class="nc"><i>569</i>&nbsp;        while (iterator.hasNext()) {</b>
+<b class="nc"><i>570</i>&nbsp;            DialPointer current = (DialPointer) iterator.next();</b>
+<b class="nc"><i>571</i>&nbsp;            if (current.isVisible()) {</b>
+<b class="nc"><i>572</i>&nbsp;                if (current.isClippedToWindow()) {</b>
+<b class="nc"><i>573</i>&nbsp;                    Shape savedClip = g2.getClip();</b>
+<b class="nc"><i>574</i>&nbsp;                    g2.clip(this.dialFrame.getWindow(frame));</b>
+<b class="nc"><i>575</i>&nbsp;                    current.draw(g2, this, frame, area);</b>
+<b class="nc"><i>576</i>&nbsp;                    g2.setClip(savedClip);</b>
+<b class="nc"><i>577</i>&nbsp;                }</b>
+<i>578</i>&nbsp;                else {
+<b class="nc"><i>579</i>&nbsp;                    current.draw(g2, this, frame, area);</b>
+<i>580</i>&nbsp;                }
+<i>581</i>&nbsp;            }
+<b class="nc"><i>582</i>&nbsp;        }</b>
+<i>583</i>&nbsp;
+<i>584</i>&nbsp;        // draw the cap if there is one...
+<b class="nc"><i>585</i>&nbsp;        if (this.cap != null &amp;&amp; this.cap.isVisible()) {</b>
+<b class="nc"><i>586</i>&nbsp;            if (this.cap.isClippedToWindow()) {</b>
+<b class="nc"><i>587</i>&nbsp;                Shape savedClip = g2.getClip();</b>
+<b class="nc"><i>588</i>&nbsp;                g2.clip(this.dialFrame.getWindow(frame));</b>
+<b class="nc"><i>589</i>&nbsp;                this.cap.draw(g2, this, frame, area);</b>
+<b class="nc"><i>590</i>&nbsp;                g2.setClip(savedClip);</b>
+<b class="nc"><i>591</i>&nbsp;            }</b>
+<i>592</i>&nbsp;            else {
+<b class="nc"><i>593</i>&nbsp;                this.cap.draw(g2, this, frame, area);</b>
+<i>594</i>&nbsp;            }
+<i>595</i>&nbsp;        }
+<i>596</i>&nbsp;
+<b class="nc"><i>597</i>&nbsp;        if (this.dialFrame.isVisible()) {</b>
+<b class="nc"><i>598</i>&nbsp;            this.dialFrame.draw(g2, this, frame, area);</b>
+<i>599</i>&nbsp;        }
+<i>600</i>&nbsp;
+<b class="nc"><i>601</i>&nbsp;        g2.setClip(origClip);</b>
+<i>602</i>&nbsp;
+<b class="nc"><i>603</i>&nbsp;    }</b>
+<i>604</i>&nbsp;
+<i>605</i>&nbsp;    /**
+<i>606</i>&nbsp;     * Returns the frame surrounding the specified view rectangle.
+<i>607</i>&nbsp;     *
+<i>608</i>&nbsp;     * @param view  the view rectangle (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>609</i>&nbsp;     *
+<i>610</i>&nbsp;     * @return The frame rectangle.
+<i>611</i>&nbsp;     */
+<i>612</i>&nbsp;    private Rectangle2D viewToFrame(Rectangle2D view) {
+<b class="nc"><i>613</i>&nbsp;        double width = view.getWidth() / this.viewW;</b>
+<b class="nc"><i>614</i>&nbsp;        double height = view.getHeight() / this.viewH;</b>
+<b class="nc"><i>615</i>&nbsp;        double x = view.getX() - (width * this.viewX);</b>
+<b class="nc"><i>616</i>&nbsp;        double y = view.getY() - (height * this.viewY);</b>
+<b class="nc"><i>617</i>&nbsp;        return new Rectangle2D.Double(x, y, width, height);</b>
+<i>618</i>&nbsp;    }
+<i>619</i>&nbsp;
+<i>620</i>&nbsp;    /**
+<i>621</i>&nbsp;     * Returns the value from the specified dataset.
+<i>622</i>&nbsp;     *
+<i>623</i>&nbsp;     * @param datasetIndex  the dataset index.
+<i>624</i>&nbsp;     *
+<i>625</i>&nbsp;     * @return The data value.
+<i>626</i>&nbsp;     */
+<i>627</i>&nbsp;    public double getValue(int datasetIndex) {
+<b class="nc"><i>628</i>&nbsp;        double result = Double.NaN;</b>
+<b class="nc"><i>629</i>&nbsp;        ValueDataset dataset = getDataset(datasetIndex);</b>
+<b class="nc"><i>630</i>&nbsp;        if (dataset != null) {</b>
+<b class="nc"><i>631</i>&nbsp;            Number n = dataset.getValue();</b>
+<b class="nc"><i>632</i>&nbsp;            if (n != null) {</b>
+<b class="nc"><i>633</i>&nbsp;                result = n.doubleValue();</b>
+<i>634</i>&nbsp;            }
+<i>635</i>&nbsp;        }
+<b class="nc"><i>636</i>&nbsp;        return result;</b>
+<i>637</i>&nbsp;    }
+<i>638</i>&nbsp;
+<i>639</i>&nbsp;    /**
+<i>640</i>&nbsp;     * Adds a dial scale to the plot and sends a {@link PlotChangeEvent} to
+<i>641</i>&nbsp;     * all registered listeners.
+<i>642</i>&nbsp;     *
+<i>643</i>&nbsp;     * @param index  the scale index.
+<i>644</i>&nbsp;     * @param scale  the scale (&lt;code&gt;null&lt;/code&gt; not permitted).
+<i>645</i>&nbsp;     */
+<i>646</i>&nbsp;    public void addScale(int index, DialScale scale) {
+<b class="fc"><i>647</i>&nbsp;        ParamChecks.nullNotPermitted(scale, &quot;scale&quot;);</b>
+<b class="fc"><i>648</i>&nbsp;        DialScale existing = (DialScale) this.scales.get(index);</b>
+<b class="fc"><i>649</i>&nbsp;        if (existing != null) {</b>
+<b class="fc"><i>650</i>&nbsp;            removeLayer(existing);</b>
+<i>651</i>&nbsp;        }
+<b class="fc"><i>652</i>&nbsp;        this.layers.add(scale);</b>
+<b class="fc"><i>653</i>&nbsp;        this.scales.set(index, scale);</b>
+<b class="fc"><i>654</i>&nbsp;        scale.addChangeListener(this);</b>
+<b class="fc"><i>655</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>656</i>&nbsp;    }</b>
+<i>657</i>&nbsp;
+<i>658</i>&nbsp;    /**
+<i>659</i>&nbsp;     * Returns the scale at the given index.
+<i>660</i>&nbsp;     *
+<i>661</i>&nbsp;     * @param index  the scale index.
+<i>662</i>&nbsp;     *
+<i>663</i>&nbsp;     * @return The scale (possibly &lt;code&gt;null&lt;/code&gt;).
+<i>664</i>&nbsp;     */
+<i>665</i>&nbsp;    public DialScale getScale(int index) {
+<b class="nc"><i>666</i>&nbsp;        DialScale result = null;</b>
+<b class="nc"><i>667</i>&nbsp;        if (this.scales.size() &gt; index) {</b>
+<b class="nc"><i>668</i>&nbsp;            result = (DialScale) this.scales.get(index);</b>
+<i>669</i>&nbsp;        }
+<b class="nc"><i>670</i>&nbsp;        return result;</b>
+<i>671</i>&nbsp;    }
+<i>672</i>&nbsp;
+<i>673</i>&nbsp;    /**
+<i>674</i>&nbsp;     * Maps a dataset to a particular scale.
+<i>675</i>&nbsp;     *
+<i>676</i>&nbsp;     * @param index  the dataset index (zero-based).
+<i>677</i>&nbsp;     * @param scaleIndex  the scale index (zero-based).
+<i>678</i>&nbsp;     */
+<i>679</i>&nbsp;    public void mapDatasetToScale(int index, int scaleIndex) {
+<b class="nc"><i>680</i>&nbsp;        this.datasetToScaleMap.set(index, new Integer(scaleIndex));</b>
+<b class="nc"><i>681</i>&nbsp;        fireChangeEvent();</b>
+<b class="nc"><i>682</i>&nbsp;    }</b>
+<i>683</i>&nbsp;
+<i>684</i>&nbsp;    /**
+<i>685</i>&nbsp;     * Returns the dial scale for a specific dataset.
+<i>686</i>&nbsp;     *
+<i>687</i>&nbsp;     * @param datasetIndex  the dataset index.
+<i>688</i>&nbsp;     *
+<i>689</i>&nbsp;     * @return The dial scale.
+<i>690</i>&nbsp;     */
+<i>691</i>&nbsp;    public DialScale getScaleForDataset(int datasetIndex) {
+<b class="nc"><i>692</i>&nbsp;        DialScale result = (DialScale) this.scales.get(0);</b>
+<b class="nc"><i>693</i>&nbsp;        Integer scaleIndex = (Integer) this.datasetToScaleMap.get(datasetIndex);</b>
+<b class="nc"><i>694</i>&nbsp;        if (scaleIndex != null) {</b>
+<b class="nc"><i>695</i>&nbsp;            result = getScale(scaleIndex.intValue());</b>
+<i>696</i>&nbsp;        }
+<b class="nc"><i>697</i>&nbsp;        return result;</b>
+<i>698</i>&nbsp;    }
+<i>699</i>&nbsp;
+<i>700</i>&nbsp;    /**
+<i>701</i>&nbsp;     * A utility method that computes a rectangle using relative radius values.
+<i>702</i>&nbsp;     *
+<i>703</i>&nbsp;     * @param rect  the reference rectangle ({@code null} not permitted).
+<i>704</i>&nbsp;     * @param radiusW  the width radius (must be &amp;gt; 0.0)
+<i>705</i>&nbsp;     * @param radiusH  the height radius.
+<i>706</i>&nbsp;     *
+<i>707</i>&nbsp;     * @return A new rectangle.
+<i>708</i>&nbsp;     */
+<i>709</i>&nbsp;    public static Rectangle2D rectangleByRadius(Rectangle2D rect,
+<i>710</i>&nbsp;            double radiusW, double radiusH) {
+<b class="nc"><i>711</i>&nbsp;        ParamChecks.nullNotPermitted(rect, &quot;rect&quot;);</b>
+<b class="nc"><i>712</i>&nbsp;        double x = rect.getCenterX();</b>
+<b class="nc"><i>713</i>&nbsp;        double y = rect.getCenterY();</b>
+<b class="nc"><i>714</i>&nbsp;        double w = rect.getWidth() * radiusW;</b>
+<b class="nc"><i>715</i>&nbsp;        double h = rect.getHeight() * radiusH;</b>
+<b class="nc"><i>716</i>&nbsp;        return new Rectangle2D.Double(x - w / 2.0, y - h / 2.0, w, h);</b>
+<i>717</i>&nbsp;    }
+<i>718</i>&nbsp;
+<i>719</i>&nbsp;    /**
+<i>720</i>&nbsp;     * Receives notification when a layer has changed, and responds by
+<i>721</i>&nbsp;     * forwarding a {@link PlotChangeEvent} to all registered listeners.
+<i>722</i>&nbsp;     *
+<i>723</i>&nbsp;     * @param event  the event.
+<i>724</i>&nbsp;     */
+<i>725</i>&nbsp;    @Override
+<i>726</i>&nbsp;    public void dialLayerChanged(DialLayerChangeEvent event) {
+<b class="fc"><i>727</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>728</i>&nbsp;    }</b>
+<i>729</i>&nbsp;
+<i>730</i>&nbsp;    /**
+<i>731</i>&nbsp;     * Tests this &lt;code&gt;DialPlot&lt;/code&gt; instance for equality with an
+<i>732</i>&nbsp;     * arbitrary object.  The plot&#39;s dataset(s) is (are) not included in
+<i>733</i>&nbsp;     * the test.
+<i>734</i>&nbsp;     *
+<i>735</i>&nbsp;     * @param obj  the object (&lt;code&gt;null&lt;/code&gt; permitted).
+<i>736</i>&nbsp;     *
+<i>737</i>&nbsp;     * @return A boolean.
+<i>738</i>&nbsp;     */
+<i>739</i>&nbsp;    @Override
+<i>740</i>&nbsp;    public boolean equals(Object obj) {
+<b class="fc"><i>741</i>&nbsp;        if (obj == this) {</b>
+<b class="fc"><i>742</i>&nbsp;            return true;</b>
+<i>743</i>&nbsp;        }
+<b class="fc"><i>744</i>&nbsp;        if (!(obj instanceof DialPlot)) {</b>
+<b class="nc"><i>745</i>&nbsp;            return false;</b>
+<i>746</i>&nbsp;        }
+<b class="fc"><i>747</i>&nbsp;        DialPlot that = (DialPlot) obj;</b>
+<b class="fc"><i>748</i>&nbsp;        if (!ObjectUtilities.equal(this.background, that.background)) {</b>
+<b class="fc"><i>749</i>&nbsp;            return false;</b>
+<i>750</i>&nbsp;        }
+<b class="fc"><i>751</i>&nbsp;        if (!ObjectUtilities.equal(this.cap, that.cap)) {</b>
+<b class="fc"><i>752</i>&nbsp;            return false;</b>
+<i>753</i>&nbsp;        }
+<b class="fc"><i>754</i>&nbsp;        if (!this.dialFrame.equals(that.dialFrame)) {</b>
+<b class="fc"><i>755</i>&nbsp;            return false;</b>
+<i>756</i>&nbsp;        }
+<b class="fc"><i>757</i>&nbsp;        if (this.viewX != that.viewX) {</b>
+<b class="fc"><i>758</i>&nbsp;            return false;</b>
+<i>759</i>&nbsp;        }
+<b class="fc"><i>760</i>&nbsp;        if (this.viewY != that.viewY) {</b>
+<b class="nc"><i>761</i>&nbsp;            return false;</b>
+<i>762</i>&nbsp;        }
+<b class="fc"><i>763</i>&nbsp;        if (this.viewW != that.viewW) {</b>
+<b class="nc"><i>764</i>&nbsp;            return false;</b>
+<i>765</i>&nbsp;        }
+<b class="fc"><i>766</i>&nbsp;        if (this.viewH != that.viewH) {</b>
+<b class="nc"><i>767</i>&nbsp;            return false;</b>
+<i>768</i>&nbsp;        }
+<b class="fc"><i>769</i>&nbsp;        if (!this.layers.equals(that.layers)) {</b>
+<b class="fc"><i>770</i>&nbsp;            return false;</b>
+<i>771</i>&nbsp;        }
+<b class="fc"><i>772</i>&nbsp;        if (!this.pointers.equals(that.pointers)) {</b>
+<b class="nc"><i>773</i>&nbsp;            return false;</b>
+<i>774</i>&nbsp;        }
+<b class="fc"><i>775</i>&nbsp;        return super.equals(obj);</b>
+<i>776</i>&nbsp;    }
+<i>777</i>&nbsp;
+<i>778</i>&nbsp;    /**
+<i>779</i>&nbsp;     * Returns a hash code for this instance.
+<i>780</i>&nbsp;     *
+<i>781</i>&nbsp;     * @return The hash code.
+<i>782</i>&nbsp;     */
+<i>783</i>&nbsp;    @Override
+<i>784</i>&nbsp;    public int hashCode() {
+<b class="fc"><i>785</i>&nbsp;        int result = 193;</b>
+<b class="fc"><i>786</i>&nbsp;        result = 37 * result + ObjectUtilities.hashCode(this.background);</b>
+<b class="fc"><i>787</i>&nbsp;        result = 37 * result + ObjectUtilities.hashCode(this.cap);</b>
+<b class="fc"><i>788</i>&nbsp;        result = 37 * result + this.dialFrame.hashCode();</b>
+<b class="fc"><i>789</i>&nbsp;        long temp = Double.doubleToLongBits(this.viewX);</b>
+<b class="fc"><i>790</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>791</i>&nbsp;        temp = Double.doubleToLongBits(this.viewY);</b>
+<b class="fc"><i>792</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>793</i>&nbsp;        temp = Double.doubleToLongBits(this.viewW);</b>
+<b class="fc"><i>794</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>795</i>&nbsp;        temp = Double.doubleToLongBits(this.viewH);</b>
+<b class="fc"><i>796</i>&nbsp;        result = 37 * result + (int) (temp ^ (temp &gt;&gt;&gt; 32));</b>
+<b class="fc"><i>797</i>&nbsp;        return result;</b>
+<i>798</i>&nbsp;    }
+<i>799</i>&nbsp;
+<i>800</i>&nbsp;    /**
+<i>801</i>&nbsp;     * Returns the plot type.
+<i>802</i>&nbsp;     *
+<i>803</i>&nbsp;     * @return &lt;code&gt;&quot;DialPlot&quot;&lt;/code&gt;
+<i>804</i>&nbsp;     */
+<i>805</i>&nbsp;    @Override
+<i>806</i>&nbsp;    public String getPlotType() {
+<b class="nc"><i>807</i>&nbsp;        return &quot;DialPlot&quot;;</b>
+<i>808</i>&nbsp;    }
+<i>809</i>&nbsp;
+<i>810</i>&nbsp;    /**
+<i>811</i>&nbsp;     * Provides serialization support.
+<i>812</i>&nbsp;     *
+<i>813</i>&nbsp;     * @param stream  the output stream.
+<i>814</i>&nbsp;     *
+<i>815</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>816</i>&nbsp;     */
+<i>817</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>818</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>819</i>&nbsp;    }</b>
+<i>820</i>&nbsp;
+<i>821</i>&nbsp;    /**
+<i>822</i>&nbsp;     * Provides serialization support.
+<i>823</i>&nbsp;     *
+<i>824</i>&nbsp;     * @param stream  the input stream.
+<i>825</i>&nbsp;     *
+<i>826</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>827</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>828</i>&nbsp;     */
+<i>829</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>830</i>&nbsp;            throws IOException, ClassNotFoundException {
+<b class="fc"><i>831</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>832</i>&nbsp;    }</b>
+<i>833</i>&nbsp;
+<i>834</i>&nbsp;
+<i>835</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:10</div>
+</div>
+</body>
+</html>

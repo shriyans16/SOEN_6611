@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HmacAlgorithmsTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.digest</a> &gt; <span class="el_source">HmacAlgorithmsTest.java</span></div><h1>HmacAlgorithmsTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.codec.digest;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.crypto.Mac;
+
+import org.apache.commons.lang3.JavaVersion;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+/**
+ * Tests {@link HmacAlgorithms}.
+ *
+ * @since 1.11
+ */
+@RunWith(Parameterized.class)
+<span class="pc bpc" id="L46" title="3 of 4 branches missed.">public class HmacAlgorithmsTest {</span>
+
+    static final String STANDARD_KEY_STRING = &quot;key&quot;;
+
+<span class="fc" id="L50">    static final byte[] STANDARD_KEY_BYTES = STANDARD_KEY_STRING.getBytes();</span>
+
+<span class="fc" id="L52">    static final byte[] STANDARD_MD5_RESULT_BYTES = new byte[] { -128, 7, 7, 19, 70, 62, 119, 73, -71, 12, 45, -62, 73,</span>
+            17, -30, 117 };
+
+    static final String STANDARD_MD5_RESULT_STRING = &quot;80070713463e7749b90c2dc24911e275&quot;;
+
+    static final String STANDARD_PHRASE_STRING = &quot;The quick brown fox jumps over the lazy dog&quot;;
+
+<span class="fc" id="L59">    static final byte[] STANDARD_PHRASE_BYTES = STANDARD_PHRASE_STRING.getBytes();</span>
+
+<span class="fc" id="L61">    static final byte[] STANDARD_SHA1_RESULT_BYTES = new byte[] { -34, 124, -101, -123, -72, -73, -118, -90, -68, -118,</span>
+            122, 54, -9, 10, -112, 112, 28, -99, -76, -39 };
+
+    static final String STANDARD_SHA1_RESULT_STRING = &quot;de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9&quot;;
+
+<span class="fc" id="L66">    static final byte[] STANDARD_SHA224_RESULT_BYTES = new byte[] { -120, -1, -117, 84, 103, 93, 57, -72, -9, 35, 34,</span>
+            -26, 95, -7, 69, -59, 45, -106, 55, -103, -120, -83, -94, 86, 57, 116, 126, 105 };
+
+    static final String STANDARD_SHA224_RESULT_STRING = &quot;88ff8b54675d39b8f72322e65ff945c52d96379988ada25639747e69&quot;;
+
+<span class="fc" id="L71">    static final byte[] STANDARD_SHA256_RESULT_BYTES = new byte[] { -9, -68, -125, -12, 48, 83, -124, 36, -79, 50, -104,</span>
+            -26, -86, 111, -79, 67, -17, 77, 89, -95, 73, 70, 23, 89, -105, 71, -99, -68, 45, 26, 60, -40 };
+
+    static final String STANDARD_SHA256_RESULT_STRING = &quot;f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8&quot;;
+
+<span class="fc" id="L76">    static final byte[] STANDARD_SHA384_RESULT_BYTES = new byte[] { -41, -12, 114, 126, 44, 11, 57, -82, 15, 30, 64,</span>
+            -52, -106, -10, 2, 66, -43, -73, -128, 24, 65, -50, -90, -4, 89, 44, 93, 62, 26, -27, 7, 0, 88, 42, -106,
+            -49, 53, -31, -27, 84, -103, 95, -28, -32, 51, -127, -62, 55 };
+
+<span class="fc" id="L80">    static final String STANDARD_SHA384_RESULT_STRING = &quot;D7F4727E2C0B39AE0F1E40CC96F60242D5B7801841CEA6FC592C5D3E1AE50700582A96CF35E1E554995FE4E03381C237&quot;</span>
+<span class="fc" id="L81">            .toLowerCase();</span>
+
+<span class="fc" id="L83">    static final byte[] STANDARD_SHA512_RESULT_BYTES = new byte[] { -76, 42, -16, -112, 87, -70, -63, -30, -44, 23, 8,</span>
+            -28, -118, -112, 46, 9, -75, -1, 127, 18, -85, 66, -118, 79, -24, 102, 83, -57, 61, -46, 72, -5, -126, -7,
+            72, -91, 73, -9, -73, -111, -91, -76, 25, 21, -18, 77, 30, -61, -109, 83, 87, -28, -30, 49, 114, 80, -48,
+            55, 42, -6, 46, -66, -21, 58 };
+
+<span class="fc" id="L88">    static final String STANDARD_SHA512_RESULT_STRING = &quot;B42AF09057BAC1E2D41708E48A902E09B5FF7F12AB428A4FE86653C73DD248FB82F948A549F7B791A5B41915EE4D1EC3935357E4E2317250D0372AFA2EBEEB3A&quot;</span>
+<span class="fc" id="L89">            .toLowerCase();</span>
+
+<span class="fc" id="L91">    private static final byte[] EMPTY_BYTE_ARRAY = new byte[] {};</span>
+
+    // TODO HMAC_SHA_224
+    @Parameters(name = &quot;{0}&quot;)
+<span class="fc" id="L95">    public static Collection&lt;Object[]&gt; data() {</span>
+<span class="fc" id="L96">        List&lt;Object[]&gt; list = Arrays.asList(</span>
+        // @formatter:off
+                new Object[][] { { HmacAlgorithms.HMAC_MD5, STANDARD_MD5_RESULT_BYTES, STANDARD_MD5_RESULT_STRING },
+                        { HmacAlgorithms.HMAC_SHA_1, STANDARD_SHA1_RESULT_BYTES, STANDARD_SHA1_RESULT_STRING },
+                        { HmacAlgorithms.HMAC_SHA_256, STANDARD_SHA256_RESULT_BYTES, STANDARD_SHA256_RESULT_STRING },
+                        { HmacAlgorithms.HMAC_SHA_384, STANDARD_SHA384_RESULT_BYTES, STANDARD_SHA384_RESULT_STRING },
+                        { HmacAlgorithms.HMAC_SHA_512, STANDARD_SHA512_RESULT_BYTES, STANDARD_SHA512_RESULT_STRING } });
+        // @formatter:on
+<span class="pc bpc" id="L104" title="7 of 10 branches missed.">        if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_1_8)) {</span>
+<span class="fc" id="L105">            list = new ArrayList&lt;&gt;(list);</span>
+<span class="fc" id="L106">            list.add(new Object[] {HmacAlgorithms.HMAC_SHA_224, STANDARD_SHA224_RESULT_BYTES, STANDARD_SHA224_RESULT_STRING});</span>
+        }
+<span class="fc" id="L108">        return list;</span>
+    }
+
+    private DigestUtilsTest digestUtilsTest;
+
+    private final HmacAlgorithms hmacAlgorithm;
+
+    private final byte[] standardResultBytes;
+    private final String standardResultString;
+
+<span class="fc" id="L118">    public HmacAlgorithmsTest(final HmacAlgorithms hmacAlgorithm, final byte[] standardResultBytes, final String standardResultString) {</span>
+<span class="fc" id="L119">        Assume.assumeTrue(HmacUtils.isAvailable(hmacAlgorithm));</span>
+<span class="fc" id="L120">        this.hmacAlgorithm = hmacAlgorithm;</span>
+<span class="fc" id="L121">        this.standardResultBytes = standardResultBytes;</span>
+<span class="fc" id="L122">        this.standardResultString = standardResultString;</span>
+<span class="fc" id="L123">    }</span>
+
+    @Before
+<span class="fc" id="L126">    public void setUp() throws Exception {</span>
+<span class="fc" id="L127">        digestUtilsTest = new DigestUtilsTest();</span>
+<span class="fc" id="L128">        digestUtilsTest.setUp();</span>
+<span class="fc" id="L129">    }</span>
+
+    @After
+<span class="fc" id="L132">    public void tearDown() throws Exception {</span>
+<span class="fc" id="L133">        digestUtilsTest.tearDown();</span>
+<span class="fc" id="L134">        digestUtilsTest = null;</span>
+<span class="fc" id="L135">    }</span>
+
+    @Test
+<span class="pc bnc" id="L138" title="All 4 branches missed.">    public void testAlgorithm() throws NoSuchAlgorithmException {</span>
+<span class="fc" id="L139">        final String algorithm = hmacAlgorithm.getName();</span>
+<span class="fc" id="L140">        Assert.assertNotNull(algorithm);</span>
+<span class="fc" id="L141">        Assert.assertFalse(algorithm.isEmpty());</span>
+<span class="fc" id="L142">        Assume.assumeTrue(HmacUtils.isAvailable(hmacAlgorithm));</span>
+<span class="fc" id="L143">        Mac.getInstance(algorithm);</span>
+<span class="fc" id="L144">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L147" title="4 of 6 branches missed.">    public void testGetHmacEmptyKey() {</span>
+<span class="nc" id="L148">        HmacUtils.getInitializedMac(hmacAlgorithm, EMPTY_BYTE_ARRAY);</span>
+<span class="nc" id="L149">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L152" title="4 of 6 branches missed.">    public void testGetHmacNullKey() {</span>
+<span class="nc" id="L153">        HmacUtils.getInitializedMac(hmacAlgorithm, null);</span>
+<span class="nc" id="L154">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L157" title="4 of 6 branches missed.">    public void testHmacFailByteArray() {</span>
+<span class="nc" id="L158">        new HmacUtils(hmacAlgorithm, (byte[]) null).hmac(STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L159">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L162" title="4 of 6 branches missed.">    public void testHmacFailInputStream() throws IOException {</span>
+<span class="nc" id="L163">        new HmacUtils(hmacAlgorithm, (byte[]) null).hmac(new ByteArrayInputStream(STANDARD_PHRASE_BYTES));</span>
+<span class="nc" id="L164">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L167" title="4 of 6 branches missed.">    public void testHmacFailString() {</span>
+<span class="nc" id="L168">        new HmacUtils(hmacAlgorithm, (String) null).hmac(STANDARD_PHRASE_STRING);</span>
+<span class="nc" id="L169">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L172" title="4 of 6 branches missed.">    public void testHmacHexFailByteArray() {</span>
+<span class="nc" id="L173">        new HmacUtils(hmacAlgorithm, (byte[]) null).hmac(STANDARD_PHRASE_BYTES);</span>
+<span class="nc" id="L174">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L177" title="4 of 6 branches missed.">    public void testHmacHexFailInputStream() throws IOException {</span>
+<span class="nc" id="L178">        new HmacUtils(hmacAlgorithm, (byte[]) null).hmac(new ByteArrayInputStream(STANDARD_PHRASE_BYTES));</span>
+<span class="nc" id="L179">    }</span>
+
+    @Test(expected = IllegalArgumentException.class)
+<span class="pc bpc" id="L182" title="4 of 6 branches missed.">    public void testHmacHexFailString() {</span>
+<span class="nc" id="L183">        new HmacUtils(hmacAlgorithm, (String) null).hmac(STANDARD_PHRASE_STRING);</span>
+<span class="nc" id="L184">    }</span>
+
+    @Test
+<span class="pc bnc" id="L187" title="All 4 branches missed.">    public void testInitializedMac() {</span>
+<span class="fc" id="L188">        final Mac mac = HmacUtils.getInitializedMac(hmacAlgorithm, STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L189">        final Mac mac2 = HmacUtils.getInitializedMac(hmacAlgorithm.getName(), STANDARD_KEY_BYTES);</span>
+<span class="fc" id="L190">        Assert.assertArrayEquals(standardResultBytes, HmacUtils.updateHmac(mac, STANDARD_PHRASE_STRING).doFinal());</span>
+<span class="fc" id="L191">        Assert.assertArrayEquals(standardResultBytes, HmacUtils.updateHmac(mac2, STANDARD_PHRASE_STRING).doFinal());</span>
+<span class="fc" id="L192">    }</span>
+
+    @Test
+<span class="pc bnc" id="L195" title="All 4 branches missed.">    public void testMacByteArary() {</span>
+<span class="fc" id="L196">        Assert.assertArrayEquals(standardResultBytes, new HmacUtils(hmacAlgorithm, STANDARD_KEY_BYTES).hmac(STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L197">    }</span>
+
+    @Test
+<span class="pc bnc" id="L200" title="All 4 branches missed.">    public void testMacHexByteArray() {</span>
+<span class="fc" id="L201">        Assert.assertEquals(standardResultString, new HmacUtils(hmacAlgorithm, STANDARD_KEY_BYTES).hmacHex(STANDARD_PHRASE_BYTES));</span>
+<span class="fc" id="L202">    }</span>
+
+    @Test
+<span class="pc bnc" id="L205" title="All 4 branches missed.">    public void testMacHexInputStream() throws IOException {</span>
+<span class="fc" id="L206">        Assert.assertEquals(standardResultString,</span>
+<span class="fc" id="L207">                new HmacUtils(hmacAlgorithm, STANDARD_KEY_BYTES).hmacHex(new ByteArrayInputStream(STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L208">    }</span>
+
+    @Test
+<span class="pc bnc" id="L211" title="All 4 branches missed.">    public void testMacHexString() {</span>
+<span class="fc" id="L212">        Assert.assertEquals(standardResultString, new HmacUtils(hmacAlgorithm, STANDARD_KEY_BYTES).hmacHex(STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L213">    }</span>
+
+    @Test
+<span class="pc bnc" id="L216" title="All 4 branches missed.">    public void testMacInputStream() throws IOException {</span>
+<span class="fc" id="L217">        Assert.assertArrayEquals(standardResultBytes,</span>
+<span class="fc" id="L218">                new HmacUtils(hmacAlgorithm, STANDARD_KEY_BYTES).hmac(new ByteArrayInputStream(STANDARD_PHRASE_BYTES)));</span>
+<span class="fc" id="L219">    }</span>
+
+    @Test
+<span class="pc bnc" id="L222" title="All 4 branches missed.">    public void testMacString() {</span>
+<span class="fc" id="L223">        Assert.assertArrayEquals(standardResultBytes, new HmacUtils(hmacAlgorithm, STANDARD_KEY_BYTES).hmac(STANDARD_PHRASE_STRING));</span>
+<span class="fc" id="L224">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

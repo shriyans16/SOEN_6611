@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BinaryCodecTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.binary</a> &gt; <span class="el_source">BinaryCodecTest.java</span></div><h1>BinaryCodecTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.binary;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.nio.charset.Charset;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * TestCase for BinaryCodec class.
+ *
+ * @version $Id$
+ */
+<span class="pc bpc" id="L37" title="3 of 4 branches missed.">public class BinaryCodecTest {</span>
+
+<span class="fc" id="L39">    private static final Charset CHARSET_UTF8 = Charsets.UTF_8;</span>
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_0 = 0x01;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_1 = 0x02;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_2 = 0x04;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_3 = 0x08;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_4 = 0x10;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_5 = 0x20;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_6 = 0x40;
+
+    /** mask with bit zero based index 0 raised */
+    private static final int BIT_7 = 0x80;
+
+    /** an instance of the binary codec */
+<span class="fc" id="L66">    BinaryCodec instance = null;</span>
+
+    @Before
+<span class="fc" id="L69">    public void setUp() throws Exception {</span>
+<span class="fc" id="L70">        this.instance = new BinaryCodec();</span>
+<span class="fc" id="L71">    }</span>
+
+    @After
+<span class="fc" id="L74">    public void tearDown() throws Exception {</span>
+<span class="fc" id="L75">        this.instance = null;</span>
+<span class="fc" id="L76">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test decode(Object)
+    //
+    // ------------------------------------------------------------------------
+    /**
+     * Tests for Object decode(Object)
+     */
+    @Test
+<span class="pc bnc" id="L87" title="All 4 branches missed.">    public void testDecodeObjectException() {</span>
+<span class="fc" id="L88">        try {</span>
+<span class="nc" id="L89">            this.instance.decode(new Object());</span>
+<span class="fc" id="L90">        } catch (final DecoderException e) {</span>
+            // all is well.
+<span class="fc" id="L92">            return;</span>
+<span class="nc" id="L93">        }</span>
+<span class="nc" id="L94">        fail(&quot;Expected DecoderException&quot;);</span>
+<span class="nc" id="L95">    }</span>
+
+    /**
+     * Tests for Object decode(Object)
+     */
+    @Test
+<span class="pc bnc" id="L101" title="All 4 branches missed.">    public void testDecodeObject() throws Exception {</span>
+<span class="fc" id="L102">        byte[] bits;</span>
+        // With a single raw binary
+<span class="fc" id="L104">        bits = new byte[1];</span>
+<span class="fc" id="L105">        assertDecodeObject(bits, &quot;00000000&quot;);</span>
+<span class="fc" id="L106">        bits = new byte[1];</span>
+<span class="fc" id="L107">        bits[0] = BIT_0;</span>
+<span class="fc" id="L108">        assertDecodeObject(bits, &quot;00000001&quot;);</span>
+<span class="fc" id="L109">        bits = new byte[1];</span>
+<span class="fc" id="L110">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L111">        assertDecodeObject(bits, &quot;00000011&quot;);</span>
+<span class="fc" id="L112">        bits = new byte[1];</span>
+<span class="fc" id="L113">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L114">        assertDecodeObject(bits, &quot;00000111&quot;);</span>
+<span class="fc" id="L115">        bits = new byte[1];</span>
+<span class="fc" id="L116">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L117">        assertDecodeObject(bits, &quot;00001111&quot;);</span>
+<span class="fc" id="L118">        bits = new byte[1];</span>
+<span class="fc" id="L119">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L120">        assertDecodeObject(bits, &quot;00011111&quot;);</span>
+<span class="fc" id="L121">        bits = new byte[1];</span>
+<span class="fc" id="L122">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L123">        assertDecodeObject(bits, &quot;00111111&quot;);</span>
+<span class="fc" id="L124">        bits = new byte[1];</span>
+<span class="fc" id="L125">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L126">        assertDecodeObject(bits, &quot;01111111&quot;);</span>
+<span class="fc" id="L127">        bits = new byte[1];</span>
+<span class="fc" id="L128">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L129">        assertDecodeObject(bits, &quot;11111111&quot;);</span>
+        // With a two raw binaries
+<span class="fc" id="L131">        bits = new byte[2];</span>
+<span class="fc" id="L132">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L133">        assertDecodeObject(bits, &quot;0000000011111111&quot;);</span>
+<span class="fc" id="L134">        bits = new byte[2];</span>
+<span class="fc" id="L135">        bits[1] = BIT_0;</span>
+<span class="fc" id="L136">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L137">        assertDecodeObject(bits, &quot;0000000111111111&quot;);</span>
+<span class="fc" id="L138">        bits = new byte[2];</span>
+<span class="fc" id="L139">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L140">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L141">        assertDecodeObject(bits, &quot;0000001111111111&quot;);</span>
+<span class="fc" id="L142">        bits = new byte[2];</span>
+<span class="fc" id="L143">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L144">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L145">        assertDecodeObject(bits, &quot;0000011111111111&quot;);</span>
+<span class="fc" id="L146">        bits = new byte[2];</span>
+<span class="fc" id="L147">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L148">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L149">        assertDecodeObject(bits, &quot;0000111111111111&quot;);</span>
+<span class="fc" id="L150">        bits = new byte[2];</span>
+<span class="fc" id="L151">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L152">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L153">        assertDecodeObject(bits, &quot;0001111111111111&quot;);</span>
+<span class="fc" id="L154">        bits = new byte[2];</span>
+<span class="fc" id="L155">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L156">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L157">        assertDecodeObject(bits, &quot;0011111111111111&quot;);</span>
+<span class="fc" id="L158">        bits = new byte[2];</span>
+<span class="fc" id="L159">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L160">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L161">        assertDecodeObject(bits, &quot;0111111111111111&quot;);</span>
+<span class="fc" id="L162">        bits = new byte[2];</span>
+<span class="fc" id="L163">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L164">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L165">        assertDecodeObject(bits, &quot;1111111111111111&quot;);</span>
+<span class="fc" id="L166">        assertDecodeObject(new byte[0], null);</span>
+<span class="fc" id="L167">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test decode(byte[])
+    //
+    // ------------------------------------------------------------------------
+    /**
+     * Utility used to assert the encoded and decoded values.
+     *
+     * @param bits
+     *            the pre-encoded data
+     * @param encodeMe
+     *            data to encode and compare
+     */
+<span class="fc" id="L182">    void assertDecodeObject(final byte[] bits, final String encodeMe) throws DecoderException {</span>
+<span class="fc" id="L183">        byte[] decoded;</span>
+<span class="fc" id="L184">        decoded = (byte[]) instance.decode(encodeMe);</span>
+<span class="fc" id="L185">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="pc bpc" id="L186" title="4 of 10 branches missed.">        if (encodeMe == null) {</span>
+<span class="fc" id="L187">            decoded = instance.decode((byte[]) null);</span>
+        } else {
+<span class="fc" id="L189">            decoded = (byte[]) instance.decode((Object) encodeMe.getBytes(CHARSET_UTF8));</span>
+        }
+<span class="fc" id="L191">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="pc bpc" id="L192" title="4 of 10 branches missed.">        if (encodeMe == null) {</span>
+<span class="fc" id="L193">            decoded = (byte[]) instance.decode((char[]) null);</span>
+        } else {
+<span class="fc" id="L195">            decoded = (byte[]) instance.decode(encodeMe.toCharArray());</span>
+        }
+<span class="fc" id="L197">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L198">    }</span>
+
+    /*
+     * Tests for byte[] decode(byte[])
+     */
+    @Test
+<span class="pc bnc" id="L204" title="All 4 branches missed.">    public void testDecodeByteArray() {</span>
+        // With a single raw binary
+<span class="fc" id="L206">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L207">        byte[] decoded = instance.decode(&quot;00000000&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L208">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L209">        bits = new byte[1];</span>
+<span class="fc" id="L210">        bits[0] = BIT_0;</span>
+<span class="fc" id="L211">        decoded = instance.decode(&quot;00000001&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L212">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L213">        bits = new byte[1];</span>
+<span class="fc" id="L214">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L215">        decoded = instance.decode(&quot;00000011&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L216">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L217">        bits = new byte[1];</span>
+<span class="fc" id="L218">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L219">        decoded = instance.decode(&quot;00000111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L220">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L221">        bits = new byte[1];</span>
+<span class="fc" id="L222">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L223">        decoded = instance.decode(&quot;00001111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L224">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L225">        bits = new byte[1];</span>
+<span class="fc" id="L226">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L227">        decoded = instance.decode(&quot;00011111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L228">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L229">        bits = new byte[1];</span>
+<span class="fc" id="L230">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L231">        decoded = instance.decode(&quot;00111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L232">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L233">        bits = new byte[1];</span>
+<span class="fc" id="L234">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L235">        decoded = instance.decode(&quot;01111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L236">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L237">        bits = new byte[1];</span>
+<span class="fc" id="L238">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L239">        decoded = instance.decode(&quot;11111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L240">        assertEquals(new String(bits), new String(decoded));</span>
+        // With a two raw binaries
+<span class="fc" id="L242">        bits = new byte[2];</span>
+<span class="fc" id="L243">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L244">        decoded = instance.decode(&quot;0000000011111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L245">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L246">        bits = new byte[2];</span>
+<span class="fc" id="L247">        bits[1] = BIT_0;</span>
+<span class="fc" id="L248">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L249">        decoded = instance.decode(&quot;0000000111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L250">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L251">        bits = new byte[2];</span>
+<span class="fc" id="L252">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L253">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L254">        decoded = instance.decode(&quot;0000001111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L255">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L256">        bits = new byte[2];</span>
+<span class="fc" id="L257">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L258">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L259">        decoded = instance.decode(&quot;0000011111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L260">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L261">        bits = new byte[2];</span>
+<span class="fc" id="L262">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L263">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L264">        decoded = instance.decode(&quot;0000111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L265">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L266">        bits = new byte[2];</span>
+<span class="fc" id="L267">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L268">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L269">        decoded = instance.decode(&quot;0001111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L270">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L271">        bits = new byte[2];</span>
+<span class="fc" id="L272">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L273">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L274">        decoded = instance.decode(&quot;0011111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L275">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L276">        bits = new byte[2];</span>
+<span class="fc" id="L277">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L278">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L279">        decoded = instance.decode(&quot;0111111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L280">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L281">        bits = new byte[2];</span>
+<span class="fc" id="L282">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L283">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L284">        decoded = instance.decode(&quot;1111111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L285">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L286">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test toByteArray(String)
+    //
+    // ------------------------------------------------------------------------
+    /*
+     * Tests for byte[] toByteArray(String)
+     */
+    @Test
+<span class="pc bnc" id="L297" title="All 4 branches missed.">    public void testToByteArrayFromString() {</span>
+        // With a single raw binary
+<span class="fc" id="L299">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L300">        byte[] decoded = instance.toByteArray(&quot;00000000&quot;);</span>
+<span class="fc" id="L301">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L302">        bits = new byte[1];</span>
+<span class="fc" id="L303">        bits[0] = BIT_0;</span>
+<span class="fc" id="L304">        decoded = instance.toByteArray(&quot;00000001&quot;);</span>
+<span class="fc" id="L305">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L306">        bits = new byte[1];</span>
+<span class="fc" id="L307">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L308">        decoded = instance.toByteArray(&quot;00000011&quot;);</span>
+<span class="fc" id="L309">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L310">        bits = new byte[1];</span>
+<span class="fc" id="L311">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L312">        decoded = instance.toByteArray(&quot;00000111&quot;);</span>
+<span class="fc" id="L313">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L314">        bits = new byte[1];</span>
+<span class="fc" id="L315">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L316">        decoded = instance.toByteArray(&quot;00001111&quot;);</span>
+<span class="fc" id="L317">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L318">        bits = new byte[1];</span>
+<span class="fc" id="L319">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L320">        decoded = instance.toByteArray(&quot;00011111&quot;);</span>
+<span class="fc" id="L321">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L322">        bits = new byte[1];</span>
+<span class="fc" id="L323">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L324">        decoded = instance.toByteArray(&quot;00111111&quot;);</span>
+<span class="fc" id="L325">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L326">        bits = new byte[1];</span>
+<span class="fc" id="L327">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L328">        decoded = instance.toByteArray(&quot;01111111&quot;);</span>
+<span class="fc" id="L329">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L330">        bits = new byte[1];</span>
+<span class="fc" id="L331">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L332">        decoded = instance.toByteArray(&quot;11111111&quot;);</span>
+<span class="fc" id="L333">        assertEquals(new String(bits), new String(decoded));</span>
+        // With a two raw binaries
+<span class="fc" id="L335">        bits = new byte[2];</span>
+<span class="fc" id="L336">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L337">        decoded = instance.toByteArray(&quot;0000000011111111&quot;);</span>
+<span class="fc" id="L338">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L339">        bits = new byte[2];</span>
+<span class="fc" id="L340">        bits[1] = BIT_0;</span>
+<span class="fc" id="L341">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L342">        decoded = instance.toByteArray(&quot;0000000111111111&quot;);</span>
+<span class="fc" id="L343">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L344">        bits = new byte[2];</span>
+<span class="fc" id="L345">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L346">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L347">        decoded = instance.toByteArray(&quot;0000001111111111&quot;);</span>
+<span class="fc" id="L348">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L349">        bits = new byte[2];</span>
+<span class="fc" id="L350">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L351">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L352">        decoded = instance.toByteArray(&quot;0000011111111111&quot;);</span>
+<span class="fc" id="L353">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L354">        bits = new byte[2];</span>
+<span class="fc" id="L355">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L356">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L357">        decoded = instance.toByteArray(&quot;0000111111111111&quot;);</span>
+<span class="fc" id="L358">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L359">        bits = new byte[2];</span>
+<span class="fc" id="L360">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L361">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L362">        decoded = instance.toByteArray(&quot;0001111111111111&quot;);</span>
+<span class="fc" id="L363">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L364">        bits = new byte[2];</span>
+<span class="fc" id="L365">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L366">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L367">        decoded = instance.toByteArray(&quot;0011111111111111&quot;);</span>
+<span class="fc" id="L368">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L369">        bits = new byte[2];</span>
+<span class="fc" id="L370">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L371">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L372">        decoded = instance.toByteArray(&quot;0111111111111111&quot;);</span>
+<span class="fc" id="L373">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L374">        bits = new byte[2];</span>
+<span class="fc" id="L375">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L376">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L377">        decoded = instance.toByteArray(&quot;1111111111111111&quot;);</span>
+<span class="fc" id="L378">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L379">        assertEquals(0, instance.toByteArray((String) null).length);</span>
+<span class="fc" id="L380">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test fromAscii(char[])
+    //
+    // ------------------------------------------------------------------------
+    /*
+     * Tests for byte[] fromAscii(char[])
+     */
+    @Test
+<span class="pc bnc" id="L391" title="All 4 branches missed.">    public void testFromAsciiCharArray() {</span>
+<span class="fc" id="L392">        assertEquals(0, BinaryCodec.fromAscii((char[]) null).length);</span>
+<span class="fc" id="L393">        assertEquals(0, BinaryCodec.fromAscii(new char[0]).length);</span>
+        // With a single raw binary
+<span class="fc" id="L395">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L396">        byte[] decoded = BinaryCodec.fromAscii(&quot;00000000&quot;.toCharArray());</span>
+<span class="fc" id="L397">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L398">        bits = new byte[1];</span>
+<span class="fc" id="L399">        bits[0] = BIT_0;</span>
+<span class="fc" id="L400">        decoded = BinaryCodec.fromAscii(&quot;00000001&quot;.toCharArray());</span>
+<span class="fc" id="L401">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L402">        bits = new byte[1];</span>
+<span class="fc" id="L403">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L404">        decoded = BinaryCodec.fromAscii(&quot;00000011&quot;.toCharArray());</span>
+<span class="fc" id="L405">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L406">        bits = new byte[1];</span>
+<span class="fc" id="L407">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L408">        decoded = BinaryCodec.fromAscii(&quot;00000111&quot;.toCharArray());</span>
+<span class="fc" id="L409">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L410">        bits = new byte[1];</span>
+<span class="fc" id="L411">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L412">        decoded = BinaryCodec.fromAscii(&quot;00001111&quot;.toCharArray());</span>
+<span class="fc" id="L413">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L414">        bits = new byte[1];</span>
+<span class="fc" id="L415">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L416">        decoded = BinaryCodec.fromAscii(&quot;00011111&quot;.toCharArray());</span>
+<span class="fc" id="L417">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L418">        bits = new byte[1];</span>
+<span class="fc" id="L419">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L420">        decoded = BinaryCodec.fromAscii(&quot;00111111&quot;.toCharArray());</span>
+<span class="fc" id="L421">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L422">        bits = new byte[1];</span>
+<span class="fc" id="L423">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L424">        decoded = BinaryCodec.fromAscii(&quot;01111111&quot;.toCharArray());</span>
+<span class="fc" id="L425">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L426">        bits = new byte[1];</span>
+<span class="fc" id="L427">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L428">        decoded = BinaryCodec.fromAscii(&quot;11111111&quot;.toCharArray());</span>
+<span class="fc" id="L429">        assertEquals(new String(bits), new String(decoded));</span>
+        // With a two raw binaries
+<span class="fc" id="L431">        bits = new byte[2];</span>
+<span class="fc" id="L432">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L433">        decoded = BinaryCodec.fromAscii(&quot;0000000011111111&quot;.toCharArray());</span>
+<span class="fc" id="L434">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L435">        bits = new byte[2];</span>
+<span class="fc" id="L436">        bits[1] = BIT_0;</span>
+<span class="fc" id="L437">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L438">        decoded = BinaryCodec.fromAscii(&quot;0000000111111111&quot;.toCharArray());</span>
+<span class="fc" id="L439">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L440">        bits = new byte[2];</span>
+<span class="fc" id="L441">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L442">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L443">        decoded = BinaryCodec.fromAscii(&quot;0000001111111111&quot;.toCharArray());</span>
+<span class="fc" id="L444">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L445">        bits = new byte[2];</span>
+<span class="fc" id="L446">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L447">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L448">        decoded = BinaryCodec.fromAscii(&quot;0000011111111111&quot;.toCharArray());</span>
+<span class="fc" id="L449">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L450">        bits = new byte[2];</span>
+<span class="fc" id="L451">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L452">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L453">        decoded = BinaryCodec.fromAscii(&quot;0000111111111111&quot;.toCharArray());</span>
+<span class="fc" id="L454">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L455">        bits = new byte[2];</span>
+<span class="fc" id="L456">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L457">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L458">        decoded = BinaryCodec.fromAscii(&quot;0001111111111111&quot;.toCharArray());</span>
+<span class="fc" id="L459">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L460">        bits = new byte[2];</span>
+<span class="fc" id="L461">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L462">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L463">        decoded = BinaryCodec.fromAscii(&quot;0011111111111111&quot;.toCharArray());</span>
+<span class="fc" id="L464">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L465">        bits = new byte[2];</span>
+<span class="fc" id="L466">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L467">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L468">        decoded = BinaryCodec.fromAscii(&quot;0111111111111111&quot;.toCharArray());</span>
+<span class="fc" id="L469">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L470">        bits = new byte[2];</span>
+<span class="fc" id="L471">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L472">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L473">        decoded = BinaryCodec.fromAscii(&quot;1111111111111111&quot;.toCharArray());</span>
+<span class="fc" id="L474">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L475">        assertEquals(0, BinaryCodec.fromAscii((char[]) null).length);</span>
+<span class="fc" id="L476">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test fromAscii(byte[])
+    //
+    // ------------------------------------------------------------------------
+    /*
+     * Tests for byte[] fromAscii(byte[])
+     */
+    @Test
+<span class="pc bnc" id="L487" title="All 4 branches missed.">    public void testFromAsciiByteArray() {</span>
+<span class="fc" id="L488">        assertEquals(0, BinaryCodec.fromAscii((byte[]) null).length);</span>
+<span class="fc" id="L489">        assertEquals(0, BinaryCodec.fromAscii(new byte[0]).length);</span>
+        // With a single raw binary
+<span class="fc" id="L491">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L492">        byte[] decoded = BinaryCodec.fromAscii(&quot;00000000&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L493">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L494">        bits = new byte[1];</span>
+<span class="fc" id="L495">        bits[0] = BIT_0;</span>
+<span class="fc" id="L496">        decoded = BinaryCodec.fromAscii(&quot;00000001&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L497">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L498">        bits = new byte[1];</span>
+<span class="fc" id="L499">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L500">        decoded = BinaryCodec.fromAscii(&quot;00000011&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L501">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L502">        bits = new byte[1];</span>
+<span class="fc" id="L503">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L504">        decoded = BinaryCodec.fromAscii(&quot;00000111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L505">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L506">        bits = new byte[1];</span>
+<span class="fc" id="L507">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L508">        decoded = BinaryCodec.fromAscii(&quot;00001111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L509">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L510">        bits = new byte[1];</span>
+<span class="fc" id="L511">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L512">        decoded = BinaryCodec.fromAscii(&quot;00011111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L513">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L514">        bits = new byte[1];</span>
+<span class="fc" id="L515">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L516">        decoded = BinaryCodec.fromAscii(&quot;00111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L517">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L518">        bits = new byte[1];</span>
+<span class="fc" id="L519">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L520">        decoded = BinaryCodec.fromAscii(&quot;01111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L521">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L522">        bits = new byte[1];</span>
+<span class="fc" id="L523">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L524">        decoded = BinaryCodec.fromAscii(&quot;11111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L525">        assertEquals(new String(bits), new String(decoded));</span>
+        // With a two raw binaries
+<span class="fc" id="L527">        bits = new byte[2];</span>
+<span class="fc" id="L528">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L529">        decoded = BinaryCodec.fromAscii(&quot;0000000011111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L530">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L531">        bits = new byte[2];</span>
+<span class="fc" id="L532">        bits[1] = BIT_0;</span>
+<span class="fc" id="L533">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L534">        decoded = BinaryCodec.fromAscii(&quot;0000000111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L535">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L536">        bits = new byte[2];</span>
+<span class="fc" id="L537">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L538">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L539">        decoded = BinaryCodec.fromAscii(&quot;0000001111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L540">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L541">        bits = new byte[2];</span>
+<span class="fc" id="L542">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L543">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L544">        decoded = BinaryCodec.fromAscii(&quot;0000011111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L545">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L546">        bits = new byte[2];</span>
+<span class="fc" id="L547">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L548">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L549">        decoded = BinaryCodec.fromAscii(&quot;0000111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L550">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L551">        bits = new byte[2];</span>
+<span class="fc" id="L552">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L553">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L554">        decoded = BinaryCodec.fromAscii(&quot;0001111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L555">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L556">        bits = new byte[2];</span>
+<span class="fc" id="L557">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L558">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L559">        decoded = BinaryCodec.fromAscii(&quot;0011111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L560">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L561">        bits = new byte[2];</span>
+<span class="fc" id="L562">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L563">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L564">        decoded = BinaryCodec.fromAscii(&quot;0111111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L565">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L566">        bits = new byte[2];</span>
+<span class="fc" id="L567">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L568">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L569">        decoded = BinaryCodec.fromAscii(&quot;1111111111111111&quot;.getBytes(CHARSET_UTF8));</span>
+<span class="fc" id="L570">        assertEquals(new String(bits), new String(decoded));</span>
+<span class="fc" id="L571">        assertEquals(0, BinaryCodec.fromAscii((byte[]) null).length);</span>
+<span class="fc" id="L572">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test encode(byte[])
+    //
+    // ------------------------------------------------------------------------
+    /*
+     * Tests for byte[] encode(byte[])
+     */
+    @Test
+<span class="pc bnc" id="L583" title="All 4 branches missed.">    public void testEncodeByteArray() {</span>
+        // With a single raw binary
+<span class="fc" id="L585">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L586">        String l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L587">        assertEquals(&quot;00000000&quot;, l_encoded);</span>
+<span class="fc" id="L588">        bits = new byte[1];</span>
+<span class="fc" id="L589">        bits[0] = BIT_0;</span>
+<span class="fc" id="L590">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L591">        assertEquals(&quot;00000001&quot;, l_encoded);</span>
+<span class="fc" id="L592">        bits = new byte[1];</span>
+<span class="fc" id="L593">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L594">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L595">        assertEquals(&quot;00000011&quot;, l_encoded);</span>
+<span class="fc" id="L596">        bits = new byte[1];</span>
+<span class="fc" id="L597">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L598">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L599">        assertEquals(&quot;00000111&quot;, l_encoded);</span>
+<span class="fc" id="L600">        bits = new byte[1];</span>
+<span class="fc" id="L601">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L602">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L603">        assertEquals(&quot;00001111&quot;, l_encoded);</span>
+<span class="fc" id="L604">        bits = new byte[1];</span>
+<span class="fc" id="L605">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L606">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L607">        assertEquals(&quot;00011111&quot;, l_encoded);</span>
+<span class="fc" id="L608">        bits = new byte[1];</span>
+<span class="fc" id="L609">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L610">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L611">        assertEquals(&quot;00111111&quot;, l_encoded);</span>
+<span class="fc" id="L612">        bits = new byte[1];</span>
+<span class="fc" id="L613">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L614">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L615">        assertEquals(&quot;01111111&quot;, l_encoded);</span>
+<span class="fc" id="L616">        bits = new byte[1];</span>
+<span class="fc" id="L617">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L618">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L619">        assertEquals(&quot;11111111&quot;, l_encoded);</span>
+        // With a two raw binaries
+<span class="fc" id="L621">        bits = new byte[2];</span>
+<span class="fc" id="L622">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L623">        assertEquals(&quot;0000000000000000&quot;, l_encoded);</span>
+<span class="fc" id="L624">        bits = new byte[2];</span>
+<span class="fc" id="L625">        bits[0] = BIT_0;</span>
+<span class="fc" id="L626">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L627">        assertEquals(&quot;0000000000000001&quot;, l_encoded);</span>
+<span class="fc" id="L628">        bits = new byte[2];</span>
+<span class="fc" id="L629">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L630">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L631">        assertEquals(&quot;0000000000000011&quot;, l_encoded);</span>
+<span class="fc" id="L632">        bits = new byte[2];</span>
+<span class="fc" id="L633">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L634">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L635">        assertEquals(&quot;0000000000000111&quot;, l_encoded);</span>
+<span class="fc" id="L636">        bits = new byte[2];</span>
+<span class="fc" id="L637">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L638">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L639">        assertEquals(&quot;0000000000001111&quot;, l_encoded);</span>
+<span class="fc" id="L640">        bits = new byte[2];</span>
+<span class="fc" id="L641">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L642">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L643">        assertEquals(&quot;0000000000011111&quot;, l_encoded);</span>
+<span class="fc" id="L644">        bits = new byte[2];</span>
+<span class="fc" id="L645">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L646">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L647">        assertEquals(&quot;0000000000111111&quot;, l_encoded);</span>
+<span class="fc" id="L648">        bits = new byte[2];</span>
+<span class="fc" id="L649">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L650">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L651">        assertEquals(&quot;0000000001111111&quot;, l_encoded);</span>
+<span class="fc" id="L652">        bits = new byte[2];</span>
+<span class="fc" id="L653">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L654">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L655">        assertEquals(&quot;0000000011111111&quot;, l_encoded);</span>
+        // work on the other byte now
+<span class="fc" id="L657">        bits = new byte[2];</span>
+<span class="fc" id="L658">        bits[1] = BIT_0;</span>
+<span class="fc" id="L659">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L660">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L661">        assertEquals(&quot;0000000111111111&quot;, l_encoded);</span>
+<span class="fc" id="L662">        bits = new byte[2];</span>
+<span class="fc" id="L663">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L664">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L665">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L666">        assertEquals(&quot;0000001111111111&quot;, l_encoded);</span>
+<span class="fc" id="L667">        bits = new byte[2];</span>
+<span class="fc" id="L668">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L669">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L670">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L671">        assertEquals(&quot;0000011111111111&quot;, l_encoded);</span>
+<span class="fc" id="L672">        bits = new byte[2];</span>
+<span class="fc" id="L673">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L674">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L675">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L676">        assertEquals(&quot;0000111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L677">        bits = new byte[2];</span>
+<span class="fc" id="L678">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L679">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L680">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L681">        assertEquals(&quot;0001111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L682">        bits = new byte[2];</span>
+<span class="fc" id="L683">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L684">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L685">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L686">        assertEquals(&quot;0011111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L687">        bits = new byte[2];</span>
+<span class="fc" id="L688">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L689">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L690">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L691">        assertEquals(&quot;0111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L692">        bits = new byte[2];</span>
+<span class="fc" id="L693">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L694">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L695">        l_encoded = new String(instance.encode(bits));</span>
+<span class="fc" id="L696">        assertEquals(&quot;1111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L697">        assertEquals(0, instance.encode((byte[]) null).length);</span>
+<span class="fc" id="L698">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test toAsciiBytes
+    //
+    // ------------------------------------------------------------------------
+    @Test
+<span class="pc bnc" id="L706" title="All 4 branches missed.">    public void testToAsciiBytes() {</span>
+        // With a single raw binary
+<span class="fc" id="L708">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L709">        String l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L710">        assertEquals(&quot;00000000&quot;, l_encoded);</span>
+<span class="fc" id="L711">        bits = new byte[1];</span>
+<span class="fc" id="L712">        bits[0] = BIT_0;</span>
+<span class="fc" id="L713">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L714">        assertEquals(&quot;00000001&quot;, l_encoded);</span>
+<span class="fc" id="L715">        bits = new byte[1];</span>
+<span class="fc" id="L716">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L717">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L718">        assertEquals(&quot;00000011&quot;, l_encoded);</span>
+<span class="fc" id="L719">        bits = new byte[1];</span>
+<span class="fc" id="L720">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L721">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L722">        assertEquals(&quot;00000111&quot;, l_encoded);</span>
+<span class="fc" id="L723">        bits = new byte[1];</span>
+<span class="fc" id="L724">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L725">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L726">        assertEquals(&quot;00001111&quot;, l_encoded);</span>
+<span class="fc" id="L727">        bits = new byte[1];</span>
+<span class="fc" id="L728">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L729">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L730">        assertEquals(&quot;00011111&quot;, l_encoded);</span>
+<span class="fc" id="L731">        bits = new byte[1];</span>
+<span class="fc" id="L732">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L733">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L734">        assertEquals(&quot;00111111&quot;, l_encoded);</span>
+<span class="fc" id="L735">        bits = new byte[1];</span>
+<span class="fc" id="L736">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L737">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L738">        assertEquals(&quot;01111111&quot;, l_encoded);</span>
+<span class="fc" id="L739">        bits = new byte[1];</span>
+<span class="fc" id="L740">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L741">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L742">        assertEquals(&quot;11111111&quot;, l_encoded);</span>
+        // With a two raw binaries
+<span class="fc" id="L744">        bits = new byte[2];</span>
+<span class="fc" id="L745">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L746">        assertEquals(&quot;0000000000000000&quot;, l_encoded);</span>
+<span class="fc" id="L747">        bits = new byte[2];</span>
+<span class="fc" id="L748">        bits[0] = BIT_0;</span>
+<span class="fc" id="L749">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L750">        assertEquals(&quot;0000000000000001&quot;, l_encoded);</span>
+<span class="fc" id="L751">        bits = new byte[2];</span>
+<span class="fc" id="L752">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L753">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L754">        assertEquals(&quot;0000000000000011&quot;, l_encoded);</span>
+<span class="fc" id="L755">        bits = new byte[2];</span>
+<span class="fc" id="L756">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L757">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L758">        assertEquals(&quot;0000000000000111&quot;, l_encoded);</span>
+<span class="fc" id="L759">        bits = new byte[2];</span>
+<span class="fc" id="L760">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L761">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L762">        assertEquals(&quot;0000000000001111&quot;, l_encoded);</span>
+<span class="fc" id="L763">        bits = new byte[2];</span>
+<span class="fc" id="L764">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L765">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L766">        assertEquals(&quot;0000000000011111&quot;, l_encoded);</span>
+<span class="fc" id="L767">        bits = new byte[2];</span>
+<span class="fc" id="L768">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L769">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L770">        assertEquals(&quot;0000000000111111&quot;, l_encoded);</span>
+<span class="fc" id="L771">        bits = new byte[2];</span>
+<span class="fc" id="L772">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L773">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L774">        assertEquals(&quot;0000000001111111&quot;, l_encoded);</span>
+<span class="fc" id="L775">        bits = new byte[2];</span>
+<span class="fc" id="L776">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L777">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L778">        assertEquals(&quot;0000000011111111&quot;, l_encoded);</span>
+        // work on the other byte now
+<span class="fc" id="L780">        bits = new byte[2];</span>
+<span class="fc" id="L781">        bits[1] = BIT_0;</span>
+<span class="fc" id="L782">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L783">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L784">        assertEquals(&quot;0000000111111111&quot;, l_encoded);</span>
+<span class="fc" id="L785">        bits = new byte[2];</span>
+<span class="fc" id="L786">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L787">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L788">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L789">        assertEquals(&quot;0000001111111111&quot;, l_encoded);</span>
+<span class="fc" id="L790">        bits = new byte[2];</span>
+<span class="fc" id="L791">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L792">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L793">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L794">        assertEquals(&quot;0000011111111111&quot;, l_encoded);</span>
+<span class="fc" id="L795">        bits = new byte[2];</span>
+<span class="fc" id="L796">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L797">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L798">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L799">        assertEquals(&quot;0000111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L800">        bits = new byte[2];</span>
+<span class="fc" id="L801">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L802">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L803">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L804">        assertEquals(&quot;0001111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L805">        bits = new byte[2];</span>
+<span class="fc" id="L806">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L807">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L808">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L809">        assertEquals(&quot;0011111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L810">        bits = new byte[2];</span>
+<span class="fc" id="L811">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L812">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L813">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L814">        assertEquals(&quot;0111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L815">        bits = new byte[2];</span>
+<span class="fc" id="L816">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L817">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L818">        l_encoded = new String(BinaryCodec.toAsciiBytes(bits));</span>
+<span class="fc" id="L819">        assertEquals(&quot;1111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L820">        assertEquals(0, BinaryCodec.toAsciiBytes((byte[]) null).length);</span>
+<span class="fc" id="L821">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test toAsciiChars
+    //
+    // ------------------------------------------------------------------------
+    @Test
+<span class="pc bnc" id="L829" title="All 4 branches missed.">    public void testToAsciiChars() {</span>
+        // With a single raw binary
+<span class="fc" id="L831">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L832">        String l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L833">        assertEquals(&quot;00000000&quot;, l_encoded);</span>
+<span class="fc" id="L834">        bits = new byte[1];</span>
+<span class="fc" id="L835">        bits[0] = BIT_0;</span>
+<span class="fc" id="L836">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L837">        assertEquals(&quot;00000001&quot;, l_encoded);</span>
+<span class="fc" id="L838">        bits = new byte[1];</span>
+<span class="fc" id="L839">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L840">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L841">        assertEquals(&quot;00000011&quot;, l_encoded);</span>
+<span class="fc" id="L842">        bits = new byte[1];</span>
+<span class="fc" id="L843">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L844">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L845">        assertEquals(&quot;00000111&quot;, l_encoded);</span>
+<span class="fc" id="L846">        bits = new byte[1];</span>
+<span class="fc" id="L847">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L848">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L849">        assertEquals(&quot;00001111&quot;, l_encoded);</span>
+<span class="fc" id="L850">        bits = new byte[1];</span>
+<span class="fc" id="L851">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L852">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L853">        assertEquals(&quot;00011111&quot;, l_encoded);</span>
+<span class="fc" id="L854">        bits = new byte[1];</span>
+<span class="fc" id="L855">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L856">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L857">        assertEquals(&quot;00111111&quot;, l_encoded);</span>
+<span class="fc" id="L858">        bits = new byte[1];</span>
+<span class="fc" id="L859">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L860">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L861">        assertEquals(&quot;01111111&quot;, l_encoded);</span>
+<span class="fc" id="L862">        bits = new byte[1];</span>
+<span class="fc" id="L863">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L864">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L865">        assertEquals(&quot;11111111&quot;, l_encoded);</span>
+        // With a two raw binaries
+<span class="fc" id="L867">        bits = new byte[2];</span>
+<span class="fc" id="L868">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L869">        assertEquals(&quot;0000000000000000&quot;, l_encoded);</span>
+<span class="fc" id="L870">        bits = new byte[2];</span>
+<span class="fc" id="L871">        bits[0] = BIT_0;</span>
+<span class="fc" id="L872">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L873">        assertEquals(&quot;0000000000000001&quot;, l_encoded);</span>
+<span class="fc" id="L874">        bits = new byte[2];</span>
+<span class="fc" id="L875">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L876">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L877">        assertEquals(&quot;0000000000000011&quot;, l_encoded);</span>
+<span class="fc" id="L878">        bits = new byte[2];</span>
+<span class="fc" id="L879">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L880">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L881">        assertEquals(&quot;0000000000000111&quot;, l_encoded);</span>
+<span class="fc" id="L882">        bits = new byte[2];</span>
+<span class="fc" id="L883">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L884">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L885">        assertEquals(&quot;0000000000001111&quot;, l_encoded);</span>
+<span class="fc" id="L886">        bits = new byte[2];</span>
+<span class="fc" id="L887">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L888">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L889">        assertEquals(&quot;0000000000011111&quot;, l_encoded);</span>
+<span class="fc" id="L890">        bits = new byte[2];</span>
+<span class="fc" id="L891">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L892">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L893">        assertEquals(&quot;0000000000111111&quot;, l_encoded);</span>
+<span class="fc" id="L894">        bits = new byte[2];</span>
+<span class="fc" id="L895">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L896">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L897">        assertEquals(&quot;0000000001111111&quot;, l_encoded);</span>
+<span class="fc" id="L898">        bits = new byte[2];</span>
+<span class="fc" id="L899">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L900">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L901">        assertEquals(&quot;0000000011111111&quot;, l_encoded);</span>
+        // work on the other byte now
+<span class="fc" id="L903">        bits = new byte[2];</span>
+<span class="fc" id="L904">        bits[1] = BIT_0;</span>
+<span class="fc" id="L905">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L906">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L907">        assertEquals(&quot;0000000111111111&quot;, l_encoded);</span>
+<span class="fc" id="L908">        bits = new byte[2];</span>
+<span class="fc" id="L909">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L910">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L911">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L912">        assertEquals(&quot;0000001111111111&quot;, l_encoded);</span>
+<span class="fc" id="L913">        bits = new byte[2];</span>
+<span class="fc" id="L914">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L915">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L916">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L917">        assertEquals(&quot;0000011111111111&quot;, l_encoded);</span>
+<span class="fc" id="L918">        bits = new byte[2];</span>
+<span class="fc" id="L919">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L920">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L921">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L922">        assertEquals(&quot;0000111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L923">        bits = new byte[2];</span>
+<span class="fc" id="L924">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L925">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L926">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L927">        assertEquals(&quot;0001111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L928">        bits = new byte[2];</span>
+<span class="fc" id="L929">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L930">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L931">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L932">        assertEquals(&quot;0011111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L933">        bits = new byte[2];</span>
+<span class="fc" id="L934">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L935">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L936">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L937">        assertEquals(&quot;0111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L938">        bits = new byte[2];</span>
+<span class="fc" id="L939">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L940">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L941">        l_encoded = new String(BinaryCodec.toAsciiChars(bits));</span>
+<span class="fc" id="L942">        assertEquals(&quot;1111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L943">        assertEquals(0, BinaryCodec.toAsciiChars((byte[]) null).length);</span>
+<span class="fc" id="L944">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test toAsciiString
+    //
+    // ------------------------------------------------------------------------
+    /**
+     * Tests the toAsciiString(byte[]) method
+     */
+    @Test
+<span class="pc bnc" id="L955" title="All 4 branches missed.">    public void testToAsciiString() {</span>
+        // With a single raw binary
+<span class="fc" id="L957">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L958">        String l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L959">        assertEquals(&quot;00000000&quot;, l_encoded);</span>
+<span class="fc" id="L960">        bits = new byte[1];</span>
+<span class="fc" id="L961">        bits[0] = BIT_0;</span>
+<span class="fc" id="L962">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L963">        assertEquals(&quot;00000001&quot;, l_encoded);</span>
+<span class="fc" id="L964">        bits = new byte[1];</span>
+<span class="fc" id="L965">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L966">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L967">        assertEquals(&quot;00000011&quot;, l_encoded);</span>
+<span class="fc" id="L968">        bits = new byte[1];</span>
+<span class="fc" id="L969">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L970">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L971">        assertEquals(&quot;00000111&quot;, l_encoded);</span>
+<span class="fc" id="L972">        bits = new byte[1];</span>
+<span class="fc" id="L973">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L974">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L975">        assertEquals(&quot;00001111&quot;, l_encoded);</span>
+<span class="fc" id="L976">        bits = new byte[1];</span>
+<span class="fc" id="L977">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L978">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L979">        assertEquals(&quot;00011111&quot;, l_encoded);</span>
+<span class="fc" id="L980">        bits = new byte[1];</span>
+<span class="fc" id="L981">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L982">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L983">        assertEquals(&quot;00111111&quot;, l_encoded);</span>
+<span class="fc" id="L984">        bits = new byte[1];</span>
+<span class="fc" id="L985">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L986">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L987">        assertEquals(&quot;01111111&quot;, l_encoded);</span>
+<span class="fc" id="L988">        bits = new byte[1];</span>
+<span class="fc" id="L989">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L990">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L991">        assertEquals(&quot;11111111&quot;, l_encoded);</span>
+        // With a two raw binaries
+<span class="fc" id="L993">        bits = new byte[2];</span>
+<span class="fc" id="L994">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L995">        assertEquals(&quot;0000000000000000&quot;, l_encoded);</span>
+<span class="fc" id="L996">        bits = new byte[2];</span>
+<span class="fc" id="L997">        bits[0] = BIT_0;</span>
+<span class="fc" id="L998">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L999">        assertEquals(&quot;0000000000000001&quot;, l_encoded);</span>
+<span class="fc" id="L1000">        bits = new byte[2];</span>
+<span class="fc" id="L1001">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L1002">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1003">        assertEquals(&quot;0000000000000011&quot;, l_encoded);</span>
+<span class="fc" id="L1004">        bits = new byte[2];</span>
+<span class="fc" id="L1005">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L1006">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1007">        assertEquals(&quot;0000000000000111&quot;, l_encoded);</span>
+<span class="fc" id="L1008">        bits = new byte[2];</span>
+<span class="fc" id="L1009">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L1010">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1011">        assertEquals(&quot;0000000000001111&quot;, l_encoded);</span>
+<span class="fc" id="L1012">        bits = new byte[2];</span>
+<span class="fc" id="L1013">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L1014">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1015">        assertEquals(&quot;0000000000011111&quot;, l_encoded);</span>
+<span class="fc" id="L1016">        bits = new byte[2];</span>
+<span class="fc" id="L1017">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L1018">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1019">        assertEquals(&quot;0000000000111111&quot;, l_encoded);</span>
+<span class="fc" id="L1020">        bits = new byte[2];</span>
+<span class="fc" id="L1021">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L1022">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1023">        assertEquals(&quot;0000000001111111&quot;, l_encoded);</span>
+<span class="fc" id="L1024">        bits = new byte[2];</span>
+<span class="fc" id="L1025">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1026">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1027">        assertEquals(&quot;0000000011111111&quot;, l_encoded);</span>
+        // work on the other byte now
+<span class="fc" id="L1029">        bits = new byte[2];</span>
+<span class="fc" id="L1030">        bits[1] = BIT_0;</span>
+<span class="fc" id="L1031">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1032">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1033">        assertEquals(&quot;0000000111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1034">        bits = new byte[2];</span>
+<span class="fc" id="L1035">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L1036">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1037">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1038">        assertEquals(&quot;0000001111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1039">        bits = new byte[2];</span>
+<span class="fc" id="L1040">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L1041">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1042">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1043">        assertEquals(&quot;0000011111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1044">        bits = new byte[2];</span>
+<span class="fc" id="L1045">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L1046">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1047">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1048">        assertEquals(&quot;0000111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1049">        bits = new byte[2];</span>
+<span class="fc" id="L1050">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L1051">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1052">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1053">        assertEquals(&quot;0001111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1054">        bits = new byte[2];</span>
+<span class="fc" id="L1055">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L1056">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1057">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1058">        assertEquals(&quot;0011111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1059">        bits = new byte[2];</span>
+<span class="fc" id="L1060">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L1061">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1062">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1063">        assertEquals(&quot;0111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1064">        bits = new byte[2];</span>
+<span class="fc" id="L1065">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1066">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1067">        l_encoded = BinaryCodec.toAsciiString(bits);</span>
+<span class="fc" id="L1068">        assertEquals(&quot;1111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1069">    }</span>
+
+    // ------------------------------------------------------------------------
+    //
+    // Test encode(Object)
+    //
+    // ------------------------------------------------------------------------
+    /*
+     * Tests for Object encode(Object)
+     */
+    @Test
+<span class="pc bnc" id="L1080" title="All 4 branches missed.">    public void testEncodeObjectNull() throws Exception {</span>
+<span class="fc" id="L1081">        final Object obj = new byte[0];</span>
+<span class="fc" id="L1082">        assertEquals(0, ((char[]) instance.encode(obj)).length);</span>
+<span class="fc" id="L1083">    }</span>
+
+    /*
+     * Tests for Object encode(Object)
+     */
+    @Test
+<span class="pc bnc" id="L1089" title="All 4 branches missed.">    public void testEncodeObjectException() {</span>
+<span class="fc" id="L1090">        try {</span>
+<span class="nc" id="L1091">            instance.encode(&quot;&quot;);</span>
+<span class="fc" id="L1092">        } catch (final EncoderException e) {</span>
+            // all is well.
+<span class="fc" id="L1094">            return;</span>
+<span class="nc" id="L1095">        }</span>
+<span class="nc" id="L1096">        fail(&quot;Expected EncoderException&quot;);</span>
+<span class="nc" id="L1097">    }</span>
+
+    /*
+     * Tests for Object encode(Object)
+     */
+    @Test
+<span class="pc bnc" id="L1103" title="All 4 branches missed.">    public void testEncodeObject() throws Exception {</span>
+        // With a single raw binary
+<span class="fc" id="L1105">        byte[] bits = new byte[1];</span>
+<span class="fc" id="L1106">        String l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1107">        assertEquals(&quot;00000000&quot;, l_encoded);</span>
+<span class="fc" id="L1108">        bits = new byte[1];</span>
+<span class="fc" id="L1109">        bits[0] = BIT_0;</span>
+<span class="fc" id="L1110">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1111">        assertEquals(&quot;00000001&quot;, l_encoded);</span>
+<span class="fc" id="L1112">        bits = new byte[1];</span>
+<span class="fc" id="L1113">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L1114">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1115">        assertEquals(&quot;00000011&quot;, l_encoded);</span>
+<span class="fc" id="L1116">        bits = new byte[1];</span>
+<span class="fc" id="L1117">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L1118">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1119">        assertEquals(&quot;00000111&quot;, l_encoded);</span>
+<span class="fc" id="L1120">        bits = new byte[1];</span>
+<span class="fc" id="L1121">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L1122">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1123">        assertEquals(&quot;00001111&quot;, l_encoded);</span>
+<span class="fc" id="L1124">        bits = new byte[1];</span>
+<span class="fc" id="L1125">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L1126">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1127">        assertEquals(&quot;00011111&quot;, l_encoded);</span>
+<span class="fc" id="L1128">        bits = new byte[1];</span>
+<span class="fc" id="L1129">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L1130">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1131">        assertEquals(&quot;00111111&quot;, l_encoded);</span>
+<span class="fc" id="L1132">        bits = new byte[1];</span>
+<span class="fc" id="L1133">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L1134">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1135">        assertEquals(&quot;01111111&quot;, l_encoded);</span>
+<span class="fc" id="L1136">        bits = new byte[1];</span>
+<span class="fc" id="L1137">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1138">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1139">        assertEquals(&quot;11111111&quot;, l_encoded);</span>
+        // With a two raw binaries
+<span class="fc" id="L1141">        bits = new byte[2];</span>
+<span class="fc" id="L1142">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1143">        assertEquals(&quot;0000000000000000&quot;, l_encoded);</span>
+<span class="fc" id="L1144">        bits = new byte[2];</span>
+<span class="fc" id="L1145">        bits[0] = BIT_0;</span>
+<span class="fc" id="L1146">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1147">        assertEquals(&quot;0000000000000001&quot;, l_encoded);</span>
+<span class="fc" id="L1148">        bits = new byte[2];</span>
+<span class="fc" id="L1149">        bits[0] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L1150">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1151">        assertEquals(&quot;0000000000000011&quot;, l_encoded);</span>
+<span class="fc" id="L1152">        bits = new byte[2];</span>
+<span class="fc" id="L1153">        bits[0] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L1154">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1155">        assertEquals(&quot;0000000000000111&quot;, l_encoded);</span>
+<span class="fc" id="L1156">        bits = new byte[2];</span>
+<span class="fc" id="L1157">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L1158">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1159">        assertEquals(&quot;0000000000001111&quot;, l_encoded);</span>
+<span class="fc" id="L1160">        bits = new byte[2];</span>
+<span class="fc" id="L1161">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L1162">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1163">        assertEquals(&quot;0000000000011111&quot;, l_encoded);</span>
+<span class="fc" id="L1164">        bits = new byte[2];</span>
+<span class="fc" id="L1165">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L1166">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1167">        assertEquals(&quot;0000000000111111&quot;, l_encoded);</span>
+<span class="fc" id="L1168">        bits = new byte[2];</span>
+<span class="fc" id="L1169">        bits[0] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L1170">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1171">        assertEquals(&quot;0000000001111111&quot;, l_encoded);</span>
+<span class="fc" id="L1172">        bits = new byte[2];</span>
+<span class="fc" id="L1173">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1174">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1175">        assertEquals(&quot;0000000011111111&quot;, l_encoded);</span>
+        // work on the other byte now
+<span class="fc" id="L1177">        bits = new byte[2];</span>
+<span class="fc" id="L1178">        bits[1] = BIT_0;</span>
+<span class="fc" id="L1179">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1180">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1181">        assertEquals(&quot;0000000111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1182">        bits = new byte[2];</span>
+<span class="fc" id="L1183">        bits[1] = BIT_0 | BIT_1;</span>
+<span class="fc" id="L1184">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1185">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1186">        assertEquals(&quot;0000001111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1187">        bits = new byte[2];</span>
+<span class="fc" id="L1188">        bits[1] = BIT_0 | BIT_1 | BIT_2;</span>
+<span class="fc" id="L1189">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1190">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1191">        assertEquals(&quot;0000011111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1192">        bits = new byte[2];</span>
+<span class="fc" id="L1193">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3;</span>
+<span class="fc" id="L1194">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1195">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1196">        assertEquals(&quot;0000111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1197">        bits = new byte[2];</span>
+<span class="fc" id="L1198">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4;</span>
+<span class="fc" id="L1199">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1200">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1201">        assertEquals(&quot;0001111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1202">        bits = new byte[2];</span>
+<span class="fc" id="L1203">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5;</span>
+<span class="fc" id="L1204">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1205">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1206">        assertEquals(&quot;0011111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1207">        bits = new byte[2];</span>
+<span class="fc" id="L1208">        bits[1] = BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6;</span>
+<span class="fc" id="L1209">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1210">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1211">        assertEquals(&quot;0111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1212">        bits = new byte[2];</span>
+<span class="fc" id="L1213">        bits[0] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1214">        bits[1] = (byte) (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4 | BIT_5 | BIT_6 | BIT_7);</span>
+<span class="fc" id="L1215">        l_encoded = new String((char[]) instance.encode((Object) bits));</span>
+<span class="fc" id="L1216">        assertEquals(&quot;1111111111111111&quot;, l_encoded);</span>
+<span class="fc" id="L1217">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

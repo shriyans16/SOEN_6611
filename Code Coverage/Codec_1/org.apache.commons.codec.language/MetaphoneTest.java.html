@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetaphoneTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">commons_codec$All_in_commons_codec.exec</a> &gt; <a href="index.source.html" class="el_package">org.apache.commons.codec.language</a> &gt; <span class="el_source">MetaphoneTest.java</span></div><h1>MetaphoneTest.java</h1><pre class="source lang-java linenums">/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the &quot;License&quot;); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.commons.codec.language;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.apache.commons.codec.StringEncoderAbstractTest;
+import org.junit.Test;
+
+/**
+ * @version $Id$
+ */
+<span class="pc bpc" id="L30" title="3 of 4 branches missed.">public class MetaphoneTest extends StringEncoderAbstractTest&lt;Metaphone&gt; {</span>
+
+<span class="fc" id="L32">    public void assertIsMetaphoneEqual(final String source, final String[] matches) {</span>
+        // match source to all matches
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        for (final String matche : matches) {</span>
+<span class="fc" id="L35">            assertTrue(&quot;Source: &quot; + source + &quot;, should have same Metaphone as: &quot; + matche,</span>
+<span class="fc" id="L36">                       this.getStringEncoder().isMetaphoneEqual(source, matche));</span>
+        }
+        // match to each other
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (final String matche : matches) {</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            for (final String matche2 : matches) {</span>
+<span class="fc" id="L41">                assertTrue(this.getStringEncoder().isMetaphoneEqual(matche, matche2));</span>
+            }
+        }
+<span class="fc" id="L44">    }</span>
+
+<span class="fc" id="L46">    public void assertMetaphoneEqual(final String[][] pairs) {</span>
+<span class="fc" id="L47">        this.validateFixture(pairs);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        for (final String[] pair : pairs) {</span>
+<span class="fc" id="L49">            final String name0 = pair[0];</span>
+<span class="fc" id="L50">            final String name1 = pair[1];</span>
+<span class="fc" id="L51">            final String failMsg = &quot;Expected match between &quot; + name0 + &quot; and &quot; + name1;</span>
+<span class="fc" id="L52">            assertTrue(failMsg, this.getStringEncoder().isMetaphoneEqual(name0, name1));</span>
+<span class="fc" id="L53">            assertTrue(failMsg, this.getStringEncoder().isMetaphoneEqual(name1, name0));</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    @Override
+<span class="fc" id="L58">    protected Metaphone createStringEncoder() {</span>
+<span class="fc" id="L59">        return new Metaphone();</span>
+    }
+
+    @Test
+<span class="pc bnc" id="L63" title="All 4 branches missed.">    public void testIsMetaphoneEqual1() {</span>
+<span class="fc" id="L64">        this.assertMetaphoneEqual(new String[][] { { &quot;Case&quot;, &quot;case&quot; }, {</span>
+                &quot;CASE&quot;, &quot;Case&quot; }, {
+                &quot;caSe&quot;, &quot;cAsE&quot; }, {
+                &quot;quick&quot;, &quot;cookie&quot; }
+        });
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Matches computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L75" title="All 4 branches missed.">    public void testIsMetaphoneEqual2() {</span>
+<span class="fc" id="L76">        this.assertMetaphoneEqual(new String[][] { { &quot;Lawrence&quot;, &quot;Lorenza&quot; }, {</span>
+                &quot;Gary&quot;, &quot;Cahra&quot; }, });
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Initial AE case.
+     *
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L86" title="All 4 branches missed.">    public void testIsMetaphoneEqualAero() {</span>
+<span class="fc" id="L87">        this.assertIsMetaphoneEqual(&quot;Aero&quot;, new String[] { &quot;Eure&quot; });</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Initial WH case.
+     *
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L96" title="All 4 branches missed.">    public void testIsMetaphoneEqualWhite() {</span>
+<span class="fc" id="L97">        this.assertIsMetaphoneEqual(</span>
+            &quot;White&quot;,
+            new String[] { &quot;Wade&quot;, &quot;Wait&quot;, &quot;Waite&quot;, &quot;Wat&quot;, &quot;Whit&quot;, &quot;Wiatt&quot;, &quot;Wit&quot;, &quot;Wittie&quot;, &quot;Witty&quot;, &quot;Wood&quot;, &quot;Woodie&quot;, &quot;Woody&quot; });
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Initial A, not followed by an E case.
+     *
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L108" title="All 4 branches missed.">    public void testIsMetaphoneEqualAlbert() {</span>
+<span class="fc" id="L109">        this.assertIsMetaphoneEqual(&quot;Albert&quot;, new String[] { &quot;Ailbert&quot;, &quot;Alberik&quot;, &quot;Albert&quot;, &quot;Alberto&quot;, &quot;Albrecht&quot; });</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L116" title="All 4 branches missed.">    public void testIsMetaphoneEqualGary() {</span>
+<span class="fc" id="L117">        this.assertIsMetaphoneEqual(</span>
+            &quot;Gary&quot;,
+            new String[] {
+                &quot;Cahra&quot;,
+                &quot;Cara&quot;,
+                &quot;Carey&quot;,
+                &quot;Cari&quot;,
+                &quot;Caria&quot;,
+                &quot;Carie&quot;,
+                &quot;Caro&quot;,
+                &quot;Carree&quot;,
+                &quot;Carri&quot;,
+                &quot;Carrie&quot;,
+                &quot;Carry&quot;,
+                &quot;Cary&quot;,
+                &quot;Cora&quot;,
+                &quot;Corey&quot;,
+                &quot;Cori&quot;,
+                &quot;Corie&quot;,
+                &quot;Correy&quot;,
+                &quot;Corri&quot;,
+                &quot;Corrie&quot;,
+                &quot;Corry&quot;,
+                &quot;Cory&quot;,
+                &quot;Gray&quot;,
+                &quot;Kara&quot;,
+                &quot;Kare&quot;,
+                &quot;Karee&quot;,
+                &quot;Kari&quot;,
+                &quot;Karia&quot;,
+                &quot;Karie&quot;,
+                &quot;Karrah&quot;,
+                &quot;Karrie&quot;,
+                &quot;Karry&quot;,
+                &quot;Kary&quot;,
+                &quot;Keri&quot;,
+                &quot;Kerri&quot;,
+                &quot;Kerrie&quot;,
+                &quot;Kerry&quot;,
+                &quot;Kira&quot;,
+                &quot;Kiri&quot;,
+                &quot;Kora&quot;,
+                &quot;Kore&quot;,
+                &quot;Kori&quot;,
+                &quot;Korie&quot;,
+                &quot;Korrie&quot;,
+                &quot;Korry&quot; });
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L170" title="All 4 branches missed.">    public void testIsMetaphoneEqualJohn() {</span>
+<span class="fc" id="L171">        this.assertIsMetaphoneEqual(</span>
+            &quot;John&quot;,
+            new String[] {
+                &quot;Gena&quot;,
+                &quot;Gene&quot;,
+                &quot;Genia&quot;,
+                &quot;Genna&quot;,
+                &quot;Genni&quot;,
+                &quot;Gennie&quot;,
+                &quot;Genny&quot;,
+                &quot;Giana&quot;,
+                &quot;Gianna&quot;,
+                &quot;Gina&quot;,
+                &quot;Ginni&quot;,
+                &quot;Ginnie&quot;,
+                &quot;Ginny&quot;,
+                &quot;Jaine&quot;,
+                &quot;Jan&quot;,
+                &quot;Jana&quot;,
+                &quot;Jane&quot;,
+                &quot;Janey&quot;,
+                &quot;Jania&quot;,
+                &quot;Janie&quot;,
+                &quot;Janna&quot;,
+                &quot;Jany&quot;,
+                &quot;Jayne&quot;,
+                &quot;Jean&quot;,
+                &quot;Jeana&quot;,
+                &quot;Jeane&quot;,
+                &quot;Jeanie&quot;,
+                &quot;Jeanna&quot;,
+                &quot;Jeanne&quot;,
+                &quot;Jeannie&quot;,
+                &quot;Jen&quot;,
+                &quot;Jena&quot;,
+                &quot;Jeni&quot;,
+                &quot;Jenn&quot;,
+                &quot;Jenna&quot;,
+                &quot;Jennee&quot;,
+                &quot;Jenni&quot;,
+                &quot;Jennie&quot;,
+                &quot;Jenny&quot;,
+                &quot;Jinny&quot;,
+                &quot;Jo Ann&quot;,
+                &quot;Jo-Ann&quot;,
+                &quot;Jo-Anne&quot;,
+                &quot;Joan&quot;,
+                &quot;Joana&quot;,
+                &quot;Joane&quot;,
+                &quot;Joanie&quot;,
+                &quot;Joann&quot;,
+                &quot;Joanna&quot;,
+                &quot;Joanne&quot;,
+                &quot;Joeann&quot;,
+                &quot;Johna&quot;,
+                &quot;Johnna&quot;,
+                &quot;Joni&quot;,
+                &quot;Jonie&quot;,
+                &quot;Juana&quot;,
+                &quot;June&quot;,
+                &quot;Junia&quot;,
+                &quot;Junie&quot; });
+<span class="fc" id="L233">    }</span>
+
+    /**
+     * Initial KN case.
+     *
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L241" title="All 4 branches missed.">    public void testIsMetaphoneEqualKnight() {</span>
+<span class="fc" id="L242">        this.assertIsMetaphoneEqual(</span>
+            &quot;Knight&quot;,
+            new String[] {
+                &quot;Hynda&quot;,
+                &quot;Nada&quot;,
+                &quot;Nadia&quot;,
+                &quot;Nady&quot;,
+                &quot;Nat&quot;,
+                &quot;Nata&quot;,
+                &quot;Natty&quot;,
+                &quot;Neda&quot;,
+                &quot;Nedda&quot;,
+                &quot;Nedi&quot;,
+                &quot;Netta&quot;,
+                &quot;Netti&quot;,
+                &quot;Nettie&quot;,
+                &quot;Netty&quot;,
+                &quot;Nita&quot;,
+                &quot;Nydia&quot; });
+<span class="fc" id="L261">    }</span>
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L266" title="All 4 branches missed.">    public void testIsMetaphoneEqualMary() {</span>
+<span class="fc" id="L267">        this.assertIsMetaphoneEqual(</span>
+            &quot;Mary&quot;,
+            new String[] {
+                &quot;Mair&quot;,
+                &quot;Maire&quot;,
+                &quot;Mara&quot;,
+                &quot;Mareah&quot;,
+                &quot;Mari&quot;,
+                &quot;Maria&quot;,
+                &quot;Marie&quot;,
+                &quot;Mary&quot;,
+                &quot;Maura&quot;,
+                &quot;Maure&quot;,
+                &quot;Meara&quot;,
+                &quot;Merrie&quot;,
+                &quot;Merry&quot;,
+                &quot;Mira&quot;,
+                &quot;Moira&quot;,
+                &quot;Mora&quot;,
+                &quot;Moria&quot;,
+                &quot;Moyra&quot;,
+                &quot;Muire&quot;,
+                &quot;Myra&quot;,
+                &quot;Myrah&quot; });
+<span class="fc" id="L291">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L297" title="All 4 branches missed.">    public void testIsMetaphoneEqualParis() {</span>
+<span class="fc" id="L298">        this.assertIsMetaphoneEqual(&quot;Paris&quot;, new String[] { &quot;Pearcy&quot;, &quot;Perris&quot;, &quot;Piercy&quot;, &quot;Pierz&quot;, &quot;Pryse&quot; });</span>
+<span class="fc" id="L299">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L305" title="All 4 branches missed.">    public void testIsMetaphoneEqualPeter() {</span>
+<span class="fc" id="L306">        this.assertIsMetaphoneEqual(</span>
+            &quot;Peter&quot;,
+            new String[] { &quot;Peadar&quot;, &quot;Peder&quot;, &quot;Pedro&quot;, &quot;Peter&quot;, &quot;Petr&quot;, &quot;Peyter&quot;, &quot;Pieter&quot;, &quot;Pietro&quot;, &quot;Piotr&quot; });
+<span class="fc" id="L309">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L315" title="All 4 branches missed.">    public void testIsMetaphoneEqualRay() {</span>
+<span class="fc" id="L316">        this.assertIsMetaphoneEqual(&quot;Ray&quot;, new String[] { &quot;Ray&quot;, &quot;Rey&quot;, &quot;Roi&quot;, &quot;Roy&quot;, &quot;Ruy&quot; });</span>
+<span class="fc" id="L317">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L323" title="All 4 branches missed.">    public void testIsMetaphoneEqualSusan() {</span>
+<span class="fc" id="L324">        this.assertIsMetaphoneEqual(</span>
+            &quot;Susan&quot;,
+            new String[] {
+                &quot;Siusan&quot;,
+                &quot;Sosanna&quot;,
+                &quot;Susan&quot;,
+                &quot;Susana&quot;,
+                &quot;Susann&quot;,
+                &quot;Susanna&quot;,
+                &quot;Susannah&quot;,
+                &quot;Susanne&quot;,
+                &quot;Suzann&quot;,
+                &quot;Suzanna&quot;,
+                &quot;Suzanne&quot;,
+                &quot;Zuzana&quot; });
+<span class="fc" id="L339">    }</span>
+
+    /**
+     * Initial WR case.
+     *
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L347" title="All 4 branches missed.">    public void testIsMetaphoneEqualWright() {</span>
+<span class="fc" id="L348">        this.assertIsMetaphoneEqual(&quot;Wright&quot;, new String[] { &quot;Rota&quot;, &quot;Rudd&quot;, &quot;Ryde&quot; });</span>
+<span class="fc" id="L349">    }</span>
+
+    /**
+     * Match data computed from http://www.lanw.com/java/phonetic/default.htm
+     */
+    @Test
+<span class="pc bnc" id="L355" title="All 4 branches missed.">    public void testIsMetaphoneEqualXalan() {</span>
+<span class="fc" id="L356">        this.assertIsMetaphoneEqual(</span>
+            &quot;Xalan&quot;,
+            new String[] { &quot;Celene&quot;, &quot;Celina&quot;, &quot;Celine&quot;, &quot;Selena&quot;, &quot;Selene&quot;, &quot;Selina&quot;, &quot;Seline&quot;, &quot;Suellen&quot;, &quot;Xylina&quot; });
+<span class="fc" id="L359">    }</span>
+
+    @Test
+<span class="pc bnc" id="L362" title="All 4 branches missed.">    public void testMetaphone() {</span>
+<span class="fc" id="L363">        assertEquals(&quot;HL&quot;, this.getStringEncoder().metaphone(&quot;howl&quot;));</span>
+<span class="fc" id="L364">        assertEquals(&quot;TSTN&quot;, this.getStringEncoder().metaphone(&quot;testing&quot;));</span>
+<span class="fc" id="L365">        assertEquals(&quot;0&quot;, this.getStringEncoder().metaphone(&quot;The&quot;));</span>
+<span class="fc" id="L366">        assertEquals(&quot;KK&quot;, this.getStringEncoder().metaphone(&quot;quick&quot;));</span>
+<span class="fc" id="L367">        assertEquals(&quot;BRN&quot;, this.getStringEncoder().metaphone(&quot;brown&quot;));</span>
+<span class="fc" id="L368">        assertEquals(&quot;FKS&quot;, this.getStringEncoder().metaphone(&quot;fox&quot;));</span>
+<span class="fc" id="L369">        assertEquals(&quot;JMPT&quot;, this.getStringEncoder().metaphone(&quot;jumped&quot;));</span>
+<span class="fc" id="L370">        assertEquals(&quot;OFR&quot;, this.getStringEncoder().metaphone(&quot;over&quot;));</span>
+<span class="fc" id="L371">        assertEquals(&quot;0&quot;, this.getStringEncoder().metaphone(&quot;the&quot;));</span>
+<span class="fc" id="L372">        assertEquals(&quot;LS&quot;, this.getStringEncoder().metaphone(&quot;lazy&quot;));</span>
+<span class="fc" id="L373">        assertEquals(&quot;TKS&quot;, this.getStringEncoder().metaphone(&quot;dogs&quot;));</span>
+<span class="fc" id="L374">    }</span>
+
+    @Test
+<span class="pc bnc" id="L377" title="All 4 branches missed.">    public void testWordEndingInMB() {</span>
+<span class="fc" id="L378">        assertEquals( &quot;KM&quot;, this.getStringEncoder().metaphone(&quot;COMB&quot;) );</span>
+<span class="fc" id="L379">        assertEquals( &quot;TM&quot;, this.getStringEncoder().metaphone(&quot;TOMB&quot;) );</span>
+<span class="fc" id="L380">        assertEquals( &quot;WM&quot;, this.getStringEncoder().metaphone(&quot;WOMB&quot;) );</span>
+<span class="fc" id="L381">    }</span>
+
+    @Test
+<span class="pc bnc" id="L384" title="All 4 branches missed.">    public void testDiscardOfSCEOrSCIOrSCY() {</span>
+<span class="fc" id="L385">        assertEquals( &quot;SNS&quot;, this.getStringEncoder().metaphone(&quot;SCIENCE&quot;) );</span>
+<span class="fc" id="L386">        assertEquals( &quot;SN&quot;, this.getStringEncoder().metaphone(&quot;SCENE&quot;) );</span>
+<span class="fc" id="L387">        assertEquals( &quot;S&quot;, this.getStringEncoder().metaphone(&quot;SCY&quot;) );</span>
+<span class="fc" id="L388">    }</span>
+
+    /**
+     * Tests (CODEC-57) Metaphone.metaphone(String) returns an empty string when passed the word &quot;why&quot;
+     */
+    @Test
+<span class="pc bnc" id="L394" title="All 4 branches missed.">    public void testWhy() {</span>
+        // PHP returns &quot;H&quot;. The original metaphone returns an empty string.
+<span class="fc" id="L396">        assertEquals(&quot;&quot;, this.getStringEncoder().metaphone(&quot;WHY&quot;));</span>
+<span class="fc" id="L397">    }</span>
+
+    @Test
+<span class="pc bnc" id="L400" title="All 4 branches missed.">    public void testWordsWithCIA() {</span>
+<span class="fc" id="L401">        assertEquals( &quot;XP&quot;, this.getStringEncoder().metaphone(&quot;CIAPO&quot;) );</span>
+<span class="fc" id="L402">    }</span>
+
+    @Test
+<span class="pc bnc" id="L405" title="All 4 branches missed.">    public void testTranslateOfSCHAndCH() {</span>
+<span class="fc" id="L406">        assertEquals( &quot;SKTL&quot;, this.getStringEncoder().metaphone(&quot;SCHEDULE&quot;) );</span>
+<span class="fc" id="L407">        assertEquals( &quot;SKMT&quot;, this.getStringEncoder().metaphone(&quot;SCHEMATIC&quot;) );</span>
+
+<span class="fc" id="L409">        assertEquals( &quot;KRKT&quot;, this.getStringEncoder().metaphone(&quot;CHARACTER&quot;) );</span>
+<span class="fc" id="L410">        assertEquals( &quot;TX&quot;, this.getStringEncoder().metaphone(&quot;TEACH&quot;) );</span>
+<span class="fc" id="L411">    }</span>
+
+    @Test
+<span class="pc bnc" id="L414" title="All 4 branches missed.">    public void testTranslateToJOfDGEOrDGIOrDGY() {</span>
+<span class="fc" id="L415">        assertEquals( &quot;TJ&quot;, this.getStringEncoder().metaphone(&quot;DODGY&quot;) );</span>
+<span class="fc" id="L416">        assertEquals( &quot;TJ&quot;, this.getStringEncoder().metaphone(&quot;DODGE&quot;) );</span>
+<span class="fc" id="L417">        assertEquals( &quot;AJMT&quot;, this.getStringEncoder().metaphone(&quot;ADGIEMTI&quot;) );</span>
+<span class="fc" id="L418">    }</span>
+
+    @Test
+<span class="pc bnc" id="L421" title="All 4 branches missed.">    public void testDiscardOfSilentHAfterG() {</span>
+<span class="fc" id="L422">        assertEquals( &quot;KNT&quot;, this.getStringEncoder().metaphone(&quot;GHENT&quot;) );</span>
+<span class="fc" id="L423">        assertEquals( &quot;B&quot;, this.getStringEncoder().metaphone(&quot;BAUGH&quot;) );</span>
+<span class="fc" id="L424">    }</span>
+
+    @Test
+<span class="pc bnc" id="L427" title="All 4 branches missed.">    public void testDiscardOfSilentGN() {</span>
+        // NOTE: This does not test for silent GN, but for starting with GN
+<span class="fc" id="L429">        assertEquals( &quot;N&quot;, this.getStringEncoder().metaphone(&quot;GNU&quot;) );</span>
+
+        // NOTE: Trying to test for GNED, but expected code does not appear to execute
+<span class="fc" id="L432">        assertEquals( &quot;SNT&quot;, this.getStringEncoder().metaphone(&quot;SIGNED&quot;) );</span>
+<span class="fc" id="L433">    }</span>
+
+    @Test
+<span class="pc bnc" id="L436" title="All 4 branches missed.">    public void testPHTOF() {</span>
+<span class="fc" id="L437">        assertEquals( &quot;FX&quot;, this.getStringEncoder().metaphone(&quot;PHISH&quot;) );</span>
+<span class="fc" id="L438">    }</span>
+
+    @Test
+<span class="pc bnc" id="L441" title="All 4 branches missed.">    public void testSHAndSIOAndSIAToX() {</span>
+<span class="fc" id="L442">        assertEquals( &quot;XT&quot;, this.getStringEncoder().metaphone(&quot;SHOT&quot;) );</span>
+<span class="fc" id="L443">        assertEquals( &quot;OTXN&quot;, this.getStringEncoder().metaphone(&quot;ODSIAN&quot;) );</span>
+<span class="fc" id="L444">        assertEquals( &quot;PLXN&quot;, this.getStringEncoder().metaphone(&quot;PULSION&quot;) );</span>
+<span class="fc" id="L445">    }</span>
+
+    @Test
+<span class="pc bnc" id="L448" title="All 4 branches missed.">    public void testTIOAndTIAToX() {</span>
+<span class="fc" id="L449">        assertEquals( &quot;OX&quot;, this.getStringEncoder().metaphone(&quot;OTIA&quot;) );</span>
+<span class="fc" id="L450">        assertEquals( &quot;PRXN&quot;, this.getStringEncoder().metaphone(&quot;PORTION&quot;) );</span>
+<span class="fc" id="L451">    }</span>
+
+    @Test
+<span class="pc bnc" id="L454" title="All 4 branches missed.">    public void testTCH() {</span>
+<span class="fc" id="L455">        assertEquals( &quot;RX&quot;, this.getStringEncoder().metaphone(&quot;RETCH&quot;) );</span>
+<span class="fc" id="L456">        assertEquals( &quot;WX&quot;, this.getStringEncoder().metaphone(&quot;WATCH&quot;) );</span>
+<span class="fc" id="L457">    }</span>
+
+    @Test
+<span class="pc bnc" id="L460" title="All 4 branches missed.">    public void testExceedLength() {</span>
+        // should be AKSKS, but istruncated by Max Code Length
+<span class="fc" id="L462">        assertEquals( &quot;AKSK&quot;, this.getStringEncoder().metaphone(&quot;AXEAXE&quot;) );</span>
+<span class="fc" id="L463">    }</span>
+
+    @Test
+<span class="pc bnc" id="L466" title="All 4 branches missed.">    public void testSetMaxLengthWithTruncation() {</span>
+        // should be AKSKS, but istruncated by Max Code Length
+<span class="fc" id="L468">        this.getStringEncoder().setMaxCodeLen( 6 );</span>
+<span class="fc" id="L469">        assertEquals( &quot;AKSKSK&quot;, this.getStringEncoder().metaphone(&quot;AXEAXEAXE&quot;) );</span>
+<span class="fc" id="L470">    }</span>
+
+<span class="fc" id="L472">    public void validateFixture(final String[][] pairs) {</span>
+<span class="pc bpc" id="L473" title="7 of 10 branches missed.">        if (pairs.length == 0) {</span>
+<span class="nc" id="L474">            fail(&quot;Test fixture is empty&quot;);</span>
+        }
+<span class="pc bpc" id="L476" title="4 of 10 branches missed.">        for (int i = 0; i &lt; pairs.length; i++) {</span>
+<span class="pc bpc" id="L477" title="7 of 10 branches missed.">            if (pairs[i].length != 2) {</span>
+<span class="nc" id="L478">                fail(&quot;Error in test fixture in the data array at index &quot; + i);</span>
+            }
+        }
+<span class="fc" id="L481">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

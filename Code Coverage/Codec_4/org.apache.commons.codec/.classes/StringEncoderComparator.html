@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: StringEncoderComparator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec</a> ]
+</div>
+
+<h1>Coverage Summary for Class: StringEncoderComparator (org.apache.commons.codec)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StringEncoderComparator</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.4%
+  </span>
+  <span class="absValue">
+    (14/ 17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">StringEncoderComparator$__CLR4_1_23f3fjuluj3jj</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (15/ 18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.util.Comparator;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * Compares Strings using a {@link StringEncoder}. This comparator is used to sort Strings by an encoding scheme such as
+<i>24</i>&nbsp; * Soundex, Metaphone, etc. This class can come in handy if one need to sort Strings by an encoded form of a name such
+<i>25</i>&nbsp; * as Soundex.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * &lt;p&gt;This class is immutable and thread-safe.&lt;/p&gt;
+<i>28</i>&nbsp; *
+<i>29</i>&nbsp; * @version $Id$
+<i>30</i>&nbsp; */
+<b class="fc"><i>31</i>&nbsp;public class StringEncoderComparator implements Comparator {</b>
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * Internal encoder instance.
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    private final StringEncoder stringEncoder;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Constructs a new instance.
+<i>40</i>&nbsp;     *
+<i>41</i>&nbsp;     * @deprecated Creating an instance without a {@link StringEncoder} leads to a {@link NullPointerException}. Will be
+<i>42</i>&nbsp;     *             removed in 2.0.
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    @Deprecated
+<b class="nc"><i>45</i>&nbsp;    public StringEncoderComparator() {</b>
+<b class="nc"><i>46</i>&nbsp;        this.stringEncoder = null; // Trying to use this will cause things to break</b>
+<b class="nc"><i>47</i>&nbsp;    }</b>
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Constructs a new instance with the given algorithm.
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @param stringEncoder
+<i>53</i>&nbsp;     *            the StringEncoder used for comparisons.
+<i>54</i>&nbsp;     */
+<b class="fc"><i>55</i>&nbsp;    public StringEncoderComparator(StringEncoder stringEncoder) {</b>
+<b class="fc"><i>56</i>&nbsp;        this.stringEncoder = stringEncoder;</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * Compares two strings based not on the strings themselves, but on an encoding of the two strings using the
+<i>61</i>&nbsp;     * StringEncoder this Comparator was created with.
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * If an {@link EncoderException} is encountered, return &lt;code&gt;0&lt;/code&gt;.
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     * @param o1
+<i>66</i>&nbsp;     *            the object to compare
+<i>67</i>&nbsp;     * @param o2
+<i>68</i>&nbsp;     *            the object to compare to
+<i>69</i>&nbsp;     * @return the Comparable.compareTo() return code or 0 if an encoding error was caught.
+<i>70</i>&nbsp;     * @see Comparable
+<i>71</i>&nbsp;     */
+<i>72</i>&nbsp;    @Override
+<b class="fc"><i>73</i>&nbsp;    public int compare(Object o1, Object o2) {</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;        int compareCode = 0;</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        try {</b>
+<b class="fc"><i>78</i>&nbsp;            Comparable s1 = (Comparable) this.stringEncoder.encode(o1);</b>
+<b class="fc"><i>79</i>&nbsp;            Comparable s2 = (Comparable) this.stringEncoder.encode(o2);</b>
+<b class="fc"><i>80</i>&nbsp;            compareCode = s1.compareTo(s2);</b>
+<b class="fc"><i>81</i>&nbsp;        } catch (EncoderException ee) {</b>
+<b class="fc"><i>82</i>&nbsp;            compareCode = 0;</b>
+<b class="fc"><i>83</i>&nbsp;        }</b>
+<b class="fc"><i>84</i>&nbsp;        return compareCode;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:33</div>
+</div>
+</body>
+</html>

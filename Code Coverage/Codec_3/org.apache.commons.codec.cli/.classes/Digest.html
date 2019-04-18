@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Digest</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Digest (org.apache.commons.codec.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Digest</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;package org.apache.commons.codec.cli;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.File;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.nio.charset.Charset;
+<i>22</i>&nbsp;import java.security.MessageDigest;
+<i>23</i>&nbsp;import java.util.Arrays;
+<i>24</i>&nbsp;import java.util.Locale;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;import org.apache.commons.codec.binary.Hex;
+<i>27</i>&nbsp;import org.apache.commons.codec.digest.DigestUtils;
+<i>28</i>&nbsp;import org.apache.commons.codec.digest.MessageDigestAlgorithms;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * A minimal command line to run digest over files, directories or a string
+<i>32</i>&nbsp; *
+<i>33</i>&nbsp; * @see #main(String[])
+<i>34</i>&nbsp; * @since 1.11
+<i>35</i>&nbsp; */
+<i>36</i>&nbsp;public class Digest {
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * Runs the digest algorithm in {@code args[0]} on the file in {@code args[1]}. If there is no {@code args[1]}, use
+<i>40</i>&nbsp;     * standard input.
+<i>41</i>&nbsp;     *
+<i>42</i>&nbsp;     * &lt;p&gt;
+<i>43</i>&nbsp;     * The algorithm can also be {@code ALL} or {@code *} to output one line for each known algorithm.
+<i>44</i>&nbsp;     * &lt;/p&gt;
+<i>45</i>&nbsp;     *
+<i>46</i>&nbsp;     * @param args
+<i>47</i>&nbsp;     *            {@code args[0]} is one of {@link MessageDigestAlgorithms} name,
+<i>48</i>&nbsp;     *            {@link MessageDigest} name, {@code ALL}, or {@code *}.
+<i>49</i>&nbsp;     *            {@code args[1+]} is a FILE/DIRECTORY/String.
+<i>50</i>&nbsp;     * @throws IOException if an error occurs
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public static void main(final String[] args) throws IOException {
+<b class="nc"><i>53</i>&nbsp;        new Digest(args).run();</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    private final String algorithm;
+<i>57</i>&nbsp;    private final String[] args;
+<i>58</i>&nbsp;    private final String[] inputs;
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;    private Digest(final String[] args) {</b>
+<b class="nc"><i>61</i>&nbsp;        if (args == null) {</b>
+<b class="nc"><i>62</i>&nbsp;            throw new IllegalArgumentException(&quot;args&quot;);</b>
+<i>63</i>&nbsp;        }
+<b class="nc"><i>64</i>&nbsp;        if (args.length == 0) {</b>
+<b class="nc"><i>65</i>&nbsp;            throw new IllegalArgumentException(</b>
+<b class="nc"><i>66</i>&nbsp;                    String.format(&quot;Usage: java %s [algorithm] [FILE|DIRECTORY|string] ...&quot;, Digest.class.getName()));</b>
+<i>67</i>&nbsp;        }
+<b class="nc"><i>68</i>&nbsp;        this.args = args;</b>
+<b class="nc"><i>69</i>&nbsp;        algorithm = args[0];</b>
+<b class="nc"><i>70</i>&nbsp;        if (args.length &lt;= 1) {</b>
+<b class="nc"><i>71</i>&nbsp;            inputs = null;</b>
+<i>72</i>&nbsp;        } else {
+<b class="nc"><i>73</i>&nbsp;            inputs = new String[args.length -1];</b>
+<b class="nc"><i>74</i>&nbsp;            System.arraycopy(args, 1, inputs, 0, inputs.length);</b>
+<i>75</i>&nbsp;        }
+<i>76</i>&nbsp;    }
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    private void println(final String prefix, final byte[] digest) {
+<b class="nc"><i>79</i>&nbsp;        println(prefix, digest, null);</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    private void println(final String prefix, final byte[] digest, final String fileName) {
+<i>83</i>&nbsp;        // The standard appears to be to print
+<i>84</i>&nbsp;        // hex, space, then either space or &#39;*&#39; followed by filename
+<i>85</i>&nbsp;        // where &#39;*&#39; is used for binary files
+<i>86</i>&nbsp;        // shasum(1) has a -b option which generates &quot; *&quot; separator
+<i>87</i>&nbsp;        // we don&#39;t distinguish binary files at present
+<b class="nc"><i>88</i>&nbsp;        System.out.println(prefix + Hex.encodeHexString(digest) + (fileName != null ? &quot;  &quot; + fileName : &quot;&quot;));</b>
+<i>89</i>&nbsp;    }
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    private void run() throws IOException {
+<b class="nc"><i>92</i>&nbsp;        if (algorithm.equalsIgnoreCase(&quot;ALL&quot;) || algorithm.equals(&quot;*&quot;)) {</b>
+<b class="nc"><i>93</i>&nbsp;            run(MessageDigestAlgorithms.values());</b>
+<i>94</i>&nbsp;            return;
+<i>95</i>&nbsp;        }
+<b class="nc"><i>96</i>&nbsp;        final MessageDigest messageDigest = DigestUtils.getDigest(algorithm, null);</b>
+<b class="nc"><i>97</i>&nbsp;        if (messageDigest != null) {</b>
+<b class="nc"><i>98</i>&nbsp;            run(&quot;&quot;, messageDigest);</b>
+<i>99</i>&nbsp;        } else {
+<b class="nc"><i>100</i>&nbsp;            run(&quot;&quot;, DigestUtils.getDigest(algorithm.toUpperCase(Locale.ROOT)));</b>
+<i>101</i>&nbsp;        }
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    private void run(final String[] digestAlgorithms) throws IOException {
+<b class="nc"><i>105</i>&nbsp;        for (final String messageDigestAlgorithm : digestAlgorithms) {</b>
+<b class="nc"><i>106</i>&nbsp;            if (DigestUtils.isAvailable(messageDigestAlgorithm)) {</b>
+<b class="nc"><i>107</i>&nbsp;                run(messageDigestAlgorithm + &quot; &quot;, messageDigestAlgorithm);</b>
+<i>108</i>&nbsp;            }
+<i>109</i>&nbsp;        }
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    private void run(final String prefix, final MessageDigest messageDigest) throws IOException {
+<b class="nc"><i>113</i>&nbsp;        if (inputs == null) {</b>
+<b class="nc"><i>114</i>&nbsp;            println(prefix, DigestUtils.digest(messageDigest, System.in));</b>
+<i>115</i>&nbsp;            return;
+<i>116</i>&nbsp;        }
+<b class="nc"><i>117</i>&nbsp;        for(final String source : inputs) {</b>
+<b class="nc"><i>118</i>&nbsp;            final File file = new File(source);</b>
+<b class="nc"><i>119</i>&nbsp;            if (file.isFile()) {</b>
+<b class="nc"><i>120</i>&nbsp;                println(prefix, DigestUtils.digest(messageDigest, file), source);</b>
+<b class="nc"><i>121</i>&nbsp;            } else if (file.isDirectory()) {</b>
+<b class="nc"><i>122</i>&nbsp;                final File[] listFiles = file.listFiles();</b>
+<b class="nc"><i>123</i>&nbsp;                if (listFiles != null) {</b>
+<b class="nc"><i>124</i>&nbsp;                    run(prefix, messageDigest, listFiles);</b>
+<i>125</i>&nbsp;                }
+<b class="nc"><i>126</i>&nbsp;            } else {</b>
+<i>127</i>&nbsp;                // use the default charset for the command-line parameter
+<b class="nc"><i>128</i>&nbsp;                final byte[] bytes = source.getBytes(Charset.defaultCharset());</b>
+<b class="nc"><i>129</i>&nbsp;                println(prefix, DigestUtils.digest(messageDigest, bytes));</b>
+<i>130</i>&nbsp;            }
+<i>131</i>&nbsp;        }
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    private void run(final String prefix, final MessageDigest messageDigest, final File[] files) throws IOException {
+<b class="nc"><i>135</i>&nbsp;        for (final File file : files) {</b>
+<b class="nc"><i>136</i>&nbsp;            if (file.isFile()) {</b>
+<b class="nc"><i>137</i>&nbsp;                println(prefix, DigestUtils.digest(messageDigest, file), file.getName());</b>
+<i>138</i>&nbsp;            }
+<i>139</i>&nbsp;        }
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    private void run(final String prefix, final String messageDigestAlgorithm) throws IOException {
+<b class="nc"><i>143</i>&nbsp;        run(prefix, DigestUtils.getDigest(messageDigestAlgorithm));</b>
+<i>144</i>&nbsp;    }
+<i>145</i>&nbsp;
+<i>146</i>&nbsp;    @Override
+<i>147</i>&nbsp;    public String toString() {
+<b class="nc"><i>148</i>&nbsp;        return String.format(&quot;%s %s&quot;, super.toString(), Arrays.toString(args));</b>
+<i>149</i>&nbsp;    }
+<i>150</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:19</div>
+</div>
+</body>
+</html>

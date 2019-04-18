@@ -1,0 +1,574 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Hex</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.binary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Hex (org.apache.commons.codec.binary)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Hex</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/ 26)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (67/ 67)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.binary;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.nio.ByteBuffer;
+<i>21</i>&nbsp;import java.nio.charset.Charset;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.codec.BinaryDecoder;
+<i>24</i>&nbsp;import org.apache.commons.codec.BinaryEncoder;
+<i>25</i>&nbsp;import org.apache.commons.codec.CharEncoding;
+<i>26</i>&nbsp;import org.apache.commons.codec.Charsets;
+<i>27</i>&nbsp;import org.apache.commons.codec.DecoderException;
+<i>28</i>&nbsp;import org.apache.commons.codec.EncoderException;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;/**
+<i>31</i>&nbsp; * Converts hexadecimal Strings. The charset used for certain operation can be set, the default is set in
+<i>32</i>&nbsp; * {@link #DEFAULT_CHARSET_NAME}
+<i>33</i>&nbsp; *
+<i>34</i>&nbsp; * This class is thread-safe.
+<i>35</i>&nbsp; *
+<i>36</i>&nbsp; * @since 1.1
+<i>37</i>&nbsp; * @version $Id$
+<i>38</i>&nbsp; */
+<i>39</i>&nbsp;public class Hex implements BinaryEncoder, BinaryDecoder {
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Default charset is {@link Charsets#UTF_8}
+<i>43</i>&nbsp;     *
+<i>44</i>&nbsp;     * @since 1.7
+<i>45</i>&nbsp;     */
+<b class="fc"><i>46</i>&nbsp;    public static final Charset DEFAULT_CHARSET = Charsets.UTF_8;</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * Default charset name is {@link CharEncoding#UTF_8}
+<i>50</i>&nbsp;     *
+<i>51</i>&nbsp;     * @since 1.4
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public static final String DEFAULT_CHARSET_NAME = CharEncoding.UTF_8;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /**
+<i>56</i>&nbsp;     * Used to build output as Hex
+<i>57</i>&nbsp;     */
+<b class="fc"><i>58</i>&nbsp;    private static final char[] DIGITS_LOWER =</b>
+<i>59</i>&nbsp;        {&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;};
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * Used to build output as Hex
+<i>63</i>&nbsp;     */
+<b class="fc"><i>64</i>&nbsp;    private static final char[] DIGITS_UPPER =</b>
+<i>65</i>&nbsp;        {&#39;0&#39;, &#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39;, &#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;F&#39;};
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * Converts a String representing hexadecimal values into an array of bytes of those same values. The
+<i>69</i>&nbsp;     * returned array will be half the length of the passed String, as it takes two characters to represent any given
+<i>70</i>&nbsp;     * byte. An exception is thrown if the passed String has an odd number of elements.
+<i>71</i>&nbsp;     *
+<i>72</i>&nbsp;     * @param data
+<i>73</i>&nbsp;     *            A String containing hexadecimal digits
+<i>74</i>&nbsp;     * @return A byte array containing binary data decoded from the supplied char array.
+<i>75</i>&nbsp;     * @throws DecoderException
+<i>76</i>&nbsp;     *             Thrown if an odd number or illegal of characters is supplied
+<i>77</i>&nbsp;     * @since 1.11
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    public static byte[] decodeHex(final String data) throws DecoderException {
+<b class="fc"><i>80</i>&nbsp;        return decodeHex(data.toCharArray());</b>
+<i>81</i>&nbsp;    }
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Converts an array of characters representing hexadecimal values into an array of bytes of those same values. The
+<i>85</i>&nbsp;     * returned array will be half the length of the passed array, as it takes two characters to represent any given
+<i>86</i>&nbsp;     * byte. An exception is thrown if the passed char array has an odd number of elements.
+<i>87</i>&nbsp;     *
+<i>88</i>&nbsp;     * @param data
+<i>89</i>&nbsp;     *            An array of characters containing hexadecimal digits
+<i>90</i>&nbsp;     * @return A byte array containing binary data decoded from the supplied char array.
+<i>91</i>&nbsp;     * @throws DecoderException
+<i>92</i>&nbsp;     *             Thrown if an odd number or illegal of characters is supplied
+<i>93</i>&nbsp;     */
+<i>94</i>&nbsp;    public static byte[] decodeHex(final char[] data) throws DecoderException {
+<i>95</i>&nbsp;
+<b class="fc"><i>96</i>&nbsp;        final int len = data.length;</b>
+<i>97</i>&nbsp;
+<b class="fc"><i>98</i>&nbsp;        if ((len &amp; 0x01) != 0) {</b>
+<b class="fc"><i>99</i>&nbsp;            throw new DecoderException(&quot;Odd number of characters.&quot;);</b>
+<i>100</i>&nbsp;        }
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;        final byte[] out = new byte[len &gt;&gt; 1];</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;        // two characters form the hex value.
+<b class="fc"><i>105</i>&nbsp;        for (int i = 0, j = 0; j &lt; len; i++) {</b>
+<b class="fc"><i>106</i>&nbsp;            int f = toDigit(data[j], j) &lt;&lt; 4;</b>
+<b class="fc"><i>107</i>&nbsp;            j++;</b>
+<b class="fc"><i>108</i>&nbsp;            f = f | toDigit(data[j], j);</b>
+<b class="fc"><i>109</i>&nbsp;            j++;</b>
+<b class="fc"><i>110</i>&nbsp;            out[i] = (byte) (f &amp; 0xFF);</b>
+<i>111</i>&nbsp;        }
+<i>112</i>&nbsp;
+<b class="fc"><i>113</i>&nbsp;        return out;</b>
+<i>114</i>&nbsp;    }
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Converts an array of bytes into an array of characters representing the hexadecimal values of each byte in order.
+<i>118</i>&nbsp;     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+<i>119</i>&nbsp;     * given byte.
+<i>120</i>&nbsp;     *
+<i>121</i>&nbsp;     * @param data
+<i>122</i>&nbsp;     *            a byte[] to convert to Hex characters
+<i>123</i>&nbsp;     * @return A char[] containing lower-case hexadecimal characters
+<i>124</i>&nbsp;     */
+<i>125</i>&nbsp;    public static char[] encodeHex(final byte[] data) {
+<b class="fc"><i>126</i>&nbsp;        return encodeHex(data, true);</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     * Converts a byte buffer into an array of characters representing the hexadecimal values of each byte in order.
+<i>131</i>&nbsp;     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+<i>132</i>&nbsp;     * given byte.
+<i>133</i>&nbsp;     *
+<i>134</i>&nbsp;     * @param data
+<i>135</i>&nbsp;     *            a byte buffer to convert to Hex characters
+<i>136</i>&nbsp;     * @return A char[] containing lower-case hexadecimal characters
+<i>137</i>&nbsp;     * @since 1.11
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    public static char[] encodeHex(final ByteBuffer data) {
+<b class="fc"><i>140</i>&nbsp;        return encodeHex(data, true);</b>
+<i>141</i>&nbsp;    }
+<i>142</i>&nbsp;
+<i>143</i>&nbsp;    /**
+<i>144</i>&nbsp;     * Converts an array of bytes into an array of characters representing the hexadecimal values of each byte in order.
+<i>145</i>&nbsp;     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+<i>146</i>&nbsp;     * given byte.
+<i>147</i>&nbsp;     *
+<i>148</i>&nbsp;     * @param data
+<i>149</i>&nbsp;     *            a byte[] to convert to Hex characters
+<i>150</i>&nbsp;     * @param toLowerCase
+<i>151</i>&nbsp;     *            &lt;code&gt;true&lt;/code&gt; converts to lowercase, &lt;code&gt;false&lt;/code&gt; to uppercase
+<i>152</i>&nbsp;     * @return A char[] containing hexadecimal characters in the selected case
+<i>153</i>&nbsp;     * @since 1.4
+<i>154</i>&nbsp;     */
+<i>155</i>&nbsp;    public static char[] encodeHex(final byte[] data, final boolean toLowerCase) {
+<b class="fc"><i>156</i>&nbsp;        return encodeHex(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);</b>
+<i>157</i>&nbsp;    }
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /**
+<i>160</i>&nbsp;     * Converts a byte buffer into an array of characters representing the hexadecimal values of each byte in order.
+<i>161</i>&nbsp;     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+<i>162</i>&nbsp;     * given byte.
+<i>163</i>&nbsp;     *
+<i>164</i>&nbsp;     * @param data
+<i>165</i>&nbsp;     *            a byte buffer to convert to Hex characters
+<i>166</i>&nbsp;     * @param toLowerCase
+<i>167</i>&nbsp;     *            &lt;code&gt;true&lt;/code&gt; converts to lowercase, &lt;code&gt;false&lt;/code&gt; to uppercase
+<i>168</i>&nbsp;     * @return A char[] containing hexadecimal characters in the selected case
+<i>169</i>&nbsp;     * @since 1.11
+<i>170</i>&nbsp;     */
+<i>171</i>&nbsp;    public static char[] encodeHex(final ByteBuffer data, final boolean toLowerCase) {
+<b class="fc"><i>172</i>&nbsp;        return encodeHex(data, toLowerCase ? DIGITS_LOWER : DIGITS_UPPER);</b>
+<i>173</i>&nbsp;    }
+<i>174</i>&nbsp;
+<i>175</i>&nbsp;    /**
+<i>176</i>&nbsp;     * Converts an array of bytes into an array of characters representing the hexadecimal values of each byte in order.
+<i>177</i>&nbsp;     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+<i>178</i>&nbsp;     * given byte.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param data
+<i>181</i>&nbsp;     *            a byte[] to convert to Hex characters
+<i>182</i>&nbsp;     * @param toDigits
+<i>183</i>&nbsp;     *            the output alphabet (must contain at least 16 chars)
+<i>184</i>&nbsp;     * @return A char[] containing the appropriate characters from the alphabet
+<i>185</i>&nbsp;     *         For best results, this should be either upper- or lower-case hex.
+<i>186</i>&nbsp;     * @since 1.4
+<i>187</i>&nbsp;     */
+<i>188</i>&nbsp;    protected static char[] encodeHex(final byte[] data, final char[] toDigits) {
+<b class="fc"><i>189</i>&nbsp;        final int l = data.length;</b>
+<b class="fc"><i>190</i>&nbsp;        final char[] out = new char[l &lt;&lt; 1];</b>
+<i>191</i>&nbsp;        // two characters form the hex value.
+<b class="fc"><i>192</i>&nbsp;        for (int i = 0, j = 0; i &lt; l; i++) {</b>
+<b class="fc"><i>193</i>&nbsp;            out[j++] = toDigits[(0xF0 &amp; data[i]) &gt;&gt;&gt; 4];</b>
+<b class="fc"><i>194</i>&nbsp;            out[j++] = toDigits[0x0F &amp; data[i]];</b>
+<i>195</i>&nbsp;        }
+<b class="fc"><i>196</i>&nbsp;        return out;</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Converts a byte buffer into an array of characters representing the hexadecimal values of each byte in order.
+<i>201</i>&nbsp;     * The returned array will be double the length of the passed array, as it takes two characters to represent any
+<i>202</i>&nbsp;     * given byte.
+<i>203</i>&nbsp;     *
+<i>204</i>&nbsp;     * @param data
+<i>205</i>&nbsp;     *            a byte buffer to convert to Hex characters
+<i>206</i>&nbsp;     * @param toDigits
+<i>207</i>&nbsp;     *            the output alphabet (must be at least 16 characters)
+<i>208</i>&nbsp;     * @return A char[] containing the appropriate characters from the alphabet
+<i>209</i>&nbsp;     *         For best results, this should be either upper- or lower-case hex.
+<i>210</i>&nbsp;     * @since 1.11
+<i>211</i>&nbsp;     */
+<i>212</i>&nbsp;    protected static char[] encodeHex(final ByteBuffer data, final char[] toDigits) {
+<b class="fc"><i>213</i>&nbsp;        return encodeHex(data.array(), toDigits);</b>
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    /**
+<i>217</i>&nbsp;     * Converts an array of bytes into a String representing the hexadecimal values of each byte in order. The returned
+<i>218</i>&nbsp;     * String will be double the length of the passed array, as it takes two characters to represent any given byte.
+<i>219</i>&nbsp;     *
+<i>220</i>&nbsp;     * @param data
+<i>221</i>&nbsp;     *            a byte[] to convert to Hex characters
+<i>222</i>&nbsp;     * @return A String containing lower-case hexadecimal characters
+<i>223</i>&nbsp;     * @since 1.4
+<i>224</i>&nbsp;     */
+<i>225</i>&nbsp;    public static String encodeHexString(final byte[] data) {
+<b class="fc"><i>226</i>&nbsp;        return new String(encodeHex(data));</b>
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Converts an array of bytes into a String representing the hexadecimal values of each byte in order. The returned
+<i>231</i>&nbsp;     * String will be double the length of the passed array, as it takes two characters to represent any given byte.
+<i>232</i>&nbsp;     *
+<i>233</i>&nbsp;     * @param data
+<i>234</i>&nbsp;     *            a byte[] to convert to Hex characters
+<i>235</i>&nbsp;     * @param toLowerCase
+<i>236</i>&nbsp;     *            &lt;code&gt;true&lt;/code&gt; converts to lowercase, &lt;code&gt;false&lt;/code&gt; to uppercase
+<i>237</i>&nbsp;     * @return A String containing lower-case hexadecimal characters
+<i>238</i>&nbsp;     * @since 1.11
+<i>239</i>&nbsp;     */
+<i>240</i>&nbsp;    public static String encodeHexString(final byte[] data, final boolean toLowerCase) {
+<b class="fc"><i>241</i>&nbsp;        return new String(encodeHex(data, toLowerCase));</b>
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /**
+<i>245</i>&nbsp;     * Converts a byte buffer into a String representing the hexadecimal values of each byte in order. The returned
+<i>246</i>&nbsp;     * String will be double the length of the passed array, as it takes two characters to represent any given byte.
+<i>247</i>&nbsp;     *
+<i>248</i>&nbsp;     * @param data
+<i>249</i>&nbsp;     *            a byte buffer to convert to Hex characters
+<i>250</i>&nbsp;     * @return A String containing lower-case hexadecimal characters
+<i>251</i>&nbsp;     * @since 1.11
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    public static String encodeHexString(final ByteBuffer data) {
+<b class="fc"><i>254</i>&nbsp;        return new String(encodeHex(data));</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * Converts a byte buffer into a String representing the hexadecimal values of each byte in order. The returned
+<i>259</i>&nbsp;     * String will be double the length of the passed array, as it takes two characters to represent any given byte.
+<i>260</i>&nbsp;     *
+<i>261</i>&nbsp;     * @param data
+<i>262</i>&nbsp;     *            a byte buffer to convert to Hex characters
+<i>263</i>&nbsp;     * @param toLowerCase
+<i>264</i>&nbsp;     *            &lt;code&gt;true&lt;/code&gt; converts to lowercase, &lt;code&gt;false&lt;/code&gt; to uppercase
+<i>265</i>&nbsp;     * @return A String containing lower-case hexadecimal characters
+<i>266</i>&nbsp;     * @since 1.11
+<i>267</i>&nbsp;     */
+<i>268</i>&nbsp;    public static String encodeHexString(final ByteBuffer data, final boolean toLowerCase) {
+<b class="fc"><i>269</i>&nbsp;        return new String(encodeHex(data, toLowerCase));</b>
+<i>270</i>&nbsp;    }
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    /**
+<i>273</i>&nbsp;     * Converts a hexadecimal character to an integer.
+<i>274</i>&nbsp;     *
+<i>275</i>&nbsp;     * @param ch
+<i>276</i>&nbsp;     *            A character to convert to an integer digit
+<i>277</i>&nbsp;     * @param index
+<i>278</i>&nbsp;     *            The index of the character in the source
+<i>279</i>&nbsp;     * @return An integer
+<i>280</i>&nbsp;     * @throws DecoderException
+<i>281</i>&nbsp;     *             Thrown if ch is an illegal hex character
+<i>282</i>&nbsp;     */
+<i>283</i>&nbsp;    protected static int toDigit(final char ch, final int index) throws DecoderException {
+<b class="fc"><i>284</i>&nbsp;        final int digit = Character.digit(ch, 16);</b>
+<b class="fc"><i>285</i>&nbsp;        if (digit == -1) {</b>
+<b class="fc"><i>286</i>&nbsp;            throw new DecoderException(&quot;Illegal hexadecimal character &quot; + ch + &quot; at index &quot; + index);</b>
+<i>287</i>&nbsp;        }
+<b class="fc"><i>288</i>&nbsp;        return digit;</b>
+<i>289</i>&nbsp;    }
+<i>290</i>&nbsp;
+<i>291</i>&nbsp;    private final Charset charset;
+<i>292</i>&nbsp;
+<i>293</i>&nbsp;    /**
+<i>294</i>&nbsp;     * Creates a new codec with the default charset name {@link #DEFAULT_CHARSET}
+<i>295</i>&nbsp;     */
+<b class="fc"><i>296</i>&nbsp;    public Hex() {</b>
+<i>297</i>&nbsp;        // use default encoding
+<b class="fc"><i>298</i>&nbsp;        this.charset = DEFAULT_CHARSET;</b>
+<b class="fc"><i>299</i>&nbsp;    }</b>
+<i>300</i>&nbsp;
+<i>301</i>&nbsp;    /**
+<i>302</i>&nbsp;     * Creates a new codec with the given Charset.
+<i>303</i>&nbsp;     *
+<i>304</i>&nbsp;     * @param charset
+<i>305</i>&nbsp;     *            the charset.
+<i>306</i>&nbsp;     * @since 1.7
+<i>307</i>&nbsp;     */
+<b class="fc"><i>308</i>&nbsp;    public Hex(final Charset charset) {</b>
+<b class="fc"><i>309</i>&nbsp;        this.charset = charset;</b>
+<b class="fc"><i>310</i>&nbsp;    }</b>
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;    /**
+<i>313</i>&nbsp;     * Creates a new codec with the given charset name.
+<i>314</i>&nbsp;     *
+<i>315</i>&nbsp;     * @param charsetName
+<i>316</i>&nbsp;     *            the charset name.
+<i>317</i>&nbsp;     * @throws java.nio.charset.UnsupportedCharsetException
+<i>318</i>&nbsp;     *             If the named charset is unavailable
+<i>319</i>&nbsp;     * @since 1.4
+<i>320</i>&nbsp;     * @since 1.7 throws UnsupportedCharsetException if the named charset is unavailable
+<i>321</i>&nbsp;     */
+<i>322</i>&nbsp;    public Hex(final String charsetName) {
+<b class="fc"><i>323</i>&nbsp;        this(Charset.forName(charsetName));</b>
+<b class="fc"><i>324</i>&nbsp;    }</b>
+<i>325</i>&nbsp;
+<i>326</i>&nbsp;    /**
+<i>327</i>&nbsp;     * Converts an array of character bytes representing hexadecimal values into an array of bytes of those same values.
+<i>328</i>&nbsp;     * The returned array will be half the length of the passed array, as it takes two characters to represent any given
+<i>329</i>&nbsp;     * byte. An exception is thrown if the passed char array has an odd number of elements.
+<i>330</i>&nbsp;     *
+<i>331</i>&nbsp;     * @param array
+<i>332</i>&nbsp;     *            An array of character bytes containing hexadecimal digits
+<i>333</i>&nbsp;     * @return A byte array containing binary data decoded from the supplied byte array (representing characters).
+<i>334</i>&nbsp;     * @throws DecoderException
+<i>335</i>&nbsp;     *             Thrown if an odd number of characters is supplied to this function
+<i>336</i>&nbsp;     * @see #decodeHex(char[])
+<i>337</i>&nbsp;     */
+<i>338</i>&nbsp;    @Override
+<i>339</i>&nbsp;    public byte[] decode(final byte[] array) throws DecoderException {
+<b class="fc"><i>340</i>&nbsp;        return decodeHex(new String(array, getCharset()).toCharArray());</b>
+<i>341</i>&nbsp;    }
+<i>342</i>&nbsp;
+<i>343</i>&nbsp;    /**
+<i>344</i>&nbsp;     * Converts a buffer of character bytes representing hexadecimal values into an array of bytes of those same values.
+<i>345</i>&nbsp;     * The returned array will be half the length of the passed array, as it takes two characters to represent any given
+<i>346</i>&nbsp;     * byte. An exception is thrown if the passed char array has an odd number of elements.
+<i>347</i>&nbsp;     *
+<i>348</i>&nbsp;     * @param buffer
+<i>349</i>&nbsp;     *            An array of character bytes containing hexadecimal digits
+<i>350</i>&nbsp;     * @return A byte array containing binary data decoded from the supplied byte array (representing characters).
+<i>351</i>&nbsp;     * @throws DecoderException
+<i>352</i>&nbsp;     *             Thrown if an odd number of characters is supplied to this function
+<i>353</i>&nbsp;     * @see #decodeHex(char[])
+<i>354</i>&nbsp;     * @since 1.11
+<i>355</i>&nbsp;     */
+<i>356</i>&nbsp;    public byte[] decode(final ByteBuffer buffer) throws DecoderException {
+<b class="fc"><i>357</i>&nbsp;        return decodeHex(new String(buffer.array(), getCharset()).toCharArray());</b>
+<i>358</i>&nbsp;    }
+<i>359</i>&nbsp;
+<i>360</i>&nbsp;    /**
+<i>361</i>&nbsp;     * Converts a String or an array of character bytes representing hexadecimal values into an array of bytes of those
+<i>362</i>&nbsp;     * same values. The returned array will be half the length of the passed String or array, as it takes two characters
+<i>363</i>&nbsp;     * to represent any given byte. An exception is thrown if the passed char array has an odd number of elements.
+<i>364</i>&nbsp;     *
+<i>365</i>&nbsp;     * @param object
+<i>366</i>&nbsp;     *            A String, ByteBuffer, byte[], or an array of character bytes containing hexadecimal digits
+<i>367</i>&nbsp;     * @return A byte array containing binary data decoded from the supplied byte array (representing characters).
+<i>368</i>&nbsp;     * @throws DecoderException
+<i>369</i>&nbsp;     *             Thrown if an odd number of characters is supplied to this function or the object is not a String or
+<i>370</i>&nbsp;     *             char[]
+<i>371</i>&nbsp;     * @see #decodeHex(char[])
+<i>372</i>&nbsp;     */
+<i>373</i>&nbsp;    @Override
+<i>374</i>&nbsp;    public Object decode(final Object object) throws DecoderException {
+<b class="fc"><i>375</i>&nbsp;        if (object instanceof String) {</b>
+<b class="fc"><i>376</i>&nbsp;            return decode(((String) object).toCharArray());</b>
+<b class="fc"><i>377</i>&nbsp;        } else if (object instanceof byte[]) {</b>
+<b class="fc"><i>378</i>&nbsp;            return decode((byte[]) object);</b>
+<b class="fc"><i>379</i>&nbsp;        } else if (object instanceof ByteBuffer) {</b>
+<b class="fc"><i>380</i>&nbsp;            return decode((ByteBuffer) object);</b>
+<i>381</i>&nbsp;        } else {
+<i>382</i>&nbsp;            try {
+<b class="fc"><i>383</i>&nbsp;                return decodeHex((char[]) object);</b>
+<b class="fc"><i>384</i>&nbsp;            } catch (final ClassCastException e) {</b>
+<b class="fc"><i>385</i>&nbsp;                throw new DecoderException(e.getMessage(), e);</b>
+<i>386</i>&nbsp;            }
+<i>387</i>&nbsp;        }
+<i>388</i>&nbsp;    }
+<i>389</i>&nbsp;
+<i>390</i>&nbsp;    /**
+<i>391</i>&nbsp;     * Converts an array of bytes into an array of bytes for the characters representing the hexadecimal values of each
+<i>392</i>&nbsp;     * byte in order. The returned array will be double the length of the passed array, as it takes two characters to
+<i>393</i>&nbsp;     * represent any given byte.
+<i>394</i>&nbsp;     * &lt;p&gt;
+<i>395</i>&nbsp;     * The conversion from hexadecimal characters to the returned bytes is performed with the charset named by
+<i>396</i>&nbsp;     * {@link #getCharset()}.
+<i>397</i>&nbsp;     * &lt;/p&gt;
+<i>398</i>&nbsp;     *
+<i>399</i>&nbsp;     * @param array
+<i>400</i>&nbsp;     *            a byte[] to convert to Hex characters
+<i>401</i>&nbsp;     * @return A byte[] containing the bytes of the lower-case hexadecimal characters
+<i>402</i>&nbsp;     * @since 1.7 No longer throws IllegalStateException if the charsetName is invalid.
+<i>403</i>&nbsp;     * @see #encodeHex(byte[])
+<i>404</i>&nbsp;     */
+<i>405</i>&nbsp;    @Override
+<i>406</i>&nbsp;    public byte[] encode(final byte[] array) {
+<b class="fc"><i>407</i>&nbsp;        return encodeHexString(array).getBytes(this.getCharset());</b>
+<i>408</i>&nbsp;    }
+<i>409</i>&nbsp;
+<i>410</i>&nbsp;    /**
+<i>411</i>&nbsp;     * Converts byte buffer into an array of bytes for the characters representing the hexadecimal values of each
+<i>412</i>&nbsp;     * byte in order. The returned array will be double the length of the passed array, as it takes two characters to
+<i>413</i>&nbsp;     * represent any given byte.
+<i>414</i>&nbsp;     * &lt;p&gt;
+<i>415</i>&nbsp;     * The conversion from hexadecimal characters to the returned bytes is performed with the charset named by
+<i>416</i>&nbsp;     * {@link #getCharset()}.
+<i>417</i>&nbsp;     * &lt;/p&gt;
+<i>418</i>&nbsp;     *
+<i>419</i>&nbsp;     * @param array
+<i>420</i>&nbsp;     *            a byte buffer to convert to Hex characters
+<i>421</i>&nbsp;     * @return A byte[] containing the bytes of the lower-case hexadecimal characters
+<i>422</i>&nbsp;     * @see #encodeHex(byte[])
+<i>423</i>&nbsp;     * @since 1.11
+<i>424</i>&nbsp;     */
+<i>425</i>&nbsp;    public byte[] encode(final ByteBuffer array) {
+<b class="fc"><i>426</i>&nbsp;        return encodeHexString(array).getBytes(this.getCharset());</b>
+<i>427</i>&nbsp;    }
+<i>428</i>&nbsp;
+<i>429</i>&nbsp;    /**
+<i>430</i>&nbsp;     * Converts a String or an array of bytes into an array of characters representing the hexadecimal values of each
+<i>431</i>&nbsp;     * byte in order. The returned array will be double the length of the passed String or array, as it takes two
+<i>432</i>&nbsp;     * characters to represent any given byte.
+<i>433</i>&nbsp;     * &lt;p&gt;
+<i>434</i>&nbsp;     * The conversion from hexadecimal characters to bytes to be encoded to performed with the charset named by
+<i>435</i>&nbsp;     * {@link #getCharset()}.
+<i>436</i>&nbsp;     * &lt;/p&gt;
+<i>437</i>&nbsp;     *
+<i>438</i>&nbsp;     * @param object
+<i>439</i>&nbsp;     *            a String, ByteBuffer, or byte[] to convert to Hex characters
+<i>440</i>&nbsp;     * @return A char[] containing lower-case hexadecimal characters
+<i>441</i>&nbsp;     * @throws EncoderException
+<i>442</i>&nbsp;     *             Thrown if the given object is not a String or byte[]
+<i>443</i>&nbsp;     * @see #encodeHex(byte[])
+<i>444</i>&nbsp;     */
+<i>445</i>&nbsp;    @Override
+<i>446</i>&nbsp;    public Object encode(final Object object) throws EncoderException {
+<i>447</i>&nbsp;        byte[] byteArray;
+<b class="fc"><i>448</i>&nbsp;        if (object instanceof String) {</b>
+<b class="fc"><i>449</i>&nbsp;            byteArray = ((String) object).getBytes(this.getCharset());</b>
+<b class="fc"><i>450</i>&nbsp;        } else if (object instanceof ByteBuffer) {</b>
+<b class="fc"><i>451</i>&nbsp;            byteArray = ((ByteBuffer) object).array();</b>
+<i>452</i>&nbsp;        } else {
+<i>453</i>&nbsp;            try {
+<b class="fc"><i>454</i>&nbsp;                byteArray = (byte[]) object;</b>
+<b class="fc"><i>455</i>&nbsp;            } catch (final ClassCastException e) {</b>
+<b class="fc"><i>456</i>&nbsp;                throw new EncoderException(e.getMessage(), e);</b>
+<b class="fc"><i>457</i>&nbsp;            }</b>
+<i>458</i>&nbsp;        }
+<b class="fc"><i>459</i>&nbsp;        return encodeHex(byteArray);</b>
+<i>460</i>&nbsp;    }
+<i>461</i>&nbsp;
+<i>462</i>&nbsp;    /**
+<i>463</i>&nbsp;     * Gets the charset.
+<i>464</i>&nbsp;     *
+<i>465</i>&nbsp;     * @return the charset.
+<i>466</i>&nbsp;     * @since 1.7
+<i>467</i>&nbsp;     */
+<i>468</i>&nbsp;    public Charset getCharset() {
+<b class="fc"><i>469</i>&nbsp;        return this.charset;</b>
+<i>470</i>&nbsp;    }
+<i>471</i>&nbsp;
+<i>472</i>&nbsp;    /**
+<i>473</i>&nbsp;     * Gets the charset name.
+<i>474</i>&nbsp;     *
+<i>475</i>&nbsp;     * @return the charset name.
+<i>476</i>&nbsp;     * @since 1.4
+<i>477</i>&nbsp;     */
+<i>478</i>&nbsp;    public String getCharsetName() {
+<b class="fc"><i>479</i>&nbsp;        return this.charset.name();</b>
+<i>480</i>&nbsp;    }
+<i>481</i>&nbsp;
+<i>482</i>&nbsp;    /**
+<i>483</i>&nbsp;     * Returns a string representation of the object, which includes the charset name.
+<i>484</i>&nbsp;     *
+<i>485</i>&nbsp;     * @return a string representation of the object.
+<i>486</i>&nbsp;     */
+<i>487</i>&nbsp;    @Override
+<i>488</i>&nbsp;    public String toString() {
+<b class="fc"><i>489</i>&nbsp;        return super.toString() + &quot;[charsetName=&quot; + this.charset + &quot;]&quot;;</b>
+<i>490</i>&nbsp;    }
+<i>491</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:19</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ContourDataset</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.data.contour</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ContourDataset (org.jfree.data.contour)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">ContourDataset</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2013, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------
+<i>28</i>&nbsp; * ContourDataset.java
+<i>29</i>&nbsp; * -------------------
+<i>30</i>&nbsp; * (C) Copyright 2002-2008, by David M. O&#39;Donnell and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  David M. O&#39;Donnell;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes (from 23-Jan-2003)
+<i>36</i>&nbsp; * --------------------------
+<i>37</i>&nbsp; * 23-Jan-2003 : Added standard header (DG);
+<i>38</i>&nbsp; * 17-Jan-2004 : Added methods from DefaultContourDataset that are referenced
+<i>39</i>&nbsp; *               by ContourPlot.  See bug 741048 (DG);
+<i>40</i>&nbsp; * ------------- JFREECHART 1.0.x ---------------------------------------------
+<i>41</i>&nbsp; * 31-Jan-2007 : Deprecated (DG);
+<i>42</i>&nbsp; *
+<i>43</i>&nbsp; */
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;package org.jfree.data.contour;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;import org.jfree.chart.plot.XYPlot;
+<i>48</i>&nbsp;import org.jfree.chart.renderer.xy.XYBlockRenderer;
+<i>49</i>&nbsp;import org.jfree.data.Range;
+<i>50</i>&nbsp;import org.jfree.data.xy.XYZDataset;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;/**
+<i>53</i>&nbsp; * The interface through which JFreeChart obtains data in the form of (x, y, z)
+<i>54</i>&nbsp; * items - used for XY and XYZ plots.
+<i>55</i>&nbsp; *
+<i>56</i>&nbsp; * @deprecated This interface is no longer supported (as of version 1.0.4).
+<i>57</i>&nbsp; *     If you are creating contour plots, please try to use {@link XYPlot} and
+<i>58</i>&nbsp; *     {@link XYBlockRenderer}.
+<i>59</i>&nbsp; */
+<i>60</i>&nbsp;public interface ContourDataset extends XYZDataset {
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * Returns the smallest Z data value.
+<i>64</i>&nbsp;     *
+<i>65</i>&nbsp;     * @return The minimum Z value.
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public double getMinZValue();
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * Returns the largest Z data value.
+<i>71</i>&nbsp;     *
+<i>72</i>&nbsp;     * @return The maximum Z value.
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    public double getMaxZValue();
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Returns the array of Numbers representing the x data values.
+<i>78</i>&nbsp;     *
+<i>79</i>&nbsp;     * @return The array of x values.
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public Number[] getXValues();
+<i>82</i>&nbsp;
+<i>83</i>&nbsp;    /**
+<i>84</i>&nbsp;     * Returns the array of Numbers representing the y data values.
+<i>85</i>&nbsp;     *
+<i>86</i>&nbsp;     * @return The array of y values.
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    public Number[] getYValues();
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;    /**
+<i>91</i>&nbsp;     * Returns the array of Numbers representing the z data values.
+<i>92</i>&nbsp;     *
+<i>93</i>&nbsp;     * @return The array of z values.
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    public Number[] getZValues();
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    /**
+<i>98</i>&nbsp;     * Returns an int array contain the index into the x values.
+<i>99</i>&nbsp;     *
+<i>100</i>&nbsp;     * @return The X values.
+<i>101</i>&nbsp;     */
+<i>102</i>&nbsp;    public int[] indexX();
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * Returns the index of the xvalues.
+<i>106</i>&nbsp;     *
+<i>107</i>&nbsp;     * @return The x values.
+<i>108</i>&nbsp;     */
+<i>109</i>&nbsp;    public int[] getXIndices();
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * Returns the maximum z-value within visible region of plot.
+<i>113</i>&nbsp;     *
+<i>114</i>&nbsp;     * @param x  the x-value.
+<i>115</i>&nbsp;     * @param y  the y-value.
+<i>116</i>&nbsp;     *
+<i>117</i>&nbsp;     * @return The maximum z-value.
+<i>118</i>&nbsp;     */
+<i>119</i>&nbsp;    public Range getZValueRange(Range x, Range y);
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * Returns true if axis are dates.
+<i>123</i>&nbsp;     *
+<i>124</i>&nbsp;     * @param axisNumber  the axis where 0-x, 1-y, and 2-z.
+<i>125</i>&nbsp;     *
+<i>126</i>&nbsp;     * @return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt;.
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    public boolean isDateAxis(int axisNumber);
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 17:09</div>
+</div>
+</body>
+</html>

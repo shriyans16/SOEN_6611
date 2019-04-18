@@ -1,0 +1,451 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: StringUtils</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.apache.commons.codec.binary</a> ]
+</div>
+
+<h1>Coverage Summary for Class: StringUtils (org.apache.commons.codec.binary)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StringUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/ 18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (47/ 47)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">StringUtils$__CLR4_1_21el1eljuluj4bs</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (19/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (48/ 48)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/*
+<i>2</i>&nbsp; * Licensed to the Apache Software Foundation (ASF) under one or more
+<i>3</i>&nbsp; * contributor license agreements.  See the NOTICE file distributed with
+<i>4</i>&nbsp; * this work for additional information regarding copyright ownership.
+<i>5</i>&nbsp; * The ASF licenses this file to You under the Apache License, Version 2.0
+<i>6</i>&nbsp; * (the &quot;License&quot;); you may not use this file except in compliance with
+<i>7</i>&nbsp; * the License.  You may obtain a copy of the License at
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; *      http://www.apache.org/licenses/LICENSE-2.0
+<i>10</i>&nbsp; *
+<i>11</i>&nbsp; * Unless required by applicable law or agreed to in writing, software
+<i>12</i>&nbsp; * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+<i>13</i>&nbsp; * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+<i>14</i>&nbsp; * See the License for the specific language governing permissions and
+<i>15</i>&nbsp; * limitations under the License.
+<i>16</i>&nbsp; */
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;package org.apache.commons.codec.binary;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import java.io.UnsupportedEncodingException;
+<i>21</i>&nbsp;import java.nio.charset.Charset;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;import org.apache.commons.codec.CharEncoding;
+<i>24</i>&nbsp;import org.apache.commons.codec.Charsets;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;/**
+<i>27</i>&nbsp; * Converts String to and from bytes using the encodings required by the Java specification. These encodings are
+<i>28</i>&nbsp; * specified in &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;
+<i>29</i>&nbsp; * Standard charsets&lt;/a&gt;.
+<i>30</i>&nbsp; *
+<i>31</i>&nbsp; * &lt;p&gt;This class is immutable and thread-safe.&lt;/p&gt;
+<i>32</i>&nbsp; *
+<i>33</i>&nbsp; * @see CharEncoding
+<i>34</i>&nbsp; * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>35</i>&nbsp; * @version $Id$
+<i>36</i>&nbsp; * @since 1.4
+<i>37</i>&nbsp; */
+<b class="fc"><i>38</i>&nbsp;public class StringUtils {</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * Calls {@link String#getBytes(Charset)}
+<i>42</i>&nbsp;     *
+<i>43</i>&nbsp;     * @param string
+<i>44</i>&nbsp;     *            The string to encode (if null, return null).
+<i>45</i>&nbsp;     * @param charset
+<i>46</i>&nbsp;     *            The {@link Charset} to encode the {@code String}
+<i>47</i>&nbsp;     * @return the encoded bytes
+<i>48</i>&nbsp;     */
+<b class="fc"><i>49</i>&nbsp;    private static byte[] getBytes(String string, Charset charset) {</b>
+<b class="fc"><i>50</i>&nbsp;        if (string == null) {</b>
+<b class="fc"><i>51</i>&nbsp;            return null;</b>
+<i>52</i>&nbsp;        }
+<b class="fc"><i>53</i>&nbsp;        return string.getBytes(charset);</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * Encodes the given string into a sequence of bytes using the ISO-8859-1 charset, storing the result into a new
+<i>58</i>&nbsp;     * byte array.
+<i>59</i>&nbsp;     *
+<i>60</i>&nbsp;     * @param string
+<i>61</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>62</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>63</i>&nbsp;     * @throws NullPointerException
+<i>64</i>&nbsp;     *             Thrown if {@link Charsets#ISO_8859_1} is not initialized, which should never happen since it is
+<i>65</i>&nbsp;     *             required by the Java platform specification.
+<i>66</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>67</i>&nbsp;     * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>68</i>&nbsp;     * @see #getBytesUnchecked(String, String)
+<i>69</i>&nbsp;     */
+<b class="fc"><i>70</i>&nbsp;    public static byte[] getBytesIso8859_1(String string) {</b>
+<b class="fc"><i>71</i>&nbsp;        return getBytes(string, Charsets.ISO_8859_1);</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;    /**
+<i>76</i>&nbsp;     * Encodes the given string into a sequence of bytes using the named charset, storing the result into a new byte
+<i>77</i>&nbsp;     * array.
+<i>78</i>&nbsp;     * &lt;p&gt;
+<i>79</i>&nbsp;     * This method catches {@link UnsupportedEncodingException} and rethrows it as {@link IllegalStateException}, which
+<i>80</i>&nbsp;     * should never happen for a required charset name. Use this method when the encoding is required to be in the JRE.
+<i>81</i>&nbsp;     * &lt;/p&gt;
+<i>82</i>&nbsp;     *
+<i>83</i>&nbsp;     * @param string
+<i>84</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>85</i>&nbsp;     * @param charsetName
+<i>86</i>&nbsp;     *            The name of a required {@link java.nio.charset.Charset}
+<i>87</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>88</i>&nbsp;     * @throws IllegalStateException
+<i>89</i>&nbsp;     *             Thrown when a {@link UnsupportedEncodingException} is caught, which should never happen for a
+<i>90</i>&nbsp;     *             required charset name.
+<i>91</i>&nbsp;     * @see CharEncoding
+<i>92</i>&nbsp;     * @see String#getBytes(String)
+<i>93</i>&nbsp;     */
+<b class="fc"><i>94</i>&nbsp;    public static byte[] getBytesUnchecked(String string, String charsetName) {</b>
+<b class="fc"><i>95</i>&nbsp;        if (string == null) {</b>
+<b class="fc"><i>96</i>&nbsp;            return null;</b>
+<i>97</i>&nbsp;        }
+<b class="fc"><i>98</i>&nbsp;        try {</b>
+<b class="fc"><i>99</i>&nbsp;            return string.getBytes(charsetName);</b>
+<b class="fc"><i>100</i>&nbsp;        } catch (UnsupportedEncodingException e) {</b>
+<b class="fc"><i>101</i>&nbsp;            throw StringUtils.newIllegalStateException(charsetName, e);</b>
+<i>102</i>&nbsp;        }
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    /**
+<i>106</i>&nbsp;     * Encodes the given string into a sequence of bytes using the US-ASCII charset, storing the result into a new byte
+<i>107</i>&nbsp;     * array.
+<i>108</i>&nbsp;     *
+<i>109</i>&nbsp;     * @param string
+<i>110</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>111</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>112</i>&nbsp;     * @throws NullPointerException
+<i>113</i>&nbsp;     *             Thrown if {@link Charsets#US_ASCII} is not initialized, which should never happen since it is
+<i>114</i>&nbsp;     *             required by the Java platform specification.
+<i>115</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>116</i>&nbsp;     * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>117</i>&nbsp;     * @see #getBytesUnchecked(String, String)
+<i>118</i>&nbsp;     */
+<b class="fc"><i>119</i>&nbsp;    public static byte[] getBytesUsAscii(String string) {</b>
+<b class="fc"><i>120</i>&nbsp;        return getBytes(string, Charsets.US_ASCII);</b>
+<i>121</i>&nbsp;    }
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;    /**
+<i>124</i>&nbsp;     * Encodes the given string into a sequence of bytes using the UTF-16 charset, storing the result into a new byte
+<i>125</i>&nbsp;     * array.
+<i>126</i>&nbsp;     *
+<i>127</i>&nbsp;     * @param string
+<i>128</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>129</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>130</i>&nbsp;     * @throws NullPointerException
+<i>131</i>&nbsp;     *             Thrown if {@link Charsets#UTF_16} is not initialized, which should never happen since it is
+<i>132</i>&nbsp;     *             required by the Java platform specification.
+<i>133</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>134</i>&nbsp;     * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>135</i>&nbsp;     * @see #getBytesUnchecked(String, String)
+<i>136</i>&nbsp;     */
+<b class="fc"><i>137</i>&nbsp;    public static byte[] getBytesUtf16(String string) {</b>
+<b class="fc"><i>138</i>&nbsp;        return getBytes(string, Charsets.UTF_16);</b>
+<i>139</i>&nbsp;    }
+<i>140</i>&nbsp;
+<i>141</i>&nbsp;    /**
+<i>142</i>&nbsp;     * Encodes the given string into a sequence of bytes using the UTF-16BE charset, storing the result into a new byte
+<i>143</i>&nbsp;     * array.
+<i>144</i>&nbsp;     *
+<i>145</i>&nbsp;     * @param string
+<i>146</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>147</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>148</i>&nbsp;     * @throws NullPointerException
+<i>149</i>&nbsp;     *             Thrown if {@link Charsets#UTF_16BE} is not initialized, which should never happen since it is
+<i>150</i>&nbsp;     *             required by the Java platform specification.
+<i>151</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>152</i>&nbsp;     * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>153</i>&nbsp;     * @see #getBytesUnchecked(String, String)
+<i>154</i>&nbsp;     */
+<b class="fc"><i>155</i>&nbsp;    public static byte[] getBytesUtf16Be(String string) {</b>
+<b class="fc"><i>156</i>&nbsp;        return getBytes(string, Charsets.UTF_16BE);</b>
+<i>157</i>&nbsp;    }
+<i>158</i>&nbsp;
+<i>159</i>&nbsp;    /**
+<i>160</i>&nbsp;     * Encodes the given string into a sequence of bytes using the UTF-16LE charset, storing the result into a new byte
+<i>161</i>&nbsp;     * array.
+<i>162</i>&nbsp;     *
+<i>163</i>&nbsp;     * @param string
+<i>164</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>165</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>166</i>&nbsp;     * @throws NullPointerException
+<i>167</i>&nbsp;     *             Thrown if {@link Charsets#UTF_16LE} is not initialized, which should never happen since it is
+<i>168</i>&nbsp;     *             required by the Java platform specification.
+<i>169</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>170</i>&nbsp;     * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>171</i>&nbsp;     * @see #getBytesUnchecked(String, String)
+<i>172</i>&nbsp;     */
+<b class="fc"><i>173</i>&nbsp;    public static byte[] getBytesUtf16Le(String string) {</b>
+<b class="fc"><i>174</i>&nbsp;        return getBytes(string, Charsets.UTF_16LE);</b>
+<i>175</i>&nbsp;    }
+<i>176</i>&nbsp;
+<i>177</i>&nbsp;    /**
+<i>178</i>&nbsp;     * Encodes the given string into a sequence of bytes using the UTF-8 charset, storing the result into a new byte
+<i>179</i>&nbsp;     * array.
+<i>180</i>&nbsp;     *
+<i>181</i>&nbsp;     * @param string
+<i>182</i>&nbsp;     *            the String to encode, may be {@code null}
+<i>183</i>&nbsp;     * @return encoded bytes, or {@code null} if the input string was {@code null}
+<i>184</i>&nbsp;     * @throws NullPointerException
+<i>185</i>&nbsp;     *             Thrown if {@link Charsets#UTF_8} is not initialized, which should never happen since it is
+<i>186</i>&nbsp;     *             required by the Java platform specification.
+<i>187</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>188</i>&nbsp;     * @see &lt;a href=&quot;http://download.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html&quot;&gt;Standard charsets&lt;/a&gt;
+<i>189</i>&nbsp;     * @see #getBytesUnchecked(String, String)
+<i>190</i>&nbsp;     */
+<b class="fc"><i>191</i>&nbsp;    public static byte[] getBytesUtf8(String string) {</b>
+<b class="fc"><i>192</i>&nbsp;        return getBytes(string, Charsets.UTF_8);</b>
+<i>193</i>&nbsp;    }
+<i>194</i>&nbsp;
+<b class="fc"><i>195</i>&nbsp;    private static IllegalStateException newIllegalStateException(String charsetName, UnsupportedEncodingException e) {</b>
+<b class="fc"><i>196</i>&nbsp;        return new IllegalStateException(charsetName + &quot;: &quot; + e);</b>
+<i>197</i>&nbsp;    }
+<i>198</i>&nbsp;
+<i>199</i>&nbsp;    /**
+<i>200</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the given charset.
+<i>201</i>&nbsp;     *
+<i>202</i>&nbsp;     * @param bytes
+<i>203</i>&nbsp;     *            The bytes to be decoded into characters
+<i>204</i>&nbsp;     * @param charset
+<i>205</i>&nbsp;     *            The {@link Charset} to encode the {@code String}
+<i>206</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the given charset,
+<i>207</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>208</i>&nbsp;     * @throws NullPointerException
+<i>209</i>&nbsp;     *             Thrown if {@link Charsets#UTF_8} is not initialized, which should never happen since it is
+<i>210</i>&nbsp;     *             required by the Java platform specification.
+<i>211</i>&nbsp;     */
+<b class="fc"><i>212</i>&nbsp;    private static String newString(byte[] bytes, Charset charset) {</b>
+<b class="fc"><i>213</i>&nbsp;        return bytes == null ? null : new String(bytes, charset);</b>
+<i>214</i>&nbsp;    }
+<i>215</i>&nbsp;
+<i>216</i>&nbsp;    /**
+<i>217</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the given charset.
+<i>218</i>&nbsp;     * &lt;p&gt;
+<i>219</i>&nbsp;     * This method catches {@link UnsupportedEncodingException} and re-throws it as {@link IllegalStateException}, which
+<i>220</i>&nbsp;     * should never happen for a required charset name. Use this method when the encoding is required to be in the JRE.
+<i>221</i>&nbsp;     * &lt;/p&gt;
+<i>222</i>&nbsp;     *
+<i>223</i>&nbsp;     * @param bytes
+<i>224</i>&nbsp;     *            The bytes to be decoded into characters, may be {@code null}
+<i>225</i>&nbsp;     * @param charsetName
+<i>226</i>&nbsp;     *            The name of a required {@link java.nio.charset.Charset}
+<i>227</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the given charset,
+<i>228</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>229</i>&nbsp;     * @throws IllegalStateException
+<i>230</i>&nbsp;     *             Thrown when a {@link UnsupportedEncodingException} is caught, which should never happen for a
+<i>231</i>&nbsp;     *             required charset name.
+<i>232</i>&nbsp;     * @see CharEncoding
+<i>233</i>&nbsp;     * @see String#String(byte[], String)
+<i>234</i>&nbsp;     */
+<b class="fc"><i>235</i>&nbsp;    public static String newString(byte[] bytes, String charsetName) {</b>
+<b class="fc"><i>236</i>&nbsp;        if (bytes == null) {</b>
+<b class="fc"><i>237</i>&nbsp;            return null;</b>
+<i>238</i>&nbsp;        }
+<b class="fc"><i>239</i>&nbsp;        try {</b>
+<b class="fc"><i>240</i>&nbsp;            return new String(bytes, charsetName);</b>
+<b class="fc"><i>241</i>&nbsp;        } catch (UnsupportedEncodingException e) {</b>
+<b class="fc"><i>242</i>&nbsp;            throw StringUtils.newIllegalStateException(charsetName, e);</b>
+<i>243</i>&nbsp;        }
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;    /**
+<i>247</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the ISO-8859-1 charset.
+<i>248</i>&nbsp;     *
+<i>249</i>&nbsp;     * @param bytes
+<i>250</i>&nbsp;     *            The bytes to be decoded into characters, may be {@code null}
+<i>251</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the ISO-8859-1 charset, or
+<i>252</i>&nbsp;     *         {@code null} if the input byte array was {@code null}.
+<i>253</i>&nbsp;     * @throws NullPointerException
+<i>254</i>&nbsp;     *             Thrown if {@link Charsets#ISO_8859_1} is not initialized, which should never happen since it is
+<i>255</i>&nbsp;     *             required by the Java platform specification.
+<i>256</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>257</i>&nbsp;     */
+<b class="fc"><i>258</i>&nbsp;    public static String newStringIso8859_1(byte[] bytes) {</b>
+<b class="fc"><i>259</i>&nbsp;        return new String(bytes, Charsets.ISO_8859_1);</b>
+<i>260</i>&nbsp;    }
+<i>261</i>&nbsp;
+<i>262</i>&nbsp;    /**
+<i>263</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the US-ASCII charset.
+<i>264</i>&nbsp;     *
+<i>265</i>&nbsp;     * @param bytes
+<i>266</i>&nbsp;     *            The bytes to be decoded into characters
+<i>267</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the US-ASCII charset,
+<i>268</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>269</i>&nbsp;     * @throws NullPointerException
+<i>270</i>&nbsp;     *             Thrown if {@link Charsets#US_ASCII} is not initialized, which should never happen since it is
+<i>271</i>&nbsp;     *             required by the Java platform specification.
+<i>272</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>273</i>&nbsp;     */
+<b class="fc"><i>274</i>&nbsp;    public static String newStringUsAscii(byte[] bytes) {</b>
+<b class="fc"><i>275</i>&nbsp;        return new String(bytes, Charsets.US_ASCII);</b>
+<i>276</i>&nbsp;    }
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    /**
+<i>279</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the UTF-16 charset.
+<i>280</i>&nbsp;     *
+<i>281</i>&nbsp;     * @param bytes
+<i>282</i>&nbsp;     *            The bytes to be decoded into characters
+<i>283</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the UTF-16 charset
+<i>284</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>285</i>&nbsp;     * @throws NullPointerException
+<i>286</i>&nbsp;     *             Thrown if {@link Charsets#UTF_16} is not initialized, which should never happen since it is
+<i>287</i>&nbsp;     *             required by the Java platform specification.
+<i>288</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>289</i>&nbsp;     */
+<b class="fc"><i>290</i>&nbsp;    public static String newStringUtf16(byte[] bytes) {</b>
+<b class="fc"><i>291</i>&nbsp;        return new String(bytes, Charsets.UTF_16);</b>
+<i>292</i>&nbsp;    }
+<i>293</i>&nbsp;
+<i>294</i>&nbsp;    /**
+<i>295</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the UTF-16BE charset.
+<i>296</i>&nbsp;     *
+<i>297</i>&nbsp;     * @param bytes
+<i>298</i>&nbsp;     *            The bytes to be decoded into characters
+<i>299</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the UTF-16BE charset,
+<i>300</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>301</i>&nbsp;     * @throws NullPointerException
+<i>302</i>&nbsp;     *             Thrown if {@link Charsets#UTF_16BE} is not initialized, which should never happen since it is
+<i>303</i>&nbsp;     *             required by the Java platform specification.
+<i>304</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>305</i>&nbsp;     */
+<b class="fc"><i>306</i>&nbsp;    public static String newStringUtf16Be(byte[] bytes) {</b>
+<b class="fc"><i>307</i>&nbsp;        return new String(bytes, Charsets.UTF_16BE);</b>
+<i>308</i>&nbsp;    }
+<i>309</i>&nbsp;
+<i>310</i>&nbsp;    /**
+<i>311</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the UTF-16LE charset.
+<i>312</i>&nbsp;     *
+<i>313</i>&nbsp;     * @param bytes
+<i>314</i>&nbsp;     *            The bytes to be decoded into characters
+<i>315</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the UTF-16LE charset,
+<i>316</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>317</i>&nbsp;     * @throws NullPointerException
+<i>318</i>&nbsp;     *             Thrown if {@link Charsets#UTF_16LE} is not initialized, which should never happen since it is
+<i>319</i>&nbsp;     *             required by the Java platform specification.
+<i>320</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>321</i>&nbsp;     */
+<b class="fc"><i>322</i>&nbsp;    public static String newStringUtf16Le(byte[] bytes) {</b>
+<b class="fc"><i>323</i>&nbsp;        return new String(bytes, Charsets.UTF_16LE);</b>
+<i>324</i>&nbsp;    }
+<i>325</i>&nbsp;
+<i>326</i>&nbsp;    /**
+<i>327</i>&nbsp;     * Constructs a new &lt;code&gt;String&lt;/code&gt; by decoding the specified array of bytes using the UTF-8 charset.
+<i>328</i>&nbsp;     *
+<i>329</i>&nbsp;     * @param bytes
+<i>330</i>&nbsp;     *            The bytes to be decoded into characters
+<i>331</i>&nbsp;     * @return A new &lt;code&gt;String&lt;/code&gt; decoded from the specified array of bytes using the UTF-8 charset,
+<i>332</i>&nbsp;     *         or {@code null} if the input byte array was {@code null}.
+<i>333</i>&nbsp;     * @throws NullPointerException
+<i>334</i>&nbsp;     *             Thrown if {@link Charsets#UTF_8} is not initialized, which should never happen since it is
+<i>335</i>&nbsp;     *             required by the Java platform specification.
+<i>336</i>&nbsp;     * @since As of 1.7, throws {@link NullPointerException} instead of UnsupportedEncodingException
+<i>337</i>&nbsp;     */
+<b class="fc"><i>338</i>&nbsp;    public static String newStringUtf8(byte[] bytes) {</b>
+<b class="fc"><i>339</i>&nbsp;        return newString(bytes, Charsets.UTF_8);</b>
+<i>340</i>&nbsp;    }
+<i>341</i>&nbsp;
+<i>342</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 19:33</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,581 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WaterfallBarRenderer</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">org.jfree.chart.renderer.category</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WaterfallBarRenderer (org.jfree.chart.renderer.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WaterfallBarRenderer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (10/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (75/ 150)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;/* ===========================================================
+<i>2</i>&nbsp; * JFreeChart : a free chart library for the Java(tm) platform
+<i>3</i>&nbsp; * ===========================================================
+<i>4</i>&nbsp; *
+<i>5</i>&nbsp; * (C) Copyright 2000-2016, by Object Refinery Limited and Contributors.
+<i>6</i>&nbsp; *
+<i>7</i>&nbsp; * Project Info:  http://www.jfree.org/jfreechart/index.html
+<i>8</i>&nbsp; *
+<i>9</i>&nbsp; * This library is free software; you can redistribute it and/or modify it
+<i>10</i>&nbsp; * under the terms of the GNU Lesser General Public License as published by
+<i>11</i>&nbsp; * the Free Software Foundation; either version 2.1 of the License, or
+<i>12</i>&nbsp; * (at your option) any later version.
+<i>13</i>&nbsp; *
+<i>14</i>&nbsp; * This library is distributed in the hope that it will be useful, but
+<i>15</i>&nbsp; * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+<i>16</i>&nbsp; * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+<i>17</i>&nbsp; * License for more details.
+<i>18</i>&nbsp; *
+<i>19</i>&nbsp; * You should have received a copy of the GNU Lesser General Public
+<i>20</i>&nbsp; * License along with this library; if not, write to the Free Software
+<i>21</i>&nbsp; * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+<i>22</i>&nbsp; * USA.
+<i>23</i>&nbsp; *
+<i>24</i>&nbsp; * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+<i>25</i>&nbsp; * Other names may be trademarks of their respective owners.]
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * -------------------------
+<i>28</i>&nbsp; * WaterfallBarRenderer.java
+<i>29</i>&nbsp; * -------------------------
+<i>30</i>&nbsp; * (C) Copyright 2003-2016, by Object Refinery Limited and Contributors.
+<i>31</i>&nbsp; *
+<i>32</i>&nbsp; * Original Author:  Darshan Shah;
+<i>33</i>&nbsp; * Contributor(s):   David Gilbert (for Object Refinery Limited);
+<i>34</i>&nbsp; *
+<i>35</i>&nbsp; * Changes
+<i>36</i>&nbsp; * -------
+<i>37</i>&nbsp; * 20-Oct-2003 : Version 1, contributed by Darshan Shah (DG);
+<i>38</i>&nbsp; * 06-Nov-2003 : Changed order of parameters in constructor, and added support
+<i>39</i>&nbsp; *               for GradientPaint (DG);
+<i>40</i>&nbsp; * 10-Feb-2004 : Updated drawItem() method to make cut-and-paste overriding
+<i>41</i>&nbsp; *               easier.  Also fixed a bug that meant the minimum bar length
+<i>42</i>&nbsp; *               was being ignored (DG);
+<i>43</i>&nbsp; * 04-Oct-2004 : Reworked equals() method and renamed PaintUtils
+<i>44</i>&nbsp; *               --&gt; PaintUtilities (DG);
+<i>45</i>&nbsp; * 05-Nov-2004 : Modified drawItem() signature (DG);
+<i>46</i>&nbsp; * 07-Jan-2005 : Renamed getRangeExtent() --&gt; findRangeBounds (DG);
+<i>47</i>&nbsp; * 23-Feb-2005 : Added argument checking (DG);
+<i>48</i>&nbsp; * 20-Apr-2005 : Renamed CategoryLabelGenerator
+<i>49</i>&nbsp; *               --&gt; CategoryItemLabelGenerator (DG);
+<i>50</i>&nbsp; * 09-Jun-2005 : Use addItemEntity() from superclass (DG);
+<i>51</i>&nbsp; * 27-Mar-2008 : Fixed error in findRangeBounds() method (DG);
+<i>52</i>&nbsp; * 26-Sep-2008 : Fixed bug with bar alignment when maximumBarWidth is
+<i>53</i>&nbsp; *               applied (DG);
+<i>54</i>&nbsp; * 04-Feb-2009 : Updated findRangeBounds to handle null dataset consistently
+<i>55</i>&nbsp; *               with other renderers (DG);
+<i>56</i>&nbsp; * 19-May-2009 : Fixed FindBugs warnings, patch by Michal Wozniak (DG);
+<i>57</i>&nbsp; * 03-Jul-2013 : Use ParamChecks (DG);
+<i>58</i>&nbsp; *
+<i>59</i>&nbsp; */
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;package org.jfree.chart.renderer.category;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;import java.awt.Color;
+<i>64</i>&nbsp;import java.awt.GradientPaint;
+<i>65</i>&nbsp;import java.awt.Graphics2D;
+<i>66</i>&nbsp;import java.awt.Paint;
+<i>67</i>&nbsp;import java.awt.Stroke;
+<i>68</i>&nbsp;import java.awt.geom.Rectangle2D;
+<i>69</i>&nbsp;import java.io.IOException;
+<i>70</i>&nbsp;import java.io.ObjectInputStream;
+<i>71</i>&nbsp;import java.io.ObjectOutputStream;
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;import org.jfree.chart.axis.CategoryAxis;
+<i>74</i>&nbsp;import org.jfree.chart.axis.ValueAxis;
+<i>75</i>&nbsp;import org.jfree.chart.entity.EntityCollection;
+<i>76</i>&nbsp;import org.jfree.chart.event.RendererChangeEvent;
+<i>77</i>&nbsp;import org.jfree.chart.labels.CategoryItemLabelGenerator;
+<i>78</i>&nbsp;import org.jfree.chart.plot.CategoryPlot;
+<i>79</i>&nbsp;import org.jfree.chart.plot.PlotOrientation;
+<i>80</i>&nbsp;import org.jfree.chart.renderer.AbstractRenderer;
+<i>81</i>&nbsp;import org.jfree.chart.ui.GradientPaintTransformType;
+<i>82</i>&nbsp;import org.jfree.chart.ui.RectangleEdge;
+<i>83</i>&nbsp;import org.jfree.chart.ui.StandardGradientPaintTransformer;
+<i>84</i>&nbsp;import org.jfree.chart.util.PaintUtils;
+<i>85</i>&nbsp;import org.jfree.chart.util.Args;
+<i>86</i>&nbsp;import org.jfree.chart.util.SerialUtils;
+<i>87</i>&nbsp;import org.jfree.data.Range;
+<i>88</i>&nbsp;import org.jfree.data.category.CategoryDataset;
+<i>89</i>&nbsp;
+<i>90</i>&nbsp;/**
+<i>91</i>&nbsp; * A renderer that handles the drawing of waterfall bar charts, for use with
+<i>92</i>&nbsp; * the {@link CategoryPlot} class.  Some quirks to note:
+<i>93</i>&nbsp; * &lt;ul&gt;
+<i>94</i>&nbsp; * &lt;li&gt;the value in the last category of the dataset should be (redundantly)
+<i>95</i>&nbsp; *   specified as the sum of the items in the preceding categories - otherwise
+<i>96</i>&nbsp; *   the final bar in the plot will be incorrectly plotted;&lt;/li&gt;
+<i>97</i>&nbsp; * &lt;li&gt;the bar colors are defined using special methods in this class - the
+<i>98</i>&nbsp; *   inherited methods (for example,
+<i>99</i>&nbsp; *   {@link AbstractRenderer#setSeriesPaint(int, Paint)}) are ignored;&lt;/li&gt;
+<i>100</i>&nbsp; * &lt;/ul&gt;
+<i>101</i>&nbsp; * The example shown here is generated by the
+<i>102</i>&nbsp; * {@code WaterfallChartDemo1.java} program included in the JFreeChart
+<i>103</i>&nbsp; * Demo Collection:
+<i>104</i>&nbsp; * &lt;br&gt;&lt;br&gt;
+<i>105</i>&nbsp; * &lt;img src=&quot;../../../../../images/WaterfallBarRendererSample.png&quot;
+<i>106</i>&nbsp; * alt=&quot;WaterfallBarRendererSample.png&quot;&gt;
+<i>107</i>&nbsp; */
+<i>108</i>&nbsp;public class WaterfallBarRenderer extends BarRenderer {
+<i>109</i>&nbsp;
+<i>110</i>&nbsp;    /** For serialization. */
+<i>111</i>&nbsp;    private static final long serialVersionUID = -2482910643727230911L;
+<i>112</i>&nbsp;
+<i>113</i>&nbsp;    /** The paint used to draw the first bar. */
+<i>114</i>&nbsp;    private transient Paint firstBarPaint;
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /** The paint used to draw the last bar. */
+<i>117</i>&nbsp;    private transient Paint lastBarPaint;
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    /** The paint used to draw bars having positive values. */
+<i>120</i>&nbsp;    private transient Paint positiveBarPaint;
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /** The paint used to draw bars having negative values. */
+<i>123</i>&nbsp;    private transient Paint negativeBarPaint;
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * Constructs a new renderer with default values for the bar colors.
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    public WaterfallBarRenderer() {
+<b class="fc"><i>129</i>&nbsp;        this(new GradientPaint(0.0f, 0.0f, new Color(0x22, 0x22, 0xFF),</b>
+<i>130</i>&nbsp;                0.0f, 0.0f, new Color(0x66, 0x66, 0xFF)),
+<i>131</i>&nbsp;                new GradientPaint(0.0f, 0.0f, new Color(0x22, 0xFF, 0x22),
+<i>132</i>&nbsp;                0.0f, 0.0f, new Color(0x66, 0xFF, 0x66)),
+<i>133</i>&nbsp;                new GradientPaint(0.0f, 0.0f, new Color(0xFF, 0x22, 0x22),
+<i>134</i>&nbsp;                0.0f, 0.0f, new Color(0xFF, 0x66, 0x66)),
+<i>135</i>&nbsp;                new GradientPaint(0.0f, 0.0f, new Color(0xFF, 0xFF, 0x22),
+<i>136</i>&nbsp;                0.0f, 0.0f, new Color(0xFF, 0xFF, 0x66)));
+<b class="fc"><i>137</i>&nbsp;    }</b>
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;    /**
+<i>140</i>&nbsp;     * Constructs a new waterfall renderer.
+<i>141</i>&nbsp;     *
+<i>142</i>&nbsp;     * @param firstBarPaint  the color of the first bar ({@code null} not
+<i>143</i>&nbsp;     *                       permitted).
+<i>144</i>&nbsp;     * @param positiveBarPaint  the color for bars with positive values
+<i>145</i>&nbsp;     *                          ({@code null} not permitted).
+<i>146</i>&nbsp;     * @param negativeBarPaint  the color for bars with negative values
+<i>147</i>&nbsp;     *                          ({@code null} not permitted).
+<i>148</i>&nbsp;     * @param lastBarPaint  the color of the last bar ({@code null} not
+<i>149</i>&nbsp;     *                      permitted).
+<i>150</i>&nbsp;     */
+<i>151</i>&nbsp;    public WaterfallBarRenderer(Paint firstBarPaint, Paint positiveBarPaint,
+<i>152</i>&nbsp;            Paint negativeBarPaint, Paint lastBarPaint) {
+<b class="fc"><i>153</i>&nbsp;        super();</b>
+<b class="fc"><i>154</i>&nbsp;        Args.nullNotPermitted(firstBarPaint, &quot;firstBarPaint&quot;);</b>
+<b class="fc"><i>155</i>&nbsp;        Args.nullNotPermitted(positiveBarPaint, &quot;positiveBarPaint&quot;);</b>
+<b class="fc"><i>156</i>&nbsp;        Args.nullNotPermitted(negativeBarPaint, &quot;negativeBarPaint&quot;);</b>
+<b class="fc"><i>157</i>&nbsp;        Args.nullNotPermitted(lastBarPaint, &quot;lastBarPaint&quot;);</b>
+<b class="fc"><i>158</i>&nbsp;        this.firstBarPaint = firstBarPaint;</b>
+<b class="fc"><i>159</i>&nbsp;        this.lastBarPaint = lastBarPaint;</b>
+<b class="fc"><i>160</i>&nbsp;        this.positiveBarPaint = positiveBarPaint;</b>
+<b class="fc"><i>161</i>&nbsp;        this.negativeBarPaint = negativeBarPaint;</b>
+<b class="fc"><i>162</i>&nbsp;        setGradientPaintTransformer(new StandardGradientPaintTransformer(</b>
+<i>163</i>&nbsp;                GradientPaintTransformType.CENTER_VERTICAL));
+<b class="fc"><i>164</i>&nbsp;        setMinimumBarLength(1.0);</b>
+<b class="fc"><i>165</i>&nbsp;    }</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    /**
+<i>168</i>&nbsp;     * Returns the paint used to draw the first bar.
+<i>169</i>&nbsp;     *
+<i>170</i>&nbsp;     * @return The paint (never {@code null}).
+<i>171</i>&nbsp;     */
+<i>172</i>&nbsp;    public Paint getFirstBarPaint() {
+<b class="nc"><i>173</i>&nbsp;        return this.firstBarPaint;</b>
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    /**
+<i>177</i>&nbsp;     * Sets the paint that will be used to draw the first bar and sends a
+<i>178</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>179</i>&nbsp;     *
+<i>180</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>181</i>&nbsp;     */
+<i>182</i>&nbsp;    public void setFirstBarPaint(Paint paint) {
+<b class="fc"><i>183</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>184</i>&nbsp;        this.firstBarPaint = paint;</b>
+<b class="fc"><i>185</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>186</i>&nbsp;    }</b>
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;    /**
+<i>189</i>&nbsp;     * Returns the paint used to draw the last bar.
+<i>190</i>&nbsp;     *
+<i>191</i>&nbsp;     * @return The paint (never {@code null}).
+<i>192</i>&nbsp;     */
+<i>193</i>&nbsp;    public Paint getLastBarPaint() {
+<b class="nc"><i>194</i>&nbsp;        return this.lastBarPaint;</b>
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     * Sets the paint that will be used to draw the last bar and sends a
+<i>199</i>&nbsp;     * {@link RendererChangeEvent} to all registered listeners.
+<i>200</i>&nbsp;     *
+<i>201</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>202</i>&nbsp;     */
+<i>203</i>&nbsp;    public void setLastBarPaint(Paint paint) {
+<b class="fc"><i>204</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>205</i>&nbsp;        this.lastBarPaint = paint;</b>
+<b class="fc"><i>206</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>207</i>&nbsp;    }</b>
+<i>208</i>&nbsp;
+<i>209</i>&nbsp;    /**
+<i>210</i>&nbsp;     * Returns the paint used to draw bars with positive values.
+<i>211</i>&nbsp;     *
+<i>212</i>&nbsp;     * @return The paint (never {@code null}).
+<i>213</i>&nbsp;     */
+<i>214</i>&nbsp;    public Paint getPositiveBarPaint() {
+<b class="nc"><i>215</i>&nbsp;        return this.positiveBarPaint;</b>
+<i>216</i>&nbsp;    }
+<i>217</i>&nbsp;
+<i>218</i>&nbsp;    /**
+<i>219</i>&nbsp;     * Sets the paint that will be used to draw bars having positive values.
+<i>220</i>&nbsp;     *
+<i>221</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>222</i>&nbsp;     */
+<i>223</i>&nbsp;    public void setPositiveBarPaint(Paint paint) {
+<b class="fc"><i>224</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>225</i>&nbsp;        this.positiveBarPaint = paint;</b>
+<b class="fc"><i>226</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>227</i>&nbsp;    }</b>
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * Returns the paint used to draw bars with negative values.
+<i>231</i>&nbsp;     *
+<i>232</i>&nbsp;     * @return The paint (never {@code null}).
+<i>233</i>&nbsp;     */
+<i>234</i>&nbsp;    public Paint getNegativeBarPaint() {
+<b class="nc"><i>235</i>&nbsp;        return this.negativeBarPaint;</b>
+<i>236</i>&nbsp;    }
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * Sets the paint that will be used to draw bars having negative values,
+<i>240</i>&nbsp;     * and sends a {@link RendererChangeEvent} to all registered listeners.
+<i>241</i>&nbsp;     *
+<i>242</i>&nbsp;     * @param paint  the paint ({@code null} not permitted).
+<i>243</i>&nbsp;     */
+<i>244</i>&nbsp;    public void setNegativeBarPaint(Paint paint) {
+<b class="fc"><i>245</i>&nbsp;        Args.nullNotPermitted(paint, &quot;paint&quot;);</b>
+<b class="fc"><i>246</i>&nbsp;        this.negativeBarPaint = paint;</b>
+<b class="fc"><i>247</i>&nbsp;        fireChangeEvent();</b>
+<b class="fc"><i>248</i>&nbsp;    }</b>
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * Returns the range of values the renderer requires to display all the
+<i>252</i>&nbsp;     * items from the specified dataset.
+<i>253</i>&nbsp;     *
+<i>254</i>&nbsp;     * @param dataset  the dataset ({@code null} not permitted).
+<i>255</i>&nbsp;     *
+<i>256</i>&nbsp;     * @return The range (or {@code null} if the dataset is empty).
+<i>257</i>&nbsp;     */
+<i>258</i>&nbsp;    @Override
+<i>259</i>&nbsp;    public Range findRangeBounds(CategoryDataset dataset) {
+<b class="fc"><i>260</i>&nbsp;        if (dataset == null) {</b>
+<b class="fc"><i>261</i>&nbsp;            return null;</b>
+<i>262</i>&nbsp;        }
+<b class="fc"><i>263</i>&nbsp;        boolean allItemsNull = true; // we&#39;ll set this to false if there is at</b>
+<i>264</i>&nbsp;                                     // least one non-null data item...
+<b class="fc"><i>265</i>&nbsp;        double minimum = 0.0;</b>
+<b class="fc"><i>266</i>&nbsp;        double maximum = 0.0;</b>
+<b class="fc"><i>267</i>&nbsp;        int columnCount = dataset.getColumnCount();</b>
+<b class="fc"><i>268</i>&nbsp;        for (int row = 0; row &lt; dataset.getRowCount(); row++) {</b>
+<b class="fc"><i>269</i>&nbsp;            double runningTotal = 0.0;</b>
+<b class="fc"><i>270</i>&nbsp;            for (int column = 0; column &lt;= columnCount - 1; column++) {</b>
+<b class="fc"><i>271</i>&nbsp;                Number n = dataset.getValue(row, column);</b>
+<b class="fc"><i>272</i>&nbsp;                if (n != null) {</b>
+<b class="fc"><i>273</i>&nbsp;                    allItemsNull = false;</b>
+<b class="fc"><i>274</i>&nbsp;                    double value = n.doubleValue();</b>
+<b class="fc"><i>275</i>&nbsp;                    if (column == columnCount - 1) {</b>
+<i>276</i>&nbsp;                        // treat the last column value as an absolute
+<b class="fc"><i>277</i>&nbsp;                        runningTotal = value;</b>
+<i>278</i>&nbsp;                    }
+<i>279</i>&nbsp;                    else {
+<b class="fc"><i>280</i>&nbsp;                        runningTotal = runningTotal + value;</b>
+<i>281</i>&nbsp;                    }
+<b class="fc"><i>282</i>&nbsp;                    minimum = Math.min(minimum, runningTotal);</b>
+<b class="fc"><i>283</i>&nbsp;                    maximum = Math.max(maximum, runningTotal);</b>
+<i>284</i>&nbsp;                }
+<i>285</i>&nbsp;            }
+<i>286</i>&nbsp;
+<i>287</i>&nbsp;        }
+<b class="fc"><i>288</i>&nbsp;        if (!allItemsNull) {</b>
+<b class="fc"><i>289</i>&nbsp;            return new Range(minimum, maximum);</b>
+<i>290</i>&nbsp;        }
+<i>291</i>&nbsp;        else {
+<b class="nc"><i>292</i>&nbsp;            return null;</b>
+<i>293</i>&nbsp;        }
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    /**
+<i>298</i>&nbsp;     * Draws the bar for a single (series, category) data item.
+<i>299</i>&nbsp;     *
+<i>300</i>&nbsp;     * @param g2  the graphics device.
+<i>301</i>&nbsp;     * @param state  the renderer state.
+<i>302</i>&nbsp;     * @param dataArea  the data area.
+<i>303</i>&nbsp;     * @param plot  the plot.
+<i>304</i>&nbsp;     * @param domainAxis  the domain axis.
+<i>305</i>&nbsp;     * @param rangeAxis  the range axis.
+<i>306</i>&nbsp;     * @param dataset  the dataset.
+<i>307</i>&nbsp;     * @param row  the row index (zero-based).
+<i>308</i>&nbsp;     * @param column  the column index (zero-based).
+<i>309</i>&nbsp;     * @param pass  the pass index.
+<i>310</i>&nbsp;     */
+<i>311</i>&nbsp;    @Override
+<i>312</i>&nbsp;    public void drawItem(Graphics2D g2, CategoryItemRendererState state,
+<i>313</i>&nbsp;            Rectangle2D dataArea, CategoryPlot plot, CategoryAxis domainAxis,
+<i>314</i>&nbsp;            ValueAxis rangeAxis, CategoryDataset dataset, int row, int column,
+<i>315</i>&nbsp;            int pass) {
+<i>316</i>&nbsp;
+<b class="nc"><i>317</i>&nbsp;        double previous = state.getSeriesRunningTotal();</b>
+<b class="nc"><i>318</i>&nbsp;        if (column == dataset.getColumnCount() - 1) {</b>
+<b class="nc"><i>319</i>&nbsp;            previous = 0.0;</b>
+<i>320</i>&nbsp;        }
+<b class="nc"><i>321</i>&nbsp;        double current = 0.0;</b>
+<b class="nc"><i>322</i>&nbsp;        Number n = dataset.getValue(row, column);</b>
+<b class="nc"><i>323</i>&nbsp;        if (n != null) {</b>
+<b class="nc"><i>324</i>&nbsp;            current = previous + n.doubleValue();</b>
+<i>325</i>&nbsp;        }
+<b class="nc"><i>326</i>&nbsp;        state.setSeriesRunningTotal(current);</b>
+<i>327</i>&nbsp;
+<b class="nc"><i>328</i>&nbsp;        int categoryCount = getColumnCount();</b>
+<b class="nc"><i>329</i>&nbsp;        PlotOrientation orientation = plot.getOrientation();</b>
+<i>330</i>&nbsp;
+<b class="nc"><i>331</i>&nbsp;        double rectX = 0.0;</b>
+<b class="nc"><i>332</i>&nbsp;        double rectY = 0.0;</b>
+<i>333</i>&nbsp;
+<b class="nc"><i>334</i>&nbsp;        RectangleEdge rangeAxisLocation = plot.getRangeAxisEdge();</b>
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;        // Y0
+<b class="nc"><i>337</i>&nbsp;        double j2dy0 = rangeAxis.valueToJava2D(previous, dataArea,</b>
+<i>338</i>&nbsp;                rangeAxisLocation);
+<i>339</i>&nbsp;
+<i>340</i>&nbsp;        // Y1
+<b class="nc"><i>341</i>&nbsp;        double j2dy1 = rangeAxis.valueToJava2D(current, dataArea,</b>
+<i>342</i>&nbsp;                rangeAxisLocation);
+<i>343</i>&nbsp;
+<b class="nc"><i>344</i>&nbsp;        double valDiff = current - previous;</b>
+<b class="nc"><i>345</i>&nbsp;        if (j2dy1 &lt; j2dy0) {</b>
+<b class="nc"><i>346</i>&nbsp;            double temp = j2dy1;</b>
+<b class="nc"><i>347</i>&nbsp;            j2dy1 = j2dy0;</b>
+<b class="nc"><i>348</i>&nbsp;            j2dy0 = temp;</b>
+<i>349</i>&nbsp;        }
+<i>350</i>&nbsp;
+<i>351</i>&nbsp;        // BAR WIDTH
+<b class="nc"><i>352</i>&nbsp;        double rectWidth = state.getBarWidth();</b>
+<i>353</i>&nbsp;
+<i>354</i>&nbsp;        // BAR HEIGHT
+<b class="nc"><i>355</i>&nbsp;        double rectHeight = Math.max(getMinimumBarLength(),</b>
+<b class="nc"><i>356</i>&nbsp;                Math.abs(j2dy1 - j2dy0));</b>
+<i>357</i>&nbsp;
+<b class="nc"><i>358</i>&nbsp;        Comparable seriesKey = dataset.getRowKey(row);</b>
+<b class="nc"><i>359</i>&nbsp;        Comparable categoryKey = dataset.getColumnKey(column);</b>
+<b class="nc"><i>360</i>&nbsp;        if (orientation == PlotOrientation.HORIZONTAL) {</b>
+<b class="nc"><i>361</i>&nbsp;            rectY = domainAxis.getCategorySeriesMiddle(categoryKey, seriesKey,</b>
+<b class="nc"><i>362</i>&nbsp;                    dataset, getItemMargin(), dataArea, RectangleEdge.LEFT);</b>
+<i>363</i>&nbsp;
+<b class="nc"><i>364</i>&nbsp;            rectX = j2dy0;</b>
+<b class="nc"><i>365</i>&nbsp;            rectHeight = state.getBarWidth();</b>
+<b class="nc"><i>366</i>&nbsp;            rectY = rectY - rectHeight / 2.0;</b>
+<b class="nc"><i>367</i>&nbsp;            rectWidth = Math.max(getMinimumBarLength(),</b>
+<b class="nc"><i>368</i>&nbsp;                    Math.abs(j2dy1 - j2dy0));</b>
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;        }
+<b class="nc"><i>371</i>&nbsp;        else if (orientation == PlotOrientation.VERTICAL) {</b>
+<b class="nc"><i>372</i>&nbsp;            rectX = domainAxis.getCategorySeriesMiddle(categoryKey, seriesKey,</b>
+<b class="nc"><i>373</i>&nbsp;                    dataset, getItemMargin(), dataArea, RectangleEdge.TOP);</b>
+<b class="nc"><i>374</i>&nbsp;            rectX = rectX - rectWidth / 2.0;</b>
+<b class="nc"><i>375</i>&nbsp;            rectY = j2dy0;</b>
+<i>376</i>&nbsp;        }
+<b class="nc"><i>377</i>&nbsp;        Rectangle2D bar = new Rectangle2D.Double(rectX, rectY, rectWidth,</b>
+<i>378</i>&nbsp;                rectHeight);
+<i>379</i>&nbsp;        Paint seriesPaint;
+<b class="nc"><i>380</i>&nbsp;        if (column == 0) {</b>
+<b class="nc"><i>381</i>&nbsp;            seriesPaint = getFirstBarPaint();</b>
+<i>382</i>&nbsp;        }
+<b class="nc"><i>383</i>&nbsp;        else if (column == categoryCount - 1) {</b>
+<b class="nc"><i>384</i>&nbsp;            seriesPaint = getLastBarPaint();</b>
+<i>385</i>&nbsp;        }
+<i>386</i>&nbsp;        else {
+<b class="nc"><i>387</i>&nbsp;            if (valDiff &gt;= 0.0) {</b>
+<b class="nc"><i>388</i>&nbsp;                seriesPaint = getPositiveBarPaint();</b>
+<i>389</i>&nbsp;            } else {
+<b class="nc"><i>390</i>&nbsp;                seriesPaint = getNegativeBarPaint();</b>
+<i>391</i>&nbsp;            }
+<i>392</i>&nbsp;        }
+<b class="nc"><i>393</i>&nbsp;        if (getGradientPaintTransformer() != null</b>
+<i>394</i>&nbsp;                &amp;&amp; seriesPaint instanceof GradientPaint) {
+<b class="nc"><i>395</i>&nbsp;            GradientPaint gp = (GradientPaint) seriesPaint;</b>
+<b class="nc"><i>396</i>&nbsp;            seriesPaint = getGradientPaintTransformer().transform(gp, bar);</b>
+<i>397</i>&nbsp;        }
+<b class="nc"><i>398</i>&nbsp;        g2.setPaint(seriesPaint);</b>
+<b class="nc"><i>399</i>&nbsp;        g2.fill(bar);</b>
+<i>400</i>&nbsp;
+<i>401</i>&nbsp;        // draw the outline...
+<b class="nc"><i>402</i>&nbsp;        if (isDrawBarOutline()</b>
+<b class="nc"><i>403</i>&nbsp;                &amp;&amp; state.getBarWidth() &gt; BAR_OUTLINE_WIDTH_THRESHOLD) {</b>
+<b class="nc"><i>404</i>&nbsp;            Stroke stroke = getItemOutlineStroke(row, column);</b>
+<b class="nc"><i>405</i>&nbsp;            Paint paint = getItemOutlinePaint(row, column);</b>
+<b class="nc"><i>406</i>&nbsp;            if (stroke != null &amp;&amp; paint != null) {</b>
+<b class="nc"><i>407</i>&nbsp;                g2.setStroke(stroke);</b>
+<b class="nc"><i>408</i>&nbsp;                g2.setPaint(paint);</b>
+<b class="nc"><i>409</i>&nbsp;                g2.draw(bar);</b>
+<i>410</i>&nbsp;            }
+<i>411</i>&nbsp;        }
+<i>412</i>&nbsp;
+<b class="nc"><i>413</i>&nbsp;        CategoryItemLabelGenerator generator</b>
+<b class="nc"><i>414</i>&nbsp;            = getItemLabelGenerator(row, column);</b>
+<b class="nc"><i>415</i>&nbsp;        if (generator != null &amp;&amp; isItemLabelVisible(row, column)) {</b>
+<b class="nc"><i>416</i>&nbsp;            drawItemLabel(g2, dataset, row, column, plot, generator, bar,</b>
+<i>417</i>&nbsp;                    (valDiff &lt; 0.0));
+<i>418</i>&nbsp;        }
+<i>419</i>&nbsp;
+<i>420</i>&nbsp;        // add an item entity, if this information is being collected
+<b class="nc"><i>421</i>&nbsp;        EntityCollection entities = state.getEntityCollection();</b>
+<b class="nc"><i>422</i>&nbsp;        if (entities != null) {</b>
+<b class="nc"><i>423</i>&nbsp;            addItemEntity(entities, dataset, row, column, bar);</b>
+<i>424</i>&nbsp;        }
+<i>425</i>&nbsp;
+<b class="nc"><i>426</i>&nbsp;    }</b>
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;    /**
+<i>429</i>&nbsp;     * Tests an object for equality with this instance.
+<i>430</i>&nbsp;     *
+<i>431</i>&nbsp;     * @param obj  the object ({@code null} permitted).
+<i>432</i>&nbsp;     *
+<i>433</i>&nbsp;     * @return A boolean.
+<i>434</i>&nbsp;     */
+<i>435</i>&nbsp;    @Override
+<i>436</i>&nbsp;    public boolean equals(Object obj) {
+<i>437</i>&nbsp;
+<b class="fc"><i>438</i>&nbsp;        if (obj == this) {</b>
+<b class="nc"><i>439</i>&nbsp;            return true;</b>
+<i>440</i>&nbsp;        }
+<b class="fc"><i>441</i>&nbsp;        if (!super.equals(obj)) {</b>
+<b class="nc"><i>442</i>&nbsp;            return false;</b>
+<i>443</i>&nbsp;        }
+<b class="fc"><i>444</i>&nbsp;        if (!(obj instanceof WaterfallBarRenderer)) {</b>
+<b class="nc"><i>445</i>&nbsp;            return false;</b>
+<i>446</i>&nbsp;        }
+<b class="fc"><i>447</i>&nbsp;        WaterfallBarRenderer that = (WaterfallBarRenderer) obj;</b>
+<b class="fc"><i>448</i>&nbsp;        if (!PaintUtils.equal(this.firstBarPaint, that.firstBarPaint)) {</b>
+<b class="fc"><i>449</i>&nbsp;            return false;</b>
+<i>450</i>&nbsp;        }
+<b class="fc"><i>451</i>&nbsp;        if (!PaintUtils.equal(this.lastBarPaint, that.lastBarPaint)) {</b>
+<b class="fc"><i>452</i>&nbsp;            return false;</b>
+<i>453</i>&nbsp;        }
+<b class="fc"><i>454</i>&nbsp;        if (!PaintUtils.equal(this.positiveBarPaint,</b>
+<i>455</i>&nbsp;                that.positiveBarPaint)) {
+<b class="fc"><i>456</i>&nbsp;            return false;</b>
+<i>457</i>&nbsp;        }
+<b class="fc"><i>458</i>&nbsp;        if (!PaintUtils.equal(this.negativeBarPaint,</b>
+<i>459</i>&nbsp;                that.negativeBarPaint)) {
+<b class="fc"><i>460</i>&nbsp;            return false;</b>
+<i>461</i>&nbsp;        }
+<b class="fc"><i>462</i>&nbsp;        return true;</b>
+<i>463</i>&nbsp;
+<i>464</i>&nbsp;    }
+<i>465</i>&nbsp;
+<i>466</i>&nbsp;    /**
+<i>467</i>&nbsp;     * Provides serialization support.
+<i>468</i>&nbsp;     *
+<i>469</i>&nbsp;     * @param stream  the output stream.
+<i>470</i>&nbsp;     *
+<i>471</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>472</i>&nbsp;     */
+<i>473</i>&nbsp;    private void writeObject(ObjectOutputStream stream) throws IOException {
+<b class="fc"><i>474</i>&nbsp;        stream.defaultWriteObject();</b>
+<b class="fc"><i>475</i>&nbsp;        SerialUtils.writePaint(this.firstBarPaint, stream);</b>
+<b class="fc"><i>476</i>&nbsp;        SerialUtils.writePaint(this.lastBarPaint, stream);</b>
+<b class="fc"><i>477</i>&nbsp;        SerialUtils.writePaint(this.positiveBarPaint, stream);</b>
+<b class="fc"><i>478</i>&nbsp;        SerialUtils.writePaint(this.negativeBarPaint, stream);</b>
+<b class="fc"><i>479</i>&nbsp;    }</b>
+<i>480</i>&nbsp;
+<i>481</i>&nbsp;    /**
+<i>482</i>&nbsp;     * Provides serialization support.
+<i>483</i>&nbsp;     *
+<i>484</i>&nbsp;     * @param stream  the input stream.
+<i>485</i>&nbsp;     *
+<i>486</i>&nbsp;     * @throws IOException  if there is an I/O error.
+<i>487</i>&nbsp;     * @throws ClassNotFoundException  if there is a classpath problem.
+<i>488</i>&nbsp;     */
+<i>489</i>&nbsp;    private void readObject(ObjectInputStream stream)
+<i>490</i>&nbsp;        throws IOException, ClassNotFoundException {
+<b class="fc"><i>491</i>&nbsp;        stream.defaultReadObject();</b>
+<b class="fc"><i>492</i>&nbsp;        this.firstBarPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>493</i>&nbsp;        this.lastBarPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>494</i>&nbsp;        this.positiveBarPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>495</i>&nbsp;        this.negativeBarPaint = SerialUtils.readPaint(stream);</b>
+<b class="fc"><i>496</i>&nbsp;    }</b>
+<i>497</i>&nbsp;
+<i>498</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2019-04-17 15:55</div>
+</div>
+</body>
+</html>
