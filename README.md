@@ -1,6 +1,6 @@
 # SOEN_6611
 Software Measurement - SOEN 6611
-Team K
+Team K:
 Heer Oza	,
 Meet Maniar	,
 Shriyans Athalye	
