@@ -1,8 +1,8 @@
 # SOEN_6611
 Software Measurement - SOEN 6611
 Team K
-Heer Oza	
-Meet Maniar	
+Heer Oza	,
+Meet Maniar	,
 Shriyans Athalye	
 
 This project consist of measuring software quality attributes and relating them with metric.
